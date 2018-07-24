@@ -1,4 +1,4 @@
-# symphony-api-client-python
+# sym_api_client_python
 The Python client is built in an event handler architecture. If you are building a bot that listens to conversations, you will only have to implement an interface of a listener with the functions to handle all events that will come through the Data Feed.
 
 ### Install using pip --
