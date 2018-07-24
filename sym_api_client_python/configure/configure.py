@@ -1,7 +1,8 @@
 import json
 import requests
 import sys
-from crypt.crypt import Crypt
+from configure.crypt import Crypt
+# from ..crypt.crypt import Crypt
 
 class Config():
     #initialize object by passing in config file
