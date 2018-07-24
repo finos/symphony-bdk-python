@@ -1,0 +1,4 @@
+2018-07-24 14:54:27,509 - root - DEBUG - Auth/authenticate() --> needed to authenticate
+2018-07-24 14:54:27,509 - root - DEBUG - Auth/get_session_token()
+2018-07-24 14:54:28,266 - root - DEBUG - Auth/get_keyauth()
+2018-07-24 14:54:29,707 - root - DEBUG - DataFeedClient/createDatafeed()

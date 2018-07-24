@@ -1,0 +1,2 @@
+class SymException(Exception):
+    pass
