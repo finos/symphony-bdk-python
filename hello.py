@@ -3,6 +3,11 @@ from sym_api_client_python.auth.auth import Auth
 from sym_api_client_python.clients.SymBotClient import SymBotClient
 from sym_api_client_python.listeners.imListenerTestImp import IMListenerTestImp
 from sym_api_client_python.listeners.roomListenerTestImp import RoomListenerTestImp
+
+#debug logging --> set to debug --> check logs/example.log
+import logging
+logging.basicConfig(filename='sym_api_client_python/logs/example.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filemode='w', level=logging.DEBUG)
+logging.getLogger("urllib3").setLevel(logging.WARNING)
 #main() acts as executable script --> run python3 hello.py to start Bot...
 def main():
         print('hi')
