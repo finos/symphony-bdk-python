@@ -3,8 +3,7 @@ import logging
 from .listeners import ConnectionListener
 from .listeners import imListener
 from .listeners import RoomListener
-# logging.basicConfig(filename='logs/example.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filemode='w', level=logging.DEBUG)
-# logging.getLogger("urllib3").setLevel(logging.WARNING)
+
 #class handles the the creation and reading of DataFeed
 #also contains the functionality to  dispatch the events coming back from the dataFeed
 #sends data over to listener where the event is handled
