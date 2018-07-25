@@ -1,4 +1,4 @@
-from listeners.imListener import IMListener
+from .imListener import IMListener
 
 #sample implementation of Abstract imListener class
 #has instance of SymBotClient so that it can respond to events coming in by leveraging other clients on SymBotClient

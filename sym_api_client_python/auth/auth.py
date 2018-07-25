@@ -1,10 +1,10 @@
 import json
 import requests
 import logging
-from clients.apiClient import APIClient
-from exceptions.UnauthorizedException import UnauthorizedException
-logging.basicConfig(filename='logs/example.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filemode='w', level=logging.DEBUG)
-logging.getLogger("urllib3").setLevel(logging.WARNING)
+from ..clients.apiClient import APIClient
+from ..exceptions.UnauthorizedException import UnauthorizedException
+# logging.basicConfig(filename='logs/example.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filemode='w', level=logging.DEBUG)
+# logging.getLogger("urllib3").setLevel(logging.WARNING)
 
 class Auth():
     #initialize Auth object with config object and empty strings representing auth tokens
