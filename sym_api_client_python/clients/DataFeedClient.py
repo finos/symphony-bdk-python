@@ -1,14 +1,14 @@
 import requests
 import json
-from DataFeedEventService import DataFeedEventService
+from ..DataFeedEventService import DataFeedEventService
 import logging
-from clients.apiClient import APIClient
-from exceptions.APIClientErrorException import APIClientErrorException
-from exceptions.ForbiddenException import ForbiddenException
-from exceptions.ServerErrorException import ServerErrorException
-from exceptions.UnauthorizedException import UnauthorizedException
-logging.basicConfig(filename='logs/example.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filemode='w', level=logging.DEBUG)
-logging.getLogger("urllib3").setLevel(logging.WARNING)
+from .apiClient import APIClient
+from ..exceptions.APIClientErrorException import APIClientErrorException
+from ..exceptions.ForbiddenException import ForbiddenException
+from ..exceptions.ServerErrorException import ServerErrorException
+from ..exceptions.UnauthorizedException import UnauthorizedException
+# logging.basicConfig(filename='logs/example.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filemode='w', level=logging.DEBUG)
+# logging.getLogger("urllib3").setLevel(logging.WARNING)
 
 #child class of APIClient --> Extends error handling functionality
 class DataFeedClient(APIClient):

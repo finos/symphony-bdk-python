@@ -1,13 +1,13 @@
-from configure.configure import Config
-from auth.auth import Auth
-from clients.SymBotClient import SymBotClient
-from listeners.imListenerTestImp import IMListenerTestImp
-from listeners.roomListenerTestImp import RoomListenerTestImp
+from sym_api_client_python.configure.configure import Config
+from sym_api_client_python.auth.auth import Auth
+from sym_api_client_python.clients.SymBotClient import SymBotClient
+from sym_api_client_python.listeners.imListenerTestImp import IMListenerTestImp
+from sym_api_client_python.listeners.roomListenerTestImp import RoomListenerTestImp
 #main() acts as executable script --> run python3 hello.py to start Bot...
 def main():
         print('hi')
         #pass in path to config.json file to Config class
-        configure = Config('./resources/config.json')
+        configure = Config('sym_api_client_python/resources/config.json')
         #parse through config.json and extract decrypt certificates
         configure.connect()
         #if you wish to authenticate using RSA replace following line with: auth = rsa_Auth(configure) --> get rid of auth.authenticate

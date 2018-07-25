@@ -1,5 +1,5 @@
 from .DataFeedClient import DataFeedClient
-from DataFeedEventService import DataFeedEventService
+from ..DataFeedEventService import DataFeedEventService
 from .MessageClient import MessageClient
 from .StreamClient import StreamClient
 from .apiClient import APIClient

@@ -1,14 +1,14 @@
 import requests
 import json
 import logging
-from DataFeedEventService import DataFeedEventService
-from clients.apiClient import APIClient
-from exceptions.APIClientErrorException import APIClientErrorException
-from exceptions.ForbiddenException import ForbiddenException
-from exceptions.ServerErrorException import ServerErrorException
-from exceptions.UnauthorizedException import UnauthorizedException
-logging.basicConfig(filename='logs/example.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filemode='w', level=logging.DEBUG)
-logging.getLogger("urllib3").setLevel(logging.WARNING)
+from ..DataFeedEventService import DataFeedEventService
+from .apiClient import APIClient
+from ..exceptions.APIClientErrorException import APIClientErrorException
+from ..exceptions.ForbiddenException import ForbiddenException
+from ..exceptions.ServerErrorException import ServerErrorException
+from ..exceptions.UnauthorizedException import UnauthorizedException
+# logging.basicConfig(filename='logs/example.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filemode='w', level=logging.DEBUG)
+# logging.getLogger("urllib3").setLevel(logging.WARNING)
 
 #child class of APIClient --> Extends error handling functionality
 #UserClient class contains a series of functions corresponding to all messaging
