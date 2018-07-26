@@ -1,4 +1,5 @@
 from .ConnectionListener import ConnectionListener
+import logging
 
 #sample implementation of Abstract imListener class
 #has instance of SymBotClient so that it can respond to events coming in by leveraging other clients on SymBotClient
@@ -9,7 +10,7 @@ class ConnectionListenerTestImp(IMListener):
         self.botClient = SymBotClient
 
     def onConnectionAccepted(self, connection):
-        debug.log('onConnectionAccepted()', connection)
+        logging.debug('onConnectionAccepted()', connection)
 
     def onConnectionRequested(self, connection):
-        debug.log('onConnectionRequested', connection)
+        logging.debug('onConnectionRequested', connection)
