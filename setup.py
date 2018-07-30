@@ -6,13 +6,13 @@ def readme():
 
 setuptools.setup(
     name="sym_api_client_python",
-    version="0.0.5",
+    version="0.0.6",
     author="Reed Feldman",
     author_email="reed.feldman@symphony.com",
     description="Symphony REST API - Python Client",
     long_description=readme(),
     long_description_content_type='text/markdown',
-    url="https://github.com/SymphonyPlatformSolutions/sym_api_client_python",
+    url="https://github.com/SymphonyPlatformSolutions/symphony-api-client-python",
     packages=setuptools.find_packages(),
     install_requires=[
         'pyOpenSSL',

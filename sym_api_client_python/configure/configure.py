@@ -22,18 +22,18 @@ class Config():
     def connect(self):
         with open(self.configFile, "r") as read_file:
             data = json.load(read_file)
-            self.data['sessionAuthUrl'] = data['sessionAuthHost']
-            self.data['keyAuthUrl'] = data['keyAuthHost']
-            self.data['podHost'] = data['podHost']
-            self.data['agentHost'] = data['agentHost']
-            self.data['botCertPath'] = data['botCertPath']
+            self.data['sessionAuthUrl'] = 'https://'+ data['sessionAuthHost']
+            self.data['keyAuthUrl'] = 'https://'+ data['keyAuthHost']
+            self.data['podHost'] = 'https://'+ data['podHost']
+            self.data['agentHost'] = 'https://'+ data['agentHost']
+            self.data['botCertPath'] = data['botCertPath'] + data['botCertName']
             self.data['botCertName'] = data['botCertName']
             self.data['botCertPassword'] = data['botCertPassword']
             self.data['botEmailAddress'] = data['botEmailAddress']
         #take in .p12 certificate and parse through file to use for authentication
         #data['botCert_cert'] and data['botCert_key'] are passed as certificates upon authentication request
         try:
-            crypt = Crypt(self.data['botCertPath'], self.data['botCertPassword'])
+            crypt = Crypt(self.data['botCertPath']+'.p12', self.data['botCertPassword'])
             self.data['symphonyCertificate'], self.data['symphonyKey'] = crypt.p12parse()
 
 

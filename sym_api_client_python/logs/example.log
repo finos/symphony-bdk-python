@@ -1,12 +1,7 @@
-2018-07-30 12:59:32,025 - root - DEBUG - Auth/authenticate() --> needed to authenticate
-2018-07-30 12:59:32,025 - root - DEBUG - Auth/get_session_token()
-2018-07-30 12:59:32,736 - root - DEBUG - Auth/get_keyauth()
-2018-07-30 12:59:34,128 - root - DEBUG - DataFeedClient/createDatafeed()
-2018-07-30 12:59:36,177 - root - DEBUG - DataFeedClient/readDatafeed()
-2018-07-30 12:59:52,361 - root - DEBUG - DataFeedEventService/readDatafeed() --> Incoming data from readDatafeed(): [{'id': 'HyfmJs', 'messageId': '1ytkU5Clsy0zLWH1_WM6-3___psT3j_7bQ', 'timestamp': 1532969992196, 'type': 'MESSAGESENT', 'initiator': {'user': {'userId': 344147139494862, 'firstName': 'Reed', 'lastName': 'Feldman', 'displayName': 'Reed Feldman', 'email': 'reed.feldman@symphony.com', 'username': 'reedUAT'}}, 'payload': {'messageSent': {'message': {'messageId': '1ytkU5Clsy0zLWH1_WM6-3___psT3j_7bQ', 'timestamp': 1532969992196, 'message': '<div data-format="PresentationML" data-version="2.0" class="wysiwyg"><p>a</p></div>', 'data': '{}', 'user': {'userId': 344147139494862, 'firstName': 'Reed', 'lastName': 'Feldman', 'displayName': 'Reed Feldman', 'email': 'reed.feldman@symphony.com', 'username': 'reedUAT'}, 'stream': {'streamId': 'NyLNtKZwstZLapBgzR1Nqn___pt1T1EpdA', 'streamType': 'ROOM'}, 'externalRecipients': False, 'userAgent': 'DESKTOP-35.0.0-6376-MacOSX-10.12.6-Chrome-67.0.3396.99', 'originalFormat': 'com.symphony.messageml.v2'}}}}]
-2018-07-30 12:59:52,362 - root - DEBUG - messageSentHandler function started
-2018-07-30 12:59:52,362 - root - DEBUG - room message recieved
-2018-07-30 12:59:52,362 - root - DEBUG - MessageClient/createMessage()
-2018-07-30 12:59:53,252 - root - DEBUG - DataFeedClient/readDatafeed()
-2018-07-30 12:59:53,800 - root - DEBUG - DataFeedEventService/readDatafeed() --> Incoming data from readDatafeed(): [{'id': 'e2gUIH:fYyIw6', 'messageId': '1kIe_sz0ppbagtIYFs1Ba3___psT3jordA', 'timestamp': 1532969993688, 'type': 'MESSAGESENT', 'initiator': {'user': {'userId': 344147139494588, 'displayName': 'ButlerDemo', 'email': 'bot.user11@example.com', 'username': 'bot.user11'}}, 'payload': {'messageSent': {'message': {'messageId': '1kIe_sz0ppbagtIYFs1Ba3___psT3jordA', 'timestamp': 1532969993688, 'message': '<div data-format="PresentationML" data-version="2.0"><span class="entity" data-entity-id="keyword1">#reed</span></div>', 'data': '{"keyword1":{"type":"org.symphonyoss.taxonomy","version":"1.0","id":[{"type":"org.symphonyoss.taxonomy.hashtag","value":"reed"}]}}', 'user': {'userId': 344147139494588, 'displayName': 'ButlerDemo', 'email': 'bot.user11@example.com', 'username': 'bot.user11'}, 'stream': {'streamId': 'NyLNtKZwstZLapBgzR1Nqn___pt1T1EpdA', 'streamType': 'ROOM'}, 'externalRecipients': False, 'userAgent': 'Agent-2.1.7-Linux-3.10.0-693.11.6.el7.x86_64', 'originalFormat': 'com.symphony.messageml.v2'}}}}]
-2018-07-30 12:59:53,800 - root - DEBUG - DataFeedClient/readDatafeed()
+2018-07-30 17:04:04,383 - root - DEBUG - Auth/authenticate() --> needed to authenticate
+2018-07-30 17:04:04,383 - root - DEBUG - Auth/get_session_token()
+2018-07-30 17:04:05,152 - root - DEBUG - Auth/get_keyauth()
+2018-07-30 17:04:06,382 - root - DEBUG - DataFeedClient/createDatafeed()
+2018-07-30 17:04:08,776 - root - DEBUG - DataFeedClient/readDatafeed()
+2018-07-30 17:04:39,395 - root - DEBUG - no data coming in from datafeed --> readDatafeed()
+2018-07-30 17:04:39,395 - root - DEBUG - DataFeedClient/readDatafeed()
