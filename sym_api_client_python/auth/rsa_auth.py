@@ -23,6 +23,7 @@ class RSA_Auth():
     #function returns a signed JWT which can be used to authenticate bot
     def getJWT(self):
         logging.debug('RSA_auth/getJWT() function started')
+        #load this from config
         privateKey = open('reedBot/reedBot_privatekey.pem', 'r').read()
         expiration_date = int(datetime.datetime.now(datetime.timezone.utc).timestamp() + (5*58))
         payload = {

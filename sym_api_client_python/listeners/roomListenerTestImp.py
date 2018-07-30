@@ -18,7 +18,7 @@ class RoomListenerTestImp(RoomListener):
         # messageId = message['payload']['messageSent']['message']['messageId']
         # message = dict(message = '<messageML><hash tag="reed"/></messageML>')
         # self.botClient.messageClient.createMessage(streamId, message)
-        
+
 
     def onRoomCreated(self, roomCreated):
         logging.debug('room created', roomCreated)
