@@ -26,9 +26,9 @@ class Config():
             self.data['keyAuthUrl'] = data['keyAuthHost']
             self.data['podHost'] = data['podHost']
             self.data['agentHost'] = data['agentHost']
-            self.data['botCertPath'] = data['botCertPath']
-            self.data['botCert_cert'] = data['botCertPath'] + 'bot.user11-cert.pem'
-            self.data['botCert_key'] = data['botCertPath'] + 'bot.user11-key.pem'
+            self.data['botCertificate'] = data['botCertificate']
+            # self.data['botCert_cert'] = data['botCertPath'] + 'bot.user11-cert.pem'
+            # self.data['botCert_key'] = data['botCertPath'] + 'bot.user11-key.pem'
             self.data['botCertName'] = data['botCertName']
             self.data['botCertPassword'] = data['botCertPassword']
             self.data['botEmailAddress'] = data['botEmailAddress']
@@ -36,7 +36,7 @@ class Config():
         #take in .p12 certificate and parse through file to use for authentication
         #data['botCert_cert'] and data['botCert_key'] are passed as certificates upon authentication request
         try:
-            crypt = Crypt(self.data['botCertName'], self.data['botCertPassword'])
+            crypt = Crypt(self.data['botCertificate'], self.data['botCertPassword'])
             self.data['symphony_crt'], self.data['symphony_key'] = crypt.p12parse()
 
 

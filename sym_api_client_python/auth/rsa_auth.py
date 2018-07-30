@@ -1,6 +1,7 @@
 import json
 import requests
 #library used to jwt signature
+import logging
 from jose import jwt
 import datetime
 
@@ -9,7 +10,7 @@ class RSA_Auth():
     #get JWT token upon initization
     #fetch session and keymanager tokens respectively
     def __init__(self, config):
-        logging.basicConfig(filename='logs/example.log', format='%(levelname)s: %(message)s', filemode='w', level=logging.DEBUG)
+        logging.basicConfig(filename='sym_api_client_python/logs/example.log', format='%(levelname)s: %(message)s', filemode='w', level=logging.DEBUG)
         logging.getLogger("urllib3").setLevel(logging.WARNING)
         self.config = config
         self.jwt = self.getJWT()
