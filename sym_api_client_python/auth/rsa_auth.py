@@ -9,10 +9,9 @@ class RSA_Auth():
     #initialize with config object
     #get JWT token upon initization
     #fetch session and keymanager tokens respectively
-    def __init__(self, config):
-        logging.basicConfig(filename='sym_api_client_python/logs/example.log', format='%(levelname)s: %(message)s', filemode='w', level=logging.DEBUG)
-        logging.getLogger("urllib3").setLevel(logging.WARNING)
+    def __init__(self, config, privatePemPath):
         self.config = config
+        self.privatePemPath = privatePemPath
         self.jwt = self.getJWT()
         self.sessionToken = self.get_session_token()
         self.keyAuthToken = self.get_keyauth()
@@ -24,10 +23,10 @@ class RSA_Auth():
     def getJWT(self):
         logging.debug('RSA_auth/getJWT() function started')
         #load this from config
-        privateKey = open('reedBot/reedBot_privatekey.pem', 'r').read()
+        privateKey = open(self.privatePemPath, 'r').read()
         expiration_date = int(datetime.datetime.now(datetime.timezone.utc).timestamp() + (5*58))
         payload = {
-            'sub': 'reedBot',
+            'sub': self.config.data['botCertName'],
             'exp': expiration_date
         }
         encoded = jwt.encode(payload, privateKey, algorithm='RS256')
