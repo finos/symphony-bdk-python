@@ -11,20 +11,18 @@ logging.getLogger("urllib3").setLevel(logging.WARNING)
 #main() acts as executable script --> run python3 hello.py to start Bot...
 
 #adjust global variable below to auth either using RSA or certificates
-RSA = False
 
 def main():
         print('hi')
         #pass in path to config.json file to Config class
         configure = Config('sym_api_client_python/resources/config.json')
-        #parse through config.json and extract decrypt certificates
         configure.connect()
-        #if you wish to authenticate using RSA replace following line with: auth = rsa_Auth(configure) --> get rid of auth.authenticate
-        if not RSA:
+        if configure.data['authType'] == 'RSA':
+            auth = RSA_Auth(configure,'/Users/reed.feldman/Desktop/sampleBot/sampleBot-python/src/main/python/RSA/bottleBot/bottleBot_privatekey.pem')
+        else:
             auth = Auth(configure)
             auth.authenticate()
-        else:
-            auth = RSA_Auth(configure)
+
         #initialize SymBotClient with auth and configure objects
         botClient = SymBotClient(auth, configure)
         #initialize datafeed service
