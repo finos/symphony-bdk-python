@@ -1,6 +1,7 @@
 import json
 import requests
 import sys
+import logging
 # from configure.crypt import Crypt
 from ..configure.crypt import Crypt
 
@@ -30,10 +31,12 @@ class Config():
             self.data['botCertName'] = data['botCertName']
             self.data['botCertPassword'] = data['botCertPassword']
             self.data['botEmailAddress'] = data['botEmailAddress']
+            self.data['p.12'] = self.data['botCertPath'] + '.p12'
         #take in .p12 certificate and parse through file to use for authentication
         #data['botCert_cert'] and data['botCert_key'] are passed as certificates upon authentication request
         try:
-            crypt = Crypt(self.data['botCertPath']+'.p12', self.data['botCertPassword'])
+            logging.debug('p.12 --->  ' + self.data['p.12'])
+            crypt = Crypt(self.data['p.12'], self.data['botCertPassword'])
             self.data['symphonyCertificate'], self.data['symphonyKey'] = crypt.p12parse()
 
 

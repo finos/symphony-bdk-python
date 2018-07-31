@@ -1,7 +1,8 @@
-2018-07-30 17:04:04,383 - root - DEBUG - Auth/authenticate() --> needed to authenticate
-2018-07-30 17:04:04,383 - root - DEBUG - Auth/get_session_token()
-2018-07-30 17:04:05,152 - root - DEBUG - Auth/get_keyauth()
-2018-07-30 17:04:06,382 - root - DEBUG - DataFeedClient/createDatafeed()
-2018-07-30 17:04:08,776 - root - DEBUG - DataFeedClient/readDatafeed()
-2018-07-30 17:04:39,395 - root - DEBUG - no data coming in from datafeed --> readDatafeed()
-2018-07-30 17:04:39,395 - root - DEBUG - DataFeedClient/readDatafeed()
+2018-07-31 12:43:44,026 - root - DEBUG - p.12 --->  /Users/reed.feldman/Desktop/symphonyPythonClient/resources/certificates/bot.user11.p12
+2018-07-31 12:43:44,034 - root - DEBUG - Auth/authenticate() --> needed to authenticate
+2018-07-31 12:43:44,034 - root - DEBUG - Auth/get_session_token()
+2018-07-31 12:43:44,811 - root - DEBUG - Auth/get_keyauth()
+2018-07-31 12:43:45,992 - root - DEBUG - DataFeedClient/createDatafeed()
+2018-07-31 12:43:48,530 - root - DEBUG - DataFeedClient/readDatafeed()
+2018-07-31 12:44:18,975 - root - DEBUG - no data coming in from datafeed --> readDatafeed()
+2018-07-31 12:44:18,975 - root - DEBUG - DataFeedClient/readDatafeed()
