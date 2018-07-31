@@ -24,6 +24,7 @@ class RSA_Auth():
         logging.debug('RSA_auth/getJWT() function started')
         #load this from config
         privateKey = open(self.privatePemPath, 'r').read()
+        print(privateKey)
         expiration_date = int(datetime.datetime.now(datetime.timezone.utc).timestamp() + (5*58))
         payload = {
             'sub': self.config.data['botCertName'],
@@ -35,17 +36,20 @@ class RSA_Auth():
     #raw api call to get session token.  pass jwt in request using json parameter
     def get_session_token(self):
         logging.debug('RSA_auth/get_session_token() function started')
+        print(self.jwt)
         data = {
             'token': self.jwt
         }
-        url = self.config.data['podHost']+'/login/pubkey/authenticate'
+        # url = self.config.data['podHost']+'/login/pubkey/authenticate'
+        url = 'https://sup.symphony.com/login/pubkey/authenticate'
+        print(url)
         response = requests.post(url, json=data)
         if response.status_code == 200:
             data = json.loads(response.text)
             return data['token']
         else:
             logging.debug('RSA_auth/get_session_token() function failed')
-            raise Exception("Failed to get sessionToken: RSA")
+            raise Exception("Failed to get sessionToken: RSA: {}".format(response.status_code))
 
     #raw api call to get key manager token.  pass jwt in request using json parameter
     def get_keyauth(self):

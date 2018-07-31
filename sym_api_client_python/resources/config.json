@@ -10,12 +10,13 @@
   "botCertPath": "/Users/reed.feldman/Desktop/symphonyPythonClient/resources/certificates/",
   "botCertName": "bot.user11",
   "botCertPassword": "changeit",
-  "botEmailAddress": "bot.user11@example.com",
+  "botEmailAddress": "bot.user11@symphony.com",
   "appCertPath": "",
   "appCertName": "",
   "appCertPassword": "",
   "proxyURL": "",
   "proxyUsername": "",
   "proxyPassword": "",
-  "authTokenRefreshPeriod": "30"
+  "authTokenRefreshPeriod": "30",
+  "authType": "cert"
 }
