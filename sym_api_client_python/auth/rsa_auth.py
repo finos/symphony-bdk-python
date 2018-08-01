@@ -40,8 +40,7 @@ class RSA_Auth():
         data = {
             'token': self.jwt
         }
-        # url = self.config.data['podHost']+'/login/pubkey/authenticate'
-        url = 'https://sup.symphony.com/login/pubkey/authenticate'
+        url = self.config.data['podHost']+'/login/pubkey/authenticate'
         print(url)
         response = requests.post(url, json=data)
         if response.status_code == 200:
@@ -57,7 +56,7 @@ class RSA_Auth():
         data = {
             'token': self.jwt
         }
-        url = 'https://sup-km.symphony.com/relay/pubkey/authenticate'
+        url = self.config.data['keyAuthUrl']+'/relay/pubkey/authenticate'
         response = requests.post(url, json=data)
         if response.status_code == 200:
             data = json.loads(response.text)
