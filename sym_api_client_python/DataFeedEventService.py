@@ -51,7 +51,6 @@ class DataFeedEventService():
                 finalData = data[0]
                 logging.debug('DataFeedEventService/readDatafeed() --> Incoming data from readDatafeed(): {}'.format(finalData))
                 for i in range(0, len(finalData)):
-                    print(finalData[i]['initiator']['user']['email'])
                     if finalData[i]['initiator']['user']['email'] != self.botClient.config.data['botEmailAddress']:
                         self.handle_event(finalData[i])
                 self.readDatafeed(id)
