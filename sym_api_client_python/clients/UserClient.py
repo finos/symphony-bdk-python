@@ -19,6 +19,10 @@ class UserClient(APIClient):
         self.botClient = botClient
         self.config = botClient.getSymConfig()
         self.auth = botClient.getSymAuth()
+        if self.config.data['proxyURL']:
+            self.proxies = {"http": self.config.data['proxyURL']}
+        else:
+            self.proxies = {}
 
     def getUsersV3(self, usersArray, local=False):
         logging.debug('UserClient/getUsersV3()')
@@ -26,7 +30,7 @@ class UserClient(APIClient):
         url = self.config.data['podHost']+'/pod/v3/users'
         usersArray = ','.join(map(str,usersArray))
         params = {'uid': usersArray, 'local': local}
-        response = requests.get(url, headers=headers, params=params)
+        response = requests.get(url, headers=headers, params=params, proxies=self.proxies)
         print(response.url)
         if response.status_code == 200:
             return json.loads(response.text)
@@ -42,7 +46,7 @@ class UserClient(APIClient):
         url = self.config.data['podHost']+'/pod/v2/user'
         usersArray = ','.join(map(str,usersArray))
         params = {'uid': usersArray, 'local': local}
-        response = requests.get(url, headers=headers, params=params)
+        response = requests.get(url, headers=headers, params=params, proxies=self.proxies)
         if response.status_code == 200:
             return json.loads(response.text)
         else:
@@ -57,7 +61,7 @@ class UserClient(APIClient):
         url = self.config.data['podHost']+'/pod/v1/user/search'
         params = {'local': local, 'skip': skip, 'limit': limit}
         data = {'query':query}
-        response = requests.post(url, headers=headers, params=params, json=data)
+        response = requests.post(url, headers=headers, params=params, json=data, proxies=self.proxies)
         print(response.url)
         if response.status_code == 200:
             return json.loads(response.text)

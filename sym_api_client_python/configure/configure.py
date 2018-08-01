@@ -33,6 +33,7 @@ class Config():
             self.data['botEmailAddress'] = data['botEmailAddress']
             self.data['p.12'] = self.data['botCertPath'] + '.p12'
             self.data['authType'] = data['authType']
+            self.data['proxyURL'] = data['proxyURL']
 
         #take in .p12 certificate and parse through file to use for authentication
         #data['botCert_cert'] and data['botCert_key'] are passed as certificates upon authentication request

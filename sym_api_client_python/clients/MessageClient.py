@@ -17,12 +17,16 @@ class MessageClient(APIClient):
         self.botClient = botClient
         self.config = botClient.getSymConfig()
         self.auth = botClient.getSymAuth()
+        if self.config.data['proxyURL']:
+            self.proxies = {"http": self.config.data['proxyURL']}
+        else:
+            self.proxies = {}
 
     def getMessages(self, streamId, since):
         logging.debug('MessageClient/getMessages()')
         headers = {'sessionToken':self.auth.sessionToken, 'keyManagerToken': self.auth.keyAuthToken}
         url = self.config.data['agentHost']+'/agent/v4/stream/{0}/message?since={1}'.format(streamId, since)
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers, proxies=self.proxies)
         if response.status_code == 204:
             result = []
             return result
@@ -38,7 +42,7 @@ class MessageClient(APIClient):
         logging.debug('MessageClient/createMessage()')
         url = self.config.data['agentHost']+'/agent/v4/stream/{0}/message/create'.format(streamId)
         headers = {'sessionToken':self.auth.sessionToken, 'keyManagerToken': self.auth.keyAuthToken}
-        response = requests.post(url, files=outBoundMessage, headers=headers)
+        response = requests.post(url, files=outBoundMessage, headers=headers, proxies=self.proxies)
         if response.status_code == 204:
             result = []
             return result
@@ -54,7 +58,7 @@ class MessageClient(APIClient):
         logging.debug('MessageClient/getAttachments()')
         headers = {'sessionToken':self.auth.sessionToken, 'keyManagerToken': self.auth.keyAuthToken}
         url = self.config.data['agentHost']+'/agent/v1/stream/{0}/attachment?messageId={1}&fileId={2}'.format(streamId, messageId, fileId)
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers, proxies=self.proxies)
         if response.status_code == 204:
             result = []
             return result
@@ -80,7 +84,7 @@ class MessageClient(APIClient):
             "originalMessageId": "",
             "streamId": ""
         }
-        response = requests.post(url, headers=headers, data=payload)
+        response = requests.post(url, headers=headers, data=payload, proxies=self.proxies)
         if response.status_code == 204:
             result = []
             return result
@@ -97,7 +101,7 @@ class MessageClient(APIClient):
         logging.debug('MessageClient/suppressMessage()')
         headers = {'sessionToken':self.auth.sessionToken}
         url = self.config.data['podHost']+'/pod/v1/admin/messagesuppression/{0}/suppress'.format(id)
-        response = requests.post(url, headers=headers)
+        response = requests.post(url, headers=headers, proxies=self.proxies)
         if response.status_code == 204:
             result = []
             return result
@@ -115,7 +119,7 @@ class MessageClient(APIClient):
         headers = {'sessionToken':self.auth.sessionToken, 'keyManagerToken': self.auth.keyAuthToken}
         url = self.config.data['agentHost']+'/agent/v1/message/search'
         payload = {'hashtag':'reed'}
-        response = requests.post(url, headers=headers, json=payload)
+        response = requests.post(url, headers=headers, json=payload, proxies=self.proxies)
         if response.status_code == 204:
             result = []
             return result
@@ -133,7 +137,7 @@ class MessageClient(APIClient):
         headers = {'sessionToken':self.auth.sessionToken, 'keyManagerToken': self.auth.keyAuthToken}
         url = self.config.data['agentHost']+'/agent/v1/message/search'
         query = {'query': 'hashtag:reed'}
-        response = requests.get(url, headers=headers, params=query)
+        response = requests.get(url, headers=headers, params=query, proxies=self.proxies)
         if response.status_code == 204:
             result = []
             return result
@@ -149,7 +153,7 @@ class MessageClient(APIClient):
         logging.debug('MessageClient/getMessageStatus()')
         headers = {'sessionToken':self.auth.sessionToken}
         url = self.config.data['podHost']+'/pod/v1/message/{0}/status'.format(messageId)
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers, proxies=self.proxies)
         if response.status_code == 204:
             result = []
             return result
@@ -165,7 +169,7 @@ class MessageClient(APIClient):
         logging.debug('MessageClient/getAttachmentTypes()')
         headers = {'sessionToken':self.auth.sessionToken}
         url = self.config.data['podHost']+'/pod/v1/files/allowedTypes'
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers, proxies=self.proxies)
         if response.status_code == 204:
             result = []
             return result

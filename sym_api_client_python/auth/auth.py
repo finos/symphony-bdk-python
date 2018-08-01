@@ -12,6 +12,10 @@ class Auth():
         self.config = config
         self.sessionToken = ''
         self.keyAuthToken = ''
+        if self.config.data['proxyURL']:
+            self.proxies = {"http": self.config.data['proxyURL']}
+        else:
+            self.proxies = {}
     #if sessionToken or keyAuthToken are empty --> call auth endpoints below
     def authenticate(self):
         if not(self.sessionToken or self.keyAuthToken):
@@ -25,7 +29,7 @@ class Auth():
     #pass in certificates from config object using requests library built in cert parameter
     def get_session_token(self):
         logging.debug('Auth/get_session_token()')
-        response = requests.post(self.config.data['sessionAuthUrl']+'/sessionauth/v1/authenticate', cert=(self.config.data['symphonyCertificate'], self.config.data['symphonyKey']))
+        response = requests.post(self.config.data['sessionAuthUrl']+'/sessionauth/v1/authenticate',proxies=self.proxies, cert=(self.config.data['symphonyCertificate'], self.config.data['symphonyKey']))
         if response.status_code == 200:
             data = json.loads(response.text)
             return data['token']
@@ -37,7 +41,7 @@ class Auth():
     #pass in certificates from config object using requests library built in cert parameter
     def get_keyauth(self):
         logging.debug('Auth/get_keyauth()')
-        response = requests.post(self.config.data['keyAuthUrl']+'/keyauth/v1/authenticate', cert=(self.config.data['symphonyCertificate'], self.config.data['symphonyKey']))
+        response = requests.post(self.config.data['keyAuthUrl']+'/keyauth/v1/authenticate', proxies=self.proxies, cert=(self.config.data['symphonyCertificate'], self.config.data['symphonyKey']))
         if response.status_code == 200:
             data = json.loads(response.text)
             return data['token']

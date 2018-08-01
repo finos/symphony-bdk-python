@@ -16,13 +16,17 @@ class DataFeedClient(APIClient):
         self.botClient = botClient
         self.config = botClient.getSymConfig()
         self.auth = botClient.getSymAuth()
+        if self.config.data['proxyURL']:
+            self.proxies = {"http": self.config.data['proxyURL']}
+        else:
+            self.proxies = {}
 
     #raw api call to createDatafeed --> returns dataFeedId
     def createDatafeed(self):
         logging.debug('DataFeedClient/createDatafeed()')
         # messaging_logger.debug('DataFeedClient/createDatafeed()')
         headers = {'sessionToken': self.auth.sessionToken, 'keyManagerToken': self.auth.keyAuthToken}
-        response = requests.post(self.config.data['agentHost']+'/agent/v4/datafeed/create', headers=headers)
+        response = requests.post(self.config.data['agentHost']+'/agent/v4/datafeed/create', proxies=self.proxies, headers=headers)
 
         if response.status_code == 200:
             data = json.loads(response.text)
@@ -39,7 +43,7 @@ class DataFeedClient(APIClient):
         datafeedevents = []
         headers = {'sessionToken': self.auth.sessionToken, 'keyManagerToken': self.auth.keyAuthToken}
         url = self.config.data['agentHost']+'/agent/v4/datafeed/{0}/read'.format(id)
-        response = requests.get(url, headers=headers )
+        response = requests.get(url, proxies=self.proxies, headers=headers )
         if (response.status_code == 204):
             datafeedevents = []
         elif(response.status_code == 200):

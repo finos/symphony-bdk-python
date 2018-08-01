@@ -18,12 +18,16 @@ class StreamClient(APIClient):
         self.botClient = botClient
         self.config = botClient.getSymConfig()
         self.auth = botClient.getSymAuth()
+        if self.config.data['proxyURL']:
+            self.proxies = {"http": self.config.data['proxyURL']}
+        else:
+            self.proxies = {}
 
     def createIM(self, usersArray):
         logging.debug('StreamClient/createIM()')
         headers = {'sessionToken':self.auth.sessionToken}
         url = self.config.data['podHost']+'/pod/v1/im/create'
-        response = requests.post(url, json=usersArray, headers=headers)
+        response = requests.post(url, json=usersArray, headers=headers,proxies=self.proxies)
         if response.status_code == 200:
             return json.loads(response.text)
         else:
@@ -36,7 +40,7 @@ class StreamClient(APIClient):
         logging.debug('StreamClient/createIMAdmin()')
         headers = {'sessionToken':self.auth.sessionToken}
         url = self.config.data['podHost']+'/pod/v1/admin/im/create'
-        response = requests.post(url, json=usersArray, headers=headers)
+        response = requests.post(url, json=usersArray, headers=headers, proxies=self.proxies)
         if response.status_code == 200:
             return json.loads(response.text)
         else:
@@ -53,7 +57,7 @@ class StreamClient(APIClient):
         url = self.config.data['podHost']+'/pod/v3/room/create'
         data = {"name": "butlahsroom",
                 "description": "meant for testing with butler"}
-        response = requests.post(url, headers=headers, json=data)
+        response = requests.post(url, headers=headers, json=data, proxies=self.proxies)
         if response.status_code == 200:
             return json.loads(response.text)
         else:
@@ -68,7 +72,7 @@ class StreamClient(APIClient):
         headers = {'sessionToken':self.auth.sessionToken}
         url = self.config.data['podHost']+'/pod/v3/room/{0}/update'.format(roomId)
         data = {"name":"updatedRoomName"}
-        response = requests.post(url, headers=headers, json=data)
+        response = requests.post(url, headers=headers, json=data, proxies=self.proxies)
         if response.status_code == 200:
             return json.loads(response.text)
         else:
@@ -81,7 +85,7 @@ class StreamClient(APIClient):
         logging.debug('StreamClient/roomInfo()')
         headers = {'sessionToken':self.auth.sessionToken}
         url = self.config.data['podHost']+'/pod/v3/room/{0}/info'.format(roomId)
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers, proxies=self.proxies)
         if response.status_code == 200:
             return json.loads(response.text)
         else:
@@ -95,7 +99,7 @@ class StreamClient(APIClient):
         logging.debug('StreamClient/activateRoom()')
         headers = {'sessionToken':self.auth.sessionToken}
         url = self.config.data['podHost']+'/pod/v1/room/{0}/setActive?active={1}'.format(roomId, active)
-        response = requests.post(url, headers=headers)
+        response = requests.post(url, headers=headers, proxies=self.proxies)
         if response.status_code == 200:
             return json.loads(response.text)
         else:
@@ -108,7 +112,7 @@ class StreamClient(APIClient):
         logging.debug('StreamClient/getRoomMembers()')
         headers = {'sessionToken':self.auth.sessionToken}
         url = self.config.data['podHost']+'/pod/v2/room/{0}/membership/list'.format(roomId)
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers, proxies=self.proxies)
         if response.status_code == 200:
             return json.loads(response.text)
         else:
@@ -123,7 +127,7 @@ class StreamClient(APIClient):
         headers = {'sessionToken':self.auth.sessionToken}
         url = self.config.data['podHost']+'/pod/v1/room/{0}/membership/add'.format(roomId)
         data = {'id': userId}
-        response = requests.post(url, headers=headers, json=data)
+        response = requests.post(url, headers=headers, json=data, proxies=self.proxies)
         if response.status_code == 200:
             return json.loads(response.text)
         else:
@@ -153,7 +157,7 @@ class StreamClient(APIClient):
         "appIconUrl": "https://apps-dev.symphony.com/ticker/assets/images/logo.png"
             }
         }
-        response = requests.post(url, headers=headers, json=data)
+        response = requests.post(url, headers=headers, json=data, proxies=self.proxies)
         if response.status_code == 200:
             return json.loads(response.text)
         else:
@@ -168,7 +172,7 @@ class StreamClient(APIClient):
             headers = {'sessionToken':self.auth.sessionToken}
             url = self.config.data['podHost']+'/pod/v1/room/{0}/membership/remove'.format(roomId)
             data = {'id': userId}
-            response = requests.post(url, headers=headers, json=data)
+            response = requests.post(url, headers=headers, json=data, proxies=self.proxies)
             if response.status_code == 200:
                 return json.loads(response.text)
             else:
@@ -183,7 +187,7 @@ class StreamClient(APIClient):
         headers = {'sessionToken':self.auth.sessionToken}
         url = self.config.data['podHost']+'/pod/v1/room/{0}/membership/promoteOwner'.format(roomId)
         data = {'id': userId}
-        response = requests.post(url, headers=headers, json=data)
+        response = requests.post(url, headers=headers, json=data, proxies=self.proxies)
         if response.status_code == 200:
             return json.loads(response.text)
         else:
@@ -197,7 +201,7 @@ class StreamClient(APIClient):
         headers = {'sessionToken':self.auth.sessionToken}
         url = self.config.data['podHost']+'/pod/v1/room/{0}/membership/demoteOwner'.format(roomId)
         data = {'id': userId}
-        response = requests.post(url, headers=headers, json=data)
+        response = requests.post(url, headers=headers, json=data, proxies=self.proxies)
         if response.status_code == 200:
             return json.loads(response.text)
         else:
@@ -212,7 +216,7 @@ class StreamClient(APIClient):
         url = self.config.data['podHost']+'/pod/v3/room/search'
         params = {'skip':skip, 'limit':limit}
         data = {'query': 'butlahsroom'}
-        response = requests.post(url, headers=headers, params=params, json=data)
+        response = requests.post(url, headers=headers, params=params, json=data, proxies=self.proxies)
         if response.status_code == 200:
             return json.loads(response.text)
         else:
@@ -233,7 +237,7 @@ class StreamClient(APIClient):
                   ],
                   "includeInactiveStreams": True
                 }
-        response = requests.post(url, headers=headers, json=data)
+        response = requests.post(url, headers=headers, json=data, proxies=self.proxies)
         if response.status_code == 200:
             return json.loads(response.text)
         else:
@@ -246,7 +250,7 @@ class StreamClient(APIClient):
         logging.debug('StreamClient/streamInfo()')
         headers = {'sessionToken':self.auth.sessionToken}
         url = self.config.data['podHost']+'/pod/v1/streams/{0}/info'.format(streamId)
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers, proxies=self.proxies)
         if response.status_code == 200:
             return json.loads(response.text)
         else:
@@ -259,7 +263,7 @@ class StreamClient(APIClient):
         logging.debug('StreamClient/streamInfoV2()')
         headers = {'sessionToken':self.auth.sessionToken}
         url = self.config.data['podHost']+'/pod/v2/streams/{0}/info'.format(streamId)
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers, proxies=self.proxies)
         if response.status_code == 200:
             return json.loads(response.text)
         else:
@@ -282,7 +286,7 @@ class StreamClient(APIClient):
               "startDate": 1481575056047,
               "endDate": 1483038089833
             }
-        response = requests.post(url, headers=headers, params=params, json=data)
+        response = requests.post(url, headers=headers, params=params, json=data, proxies=self.proxies)
         if response.status_code == 200:
             return json.loads(response.text)
         else:
@@ -306,7 +310,7 @@ class StreamClient(APIClient):
               "startDate": 1481575056047,
               "endDate": 1483038089833
             }
-        response = requests.post(url, headers=headers, params=params, json=data)
+        response = requests.post(url, headers=headers, params=params, json=data, proxies=self.proxies)
         if response.status_code == 200:
             return json.loads(response.text)
         else:
@@ -320,7 +324,7 @@ class StreamClient(APIClient):
         logging.debug('StreamClient/getStreamMembers()')
         headers = {'sessionToken':self.auth.sessionToken}
         url = self.config.data['podHost']+'/pod/v1/admin/stream/{0}/membership/list'.format(streamId)
-        response = requests.post(url, headers=headers)
+        response = requests.post(url, headers=headers, proxies=self.proxies)
         if response.status_code == 200:
             return json.loads(response.text)
         else:
