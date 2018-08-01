@@ -1,3 +1,4 @@
+
 2018-08-01 13:01:22,613 - root - DEBUG - p12 location ---> /Users/reed.feldman/Desktop/symphonyPythonClient/resources/certificates/bot.user11.p12
 2018-08-01 13:01:22,623 - root - DEBUG - Auth/authenticate() --> needed to authenticate
 2018-08-01 13:01:22,624 - root - DEBUG - Auth/get_session_token()
@@ -18,3 +19,5 @@
 2018-08-01 13:01:33,944 - root - DEBUG - DataFeedClient/readDatafeed()
 2018-08-01 13:01:34,375 - root - DEBUG - DataFeedEventService/readDatafeed() --> Incoming data from readDatafeed(): [{'id': '1cSe0s:CXZm7v', 'messageId': '3UjwYdOw0A0OozeMSvq9xH___psJj_sVdA', 'timestamp': 1533142893806, 'type': 'MESSAGESENT', 'initiator': {'user': {'userId': 344147139494588, 'displayName': 'ButlerDemo', 'email': 'bot.user11@example.com', 'username': 'bot.user11'}}, 'payload': {'messageSent': {'message': {'messageId': '3UjwYdOw0A0OozeMSvq9xH___psJj_sVdA', 'timestamp': 1533142893806, 'message': '<div data-format="PresentationML" data-version="2.0"><span class="entity" data-entity-id="keyword1">#reed</span></div>', 'data': '{"keyword1":{"type":"org.symphonyoss.taxonomy","version":"1.0","id":[{"type":"org.symphonyoss.taxonomy.hashtag","value":"reed"}]}}', 'user': {'userId': 344147139494588, 'displayName': 'ButlerDemo', 'email': 'bot.user11@example.com', 'username': 'bot.user11'}, 'stream': {'streamId': 'NyLNtKZwstZLapBgzR1Nqn___pt1T1EpdA', 'streamType': 'ROOM'}, 'externalRecipients': False, 'userAgent': 'Agent-2.1.7-Linux-3.10.0-693.11.6.el7.x86_64', 'originalFormat': 'com.symphony.messageml.v2'}}}}]
 2018-08-01 13:01:34,376 - root - DEBUG - DataFeedClient/readDatafeed()
+
+
