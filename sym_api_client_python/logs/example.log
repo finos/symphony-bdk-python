@@ -1,6 +1,6 @@
-2018-07-31 17:25:19,914 - root - DEBUG - p12 location ---> /Users/reed.feldman/Desktop/symphonyPythonClient/resources/certificates/bot.user11.p12
-2018-07-31 17:25:19,932 - root - DEBUG - Auth/authenticate() --> needed to authenticate
-2018-07-31 17:25:19,932 - root - DEBUG - Auth/get_session_token()
-2018-07-31 17:25:20,783 - root - DEBUG - Auth/get_keyauth()
-2018-07-31 17:25:22,077 - root - DEBUG - DataFeedClient/createDatafeed()
-2018-07-31 17:25:24,054 - root - DEBUG - DataFeedClient/readDatafeed()
+2018-08-01 10:56:30,660 - root - DEBUG - p12 location ---> /Users/reed.feldman/Desktop/symphonyPythonClient/resources/certificates/bot.user11.p12
+2018-08-01 10:56:30,669 - root - DEBUG - Auth/authenticate() --> needed to authenticate
+2018-08-01 10:56:30,669 - root - DEBUG - Auth/get_session_token()
+2018-08-01 10:56:31,322 - root - DEBUG - Auth/get_keyauth()
+2018-08-01 10:56:32,529 - root - DEBUG - DataFeedClient/createDatafeed()
+2018-08-01 10:56:34,925 - root - DEBUG - DataFeedClient/readDatafeed()
