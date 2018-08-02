@@ -15,10 +15,9 @@ logging.getLogger("urllib3").setLevel(logging.WARNING)
 def main():
         print('hi')
         #RSA Auth flow:
-        #certificate Auth flow:
-        configure = Config('sym_api_client_python/resources/config.json')
-        configure.loadFromFile()
-        auth = Auth(configure)
+        configure = Config('sym_api_client_python/resources/rsa_config.json')
+        configure.loadFromRSA()
+        auth = SymBotRSAAuth(configure)
         auth.authenticate()
         #initialize SymBotClient with auth and configure objects
         botClient = SymBotClient(auth, configure)

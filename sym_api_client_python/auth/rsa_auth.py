@@ -4,17 +4,32 @@ import requests
 import logging
 from jose import jwt
 import datetime
+from ..clients.apiClient import APIClient
+from ..exceptions.UnauthorizedException import UnauthorizedException
 
-class RSA_Auth():
+class SymBotRSAAuth(APIClient):
     #initialize with config object
     #get JWT token upon initization
     #fetch session and keymanager tokens respectively
-    def __init__(self, config, privatePemPath):
+    def __init__(self, config):
         self.config = config
-        self.privatePemPath = privatePemPath
+        self.sessionToken = ''
+        self.keyAuthToken = ''
         self.jwt = self.getJWT()
-        self.sessionToken = self.get_session_token()
-        self.keyAuthToken = self.get_keyauth()
+        if self.config.data['proxyURL']:
+            self.proxies = {"http": self.config.data['proxyURL']}
+            print(self.proxies)
+        else:
+            self.proxies = {}
+
+
+    def authenticate(self):
+        if not(self.sessionToken or self.keyAuthToken):
+            logging.debug('Auth/authenticate() --> needed to authenticate')
+            self.sessionToken = self.get_session_token()
+            self.keyAuthToken = self.get_keyauth()
+        else:
+            logging.debug('Auth/authenticate() --> did not need to authenticate')
 
     #load .pem file generated on admin portal in symphony pod
     #retrieve folder of public/private keys by executing shell script on symphony developers guide
@@ -23,11 +38,11 @@ class RSA_Auth():
     def getJWT(self):
         logging.debug('RSA_auth/getJWT() function started')
         #load this from config
-        privateKey = open(self.privatePemPath, 'r').read()
+        privateKey = open(self.config.data['privatePemPath'], 'r').read()
         print(privateKey)
         expiration_date = int(datetime.datetime.now(datetime.timezone.utc).timestamp() + (5*58))
         payload = {
-            'sub': self.config.data['botCertName'],
+            'sub': self.config.data['botUserName'],
             'exp': expiration_date
         }
         encoded = jwt.encode(payload, privateKey, algorithm='RS256')
@@ -42,7 +57,7 @@ class RSA_Auth():
         }
         url = self.config.data['podHost']+'/login/pubkey/authenticate'
         print(url)
-        response = requests.post(url, json=data)
+        response = requests.post(url, json=data, proxies=self.proxies)
         if response.status_code == 200:
             data = json.loads(response.text)
             return data['token']
@@ -56,8 +71,9 @@ class RSA_Auth():
         data = {
             'token': self.jwt
         }
-        url = self.config.data['keyAuthUrl']+'/relay/pubkey/authenticate'
-        response = requests.post(url, json=data)
+        url = self.config.data['podHost']+'/relay/pubkey/authenticate'
+        print(url)
+        response = requests.post(url, json=data, proxies=self.proxies)
         if response.status_code == 200:
             data = json.loads(response.text)
             return data['token']

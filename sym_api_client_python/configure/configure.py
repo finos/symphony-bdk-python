@@ -17,14 +17,28 @@ class Config():
         for k,v in self.data.items():
             print(v)
 
+    def loadFromRSA(self):
+        with open(self.configFile, "r") as read_file:
+            data = json.load(read_file)
+            self.data['sessionAuthHost'] = 'https://'+ data['sessionAuthHost']
+            self.data['keyAuthHost'] = 'https://'+ data['keyAuthHost']
+            self.data['podHost'] = 'https://'+ data['podHost']
+            self.data['agentHost'] = 'https://'+ data['agentHost']
+            self.data['privatePemPath'] = data['privatePemPath']
+            self.data['botUserName'] = data['botUserName']
+            self.data['botEmailAddress'] = data['botEmailAddress']
+            self.data['authType'] = data['authType']
+            self.data['proxyURL'] = data['proxyURL']
+
+
     #read config file and store values in dictionary called data
     #sessionAuthUrl, keyAuthUrl, are endpoints used for authentication respectively
     #podHost and agentHost are used for any of the other REST API requests
-    def connect(self):
+    def loadFromFile(self):
         with open(self.configFile, "r") as read_file:
             data = json.load(read_file)
-            self.data['sessionAuthUrl'] = 'https://'+ data['sessionAuthHost']
-            self.data['keyAuthUrl'] = 'https://'+ data['keyAuthHost']
+            self.data['sessionAuthHost'] = 'https://'+ data['sessionAuthHost']
+            self.data['keyAuthHost'] = 'https://'+ data['keyAuthHost']
             self.data['podHost'] = 'https://'+ data['podHost']
             self.data['agentHost'] = 'https://'+ data['agentHost']
             self.data['botCertPath'] = data['botCertPath'] + data['botCertName']

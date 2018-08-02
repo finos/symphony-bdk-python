@@ -1,5 +1,6 @@
-2018-08-01 16:46:47,234 - root - DEBUG - RSA_auth/getJWT() function started
-2018-08-01 16:46:47,242 - root - DEBUG - RSA_auth/get_session_token() function started
-2018-08-01 16:46:47,407 - root - DEBUG - RSA_auth/get_keyauth() function started
-2018-08-01 16:46:48,192 - root - DEBUG - DataFeedClient/createDatafeed()
-2018-08-01 16:46:50,226 - root - DEBUG - DataFeedClient/readDatafeed()
+2018-08-02 13:42:37,150 - root - DEBUG - RSA_auth/getJWT() function started
+2018-08-02 13:42:37,161 - root - DEBUG - Auth/authenticate() --> needed to authenticate
+2018-08-02 13:42:37,162 - root - DEBUG - RSA_auth/get_session_token() function started
+2018-08-02 13:42:37,370 - root - DEBUG - RSA_auth/get_keyauth() function started
+2018-08-02 13:42:38,055 - root - DEBUG - DataFeedClient/createDatafeed()
+2018-08-02 13:42:40,402 - root - DEBUG - DataFeedClient/readDatafeed()

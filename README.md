@@ -27,7 +27,8 @@ Create a config.json file in your project which includes the following propertie
           "proxyURL": "",
           "proxyUsername": "",
           "proxyPassword": "",
-          "authTokenRefreshPeriod": "30"
+          "authTokenRefreshPeriod": "30",
+          "authType": "RSA"
         }
 
 ## Example main class

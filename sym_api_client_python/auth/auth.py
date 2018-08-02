@@ -6,7 +6,7 @@ from ..exceptions.UnauthorizedException import UnauthorizedException
 # logging.basicConfig(filename='logs/example.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filemode='w', level=logging.DEBUG)
 # logging.getLogger("urllib3").setLevel(logging.WARNING)
 
-class Auth():
+class Auth(APIClient):
     #initialize Auth object with config object and empty strings representing auth tokens
     def __init__(self, config):
         self.config = config
@@ -29,7 +29,7 @@ class Auth():
     #pass in certificates from config object using requests library built in cert parameter
     def get_session_token(self):
         logging.debug('Auth/get_session_token()')
-        response = requests.post(self.config.data['sessionAuthUrl']+'/sessionauth/v1/authenticate',proxies=self.proxies, cert=(self.config.data['symphonyCertificate'], self.config.data['symphonyKey']))
+        response = requests.post(self.config.data['sessionAuthHost']+'/sessionauth/v1/authenticate',proxies=self.proxies, cert=(self.config.data['symphonyCertificate'], self.config.data['symphonyKey']))
         if response.status_code == 200:
             data = json.loads(response.text)
             return data['token']
@@ -41,7 +41,7 @@ class Auth():
     #pass in certificates from config object using requests library built in cert parameter
     def get_keyauth(self):
         logging.debug('Auth/get_keyauth()')
-        response = requests.post(self.config.data['keyAuthUrl']+'/keyauth/v1/authenticate', proxies=self.proxies, cert=(self.config.data['symphonyCertificate'], self.config.data['symphonyKey']))
+        response = requests.post(self.config.data['keyAuthHost']+'/keyauth/v1/authenticate', proxies=self.proxies, cert=(self.config.data['symphonyCertificate'], self.config.data['symphonyKey']))
         if response.status_code == 200:
             data = json.loads(response.text)
             return data['token']
