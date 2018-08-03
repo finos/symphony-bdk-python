@@ -17,11 +17,10 @@ class SymBotClient():
         self.config = config
         self.dataFeedClient = None
         self.dataFeedEventService = None
-        self.getAPIClient()
         self.getMessageClient()
         self.getStreamClient()
         self.getUserClient()
-
+        self.getAPIClient()
 
     def getDataFeedEventService(self):
         if self.dataFeedEventService is None:
