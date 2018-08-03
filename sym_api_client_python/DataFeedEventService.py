@@ -17,6 +17,7 @@ class DataFeedEventService():
         self.roomListeners = []
         self.IMListeners = []
         self.connectionListener =[]
+        self.stop = False
         self.dataFeedClient = self.botClient.getDataFeedClient()
 
     def startDataFeed(self):
@@ -41,27 +42,35 @@ class DataFeedEventService():
     def removeConnectionsListener(self, connectionListener):
         self.connectionListeners.remove(connectionListener);
 
+    def activateDataFeed(self):
+        if self.stop == True:
+            self.stop == False
+
+    def deactivateDataFeed(self):
+        if self.stop == False:
+            self.stop == True
+
     #readDatafeed function reads an array of events coming back from DataFeedClient
     #checks to see that sender's email is not equal to Bot's email in config file
     #this functionality helps bot avoid entering an infinite loop where it responsds to its own messageSent
-    #recursively calls itelf after event recieved from DataFeed is properly handled
     def readDatafeed(self, id):
-        try:
-            data = self.dataFeedClient.readDatafeed(id)
-            if data:
-                finalData = data[0]
-                logging.debug('DataFeedEventService/readDatafeed() --> Incoming data from readDatafeed(): {}'.format(finalData))
-                for i in range(0, len(finalData)):
-                    if finalData[i]['initiator']['user']['email'] != self.botClient.config.data['botEmailAddress']:
-                        self.handle_event(finalData[i])
-                self.readDatafeed(id)
-            else:
-                logging.debug('DataFeedEventService() - no data coming in from datafeed --> readDatafeed()')
-                self.readDatafeed(id)
+        while not self.stop:
+            try:
+                data = self.dataFeedClient.readDatafeed(id)
+                if data:
+                    finalData = data[0]
+                    logging.debug('DataFeedEventService/readDatafeed() --> Incoming data from readDatafeed(): {}'.format(finalData))
+                    for i in range(0, len(finalData)):
+                        if finalData[i]['initiator']['user']['email'] != self.botClient.config.data['botEmailAddress']:
+                            self.handle_event(finalData[i])
+                    # self.readDatafeed(id)
+                else:
+                    logging.debug('DataFeedEventService() - no data coming in from datafeed --> readDatafeed()')
+                    # self.readDatafeed(id)
 
-        except UnauthorizedException:
-            logging.debug('DataFeedEventService - caught unauthorized exception --> startDataFeed()')
-            self.startDataFeed()
+            except UnauthorizedException:
+                logging.debug('DataFeedEventService - caught unauthorized exception --> startDataFeed()')
+                self.startDataFeed()
 
     #function takes in single event --> Checks eventType --> forwards event to proper handling function
     def handle_event(self, payload):
