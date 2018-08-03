@@ -1,6 +1,32 @@
-2018-08-02 13:42:37,150 - root - DEBUG - RSA_auth/getJWT() function started
-2018-08-02 13:42:37,161 - root - DEBUG - Auth/authenticate() --> needed to authenticate
-2018-08-02 13:42:37,162 - root - DEBUG - RSA_auth/get_session_token() function started
-2018-08-02 13:42:37,370 - root - DEBUG - RSA_auth/get_keyauth() function started
-2018-08-02 13:42:38,055 - root - DEBUG - DataFeedClient/createDatafeed()
-2018-08-02 13:42:40,402 - root - DEBUG - DataFeedClient/readDatafeed()
+2018-08-03 13:16:27,615 - root - DEBUG - p12 location ---> /Users/reed.feldman/Desktop/symphonyPythonClient/resources/certificates/bot.user11.p12
+2018-08-03 13:16:27,626 - root - DEBUG - Auth/authenticate() --> needed to authenticate
+2018-08-03 13:16:27,627 - root - DEBUG - Auth/get_session_token()
+2018-08-03 13:16:28,214 - root - DEBUG - Auth/session token success
+2018-08-03 13:16:28,215 - root - DEBUG - Auth/get_keyauth()
+2018-08-03 13:16:29,420 - root - DEBUG - Auth/keymanager token sucess
+2018-08-03 13:16:29,420 - root - DEBUG - DataFeedClient/createDatafeed()
+2018-08-03 13:16:31,711 - root - DEBUG - DataFeedClient/createDatafeed() suceeded: 200
+2018-08-03 13:16:31,711 - root - DEBUG - DataFeedClient/readDatafeed()
+2018-08-03 13:17:02,331 - root - DEBUG - DataFeedEventService() - no data coming in from datafeed --> readDatafeed()
+2018-08-03 13:17:02,331 - root - DEBUG - DataFeedClient/readDatafeed()
+2018-08-03 13:17:32,844 - root - DEBUG - DataFeedEventService() - no data coming in from datafeed --> readDatafeed()
+2018-08-03 13:17:32,844 - root - DEBUG - DataFeedClient/readDatafeed()
+2018-08-03 13:18:03,466 - root - DEBUG - DataFeedEventService() - no data coming in from datafeed --> readDatafeed()
+2018-08-03 13:18:03,466 - root - DEBUG - DataFeedClient/readDatafeed()
+2018-08-03 13:18:03,906 - root - DEBUG - DataFeedClient/readDatafeed() failed: 401
+2018-08-03 13:18:03,906 - root - DEBUG - handleError function started
+2018-08-03 13:18:03,906 - root - DEBUG - Auth/authenticate() --> needed to authenticate
+2018-08-03 13:18:03,906 - root - DEBUG - Auth/get_session_token()
+2018-08-03 13:18:04,383 - root - DEBUG - Auth/session token success
+2018-08-03 13:18:04,384 - root - DEBUG - Auth/get_keyauth()
+2018-08-03 13:18:05,390 - root - DEBUG - Auth/get_keyauth() failed: 401
+2018-08-03 13:18:05,390 - root - DEBUG - reauthenticated too fast. wait 30 seconds and try again.
+2018-08-03 13:18:35,396 - root - DEBUG - Auth/authenticate() --> needed to authenticate
+2018-08-03 13:18:35,396 - root - DEBUG - Auth/get_session_token()
+2018-08-03 13:18:35,749 - root - DEBUG - Auth/session token success
+2018-08-03 13:18:35,750 - root - DEBUG - Auth/get_keyauth()
+2018-08-03 13:18:36,726 - root - DEBUG - Auth/keymanager token sucess
+2018-08-03 13:18:36,726 - root - DEBUG - DataFeedEventService - caught unauthorized exception --> startDataFeed()
+2018-08-03 13:18:36,726 - root - DEBUG - DataFeedClient/createDatafeed()
+2018-08-03 13:18:37,262 - root - DEBUG - DataFeedClient/createDatafeed() failed: 400
+2018-08-03 13:18:37,262 - root - DEBUG - handleError function started

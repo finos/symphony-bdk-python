@@ -3,6 +3,7 @@ import logging
 from .listeners import ConnectionListener
 from .listeners import imListener
 from .listeners import RoomListener
+from .exceptions.UnauthorizedException import UnauthorizedException
 
 #class handles the the creation and reading of DataFeed
 #also contains the functionality to  dispatch the events coming back from the dataFeed
@@ -55,12 +56,12 @@ class DataFeedEventService():
                         self.handle_event(finalData[i])
                 self.readDatafeed(id)
             else:
-                logging.debug('no data coming in from datafeed --> readDatafeed()')
+                logging.debug('DataFeedEventService() - no data coming in from datafeed --> readDatafeed()')
                 self.readDatafeed(id)
 
-        except Exception as err:
-            print("Failed to read Data Feed: %s" % err)
-            raise
+        except UnauthorizedException:
+            logging.debug('DataFeedEventService - caught unauthorized exception --> startDataFeed()')
+            self.startDataFeed()
 
     #function takes in single event --> Checks eventType --> forwards event to proper handling function
     def handle_event(self, payload):

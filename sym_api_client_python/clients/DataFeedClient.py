@@ -29,13 +29,19 @@ class DataFeedClient(APIClient):
         response = requests.post(self.config.data['agentHost']+'/agent/v4/datafeed/create', proxies=self.proxies, headers=headers)
 
         if response.status_code == 200:
+            logging.debug('DataFeedClient/createDatafeed() suceeded: {}'.format(response.status_code))
             data = json.loads(response.text)
             dataFeedId = data['id']
             return dataFeedId
 
         else:
-            logging.debug('DataFeedClient/createDatafeed() failed: {}'.format(response.status_code))
-            super().handleError(response)
+            try:
+                logging.debug('DataFeedClient/createDatafeed() failed: {}'.format(response.status_code))
+                super().handleError(response)
+            except UnauthorizedException:
+                #should take 30 second to get here so after it reauthorizes, catch it and re create df
+                self.createDatafeed()
+
 
     #raw api call to readDatafeed --> returns an array of events returned from DataFeed
     def readDatafeed(self, id):
@@ -43,13 +49,12 @@ class DataFeedClient(APIClient):
         datafeedevents = []
         headers = {'sessionToken': self.auth.sessionToken, 'keyManagerToken': self.auth.keyAuthToken}
         url = self.config.data['agentHost']+'/agent/v4/datafeed/{0}/read'.format(id)
-        response = requests.get(url, proxies=self.proxies, headers=headers )
+        response = requests.get(url, proxies=self.proxies, headers=headers)
         if (response.status_code == 204):
             datafeedevents = []
         elif(response.status_code == 200):
             x = json.loads(response.text)
             datafeedevents.append(x)
-
         else:
             logging.debug('DataFeedClient/readDatafeed() failed: {}'.format(response.status_code))
             super().handleError(response)
