@@ -1,11 +1,15 @@
 import unittest
 import requests
 import json
-from ..clients.SymBotClient import SymBotClient
-from ..clients.MessageClient import MessageClient
-from ..configure.configure import Config
-from ..auth.auth import Auth
-
+import logging
+logging.basicConfig(filename='sym_api_client_python/logs/example.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filemode='w', level=logging.DEBUG)
+logging.getLogger("urllib3").setLevel(logging.WARNING)
+from sym_api_client_python.configure.configure import SymConfig
+from sym_api_client_python.auth.auth import Auth
+from sym_api_client_python.auth.rsa_auth import SymBotRSAAuth
+from sym_api_client_python.clients.SymBotClient import SymBotClient
+from sym_api_client_python.listeners.imListenerTestImp import IMListenerTestImp
+from sym_api_client_python.listeners.roomListenerTestImp import RoomListenerTestImp
 #TestStreams class extends unittest class
 #setUp functions executes before every test function runs --> grabs necessary data to run each client test
 #streamId is hard coded --> replace with your own streamId to test if necessary
@@ -13,14 +17,17 @@ from ..auth.auth import Auth
 #comment any function that you no longer wish to test
 class TestStreams(unittest.TestCase):
 
-    #run before each test function
+    # run before each test function
     def setUp(self):
-        configure = Config('./resources/config.json')
-        configure.connect()
-        auth = Auth(configure)
+        logging.debug('hi')
+        #RSA Auth flow:
+        configure = SymConfig('sym_api_client_python/resources/rsa_config.json')
+        configure.loadFromRSA()
+        auth = SymBotRSAAuth(configure)
         auth.authenticate()
+        #initialize SymBotClient with auth and configure objects
         self.botClient = SymBotClient(auth, configure)
-        self.user = ['344147139494862']
+        self.streamId = 'GVYRWwxRnEI7xde31EQz63___prrBEtgdA'
 
     #always passes
     # def test_facts(self):
@@ -64,7 +71,7 @@ class TestStreams(unittest.TestCase):
     #     print('testing addmember function')
     #     roomId = 'NyLNtKZwstZLapBgzR1Nqn___pt1T1EpdA'
     #     userId = '344147139494862'
-    #     self.assertTrue(self.botClient.streamClient.addMember(roomId, userId))
+    #     self.assertTrue(self.botClient.streamClient.addMemberToRoom(roomId, userId))
 
     #pass
     # def test_shareRoom(self):
@@ -73,41 +80,41 @@ class TestStreams(unittest.TestCase):
     #     self.assertTrue(self.botClient.streamClient.shareRoom(roomId))
 
     #pass
-    # def test_removeMember(self):
+    # def test_removeMemberFromRoom(self):
     #     print('testing remove Member function')
     #     roomId = 'NqlZTCH2C-JCZ5dRKbcFMX___pt1wct2dA'
     #     userId = '344147139494862'
-    #     self.assertTrue(self.botClient.streamClient.removeMember(roomId, userId))
+    #     self.assertTrue(self.botClient.streamClient.removeMemberFromRoom(roomId, userId))
 
     #pass
-    # def test_promoteOwner(self):
+    # def test_promoteUserToOwner(self):
     #     print('testing promote owner function')
     #     roomId = 'NyLNtKZwstZLapBgzR1Nqn___pt1T1EpdA'
     #     userId = '344147139494862'
-    #     self.assertTrue(self.botClient.streamClient.promoteOwner(roomId, userId))
+    #     self.assertTrue(self.botClient.streamClient.promoteUserToOwner(roomId, userId))
 
     #pass
-    # def test_demoteOwner(self):
+    # def test_demoteUserFromOwner(self):
     #     print('testing demote owner function')
     #     roomId = 'NyLNtKZwstZLapBgzR1Nqn___pt1T1EpdA'
     #     userId = '344147139494862'
-    #     self.assertTrue(self.botClient.streamClient.demoteOwner(roomId, userId))
+    #     self.assertTrue(self.botClient.streamClient.demoteUserFromOwner(roomId, userId))
 
     #pass
-    # def test_roomSearch(self):
+    # def test_searchRooms(self):
     #     print('testing roomSearch function')
-    #     self.assertTrue(self.botClient.streamClient.roomSearch())
+    #     self.assertTrue(self.botClient.streamClient.searchRooms())
 
     #pass
-    # def test_listUserStreams(self):
+    # def test_getUserStreams(self):
     #     print('testing listUserStreams fucntion')
-    #     self.assertTrue(self.botClient.streamClient.listUserStreams())
+    #     self.assertTrue(self.botClient.streamClient.getUserStreams())
 
     #pass
-    # def test_streamInfo(self):
+    # def test_getRoomInfo(self):
     #     print('testing streamInfo function')
     #     roomId = 'NyLNtKZwstZLapBgzR1Nqn___pt1T1EpdA'
-    #     self.assertTrue(self.botClient.streamClient.streamInfo(roomId))
+    #     self.assertTrue(self.botClient.streamClient.getRoomInfo(roomId))
 
     #pass
     # def test_streamInfo(self):
@@ -128,8 +135,7 @@ class TestStreams(unittest.TestCase):
     #DOESNOTPASS --> 405: verify if endpoint is still live
     # def test_getStreamMembers(self):
     #     print('testing getstreamMembers function')
-    #     roomId = 'NyLNtKZwstZLapBgzR1Nqn___pt1T1EpdA'
-    #     self.assertTrue(self.botClient.streamClient.getStreamMembers(roomId))
+    #     self.assertTrue(self.botClient.streamClient.getStreamMembers(self.streamId))
 
-if __name__ == '__main__':
-    unittest.main()
+# if __name__ == '__main__':
+#     unittest.main()

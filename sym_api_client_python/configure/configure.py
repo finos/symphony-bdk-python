@@ -5,7 +5,7 @@ import logging
 # from configure.crypt import Crypt
 from ..configure.crypt import Crypt
 
-class Config():
+class SymConfig():
     #initialize object by passing in config file
     #store info in config file in dict called data
     def __init__(self, configFile):

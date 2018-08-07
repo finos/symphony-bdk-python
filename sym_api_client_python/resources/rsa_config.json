@@ -1,5 +1,5 @@
 {
-  "sessionAuthHost": "sup-api.symphony.com",
+  "sessionAuthHost": "sup.symphony.com",
   "sessionAuthPort": 8444,
   "keyAuthHost": "sup-km.symphony.com",
   "keyAuthPort": 8444,
