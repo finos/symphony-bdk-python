@@ -15,14 +15,20 @@ class Auth():
             self.proxies = {"http": self.config.data['proxyURL']}
         else:
             self.proxies = {}
+
+    def getSessionToken(self):
+        return self.sessionToken
+
+    def getKeyManagerToken(self):
+        return self.keyAuthToken
     #if sessionToken or keyAuthToken are empty --> call auth endpoints below
     def authenticate(self):
+        logging.debug('Auth/authenticate()')
         if (self.lastAuthTime == 0) or (int(round(time.time() * 1000) - self.lastAuthTime>=3000)):
             logging.debug('Auth/authenticate() --> needed to authenticate')
             self.lastAuthTime = int(round(time.time() * 1000))
-            self.sessionToken = self.get_session_token()
-            self.keyAuthToken = self.get_keyauth()
-
+            self.sessionAuthenticate()
+            self.keyManagerAuthenticate()
         else:
             try:
                 logging.debug('reauthenticated too fast. wait 30 seconds and try again.')
@@ -36,27 +42,26 @@ class Auth():
 
     #raw auth api call to retrieve session token
     #pass in certificates from config object using requests library built in cert parameter
-    def get_session_token(self):
+    def sessionAuthenticate(self):
         logging.debug('Auth/get_session_token()')
         response = requests.post(self.config.data['sessionAuthHost']+'/sessionauth/v1/authenticate',proxies=self.proxies, cert=(self.config.data['symphonyCertificate'], self.config.data['symphonyKey']))
         if response.status_code == 200:
-            logging.debug('Auth/session token success')
             data = json.loads(response.text)
-            print(data['token'])
-            return data['token']
+            logging.debug('Auth/session token success: ' + data['token'])
+            self.sessionToken = data['token']
         else:
             logging.debug('Auth/get_session_token() failed: {}'.format(response.status_code))
             self.authenticate()
 
     #raw auth api call to retrieve key manager token
     #pass in certificates from config object using requests library built in cert parameter
-    def get_keyauth(self):
+    def keyManagerAuthenticate(self):
         logging.debug('Auth/get_keyauth()')
         response = requests.post(self.config.data['keyAuthHost']+'/keyauth/v1/authenticate', proxies=self.proxies, cert=(self.config.data['symphonyCertificate'], self.config.data['symphonyKey']))
         if response.status_code == 200:
-            logging.debug('Auth/keymanager token sucess')
             data = json.loads(response.text)
-            return data['token']
+            logging.debug('Auth/keymanager token sucess: ' + data['token'])
+            self.keyAuthToken = data['token']
         else:
             logging.debug('Auth/get_keyauth() failed: {}'.format(response.status_code))
             self.authenticate()

@@ -14,8 +14,7 @@ class DataFeedClient(APIClient):
 
     def __init__(self, botClient):
         self.botClient = botClient
-        self.config = botClient.getSymConfig()
-        self.auth = botClient.getSymAuth()
+        self.config = self.botClient.getSymConfig()
         if self.config.data['proxyURL']:
             self.proxies = {"http": self.config.data['proxyURL']}
         else:
@@ -25,7 +24,8 @@ class DataFeedClient(APIClient):
     def createDatafeed(self):
         logging.debug('DataFeedClient/createDatafeed()')
         # messaging_logger.debug('DataFeedClient/createDatafeed()')
-        headers = {'sessionToken': self.auth.sessionToken, 'keyManagerToken': self.auth.keyAuthToken}
+        headers = {'sessionToken': self.botClient.getSymAuth().getSessionToken(), 'keyManagerToken': self.botClient.getSymAuth().getKeyManagerToken()}
+        logging.debug(headers)
         response = requests.post(self.config.data['agentHost']+'/agent/v4/datafeed/create', proxies=self.proxies, headers=headers)
 
         if response.status_code == 200:
@@ -37,7 +37,7 @@ class DataFeedClient(APIClient):
         else:
             try:
                 logging.debug('DataFeedClient/createDatafeed() failed: {}'.format(response.status_code))
-                super().handleError(response)
+                super().handleError(response, self.botClient)
             except UnauthorizedException:
                 #should take 30 second to get here so after it reauthorizes, catch it and re create df
                 self.createDatafeed()
@@ -47,7 +47,7 @@ class DataFeedClient(APIClient):
     def readDatafeed(self, id):
         logging.debug('DataFeedClient/readDatafeed()')
         datafeedevents = []
-        headers = {'sessionToken': self.auth.sessionToken, 'keyManagerToken': self.auth.keyAuthToken}
+        headers = {'sessionToken': self.botClient.getSymAuth().getSessionToken(), 'keyManagerToken':self.botClient.getSymAuth().getKeyManagerToken()}
         url = self.config.data['agentHost']+'/agent/v4/datafeed/{0}/read'.format(id)
         response = requests.get(url, proxies=self.proxies, headers=headers)
         if (response.status_code == 204):
@@ -57,6 +57,6 @@ class DataFeedClient(APIClient):
             datafeedevents.append(x)
         else:
             logging.debug('DataFeedClient/readDatafeed() failed: {}'.format(response.status_code))
-            super().handleError(response)
+            super().handleError(response, self.botClient)
 
         return datafeedevents

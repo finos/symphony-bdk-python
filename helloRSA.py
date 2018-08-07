@@ -1,4 +1,4 @@
-from sym_api_client_python.configure.configure import Config
+from sym_api_client_python.configure.configure import SymConfig
 from sym_api_client_python.auth.auth import Auth
 from sym_api_client_python.auth.rsa_auth import SymBotRSAAuth
 from sym_api_client_python.clients.SymBotClient import SymBotClient
@@ -15,7 +15,7 @@ logging.getLogger("urllib3").setLevel(logging.WARNING)
 def main():
         print('hi')
         #RSA Auth flow:
-        configure = Config('sym_api_client_python/resources/rsa_config.json')
+        configure = SymConfig('sym_api_client_python/resources/rsa_config.json')
         configure.loadFromRSA()
         auth = SymBotRSAAuth(configure)
         auth.authenticate()

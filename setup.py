@@ -8,7 +8,7 @@ setuptools.setup(
     name="sym_api_client_python",
     version="0.1.2",
     author="Reed Feldman",
-    author_email="reed.feldman@symphony.com",
+    author_email="platformsolutions@symphony.com",
     description="Symphony REST API - Python Client",
     long_description=readme(),
     long_description_content_type='text/markdown',
