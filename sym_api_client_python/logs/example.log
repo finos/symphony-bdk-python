@@ -1,19 +1,199 @@
-2018-08-07 16:05:36,012 - root - DEBUG - Auth/authenticate()
-2018-08-07 16:05:36,012 - root - DEBUG - Auth/authenticate() --> needed to authenticate
-2018-08-07 16:05:36,012 - root - DEBUG - RSA_auth/getJWT() function started
-2018-08-07 16:05:36,020 - root - DEBUG - RSA_auth/get_session_token() function started
-2018-08-07 16:05:36,302 - root - DEBUG - eyJhbGciOiJSUzUxMiJ9.eyJzdWIiOiJib3R0bGVCb3QiLCJpc3MiOiJzeW1waG9ueSIsInNlc3Npb25JZCI6ImMxZDAzMzVjMjkzMmNkMzYyNmEzYmI5ZTczNDBmMTVlZWQ4YTVlMzc4M2U1ZGUyMjk4OGYyMmRjZjYwYjk0YzA4MWE0YTU2ZjM1ZGIwZTcwNjRhNzQzNjEyNmE3ZmE0YzAwMDAwMTY1MTVmZWFiODMwMDAxMzkwMDAwMDAwM2ZkIiwidXNlcklkIjoiMzQ0MTQ3MTM5NDk0OTA5In0.BmjQL76EHP_PRF04BwqlRbKHvRLtXCVZ1kLwqYRhtXzIqfpQTsievn0iuFtmWj3NI5BbUZCs60bR_52udF2jtMA3Buh9ba-d5IZf4x7yG1nm8m3uU28boX_xoNUdP0Bpv9aPF5OWxx4yZH0sWkT6vXwgT3aLao7mCw2oVQDZKwCnMwDDYZiCmPeq1dAa09ofGjMY4lrK-vnjC2hmy3xdmVOElzMU0R5Kt5rUweanocbHjwG__fGJxfXV0Ai8lj60EbPgFuZDZCMQjQySbjwZ1ZAarSF1XnmKhlJYjEPdTiAq6J-K2ZcFnjzR6RiB0rbi2xoMQnUEQrxEq3RTE_yaHQ
-2018-08-07 16:05:36,302 - root - DEBUG - RSA_auth/get_keyauth() function started
-2018-08-07 16:05:37,227 - root - DEBUG - 0100514df666b820e58f895df6b08a68ddae9eca1adb94784e09ff3f49c4b25f1ee34d45b2b886cc1540cc026e2934b2c97be4d0ef6b58b495b811c26a0593293318993590a9b7fdc987e021f2a5e61ed94b87b5cf7d38ada1ca4ea9425cb86ed07885ccbcb35065da5cd44bbdcace33a4933353dc91c9d52c9d1e51fd373ebe2af15b2bee892157ded7f94635dfab76dd573077c0cfcfb96c906f63a809a0ab00eb219956992da573252c4599be14add7a231d219410adc19
-2018-08-07 16:05:37,228 - root - DEBUG - DataFeedEventService/startDataFeed()
-2018-08-07 16:05:37,228 - root - DEBUG - DataFeedClient/createDatafeed()
-2018-08-07 16:05:37,228 - root - DEBUG - {'sessionToken': 'eyJhbGciOiJSUzUxMiJ9.eyJzdWIiOiJib3R0bGVCb3QiLCJpc3MiOiJzeW1waG9ueSIsInNlc3Npb25JZCI6ImMxZDAzMzVjMjkzMmNkMzYyNmEzYmI5ZTczNDBmMTVlZWQ4YTVlMzc4M2U1ZGUyMjk4OGYyMmRjZjYwYjk0YzA4MWE0YTU2ZjM1ZGIwZTcwNjRhNzQzNjEyNmE3ZmE0YzAwMDAwMTY1MTVmZWFiODMwMDAxMzkwMDAwMDAwM2ZkIiwidXNlcklkIjoiMzQ0MTQ3MTM5NDk0OTA5In0.BmjQL76EHP_PRF04BwqlRbKHvRLtXCVZ1kLwqYRhtXzIqfpQTsievn0iuFtmWj3NI5BbUZCs60bR_52udF2jtMA3Buh9ba-d5IZf4x7yG1nm8m3uU28boX_xoNUdP0Bpv9aPF5OWxx4yZH0sWkT6vXwgT3aLao7mCw2oVQDZKwCnMwDDYZiCmPeq1dAa09ofGjMY4lrK-vnjC2hmy3xdmVOElzMU0R5Kt5rUweanocbHjwG__fGJxfXV0Ai8lj60EbPgFuZDZCMQjQySbjwZ1ZAarSF1XnmKhlJYjEPdTiAq6J-K2ZcFnjzR6RiB0rbi2xoMQnUEQrxEq3RTE_yaHQ', 'keyManagerToken': '0100514df666b820e58f895df6b08a68ddae9eca1adb94784e09ff3f49c4b25f1ee34d45b2b886cc1540cc026e2934b2c97be4d0ef6b58b495b811c26a0593293318993590a9b7fdc987e021f2a5e61ed94b87b5cf7d38ada1ca4ea9425cb86ed07885ccbcb35065da5cd44bbdcace33a4933353dc91c9d52c9d1e51fd373ebe2af15b2bee892157ded7f94635dfab76dd573077c0cfcfb96c906f63a809a0ab00eb219956992da573252c4599be14add7a231d219410adc19'}
-2018-08-07 16:05:39,067 - root - DEBUG - DataFeedClient/createDatafeed() suceeded: 200
-2018-08-07 16:05:39,067 - root - DEBUG - DataFeedClient/readDatafeed()
-2018-08-07 16:05:45,414 - root - DEBUG - DataFeedEventService/readDatafeed() --> Incoming data from readDatafeed(): {'messageSent': {'message': {'messageId': 'xQkYHskVmrHC9iV7JAozi3___prqATMSbQ', 'timestamp': 1533672344813, 'message': '<div data-format="PresentationML" data-version="2.0" class="wysiwyg"><p>w</p></div>', 'data': '{}', 'user': {'userId': 344147139494862, 'firstName': 'Reed', 'lastName': 'Feldman', 'displayName': 'Reed Feldman', 'email': 'reed.feldman@symphony.com', 'username': 'reedUAT'}, 'stream': {'streamId': 'GVYRWwxRnEI7xde31EQz63___prrBEtgdA', 'streamType': 'ROOM'}, 'externalRecipients': False, 'userAgent': 'DESKTOP-35.0.0-6376-MacOSX-10.12.6-Chrome-68.0.3440.84', 'originalFormat': 'com.symphony.messageml.v2'}}}
-2018-08-07 16:05:45,414 - root - DEBUG - messageSentHandler function started
-2018-08-07 16:05:45,415 - root - DEBUG - room message recieved
-2018-08-07 16:05:45,415 - root - DEBUG - MessageClient/createMessage()
-2018-08-07 16:05:46,212 - root - DEBUG - DataFeedClient/readDatafeed()
-2018-08-07 16:05:46,657 - root - DEBUG - DataFeedEventService/readDatafeed() --> Incoming data from readDatafeed(): {'messageSent': {'message': {'messageId': 'fCoRWAHDiUhOpCSGnq1LBX___prqAS8xdA', 'timestamp': 1533672345810, 'message': '<div data-format="PresentationML" data-version="2.0"><span class="entity" data-entity-id="keyword1">#reed</span></div>', 'data': '{"keyword1":{"type":"org.symphonyoss.taxonomy","version":"1.0","id":[{"type":"org.symphonyoss.taxonomy.hashtag","value":"reed"}]}}', 'user': {'userId': 344147139494909, 'displayName': 'bottleBot', 'email': 'bottleBot@symphony.com', 'username': 'bottleBot'}, 'stream': {'streamId': 'GVYRWwxRnEI7xde31EQz63___prrBEtgdA', 'streamType': 'ROOM'}, 'externalRecipients': False, 'userAgent': 'Agent-2.1.7-Linux-3.10.0-693.11.6.el7.x86_64', 'originalFormat': 'com.symphony.messageml.v2'}}}
-2018-08-07 16:05:46,657 - root - DEBUG - DataFeedClient/readDatafeed()
+2018-08-07 17:07:48,717 - root - DEBUG - p12 location ---> /Users/reed.feldman/Desktop/symphonyPythonClient/resources/certificates/bot.user11.p12
+2018-08-07 17:07:48,726 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:07:48,726 - root - DEBUG - Auth/authenticate() --> needed to authenticate
+2018-08-07 17:07:48,726 - root - DEBUG - Auth/get_session_token()
+2018-08-07 17:07:49,241 - root - DEBUG - Auth/session token success: eyJhbGciOiJSUzUxMiJ9.eyJzdWIiOiJib3QudXNlcjExIiwiaXNzIjoic3ltcGhvbnkiLCJzZXNzaW9uSWQiOiJiNGFhOWQyM2Q4ZTA1ZWQ0OWI1NDQ0M2E5ZWZiMWNlN2JkYWNkMmRlY2IyNDA5NzRlODc3OWU5MTZkODk2MDYxN2FiYjhlOTJhZTVlZWVlNzI1ZjQ2MzA0YTM5MGMzMWYwMDAwMDE2NTE2MzM3MmY5MDAwMTM5MDAwMDAwMDJiYyIsInVzZXJJZCI6IjM0NDE0NzEzOTQ5NDU4OCJ9.drsOr09NVvx1bZWvv3dKA2eQkVv1D_dYlkIgI8ry-bq8fGkuF3Ii_2_Sr6Iu1SJypk_NI6WPAn3Hrnn8UROTJ9NkJSuaEIijxY7ADxYaGK_WsNOeAyPEoi5oWLqZVdSLWhvIFtWKvetc_9u-gB02HpePdeNsxWj8zZNQMOZIMAKkvAgxQrM7q-hlm5x2Tz-5YR3t7D-W0TQTgbfImSCtXASibVVdWd_0FGgBMyrf6ujWrbqkp4Idtp3iLbQ6cJV3JkqSw0nv4Bk_NzTjdMYwnR1TCtFMYl_nPaBvC9M4FjBXbCrjsua5ZYaIl_mt5XWnpsnecnbDB9REzeHxneJdVA
+2018-08-07 17:07:49,241 - root - DEBUG - Auth/get_keyauth()
+2018-08-07 17:07:50,307 - root - DEBUG - Auth/keymanager token sucess: 0100f337eea67392943aa3c996fc29cc1940da31f4daa8784673e78c86fa8e75f2f002e0456684271c97605733a6444184ecaf06cad434b78a4bdee811701e2770cd1c422f4789a0ac5f8fabfd78471793c72c0748d7908d050c5217d4cadec8b0a59b9cdfb1ddd850b446d02d7ec7e1ab94f17c7f1a2459dc2d1670544cb882c9f7bd0927b149e8a1c520d61c1fbfebb3d22a8fb72c9ac69df70e01516e3156a67efd203b9b7641001fcb5421098f55ff1e710764288f2f3e3c62cbb99a
+2018-08-07 17:07:50,307 - root - DEBUG - DataFeedEventService/startDataFeed()
+2018-08-07 17:07:50,307 - root - DEBUG - DataFeedClient/createDatafeed()
+2018-08-07 17:07:50,307 - root - DEBUG - {'sessionToken': 'eyJhbGciOiJSUzUxMiJ9.eyJzdWIiOiJib3QudXNlcjExIiwiaXNzIjoic3ltcGhvbnkiLCJzZXNzaW9uSWQiOiJiNGFhOWQyM2Q4ZTA1ZWQ0OWI1NDQ0M2E5ZWZiMWNlN2JkYWNkMmRlY2IyNDA5NzRlODc3OWU5MTZkODk2MDYxN2FiYjhlOTJhZTVlZWVlNzI1ZjQ2MzA0YTM5MGMzMWYwMDAwMDE2NTE2MzM3MmY5MDAwMTM5MDAwMDAwMDJiYyIsInVzZXJJZCI6IjM0NDE0NzEzOTQ5NDU4OCJ9.drsOr09NVvx1bZWvv3dKA2eQkVv1D_dYlkIgI8ry-bq8fGkuF3Ii_2_Sr6Iu1SJypk_NI6WPAn3Hrnn8UROTJ9NkJSuaEIijxY7ADxYaGK_WsNOeAyPEoi5oWLqZVdSLWhvIFtWKvetc_9u-gB02HpePdeNsxWj8zZNQMOZIMAKkvAgxQrM7q-hlm5x2Tz-5YR3t7D-W0TQTgbfImSCtXASibVVdWd_0FGgBMyrf6ujWrbqkp4Idtp3iLbQ6cJV3JkqSw0nv4Bk_NzTjdMYwnR1TCtFMYl_nPaBvC9M4FjBXbCrjsua5ZYaIl_mt5XWnpsnecnbDB9REzeHxneJdVA', 'keyManagerToken': '0100f337eea67392943aa3c996fc29cc1940da31f4daa8784673e78c86fa8e75f2f002e0456684271c97605733a6444184ecaf06cad434b78a4bdee811701e2770cd1c422f4789a0ac5f8fabfd78471793c72c0748d7908d050c5217d4cadec8b0a59b9cdfb1ddd850b446d02d7ec7e1ab94f17c7f1a2459dc2d1670544cb882c9f7bd0927b149e8a1c520d61c1fbfebb3d22a8fb72c9ac69df70e01516e3156a67efd203b9b7641001fcb5421098f55ff1e710764288f2f3e3c62cbb99a'}
+2018-08-07 17:07:52,376 - root - DEBUG - DataFeedClient/createDatafeed() suceeded: 200
+2018-08-07 17:07:52,376 - root - DEBUG - DataFeedClient/readDatafeed()
+2018-08-07 17:08:21,686 - root - DEBUG - DataFeedEventService/readDatafeed() --> Incoming data from readDatafeed(): {'messageSent': {'message': {'messageId': 'oeSpikd47irwTAKUpdhoi3___prpx-K_bQ', 'timestamp': 1533676100928, 'message': '<div data-format="PresentationML" data-version="2.0" class="wysiwyg"><p>ws</p></div>', 'data': '{}', 'user': {'userId': 344147139494862, 'firstName': 'Reed', 'lastName': 'Feldman', 'displayName': 'Reed Feldman', 'email': 'reed.feldman@symphony.com', 'username': 'reedUAT'}, 'stream': {'streamId': '0q-hg8AfeCRj2H5fwKRm1H___prpy8VsdA', 'streamType': 'ROOM'}, 'externalRecipients': False, 'userAgent': 'DESKTOP-35.0.0-6376-MacOSX-10.12.6-Chrome-68.0.3440.84', 'originalFormat': 'com.symphony.messageml.v2'}}}
+2018-08-07 17:08:21,686 - root - DEBUG - messageSentHandler function started
+2018-08-07 17:08:21,686 - root - DEBUG - room message recieved
+2018-08-07 17:08:21,686 - root - DEBUG - MessageClient/createMessage()
+2018-08-07 17:08:22,236 - root - DEBUG - DataFeedClient/readDatafeed()
+2018-08-07 17:08:22,665 - root - DEBUG - DataFeedEventService/readDatafeed() --> Incoming data from readDatafeed(): {'messageSent': {'message': {'messageId': 'XHKAJg8em2IL1erZ1dfSBH___prpx947dA', 'timestamp': 1533676102089, 'message': '<div data-format="PresentationML" data-version="2.0"><span class="entity" data-entity-id="keyword1">#reed</span></div>', 'data': '{"keyword1":{"type":"org.symphonyoss.taxonomy","version":"1.0","id":[{"type":"org.symphonyoss.taxonomy.hashtag","value":"reed"}]}}', 'user': {'userId': 344147139494588, 'displayName': 'ButlerDemo', 'email': 'bot.user11@example.com', 'username': 'bot.user11'}, 'stream': {'streamId': '0q-hg8AfeCRj2H5fwKRm1H___prpy8VsdA', 'streamType': 'ROOM'}, 'externalRecipients': False, 'userAgent': 'Agent-2.1.7-Linux-3.10.0-693.11.6.el7.x86_64', 'originalFormat': 'com.symphony.messageml.v2'}}}
+2018-08-07 17:08:22,665 - root - DEBUG - DataFeedClient/readDatafeed()
+2018-08-07 17:08:34,387 - root - DEBUG - DataFeedEventService/readDatafeed() --> Incoming data from readDatafeed(): {'userLeftRoom': {'stream': {'streamId': '0q-hg8AfeCRj2H5fwKRm1H___prpy8VsdA', 'streamType': 'ROOM', 'roomName': 'weddddws', 'external': False, 'crossPod': False}, 'affectedUser': {'userId': 344147139494588, 'displayName': 'ButlerDemo', 'email': 'bot.user11@example.com', 'username': 'bot.user11'}}}
+2018-08-07 17:08:34,388 - root - DEBUG - userLeftRoomHandler
+2018-08-07 17:08:34,388 - root - DEBUG - {'userLeftRoom': {'stream': {'streamId': '0q-hg8AfeCRj2H5fwKRm1H___prpy8VsdA', 'streamType': 'ROOM', 'roomName': 'weddddws', 'external': False, 'crossPod': False}, 'affectedUser': {'userId': 344147139494588, 'displayName': 'ButlerDemo', 'email': 'bot.user11@example.com', 'username': 'bot.user11'}}}
+2018-08-07 17:08:34,388 - root - DEBUG - USER LEFT ROOM
+2018-08-07 17:08:34,388 - root - DEBUG - DataFeedClient/readDatafeed()
+2018-08-07 17:08:35,017 - root - DEBUG - DataFeedClient/readDatafeed() failed: 401
+2018-08-07 17:08:35,017 - root - DEBUG - handleError function started
+2018-08-07 17:08:35,017 - root - DEBUG - handling 401 error
+2018-08-07 17:08:35,017 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:08:35,017 - root - DEBUG - Auth/authenticate() --> needed to authenticate
+2018-08-07 17:08:35,017 - root - DEBUG - Auth/get_session_token()
+2018-08-07 17:08:35,503 - root - DEBUG - Auth/get_session_token() failed: 401
+2018-08-07 17:08:35,503 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:08:35,503 - root - DEBUG - reauthenticated too fast. wait 30 seconds and try again.
+2018-08-07 17:09:05,505 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:09:05,505 - root - DEBUG - Auth/authenticate() --> needed to authenticate
+2018-08-07 17:09:05,505 - root - DEBUG - Auth/get_session_token()
+2018-08-07 17:09:06,290 - root - DEBUG - Auth/get_session_token() failed: 401
+2018-08-07 17:09:06,290 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:09:06,290 - root - DEBUG - reauthenticated too fast. wait 30 seconds and try again.
+2018-08-07 17:09:36,293 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:09:36,293 - root - DEBUG - Auth/authenticate() --> needed to authenticate
+2018-08-07 17:09:36,293 - root - DEBUG - Auth/get_session_token()
+2018-08-07 17:09:36,643 - root - DEBUG - Auth/get_session_token() failed: 401
+2018-08-07 17:09:36,643 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:09:36,643 - root - DEBUG - reauthenticated too fast. wait 30 seconds and try again.
+2018-08-07 17:10:06,644 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:10:06,645 - root - DEBUG - Auth/authenticate() --> needed to authenticate
+2018-08-07 17:10:06,645 - root - DEBUG - Auth/get_session_token()
+2018-08-07 17:10:07,173 - root - DEBUG - Auth/get_session_token() failed: 401
+2018-08-07 17:10:07,173 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:10:07,173 - root - DEBUG - reauthenticated too fast. wait 30 seconds and try again.
+2018-08-07 17:10:37,175 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:10:37,175 - root - DEBUG - Auth/authenticate() --> needed to authenticate
+2018-08-07 17:10:37,176 - root - DEBUG - Auth/get_session_token()
+2018-08-07 17:10:37,542 - root - DEBUG - Auth/get_session_token() failed: 401
+2018-08-07 17:10:37,543 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:10:37,543 - root - DEBUG - reauthenticated too fast. wait 30 seconds and try again.
+2018-08-07 17:11:07,547 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:11:07,548 - root - DEBUG - Auth/authenticate() --> needed to authenticate
+2018-08-07 17:11:07,548 - root - DEBUG - Auth/get_session_token()
+2018-08-07 17:11:08,056 - root - DEBUG - Auth/get_session_token() failed: 401
+2018-08-07 17:11:08,057 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:11:08,057 - root - DEBUG - reauthenticated too fast. wait 30 seconds and try again.
+2018-08-07 17:11:38,062 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:11:38,062 - root - DEBUG - Auth/authenticate() --> needed to authenticate
+2018-08-07 17:11:38,062 - root - DEBUG - Auth/get_session_token()
+2018-08-07 17:11:38,468 - root - DEBUG - Auth/get_session_token() failed: 401
+2018-08-07 17:11:38,468 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:11:38,468 - root - DEBUG - reauthenticated too fast. wait 30 seconds and try again.
+2018-08-07 17:12:08,474 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:12:08,475 - root - DEBUG - Auth/authenticate() --> needed to authenticate
+2018-08-07 17:12:08,475 - root - DEBUG - Auth/get_session_token()
+2018-08-07 17:12:08,935 - root - DEBUG - Auth/get_session_token() failed: 401
+2018-08-07 17:12:08,935 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:12:08,936 - root - DEBUG - reauthenticated too fast. wait 30 seconds and try again.
+2018-08-07 17:12:38,940 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:12:38,941 - root - DEBUG - Auth/authenticate() --> needed to authenticate
+2018-08-07 17:12:38,941 - root - DEBUG - Auth/get_session_token()
+2018-08-07 17:12:39,302 - root - DEBUG - Auth/get_session_token() failed: 401
+2018-08-07 17:12:39,303 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:12:39,303 - root - DEBUG - reauthenticated too fast. wait 30 seconds and try again.
+2018-08-07 17:13:09,304 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:13:09,305 - root - DEBUG - Auth/authenticate() --> needed to authenticate
+2018-08-07 17:13:09,305 - root - DEBUG - Auth/get_session_token()
+2018-08-07 17:13:09,833 - root - DEBUG - Auth/get_session_token() failed: 401
+2018-08-07 17:13:09,833 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:13:09,833 - root - DEBUG - reauthenticated too fast. wait 30 seconds and try again.
+2018-08-07 17:13:39,836 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:13:39,837 - root - DEBUG - Auth/authenticate() --> needed to authenticate
+2018-08-07 17:13:39,837 - root - DEBUG - Auth/get_session_token()
+2018-08-07 17:13:40,382 - root - DEBUG - Auth/get_session_token() failed: 401
+2018-08-07 17:13:40,382 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:13:40,382 - root - DEBUG - reauthenticated too fast. wait 30 seconds and try again.
+2018-08-07 17:14:10,386 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:14:10,386 - root - DEBUG - Auth/authenticate() --> needed to authenticate
+2018-08-07 17:14:10,387 - root - DEBUG - Auth/get_session_token()
+2018-08-07 17:14:10,941 - root - DEBUG - Auth/get_session_token() failed: 401
+2018-08-07 17:14:10,941 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:14:10,942 - root - DEBUG - reauthenticated too fast. wait 30 seconds and try again.
+2018-08-07 17:14:40,945 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:14:40,945 - root - DEBUG - Auth/authenticate() --> needed to authenticate
+2018-08-07 17:14:40,945 - root - DEBUG - Auth/get_session_token()
+2018-08-07 17:14:41,300 - root - DEBUG - Auth/get_session_token() failed: 401
+2018-08-07 17:14:41,301 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:14:41,301 - root - DEBUG - reauthenticated too fast. wait 30 seconds and try again.
+2018-08-07 17:15:11,306 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:15:11,306 - root - DEBUG - Auth/authenticate() --> needed to authenticate
+2018-08-07 17:15:11,306 - root - DEBUG - Auth/get_session_token()
+2018-08-07 17:15:11,805 - root - DEBUG - Auth/get_session_token() failed: 401
+2018-08-07 17:15:11,805 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:15:11,805 - root - DEBUG - reauthenticated too fast. wait 30 seconds and try again.
+2018-08-07 17:15:41,811 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:15:41,812 - root - DEBUG - Auth/authenticate() --> needed to authenticate
+2018-08-07 17:15:41,812 - root - DEBUG - Auth/get_session_token()
+2018-08-07 17:15:42,239 - root - DEBUG - Auth/get_session_token() failed: 401
+2018-08-07 17:15:42,239 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:15:42,240 - root - DEBUG - reauthenticated too fast. wait 30 seconds and try again.
+2018-08-07 17:16:12,245 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:16:12,245 - root - DEBUG - Auth/authenticate() --> needed to authenticate
+2018-08-07 17:16:12,245 - root - DEBUG - Auth/get_session_token()
+2018-08-07 17:16:12,760 - root - DEBUG - Auth/get_session_token() failed: 401
+2018-08-07 17:16:12,761 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:16:12,761 - root - DEBUG - reauthenticated too fast. wait 30 seconds and try again.
+2018-08-07 17:16:42,767 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:16:42,767 - root - DEBUG - Auth/authenticate() --> needed to authenticate
+2018-08-07 17:16:42,767 - root - DEBUG - Auth/get_session_token()
+2018-08-07 17:16:43,150 - root - DEBUG - Auth/get_session_token() failed: 401
+2018-08-07 17:16:43,150 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:16:43,150 - root - DEBUG - reauthenticated too fast. wait 30 seconds and try again.
+2018-08-07 17:17:13,156 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:17:13,156 - root - DEBUG - Auth/authenticate() --> needed to authenticate
+2018-08-07 17:17:13,156 - root - DEBUG - Auth/get_session_token()
+2018-08-07 17:17:13,613 - root - DEBUG - Auth/get_session_token() failed: 401
+2018-08-07 17:17:13,614 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:17:13,614 - root - DEBUG - reauthenticated too fast. wait 30 seconds and try again.
+2018-08-07 17:17:43,620 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:17:43,620 - root - DEBUG - Auth/authenticate() --> needed to authenticate
+2018-08-07 17:17:43,621 - root - DEBUG - Auth/get_session_token()
+2018-08-07 17:17:43,972 - root - DEBUG - Auth/get_session_token() failed: 401
+2018-08-07 17:17:43,972 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:17:43,972 - root - DEBUG - reauthenticated too fast. wait 30 seconds and try again.
+2018-08-07 17:18:13,977 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:18:13,977 - root - DEBUG - Auth/authenticate() --> needed to authenticate
+2018-08-07 17:18:13,977 - root - DEBUG - Auth/get_session_token()
+2018-08-07 17:18:14,442 - root - DEBUG - Auth/get_session_token() failed: 401
+2018-08-07 17:18:14,442 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:18:14,442 - root - DEBUG - reauthenticated too fast. wait 30 seconds and try again.
+2018-08-07 17:18:44,447 - root - DEBUG - Auth/authenticate()
+2018-08-07 17:18:44,448 - root - DEBUG - Auth/authenticate() --> needed to authenticate
+2018-08-07 17:18:44,448 - root - DEBUG - Auth/get_session_token()
+2018-08-07 17:18:44,893 - root - DEBUG - Auth/session token success: eyJhbGciOiJSUzUxMiJ9.eyJzdWIiOiJib3QudXNlcjExIiwiaXNzIjoic3ltcGhvbnkiLCJzZXNzaW9uSWQiOiIxYTM1ODI4NGVlNDQ0Nzk1MjE2NjY4YjJlMzE0NTU1YjBiYWQ4NGEyOWY0MTVjZDM2NDQ1OTljNjFlMGI1YWRkY2JjYTA4YzJiNjViOWIwM2ZmMzUzMjQyNGNhMGNiYjcwMDAwMDE2NTE2NDFhMjcxMDAwMTM5MDAwMDAwMDJiYyIsInVzZXJJZCI6IjM0NDE0NzEzOTQ5NDU4OCJ9.TjaeAJZ-vcaoEpRmBP_hPg30w95RM50EeV4UO96xOy6CcyJt6ke9u5SrBrideiZc0l6Qync-i4D-RMasSBLb23w1K8a3hlpxxn9cEIqtqQJgzfaJ5iU6Mn_VmBC3yYakzJIW0Onz7heU-k3pYXo_vfL3Qbu4Y21SLuGCFD0V4ESXuEpFe93m9Ue1hETnsuXbbNLgSOYXiH_pcgNMGjyIdBR95jOFqPV_jT75b9FdNvjZka98B6abUDyU3BmOf5VGMShvCj8Ygxh0hmpIfDG2KnUHeLIOGiygGewc_IVVjfX1DYaHWcNaHnAOXU7WOtMVjxkogwB6jWNYx2S3Vt4S0w
+2018-08-07 17:18:44,893 - root - DEBUG - Auth/get_keyauth()
+2018-08-07 17:18:46,199 - root - DEBUG - Auth/keymanager token sucess: 01004af95a583f87d658c5653a8fdcb485f7d4583e1c70743c21e2324ace3115af70827d686024178088d8abf96e6a9f88aecfb83af6bc134b9923c5091f4522b8e7bc1ef14a2fbd2925b68274a1c190227c6ca805177c1aa03a8b689afa337bd9e82bfcdfa3f6e23e414b3cd22c548a6473c31b6004cab8d24c7ca3c9e18e63cb5314d9986f8c9d2244ddf4d98f048789466aa9d712f9ec6427bfb4be724d2978892fbefbc85900169f68e72d3c98a07f01c96b41e85b20d59ea2bb825d
+2018-08-07 17:18:46,200 - root - DEBUG - Auth/get_keyauth()
+2018-08-07 17:18:47,233 - root - DEBUG - Auth/keymanager token sucess: 01001f1611ffa2df1d3209ef8b90fbe51049d5aafee4065c6b7fb136877db5d554f59cd1e777dab70d33abd43ebbfdba7f3538509308a189da979e29cef7decd7a598d4b4958464cd08384a1b8987a3e5311ab046c5e95d014e4c506b5bcbc13351140562adebd75e7b0871b08f4e2f33f1626d1288f046d8b8c490d320405f4f5cba6277aada2fa5d01a352272aadc6842e5a3d199e537ccf93afe93455ca61c30ca15ea36cc9e0cbb2544b8a1f15d265351c78746e971d41e72e60193a
+2018-08-07 17:18:47,233 - root - DEBUG - Auth/get_keyauth()
+2018-08-07 17:18:48,152 - root - DEBUG - Auth/keymanager token sucess: 01004af95a583f87d658c5653a8fdcb485f7d4583e1c70743c21e2324ace3115af70827d686024178088d8abf96e6a9f88aecfb83af6bc134b9923c5091f4522b8e7bc1ef14a2fbd2925b68274a1c190227c6ca805177c1aa03a8b689afa337bd9e82bfcdfa3f6e23e414b3cd22c548a6473c31b6004cab8d24c7ca3c9e18e63cb5314d9986f8c9d2244ddf4d98f048789466aa9d712f9ec6427bfb4be724d2978892fbefbc85900169f68e72d3c98a07f01c96b41e85b20d59ea2bb825d
+2018-08-07 17:18:48,152 - root - DEBUG - Auth/get_keyauth()
+2018-08-07 17:18:49,074 - root - DEBUG - Auth/keymanager token sucess: 01001f1611ffa2df1d3209ef8b90fbe51049d5aafee4065c6b7fb136877db5d554f59cd1e777dab70d33abd43ebbfdba7f3538509308a189da979e29cef7decd7a598d4b4958464cd08384a1b8987a3e5311ab046c5e95d014e4c506b5bcbc13351140562adebd75e7b0871b08f4e2f33f1626d1288f046d8b8c490d320405f4f5cba6277aada2fa5d01a352272aadc6842e5a3d199e537ccf93afe93455ca61c30ca15ea36cc9e0cbb2544b8a1f15d265351c78746e971d41e72e60193a
+2018-08-07 17:18:49,074 - root - DEBUG - Auth/get_keyauth()
+2018-08-07 17:18:50,001 - root - DEBUG - Auth/keymanager token sucess: 01004af95a583f87d658c5653a8fdcb485f7d4583e1c70743c21e2324ace3115af70827d686024178088d8abf96e6a9f88aecfb83af6bc134b9923c5091f4522b8e7bc1ef14a2fbd2925b68274a1c190227c6ca805177c1aa03a8b689afa337bd9e82bfcdfa3f6e23e414b3cd22c548a6473c31b6004cab8d24c7ca3c9e18e63cb5314d9986f8c9d2244ddf4d98f048789466aa9d712f9ec6427bfb4be724d2978892fbefbc85900169f68e72d3c98a07f01c96b41e85b20d59ea2bb825d
+2018-08-07 17:18:50,001 - root - DEBUG - Auth/get_keyauth()
+2018-08-07 17:18:50,920 - root - DEBUG - Auth/keymanager token sucess: 01001f1611ffa2df1d3209ef8b90fbe51049d5aafee4065c6b7fb136877db5d554f59cd1e777dab70d33abd43ebbfdba7f3538509308a189da979e29cef7decd7a598d4b4958464cd08384a1b8987a3e5311ab046c5e95d014e4c506b5bcbc13351140562adebd75e7b0871b08f4e2f33f1626d1288f046d8b8c490d320405f4f5cba6277aada2fa5d01a352272aadc6842e5a3d199e537ccf93afe93455ca61c30ca15ea36cc9e0cbb2544b8a1f15d265351c78746e971d41e72e60193a
+2018-08-07 17:18:50,920 - root - DEBUG - Auth/get_keyauth()
+2018-08-07 17:18:51,839 - root - DEBUG - Auth/keymanager token sucess: 01004af95a583f87d658c5653a8fdcb485f7d4583e1c70743c21e2324ace3115af70827d686024178088d8abf96e6a9f88aecfb83af6bc134b9923c5091f4522b8e7bc1ef14a2fbd2925b68274a1c190227c6ca805177c1aa03a8b689afa337bd9e82bfcdfa3f6e23e414b3cd22c548a6473c31b6004cab8d24c7ca3c9e18e63cb5314d9986f8c9d2244ddf4d98f048789466aa9d712f9ec6427bfb4be724d2978892fbefbc85900169f68e72d3c98a07f01c96b41e85b20d59ea2bb825d
+2018-08-07 17:18:51,839 - root - DEBUG - Auth/get_keyauth()
+2018-08-07 17:18:52,762 - root - DEBUG - Auth/keymanager token sucess: 01001f1611ffa2df1d3209ef8b90fbe51049d5aafee4065c6b7fb136877db5d554f59cd1e777dab70d33abd43ebbfdba7f3538509308a189da979e29cef7decd7a598d4b4958464cd08384a1b8987a3e5311ab046c5e95d014e4c506b5bcbc13351140562adebd75e7b0871b08f4e2f33f1626d1288f046d8b8c490d320405f4f5cba6277aada2fa5d01a352272aadc6842e5a3d199e537ccf93afe93455ca61c30ca15ea36cc9e0cbb2544b8a1f15d265351c78746e971d41e72e60193a
+2018-08-07 17:18:52,762 - root - DEBUG - Auth/get_keyauth()
+2018-08-07 17:18:53,672 - root - DEBUG - Auth/keymanager token sucess: 01004af95a583f87d658c5653a8fdcb485f7d4583e1c70743c21e2324ace3115af70827d686024178088d8abf96e6a9f88aecfb83af6bc134b9923c5091f4522b8e7bc1ef14a2fbd2925b68274a1c190227c6ca805177c1aa03a8b689afa337bd9e82bfcdfa3f6e23e414b3cd22c548a6473c31b6004cab8d24c7ca3c9e18e63cb5314d9986f8c9d2244ddf4d98f048789466aa9d712f9ec6427bfb4be724d2978892fbefbc85900169f68e72d3c98a07f01c96b41e85b20d59ea2bb825d
+2018-08-07 17:18:53,672 - root - DEBUG - Auth/get_keyauth()
+2018-08-07 17:18:54,555 - root - DEBUG - Auth/keymanager token sucess: 01001f1611ffa2df1d3209ef8b90fbe51049d5aafee4065c6b7fb136877db5d554f59cd1e777dab70d33abd43ebbfdba7f3538509308a189da979e29cef7decd7a598d4b4958464cd08384a1b8987a3e5311ab046c5e95d014e4c506b5bcbc13351140562adebd75e7b0871b08f4e2f33f1626d1288f046d8b8c490d320405f4f5cba6277aada2fa5d01a352272aadc6842e5a3d199e537ccf93afe93455ca61c30ca15ea36cc9e0cbb2544b8a1f15d265351c78746e971d41e72e60193a
+2018-08-07 17:18:54,555 - root - DEBUG - Auth/get_keyauth()
+2018-08-07 17:18:55,672 - root - DEBUG - Auth/keymanager token sucess: 01004af95a583f87d658c5653a8fdcb485f7d4583e1c70743c21e2324ace3115af70827d686024178088d8abf96e6a9f88aecfb83af6bc134b9923c5091f4522b8e7bc1ef14a2fbd2925b68274a1c190227c6ca805177c1aa03a8b689afa337bd9e82bfcdfa3f6e23e414b3cd22c548a6473c31b6004cab8d24c7ca3c9e18e63cb5314d9986f8c9d2244ddf4d98f048789466aa9d712f9ec6427bfb4be724d2978892fbefbc85900169f68e72d3c98a07f01c96b41e85b20d59ea2bb825d
+2018-08-07 17:18:55,672 - root - DEBUG - Auth/get_keyauth()
+2018-08-07 17:18:56,562 - root - DEBUG - Auth/keymanager token sucess: 01001f1611ffa2df1d3209ef8b90fbe51049d5aafee4065c6b7fb136877db5d554f59cd1e777dab70d33abd43ebbfdba7f3538509308a189da979e29cef7decd7a598d4b4958464cd08384a1b8987a3e5311ab046c5e95d014e4c506b5bcbc13351140562adebd75e7b0871b08f4e2f33f1626d1288f046d8b8c490d320405f4f5cba6277aada2fa5d01a352272aadc6842e5a3d199e537ccf93afe93455ca61c30ca15ea36cc9e0cbb2544b8a1f15d265351c78746e971d41e72e60193a
+2018-08-07 17:18:56,563 - root - DEBUG - Auth/get_keyauth()
+2018-08-07 17:18:57,457 - root - DEBUG - Auth/keymanager token sucess: 01004af95a583f87d658c5653a8fdcb485f7d4583e1c70743c21e2324ace3115af70827d686024178088d8abf96e6a9f88aecfb83af6bc134b9923c5091f4522b8e7bc1ef14a2fbd2925b68274a1c190227c6ca805177c1aa03a8b689afa337bd9e82bfcdfa3f6e23e414b3cd22c548a6473c31b6004cab8d24c7ca3c9e18e63cb5314d9986f8c9d2244ddf4d98f048789466aa9d712f9ec6427bfb4be724d2978892fbefbc85900169f68e72d3c98a07f01c96b41e85b20d59ea2bb825d
+2018-08-07 17:18:57,457 - root - DEBUG - Auth/get_keyauth()
+2018-08-07 17:18:58,393 - root - DEBUG - Auth/keymanager token sucess: 01001f1611ffa2df1d3209ef8b90fbe51049d5aafee4065c6b7fb136877db5d554f59cd1e777dab70d33abd43ebbfdba7f3538509308a189da979e29cef7decd7a598d4b4958464cd08384a1b8987a3e5311ab046c5e95d014e4c506b5bcbc13351140562adebd75e7b0871b08f4e2f33f1626d1288f046d8b8c490d320405f4f5cba6277aada2fa5d01a352272aadc6842e5a3d199e537ccf93afe93455ca61c30ca15ea36cc9e0cbb2544b8a1f15d265351c78746e971d41e72e60193a
+2018-08-07 17:18:58,394 - root - DEBUG - Auth/get_keyauth()
+2018-08-07 17:18:59,316 - root - DEBUG - Auth/keymanager token sucess: 01004af95a583f87d658c5653a8fdcb485f7d4583e1c70743c21e2324ace3115af70827d686024178088d8abf96e6a9f88aecfb83af6bc134b9923c5091f4522b8e7bc1ef14a2fbd2925b68274a1c190227c6ca805177c1aa03a8b689afa337bd9e82bfcdfa3f6e23e414b3cd22c548a6473c31b6004cab8d24c7ca3c9e18e63cb5314d9986f8c9d2244ddf4d98f048789466aa9d712f9ec6427bfb4be724d2978892fbefbc85900169f68e72d3c98a07f01c96b41e85b20d59ea2bb825d
+2018-08-07 17:18:59,316 - root - DEBUG - Auth/get_keyauth()
+2018-08-07 17:19:00,341 - root - DEBUG - Auth/keymanager token sucess: 01001f1611ffa2df1d3209ef8b90fbe51049d5aafee4065c6b7fb136877db5d554f59cd1e777dab70d33abd43ebbfdba7f3538509308a189da979e29cef7decd7a598d4b4958464cd08384a1b8987a3e5311ab046c5e95d014e4c506b5bcbc13351140562adebd75e7b0871b08f4e2f33f1626d1288f046d8b8c490d320405f4f5cba6277aada2fa5d01a352272aadc6842e5a3d199e537ccf93afe93455ca61c30ca15ea36cc9e0cbb2544b8a1f15d265351c78746e971d41e72e60193a
+2018-08-07 17:19:00,341 - root - DEBUG - Auth/get_keyauth()
+2018-08-07 17:19:01,238 - root - DEBUG - Auth/keymanager token sucess: 01004af95a583f87d658c5653a8fdcb485f7d4583e1c70743c21e2324ace3115af70827d686024178088d8abf96e6a9f88aecfb83af6bc134b9923c5091f4522b8e7bc1ef14a2fbd2925b68274a1c190227c6ca805177c1aa03a8b689afa337bd9e82bfcdfa3f6e23e414b3cd22c548a6473c31b6004cab8d24c7ca3c9e18e63cb5314d9986f8c9d2244ddf4d98f048789466aa9d712f9ec6427bfb4be724d2978892fbefbc85900169f68e72d3c98a07f01c96b41e85b20d59ea2bb825d
+2018-08-07 17:19:01,238 - root - DEBUG - Auth/get_keyauth()
+2018-08-07 17:19:02,145 - root - DEBUG - Auth/keymanager token sucess: 01001f1611ffa2df1d3209ef8b90fbe51049d5aafee4065c6b7fb136877db5d554f59cd1e777dab70d33abd43ebbfdba7f3538509308a189da979e29cef7decd7a598d4b4958464cd08384a1b8987a3e5311ab046c5e95d014e4c506b5bcbc13351140562adebd75e7b0871b08f4e2f33f1626d1288f046d8b8c490d320405f4f5cba6277aada2fa5d01a352272aadc6842e5a3d199e537ccf93afe93455ca61c30ca15ea36cc9e0cbb2544b8a1f15d265351c78746e971d41e72e60193a
+2018-08-07 17:19:02,145 - root - DEBUG - Auth/get_keyauth()
+2018-08-07 17:19:03,046 - root - DEBUG - Auth/keymanager token sucess: 01004af95a583f87d658c5653a8fdcb485f7d4583e1c70743c21e2324ace3115af70827d686024178088d8abf96e6a9f88aecfb83af6bc134b9923c5091f4522b8e7bc1ef14a2fbd2925b68274a1c190227c6ca805177c1aa03a8b689afa337bd9e82bfcdfa3f6e23e414b3cd22c548a6473c31b6004cab8d24c7ca3c9e18e63cb5314d9986f8c9d2244ddf4d98f048789466aa9d712f9ec6427bfb4be724d2978892fbefbc85900169f68e72d3c98a07f01c96b41e85b20d59ea2bb825d
+2018-08-07 17:19:03,046 - root - DEBUG - Auth/get_keyauth()
+2018-08-07 17:19:03,938 - root - DEBUG - Auth/keymanager token sucess: 01001f1611ffa2df1d3209ef8b90fbe51049d5aafee4065c6b7fb136877db5d554f59cd1e777dab70d33abd43ebbfdba7f3538509308a189da979e29cef7decd7a598d4b4958464cd08384a1b8987a3e5311ab046c5e95d014e4c506b5bcbc13351140562adebd75e7b0871b08f4e2f33f1626d1288f046d8b8c490d320405f4f5cba6277aada2fa5d01a352272aadc6842e5a3d199e537ccf93afe93455ca61c30ca15ea36cc9e0cbb2544b8a1f15d265351c78746e971d41e72e60193a
+2018-08-07 17:19:03,938 - root - DEBUG - Auth/get_keyauth()
+2018-08-07 17:19:04,852 - root - DEBUG - Auth/keymanager token sucess: 01004af95a583f87d658c5653a8fdcb485f7d4583e1c70743c21e2324ace3115af70827d686024178088d8abf96e6a9f88aecfb83af6bc134b9923c5091f4522b8e7bc1ef14a2fbd2925b68274a1c190227c6ca805177c1aa03a8b689afa337bd9e82bfcdfa3f6e23e414b3cd22c548a6473c31b6004cab8d24c7ca3c9e18e63cb5314d9986f8c9d2244ddf4d98f048789466aa9d712f9ec6427bfb4be724d2978892fbefbc85900169f68e72d3c98a07f01c96b41e85b20d59ea2bb825d
+2018-08-07 17:19:04,852 - root - DEBUG - DataFeedEventService - caught unauthorized exception --> startDataFeed()
+2018-08-07 17:19:04,852 - root - DEBUG - DataFeedEventService/startDataFeed()
+2018-08-07 17:19:04,852 - root - DEBUG - DataFeedClient/createDatafeed()
+2018-08-07 17:19:04,852 - root - DEBUG - {'sessionToken': 'eyJhbGciOiJSUzUxMiJ9.eyJzdWIiOiJib3QudXNlcjExIiwiaXNzIjoic3ltcGhvbnkiLCJzZXNzaW9uSWQiOiIxYTM1ODI4NGVlNDQ0Nzk1MjE2NjY4YjJlMzE0NTU1YjBiYWQ4NGEyOWY0MTVjZDM2NDQ1OTljNjFlMGI1YWRkY2JjYTA4YzJiNjViOWIwM2ZmMzUzMjQyNGNhMGNiYjcwMDAwMDE2NTE2NDFhMjcxMDAwMTM5MDAwMDAwMDJiYyIsInVzZXJJZCI6IjM0NDE0NzEzOTQ5NDU4OCJ9.TjaeAJZ-vcaoEpRmBP_hPg30w95RM50EeV4UO96xOy6CcyJt6ke9u5SrBrideiZc0l6Qync-i4D-RMasSBLb23w1K8a3hlpxxn9cEIqtqQJgzfaJ5iU6Mn_VmBC3yYakzJIW0Onz7heU-k3pYXo_vfL3Qbu4Y21SLuGCFD0V4ESXuEpFe93m9Ue1hETnsuXbbNLgSOYXiH_pcgNMGjyIdBR95jOFqPV_jT75b9FdNvjZka98B6abUDyU3BmOf5VGMShvCj8Ygxh0hmpIfDG2KnUHeLIOGiygGewc_IVVjfX1DYaHWcNaHnAOXU7WOtMVjxkogwB6jWNYx2S3Vt4S0w', 'keyManagerToken': '01004af95a583f87d658c5653a8fdcb485f7d4583e1c70743c21e2324ace3115af70827d686024178088d8abf96e6a9f88aecfb83af6bc134b9923c5091f4522b8e7bc1ef14a2fbd2925b68274a1c190227c6ca805177c1aa03a8b689afa337bd9e82bfcdfa3f6e23e414b3cd22c548a6473c31b6004cab8d24c7ca3c9e18e63cb5314d9986f8c9d2244ddf4d98f048789466aa9d712f9ec6427bfb4be724d2978892fbefbc85900169f68e72d3c98a07f01c96b41e85b20d59ea2bb825d'}
+2018-08-07 17:19:07,038 - root - DEBUG - DataFeedClient/createDatafeed() suceeded: 200
+2018-08-07 17:19:07,038 - root - DEBUG - DataFeedClient/readDatafeed()

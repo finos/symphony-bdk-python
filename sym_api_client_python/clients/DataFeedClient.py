@@ -25,6 +25,7 @@ class DataFeedClient(APIClient):
         logging.debug('DataFeedClient/createDatafeed()')
         # messaging_logger.debug('DataFeedClient/createDatafeed()')
         headers = {'sessionToken': self.botClient.getSymAuth().getSessionToken(), 'keyManagerToken': self.botClient.getSymAuth().getKeyManagerToken()}
+        print(headers)
         logging.debug(headers)
         response = requests.post(self.config.data['agentHost']+'/agent/v4/datafeed/create', proxies=self.proxies, headers=headers)
 
