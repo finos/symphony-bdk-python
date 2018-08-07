@@ -17,9 +17,9 @@ class SymBotClient():
         self.config = config
         self.dataFeedClient = None
         self.dataFeedEventService = None
-        self.getMessageClient()
-        self.getStreamClient()
-        self.getUserClient()
+        self.messageClient = None
+        self.streamClient = None
+        self.userClient = None
 
     def getDataFeedEventService(self):
         if self.dataFeedEventService is None:
@@ -32,13 +32,19 @@ class SymBotClient():
         return self.dataFeedClient
 
     def getMessageClient(self):
-        self.messageClient = MessageClient(self)
+        if self.messageClient is None:
+            self.messageClient = MessageClient(self)
+        return self.messageClient
 
     def getStreamClient(self):
-        self.streamClient = StreamClient(self)
+        if self.streamClient is None:
+            self.streamClient = StreamClient(self)
+        return self.streamClient
 
     def getUserClient(self):
-        self.userClient = UserClient(self)
+        if self.userClient is None:
+            self.userClient = UserClient(self)
+        return self.userClient
 
     def getAPIClient(self):
         self.APIClient = APIClient(self)
