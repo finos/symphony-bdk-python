@@ -66,5 +66,5 @@ class TestMessages(unittest.TestCase):
     #     self.assertTrue(self.botClient.messageClient.getSupportedAttachmentTypes())
 #
 #
-if __name__ == '__main__':
-    unittest.main()
+# if __name__ == '__main__':
+#     unittest.main()

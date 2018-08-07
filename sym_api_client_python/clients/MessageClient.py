@@ -40,9 +40,7 @@ class MessageClient(APIClient):
     def sendMessage(self, streamId, outBoundMessage):
         logging.debug('MessageClient/createMessage()')
         url = self.config.data['agentHost']+'/agent/v4/stream/{0}/message/create'.format(streamId)
-        print(url)
         headers = {'sessionToken': self.botClient.getSymAuth().getSessionToken(), 'keyManagerToken': self.botClient.getSymAuth().getKeyManagerToken()}
-        print(headers)
         response = requests.post(url, files=outBoundMessage, headers=headers, proxies=self.proxies)
         if response.status_code == 204:
             result = []

@@ -60,7 +60,7 @@ class DataFeedEventService():
                 data = self.dataFeedClient.readDatafeed(id)
                 if data:
                     finalData = data[0]
-                    logging.debug('DataFeedEventService/readDatafeed() --> Incoming data from readDatafeed(): {}'.format(finalData))
+                    logging.debug('DataFeedEventService/readDatafeed() --> Incoming data from readDatafeed(): {}'.format(finalData[0]['payload']))
                     for i in range(0, len(finalData)):
                         if finalData[i]['initiator']['user']['email'] != self.botClient.config.data['botEmailAddress']:
                             self.handle_event(finalData[i])
@@ -107,12 +107,13 @@ class DataFeedEventService():
     def messageSentHandler(self, payload):
         logging.debug('messageSentHandler function started')
         streamType = payload['payload']['messageSent']['message']['stream']['streamType']
+        messageSentData = payload['payload']
         if (str(streamType) == 'ROOM'):
             for listener in self.roomListeners:
-                listener.onRoomMessage(payload)
+                listener.onRoomMessage(messageSentData)
         else:
             for listener in self.IMListeners:
-                listener.onIMMessage(payload)
+                listener.onIMMessage(messageSentData)
 
 
     def instantMessageHandler(self, payload):

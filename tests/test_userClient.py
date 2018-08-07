@@ -63,5 +63,5 @@ class TestUsers(unittest.TestCase):
     #     print('testing search users function')
     #     self.assertTrue(self.botClient.userClient.searchUsers('reed feldman'))
 
-if __name__ == '__main__':
-    unittest.main()
+# if __name__ == '__main__':
+#     unittest.main()

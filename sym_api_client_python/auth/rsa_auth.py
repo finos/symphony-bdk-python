@@ -83,7 +83,7 @@ class SymBotRSAAuth(APIClient):
         data = {
             'token': self.jwt
         }
-        url = self.config.data['podHost']+'/relay/pubkey/authenticate'
+        url = self.config.data['keyAuthHost']+'/relay/pubkey/authenticate'
         print(url)
         response = requests.post(url, json=data, proxies=self.proxies)
         if response.status_code == 200:
