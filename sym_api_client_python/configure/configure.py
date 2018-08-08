@@ -51,7 +51,6 @@ class SymConfig():
 
         #take in .p12 certificate and parse through file to use for authentication
         #data['botCert_cert'] and data['botCert_key'] are passed as certificates upon authentication request
-        if self.data['authType'] != 'RSA':
             try:
                 logging.debug('p12 location ---> ' + self.data['p.12'])
                 crypt = Crypt(self.data['p.12'], self.data['botCertPassword'])
@@ -60,6 +59,3 @@ class SymConfig():
             except Exception as err:
                 print("Failed to load config file: %s" % err)
                 raise
-
-        else:
-            print('auth using RSA')
