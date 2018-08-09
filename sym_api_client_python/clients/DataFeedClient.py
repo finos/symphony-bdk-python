@@ -16,7 +16,7 @@ class DataFeedClient(APIClient):
         self.botClient = botClient
         self.config = self.botClient.getSymConfig()
         if self.config.data['proxyURL']:
-            self.proxies = {"https": self.config.data['proxyURL']}
+            self.proxies = {"http": self.config.data['proxyURL']}
         else:
             self.proxies = {}
 
@@ -25,9 +25,9 @@ class DataFeedClient(APIClient):
         logging.debug('DataFeedClient/createDatafeed()')
         # messaging_logger.debug('DataFeedClient/createDatafeed()')
         headers = {'sessionToken': self.botClient.getSymAuth().getSessionToken(), 'keyManagerToken': self.botClient.getSymAuth().getKeyManagerToken()}
-        logging.debug(headers)
-        response = requests.post(self.config.data['agentHost']+'/agent/v4/datafeed/create', headers=headers)
-
+        print(headers)
+        response = requests.post(self.config.data['agentHost']+'/agent/v4/datafeed/create', proxies=self.proxies, headers=headers)
+        
         if response.status_code == 200:
             logging.debug('DataFeedClient/createDatafeed() suceeded: {}'.format(response.status_code))
             data = json.loads(response.text)

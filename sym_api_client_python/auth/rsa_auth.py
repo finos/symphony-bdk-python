@@ -15,6 +15,7 @@ class SymBotRSAAuth(APIClient):
     def __init__(self, config):
         self.config = config
         self.lastAuthTime=0
+        print('rsa')
         if self.config.data['proxyURL']:
             self.proxies = {"https": self.config.data['proxyURL']}
             print(self.proxies)
