@@ -16,7 +16,7 @@ class SymBotRSAAuth(APIClient):
         self.config = config
         self.lastAuthTime=0
         if self.config.data['proxyURL']:
-            self.proxies = {"http": self.config.data['proxyURL']}
+            self.proxies = {"https": self.config.data['proxyURL']}
             print(self.proxies)
         else:
             self.proxies = {}
@@ -85,7 +85,7 @@ class SymBotRSAAuth(APIClient):
         }
         url = self.config.data['keyAuthHost']+'/relay/pubkey/authenticate'
         print(url)
-        response = requests.post(url, json=data, proxies=self.proxies)
+        response = requests.post(url, json=data)
         if response.status_code == 200:
             data = json.loads(response.text)
             logging.debug(data['token'])

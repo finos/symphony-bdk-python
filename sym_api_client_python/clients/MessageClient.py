@@ -17,7 +17,7 @@ class MessageClient(APIClient):
         self.botClient = botClient
         self.config = self.botClient.getSymConfig()
         if self.config.data['proxyURL']:
-            self.proxies = {"http": self.config.data['proxyURL']}
+            self.proxies = {"https": self.config.data['proxyURL']}
         else:
             self.proxies = {}
 
@@ -25,7 +25,7 @@ class MessageClient(APIClient):
         logging.debug('MessageClient/getMessages()')
         headers = {'sessionToken': self.botClient.getSymAuth().getSessionToken(), 'keyManagerToken': self.botClient.getSymAuth().getKeyManagerToken()}
         url = self.config.data['agentHost']+'/agent/v4/stream/{0}/message?since={1}'.format(streamId, since)
-        response = requests.get(url, headers=headers, proxies=self.proxies)
+        response = requests.get(url, headers=headers)
         if response.status_code == 204:
             result = []
             return result
@@ -41,7 +41,7 @@ class MessageClient(APIClient):
         logging.debug('MessageClient/createMessage()')
         url = self.config.data['agentHost']+'/agent/v4/stream/{0}/message/create'.format(streamId)
         headers = {'sessionToken': self.botClient.getSymAuth().getSessionToken(), 'keyManagerToken': self.botClient.getSymAuth().getKeyManagerToken()}
-        response = requests.post(url, files=outBoundMessage, headers=headers, proxies=self.proxies)
+        response = requests.post(url, files=outBoundMessage, headers=headers)
         if response.status_code == 204:
             result = []
             return result
@@ -57,7 +57,7 @@ class MessageClient(APIClient):
         logging.debug('MessageClient/getAttachments()')
         headers = {'sessionToken': self.botClient.getSymAuth().getSessionToken(), 'keyManagerToken': self.botClient.getSymAuth().getKeyManagerToken()}
         url = self.config.data['agentHost']+'/agent/v1/stream/{0}/attachment?messageId={1}&fileId={2}'.format(streamId, messageId, fileId)
-        response = requests.get(url, headers=headers, proxies=self.proxies)
+        response = requests.get(url, headers=headers)
         if response.status_code == 204:
             result = []
             return result
@@ -83,7 +83,7 @@ class MessageClient(APIClient):
             "originalMessageId": "",
             "streamId": ""
         }
-        response = requests.post(url, headers=headers, data=payload, proxies=self.proxies)
+        response = requests.post(url, headers=headers, data=payload)
         if response.status_code == 204:
             result = []
             return result
@@ -118,7 +118,7 @@ class MessageClient(APIClient):
         headers = {'sessionToken': self.botClient.getSymAuth().getSessionToken(), 'keyManagerToken': self.botClient.getSymAuth().getKeyManagerToken()}
         url = self.config.data['agentHost']+'/agent/v1/message/search'
         payload = {'hashtag':'reed'}
-        response = requests.post(url, headers=headers, json=payload, proxies=self.proxies)
+        response = requests.post(url, headers=headers, json=payload)
         if response.status_code == 204:
             result = []
             return result
@@ -136,7 +136,7 @@ class MessageClient(APIClient):
         headers = {'sessionToken': self.botClient.getSymAuth().getSessionToken(), 'keyManagerToken': self.botClient.getSymAuth().getKeyManagerToken()}
         url = self.config.data['agentHost']+'/agent/v1/message/search'
         query = {'query': 'hashtag:reed'}
-        response = requests.get(url, headers=headers, params=query, proxies=self.proxies)
+        response = requests.get(url, headers=headers, params=query)
         if response.status_code == 204:
             result = []
             return result

@@ -18,7 +18,7 @@ class StreamClient(APIClient):
         self.botClient = botClient
         self.config = self.botClient.getSymConfig()
         if self.config.data['proxyURL']:
-            self.proxies = {"http": self.config.data['proxyURL']}
+            self.proxies = {"https": self.config.data['proxyURL']}
         else:
             self.proxies = {}
 
@@ -169,7 +169,7 @@ class StreamClient(APIClient):
         "appIconUrl": "https://apps-dev.symphony.com/ticker/assets/images/logo.png"
             }
         }
-        response = requests.post(url, headers=headers, json=data, proxies=self.proxies)
+        response = requests.post(url, headers=headers, json=data)
         if response.status_code == 200:
             return json.loads(response.text)
         else:

@@ -16,7 +16,7 @@ class DataFeedClient(APIClient):
         self.botClient = botClient
         self.config = self.botClient.getSymConfig()
         if self.config.data['proxyURL']:
-            self.proxies = {"http": self.config.data['proxyURL']}
+            self.proxies = {"https": self.config.data['proxyURL']}
         else:
             self.proxies = {}
 
@@ -25,9 +25,8 @@ class DataFeedClient(APIClient):
         logging.debug('DataFeedClient/createDatafeed()')
         # messaging_logger.debug('DataFeedClient/createDatafeed()')
         headers = {'sessionToken': self.botClient.getSymAuth().getSessionToken(), 'keyManagerToken': self.botClient.getSymAuth().getKeyManagerToken()}
-        print(headers)
         logging.debug(headers)
-        response = requests.post(self.config.data['agentHost']+'/agent/v4/datafeed/create', proxies=self.proxies, headers=headers)
+        response = requests.post(self.config.data['agentHost']+'/agent/v4/datafeed/create', headers=headers)
 
         if response.status_code == 200:
             logging.debug('DataFeedClient/createDatafeed() suceeded: {}'.format(response.status_code))
@@ -50,7 +49,7 @@ class DataFeedClient(APIClient):
         datafeedevents = []
         headers = {'sessionToken': self.botClient.getSymAuth().getSessionToken(), 'keyManagerToken':self.botClient.getSymAuth().getKeyManagerToken()}
         url = self.config.data['agentHost']+'/agent/v4/datafeed/{0}/read'.format(id)
-        response = requests.get(url, proxies=self.proxies, headers=headers)
+        response = requests.get(url, headers=headers)
         if (response.status_code == 204):
             datafeedevents = []
         elif(response.status_code == 200):
