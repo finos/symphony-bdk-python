@@ -19,7 +19,7 @@ class UserClient(APIClient):
         self.botClient = botClient
         self.config = self.botClient.getSymConfig()
         if self.config.data['proxyURL']:
-            self.proxies = {"http": self.config.data['proxyURL']}
+            self.proxies = {"https": self.config.data['proxyURL']}
         else:
             self.proxies = {}
 
