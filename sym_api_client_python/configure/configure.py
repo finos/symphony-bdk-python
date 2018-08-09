@@ -24,10 +24,9 @@ class SymConfig():
             self.data['keyAuthHost'] = 'https://'+ data['keyAuthHost']
             self.data['podHost'] = 'https://'+ data['podHost']
             self.data['agentHost'] = 'https://'+ data['agentHost']
-            self.data['privatePemPath'] = data['privatePemPath']
+            self.data['botRSAPath'] = data['botRSAPath'] + data['botRSAName']
             self.data['botUserName'] = data['botUserName']
             self.data['botEmailAddress'] = data['botEmailAddress']
-            self.data['authType'] = data['authType']
             self.data['proxyURL'] = data['proxyURL']
 
 
@@ -46,7 +45,6 @@ class SymConfig():
             self.data['botCertPassword'] = data['botCertPassword']
             self.data['botEmailAddress'] = data['botEmailAddress']
             self.data['p.12'] = self.data['botCertPath'] + '.p12'
-            self.data['authType'] = data['authType']
             self.data['proxyURL'] = data['proxyURL']
 
         #take in .p12 certificate and parse through file to use for authentication

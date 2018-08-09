@@ -51,7 +51,7 @@ class SymBotRSAAuth(APIClient):
     def createJWT(self):
         logging.debug('RSA_auth/getJWT() function started')
         #load this from config
-        with open(self.config.data['privatePemPath'], 'r') as f:
+        with open(self.config.data['botRSAPath'], 'r') as f:
             privateKey = f.read()
             expiration_date = int(datetime.datetime.now(datetime.timezone.utc).timestamp() + (5*58))
             payload = {

@@ -17,6 +17,5 @@
   "proxyURL": "",
   "proxyUsername": "",
   "proxyPassword": "",
-  "authTokenRefreshPeriod": "30",
-  "authType": "cert"
+  "authTokenRefreshPeriod": "30"
 }
