@@ -20,14 +20,15 @@ class SymConfig():
     def loadFromRSA(self):
         with open(self.configFile, "r") as read_file:
             data = json.load(read_file)
-            self.data['sessionAuthHost'] = 'https://'+ data['sessionAuthHost']
-            self.data['keyAuthHost'] = 'https://'+ data['keyAuthHost']
-            self.data['podHost'] = 'https://'+ data['podHost']
-            self.data['agentHost'] = 'https://'+ data['agentHost']
+            self.data['sessionAuthHost'] = 'https://'+ data['sessionAuthHost'] + ':' + str(data['sessionAuthPort'])
+            self.data['keyAuthHost'] = 'https://'+ data['keyAuthHost'] + ':' + str(data['keyAuthPort'])
+            self.data['podHost'] = 'https://'+ data['podHost'] + ':' + str(data['podPort'])
+            self.data['agentHost'] = 'https://'+ data['agentHost'] + ':' + str(data['agentPort'])
             self.data['botRSAPath'] = data['botRSAPath'] + data['botRSAName']
             self.data['botUserName'] = data['botUserName']
             self.data['botEmailAddress'] = data['botEmailAddress']
             self.data['proxyURL'] = data['proxyURL']
+            self.data['proxyPort'] = data['proxyPort']
 
 
     #read config file and store values in dictionary called data
@@ -36,16 +37,17 @@ class SymConfig():
     def loadFromFile(self):
         with open(self.configFile, "r") as read_file:
             data = json.load(read_file)
-            self.data['sessionAuthHost'] = 'https://'+ data['sessionAuthHost']
-            self.data['keyAuthHost'] = 'https://'+ data['keyAuthHost']
-            self.data['podHost'] = 'https://'+ data['podHost']
-            self.data['agentHost'] = 'https://'+ data['agentHost']
+            self.data['sessionAuthHost'] = 'https://'+ data['sessionAuthHost'] + ':' + str(data['sessionAuthPort'])
+            self.data['keyAuthHost'] = 'https://'+ data['keyAuthHost'] + ':' + str(data['keyAuthPort'])
+            self.data['podHost'] = 'https://'+ data['podHost'] + ':' + str(data['podPort'])
+            self.data['agentHost'] = 'https://'+ data['agentHost'] + ':' + str(data['agentPort'])
             self.data['botCertPath'] = data['botCertPath'] + data['botCertName']
             self.data['botCertName'] = data['botCertName']
             self.data['botCertPassword'] = data['botCertPassword']
             self.data['botEmailAddress'] = data['botEmailAddress']
             self.data['p.12'] = self.data['botCertPath'] + '.p12'
             self.data['proxyURL'] = data['proxyURL']
+            self.data['proxyPort'] = data['proxyPort']
 
         #take in .p12 certificate and parse through file to use for authentication
         #data['botCert_cert'] and data['botCert_key'] are passed as certificates upon authentication request

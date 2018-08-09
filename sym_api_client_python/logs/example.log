@@ -1,17 +1,4 @@
-2018-08-09 12:08:04,164 - root - DEBUG - Auth/authenticate()
-2018-08-09 12:08:04,164 - root - DEBUG - Auth/authenticate() --> needed to authenticate
-2018-08-09 12:08:04,164 - root - DEBUG - RSA_auth/getJWT() function started
-2018-08-09 12:08:04,173 - root - DEBUG - RSA_auth/get_session_token() function started
-2018-08-09 12:08:04,326 - root - DEBUG - eyJhbGciOiJSUzUxMiJ9.eyJzdWIiOiJib3R0bGVCb3QiLCJpc3MiOiJzeW1waG9ueSIsInNlc3Npb25JZCI6IjIzYTQwZDdjNGRmMTNkMmNjZDY5ZTMxZGZkZGFkYjA0NDQ1NGE2MWM5MzNiMjBkNTA1OTM4MzViYmY4ODA4ZjM4MWFjNTMwMzFlZjU0YjUxYmVmNWQ2NTY1NzljMjExNDAwMDAwMTY1MWY3MWVjYTEwMDAxM2MyMDAwMDAwMzRiIiwidXNlcklkIjoiMzQ3NTgzMTEzMzMxNTMxIn0.QE4g-yhTGXftaL2E50Ffrw2aFbNZHlKPQjOZLzJc1V0Y1aMWtE31tjPibf-bvs_yLHfv7k5hRKJ58Pendhv028UmK6r3z-sb635n_I-oUnZTS4iUrbelpEe8VX_QLVwud-gUlZZqAxzZK-1qJkUl3P4Loo5kEkEi2L0CTm0KzkHO0GuoS6eXoqHjma3viTNsLYoalfRUaFqiwL8PFwDQenHn-HXfpkww3nylnpqz0EL8k9FeJ30CdEiRkR3pLO0PsO2R96JHSTrm7zuA66doIRPYqZPiNUdEV3OLqVtslq0Gb2fW99v3_GPO5ZFlZbylkVkOTNxlQlaEibPN_j05Qg
-2018-08-09 12:08:04,326 - root - DEBUG - RSA_auth/get_keyauth() function started
-2018-08-09 12:08:04,475 - root - DEBUG - 010078d0ebf6505c3c731d931166d2e48648bd13afe4a093f13f987de91babafaeec4cff65cce8b73293dca1e8710a69d0ebfbbde74404b2ddf7021941fb5665e34fcc40fe38d83b3eae151137dabf05f27f634ca391640f65a289a574f1480795e6951d61757abfc3122d28ea4f33e0431356c2a9cc7d2c12f94ad1530182b1837e58518830062d732aaf3bdbca22c1140d51bff5361a4dbfaadeb8b5dfaf048bc95fe2b23090d3c444e0a605e51cfc2001dc88b055f4eabf
-2018-08-09 12:08:04,475 - root - DEBUG - DataFeedEventService/startDataFeed()
-2018-08-09 12:08:04,475 - root - DEBUG - DataFeedClient/createDatafeed()
-2018-08-09 12:08:05,337 - root - DEBUG - DataFeedClient/createDatafeed() suceeded: 200
-2018-08-09 12:08:05,337 - root - DEBUG - DataFeedClient/readDatafeed()
-2018-08-09 12:08:35,646 - root - DEBUG - DataFeedEventService() - no data coming in from datafeed --> readDatafeed()
-2018-08-09 12:08:35,646 - root - DEBUG - DataFeedClient/readDatafeed()
-2018-08-09 12:09:05,957 - root - DEBUG - DataFeedEventService() - no data coming in from datafeed --> readDatafeed()
-2018-08-09 12:09:05,957 - root - DEBUG - DataFeedClient/readDatafeed()
-2018-08-09 12:09:36,268 - root - DEBUG - DataFeedEventService() - no data coming in from datafeed --> readDatafeed()
-2018-08-09 12:09:36,268 - root - DEBUG - DataFeedClient/readDatafeed()
+2018-08-09 13:07:39,719 - root - DEBUG - p12 location ---> /Users/reed.feldman/Desktop/symphonyPythonClient/resources/certificates/bot.user11.p12
+2018-08-09 13:07:39,728 - root - DEBUG - Auth/authenticate()
+2018-08-09 13:07:39,728 - root - DEBUG - Auth/authenticate() --> needed to authenticate
+2018-08-09 13:07:39,728 - root - DEBUG - Auth/get_session_token()

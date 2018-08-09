@@ -14,7 +14,8 @@
   "appCertPath": "",
   "appCertName": "",
   "appCertPassword": "",
-  "proxyURL": "",
+  "proxyURL": "awsusproxy.fg.rbc.com",
+  "proxyPort": 8080,
   "proxyUsername": "",
   "proxyPassword": "",
   "authTokenRefreshPeriod": "30"

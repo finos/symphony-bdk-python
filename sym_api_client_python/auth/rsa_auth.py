@@ -15,9 +15,8 @@ class SymBotRSAAuth(APIClient):
     def __init__(self, config):
         self.config = config
         self.lastAuthTime=0
-        print('rsa')
         if self.config.data['proxyURL']:
-            self.proxies = {"https": self.config.data['proxyURL']}
+            self.proxies = {"https": 'https://' + self.config.data['proxyURL'] + ':' + str(self.config.data['proxyPort'])}
             print(self.proxies)
         else:
             self.proxies = {}
@@ -68,7 +67,7 @@ class SymBotRSAAuth(APIClient):
         data = {
             'token': self.jwt
         }
-        url = self.config.data['podHost']+'/login/pubkey/authenticate'
+        url = self.config.data['sessionAuthHost']+'/login/pubkey/authenticate'
         print(url)
         response = requests.post(url, json=data, proxies=self.proxies)
         if response.status_code == 200:
