@@ -1,8 +1,8 @@
 {
-  "sessionAuthHost": "sup-api.symphony.com",
-  "sessionAuthPort": 8444,
+  "sessionAuthHost": "develop.symphony.com",
+  "sessionAuthPort": 443,
   "keyAuthHost": "develop.symphony.com",
-  "keyAuthPort": 8444,
+  "keyAuthPort": 443,
   "podHost": "develop.symphony.com",
   "podPort": 443,
   "agentHost": "develop.symphony.com",
@@ -14,7 +14,8 @@
   "appCertPath": "",
   "appCertName": "",
   "appCertPassword": "",
-  "proxyURL": "",
+  "proxyURL": "awsusproxy.fg.rbc.com",
+  "proxyPort": 8080,
   "proxyUsername": "",
   "proxyPassword": "",
   "authTokenRefreshPeriod": "30"

@@ -12,8 +12,7 @@ class Auth():
         self.config = config
         self.lastAuthTime=0
         if self.config.data['proxyURL']:
-            self.proxies = {"https": self.config.data['proxyURL']}
-            print('auth')
+            self.proxies = {"https": 'https://' + self.config.data['proxyURL'] + ':' + str(self.config.data['proxyPort'])}
             print(self.proxies)
         else:
             self.proxies = {}
@@ -46,8 +45,8 @@ class Auth():
     #pass in certificates from config object using requests library built in cert parameter
     def sessionAuthenticate(self):
         logging.debug('Auth/get_session_token()')
-        response = requests.post(self.config.data['sessionAuthHost']+':8444/sessionauth/v1/authenticate',proxies=self.proxies, cert=(self.config.data['symphonyCertificate'], self.config.data['symphonyKey']))
-        print(response.text)
+        print(self.config.data['sessionAuthHost']+'/sessionauth/v1/authenticate')
+        response = requests.post(self.config.data['sessionAuthHost']+'/sessionauth/v1/authenticate',proxies=self.proxies, cert=(self.config.data['symphonyCertificate'], self.config.data['symphonyKey']))
         if response.status_code == 200:
             data = json.loads(response.text)
             logging.debug('Auth/session token success: ' + data['token'])
@@ -60,7 +59,7 @@ class Auth():
     #pass in certificates from config object using requests library built in cert parameter
     def keyManagerAuthenticate(self):
         logging.debug('Auth/get_keyauth()')
-        response = requests.post(self.config.data['keyAuthHost']+':8444/keyauth/v1/authenticate', cert=(self.config.data['symphonyCertificate'], self.config.data['symphonyKey']))
+        response = requests.post(self.config.data['keyAuthHost']+'/keyauth/v1/authenticate', cert=(self.config.data['symphonyCertificate'], self.config.data['symphonyKey']))
         if response.status_code == 200:
             data = json.loads(response.text)
             logging.debug('Auth/keymanager token sucess: ' + data['token'])
