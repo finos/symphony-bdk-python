@@ -8,8 +8,8 @@ class IMListenerTestImp(IMListener):
     def __init__(self, SymBotClient):
         self.botClient = SymBotClient
 
-    def onIMMessage(self, message):
-        logging.debug('message recieved in IM', message)
+    def onIMMessage(self, IMmessage):
+        logging.debug('message recieved in IM', IMmessage)
 
-    def onIMCreated(self, stream):
-        logging.debug('IM created!')
+    def onIMCreated(self, IMCreated):
+        logging.debug('IM created!', IMCreated )

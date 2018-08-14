@@ -1,11 +1,40 @@
-2018-08-14 11:58:17,234 - root - DEBUG - Auth/authenticate()
-2018-08-14 11:58:17,234 - root - DEBUG - Auth/authenticate() --> needed to authenticate
-2018-08-14 11:58:17,234 - root - DEBUG - RSA_auth/getJWT() function started
-2018-08-14 11:58:17,245 - root - DEBUG - RSA_auth/get_session_token() function started
-2018-08-14 11:58:17,393 - root - DEBUG - eyJhbGciOiJSUzUxMiJ9.eyJzdWIiOiJib3R0bGVCb3QiLCJpc3MiOiJzeW1waG9ueSIsInNlc3Npb25JZCI6IjkwZTYzNjUzYWVhZGMxMDRiYWMxNTEwMzRmNTQ0YTFjODNiMmE1MzFlOTU5YzRlMTlhMmZmYzYyMjQ0YzE2MzQzZGQ2MjI0NzM4MGNlMjBiOWYwYmMxYmU2ZDYzNGJhYzAwMDAwMTY1MzkyOGM1YjAwMDAxM2MyMDAwMDAwMzRiIiwidXNlcklkIjoiMzQ3NTgzMTEzMzMxNTMxIn0.TldyiUsSDFvq9B7n33G9upsJg2kxqUvAV8So2PfnR5mViR8G_vssbc7UXlz2ikeLWGNl3mYZP1BmHX2nMCAwbwm8muAZ5W9Idpz8n55361HParagQPYis5eB2DbZDW0tdezINPNcdQM5pVv3A2SHURHXMOrgVCBV_ym7FOh-hYPl1di707SKdhi7c2KGydPxuQHRef_eVsXyN_bbQiZ14vjzDpV03YkhHKSPfCRgN4FIbsmvA6OPSbFFkY_z9nUTWTpoAvN_o6fwVZdNe_SrBWxbQbZYZUenbzp7eLldh2QQ3HzLEEIkf55jBivJEVBbPaYBhyjqicfFNAcbYXkOdw
-2018-08-14 11:58:17,393 - root - DEBUG - RSA_auth/get_keyauth() function started
-2018-08-14 11:58:17,556 - root - DEBUG - 010052f99b623bcbf4cbb4f588dec36340dcc74e105d5a4cbe99d655ee99fa3b7d28b7583266761e9c319e589b7140c0ae6c2394c0ad4e9a665853fe6a4e3f7df2b08e954b5cdc6ba2061298880b824d7f98376f777b17f723c68f4df07e527e89ad7e1a9394e225e61aba62d47139c149c9d9b8d936dddecffafad0d49f3dad595c3247da9513bb89918b9ceb48b34b023cb6244ab53c83de2ef7bc5da9265950d89fecba7e44020e1126a092fedd443e271a1e24fffa19c9
-2018-08-14 11:58:17,556 - root - INFO - DataFeedEventService/startDataFeed()
-2018-08-14 11:58:17,556 - root - DEBUG - DataFeedClient/createDatafeed()
-2018-08-14 11:58:18,360 - root - DEBUG - DataFeedClient/createDatafeed() suceeded: 200
-2018-08-14 11:58:18,360 - root - DEBUG - DataFeedClient/readDatafeed()
+2018-08-14 13:14:52,406 - root - DEBUG - Auth/authenticate()
+2018-08-14 13:14:52,406 - root - DEBUG - Auth/authenticate() --> needed to authenticate
+2018-08-14 13:14:52,407 - root - DEBUG - RSA_auth/getJWT() function started
+2018-08-14 13:14:52,419 - root - DEBUG - RSA_auth/get_session_token() function started
+2018-08-14 13:14:52,800 - root - DEBUG - eyJhbGciOiJSUzUxMiJ9.eyJzdWIiOiJib3R0bGVCb3QiLCJpc3MiOiJzeW1waG9ueSIsInNlc3Npb25JZCI6IjVlZDQ1ZDM2MmE5OGYxNDZhNjBjZjMwODNmYTE1NDI2NzVmZDE5ZDdiNzAwZTNjZDU5MmYzZWFmMjYyMTY5MjJjY2ExYTIxYjVlNjljZjg0NDNhYmU2N2UwY2IyZWZhNDAwMDAwMTY1Mzk2ZWUxZjAwMDAxM2MyMDAwMDAwMzRiIiwidXNlcklkIjoiMzQ3NTgzMTEzMzMxNTMxIn0.ePa905yGMq2JU6dL3AnIf7iHo06Pye827ApAxzpOk7rVOc_B9bzn8DfmhUyLS_RY-wsllhpVq6CrpKxEM4UK3AQJHyWZnCpjvjPw_yDVawSbXR-BNU6FyUEwMLPqCSZkp1ugz5RZLj8HCWKOOxG4fyGYaM51TSLEw5wCAyMGu3mlUVsxndgFpcVTK4CEqfebllzSrQoybTmdREDExhtYTHPrwfqU8V7T39-_PhXUTJlKJaJk0D8foO9c2rD8xm-sgz2R0TipGaO_2Ca0uTbN_AcLqcy6X23UlP-LBUq8rlpOKlpA9ncac04lyYu3SLL44VlbnebcJg4ys9Ew-NzJmQ
+2018-08-14 13:14:52,800 - root - DEBUG - RSA_auth/get_keyauth() function started
+2018-08-14 13:14:52,989 - root - DEBUG - 0100f563bc2bf4947577f51119f45de78bbda99a02e153aeffff6142deb61afc16bccc20f26f471ff39d1a0c5e4be09e181384e487f59f64f7332a3bf41d50218f9551cde30512b26ca5e54b8dc8bfb8e798417ed2892e7258c1524b33857babca9e4459349db5c25a83c0247aaf6374c4838b227051ad8724d2f532587296d5a74803dc57a1bbf48dc17ade56431b9a2d99799cea9a0c71208b2d01269e29b29bf1aaea258f40ce391a17c486a072f75e58bc0e26087b0a24
+2018-08-14 13:14:52,989 - root - INFO - DataFeedEventService/startDataFeed()
+2018-08-14 13:14:52,989 - root - DEBUG - DataFeedClient/createDatafeed()
+2018-08-14 13:14:53,898 - root - DEBUG - DataFeedClient/createDatafeed() suceeded: 200
+2018-08-14 13:14:53,898 - root - DEBUG - DataFeedClient/readDatafeed()
+2018-08-14 13:15:04,608 - root - DEBUG - DataFeedEventService/readDatafeed() --> Incoming data from readDatafeed(): {'instantMessageCreated': {'stream': {'streamId': 'd3ahIaPh7pV2D0ZpaS-FcX___prGkPD7dA', 'streamType': 'IM', 'members': [{'userId': 347583113331529}, {'userId': 347583113331531}], 'external': False, 'crossPod': False}}}
+2018-08-14 13:15:04,608 - root - DEBUG - instantMessageHandler fucntion started
+2018-08-14 13:15:04,609 - root - DEBUG - {'stream': {'streamId': 'd3ahIaPh7pV2D0ZpaS-FcX___prGkPD7dA', 'streamType': 'IM', 'members': [{'userId': 347583113331529}, {'userId': 347583113331531}], 'external': False, 'crossPod': False}}
+2018-08-14 13:15:04,609 - root - DEBUG - IM created!
+2018-08-14 13:15:04,609 - root - DEBUG - DataFeedClient/readDatafeed()
+2018-08-14 13:15:10,500 - root - DEBUG - DataFeedEventService/readDatafeed() --> Incoming data from readDatafeed(): {'messageSent': {'message': {'messageId': 'ulml9QJcekWYoMimKvTGPX___prGkNxObQ', 'timestamp': 1534266909617, 'message': '<div data-format="PresentationML" data-version="2.0" class="wysiwyg"><p>ss</p></div>', 'data': '{}', 'user': {'userId': 347583113331529, 'firstName': 'Reed', 'lastName': 'DEV', 'displayName': 'Reed DEV', 'email': 'reed.feldman@symphony.com', 'username': 'reeddevelop'}, 'stream': {'streamId': 'd3ahIaPh7pV2D0ZpaS-FcX___prGkPD7dA', 'streamType': 'IM'}, 'externalRecipients': False, 'userAgent': 'DESKTOP-35.0.0-6376-MacOSX-10.12.6-Chrome-68.0.3440.84', 'originalFormat': 'com.symphony.messageml.v2'}}}
+2018-08-14 13:15:10,500 - root - DEBUG - messageSentHandler function started
+2018-08-14 13:15:10,500 - root - DEBUG - message recieved in IM
+2018-08-14 13:15:10,500 - root - DEBUG - DataFeedClient/readDatafeed()
+2018-08-14 13:15:16,790 - root - DEBUG - DataFeedEventService/readDatafeed() --> Incoming data from readDatafeed(): {'messageSent': {'message': {'messageId': 'cEyaNGDpkkXvuouUVwgs7X___prGkMHObQ', 'timestamp': 1534266916401, 'message': '<div data-format="PresentationML" data-version="2.0" class="wysiwyg"><p>asdf</p></div>', 'data': '{}', 'user': {'userId': 347583113331529, 'firstName': 'Reed', 'lastName': 'DEV', 'displayName': 'Reed DEV', 'email': 'reed.feldman@symphony.com', 'username': 'reeddevelop'}, 'stream': {'streamId': 'd3ahIaPh7pV2D0ZpaS-FcX___prGkPD7dA', 'streamType': 'IM'}, 'externalRecipients': False, 'userAgent': 'DESKTOP-35.0.0-6376-MacOSX-10.12.6-Chrome-68.0.3440.84', 'originalFormat': 'com.symphony.messageml.v2'}}}
+2018-08-14 13:15:16,790 - root - DEBUG - messageSentHandler function started
+2018-08-14 13:15:16,790 - root - DEBUG - message recieved in IM
+2018-08-14 13:15:16,790 - root - DEBUG - DataFeedClient/readDatafeed()
+2018-08-14 13:15:37,654 - root - DEBUG - DataFeedEventService/readDatafeed() --> Incoming data from readDatafeed(): {'messageSent': {'message': {'messageId': 'elPG3SkUVm6b329Ob_28an___prGkG9ybQ', 'timestamp': 1534266937485, 'message': '<div data-format="PresentationML" data-version="2.0" class="wysiwyg"><p>ll</p></div>', 'data': '{}', 'user': {'userId': 347583113331529, 'firstName': 'Reed', 'lastName': 'DEV', 'displayName': 'Reed DEV', 'email': 'reed.feldman@symphony.com', 'username': 'reeddevelop'}, 'stream': {'streamId': 'd3ahIaPh7pV2D0ZpaS-FcX___prGkPD7dA', 'streamType': 'IM'}, 'externalRecipients': False, 'userAgent': 'DESKTOP-35.0.0-6376-MacOSX-10.12.6-Chrome-68.0.3440.84', 'originalFormat': 'com.symphony.messageml.v2'}}}
+2018-08-14 13:15:37,654 - root - DEBUG - messageSentHandler function started
+2018-08-14 13:15:37,654 - root - DEBUG - message recieved in IM
+2018-08-14 13:15:37,654 - root - DEBUG - DataFeedClient/readDatafeed()
+2018-08-14 13:15:50,068 - root - DEBUG - DataFeedEventService/readDatafeed() --> Incoming data from readDatafeed(): {'messageSent': {'message': {'messageId': 'PAZDqr-e8UnWujTJAPmiVn___prGkD8YbQ', 'timestamp': 1534266949863, 'message': '<div data-format="PresentationML" data-version="2.0" class="wysiwyg"><p>\'</p></div>', 'data': '{}', 'user': {'userId': 347583113331529, 'firstName': 'Reed', 'lastName': 'DEV', 'displayName': 'Reed DEV', 'email': 'reed.feldman@symphony.com', 'username': 'reeddevelop'}, 'stream': {'streamId': 'd3ahIaPh7pV2D0ZpaS-FcX___prGkPD7dA', 'streamType': 'IM'}, 'externalRecipients': False, 'userAgent': 'DESKTOP-35.0.0-6376-MacOSX-10.12.6-Chrome-68.0.3440.84', 'originalFormat': 'com.symphony.messageml.v2'}}}
+2018-08-14 13:15:50,068 - root - DEBUG - messageSentHandler function started
+2018-08-14 13:15:50,069 - root - DEBUG - message recieved in IM
+2018-08-14 13:15:50,069 - root - DEBUG - DataFeedClient/readDatafeed()
+2018-08-14 13:15:55,141 - root - DEBUG - DataFeedEventService/readDatafeed() --> Incoming data from readDatafeed(): {'messageSent': {'message': {'messageId': 'XhPG_ehGAn3gCcd6tJuVLX___prGkCsbbQ', 'timestamp': 1534266954980, 'message': '<div data-format="PresentationML" data-version="2.0" class="wysiwyg"><p>k</p></div>', 'data': '{}', 'user': {'userId': 347583113331529, 'firstName': 'Reed', 'lastName': 'DEV', 'displayName': 'Reed DEV', 'email': 'reed.feldman@symphony.com', 'username': 'reeddevelop'}, 'stream': {'streamId': 'd3ahIaPh7pV2D0ZpaS-FcX___prGkPD7dA', 'streamType': 'IM'}, 'externalRecipients': False, 'userAgent': 'DESKTOP-35.0.0-6376-MacOSX-10.12.6-Chrome-68.0.3440.84', 'originalFormat': 'com.symphony.messageml.v2'}}}
+2018-08-14 13:15:55,141 - root - DEBUG - messageSentHandler function started
+2018-08-14 13:15:55,141 - root - DEBUG - message recieved in IM
+2018-08-14 13:15:55,141 - root - DEBUG - DataFeedClient/readDatafeed()
+2018-08-14 13:15:55,358 - root - DEBUG - DataFeedEventService/readDatafeed() --> Incoming data from readDatafeed(): {'messageSent': {'message': {'messageId': '8fUYv_KC-EEmVYhUcm0Z9n___prGkCrqbQ', 'timestamp': 1534266955029, 'message': '<div data-format="PresentationML" data-version="2.0" class="wysiwyg"><p>k</p></div>', 'data': '{}', 'user': {'userId': 347583113331529, 'firstName': 'Reed', 'lastName': 'DEV', 'displayName': 'Reed DEV', 'email': 'reed.feldman@symphony.com', 'username': 'reeddevelop'}, 'stream': {'streamId': 'd3ahIaPh7pV2D0ZpaS-FcX___prGkPD7dA', 'streamType': 'IM'}, 'externalRecipients': False, 'userAgent': 'DESKTOP-35.0.0-6376-MacOSX-10.12.6-Chrome-68.0.3440.84', 'originalFormat': 'com.symphony.messageml.v2'}}}
+2018-08-14 13:15:55,358 - root - DEBUG - messageSentHandler function started
+2018-08-14 13:15:55,358 - root - DEBUG - message recieved in IM
+2018-08-14 13:15:55,358 - root - DEBUG - DataFeedClient/readDatafeed()

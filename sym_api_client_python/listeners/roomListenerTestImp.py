@@ -14,7 +14,7 @@ class RoomListenerTestImp(RoomListener):
         logging.debug('room message recieved', message)
         #sample code for developer to implement --> use MessageClient and
         #data recieved from message event to reply with a #reed
-        streamId = message['messageSent']['message']['stream']['streamId']
+        streamId = message['stream']['streamId']
         message = dict(message = '<messageML><hash tag="ReedF"/></messageML>')
         self.botClient.getMessageClient().sendMessage(streamId, message)
 

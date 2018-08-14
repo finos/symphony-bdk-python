@@ -107,7 +107,8 @@ class DataFeedEventService():
     def messageSentHandler(self, payload):
         logging.debug('messageSentHandler function started')
         streamType = payload['payload']['messageSent']['message']['stream']['streamType']
-        messageSentData = payload['payload']
+        messageSentData = payload['payload']['messageSent']['message']
+        print(messageSentData)
         if (str(streamType) == 'ROOM'):
             for listener in self.roomListeners:
                 listener.onRoomMessage(messageSentData)
@@ -118,14 +119,14 @@ class DataFeedEventService():
 
     def instantMessageHandler(self, payload):
         logging.debug('instantMessageHandler fucntion started')
-        instantMessageData = payload['payload']
+        instantMessageData = payload['payload']['instantMessageCreated']
         logging.debug(instantMessageData)
         for listener in self.IMListeners:
             listener.onIMCreated(instantMessageData)
 
     def roomCreatedHandler(self, payload):
         logging.debug('roomCreatedHandler function started')
-        roomCreatedData = payload['payload']
+        roomCreatedData = payload['payload']['roomCreated']
         logging.debug(roomCreatedData)
         for listener in self.roomListeners:
             listener.onRoomCreated(roomCreatedData)
@@ -133,63 +134,63 @@ class DataFeedEventService():
 
     def roomUpdatedHandler(self, payload):
         logging.debugrint('roomUpdatedHandler')
-        roomUpdatedData = payload['payload']
+        roomUpdatedData = payload['payload']['roomUpdated']
         logging.debug(roomUpdatedData)
         for listener in self.roomListeners:
             listener.onRoomUpdated(roomUpdatedData)
 
     def roomDeactivatedHandler(self, payload):
         logging.debug('roomDeactivatedHandler')
-        roomDeactivatedData = payload['payload']
+        roomDeactivatedData = payload['payload']['roomDeactivated']
         logging.debug(roomDeactivatedData)
         for listner in self.roomListeners:
             listener.onRoomDeactivated(roomDeactivatedData)
 
     def roomReactivatedHandler(self, payload):
         logging.debug('roomReactivatedHandler')
-        roomReactivatedData = payload['payload']
+        roomReactivatedData = payload['payload']['roomReactivated']
         logging.debug(roomReactivatedData)
         for listener in self.roomListeners:
             listener.onRoomReactivated(roomReactivatedData)
 
     def userJoinedRoomHandler(self, payload):
         logging.debug('userJoinedRoomHandler')
-        userJoinedRoomData = payload['payload']
+        userJoinedRoomData = payload['payload']['userJoinedRoom']
         logging.debug(userJoinedRoomData)
         for listener in self.roomListeners:
             listener.onUserJoinedRoom(userJoinedRoomData)
 
     def userLeftRoomHandler(self, payload):
         logging.debug('userLeftRoomHandler')
-        userLeftRoomData = payload['payload']
+        userLeftRoomData = payload['payload']['userLeftRoom']
         logging.debug(userLeftRoomData)
         for listener in self.roomListeners:
             listener.onUserLeftRoom(userLeftRoomData)
 
     def promotedToOwner(self, payload):
         logging.debug('promotedToOwner')
-        promotedToOwnerData = payload['payload']
+        promotedToOwnerData = payload['payload']['roomMemberPromotedToOwner']
         logging.debug(promotedToOwnerData)
         for listener in self.roomListeners:
             listener.onRoomMemberPromotedToOwner(promotedToOwnerData)
 
     def demotedToOwner(self, payload):
         logging.debug('demotedtoOwner')
-        demotedToOwnerData = payload['payload']
+        demotedToOwnerData = payload['payload']['roomMemberDemotedFromOwner']
         logging.debug(demotedToOwnerData)
         for listener in self.roomListeners:
             listener.onRoomMemberDemotedFromOwner(demotedToOwnerData)
 
     def connectionAcceptedHandler(self, payload):
         logging.debug('connectionAcceptedHandler')
-        connectionAcceptedData = payload['payload']
+        connectionAcceptedData = payload['payload']['connectionAccepted']
         logging.debug(connectionAcceptedData)
         for listener in self.connectionListeners:
             listener.onConnectionAccepted(connectionAcceptedData)
 
     def connectionRequestedHandler(self, payload):
         logging.debug('connectionRequestedHandler')
-        connectionRequestedData = payload['payload']
+        connectionRequestedData = payload['payload']['connectionRequested']
         logging.debug(connectionRequestedData)
         for listener in self.connectionListeners:
             listener.onConnectionRequested(connectionRequestedData)
