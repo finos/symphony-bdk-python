@@ -108,7 +108,6 @@ class DataFeedEventService():
         logging.debug('messageSentHandler function started')
         streamType = payload['payload']['messageSent']['message']['stream']['streamType']
         messageSentData = payload['payload']['messageSent']['message']
-        print(messageSentData)
         if (str(streamType) == 'ROOM'):
             for listener in self.roomListeners:
                 listener.onRoomMessage(messageSentData)
