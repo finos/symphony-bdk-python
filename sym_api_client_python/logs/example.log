@@ -1,18 +1,11 @@
-2018-08-14 09:05:17,154 - root - DEBUG - Auth/authenticate()
-2018-08-14 09:05:17,155 - root - DEBUG - Auth/authenticate() --> needed to authenticate
-2018-08-14 09:05:17,155 - root - DEBUG - RSA_auth/getJWT() function started
-2018-08-14 09:05:17,163 - root - DEBUG - RSA_auth/get_session_token() function started
-2018-08-14 09:05:17,308 - root - DEBUG - eyJhbGciOiJSUzUxMiJ9.eyJzdWIiOiJib3R0bGVCb3QiLCJpc3MiOiJzeW1waG9ueSIsInNlc3Npb25JZCI6IjQwZTkwNTFjYWYzN2E1NTNkODU2NjQ5NTY0YmZjNjhlMzVlZDU3NTc5YTg5YTc3NzdhZWQ3NWVjY2YzNzM3ODgxOTU3ZTRhM2ViN2EwMTY3MWZhYjg0MjgxYjU2OWY5MDAwMDAwMTY1Mzg4YTVkYzcwMDAxM2MyMDAwMDAwMzRiIiwidXNlcklkIjoiMzQ3NTgzMTEzMzMxNTMxIn0.QvFgrBaxKZu69rTbTGAHXEM7CmhQhb_QWLv2JXU1p1aCD5y0GL6zts6AaAtK8U53fQt0HVrnoMjbDvlz26vGsy2FDMxUVSDxszArkqzXjriSDxX0CjQEDQZrxhYYbZl3O8u0SOSGFKJ3tL1ioypZZhcIxZg8XrABkH6aukELMhIB97SLTB3uVYnS6GuT3luwiIwhD-365TJGHyfiBkyENIYxY50V5ThRHsVnOdaklh1t9CAK8j2CsMYae0SeqRTpYbnbd3CQBqIhyqT_vx6hkCprGcDVGa6NCeV_0t2exwrTkUh8sPx1xE9VVqbR4CeoM7enrw0pA6mnaZRLBWlNlg
-2018-08-14 09:05:17,308 - root - DEBUG - RSA_auth/get_keyauth() function started
-2018-08-14 09:05:17,451 - root - DEBUG - 010046e298c4e0fc4ddab4b9c5b51e8f4df635af6c4fcb5425e76b1b7abfdbffa0c818d162c0b5493113b31c019617b4f60ed51c85f1070f9a733b865356d7313b2f925b45ab26dfb46ed4916a00a09a2295bc943ff60745da38b9194ab3479821d7f40db3b4e1abb2d5968e05018d451d9645d91b19a4fe1351d7172988eedbec911a4115274d5f043fd70589e9eb16a6d2b1aa040b97ca21c6f610cd400aa0169535f533465b68296b7700bcff7f2c12dfcec40b8fbd782a
-2018-08-14 09:05:17,451 - root - DEBUG - DataFeedEventService/startDataFeed()
-2018-08-14 09:05:17,452 - root - DEBUG - DataFeedClient/createDatafeed()
-2018-08-14 09:05:18,543 - root - DEBUG - DataFeedClient/createDatafeed() suceeded: 200
-2018-08-14 09:05:18,543 - root - DEBUG - DataFeedClient/readDatafeed()
-2018-08-14 09:05:37,708 - root - DEBUG - DataFeedEventService/readDatafeed() --> Incoming data from readDatafeed(): {'messageSent': {'message': {'messageId': 'ItwKOKZero0_-caNkwtBrX___prHdVVObQ', 'timestamp': 1534251936433, 'message': '<div data-format="PresentationML" data-version="2.0" class="wysiwyg"><p>asd</p></div>', 'data': '{}', 'user': {'userId': 347583113331529, 'firstName': 'Reed', 'lastName': 'DEV', 'displayName': 'Reed DEV', 'email': 'reed.feldman@symphony.com', 'username': 'reeddevelop'}, 'stream': {'streamId': 'EPxMmfFjmCczz1n5bdnfzn___prgvtGgdA', 'streamType': 'ROOM'}, 'externalRecipients': False, 'userAgent': 'DESKTOP-35.0.0-6376-MacOSX-10.12.6-Chrome-68.0.3440.84', 'originalFormat': 'com.symphony.messageml.v2'}}}
-2018-08-14 09:05:37,708 - root - DEBUG - messageSentHandler function started
-2018-08-14 09:05:37,709 - root - DEBUG - room message recieved
-2018-08-14 09:05:37,709 - root - DEBUG - MessageClient/createMessage()
-2018-08-14 09:05:38,223 - root - DEBUG - DataFeedClient/readDatafeed()
-2018-08-14 09:05:38,420 - root - DEBUG - DataFeedEventService/readDatafeed() --> Incoming data from readDatafeed(): {'messageSent': {'message': {'messageId': 'vRcyjoewpMaxlFigAarVSH___prHdVFjdA', 'timestamp': 1534251937442, 'message': '<div data-format="PresentationML" data-version="2.0"><span class="entity" data-entity-id="keyword1">#ReedF</span></div>', 'data': '{"keyword1":{"type":"org.symphonyoss.taxonomy","version":"1.0","id":[{"type":"org.symphonyoss.taxonomy.hashtag","value":"ReedF"}]}}', 'user': {'userId': 347583113331531, 'displayName': 'bottleBot', 'email': 'bottleBot@symphony.com', 'username': 'bottleBot'}, 'stream': {'streamId': 'EPxMmfFjmCczz1n5bdnfzn___prgvtGgdA', 'streamType': 'ROOM'}, 'externalRecipients': False, 'userAgent': 'Agent-2.1.4-Linux-4.9.77-31.58.amzn1.x86_64', 'originalFormat': 'com.symphony.messageml.v2'}}}
-2018-08-14 09:05:38,420 - root - DEBUG - DataFeedClient/readDatafeed()
+2018-08-14 11:58:17,234 - root - DEBUG - Auth/authenticate()
+2018-08-14 11:58:17,234 - root - DEBUG - Auth/authenticate() --> needed to authenticate
+2018-08-14 11:58:17,234 - root - DEBUG - RSA_auth/getJWT() function started
+2018-08-14 11:58:17,245 - root - DEBUG - RSA_auth/get_session_token() function started
+2018-08-14 11:58:17,393 - root - DEBUG - eyJhbGciOiJSUzUxMiJ9.eyJzdWIiOiJib3R0bGVCb3QiLCJpc3MiOiJzeW1waG9ueSIsInNlc3Npb25JZCI6IjkwZTYzNjUzYWVhZGMxMDRiYWMxNTEwMzRmNTQ0YTFjODNiMmE1MzFlOTU5YzRlMTlhMmZmYzYyMjQ0YzE2MzQzZGQ2MjI0NzM4MGNlMjBiOWYwYmMxYmU2ZDYzNGJhYzAwMDAwMTY1MzkyOGM1YjAwMDAxM2MyMDAwMDAwMzRiIiwidXNlcklkIjoiMzQ3NTgzMTEzMzMxNTMxIn0.TldyiUsSDFvq9B7n33G9upsJg2kxqUvAV8So2PfnR5mViR8G_vssbc7UXlz2ikeLWGNl3mYZP1BmHX2nMCAwbwm8muAZ5W9Idpz8n55361HParagQPYis5eB2DbZDW0tdezINPNcdQM5pVv3A2SHURHXMOrgVCBV_ym7FOh-hYPl1di707SKdhi7c2KGydPxuQHRef_eVsXyN_bbQiZ14vjzDpV03YkhHKSPfCRgN4FIbsmvA6OPSbFFkY_z9nUTWTpoAvN_o6fwVZdNe_SrBWxbQbZYZUenbzp7eLldh2QQ3HzLEEIkf55jBivJEVBbPaYBhyjqicfFNAcbYXkOdw
+2018-08-14 11:58:17,393 - root - DEBUG - RSA_auth/get_keyauth() function started
+2018-08-14 11:58:17,556 - root - DEBUG - 010052f99b623bcbf4cbb4f588dec36340dcc74e105d5a4cbe99d655ee99fa3b7d28b7583266761e9c319e589b7140c0ae6c2394c0ad4e9a665853fe6a4e3f7df2b08e954b5cdc6ba2061298880b824d7f98376f777b17f723c68f4df07e527e89ad7e1a9394e225e61aba62d47139c149c9d9b8d936dddecffafad0d49f3dad595c3247da9513bb89918b9ceb48b34b023cb6244ab53c83de2ef7bc5da9265950d89fecba7e44020e1126a092fedd443e271a1e24fffa19c9
+2018-08-14 11:58:17,556 - root - INFO - DataFeedEventService/startDataFeed()
+2018-08-14 11:58:17,556 - root - DEBUG - DataFeedClient/createDatafeed()
+2018-08-14 11:58:18,360 - root - DEBUG - DataFeedClient/createDatafeed() suceeded: 200
+2018-08-14 11:58:18,360 - root - DEBUG - DataFeedClient/readDatafeed()

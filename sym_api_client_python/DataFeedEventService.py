@@ -21,7 +21,7 @@ class DataFeedEventService():
         self.dataFeedClient = self.botClient.getDataFeedClient()
 
     def startDataFeed(self):
-        logging.debug('DataFeedEventService/startDataFeed()')
+        logging.info('DataFeedEventService/startDataFeed()')
         self.dataFeedId = self.dataFeedClient.createDatafeed()
         self.readDatafeed(self.dataFeedId)
 
