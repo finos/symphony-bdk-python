@@ -14,7 +14,7 @@
   "appCertPath": "",
   "appCertName": "",
   "appCertPassword": "",
-  "proxyURL": "awsusproxy.fg.rbc.com",
+  "proxyURL": "",
   "proxyPort": 8080,
   "proxyUsername": "",
   "proxyPassword": "",

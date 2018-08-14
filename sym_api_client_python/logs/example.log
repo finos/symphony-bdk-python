@@ -1,4 +1,18 @@
-2018-08-09 13:07:39,719 - root - DEBUG - p12 location ---> /Users/reed.feldman/Desktop/symphonyPythonClient/resources/certificates/bot.user11.p12
-2018-08-09 13:07:39,728 - root - DEBUG - Auth/authenticate()
-2018-08-09 13:07:39,728 - root - DEBUG - Auth/authenticate() --> needed to authenticate
-2018-08-09 13:07:39,728 - root - DEBUG - Auth/get_session_token()
+2018-08-14 09:05:17,154 - root - DEBUG - Auth/authenticate()
+2018-08-14 09:05:17,155 - root - DEBUG - Auth/authenticate() --> needed to authenticate
+2018-08-14 09:05:17,155 - root - DEBUG - RSA_auth/getJWT() function started
+2018-08-14 09:05:17,163 - root - DEBUG - RSA_auth/get_session_token() function started
+2018-08-14 09:05:17,308 - root - DEBUG - eyJhbGciOiJSUzUxMiJ9.eyJzdWIiOiJib3R0bGVCb3QiLCJpc3MiOiJzeW1waG9ueSIsInNlc3Npb25JZCI6IjQwZTkwNTFjYWYzN2E1NTNkODU2NjQ5NTY0YmZjNjhlMzVlZDU3NTc5YTg5YTc3NzdhZWQ3NWVjY2YzNzM3ODgxOTU3ZTRhM2ViN2EwMTY3MWZhYjg0MjgxYjU2OWY5MDAwMDAwMTY1Mzg4YTVkYzcwMDAxM2MyMDAwMDAwMzRiIiwidXNlcklkIjoiMzQ3NTgzMTEzMzMxNTMxIn0.QvFgrBaxKZu69rTbTGAHXEM7CmhQhb_QWLv2JXU1p1aCD5y0GL6zts6AaAtK8U53fQt0HVrnoMjbDvlz26vGsy2FDMxUVSDxszArkqzXjriSDxX0CjQEDQZrxhYYbZl3O8u0SOSGFKJ3tL1ioypZZhcIxZg8XrABkH6aukELMhIB97SLTB3uVYnS6GuT3luwiIwhD-365TJGHyfiBkyENIYxY50V5ThRHsVnOdaklh1t9CAK8j2CsMYae0SeqRTpYbnbd3CQBqIhyqT_vx6hkCprGcDVGa6NCeV_0t2exwrTkUh8sPx1xE9VVqbR4CeoM7enrw0pA6mnaZRLBWlNlg
+2018-08-14 09:05:17,308 - root - DEBUG - RSA_auth/get_keyauth() function started
+2018-08-14 09:05:17,451 - root - DEBUG - 010046e298c4e0fc4ddab4b9c5b51e8f4df635af6c4fcb5425e76b1b7abfdbffa0c818d162c0b5493113b31c019617b4f60ed51c85f1070f9a733b865356d7313b2f925b45ab26dfb46ed4916a00a09a2295bc943ff60745da38b9194ab3479821d7f40db3b4e1abb2d5968e05018d451d9645d91b19a4fe1351d7172988eedbec911a4115274d5f043fd70589e9eb16a6d2b1aa040b97ca21c6f610cd400aa0169535f533465b68296b7700bcff7f2c12dfcec40b8fbd782a
+2018-08-14 09:05:17,451 - root - DEBUG - DataFeedEventService/startDataFeed()
+2018-08-14 09:05:17,452 - root - DEBUG - DataFeedClient/createDatafeed()
+2018-08-14 09:05:18,543 - root - DEBUG - DataFeedClient/createDatafeed() suceeded: 200
+2018-08-14 09:05:18,543 - root - DEBUG - DataFeedClient/readDatafeed()
+2018-08-14 09:05:37,708 - root - DEBUG - DataFeedEventService/readDatafeed() --> Incoming data from readDatafeed(): {'messageSent': {'message': {'messageId': 'ItwKOKZero0_-caNkwtBrX___prHdVVObQ', 'timestamp': 1534251936433, 'message': '<div data-format="PresentationML" data-version="2.0" class="wysiwyg"><p>asd</p></div>', 'data': '{}', 'user': {'userId': 347583113331529, 'firstName': 'Reed', 'lastName': 'DEV', 'displayName': 'Reed DEV', 'email': 'reed.feldman@symphony.com', 'username': 'reeddevelop'}, 'stream': {'streamId': 'EPxMmfFjmCczz1n5bdnfzn___prgvtGgdA', 'streamType': 'ROOM'}, 'externalRecipients': False, 'userAgent': 'DESKTOP-35.0.0-6376-MacOSX-10.12.6-Chrome-68.0.3440.84', 'originalFormat': 'com.symphony.messageml.v2'}}}
+2018-08-14 09:05:37,708 - root - DEBUG - messageSentHandler function started
+2018-08-14 09:05:37,709 - root - DEBUG - room message recieved
+2018-08-14 09:05:37,709 - root - DEBUG - MessageClient/createMessage()
+2018-08-14 09:05:38,223 - root - DEBUG - DataFeedClient/readDatafeed()
+2018-08-14 09:05:38,420 - root - DEBUG - DataFeedEventService/readDatafeed() --> Incoming data from readDatafeed(): {'messageSent': {'message': {'messageId': 'vRcyjoewpMaxlFigAarVSH___prHdVFjdA', 'timestamp': 1534251937442, 'message': '<div data-format="PresentationML" data-version="2.0"><span class="entity" data-entity-id="keyword1">#ReedF</span></div>', 'data': '{"keyword1":{"type":"org.symphonyoss.taxonomy","version":"1.0","id":[{"type":"org.symphonyoss.taxonomy.hashtag","value":"ReedF"}]}}', 'user': {'userId': 347583113331531, 'displayName': 'bottleBot', 'email': 'bottleBot@symphony.com', 'username': 'bottleBot'}, 'stream': {'streamId': 'EPxMmfFjmCczz1n5bdnfzn___prgvtGgdA', 'streamType': 'ROOM'}, 'externalRecipients': False, 'userAgent': 'Agent-2.1.4-Linux-4.9.77-31.58.amzn1.x86_64', 'originalFormat': 'com.symphony.messageml.v2'}}}
+2018-08-14 09:05:38,420 - root - DEBUG - DataFeedClient/readDatafeed()
