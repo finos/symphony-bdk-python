@@ -25,7 +25,7 @@ class SymConfig():
             self.data['podHost'] = 'https://'+ data['podHost'] + ':' + str(data['podPort'])
             self.data['agentHost'] = 'https://'+ data['agentHost'] + ':' + str(data['agentPort'])
             self.data['botRSAPath'] = data['botRSAPath'] + data['botRSAName']
-            self.data['botUserName'] = data['botUserName']
+            self.data['botUsername'] = data['botUsername']
             self.data['botEmailAddress'] = data['botEmailAddress']
             self.data['proxyURL'] = data['proxyURL']
             self.data['proxyPort'] = data['proxyPort']

@@ -55,7 +55,7 @@ class SymBotRSAAuth(APIClient):
             privateKey = f.read()
             expiration_date = int(datetime.datetime.now(datetime.timezone.utc).timestamp() + (5*58))
             payload = {
-                'sub': self.config.data['botUserName'],
+                'sub': self.config.data['botUsername'],
                 'exp': expiration_date
             }
             encoded = jwt.encode(payload, privateKey, algorithm='RS256')

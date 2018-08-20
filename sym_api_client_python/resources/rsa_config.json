@@ -9,7 +9,7 @@
   "agentPort": 443,
   "botRSAPath":"/Users/reed.feldman/Desktop/sampleBot/sampleBot-python-RSA/src/main/python/RSA/bottleBot/",
   "botRSAName": "bottleBot_privatekey.pem",
-  "botUserName": "bottleBot",
+  "botUsername": "bottleBot",
   "botEmailAddress": "bottleBot@symphony.com",
   "appCertPath": "",
   "appCertName": "",
