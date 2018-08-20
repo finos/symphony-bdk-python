@@ -9,6 +9,7 @@ from ..exceptions.UnauthorizedException import UnauthorizedException
 # logging.basicConfig(filename='logs/example.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filemode='w', level=logging.DEBUG)
 # logging.getLogger("urllib3").setLevel(logging.WARNING)
 #child class of APIClient --> Extends error handling functionality
+
 #MessageClient class contains a series of functions corresponding to all messaging
 #endpoints on the REST API.
 class MessageClient(APIClient):
