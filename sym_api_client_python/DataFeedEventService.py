@@ -20,6 +20,7 @@ class DataFeedEventService():
         self.stop = False
         self.dataFeedClient = self.botClient.getDataFeedClient()
 
+    #startDataFeed() --> creats data feed and reads it by calling dataFeedClient()
     def startDataFeed(self):
         logging.info('DataFeedEventService/startDataFeed()')
         self.dataFeedId = self.dataFeedClient.createDatafeed()
@@ -54,6 +55,7 @@ class DataFeedEventService():
     #readDatafeed function reads an array of events coming back from DataFeedClient
     #checks to see that sender's email is not equal to Bot's email in config file
     #this functionality helps bot avoid entering an infinite loop where it responsds to its own messageSent
+    #after an event comes back over the dataFeed, the json object returned from readDatafeed() gets passed to handle_event()
     def readDatafeed(self, id):
         while not self.stop:
             try:
@@ -74,6 +76,7 @@ class DataFeedEventService():
                 self.startDataFeed()
 
     #function takes in single event --> Checks eventType --> forwards event to proper handling function
+    #there is a handle_event function that corresponds to each eventType
     def handle_event(self, payload):
         print('event handler')
         eventType = str(payload['type'])
@@ -129,7 +132,6 @@ class DataFeedEventService():
         logging.debug(roomCreatedData)
         for listener in self.roomListeners:
             listener.onRoomCreated(roomCreatedData)
-            break
 
     def roomUpdatedHandler(self, payload):
         logging.debugrint('roomUpdatedHandler')

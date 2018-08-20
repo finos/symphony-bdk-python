@@ -1,6 +1,5 @@
 from sym_api_client_python.configure.configure import SymConfig
 from sym_api_client_python.auth.auth import Auth
-from sym_api_client_python.auth.rsa_auth import SymBotRSAAuth
 from sym_api_client_python.clients.SymBotClient import SymBotClient
 from sym_api_client_python.listeners.imListenerTestImp import IMListenerTestImp
 from sym_api_client_python.listeners.roomListenerTestImp import RoomListenerTestImp
@@ -14,8 +13,7 @@ logging.getLogger("urllib3").setLevel(logging.WARNING)
 
 def main():
         print('hi')
-        #RSA Auth flow:
-        #certificate Auth flow:
+        #certificate Auth flow: --> pass in path to config file
         configure = SymConfig('sym_api_client_python/resources/config.json')
         configure.loadFromFile()
         auth = Auth(configure)
@@ -31,7 +29,7 @@ def main():
         DataFeedEventService.addIMListener(imListenerTest)
         roomListenerTest = RoomListenerTestImp(botClient)
         DataFeedEventService.addRoomListener(roomListenerTest)
-        #create data feed and read datafeed recursively
+        #create data feed and read datafeed continuously in while loop.
         print('starting datafeed')
         DataFeedEventService.startDataFeed()
 

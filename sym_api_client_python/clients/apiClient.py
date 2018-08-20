@@ -4,8 +4,6 @@ from ..exceptions.APIClientErrorException import APIClientErrorException
 from ..exceptions.ServerErrorException import ServerErrorException
 from ..exceptions.UnauthorizedException import UnauthorizedException
 from ..exceptions.ForbiddenException import ForbiddenException
-# logging.basicConfig(filename='..logs/example.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filemode='w', level=logging.DEBUG)
-# logging.getLogger("urllib3").setLevel(logging.WARNING)
 #error handling class --> take status code and raise appropriate exceptions
 #this class acts as a parent class to each of the other client class.
 #each child class extends error handling functionality

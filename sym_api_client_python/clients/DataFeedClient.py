@@ -31,7 +31,7 @@ class DataFeedClient(APIClient):
             data = json.loads(response.text)
             dataFeedId = data['id']
             return dataFeedId
-
+            
         else:
             try:
                 logging.debug('DataFeedClient/createDatafeed() failed: {}'.format(response.status_code))
