@@ -154,9 +154,9 @@ If you are going to authenticate using RSA, use the following rsa_config.json fi
             self.botClient = SymBotClient
 
         def onRoomMessage(self, message):
-            logging.debug('room message recieved', message)
+            logging.debug('room message received', message)
             #sample code for developer to implement --> use MessageClient and
-            #data recieved from message event to reply with a #ReedF
+            #data received from message event to reply with a #ReedF
             streamId = message['stream']['streamId']
             message = dict(message = '<messageML><hash tag="ReedF"/></messageML>')
             self.botClient.getMessageClient().sendMessage(streamId, message)
