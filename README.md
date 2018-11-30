@@ -6,7 +6,7 @@ The Python client is built in an event handler architecture. If you are building
 
 
 ## Configuration
-There are two methods of authentication.  You can either authenticate your bot using certificates or using RSA.  If you are going to authenticate using certificates, make sure you have a config.json file in your project which includes the following properties:
+There are two methods of authentication.  You can either authenticate your bot using certificates or using RSA.  If you are going to authenticate using certificates, make sure you have a config.json file in your project which includes the following properties (make sure that your "botCertPath" or "botRSAPath" include a trailing "/"):
 
         {
           "sessionAuthHost": "COMPANYNAME-api.symphony.com",
@@ -44,7 +44,7 @@ If you are going to authenticate using RSA, use the following rsa_config.json fi
           "agentPort": 443,
           "botRSAPath": "PATH-TO-PRIVATEKEY",
           "botRSAName": "PRIVATEKEY.PEM-NAME",
-          "botUsername": "BOT-USERNAME",
+          "botUserName": "BOT-USERNAME",
           "botEmailAddress": "BOT-EMAIL-ADDRESS",
           "appCertPath": "",
           "appCertName": "",
@@ -57,6 +57,9 @@ If you are going to authenticate using RSA, use the following rsa_config.json fi
         }
 
 ## Example main class (using certificates)
+Adjust the following paths in the sample to match your configuration
+ - "sym_api_client_python/logs/example.log"
+ - "sym_api_client_python/resources/config.json"
 
     from sym_api_client_python.configure.configure import SymConfig
     from sym_api_client_python.auth.auth import Auth
@@ -73,7 +76,6 @@ If you are going to authenticate using RSA, use the following rsa_config.json fi
 
     def main():
             print('hi')
-            #RSA Auth flow:
             #certificate Auth flow:
             configure = SymConfig('sym_api_client_python/resources/config.json')
             configure.loadFromFile()
@@ -98,6 +100,9 @@ If you are going to authenticate using RSA, use the following rsa_config.json fi
         main()
 
 ## Example main class (using RSA)
+Adjust the following paths in the sample to match your configuration
+ - "sym_api_client_python/logs/example.log"
+ - "sym_api_client_python/resources/config.json"
 
     from sym_api_client_python.configure.configure import SymConfig
     from sym_api_client_python.auth.auth import Auth
@@ -154,9 +159,9 @@ If you are going to authenticate using RSA, use the following rsa_config.json fi
             self.botClient = SymBotClient
 
         def onRoomMessage(self, message):
-            logging.debug('room message recieved', message)
+            logging.debug('room message received', message)
             #sample code for developer to implement --> use MessageClient and
-            #data recieved from message event to reply with a #ReedF
+            #data received from message event to reply with a #ReedF
             streamId = message['stream']['streamId']
             message = dict(message = '<messageML><hash tag="ReedF"/></messageML>')
             self.botClient.getMessageClient().sendMessage(streamId, message)

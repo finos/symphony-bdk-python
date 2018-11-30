@@ -30,9 +30,9 @@ class SymConfig():
             self.data['botEmailAddress'] = data['botEmailAddress']
             self.data['proxyURL'] = data['proxyURL']
             self.data['proxyPort'] = data['proxyPort']
-            self.data['proxyUsername'] = data['proxyUsername']
-            self.data['proxyPassword'] = data['proxyPassword']
-            
+
+            self.data['pr<<<<<<< patch-5oxyUsername'] = data['proxyUsername']
+            self.data['proxyPassword'] = data['proxyPassword']   >>>>>>> master
             read_file.close()
 
 
@@ -51,10 +51,10 @@ class SymConfig():
             self.data['p.12'] = self.data['botCertPath'] + '.p12'
             self.data['proxyURL'] = data['proxyURL']
             self.data['proxyPort'] = data['proxyPort']
+
             self.data['proxyUsername'] = data['proxyUsername']
             self.data['proxyPassword'] = data['proxyPassword']
-            
-            read_file.close()  
+            read_file.close()
 
         #take in .p12 certificate and parse through file to use for authentication
         #class returns symphonyCertificate and symphonyKey
