@@ -31,8 +31,8 @@ class SymConfig():
             self.data['proxyURL'] = data['proxyURL']
             self.data['proxyPort'] = data['proxyPort']
 
-            self.data['pr<<<<<<< patch-5oxyUsername'] = data['proxyUsername']
-            self.data['proxyPassword'] = data['proxyPassword']   >>>>>>> master
+            self.data['proxyUsername'] = data['proxyUsername']
+            self.data['proxyPassword'] = data['proxyPassword']
             read_file.close()
 
 
