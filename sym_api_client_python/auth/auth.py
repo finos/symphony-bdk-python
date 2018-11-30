@@ -12,8 +12,13 @@ class Auth():
         self.config = config
         self.lastAuthTime=0
         if self.config.data['proxyURL']:
-            self.proxies = {"https": 'https://' + self.config.data['proxyURL'] + ':' + str(self.config.data['proxyPort'])}
-            print(self.proxies)
+            if self.config.data['proxyUsername']:
+                self.proxies = {"https": "https://'" + str(self.config.data['proxyUsername'])+ "':'" + str(self.config.data['proxyPassword']) + "'@" + self.config.data['proxyURL'] + ':' + str(self.config.data['proxyPort'])}
+                self.proxiesMasked = {"https": "https://'*******:*******@" + self.config.data['proxyURL'] + ':' + str(self.config.data['proxyPort'])}
+                print(self.proxiesMasked)
+            else:
+                self.proxies = {"https": 'https://' + self.config.data['proxyURL'] + ':' + str(self.config.data['proxyPort'])}
+                print(self.proxies)
         else:
             self.proxies = {}
 
