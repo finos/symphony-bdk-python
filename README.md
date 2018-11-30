@@ -44,7 +44,7 @@ If you are going to authenticate using RSA, use the following rsa_config.json fi
           "agentPort": 443,
           "botRSAPath": "PATH-TO-PRIVATEKEY",
           "botRSAName": "PRIVATEKEY.PEM-NAME",
-          "botUserName": "BOT-USERNAME",
+          "botUsername": "BOT-USERNAME",
           "botEmailAddress": "BOT-EMAIL-ADDRESS",
           "appCertPath": "",
           "appCertName": "",
