@@ -73,7 +73,6 @@ If you are going to authenticate using RSA, use the following rsa_config.json fi
 
     def main():
             print('hi')
-            #RSA Auth flow:
             #certificate Auth flow:
             configure = SymConfig('sym_api_client_python/resources/config.json')
             configure.loadFromFile()
