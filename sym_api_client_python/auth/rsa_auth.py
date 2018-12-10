@@ -58,7 +58,7 @@ class SymBotRSAAuth(APIClient):
                 'sub': self.config.data['botUsername'],
                 'exp': expiration_date
             }
-            encoded = jwt.encode(payload, privateKey, algorithm='RS256')
+            encoded = jwt.encode(payload, privateKey, algorithm='RS512')
             return encoded
 
     #raw api call to get session token.  pass jwt in request using json parameter
