@@ -7,9 +7,9 @@ logging.getLogger("urllib3").setLevel(logging.WARNING)
 from sym_api_client_python.configure.configure import SymConfig
 from sym_api_client_python.auth.auth import Auth
 from sym_api_client_python.auth.rsa_auth import SymBotRSAAuth
-from sym_api_client_python.clients.SymBotClient import SymBotClient
-from sym_api_client_python.listeners.imListenerTestImp import IMListenerTestImp
-from sym_api_client_python.listeners.roomListenerTestImp import RoomListenerTestImp
+from sym_api_client_python.clients.sym_bot_client import SymBotClient
+from sym_api_client_python.listeners.im_listener_test_imp import IMListenerTestImp
+from sym_api_client_python.listeners.room_listener_test_imp import RoomListenerTestImp
 
 #TestMessages class extends unittest class
 #setUp functions executes before every test function runs --> grabs necessary data to run each client test
@@ -23,7 +23,7 @@ class TestMessages(unittest.TestCase):
         logging.debug('hi')
         #RSA Auth flow:
         configure = SymConfig('sym_api_client_python/resources/rsa_config.json')
-        configure.loadFromRSA()
+        configure.load_rsa_config()
         auth = SymBotRSAAuth(configure)
         auth.authenticate()
         #initialize SymBotClient with auth and configure objects
@@ -36,11 +36,11 @@ class TestMessages(unittest.TestCase):
     # def test_createMessage(self):
     #     print('testing create messages function')
     #     message = dict(message = '<messageML><hash tag="reed"/></messageML>')
-    #     self.assertTrue(self.botClient.messageClient.sendMessage(self.streamId, message))
+    #     self.assertTrue(self.bot_client.msg_client.send_msg(self.streamId, message))
 
     # def test_getMessageFromStream(self):
-    #     print('testing getMessageFromStream function')
-    #     self.assertTrue(self.botClient.messageClient.getMessageFromStream(self.streamId, 0))
+    #     print('testing get_msg_from_stream function')
+    #     self.assertTrue(self.bot_client.msg_client.get_msg_from_stream(self.streamId, 0))
 #
 #     def test_getMessageAttachments(self):
 #         pass
@@ -51,19 +51,19 @@ class TestMessages(unittest.TestCase):
 #     #this function returns a 200 but its empty
 #     def test_postMessageSearch(self):
 #         print('testing post Message search fucntion')
-#         self.assertTrue(self.botClient.messageClient.postMessageSearch())
+#         self.assertTrue(self.bot_client.msg_client.post_msg_search())
 #
 #     def test_getMessageSearch(self):
 #         print('testing getMessage Search function')
-#         self.assertTrue(self.botClient.messageClient.getMessageSearch())
+#         self.assertTrue(self.bot_client.msg_client.get_msg_search())
 #
     # def test_getMessageStatus(self):
     #     print('testing getMessage Status function')
-    #     self.assertTrue(self.botClient.messageClient.getMessageStatus('7NcvR6mY9V2iXME5jT1DVn___prq9E3LbQ'))
+    #     self.assertTrue(self.bot_client.msg_client.get_msg_status('7NcvR6mY9V2iXME5jT1DVn___prq9E3LbQ'))
 #
     # def test_getSupportedAttachmentTypes(self):
     #     print('testing getAttachmentType function')
-    #     self.assertTrue(self.botClient.messageClient.getSupportedAttachmentTypes())
+    #     self.assertTrue(self.bot_client.msg_client.get_supported_attachment_types())
 #
 #
 # if __name__ == '__main__':
