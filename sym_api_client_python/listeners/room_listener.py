@@ -1,43 +1,46 @@
 from abc import ABC, abstractmethod
 
-#Abstract class for ROOM listener
-#class is just an interface of functions to handle the Room events recieved from DataFeed
-#(see Real Time Events in REST API documentation for more details)
-#the developer will handle actual event logic in your implementation of this abstract class
+# Abstract class for ROOM listener
+# class is just an interface of functions to handle the Room events received
+# from DataFeed see Real Time Events in REST API documentation for more
+# details. The developer will handle actual event logic in your implementation
+# of this abstract class
+
+
 class RoomListener(ABC):
 
     @abstractmethod
-    def onRoomMessage(self, message):
+    def on_room_msg(self, message):
         pass
 
     @abstractmethod
-    def onRoomCreated(self, roomCreated):
+    def on_room_created(self, roomCreated):
         pass
 
     @abstractmethod
-    def onRoomDeactivated(self, roomDeactivated):
+    def on_room_deactivated(self, roomDeactivated):
         pass
 
     @abstractmethod
-    def onRoomMemberDemotedFromOwner(self, roomMemberDemotedFromOwner):
+    def on_room_member_demoted_from_owner(self, roomMemberDemotedFromOwner):
         pass
 
     @abstractmethod
-    def onRoomMemberPromotedToOwner(self, roomMemberPromotedToOwner):
+    def on_room_member_promoted_to_owner(self, roomMemberPromotedToOwner):
         pass
 
     @abstractmethod
-    def onRoomReactivated(self, roomReactivated):
+    def on_room_reactivated(self, roomReactivated):
         pass
 
     @abstractmethod
-    def onRoomUpdated(self, roomUpdated):
+    def on_room_updated(self, roomUpdated):
         pass
 
     @abstractmethod
-    def onUserJoinedRoom(self, userJoinedRoom):
+    def on_user_joined_room(self, userJoinedRoom):
         pass
 
     @abstractmethod
-    def onUserLeftRoom(self, userLeftRoom):
+    def on_user_left_room(self, userLeftRoom):
         pass

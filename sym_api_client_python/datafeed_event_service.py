@@ -1,197 +1,202 @@
-import json
 import logging
-from .listeners import ConnectionListener
-from .listeners import imListener
-from .listeners import RoomListener
 from .exceptions.UnauthorizedException import UnauthorizedException
 
-#class handles the the creation and reading of DataFeed
-#also contains the functionality to  dispatch the events coming back from the dataFeed
-#sends data over to listener where the event is handled
-class DataFeedEventService():
 
-    def __init__(self, symBotClient):
-        self.botClient = symBotClient
-        self.dataFeedId = None
-        self.datafeedEvents = []
-        self.roomListeners = []
-        self.IMListeners = []
-        self.connectionListener =[]
+class DataFeedEventService:
+
+    def __init__(self, sym_bot_client):
+        self.bot_client = sym_bot_client
+        self.datafeed_id = None
+        self.datafeed_events = []
+        self.room_listeners = []
+        self.im_listeners = []
+        self.connection_listeners = []
         self.stop = False
-        self.dataFeedClient = self.botClient.getDataFeedClient()
+        self.datafeed_client = self.bot_client.get_datafeed_client()
 
-    #startDataFeed() --> creats data feed and reads it by calling dataFeedClient()
-    def startDataFeed(self):
+    def start_datafeed(self):
         logging.info('DataFeedEventService/startDataFeed()')
-        self.dataFeedId = self.dataFeedClient.createDatafeed()
-        self.readDatafeed(self.dataFeedId)
+        self.datafeed_id = self.datafeed_client.create_datafeed()
+        self.read_datafeed(self.datafeed_id)
 
-    def addRoomListener(self, roomlistener):
-        self.roomListeners.append(roomlistener);
+    def add_room_listener(self, room_listener):
+        self.room_listeners.append(room_listener)
 
-    def removeRoomListener(self, roomlistener):
-        self.roomListeners.remove(roomlistener);
+    def remove_room_listener(self, room_listener):
+        self.room_listeners.remove(room_listener)
 
-    def addIMListener(self, IMListener):
-        self.IMListeners.append(IMListener);
+    def add_im_listener(self, im_listener):
+        self.im_listeners.append(im_listener)
 
-    def removeIMListener(self, IMListener):
-        self.IMListeners.remove(IMListener);
+    def remove_im_listener(self, im_listener):
+        self.im_listeners.remove(im_listener)
 
-    def addConnectionsListener(self, connectionListener):
-        self.connectionListeners.append(connectionListener);
+    def add_connection_listener(self, connection_listener):
+        self.connection_listeners.append(connection_listener)
 
-    def removeConnectionsListener(self, connectionListener):
-        self.connectionListeners.remove(connectionListener);
+    def remove_connection_listener(self, connection_listener):
+        self.connection_listeners.remove(connection_listener)
 
-    def activateDataFeed(self):
-        if self.stop == True:
-            self.stop == False
+    def activate_datafeed(self):
+        if self.stop:
+            self.stop = False
 
-    def deactivateDataFeed(self):
-        if self.stop == False:
-            self.stop == True
+    def deactivate_datafeed(self):
+        if not self.stop:
+            self.stop = True
 
-    #readDatafeed function reads an array of events coming back from DataFeedClient
-    #checks to see that sender's email is not equal to Bot's email in config file
-    #this functionality helps bot avoid entering an infinite loop where it responsds to its own messageSent
-    #after an event comes back over the dataFeed, the json object returned from readDatafeed() gets passed to handle_event()
-    def readDatafeed(self, id):
+    # read_datafeed function reads an array of events
+    # read_datafeed function reads an array of events coming back from
+    # DataFeedClient checks to see that sender's email is not equal to Bot's
+    # email in config filemthis functionality helps bot avoid entering an
+    # infinite loop where it responds to its own messageSent
+    # after an event comes back over the dataFeed, the json object returned
+    # from read_datafeed() gets passed to handle_event()
+    def read_datafeed(self, datafeed_id):
         while not self.stop:
             try:
-                data = self.dataFeedClient.readDatafeed(id)
+                data = self.datafeed_client.read_datafeed(datafeed_id)
                 if data:
-                    finalData = data[0]
-                    logging.debug('DataFeedEventService/readDatafeed() --> Incoming data from readDatafeed(): {}'.format(finalData[0]['payload']))
-                    for i in range(0, len(finalData)):
-                        if finalData[i]['initiator']['user']['email'] != self.botClient.config.data['botEmailAddress']:
-                            self.handle_event(finalData[i])
-                    # self.readDatafeed(id)
+                    events = data[0]
+                    logging.debug(
+                        'DataFeedEventService/read_datafeed() --> '
+                        'Incoming data from read_datafeed(): {}'.format(
+                            events[0]['payload'])
+                    )
+                    for event in events:
+                        if event['initiator']['user']['email'] != \
+                                self.bot_client.config.data['botEmailAddress']:
+                            self.handle_event(event)
                 else:
-                    logging.debug('DataFeedEventService() - no data coming in from datafeed --> readDatafeed()')
-                    # self.readDatafeed(id)
+                    logging.debug(
+                        'DataFeedEventService() - no data coming in from '
+                        'datafeed --> read_datafeed()'
+                    )
 
             except UnauthorizedException:
-                logging.debug('DataFeedEventService - caught unauthorized exception --> startDataFeed()')
-                self.startDataFeed()
+                logging.debug(
+                    'DataFeedEventService - caught unauthorized exception '
+                    '--> startDataFeed()'
+                )
+                self.start_datafeed()
 
-    #function takes in single event --> Checks eventType --> forwards event to proper handling function
-    #there is a handle_event function that corresponds to each eventType
+    # function takes in single event --> Checks eventType --> forwards event
+    # to proper handling function there is a handle_event function that
+    # corresponds to each eventType
     def handle_event(self, payload):
         print('event handler')
-        eventType = str(payload['type'])
-        if eventType == 'MESSAGESENT':
-            self.messageSentHandler(payload)
-        elif eventType == 'INSTANTMESSAGECREATED':
-            self.instantMessageHandler(payload)
-        elif eventType == 'ROOMCREATED':
-            self.roomCreatedHandler(payload)
-        elif eventType == 'ROOMDEACTIVATED':
-            self.roomDeactivatedHandler(payload)
-        elif eventType == 'ROOMREACTIVATED':
-            self.roomReactivatedHandler(payload)
-        elif eventType == 'USERJOINEDROOM':
-            self.userJoinedRoomHandler(payload)
-        elif eventType == 'USERLEFTROOM':
-            self.userLeftRoomHandler(payload)
-        elif eventType == 'ROOMMEMBERPROMOTEDTOOWNER':
-            self.promotedToOwner(payload)
-        elif eventType == 'ROOMMEMBERDEMOTEDFROMOWNER':
-            self.demotedToOwner(payload)
-        elif eventType == 'CONNECTIONACCEPTED':
-            self.connectionAcceptedHandler(payload)
-        elif eventType == 'CONNECTIONREQUESTED':
-            self.connectionRequestedHandler(payload)
+        event_type = str(payload['type'])
+        if event_type == 'MESSAGESENT':
+            self.msg_sent_handler(payload)
+        elif event_type == 'INSTANTMESSAGECREATED':
+            self.instant_msg_handler(payload)
+        elif event_type == 'ROOMCREATED':
+            self.room_created_handler(payload)
+        elif event_type == 'ROOMDEACTIVATED':
+            self.room_deactivated_handler(payload)
+        elif event_type == 'ROOMREACTIVATED':
+            self.room_reactivated_handler(payload)
+        elif event_type == 'USERJOINEDROOM':
+            self.user_joined_room_handler(payload)
+        elif event_type == 'USERLEFTROOM':
+            self.user_left_room_handler(payload)
+        elif event_type == 'ROOMMEMBERPROMOTEDTOOWNER':
+            self.promoted_to_owner(payload)
+        elif event_type == 'ROOMMEMBERDEMOTEDFROMOWNER':
+            self.demoted_to_owner(payload)
+        elif event_type == 'CONNECTIONACCEPTED':
+            self.connection_accepted_handler(payload)
+        elif event_type == 'CONNECTIONREQUESTED':
+            self.connection_requested_handler(payload)
         else:
             logging.debug('no event detected')
             return
 
-    #check streamType --> send data to appropriate listener
-    def messageSentHandler(self, payload):
-        logging.debug('messageSentHandler function started')
-        streamType = payload['payload']['messageSent']['message']['stream']['streamType']
-        messageSentData = payload['payload']['messageSent']['message']
-        if (str(streamType) == 'ROOM'):
-            for listener in self.roomListeners:
-                listener.onRoomMessage(messageSentData)
+    # heck streamType --> send data to appropriate listener
+    def msg_sent_handler(self, payload):
+        logging.debug('msg_sent_handler function started')
+        stream_type = payload['payload']['messageSent']['message']['stream']['streamType']
+        message_sent_data = payload['payload']['messageSent']['message']
+        if str(stream_type) == 'ROOM':
+            for listener in self.room_listeners:
+                listener.on_room_msg(message_sent_data)
         else:
-            for listener in self.IMListeners:
-                listener.onIMMessage(messageSentData)
+            for listener in self.im_listeners:
+                listener.on_im_message(message_sent_data)
 
+    def instant_msg_handler(self, payload):
+        logging.debug('instant_msg_handler function started')
+        instant_message_data = payload['payload']['instantMessageCreated']
+        logging.debug(instant_message_data)
+        for listener in self.im_listeners:
+            listener.on_im_created(instant_message_data)
 
-    def instantMessageHandler(self, payload):
-        logging.debug('instantMessageHandler fucntion started')
-        instantMessageData = payload['payload']['instantMessageCreated']
-        logging.debug(instantMessageData)
-        for listener in self.IMListeners:
-            listener.onIMCreated(instantMessageData)
+    def room_created_handler(self, payload):
+        logging.debug('room_created_handler function started')
+        room_created_data = payload['payload']['roomCreated']
+        logging.debug(room_created_data)
+        for listener in self.room_listeners:
+            listener.on_room_created(room_created_data)
 
-    def roomCreatedHandler(self, payload):
-        logging.debug('roomCreatedHandler function started')
-        roomCreatedData = payload['payload']['roomCreated']
-        logging.debug(roomCreatedData)
-        for listener in self.roomListeners:
-            listener.onRoomCreated(roomCreatedData)
+    def room_updated_handler(self, payload):
+        logging.debug('room_updated_handler')
+        room_updated_data = payload['payload']['roomUpdated']
+        logging.debug(room_updated_data)
+        for listener in self.room_listeners:
+            listener.on_room_updated(room_updated_data)
 
-    def roomUpdatedHandler(self, payload):
-        logging.debugrint('roomUpdatedHandler')
-        roomUpdatedData = payload['payload']['roomUpdated']
-        logging.debug(roomUpdatedData)
-        for listener in self.roomListeners:
-            listener.onRoomUpdated(roomUpdatedData)
+    def room_deactivated_handler(self, payload):
+        logging.debug('room_deactivated_handler')
+        room_deactivated_data = payload['payload']['roomDeactivated']
+        logging.debug(room_deactivated_data)
+        for listener in self.room_listeners:
+            listener.on_room_deactivated(room_deactivated_data)
 
-    def roomDeactivatedHandler(self, payload):
-        logging.debug('roomDeactivatedHandler')
-        roomDeactivatedData = payload['payload']['roomDeactivated']
-        logging.debug(roomDeactivatedData)
-        for listner in self.roomListeners:
-            listener.onRoomDeactivated(roomDeactivatedData)
+    def room_reactivated_handler(self, payload):
+        logging.debug('room_reactivated_handler')
+        room_reactivated_data = payload['payload']['roomReactivated']
+        logging.debug(room_reactivated_data)
+        for listener in self.room_listeners:
+            listener.on_room_reactivated(room_reactivated_data)
 
-    def roomReactivatedHandler(self, payload):
-        logging.debug('roomReactivatedHandler')
-        roomReactivatedData = payload['payload']['roomReactivated']
-        logging.debug(roomReactivatedData)
-        for listener in self.roomListeners:
-            listener.onRoomReactivated(roomReactivatedData)
+    def user_joined_room_handler(self, payload):
+        logging.debug('user_joined_room_handler')
+        user_joined_room_data = payload['payload']['userJoinedRoom']
+        logging.debug(user_joined_room_data)
+        for listener in self.room_listeners:
+            listener.on_user_joined_room(user_joined_room_data)
 
-    def userJoinedRoomHandler(self, payload):
-        logging.debug('userJoinedRoomHandler')
-        userJoinedRoomData = payload['payload']['userJoinedRoom']
-        logging.debug(userJoinedRoomData)
-        for listener in self.roomListeners:
-            listener.onUserJoinedRoom(userJoinedRoomData)
+    def user_left_room_handler(self, payload):
+        logging.debug('user_left_room_handler')
+        user_left_room_data = payload['payload']['userLeftRoom']
+        logging.debug(user_left_room_data)
+        for listener in self.room_listeners:
+            listener.on_user_left_room(user_left_room_data)
 
-    def userLeftRoomHandler(self, payload):
-        logging.debug('userLeftRoomHandler')
-        userLeftRoomData = payload['payload']['userLeftRoom']
-        logging.debug(userLeftRoomData)
-        for listener in self.roomListeners:
-            listener.onUserLeftRoom(userLeftRoomData)
+    def promoted_to_owner(self, payload):
+        logging.debug('promoted_to_owner')
+        promoted_to_owner_data = payload['payload']['roomMemberPromotedToOwner']
+        logging.debug(promoted_to_owner_data)
+        for listener in self.room_listeners:
+            listener.on_room_member_promoted_to_owner(promoted_to_owner_data)
 
-    def promotedToOwner(self, payload):
-        logging.debug('promotedToOwner')
-        promotedToOwnerData = payload['payload']['roomMemberPromotedToOwner']
-        logging.debug(promotedToOwnerData)
-        for listener in self.roomListeners:
-            listener.onRoomMemberPromotedToOwner(promotedToOwnerData)
+    def demoted_to_owner(self, payload):
+        logging.debug('demoted_to_Owner')
+        demoted_to_owner_data = payload['payload']['roomMemberDemotedFromOwner']
+        logging.debug(demoted_to_owner_data)
+        for listener in self.room_listeners:
+            listener.on_room_member_demoted_from_owner(demoted_to_owner_data)
 
-    def demotedToOwner(self, payload):
-        logging.debug('demotedtoOwner')
-        demotedToOwnerData = payload['payload']['roomMemberDemotedFromOwner']
-        logging.debug(demotedToOwnerData)
-        for listener in self.roomListeners:
-            listener.onRoomMemberDemotedFromOwner(demotedToOwnerData)
+    def connection_accepted_handler(self, payload):
+        logging.debug('connection_accepted_handler')
+        connection_accepted_data = payload['payload']['connectionAccepted']
+        logging.debug(connection_accepted_data)
+        for listener in self.connection_listeners:
+            listener.on_connection_accepted(connection_accepted_data)
 
-    def connectionAcceptedHandler(self, payload):
-        logging.debug('connectionAcceptedHandler')
-        connectionAcceptedData = payload['payload']['connectionAccepted']
-        logging.debug(connectionAcceptedData)
-        for listener in self.connectionListeners:
-            listener.onConnectionAccepted(connectionAcceptedData)
-
-    def connectionRequestedHandler(self, payload):
-        logging.debug('connectionRequestedHandler')
-        connectionRequestedData = payload['payload']['connectionRequested']
-        logging.debug(connectionRequestedData)
-        for listener in self.connectionListeners:
-            listener.onConnectionRequested(connectionRequestedData)
+    def connection_requested_handler(self, payload):
+        logging.debug('connection_requested_handler')
+        connection_requested_data = payload['payload']['connectionRequested']
+        logging.debug(connection_requested_data)
+        for listener in self.connection_listeners:
+            listener.on_connection_requested(connection_requested_data)

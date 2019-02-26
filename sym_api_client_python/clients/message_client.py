@@ -1,31 +1,35 @@
 import requests
 import json
 import logging
-from .apiClient import APIClient
-from ..exceptions.APIClientErrorException import APIClientErrorException
-from ..exceptions.ForbiddenException import ForbiddenException
-from ..exceptions.ServerErrorException import ServerErrorException
+from .api_client import APIClient
 from ..exceptions.UnauthorizedException import UnauthorizedException
-# logging.basicConfig(filename='logs/example.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filemode='w', level=logging.DEBUG)
-# logging.getLogger("urllib3").setLevel(logging.WARNING)
-#child class of APIClient --> Extends error handling functionality
+from requests_toolbelt.multipart.encoder import MultipartEncoder
 
-#MessageClient class contains a series of functions corresponding to all messaging
-#endpoints on the REST API.
+
+# child class of APIClient --> Extends error handling functionality
+# MessageClient class contains a series of functions corresponding to all
+# messaging endpoints on the REST API.
 class MessageClient(APIClient):
 
-    def __init__(self, botClient):
-        self.botClient = botClient
-        self.config = self.botClient.getSymConfig()
+    def __init__(self, bot_client):
+        self.bot_client = bot_client
+        self.config = self.bot_client.get_sym_config()
         if self.config.data['proxyURL']:
-            self.proxies = {"https": 'https://' + self.config.data['proxyURL'] + ':' + str(self.config.data['proxyPort'])}
+            self.proxies = {
+                "https": 'https://' + self.config.data['proxyURL'] + ':'
+                         + str(self.config.data['proxyPort'])
+            }
         else:
             self.proxies = {}
 
-    def getMessageFromStream(self, streamId, since):
+    def get_msg_from_stream(self, stream_id, since):
         logging.debug('MessageClient/getMessages()')
-        headers = {'sessionToken': self.botClient.getSymAuth().getSessionToken(), 'keyManagerToken': self.botClient.getSymAuth().getKeyManagerToken()}
-        url = self.config.data['agentHost']+'/agent/v4/stream/{0}/message?since={1}'.format(streamId, since)
+        headers = {
+            'sessionToken': self.bot_client.get_sym_auth().get_session_token(),
+            'keyManagerToken': self.bot_client.get_sym_auth().get_key_manager_token()
+        }
+        url = self.config.data['agentHost'] + \
+              '/agent/v4/stream/{0}/message?since={1}'.format(stream_id, since)
         response = requests.get(url, headers=headers, proxies=self.proxies)
         if response.status_code == 204:
             result = []
@@ -34,15 +38,21 @@ class MessageClient(APIClient):
             return json.loads(response.text)
         else:
             try:
-                super().handleError(response, self.botClient)
+                super().handle_error(response, self.bot_client)
             except UnauthorizedException:
-                getMessageFromStream(streamId, since)
+                self.get_msg_from_stream(stream_id, since)
 
-    def sendMessage(self, streamId, outBoundMessage):
+    def send_msg(self, stream_id, outbound_msg):
+        print(stream_id + " streamID to play with")
         logging.debug('MessageClient/createMessage()')
-        url = self.config.data['agentHost']+'/agent/v4/stream/{0}/message/create'.format(streamId)
-        headers = {'sessionToken': self.botClient.getSymAuth().getSessionToken(), 'keyManagerToken': self.botClient.getSymAuth().getKeyManagerToken()}
-        response = requests.post(url, files=outBoundMessage, headers=headers, proxies=self.proxies)
+        url = self.config.data['agentHost'] + \
+              '/agent/v4/stream/{0}/message/create'.format(stream_id)
+        headers = {
+            'sessionToken': self.bot_client.get_sym_auth().get_session_token(),
+            'keyManagerToken': self.bot_client.get_sym_auth().get_key_manager_token()
+        }
+        response = requests.post(url, files=outbound_msg,
+                                 headers=headers, proxies=self.proxies)
         if response.status_code == 204:
             result = []
             return result
@@ -50,14 +60,49 @@ class MessageClient(APIClient):
             return json.loads(response.text)
         else:
             try:
-                super().handleError(response, self.botClient)
+                super().handle_error(response, self.bot_client)
             except UnauthorizedException:
-                self.sendMessage(streamId, outBoundMessage)
+                self.send_msg(stream_id, outbound_msg)
 
-    def getMessageAttachments(self, streamId, messageId, fileId):
+    def send_msg_with_attachment(self, stream_id, msg,
+                                 filename, path_to_attachment):
+        url = self.config.data['agentHost'] + \
+              '/agent/v4/stream/{0}/message/create'.format(stream_id)
+        print(url)
+        data = MultipartEncoder(
+            fields={'message': msg,
+                    'attachment': (
+                    filename, open(path_to_attachment, 'rb'), 'file')}
+        )
+        headers = {
+            'sessionToken': self.bot_client.get_sym_auth().get_session_token(),
+            'keyManagerToken': self.bot_client.get_sym_auth().get_key_manager_token(),
+            'Content-Type': data.content_type
+        }
+        response = requests.post(url, data=data, headers=headers,
+                                 proxies=self.proxies)
+        if response.status_code == 204:
+            result = []
+            return result
+        elif response.status_code == 200:
+            return json.loads(response.text)
+        else:
+            try:
+                super().handle_error(response, self.bot_client)
+            except UnauthorizedException:
+                self.send_msg(stream_id, msg)
+
+        pass
+
+    def get_msg_attachments(self, stream_id, msg_id, file_id):
         logging.debug('MessageClient/getAttachments()')
-        headers = {'sessionToken': self.botClient.getSymAuth().getSessionToken(), 'keyManagerToken': self.botClient.getSymAuth().getKeyManagerToken()}
-        url = self.config.data['agentHost']+'/agent/v1/stream/{0}/attachment?messageId={1}&fileId={2}'.format(streamId, messageId, fileId)
+        headers = {
+            'sessionToken': self.bot_client.get_sym_auth().get_session_token(),
+            'keyManagerToken': self.bot_client.get_sym_auth().get_key_manager_token()
+        }
+        url = self.config.data['agentHost'] + \
+              '/agent/v1/stream/{0}/attachment?msg_id={1}&file_id={2}'\
+                  .format(stream_id, msg_id, file_id)
         response = requests.get(url, headers=headers, proxies=self.proxies)
         if response.status_code == 204:
             result = []
@@ -66,14 +111,17 @@ class MessageClient(APIClient):
             return json.loads(response.text)
         else:
             try:
-                super().handleError(response, self.botClient)
+                super().handle_error(response, self.bot_client)
             except UnauthorizedException:
-                self.getMessageAttachments(streamId, messageId, fileId)
+                self.get_msg_attachments(stream_id, msg_id, file_id)
 
-    #go on admin clients --> Contains sample data just for example's sake
-    def importMessage(self):
-        logging.debug('MessageClient/importMessage()')
-        headers = {'sessionToken': self.botClient.getSymAuth().getSessionToken(), 'keyManagerToken': self.botClient.getSymAuth().getKeyManagerToken()}
+    # go on admin clients --> Contains sample data just for example's sake
+    def import_message(self):
+        logging.debug('MessageClient/import_message()')
+        headers = {
+            'sessionToken': self.bot_client.get_sym_auth().get_session_token(),
+            'keyManagerToken': self.bot_client.get_sym_auth().get_key_manager_token()
+        }
         url = self.config.data['agentHost']+'/agent/v4/message/import'
         payload = {
             "message": "<messageML>Imported message</messageML>",
@@ -84,7 +132,10 @@ class MessageClient(APIClient):
             "originalMessageId": "",
             "streamId": ""
         }
-        response = requests.post(url, headers=headers, data=payload, proxies=self.proxies)
+        response = requests.post(
+            url, headers=headers,
+            data=payload, proxies=self.proxies
+        )
         if response.status_code == 204:
             result = []
             return result
@@ -92,15 +143,19 @@ class MessageClient(APIClient):
             return json.loads(response.text)
         else:
             try:
-                super().handleError(response, self.botClient)
+                super().handle_error(response, self.bot_client)
             except UnauthorizedException:
-                self.importMessage()
+                self.import_message()
 
-    #go on admin clients
-    def suppressMessage(self, id):
-        logging.debug('MessageClient/suppressMessage()')
-        headers = {'sessionToken': self.botClient.getSymAuth().getSessionToken(), 'keyManagerToken': self.botClient.getSymAuth().getKeyManagerToken()}
-        url = self.config.data['podHost']+'/pod/v1/admin/messagesuppression/{0}/suppress'.format(id)
+    # go on admin clients
+    def suppress_message(self, id):
+        logging.debug('MessageClient/suppress_message()')
+        headers = {
+            'sessionToken': self.bot_client.get_sym_auth().get_session_token(),
+            'keyManagerToken': self.bot_client.get_sym_auth().get_key_manager_token()
+        }
+        url = self.config.data['podHost'] + \
+              '/pod/v1/admin/messagesuppression/{0}/suppress'.format(id)
         response = requests.post(url, headers=headers, proxies=self.proxies)
         if response.status_code == 204:
             result = []
@@ -109,17 +164,24 @@ class MessageClient(APIClient):
             return json.loads(response.text)
         else:
             try:
-                super().handleError(response, self.botClient)
+                super().handle_error(response, self.bot_client)
             except UnauthorizedException:
-                self.suppressMessage(id)
+                self.suppress_message(id)
 
-
-    def postMessageSearch(self):
-        logging.debug('MessageClient/postMessageSearch()')
-        headers = {'sessionToken': self.botClient.getSymAuth().getSessionToken(), 'keyManagerToken': self.botClient.getSymAuth().getKeyManagerToken()}
+    def post_msg_search(self):
+        logging.debug('MessageClient/post_msg_search()')
+        headers = {
+            'sessionToken': self.bot_client.get_sym_auth().get_session_token(),
+            'keyManagerToken': self.bot_client.get_sym_auth().get_key_manager_token()
+        }
         url = self.config.data['agentHost']+'/agent/v1/message/search'
-        payload = {'hashtag':'reed'}
-        response = requests.post(url, headers=headers, json=payload, proxies=self.proxies)
+        payload = {
+            'hashtag': 'reed'
+        }
+        response = requests.post(
+            url, headers=headers,
+            json=payload, proxies=self.proxies
+        )
         if response.status_code == 204:
             result = []
             return result
@@ -127,17 +189,23 @@ class MessageClient(APIClient):
             return json.loads(response.text)
         else:
             try:
-                super().handleError(response, self.botClient)
+                super().handle_error(response, self.bot_client)
             except UnauthorizedException:
-                self.postMessageSearch(id)
+                self.post_msg_search(id)
 
-    #contains sample query for example
-    def getMessageSearch(self):
-        logging.debug('MessageClient/getMessageSearch()')
-        headers = {'sessionToken': self.botClient.getSymAuth().getSessionToken(), 'keyManagerToken': self.botClient.getSymAuth().getKeyManagerToken()}
+    # contains sample query for example
+    def get_msg_search(self):
+        logging.debug('MessageClient/get_msg_search()')
+        headers = {
+            'sessionToken': self.bot_client.get_sym_auth().get_session_token(),
+            'keyManagerToken': self.bot_client.get_sym_auth().get_key_manager_token()
+        }
         url = self.config.data['agentHost']+'/agent/v1/message/search'
-        query = {'query': 'hashtag:reed'}
-        response = requests.get(url, headers=headers, params=query, proxies=self.proxies)
+        query = {
+            'query': 'hashtag:reed'
+        }
+        response = requests.get(url, headers=headers,
+                                params=query, proxies=self.proxies)
         if response.status_code == 204:
             result = []
             return result
@@ -145,14 +213,17 @@ class MessageClient(APIClient):
             return json.loads(response.text)
         else:
             try:
-                super().handleError(response, self.botClient)
+                super().handle_error(response, self.bot_client)
             except UnauthorizedException:
-                self.getMessageSearch(id)
+                self.get_msg_search(id)
 
-    def getMessageStatus(self, messageId):
-        logging.debug('MessageClient/getMessageStatus()')
-        headers = {'sessionToken': self.botClient.getSymAuth().getSessionToken()}
-        url = self.config.data['podHost']+'/pod/v1/message/{0}/status'.format(messageId)
+    def get_msg_status(self, msg_id):
+        logging.debug('MessageClient/get_msg_status()')
+        headers = {
+            'sessionToken': self.bot_client.get_sym_auth().get_session_token()
+        }
+        url = self.config.data['podHost'] + '/pod/v1/message/{0}/status'\
+            .format(msg_id)
         response = requests.get(url, headers=headers, proxies=self.proxies)
         if response.status_code == 204:
             result = []
@@ -161,13 +232,15 @@ class MessageClient(APIClient):
             return json.loads(response.text)
         else:
             try:
-                super().handleError(response, self.botClient)
+                super().handle_error(response, self.bot_client)
             except UnauthorizedException:
-                self.getMessageStatus(messageId)
+                self.get_msg_status(msg_id)
 
-    def getSupportedAttachmentTypes(self):
+    def get_supported_attachment_types(self):
         logging.debug('MessageClient/getAttachmentTypes()')
-        headers = {'sessionToken': self.botClient.getSymAuth().getSessionToken()}
+        headers = {
+            'sessionToken': self.bot_client.get_sym_auth().get_session_token()
+        }
         url = self.config.data['podHost']+'/pod/v1/files/allowedTypes'
         response = requests.get(url, headers=headers, proxies=self.proxies)
         if response.status_code == 204:
@@ -179,6 +252,6 @@ class MessageClient(APIClient):
         else:
             logging.debug(response.status_code)
             try:
-                super().handleError(response, self.botClient)
+                super().handle_error(response, self.bot_client)
             except UnauthorizedException:
-                self.getSupportedAttachmentTypes()
+                self.get_supported_attachment_types()

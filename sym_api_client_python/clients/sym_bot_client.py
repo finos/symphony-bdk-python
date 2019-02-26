@@ -1,56 +1,61 @@
-from .DataFeedClient import DataFeedClient
-from ..DataFeedEventService import DataFeedEventService
-from .MessageClient import MessageClient
-from .StreamClient import StreamClient
-from .apiClient import APIClient
-from .UserClient import UserClient
+from .datafeed_client import DataFeedClient
+from ..datafeed_event_service import DataFeedEventService
+from .message_client import MessageClient
+from .stream_client import StreamClient
+from .api_client import APIClient
+from .user_client import UserClient
 
-#SymBotClient class is the Client class that has access to all of the other client classes
-#upon initialization, SymBotClient class gets an instance of each client along with access to all of its methods.
-#class contains series of getters for each client
-#class also contains config and auth class as a way to pass this info around to each client as well
-#class is seen as orchestrator or interface for all REST API calls
-class SymBotClient():
+# SymBotClient class is the Client class that has access to all of the other
+# client classes upon initialization, SymBotClient class gets an instance of
+# each client along with access to all of its methods.
+# class contains series of getters for each client
+# class also contains config and auth class as a way to pass this info around
+# to each client as well class is seen as orchestrator or interface for all
+# REST API calls
+
+
+class SymBotClient:
 
     def __init__(self, auth, config):
         self.auth = auth
         self.config = config
-        self.dataFeedClient = None
-        self.dataFeedEventService = None
-        self.messageClient = None
-        self.streamClient = None
-        self.userClient = None
+        self.datafeed_event_service = None
+        self.datafeed_client = None
+        self.msg_client = None
+        self.stream_client = None
+        self.user_client = None
+        self.api_client = None
 
-    def getDataFeedEventService(self):
-        if self.dataFeedEventService is None:
-            self.dataFeedEventService = DataFeedEventService(self)
-        return self.dataFeedEventService
+    def get_datafeed_event_service(self):
+        if self.datafeed_event_service is None:
+            self.datafeed_event_service = DataFeedEventService(self)
+        return self.datafeed_event_service
 
-    def getDataFeedClient(self):
-        if self.dataFeedClient is None:
-            self.dataFeedClient = DataFeedClient(self)
-        return self.dataFeedClient
+    def get_datafeed_client(self):
+        if self.datafeed_client is None:
+            self.datafeed_client = DataFeedClient(self)
+        return self.datafeed_client
 
-    def getMessageClient(self):
-        if self.messageClient is None:
-            self.messageClient = MessageClient(self)
-        return self.messageClient
+    def get_message_client(self):
+        if self.msg_client is None:
+            self.msg_client = MessageClient(self)
+        return self.msg_client
 
-    def getStreamClient(self):
-        if self.streamClient is None:
-            self.streamClient = StreamClient(self)
-        return self.streamClient
+    def get_stream_client(self):
+        if self.stream_client is None:
+            self.stream_client = StreamClient(self)
+        return self.stream_client
 
-    def getUserClient(self):
-        if self.userClient is None:
-            self.userClient = UserClient(self)
-        return self.userClient
+    def get_user_client(self):
+        if self.user_client is None:
+            self.user_client = UserClient(self)
+        return self.user_client
 
-    def getAPIClient(self):
-        self.APIClient = APIClient(self)
+    def get_api_client(self):
+        self.api_client = APIClient(self)
 
-    def getSymConfig(self):
+    def get_sym_config(self):
         return self.config
 
-    def getSymAuth(self):
+    def get_sym_auth(self):
         return self.auth

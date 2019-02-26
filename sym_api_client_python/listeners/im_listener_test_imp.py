@@ -1,15 +1,22 @@
-from .imListener import IMListener
+from .im_listener import IMListener
 import logging
-#sample implementation of Abstract imListener class
-#has instance of SymBotClient so that it can respond to events coming in by leveraging other clients on SymBotClient
-#each function should contain logic for each corresponding event
+# A sample implementation of Abstract imListener class
+# The listener can respond to incoming events if the respective event
+# handler has been implemented
+
+
 class IMListenerTestImp(IMListener):
+    """Example implementation of IMListener
 
-    def __init__(self, SymBotClient):
-        self.botClient = SymBotClient
+        sym_bot_client: contains clients which respond to incoming events
 
-    def onIMMessage(self, IMmessage):
-        logging.debug('message recieved in IM', IMmessage)
+    """
 
-    def onIMCreated(self, IMCreated):
-        logging.debug('IM created!', IMCreated )
+    def __init__(self, sym_bot_client):
+        self.botClient = sym_bot_client
+
+    def on_im_message(self, im_message):
+        logging.debug('message received in IM', im_message)
+
+    def on_im_created(self, im_created):
+        logging.debug('IM created!', im_created)

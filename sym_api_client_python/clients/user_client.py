@@ -1,117 +1,141 @@
 import requests
 import json
 import logging
-from ..DataFeedEventService import DataFeedEventService
-from .apiClient import APIClient
-from ..exceptions.APIClientErrorException import APIClientErrorException
-from ..exceptions.ForbiddenException import ForbiddenException
-from ..exceptions.ServerErrorException import ServerErrorException
+from .api_client import APIClient
 from ..exceptions.UnauthorizedException import UnauthorizedException
-# logging.basicConfig(filename='logs/example.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filemode='w', level=logging.DEBUG)
+# logging.basicConfig(filename='logs/example.log', format='%(asctime)s - %(
+# name)s - %(levelname)s - %(message)s', filemode='w', level=logging.DEBUG)
 # logging.getLogger("urllib3").setLevel(logging.WARNING)
 
-#child class of APIClient --> Extends error handling functionality
-#UserClient class contains a series of functions corresponding to all messaging
-#endpoints on the REST API.
+# child class of APIClient --> Extends error handling functionality
+# UserClient class contains a series of functions corresponding to all
+# messaging
+# endpoints on the REST API.
+
+
 class UserClient(APIClient):
 
-    def __init__(self, botClient):
-        self.botClient = botClient
-        self.config = self.botClient.getSymConfig()
+    def __init__(self, bot_client):
+        self.bot_client = bot_client
+        self.config = self.bot_client.get_sym_config()
         if self.config.data['proxyURL']:
             self.proxies = {"https": self.config.data['proxyURL']}
         else:
             self.proxies = {}
 
-    def getUserFromUsername(self, userName):
-        logging.debug('UserClient/getUserFromUserName()')
-        headers = {'sessionToken': self.botClient.getSymAuth().getSessionToken()}
+    def get_user_from_user_name(self, user_name):
+        logging.debug('UserClient/get_user_from_user_name()')
+        headers = {
+            'sessionToken': self.bot_client.get_sym_auth().get_session_token()
+        }
         url = self.config.data['podHost']+'/pod/v2/user'
-        params = {'username': userName}
-        response = requests.get(url, headers=headers, params=params, proxies=self.proxies)
+        params = {'username': user_name}
+        response = requests.get(
+            url, headers=headers, params=params, proxies=self.proxies
+        )
         if response.status_code == 200:
             return json.loads(response.text)
         else:
             try:
-                super().handleError(response, self.botClient)
+                super().handle_error(response, self.bot_client)
             except UnauthorizedException:
-                self.getUserFromUserName(userName)
+                self.get_user_from_user_name(user_name)
 
-    def getUserFromEmail(self, email, local=False):
-        logging.debug('UserClient/getUserFromEmail()')
-        headers = {'sessionToken': self.botClient.getSymAuth().getSessionToken()}
+    def get_user_from_email(self, email, local=False):
+        logging.debug('UserClient/get_user_from_email()')
+        headers = {
+            'sessionToken': self.bot_client.get_sym_auth().get_session_token()
+        }
         url = self.config.data['podHost']+'/pod/v2/user'
         params = {'email': email, 'local':local}
-        response = requests.get(url, headers=headers, params=params, proxies=self.proxies)
+        response = requests.get(
+            url, headers=headers, params=params, proxies=self.proxies
+        )
         if response.status_code == 200:
             return json.loads(response.text)
         else:
             try:
-                super().handleError(response, self.botClient)
+                super().handle_error(response, self.bot_client)
             except UnauthorizedException:
-                self.getUserFromEmail(email)
+                self.get_user_from_email(email)
 
-    def getUserFromId(self, id, local=False):
-        logging.debug('UserClient/getUserFromId')
-        headers = {'sessionToken': self.botClient.getSymAuth().getSessionToken()}
+    def get_user_from_id(self, user_id, local=False):
+        logging.debug('UserClient/get_user_from_id')
+        headers = {
+            'sessionToken': self.bot_client.get_sym_auth().get_session_token()
+        }
         url = self.config.data['podHost']+'/pod/v2/user'
-        params = {'uid': id, 'local':local}
-        response = requests.get(url, headers=headers, params=params, proxies=self.proxies)
+        params = {'uid': user_id, 'local':local}
+        response = requests.get(
+            url, headers=headers, params=params, proxies=self.proxies
+        )
         if response.status_code == 200:
             return json.loads(response.text)
         else:
             try:
-                super().handleError(response, self.botClient)
+                super().handle_error(response, self.bot_client)
             except UnauthorizedException:
-                self.getUserFromId(id)
+                self.get_user_from_id(user_id)
 
-
-    def getUsersFromIdList(self, idList, local=False):
-        logging.debug('UserClient/getUsersFromIdList()')
-        headers = {'sessionToken': self.botClient.getSymAuth().getSessionToken()}
+    def get_users_from_id_list(self, user_id_list, local=False):
+        logging.debug('UserClient/get_users_from_id_list()')
+        headers = {
+            'sessionToken': self.bot_client.get_sym_auth().get_session_token()
+        }
         url = self.config.data['podHost']+'/pod/v3/users'
-        usersArray = ','.join(map(str,idList))
-        params = {'uid': usersArray, 'local': local}
-        response = requests.get(url, headers=headers, params=params, proxies=self.proxies)
+        users_array = ','.join(map(str, user_id_list))
+        params = {'uid': users_array, 'local': local}
+        response = requests.get(
+            url, headers=headers, params=params, proxies=self.proxies
+        )
         print(response.url)
         if response.status_code == 200:
             return json.loads(response.text)
         else:
             try:
-                super().handleError(response, self.botClient)
+                super().handle_error(response, self.bot_client)
             except UnauthorizedException:
-                self.getUsersFromIdList(idList)
+                self.get_users_from_id_list(id_list)
 
-    def getUsersFromEmailList(self, emailList, local=False):
-        logging.debug('UserClient/getUsersFromEmailList()')
-        headers = {'sessionToken': self.botClient.getSymAuth().getSessionToken()}
+    def get_users_from_email_list(self, email_list, local=False):
+        logging.debug('UserClient/get_users_from_email_list()')
+        headers = {
+            'sessionToken': self.bot_client.get_sym_auth().get_session_token()
+        }
         url = self.config.data['podHost']+'/pod/v3/users'
-        usersArray = ','.join(map(str,emailList))
+        usersArray = ','.join(map(str, email_list))
         print(usersArray)
         params = {'email': usersArray, 'local': local}
-        response = requests.get(url, headers=headers, params=params, proxies=self.proxies)
+        response = requests.get(
+            url, headers=headers, params=params, proxies=self.proxies
+        )
         print(response.url)
         if response.status_code == 200:
             return json.loads(response.text)
         else:
             try:
-                super().handleError(response, self.botClient)
+                super().handle_error(response, self.bot_client)
             except UnauthorizedException:
-                self.getUsersFromIdList(idList)
+                self.get_users_from_email_list(email_list)
 
-    def searchUsers(self, query, local=False, skip=0, limit=50, filter={}):
-        logging.debug('UserClient/searchUsers()')
-        headers = {'sessionToken': self.botClient.getSymAuth().getSessionToken()}
+    def search_users(self, query, local=False, skip=0, limit=50, filters={}):
+        logging.debug('UserClient/search_users()')
+        headers = {
+            'sessionToken': self.bot_client.get_sym_auth().get_session_token()
+        }
         url = self.config.data['podHost']+'/pod/v1/user/search'
         params = {'local': local, 'skip': skip, 'limit': limit}
-        data = {'query':query, 'filters': filter}
-        response = requests.post(url, headers=headers, params=params, json=data, proxies=self.proxies)
+        data = {'query':query, 'filters': filters}
+        response = requests.post(
+            url, headers=headers, params=params, json=data,
+            proxies=self.proxies
+        )
         print(response.url)
         if response.status_code == 200:
             return json.loads(response.text)
         else:
             print(response.status_code)
             try:
-                super().handleError(response, self.botClient)
+                super().handle_error(response, self.bot_client)
             except UnauthorizedException:
-                self.searchUsers(query, local, skip, limit)
+                self.search_users(query, local, skip, limit)

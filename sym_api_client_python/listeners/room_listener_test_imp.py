@@ -1,43 +1,49 @@
-from .RoomListener import RoomListener
-import calendar
-import time
 import logging
-#sample implementation of Abstract RoomListener class
-#has instance of SymBotClient so that it can respond to events coming in by leveraging other clients on SymBotClient
-#each function should contain logic for each corresponding event
+from .room_listener import RoomListener
+from .chatbot.message_processor import MessageProcessor
+# A sample implementation of Abstract RoomListener class
+# The listener can respond to incoming events if the respective event
+# handler has been implemented
+
+
 class RoomListenerTestImp(RoomListener):
+    """Example implementation of RoomListener
 
-    def __init__(self, SymBotClient):
-        self.botClient = SymBotClient
+        sym_bot_client: contains clients which respond to incoming events
 
-    def onRoomMessage(self, message):
-        logging.debug('room message recieved', message)
-        #sample code for developer to implement --> use MessageClient and
-        #data recieved from message event to reply with a #reed
-        streamId = message['stream']['streamId']
-        message = dict(message = '<messageML><hash tag="ReedF"/></messageML>')
-        self.botClient.getMessageClient().sendMessage(streamId, message)
+    """
 
-    def onRoomCreated(self, roomCreated):
-        logging.debug('room created', roomCreated)
+    def __init__(self, sym_bot_client):
+        self.bot_client = sym_bot_client
 
-    def onRoomDeactivated(self, roomDeactivated):
-        logging.debug('room Deactivated', roomDeactivated)
+    def on_room_msg(self, msg):
+        logging.debug('room msg received', msg)
+        msg_processor = MessageProcessor(self.bot_client)
+        msg_processor.process(msg)
 
-    def onRoomMemberDemotedFromOwner(self, roomMemberDemotedFromOwner):
-        logging.debug('room member demoted from owner', roomMemberDemotedFromOwner)
+    def on_room_created(self, room_created):
+        logging.debug('room created', room_created)
 
-    def onRoomMemberPromotedToOwner(self, roomMemberPromotedToOwner):
-        logging.debug('room member promoted to owner', roomMemberPromotedToOwner)
+    def on_room_deactivated(self, room_deactivated):
+        logging.debug('room Deactivated', room_deactivated)
 
-    def onRoomReactivated(self, roomReactivated):
-        logging.debug('room reactivated', roomReactivated)
+    def on_room_member_demoted_from_owner(self,
+                                          room_member_demoted_from_owner):
+        logging.debug('room member demoted from owner',
+                      room_member_demoted_from_owner)
 
-    def onRoomUpdated(self, roomUpdated):
-        logging.debug('room updated', roomUpdated)
+    def on_room_member_promoted_to_owner(self, room_member_promoted_to_owner):
+        logging.debug('room member promoted to owner',
+                      room_member_promoted_to_owner)
 
-    def onUserJoinedRoom(self, userJoinedRoom):
-        logging.debug('USER JOINED ROOM', userJoinedRoom)
+    def on_room_reactivated(self, room_reactivated):
+        logging.debug('room reactivated', room_reactivated)
 
-    def onUserLeftRoom(self, userLeftRoom):
-        logging.debug('USER LEFT ROOM', userLeftRoom)
+    def on_room_updated(self, room_updated):
+        logging.debug('room updated', room_updated)
+
+    def on_user_joined_room(self, user_joined_room):
+        logging.debug('USER JOINED ROOM', user_joined_room)
+
+    def on_user_left_room(self, user_left_room):
+        logging.debug('USER LEFT ROOM', user_left_room)
