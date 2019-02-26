@@ -1,37 +1,53 @@
+import logging
 from sym_api_client_python.configure.configure import SymConfig
 from sym_api_client_python.auth.rsa_auth import SymBotRSAAuth
-from sym_api_client_python.clients.SymBotClient import SymBotClient
-from sym_api_client_python.listeners.imListenerTestImp import IMListenerTestImp
-from sym_api_client_python.listeners.roomListenerTestImp import RoomListenerTestImp
-#debug logging --> set to debug --> check logs/example.log
-import logging
-logging.basicConfig(filename='sym_api_client_python/logs/example.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filemode='w', level=logging.DEBUG)
-logging.getLogger("urllib3").setLevel(logging.WARNING)
-#main() acts as executable script --> run python3 hello.py to start Bot...
+from sym_api_client_python.clients.sym_bot_client import SymBotClient
+from sym_api_client_python.listeners.\
+        im_listener_test_imp import IMListenerTestImp
+from sym_api_client_python.listeners.\
+        room_listener_test_imp import RoomListenerTestImp
 
-#adjust global variable below to auth either using RSA or certificates
+
+def configure_logging():
+        logging.basicConfig(
+                filename='sym_api_client_python/logs/example.log',
+                format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                filemode='w', level=logging.DEBUG
+        )
+        logging.getLogger("urllib3").setLevel(logging.WARNING)
+
 
 def main():
-        print('hi')
-        #RSA Auth flow: pass path to rsa_config.json file
-        configure = SymConfig('sym_api_client_python/resources/rsa_config.json')
-        configure.loadFromRSA()
+        print('Python Client runs using RSA authentication')
+
+        # Configure log
+        configure_logging()
+
+        # RSA Auth flow: pass path to rsa_config.json file
+        configure = SymConfig('sym_api_client_python/resources'
+                              '/rsa_config.json')
+        configure.load_rsa_config()
         auth = SymBotRSAAuth(configure)
         auth.authenticate()
-        #initialize SymBotClient with auth and configure objects
-        botClient = SymBotClient(auth, configure)
-        #initialize datafeed service
-        DataFeedEventService = botClient.getDataFeedEventService()
-        #initialize listener classes and append them to DataFeedEventService class
-        #these listener classes sit in DataFeedEventService class as a way to easily handle events
-        #coming back from the DataFeed
-        imListenerTest = IMListenerTestImp(botClient)
-        DataFeedEventService.addIMListener(imListenerTest)
-        roomListenerTest = RoomListenerTestImp(botClient)
-        DataFeedEventService.addRoomListener(roomListenerTest)
-        #create data feed and read datafeed recursively
-        print('starting datafeed')
-        DataFeedEventService.startDataFeed()
+
+        # Initialize SymBotClient with auth and configure objects
+        bot_client = SymBotClient(auth, configure)
+
+        # Initialize datafeed service
+        datafeed_event_service = bot_client.get_datafeed_event_service()
+
+        # Initialize listener objects and append them to datafeed_event_service
+        # Datafeed_event_service polls the datafeed and the event listeners
+        # respond to the respective types of events
+        im_listener_test = IMListenerTestImp(bot_client)
+        datafeed_event_service.add_im_listener(im_listener_test)
+        room_listener_test = RoomListenerTestImp(bot_client)
+        datafeed_event_service.add_room_listener(room_listener_test)
+
+        # Create and read the datafeed
+        print('Starting datafeed')
+        datafeed_event_service.start_datafeed()
+
 
 if __name__ == "__main__":
     main()

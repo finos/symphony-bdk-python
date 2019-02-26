@@ -1,8 +1,10 @@
 import setuptools
 
+
 def readme():
     with open('README.md') as f:
         return f.read()
+
 
 setuptools.setup(
     name="sym_api_client_python",
@@ -12,7 +14,8 @@ setuptools.setup(
     description="Symphony REST API - Python Client",
     long_description=readme(),
     long_description_content_type='text/markdown',
-    url="https://github.com/SymphonyPlatformSolutions/symphony-api-client-python",
+    url="https://github.com/SymphonyPlatformSolutions/"
+        "symphony-api-client-python",
     packages=setuptools.find_packages(),
     install_requires=[
         'pyOpenSSL',
