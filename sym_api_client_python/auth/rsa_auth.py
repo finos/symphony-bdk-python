@@ -1,95 +1,112 @@
 import json
 import requests
-#library used to jwt signature
-import logging
-from jose import jwt
 import datetime
 import time
-from ..clients.apiClient import APIClient
-from ..exceptions.UnauthorizedException import UnauthorizedException
+import logging
+
+from jose import jwt
+from ..clients.api_client import APIClient
+
 
 class SymBotRSAAuth(APIClient):
-    #initialize with config object
-    #get JWT token upon initization
-    #fetch session and keymanager tokens respectively
+    """Class for RSA authentication"""
+
     def __init__(self, config):
+        """
+        Set up proxy information if configuration contains proxyURL
+
+        :param config: Object contains all RSA configurations
+        """
         self.config = config
-        self.lastAuthTime=0
+        self.last_auth_time = 0
+        self.session_token = None
+        self.key_manager_token = None
         if self.config.data['proxyURL']:
-            self.proxies = {"https": 'https://' + self.config.data['proxyURL'] + ':' + str(self.config.data['proxyPort'])}
+            self.proxies = {
+                "https": 'https://' + self.config.data['proxyURL']
+                         + ':' + str(self.config.data['proxyPort'])}
             print(self.proxies)
         else:
             self.proxies = {}
 
-    def getSessionToken(self):
-        return self.sessionToken
+    def get_session_token(self):
+        """Return the session token"""
+        return self.session_token
 
-    def getKeyManagerToken(self):
-        return self.keyAuthToken
-
+    def get_key_manager_token(self):
+        """Return the key manager token"""
+        return self.key_manager_token
 
     def authenticate(self):
+        """
+        Get the session and key manager token
+        """
         logging.debug('Auth/authenticate()')
-        if (self.lastAuthTime == 0) or (int(round(time.time() * 1000) - self.lastAuthTime>=3000)):
+        if (self.last_auth_time == 0) or (int(round(time.time() * 1000) -
+                                              self.last_auth_time >= 3000)):
             logging.debug('Auth/authenticate() --> needed to authenticate')
-            self.jwt = self.createJWT()
-            self.lastAuthTime = int(round(time.time() * 1000))
-            self.sessionAuthenticate()
-            self.keyManagerAuthenticate()
+            self.last_auth_time = int(round(time.time() * 1000))
+            self.session_authenticate()
+            self.key_manager_authenticate()
         else:
             try:
-                logging.debug('reauthenticated too fast. wait 30 seconds and try again.')
+                logging.debug('Retry authentication in 30 seconds.')
                 time.sleep(30)
                 self.authenticate()
             except Exception as err:
                 print(err)
 
-    #load .pem file generated on admin portal in symphony pod
-    #retrieve folder of public/private keys by executing shell script on symphony developers guide
-    #expiration_date is a timestamp LESS than 5 min in the future (IMPORTANT THAT ITS LESS)
-    #function returns a signed JWT which can be used to authenticate bot
-    def createJWT(self):
+    def create_jwt(self):
+        """
+        Create a jwt token with payload dictionary. Encode with
+        RSA private key using RS512 algorithm
+
+        :return: A jwt token valid for < 290 seconds
+        """
         logging.debug('RSA_auth/getJWT() function started')
-        #load this from config
         with open(self.config.data['botRSAPath'], 'r') as f:
-            privateKey = f.read()
-            expiration_date = int(datetime.datetime.now(datetime.timezone.utc).timestamp() + (5*58))
+            content = f.readlines()
+            private_key = ''.join(content)
+            expiration_date = int(datetime.datetime.now(datetime.timezone.utc)
+                                  .timestamp() + (5*58))
             payload = {
                 'sub': self.config.data['botUsername'],
                 'exp': expiration_date
             }
-            encoded = jwt.encode(payload, privateKey, algorithm='RS512')
+            encoded = jwt.encode(payload, private_key, algorithm='RS512')
+            f.close()
             return encoded
 
-    #raw api call to get session token.  pass jwt in request using json parameter
-    def sessionAuthenticate(self):
+    def session_authenticate(self):
+        """
+        Get the session token by calling API using jwt token
+        """
         logging.debug('RSA_auth/get_session_token() function started')
         data = {
-            'token': self.jwt
+            'token': self.create_jwt()
         }
         url = self.config.data['sessionAuthHost']+'/login/pubkey/authenticate'
-        print(url)
         response = requests.post(url, json=data, proxies=self.proxies)
         if response.status_code == 200:
             data = json.loads(response.text)
-            logging.debug(data['token'])
-            self.sessionToken = data['token']
+            self.session_token = data['token']
         else:
             logging.debug('RSA_auth/get_session_token() function failed')
             self.authenticate()
-    #raw api call to get key manager token.  pass jwt in request using json parameter
-    def keyManagerAuthenticate(self):
+
+    def key_manager_authenticate(self):
+        """
+        Get the key manager token by calling API using jwt token
+        """
         logging.debug('RSA_auth/get_keyauth() function started')
         data = {
-            'token': self.jwt
+            'token': self.create_jwt()
         }
         url = self.config.data['keyAuthHost']+'/relay/pubkey/authenticate'
-        print(url)
         response = requests.post(url, json=data)
         if response.status_code == 200:
             data = json.loads(response.text)
-            logging.debug(data['token'])
-            self.keyAuthToken = data['token']
+            self.key_manager_token = data['token']
         else:
             logging.debug('RSA_auth/get_keyauth() function failed')
             self.authenticate()

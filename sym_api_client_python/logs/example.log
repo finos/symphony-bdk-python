@@ -1,18 +1,19 @@
-2018-08-20 16:45:14,728 - root - DEBUG - Auth/authenticate()
-2018-08-20 16:45:14,728 - root - DEBUG - Auth/authenticate() --> needed to authenticate
-2018-08-20 16:45:14,729 - root - DEBUG - RSA_auth/getJWT() function started
-2018-08-20 16:45:14,815 - root - DEBUG - RSA_auth/get_session_token() function started
-2018-08-20 16:45:14,961 - root - DEBUG - eyJhbGciOiJSUzUxMiJ9.eyJzdWIiOiJib3R0bGVCb3QiLCJpc3MiOiJzeW1waG9ueSIsInNlc3Npb25JZCI6IjIwNWUwMmJiMjIwY2Y2NmI3NTU4Mzg1NzE1MjQxZmE3MzRhZTE4ZjFkNjk5MGE3N2M5M2U2ZDc4OGM1YmVhOWFiZWY4OWQ2NmM2YmQ3ODk2NWY2YmNiYmYwZWI0OTlhYjAwMDAwMTY1NTkxNWEzNDgwMDAxM2MyMDAwMDAwMzRiIiwidXNlcklkIjoiMzQ3NTgzMTEzMzMxNTMxIn0.pWUnScQzt0GzSlUrWE6wpjwoQ6txO_Spjl2Gp84r15IoLeEPqQTo9sl42WwMYQPV1mHbfQ2y9s5PrTiDMwkRCuCm3_l4DnfOSGlvMyCoDt50xRCMmlCREP02fAgNAjOn8swGHsddL21FzUX46f3wWaUtTKjtkGjEDKiB-YtUf6Fg5-0kPsT0KQRE3V8heHa9O2qMtgz2WAndegFm8foExdfmqEmsDtrZGaPs4gMBIu_TCop5cMKthZKUwdYP4TnoEomk8xiekQhdx4emoi7wu6O8kITjkvaxFxI1yITyIfBjCmtpe6x0SOYJZAbd3RjaaShtzILnNuYx70Vp9V2JMA
-2018-08-20 16:45:14,961 - root - DEBUG - RSA_auth/get_keyauth() function started
-2018-08-20 16:45:15,108 - root - DEBUG - 01004c1cba9d6e68f490497e54eb8519ca8e35f806ccc3331f0349284bb8470982991c440a6a296b2cb247c2e940700087b654f4f5b1b4eef38d35be4882bb8beba9eec81ad170ff823c2a28def76b4d4c46c9b370f005525751fb5f4b867b14780a97b52556c88a1580a77cde0d2dc4863488db56910d7fb3ca2f68f826b6567876605ec972c77bc8ef070e6e6b795b4f0e95da8b6aa97a56de8a1d398bcc9168a43b800109ea802c7872635d1683d0394176e8a4fdff2ed0
-2018-08-20 16:45:15,108 - root - INFO - DataFeedEventService/startDataFeed()
-2018-08-20 16:45:15,108 - root - DEBUG - DataFeedClient/createDatafeed()
-2018-08-20 16:45:16,015 - root - DEBUG - DataFeedClient/createDatafeed() suceeded: 200
-2018-08-20 16:45:16,015 - root - DEBUG - DataFeedClient/readDatafeed()
-2018-08-20 16:45:20,367 - root - DEBUG - DataFeedEventService/readDatafeed() --> Incoming data from readDatafeed(): {'messageSent': {'message': {'messageId': 'gT9sHx3NIIs3kyVlUk2l0X___pqm6kpTbQ', 'timestamp': 1534797919660, 'message': '<div data-format="PresentationML" data-version="2.0" class="wysiwyg"><p>s</p></div>', 'data': '{}', 'user': {'userId': 347583113331529, 'firstName': 'Reed', 'lastName': 'DEV', 'displayName': 'Reed DEV', 'email': 'reed.feldman@symphony.com', 'username': 'reeddevelop'}, 'stream': {'streamId': 'HYAjL7IumeB4hBGUOhBjXX___pqnSZHldA', 'streamType': 'ROOM'}, 'externalRecipients': False, 'userAgent': 'DESKTOP-35.0.0-6376-MacOSX-10.12.6-Chrome-68.0.3440.84', 'originalFormat': 'com.symphony.messageml.v2'}}}
-2018-08-20 16:45:20,367 - root - DEBUG - messageSentHandler function started
-2018-08-20 16:45:20,368 - root - DEBUG - room message recieved
-2018-08-20 16:45:20,368 - root - DEBUG - MessageClient/createMessage()
-2018-08-20 16:45:20,678 - root - DEBUG - DataFeedClient/readDatafeed()
-2018-08-20 16:45:21,544 - root - DEBUG - DataFeedEventService/readDatafeed() --> Incoming data from readDatafeed(): {'messageSent': {'message': {'messageId': '35LspToMHWMRkwABQVN033___pqm6kaRdA', 'timestamp': 1534797920628, 'message': '<div data-format="PresentationML" data-version="2.0"><span class="entity" data-entity-id="keyword1">#ReedF</span></div>', 'data': '{"keyword1":{"type":"org.symphonyoss.taxonomy","version":"1.0","id":[{"type":"org.symphonyoss.taxonomy.hashtag","value":"ReedF"}]}}', 'user': {'userId': 347583113331531, 'displayName': 'bottleBot', 'email': 'bottleBot@symphony.com', 'username': 'bottleBot'}, 'stream': {'streamId': 'HYAjL7IumeB4hBGUOhBjXX___pqnSZHldA', 'streamType': 'ROOM'}, 'externalRecipients': False, 'userAgent': 'Agent-2.1.4-Linux-4.9.77-31.58.amzn1.x86_64', 'originalFormat': 'com.symphony.messageml.v2'}}}
-2018-08-20 16:45:21,544 - root - DEBUG - DataFeedClient/readDatafeed()
+2019-02-26 15:52:31,351 - root - DEBUG - Auth/authenticate()
+2019-02-26 15:52:31,352 - root - DEBUG - Auth/authenticate() --> needed to authenticate
+2019-02-26 15:52:31,352 - root - DEBUG - Auth/get_session_token()
+2019-02-26 15:52:33,063 - root - DEBUG - Auth/session token success
+2019-02-26 15:52:33,065 - root - DEBUG - Auth/get_keyauth()
+2019-02-26 15:52:34,249 - root - DEBUG - Auth/keymanager token success
+2019-02-26 15:52:34,252 - root - INFO - DataFeedEventService/startDataFeed()
+2019-02-26 15:52:34,252 - root - DEBUG - DataFeedClient/create_datafeed()
+2019-02-26 15:52:35,973 - root - DEBUG - DataFeedClient/create_datafeed() succeeded: 200
+2019-02-26 15:52:35,973 - root - DEBUG - DataFeedClient/read_datafeed()
+2019-02-26 15:52:46,669 - root - DEBUG - DataFeedEventService/read_datafeed() --> Incoming data from read_datafeed(): {'messageSent': {'message': {'messageId': 'r6owyqLlGFQj7hILHAM5zn___pbXNU5VbQ', 'timestamp': 1551167566250, 'message': '<div data-format="PresentationML" data-version="2.0" class="wysiwyg"><p>/bot joke</p></div>', 'data': '{}', 'user': {'userId': 349026222343626, 'firstName': 'Victor', 'lastName': 'Tang', 'displayName': 'Victor Tang (Develop 2)', 'email': 'victor.tang@symphony.com', 'username': 'victor.tang@symphony.com'}, 'stream': {'streamId': 'Q2N-wzmLhnw9DyFceCmypH___peF2zVLdA', 'streamType': 'ROOM'}, 'externalRecipients': False, 'userAgent': 'DESKTOP-37.0.0-6971-MacOSX-10.14.3-Chrome-72.0.3626.109', 'originalFormat': 'com.symphony.messageml.v2'}}}
+2019-02-26 15:52:46,669 - root - DEBUG - msg_sent_handler function started
+2019-02-26 15:52:46,669 - root - DEBUG - room msg received
+2019-02-26 15:52:46,669 - root - DEBUG - Getting a random joke..
+2019-02-26 15:52:47,393 - root - DEBUG - MessageClient/createMessage()
+2019-02-26 15:52:51,888 - root - DEBUG - MessageClient/createMessage()
+2019-02-26 15:52:59,599 - root - DEBUG - DataFeedClient/read_datafeed()
+2019-02-26 15:53:00,874 - root - DEBUG - DataFeedEventService/read_datafeed() --> Incoming data from read_datafeed(): {'messageSent': {'message': {'messageId': 'buczo3B_4iwnJ03ki_R-yX___pbXNUShdA', 'timestamp': 1551167568738, 'message': '<div data-format="PresentationML" data-version="2.0"><div class="wysiwyg"><p>What do you call a cow with no legs?</p></div></div>', 'user': {'userId': 349026222343627, 'displayName': "Victor's Bot", 'email': 'victor.tang@example.com', 'username': 'victor.bot'}, 'stream': {'streamId': 'Q2N-wzmLhnw9DyFceCmypH___peF2zVLdA', 'streamType': 'ROOM'}, 'externalRecipients': False, 'userAgent': 'Agent-2.53.2-Linux-4.9.77-31.58.amzn1.x86_64', 'originalFormat': 'com.symphony.messageml.v2'}}}
+2019-02-26 15:53:00,874 - root - DEBUG - DataFeedClient/read_datafeed()
