@@ -102,3 +102,10 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+
+# Credentials files
+sym_api_client_python/resources/certificates/*
+sym_api_client_python/resources/bot_private_key.pem
+
+# System logs
+sym_api_client_python/logs/example.log
