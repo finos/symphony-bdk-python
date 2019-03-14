@@ -41,6 +41,7 @@ An example **main_RSA.py** has been provided to illustrate how all components wo
 Most of the time, the **port numbers** do not need to be changed.
 
 An example of json has been provided below.  (The "botRSAPath" ends with a trailing "/")
+
     {
       "sessionAuthHost": "MY_ENVIRONMENT.symphony.com",
       "sessionAuthPort": 443,
@@ -71,6 +72,7 @@ Adjust the following paths in the sample to match your configuration
  - "sym_api_client_python/resources/config.json"
 
 Example Main Class:
+
     import logging
     from sym_api_client_python.configure.configure import SymConfig
     from sym_api_client_python.auth.rsa_auth import SymBotRSAAuth
@@ -135,6 +137,7 @@ An example **main_certificate.py** has been provided to illustrate how all compo
 Most of the time, the **port numbers** do not need to be changed.
 
 An example of json has been provided below. (The "botCertPath" ends with a trailing "/")
+
     {
       "sessionAuthHost": "MY_ENVIRONMENT-api.symphony.com",
       "sessionAuthPort": 443,
@@ -168,6 +171,7 @@ Change the paths to both **log**, and **config.json**
  - "sym_api_client_python/resources/config.json"
 
 Example Main Class:
+
     import logging
     from sym_api_client_python.configure.configure import SymConfig
     from sym_api_client_python.auth.auth import Auth
