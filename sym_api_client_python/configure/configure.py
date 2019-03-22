@@ -23,6 +23,7 @@ class SymConfig:
             self.data['proxyPort'] = data['proxyPort']
             self.data['proxyUsername'] = data['proxyUsername']
             self.data['proxyPassword'] = data['proxyPassword']
+            self.data['truststorePath'] = data['truststorePath']
             read_file.close()
 
     # load Certificate configuration variables into SymConfig data
@@ -40,4 +41,5 @@ class SymConfig:
             self.data['proxyPort'] = data['proxyPort']
             self.data['proxyUsername'] = data['proxyUsername']
             self.data['proxyPassword'] = data['proxyPassword']
+            self.data['truststorePath'] = data['truststorePath']
             read_file.close()

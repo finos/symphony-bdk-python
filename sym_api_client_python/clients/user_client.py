@@ -95,7 +95,7 @@ class UserClient(APIClient):
             try:
                 super().handle_error(response, self.bot_client)
             except UnauthorizedException:
-                self.get_users_from_id_list(id_list)
+                self.get_users_from_id_list(user_id_list)
 
     def get_users_from_email_list(self, email_list, local=False):
         logging.debug('UserClient/get_users_from_email_list()')

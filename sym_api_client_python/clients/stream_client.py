@@ -167,7 +167,7 @@ class StreamClient(APIClient):
             try:
                 super().handle_error(response, self.bot_client)
             except UnauthorizedException:
-                self.get_room_members()
+                self.get_room_members(stream_id)
 
     def add_member_to_room(self, stream_id, user_id):
         logging.debug('StreamClient/addMember()')
@@ -215,7 +215,7 @@ class StreamClient(APIClient):
             }
         }
         response = requests.post(
-            url, headers=headers, json=data
+            url, headers=headers, json=data, proxies=self.proxies
         )
         if response.status_code == 200:
             return json.loads(response.text)
@@ -344,7 +344,7 @@ class StreamClient(APIClient):
             try:
                 super().handle_error(response, self.bot_client)
             except UnauthorizedException:
-                self.stream_info_v2()
+                self.stream_info_v2(stream_id)
 
     def list_streams_enterprise(self, skip=0, limit=50):
         logging.debug('StreamClient/list_streams_enterprise()')
