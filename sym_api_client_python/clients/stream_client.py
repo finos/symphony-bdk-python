@@ -13,191 +13,67 @@ class StreamClient(APIClient):
 
     def __init__(self, bot_client):
         self.bot_client = bot_client
-        self.config = self.bot_client.get_sym_config()
-        if self.config.data['proxyURL']:
-            self.proxies = {"https": self.config.data['proxyURL']}
-        else:
-            self.proxies = {}
 
     def create_im(self, users_array):
         logging.debug('StreamClient/create_im()')
-        headers = {
-            'sessionToken': self.bot_client.get_sym_auth().get_session_token()
-        }
-        url = self.config.data['podHost']+'/pod/v1/im/create'
-        response = requests.post(
-            url, json=users_array, headers=headers, proxies=self.proxies
-        )
-        if response.status_code == 200:
-            return json.loads(response.text)
-        else:
-            try:
-                super().handle_error(response, self.bot_client)
-            except UnauthorizedException:
-                self.create_im(users_array)
+        url = '/pod/v1/im/create'
+        return self.bot_client.execute_rest_call("POST", url, json=users_array)
 
     def create_im_admin(self, users_array):
         logging.debug('StreamClient/create_im_admin()')
-        headers = {
-            'sessionToken': self.bot_client.get_sym_auth().get_session_token()
-        }
-        url = self.config.data['podHost']+'/pod/v1/admin/im/create'
-        response = requests.post(
-            url, json=users_array, headers=headers, proxies=self.proxies
-        )
-        if response.status_code == 200:
-            return json.loads(response.text)
-        else:
-            try:
-                super().handle_error(response, self.bot_client)
-            except UnauthorizedException:
-                self.create_im_admin(users_array)
+        url = '/pod/v1/admin/im/create'
+        return self.bot_client.execute_rest_call("POST", url, json=users_array)
 
     # contains sample data for example's sake
     def create_room(self):
         logging.debug('StreamClient/create_room()')
-        headers = {
-            'sessionToken': self.bot_client.get_sym_auth().get_session_token()
-        }
-        url = self.config.data['podHost']+'/pod/v3/room/create'
+        url = '/pod/v3/room/create'
         data = {
             "name": "butlahsroom",
             "description": "meant for testing with butler"
         }
-        response = requests.post(
-            url, headers=headers, json=data, proxies=self.proxies
-        )
-        if response.status_code == 200:
-            return json.loads(response.text)
-        else:
-            try:
-                super().handle_error(response, self.bot_client)
-            except UnauthorizedException:
-                self.create_room()
+        return self.bot_client.execute_rest_call("POST", url, json=data)
 
     # contains example data dictionary for example sake
     def update_room(self, stream_id):
         logging.debug('StreamClient/update_room()')
-        headers = {
-            'sessionToken': self.bot_client.get_sym_auth().get_session_token()
-        }
-        url = self.config.data['podHost'] + \
-              '/pod/v3/room/{0}/update'.format(stream_id)
+        url = '/pod/v3/room/{0}/update'.format(stream_id)
         data = {
             "name": "updatedRoomName"
         }
-        response = requests.post(
-            url, headers=headers, json=data, proxies=self.proxies
-        )
-        if response.status_code == 200:
-            return json.loads(response.text)
-        else:
-            try:
-                super().handle_error(response, self.bot_client)
-            except UnauthorizedException:
-                self.update_room(stream_id)
+        return self.bot_client.execute_rest_call('POST', url, json=data)
 
     def get_room_info(self, stream_id):
         logging.debug('StreamClient/roomInfo()')
-        headers = {
-            'sessionToken': self.bot_client.get_sym_auth().get_session_token()
-        }
-        url = self.config.data['podHost'] + \
-              '/pod/v3/room/{0}/info'.format(stream_id)
-        response = requests.get(
-            url, headers=headers, proxies=self.proxies
-        )
-        if response.status_code == 200:
-            return json.loads(response.text)
-        else:
-            try:
-                super().handle_error(response, self.bot_client)
-            except UnauthorizedException:
-                self.get_room_info(stream_id)
+        url = '/pod/v3/room/{0}/info'.format(stream_id)
+        return self.bot_client.execute_rest_call('GET', url)
 
     def activate_room(self, stream_id, active=True):
         logging.debug('StreamClient/activate_room()')
-        headers = {
-            'sessionToken': self.bot_client.get_sym_auth().get_session_token()
-        }
-        url = self.config.data['podHost'] + \
-              '/pod/v1/room/{0}/setActive?active={1}'.format(stream_id, active)
-        response = requests.post(
-            url, headers=headers, proxies=self.proxies
-        )
-        if response.status_code == 200:
-            return json.loads(response.text)
-        else:
-            try:
-                super().handle_error(response, self.bot_client)
-            except UnauthorizedException:
-                self.activate_room(stream_id, active=True)
+        url = '/pod/v1/room/{0}/setActive?active={1}'.format(stream_id, active)
+        return self.bot_client.execute_rest_call('POST', url)
 
     def deactivate_room(self, stream_id, active=False):
-        logging.debug('StreamClient/deactivate_room()')
-        headers = {
-            'sessionToken': self.bot_client.get_sym_auth().get_session_token()
-        }
-        url = self.config.data['podHost'] + \
-              '/pod/v1/room/{0}/setActive?active={1}'.format(stream_id, active)
-        response = requests.post(
-            url, headers=headers, proxies=self.proxies
-        )
-        if response.status_code == 200:
-            return json.loads(response.text)
-        else:
-            try:
-                super().handle_error(response, self.bot_client)
-            except UnauthorizedException:
-                self.deactivate_room(stream_id, active=False)
+        logging.debug('StreamClient/activate_room()')
+        url = '/pod/v1/room/{0}/setActive?active={1}'.format(stream_id, active)
+        return self.bot_client.execute_rest_call('POST', url)
 
     def get_room_members(self, stream_id):
         logging.debug('StreamClient/get_room_members()')
-        headers = {
-            'sessionToken': self.bot_client.get_sym_auth().get_session_token()
-        }
-        url = self.config.data['podHost'] + \
-              '/pod/v2/room/{0}/membership/list'.format(stream_id)
-        response = requests.get(
-            url, headers=headers, proxies=self.proxies
-        )
-        if response.status_code == 200:
-            return json.loads(response.text)
-        else:
-            try:
-                super().handle_error(response, self.bot_client)
-            except UnauthorizedException:
-                self.get_room_members(stream_id)
+        url = '/pod/v2/room/{0}/membership/list'.format(stream_id)
+        return self.bot_client.execute_rest_call('GET', url)
 
     def add_member_to_room(self, stream_id, user_id):
         logging.debug('StreamClient/addMember()')
-        headers = {
-            'sessionToken': self.bot_client.get_sym_auth().get_session_token()
-        }
-        url = self.config.data['podHost'] + \
-              '/pod/v1/room/{0}/membership/add'.format(stream_id)
+        url = '/pod/v1/room/{0}/membership/add'.format(stream_id)
         data = {'id': user_id}
-        response = requests.post(
-            url, headers=headers, json=data, proxies=self.proxies
-        )
-        if response.status_code == 200:
-            return json.loads(response.text)
-        else:
-            try:
-                super().handle_error(response, self.bot_client)
-            except UnauthorizedException:
-                self.add_member_to_room(stream_id, user_id)
+        return self.bot_client.execute_rest_call('POST', url, json=data)
 
     # contains sample data dictionary for example --> see documentation for
     # further detail
     def share_room(self, stream_id):
         logging.debug('StreamClient/share_room()')
-        headers = {
-            'sessionToken': self.bot_client.get_sym_auth().get_session_token(),
-            'keyManagerToken': self.bot_client.get_sym_auth().get_key_manager_token()
-        }
-        url = self.config.data['agentHost'] + \
-              '/agent/v3/stream/{0}/share'.format(stream_id)
+        url = '/agent/v3/stream/{0}/share'.format(stream_id)
         data = {
             "type": "com.symphony.sharing.article",
             "content":{
@@ -214,100 +90,36 @@ class StreamClient(APIClient):
                 "appIconUrl": "https://apps-dev.symphony.com/ticker/assets/images/logo.png"
             }
         }
-        response = requests.post(
-            url, headers=headers, json=data, proxies=self.proxies
-        )
-        if response.status_code == 200:
-            return json.loads(response.text)
-        else:
-            try:
-                super().handle_error(response, self.bot_client)
-            except UnauthorizedException:
-                self.share_room(stream_id)
+        return self.bot_client.execute_rest_call('POST', url, json=data)
 
     def remove_member_from_room(self, stream_id, user_id):
         logging.debug('StreamClient/removeMember()')
-        headers = {
-            'sessionToken': self.bot_client.get_sym_auth().get_session_token()
-        }
-        url = self.config.data['podHost'] + \
-              '/pod/v1/room/{0}/membership/remove'.format(stream_id)
+        url = '/pod/v1/room/{0}/membership/remove'.format(stream_id)
         data = {'id': user_id}
-        response = requests.post(
-            url, headers=headers, json=data, proxies=self.proxies
-        )
-        if response.status_code == 200:
-            return json.loads(response.text)
-        else:
-            try:
-                super().handle_error(response, self.bot_client)
-            except UnauthorizedException:
-                self.remove_member_from_room(stream_id, user_id)
+        return self.bot_client.execute_rest_call('POST', url, json=data)
 
     def promote_user_to_owner(self, stream_id, user_id):
         logging.debug('StreamClient/promoteOwner()')
-        headers = {
-            'sessionToken': self.bot_client.get_sym_auth().get_session_token()
-        }
-        url = self.config.data['podHost'] + \
-              '/pod/v1/room/{0}/membership/promoteOwner'.format(stream_id)
+        url = '/pod/v1/room/{0}/membership/promoteOwner'.format(stream_id)
         data = {'id': user_id}
-        response = requests.post(
-            url, headers=headers, json=data, proxies=self.proxies
-        )
-        if response.status_code == 200:
-            return json.loads(response.text)
-        else:
-            try:
-                super().handle_error(response, self.bot_client)
-            except UnauthorizedException:
-                self.promote_user_to_owner(stream_id, user_id)
+        return self.bot_client.execute_rest_call('POST', url, json=data)
 
     def demote_user_from_owner(self, stream_id, user_id):
         logging.debug('StreamClient/demoteOwner()')
-        headers = {
-            'sessionToken': self.bot_client.get_sym_auth().get_session_token()
-        }
-        url = self.config.data['podHost'] + \
-              '/pod/v1/room/{0}/membership/demoteOwner'.format(stream_id)
+        url = '/pod/v1/room/{0}/membership/demoteOwner'.format(stream_id)
         data = {'id': user_id}
-        response = requests.post(
-            url, headers=headers, json=data, proxies=self.proxies
-        )
-        if response.status_code == 200:
-            return json.loads(response.text)
-        else:
-            try:
-                super().handle_error(response, self.bot_client)
-            except UnauthorizedException:
-                self.demote_user_from_owner(stream_id, user_id)
+        return self.bot_client.execute_rest_call('POST', url, json=data)
 
     def search_rooms(self, skip=0, limit=50):
         logging.debug('StreamClient/roomSearch()')
-        headers = {
-            'sessionToken': self.bot_client.get_sym_auth().get_session_token()
-        }
-        url = self.config.data['podHost']+'/pod/v3/room/search'
+        url = '/pod/v3/room/search'
         params = {'skip': skip, 'limit':limit}
         data = {'query': 'butlahsroom'}
-        response = requests.post(
-            url, headers=headers, params=params, json=data,
-            proxies=self.proxies
-        )
-        if response.status_code == 200:
-            return json.loads(response.text)
-        else:
-            try:
-                super().handle_error(response, self.bot_client)
-            except UnauthorizedException:
-                self.search_rooms(skip=0, limit=50)
+        return self.bot_client.execute_rest_call('POST', url, params=params, json=data)
 
     def get_user_streams(self, skip=0, limit=50):
         logging.debug('StreamClient/listUserStreams()')
-        headers = {
-            'sessionToken': self.bot_client.get_sym_auth().get_session_token()
-        }
-        url = self.config.data['podHost']+'/pod/v1/streams/list'
+        url = '/pod/v1/streams/list'
         data = {
             "streamTypes": [
                 {"type": "IM"},
@@ -317,41 +129,16 @@ class StreamClient(APIClient):
             ],
             "includeInactiveStreams": True
         }
-        response = requests.post(
-            url, headers=headers, json=data, proxies=self.proxies
-        )
-        if response.status_code == 200:
-            return json.loads(response.text)
-        else:
-            try:
-                super().handle_error(response, self.bot_client)
-            except UnauthorizedException:
-                self.get_user_streams(skip=0, limit=50)
+        return self.bot_client.execute_rest_call('POST', url, json=data)
 
     def stream_info_v2(self, stream_id):
         logging.debug('StreamClient/stream_info_v2()')
-        headers = {
-            'sessionToken': self.bot_client.get_sym_auth().get_session_token()
-        }
-        url = self.config.data['podHost'] + \
-              '/pod/v2/streams/{0}/info'.format(stream_id)
-        response = requests.get(
-            url, headers=headers, proxies=self.proxies
-        )
-        if response.status_code == 200:
-            return json.loads(response.text)
-        else:
-            try:
-                super().handle_error(response, self.bot_client)
-            except UnauthorizedException:
-                self.stream_info_v2(stream_id)
+        url = '/pod/v2/streams/{0}/info'.format(stream_id)
+        return self.bot_client.execute_rest_call('GET', url)
 
     def list_streams_enterprise(self, skip=0, limit=50):
         logging.debug('StreamClient/list_streams_enterprise()')
-        headers = {
-            'sessionToken': self.bot_client.get_sym_auth().get_session_token()
-        }
-        url = self.config.data['podHost'] + '/pod/v1/admin/streams/list'
+        url = '/pod/v1/admin/streams/list'
         params = {'skip': skip, 'limit': limit}
         data = {
               "streamTypes": [{"type": "ROOM"}],
@@ -362,24 +149,11 @@ class StreamClient(APIClient):
               "startDate": 1481575056047,
               "endDate": 1483038089833
         }
-        response = requests.post(
-            url, headers=headers, params=params, json=data,
-            proxies=self.proxies
-        )
-        if response.status_code == 200:
-            return json.loads(response.text)
-        else:
-            try:
-                super().handle_error(response, self.bot_client)
-            except UnauthorizedException:
-                self.list_streams_enterprise()
+        return self.bot_client.execute_rest_call('POST', url, params=params, json=data)
 
     def list_streams_enterprise_v2(self, skip=0, limit=50):
         logging.debug('StreamClient/list_streams_enterprise_v2()')
-        headers = {
-            'sessionToken': self.bot_client.get_sym_auth().get_session_token()
-        }
-        url = self.config.data['podHost'] + '/pod/v2/admin/streams/list'
+        url = '/pod/v2/admin/streams/list'
         params = {'skip': skip, 'limit': limit}
         data = {
               "streamTypes": [{"type": "ROOM"}],
@@ -390,32 +164,9 @@ class StreamClient(APIClient):
               "startDate": 1481575056047,
               "endDate": 1483038089833
         }
-        response = requests.post(
-            url, headers=headers, params=params, json=data,
-            proxies=self.proxies
-        )
-        if response.status_code == 200:
-            return json.loads(response.text)
-        else:
-            try:
-                super().handle_error(response, self.bot_client)
-            except UnauthorizedException:
-                self.list_streams_enterprise_v2()
+        return self.bot_client.execute_rest_call('POST', url, params=params, json=data)
 
     def get_stream_members(self, stream_id, skip=0, limit=100):
         logging.debug('StreamClient/get_stream_members()')
-        headers = {
-            'sessionToken': self.bot_client.get_sym_auth().get_session_token()
-        }
-        url = self.config.data['podHost'] + \
-              '/pod/v1/admin/stream/{0}/membership/list'.format(stream_id)
-        response = requests.post(
-            url, headers=headers, proxies=self.proxies
-        )
-        if response.status_code == 200:
-            return json.loads(response.text)
-        else:
-            try:
-                super().handle_error(response, self.bot_client)
-            except UnauthorizedException:
-                self.get_stream_members(stream_id)
+        url = '/pod/v1/admin/stream/{0}/membership/list'.format(stream_id)
+        return self.bot_client.execute_rest_call('POST', url)
