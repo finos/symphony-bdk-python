@@ -1,5 +1,6 @@
 import requests
 import json
+import logging
 
 from .datafeed_client import DataFeedClient
 from ..datafeed_event_service import DataFeedEventService
@@ -71,10 +72,13 @@ class SymBotClient(APIClient):
         if self.pod_session is None:
             self.pod_session = requests.Session()
             self.pod_session.headers.update({'sessionToken' : self.auth.get_session_token()})
-            if (self.config.data['truststorePath'] and self.config.data['truststorePath'] is not ""):
+            if (self.config.data['truststorePath']):
+                logging.debug("Setting trusstorePath for pod to {}".format(self.config.data['truststorePath']))
                 self.pod_session.verify=self.config.data['truststorePath']
-            if self.config.data['proxyURL']:
-                self.pod_session.proxies.update({"http": self.config.data['proxyURL']})
+            if self.config.data['completeProxyURL']:
+                self.pod_session.proxies.update({
+                    "http": self.config.data['completeProxyURL'],
+                    "https": self.config.data['completeProxyURL']})
         return self.pod_session
 
     def get_agent_session(self):
@@ -84,11 +88,13 @@ class SymBotClient(APIClient):
                 {'sessionToken' : self.auth.get_session_token(), 
                 'keyManagerToken': self.auth.get_key_manager_token()
                 })
-            if (self.config.data['truststorePath'] and self.config.data['truststorePath'] is not ""):
+            if (self.config.data['truststorePath']):
+                logging.debug("Setting trusstorePath for agent to {}".format(self.config.data['truststorePath']))
                 self.agent_session.verify=self.config.data['truststorePath']
-                print("Setting trusstorePath to {}".format(self.config.data['truststorePath']))
-            if self.config.data['proxyURL']:
-                self.agent_session.proxies.update({"http": self.config.data['proxyURL']})
+            if self.config.data['completeProxyURL']:
+                self.agent_session.proxies.update({
+                    "http": self.config.data['completeProxyURL'],
+                    "https": self.config.data['completeProxyURL']})
         return self.agent_session
     
     def execute_rest_call(self, method, path, **kwargs):

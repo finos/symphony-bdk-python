@@ -1,4 +1,5 @@
 import json
+import logging
 
 
 class SymConfig:
@@ -24,6 +25,8 @@ class SymConfig:
             self.data['proxyUsername'] = data['proxyUsername']
             self.data['proxyPassword'] = data['proxyPassword']
             self.data['truststorePath'] = data['truststorePath']
+            self.data['completeProxyURL'] = self.build_proxy_url()
+            
             read_file.close()
 
     # load Certificate configuration variables into SymConfig data
@@ -42,4 +45,21 @@ class SymConfig:
             self.data['proxyUsername'] = data['proxyUsername']
             self.data['proxyPassword'] = data['proxyPassword']
             self.data['truststorePath'] = data['truststorePath']
+            self.data['completeProxyURL'] = self.build_proxy_url()
+
             read_file.close()
+
+    def build_proxy_url(self):
+        logging.debug('SymConfig/build_proxy_url()')
+        proxy_builder = ""
+        if (self.data['proxyURL']):
+            proxy_builder = 'http://'
+            if (self.data['proxyUsername']):
+                proxy_builder += self.data['proxyUsername']
+                if (self.data['proxyPassword']):
+                    proxy_builder += ':' + self.data['proxyPassword']
+                proxy_builder += '@' + self.data['proxyURL']
+                if(self.data['proxyPort']):
+                    proxy_builder += ':' + self.data['proxyPort']
+        logging.debug('Proxy is set to: ' + proxy_builder)
+        return proxy_builder

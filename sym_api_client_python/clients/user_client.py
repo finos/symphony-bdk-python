@@ -31,7 +31,7 @@ class UserClient(APIClient):
         return self.bot_client.execute_rest_call('GET', url, params=params)
 
     def get_user_from_id(self, user_id, local=False):
-        logging.debug('UserClient/get_user_from_id')
+        logging.debug('UserClient/get_user_from_id()')
         url = '/pod/v2/user'
         params = {'uid': user_id, 'local':local}
         return self.bot_client.execute_rest_call('GET', url, params=params)
