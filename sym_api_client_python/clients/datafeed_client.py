@@ -24,4 +24,8 @@ class DataFeedClient(APIClient):
     def read_datafeed(self, datafeed_id):
         logging.debug('DataFeedClient/read_datafeed()')
         url = '/agent/v4/datafeed/{0}/read'.format(datafeed_id)
-        return self.bot_client.execute_rest_call("GET", url)
+        new_events = []
+        datafeed_read = self.bot_client.execute_rest_call("GET", url)
+        if (datafeed_read != []):
+            new_events.append(datafeed_read)
+        return new_events

@@ -13,7 +13,6 @@ class MessageClient(APIClient):
 
     def __init__(self, bot_client):
         self.bot_client = bot_client
-        self.config = self.bot_client.get_sym_config()
 
     def get_msg_from_stream(self, stream_id, since, **kwargs):
         logging.debug('MessageClient/get_msg_from_stream()')
