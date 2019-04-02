@@ -31,6 +31,7 @@ class SymBotClient(APIClient):
         self.api_client = None
         self.pod_session = None
         self.agent_session = None
+        self.bot_user_info = None
 
     def get_datafeed_event_service(self):
         if self.datafeed_event_service is None:
@@ -98,7 +99,7 @@ class SymBotClient(APIClient):
             url = self.config.data["agentHost"] + path
             session = self.get_agent_session()
         elif path.startswith("/pod/"):
-            url = self.config.data["sessionHost"] + path
+            url = self.config.data["podHost"] + path
             session = self.get_pod_session()
         else:
             url = path
@@ -124,3 +125,8 @@ class SymBotClient(APIClient):
                 {'sessionToken' : self.auth.get_session_token(), 
                 'keyManagerToken': self.auth.get_key_manager_token()
                 })
+
+    def get_bot_user_info(self):
+        if (self.bot_user_info is None):
+            self.bot_user_info = self.get_user_client().get_session_user()
+        return self.bot_user_info

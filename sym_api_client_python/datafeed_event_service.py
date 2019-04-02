@@ -64,8 +64,8 @@ class DataFeedEventService:
                             events[0]['payload'])
                     )
                     for event in events:
-                        if event['initiator']['user']['email'] != \
-                                self.bot_client.config.data['botEmailAddress']:
+                        if event['initiator']['user']['userId'] != \
+                                self.bot_client.get_bot_user_info()['id']:
                             self.handle_event(event)
                 else:
                     logging.debug(

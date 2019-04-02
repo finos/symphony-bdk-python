@@ -60,4 +60,5 @@ class UserClient(APIClient):
 
     def get_session_user(self):
         logging.debug('UserClient/get_session_user()')
-        url = ''
+        url = '/pod/v2/sessioninfo'
+        return self.bot_client.execute_rest_call('GET', url)
