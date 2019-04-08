@@ -53,7 +53,7 @@ class SymConfig:
         logging.debug('SymConfig/build_proxy_url()')
         proxy_builder = ""
         if (self.data['proxyURL']):
-            proxy_builder = 'http://'
+            proxy_builder = ''
             if (self.data['proxyUsername']):
                 proxy_builder += self.data['proxyUsername']
                 if (self.data['proxyPassword']):
