@@ -1,7 +1,6 @@
 import json
 import logging
 
-
 class SymConfig:
     # initialize object by passing in path to config file
     # store configuration data in variable data
@@ -21,7 +20,6 @@ class SymConfig:
             self.data['botUsername'] = data['botUsername']
             self.data['botEmailAddress'] = data['botEmailAddress']
             self.data['proxyURL'] = data['proxyURL']
-            self.data['proxyPort'] = data['proxyPort']
             self.data['proxyUsername'] = data['proxyUsername']
             self.data['proxyPassword'] = data['proxyPassword']
             self.data['truststorePath'] = data['truststorePath']
@@ -41,7 +39,6 @@ class SymConfig:
             self.data['botEmailAddress'] = data['botEmailAddress']
             self.data['p.12'] = data['botCertPath'] + data['botCertName']
             self.data['proxyURL'] = data['proxyURL']
-            self.data['proxyPort'] = data['proxyPort']
             self.data['proxyUsername'] = data['proxyUsername']
             self.data['proxyPassword'] = data['proxyPassword']
             self.data['truststorePath'] = data['truststorePath']
@@ -51,15 +48,18 @@ class SymConfig:
 
     def build_proxy_url(self):
         logging.debug('SymConfig/build_proxy_url()')
-        proxy_builder = ""
+        built_proxy_string = ''
         if (self.data['proxyURL']):
-            proxy_builder = ''
+            proxy_url = self.data['proxyURL']
+            proxy_user_password_string = ''
             if (self.data['proxyUsername']):
-                proxy_builder += self.data['proxyUsername']
+                proxy_user_password_string = self.data['proxyUsername']
                 if (self.data['proxyPassword']):
-                    proxy_builder += ':' + self.data['proxyPassword']
-                proxy_builder += '@' + self.data['proxyURL']
-                if(self.data['proxyPort']):
-                    proxy_builder += ':' + self.data['proxyPort']
-        logging.debug('Proxy is set to: ' + proxy_builder)
-        return proxy_builder
+                    proxy_user_password_string += ':' + self.data['proxyPassword']
+                proxy_user_password_string += '@'
+            hostname_index = self.data['proxyURL'].find("://")
+            if (hostname_index != -1):
+                hostname_index += 3
+                built_proxy_string = proxy_url[:hostname_index] + proxy_user_password_string + proxy_url[hostname_index:]
+        logging.debug('Proxy is set to: ' + built_proxy_string)
+        return built_proxy_string
