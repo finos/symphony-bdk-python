@@ -21,11 +21,14 @@ class SymBotRSAAuth(APIClient):
         self.last_auth_time = 0
         self.session_token = None
         self.key_manager_token = None
-        if self.config.data['proxyURL']:
-            self.proxies = {
-                "https": 'https://' + self.config.data['proxyURL']
-                         + ':' + str(self.config.data['proxyPort'])}
-            print(self.proxies)
+        self.auth_session = requests.Session()
+        if (self.config.data['truststorePath']):
+            logging.debug("Setting trusstorePath for auth to {}".format(self.config.data['truststorePath']))
+            self.auth_session.verify=self.config.data['truststorePath']
+        if self.config.data['completeProxyURL']:
+            self.auth_session.proxies.update({
+                "http": self.config.data['completeProxyURL'],
+                "https": self.config.data['completeProxyURL']})
         else:
             self.proxies = {}
 
@@ -86,7 +89,7 @@ class SymBotRSAAuth(APIClient):
             'token': self.create_jwt()
         }
         url = self.config.data['sessionAuthHost']+'/login/pubkey/authenticate'
-        response = requests.post(url, json=data, proxies=self.proxies)
+        response = self.auth_session.post(url, json=data)
         if response.status_code == 200:
             data = json.loads(response.text)
             self.session_token = data['token']
@@ -103,7 +106,7 @@ class SymBotRSAAuth(APIClient):
             'token': self.create_jwt()
         }
         url = self.config.data['keyAuthHost']+'/relay/pubkey/authenticate'
-        response = requests.post(url, json=data)
+        response = self.auth_session.post(url, json=data)
         if response.status_code == 200:
             data = json.loads(response.text)
             self.key_manager_token = data['token']
