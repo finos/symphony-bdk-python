@@ -234,6 +234,16 @@ To interact with the joke bot, try ``/bot joke``
 Symphony REST API offer a range of capabilities for application to integrate, visit the [official documentation](https://rest-api.symphony.com/reference) for more information.
 
 # Release Notes
+## 0.1.13
+- Rewrite clients to use python sessions.
+- Moved over requests to sessions for consistent headers, proxies and truststore
+- Fixed auth using sessionAuth for both sessionAuth and keyAuth
+- Fixed functions that pre-populated payload to accept params
+- Datafeed now utilizes session user to determine userId
+- Update to ProxyURL. No longer prepend http://
+- Changed config.json for Proxy to mirror Java SDK
+
+
 ## 0.1.12
 - The updates in this release may break your existing bot implementation.  Please ensure you review and test against this client prior to deployment in Production.
 - Extensively renamed client libraries to follow PEP8 Python standard.  Naming now follows "snake_case" convention.
