@@ -24,6 +24,7 @@ class SymBotClient(APIClient):
     def __init__(self, auth, config):
         self.auth = auth
         self.config = config
+        self.agentConfig = config
         self.datafeed_event_service = None
         self.datafeed_client = None
         self.msg_client = None
@@ -65,6 +66,9 @@ class SymBotClient(APIClient):
     def get_sym_config(self):
         return self.config
 
+    def get_sym_agent_config(self):
+        return self.agentConfig
+
     def get_sym_auth(self):
         return self.auth
 
@@ -92,9 +96,7 @@ class SymBotClient(APIClient):
                 logging.debug("Setting trusstorePath for agent to {}".format(self.config.data['truststorePath']))
                 self.agent_session.verify=self.config.data['truststorePath']
             if self.config.data['completeProxyURL']:
-                self.agent_session.proxies.update({
-                    "http": self.config.data['completeProxyURL'],
-                    "https": self.config.data['completeProxyURL']})
+                self.agent_session.proxies.update({})
         return self.agent_session
     
     def execute_rest_call(self, method, path, **kwargs):

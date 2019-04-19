@@ -17,13 +17,16 @@ class Auth:
         :param config: Object contains all certificate configurations
         """
         self.config = config
+        self.agentConfig = config
         self.last_auth_time = 0
         self.session_token = None
         self.key_manager_token = None
         self.auth_session = requests.Session()
+        self.kmAuth_session = requests.Session()
         if (self.config.data['truststorePath']):
             logging.debug("Setting trusstorePath for auth to {}".format(self.config.data['truststorePath']))
             self.auth_session.verify=self.config.data['truststorePath']
+            self.kmAuth_session.verify = self.config.data['truststorePath']
         if self.config.data['completeProxyURL']:
             self.auth_session.proxies.update({
                 "http": self.config.data['completeProxyURL'],
@@ -43,6 +46,21 @@ class Auth:
                 pkcs12_filename=self.config.data['p.12'],
                 pkcs12_password=self.config.data['botCertPassword']
             ))
+
+        self.kmAuth_session.mount(
+            self.config.data['sessionAuthHost'],
+            Pkcs12Adapter(
+                pkcs12_filename=self.config.data['p.12'],
+                pkcs12_password=self.config.data['botCertPassword']
+            ))
+        self.kmAuth_session.mount(
+            self.config.data['keyAuthHost'],
+            Pkcs12Adapter(
+                pkcs12_filename=self.config.data['p.12'],
+                pkcs12_password=self.config.data['botCertPassword']
+            ))
+
+        self.kmAuth_session.proxies.update({})
 
     def get_session_token(self):
         """Return the session token"""
@@ -98,7 +116,7 @@ class Auth:
         passed in through Request Session object
         """
         logging.debug('Auth/get_keyauth()')
-        response = self.auth_session.post(
+        response = self.kmAuth_session.post(
             self.config.data['keyAuthHost'] +
             '/keyauth/v1/authenticate'
         )
