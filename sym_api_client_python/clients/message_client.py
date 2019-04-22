@@ -20,7 +20,7 @@ class MessageClient(APIClient):
         params = {
             'since': since
         }
-        params = params.update(kwargs)
+        params.update(kwargs)
         return self.bot_client.execute_rest_call('GET', url, params=params)
 
     def send_msg(self, stream_id, outbound_msg):
@@ -75,7 +75,7 @@ class MessageClient(APIClient):
         params = {
             'query': query
         }
-        params = params.update(kwargs)
+        params.update(kwargs)
         return self.bot_client.execute_rest_call("GET", url, params=params)
 
     def get_msg_status(self, msg_id):
