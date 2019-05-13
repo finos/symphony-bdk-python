@@ -9,7 +9,7 @@ class MessageProcessor:
     def process(self, msg):
         msg_xml = msg['message']
         msg_root = ET.fromstring(msg_xml)
-        msg_txt = msg_root[0].text
+        msg_txt = msg_root.text
 
         if '/bot' in msg_txt and 'joke' in msg_txt:
             joke_client = JokeClient(self.bot_client)
