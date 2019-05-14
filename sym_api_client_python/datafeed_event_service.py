@@ -64,8 +64,8 @@ class DataFeedEventService:
                             events[0]['payload'])
                     )
                     for event in events:
-                        if event['initiator']['user']['email'] != \
-                                self.bot_client.config.data['botEmailAddress']:
+                        if event['initiator']['user']['userId'] != \
+                                self.bot_client.get_bot_user_info()['id']:
                             self.handle_event(event)
                 else:
                     logging.debug(
@@ -84,7 +84,7 @@ class DataFeedEventService:
     # to proper handling function there is a handle_event function that
     # corresponds to each eventType
     def handle_event(self, payload):
-        print('event handler')
+        logging.debug('DataFeedEventService/handle_event()')
         event_type = str(payload['type'])
         if event_type == 'MESSAGESENT':
             self.msg_sent_handler(payload)
