@@ -145,6 +145,6 @@ class SymBotClient(APIClient):
             )
 
     def get_bot_user_info(self):
-        if not self.bot_user_info:
+        if self.bot_user_info is None:
             self.bot_user_info = self.get_user_client().get_session_user()
         return self.bot_user_info
