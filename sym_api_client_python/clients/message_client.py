@@ -42,8 +42,8 @@ class MessageClient(APIClient):
         }
         return self.bot_client.execute_rest_call("POST", url, data=data, headers=headers)
 
-    def get_msg_attachments(self, stream_id, msg_id, file_id):
-        logging.debug('MessageClient/get_msg_attachments()')
+    def get_msg_attachment(self, stream_id, msg_id, file_id):
+        logging.debug('MessageClient/get_msg_attachment()')
         url = '/agent/v1/stream/{0}/attachment'.format(stream_id)
         params = {
             'messageId': msg_id,
