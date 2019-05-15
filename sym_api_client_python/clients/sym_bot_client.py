@@ -9,6 +9,7 @@ from .stream_client import StreamClient
 from .api_client import APIClient
 from .user_client import UserClient
 from ..exceptions.UnauthorizedException import UnauthorizedException
+from json.decoder import JSONDecodeError
 
 # SymBotClient class is the Client class that has access to all of the other
 # client classes upon initialization, SymBotClient class gets an instance of
@@ -116,7 +117,10 @@ class SymBotClient(APIClient):
         if response.status_code == 204:
             results = []
         elif response.status_code == 200:
-            results = json.loads(response.text)
+            try:
+                results = json.loads(response.text)
+            except JSONDecodeError:
+                results = response.text
         else:
             try:
                 super().handle_error(response, self)
