@@ -97,3 +97,8 @@ class MessageClient(APIClient):
         logging.debug('MessageClient/list_msg_receipts()')
         url = '/pod/v1/admin/messages/{0}/receipts'.format(msg_id)
         return self.bot_client.example('GET', url)
+
+    def list_stream_attachments(self, stream_id):
+        logging.debug('MessageClient/list_msg_attachments()')
+        url = '/pod/v1/streams/{0}/attachments'.format(stream_id)
+        return self.bot_client.execute_rest_call('GET', url)
