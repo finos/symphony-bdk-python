@@ -228,8 +228,14 @@ Example Main Class:
     
 
 
+### 4 - Converting JKS (Java Key Store) to Python truststore
+The Python SDK truststore requires that your certificates be in a .pem file that is a collection of your certificates. You can convert JKSto a .p12 and then convert to .pem:
 
-### 4 - Interacting with the joke bot!
+    keytool -importkeystore -srckeystore myapp.jks -destkeystore myapp.p12 -srcalias myapp-dev -srcstoretype jks -deststoretype pkcs12
+
+    openssl pkcs12 -in myapp.p12 -out myapp.pem
+
+### 5 - Interacting with the joke bot!
 The joke bot shows how a Symphony chat bot application works. In general, a chat bot application keeps polling the [datafeed](https://rest-api.symphony.com/reference#read-messagesevents-stream-v4) API for new messages, then it sends the messages to listeners to handle,
 depending on the message type.
 
