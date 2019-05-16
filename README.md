@@ -51,19 +51,48 @@ An example of json has been provided below.  (The "botRSAPath" ends with a trail
       "podPort": 443,
       "agentHost": "MY_ENVIRONMENT.symphony.com",
       "agentPort": 443,
+
+      // For bot RSA authentication
       "botRSAPath":"./sym_api_client_python/resources/",
       "botRSAName": "bot_private_key.pem",
+
+      // For bot cert authentication
+      "botCertPath": "/path/to/bot-cert/",
+      "botCertName": "/bot-cert.p12",
+
       "botUsername": "YOUR_BOT_USERNAME",
       "botEmailAddress": "YOUR_BOT_EMAIL_ADDRESS",
+
       "appCertPath": "",
       "appCertName": "",
       "appCertPassword": "",
-      "proxyURL": "",
-      "proxyPort": "",
-      "proxyUsername": "",
-      "proxyPassword": "",
       "authTokenRefreshPeriod": "30"
+     
+      // Optional: If all the traffic goes through a single proxy, set this parameter. If using multiple proxies or only using a proxy for some of the components, set them below and don't useproxyURL
+      "proxyURL": "http://localhost:8888",
+      "proxyUsername": "proxy-username",
+      "proxyPassword": "proxy-password",
+
+      // Optional: set this if traffic to pod goes through a specific, unique proxy
+      "podProxyURL": "http://localhost:8888",
+      "podProxyUsername": "proxy-username",
+      "podProxyPassword": "proxy-password",
+
+      // Optional: set this if traffic to agent goes through a specific, unique proxy
+      "agentProxyURL": "http://localhost:8888",
+      "agentProxyUsername": "proxy-username",
+      "agentProxyPassword": "proxy-password",
+
+      // Optional: set this if traffic to KeyManager goes through a specific, unique proxy
+      "keyManagerProxyURL": "http://localhost:8888",
+      "keyManagerProxyUsername": "proxy-username",
+      "keyManagerProxyPassword": "proxy-password",
+
+
+      // Optional: If a truststore is required to access on-prem components. Needs to be .pem file.  Instructions below for converting JKS to python pem truststore
+      "truststore": "/path/to/truststore.pem" 
     }
+
 
 
 ### Example main class (using RSA)
