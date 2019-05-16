@@ -1,6 +1,6 @@
 import logging
 from .room_listener import RoomListener
-from .chatbot.message_processor import MessageProcessor
+from .simple_message_processor import MessageProcessor
 # A sample implementation of Abstract RoomListener class
 # The listener can respond to incoming events if the respective event
 # handler has been implemented
