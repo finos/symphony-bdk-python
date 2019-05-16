@@ -10,20 +10,22 @@ from sym_api_client_python.listeners.room_listener_test_imp import \
 
 def configure_logging():
         logging.basicConfig(
-                filename='sym_api_client_python/logs/example.log',
+                filename='./logs/example.log',
                 format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                filemode='w', level=logging.DEBUG)
+                filemode='w', level=logging.DEBUG
+        )
         logging.getLogger("urllib3").setLevel(logging.WARNING)
 
 
 def main():
-        print('Python Client runs using certificate authentication')
+        print('Python Client runs using Cert authentication')
+
         # Configure log
         configure_logging()
 
-        # Certificate Auth flow: Pass in path to config file
-        configure = SymConfig('sym_api_client_python/resources/config.json')
-        configure.load_cert_config()
+        # Cert Auth flow: pass path to certificate config.json file
+        configure = SymConfig('../resources/config.json')
+        configure.load_config()
         auth = Auth(configure)
         auth.authenticate()
 
@@ -41,10 +43,11 @@ def main():
         room_listener_test = RoomListenerTestImp(bot_client)
         datafeed_event_service.add_room_listener(room_listener_test)
 
-        # create data feed and read datafeed continuously in while loop.
-        print('starting datafeed')
+        # Create and read the datafeed
+        print('Starting datafeed')
         datafeed_event_service.start_datafeed()
 
 
 if __name__ == "__main__":
     main()
+
