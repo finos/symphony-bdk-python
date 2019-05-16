@@ -29,13 +29,18 @@ and [RSA Public/Private Key Pair Authentication](https://symphony-developers.sym
 ### 2 - Implement the event listeners
 As an example, the **roomListenerTestImp** has been implemented to respond with "Hello World", to a chat room in which there is an incoming message. To respond to other types of events, respective Listeners need to be implemented.
 
-### 3.1 - Run bot with RSA Public/Private Key Pair
+### 3.1 - Run bot with config.json
 **RSA Public/Private Key Pair** is the recommended authentication mechanism by Symphony, due to its robust security and simplicity.
 
 To run the bot using the **RSA Public/Private Key Pair**, a **rsa_config.json** should be provided. In our example, the json file resides in the
 **resources** folder but it can be anywhere.
 
 An example **main_RSA.py** has been provided to illustrate how all components work together.
+
+To run the bot using the **Client Certificates Authentication**, a **config.json** should be provided. In our example, the json file resides in the
+**resources** folder but it can be anywhere.
+
+An example **main_certificate.py** has been provided to illustrate how all components work together.
 
 **Notes:**
 Most of the time, the **port numbers** do not need to be changed.
@@ -113,82 +118,49 @@ Example Main Class:
 
 
     def configure_logging():
-            logging.basicConfig(
-                    filename='sym_api_client_python/logs/example.log',
-                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    filemode='w', level=logging.DEBUG
-            )
-            logging.getLogger("urllib3").setLevel(logging.WARNING)
+        logging.basicConfig(
+                filename='./logs/example.log',
+                format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                filemode='w', level=logging.DEBUG
+        )
+        logging.getLogger("urllib3").setLevel(logging.WARNING)
 
 
     def main():
-            print('Python Client runs using RSA authentication')
+        print('Python Client runs using RSA authentication')
 
-            # Configure log
-            configure_logging()
+        # Configure log
+        configure_logging()
 
-            # RSA Auth flow: pass path to rsa_config.json file
-            configure = SymConfig('sym_api_client_python/resources'
-                                  '/rsa_config.json')
-            configure.load_rsa_config()
-            auth = SymBotRSAAuth(configure)
-            auth.authenticate()
+        # RSA Auth flow: pass path to rsa config.json file
+        configure = SymConfig('../resources/config.json')
+        configure.load_config()
+        auth = SymBotRSAAuth(configure)
+        auth.authenticate()
 
-            # Initialize SymBotClient with auth and configure objects
-            bot_client = SymBotClient(auth, configure)
+        # Initialize SymBotClient with auth and configure objects
+        bot_client = SymBotClient(auth, configure)
 
-            # Initialize datafeed service
-            datafeed_event_service = bot_client.get_datafeed_event_service()
+        # Initialize datafeed service
+        datafeed_event_service = bot_client.get_datafeed_event_service()
 
-            # Initialize listener objects and append them to datafeed_event_service
-            # Datafeed_event_service polls the datafeed and the event listeners
-            # respond to the respective types of events
-            im_listener_test = IMListenerTestImp(bot_client)
-            datafeed_event_service.add_im_listener(im_listener_test)
-            room_listener_test = RoomListenerTestImp(bot_client)
-            datafeed_event_service.add_room_listener(room_listener_test)
+        # Initialize listener objects and append them to datafeed_event_service
+        # Datafeed_event_service polls the datafeed and the event listeners
+        # respond to the respective types of events
+        im_listener_test = IMListenerTestImp(bot_client)
+        datafeed_event_service.add_im_listener(im_listener_test)
+        room_listener_test = RoomListenerTestImp(bot_client)
+        datafeed_event_service.add_room_listener(room_listener_test)
 
-            # Create and read the datafeed
-            print('Starting datafeed')
-            datafeed_event_service.start_datafeed()
+        # Create and read the datafeed
+        print('Starting datafeed')
+        datafeed_event_service.start_datafeed()
 
 
     if __name__ == "__main__":
         main()
 
-### 3.2 - Run bot with Certificates
-To run the bot using the **Client Certificates Authentication**, a **config.json** should be provided. In our example, the json file resides in the
-**resources** folder but it can be anywhere.
 
-An example **main_certificate.py** has been provided to illustrate how all components work together.
-
-**Notes:**
-Most of the time, the **port numbers** do not need to be changed.
-
-An example of json has been provided below. (The "botCertPath" ends with a trailing "/")
-
-    {
-      "sessionAuthHost": "MY_ENVIRONMENT-api.symphony.com",
-      "sessionAuthPort": 443,
-      "keyAuthHost": "MY_ENVIRONMENT-api.symphony.com",
-      "keyAuthPort": 443,
-      "podHost": "MY_ENVIRONMENT.symphony.com",
-      "podPort": 443,
-      "agentHost": "MY_ENVIRONMENT.symphony.com",
-      "agentPort": 443,
-      "botCertPath": "./sym_api_client_python/resources/certificates/",
-      "botCertName": "my_bot_cert.p12",
-      "botCertPassword": "YOUR_PASSWORD",
-      "botEmailAddress": "YOUR_BOT_EMAIL_ADDRESS",
-      "appCertPath": "",
-      "appCertName": "",
-      "appCertPassword": "",
-      "proxyURL": "",
-      "proxyPort": 8080,
-      "proxyUsername": "",
-      "proxyPassword": "",
-      "authTokenRefreshPeriod": "30"
-    }
 
 ### Run with Example main class (using certificates)
 Once the certificates are provided and example listeners are implemented, let's run the bot by executing following command:
@@ -212,45 +184,48 @@ Example Main Class:
 
 
     def configure_logging():
-            logging.basicConfig(
-                    filename='sym_api_client_python/logs/example.log',
-                    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-                    filemode='w', level=logging.DEBUG)
-            logging.getLogger("urllib3").setLevel(logging.WARNING)
+        logging.basicConfig(
+                filename='./logs/example.log',
+                format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+                filemode='w', level=logging.DEBUG
+        )
+        logging.getLogger("urllib3").setLevel(logging.WARNING)
 
 
     def main():
-            print('Python Client runs using certificate authentication')
-            # Configure log
-            configure_logging()
+        print('Python Client runs using Cert authentication')
 
-            # Certificate Auth flow: Pass in path to config file
-            configure = SymConfig('sym_api_client_python/resources/config.json')
-            configure.load_cert_config()
-            auth = Auth(configure)
-            auth.authenticate()
+        # Configure log
+        configure_logging()
 
-            # Initialize SymBotClient with auth and configure objects
-            bot_client = SymBotClient(auth, configure)
+        # Cert Auth flow: pass path to certificate config.json file
+        configure = SymConfig('../resources/config.json')
+        configure.load_config()
+        auth = Auth(configure)
+        auth.authenticate()
 
-            # Initialize datafeed service
-            datafeed_event_service = bot_client.get_datafeed_event_service()
+        # Initialize SymBotClient with auth and configure objects
+        bot_client = SymBotClient(auth, configure)
 
-            # Initialize listener objects and append them to datafeed_event_service
-            # Datafeed_event_service polls the datafeed and the event listeners
-            # respond to the respective types of events
-            im_listener_test = IMListenerTestImp(bot_client)
-            datafeed_event_service.add_im_listener(im_listener_test)
-            room_listener_test = RoomListenerTestImp(bot_client)
-            datafeed_event_service.add_room_listener(room_listener_test)
+        # Initialize datafeed service
+        datafeed_event_service = bot_client.get_datafeed_event_service()
 
-            # create data feed and read datafeed continuously in while loop.
-            print('starting datafeed')
-            datafeed_event_service.start_datafeed()
+        # Initialize listener objects and append them to datafeed_event_service
+        # Datafeed_event_service polls the datafeed and the event listeners
+        # respond to the respective types of events
+        im_listener_test = IMListenerTestImp(bot_client)
+        datafeed_event_service.add_im_listener(im_listener_test)
+        room_listener_test = RoomListenerTestImp(bot_client)
+        datafeed_event_service.add_room_listener(room_listener_test)
+
+        # Create and read the datafeed
+        print('Starting datafeed')
+        datafeed_event_service.start_datafeed()
 
 
     if __name__ == "__main__":
         main()
+    
 
 
 
@@ -263,6 +238,11 @@ To interact with the joke bot, try ``/bot joke``
 Symphony REST API offer a range of capabilities for application to integrate, visit the [official documentation](https://rest-api.symphony.com/reference) for more information.
 
 # Release Notes
+## 0.1.14
+- Added podProxyURL, agentProxyURL, and keyManagerProxyURL as supported parameters in the config.json and config loader. If proxyURL is set, all of these proxies will be set to that URL. Otherwise, it will use the proxy address provided.
+- merge to using the same method in configure.py to load RSA and Cert
+
+
 ## 0.1.13
 - Rewrite clients to use python sessions.
 - Moved over requests to sessions for consistent headers, proxies and truststore
