@@ -42,12 +42,12 @@ class MessageClient(APIClient):
         }
         return self.bot_client.execute_rest_call("POST", url, data=data, headers=headers)
 
-    def get_msg_attachments(self, stream_id, msg_id, file_id):
-        logging.debug('MessageClient/get_msg_attachments()')
+    def get_msg_attachment(self, stream_id, msg_id, file_id):
+        logging.debug('MessageClient/get_msg_attachment()')
         url = '/agent/v1/stream/{0}/attachment'.format(stream_id)
         params = {
-            'msg_id': msg_id,
-            'file_id': file_id
+            'messageId': msg_id,
+            'fileId': file_id
         }
         return self.bot_client.execute_rest_call("GET", url, params=params)
 
@@ -97,3 +97,8 @@ class MessageClient(APIClient):
         logging.debug('MessageClient/list_msg_receipts()')
         url = '/pod/v1/admin/messages/{0}/receipts'.format(msg_id)
         return self.bot_client.example('GET', url)
+
+    def list_stream_attachments(self, stream_id):
+        logging.debug('MessageClient/list_msg_attachments()')
+        url = '/pod/v1/streams/{0}/attachments'.format(stream_id)
+        return self.bot_client.execute_rest_call('GET', url)
