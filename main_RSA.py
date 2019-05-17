@@ -7,9 +7,10 @@ from sym_api_client_python.listeners.\
 from sym_api_client_python.listeners.\
         room_listener_test_imp import RoomListenerTestImp
 
+
 def configure_logging():
         logging.basicConfig(
-                filename='./logs/example.log',
+                filename='sym_api_client_python/logs/example.log',
                 format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                 filemode='w', level=logging.DEBUG
         )
@@ -22,9 +23,10 @@ def main():
         # Configure log
         configure_logging()
 
-        # RSA Auth flow: pass path to rsa config.json file
-        configure = SymConfig('../resources/config.json')
-        configure.load_config()
+        # RSA Auth flow: pass path to rsa_config.json file
+        configure = SymConfig('sym_api_client_python/resources'
+                              '/rsa_config.json')
+        configure.load_rsa_config()
         auth = SymBotRSAAuth(configure)
         auth.authenticate()
 
@@ -49,4 +51,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
