@@ -4,7 +4,6 @@ import datetime
 import time
 import logging
 
-from requests import Session
 from jose import jwt
 from ..clients.api_client import APIClient
 
@@ -23,11 +22,15 @@ class SymBotRSAAuth(APIClient):
         self.session_token = None
         self.key_manager_token = None
         self.auth_session = requests.Session()
-        self.key_manager_auth_session = requests.Session()
-
-        
-        self.auth_session.proxies.update(self.config.data['podProxyRequestObject'])
-        self.key_manager_auth_session.proxies.update(self.config.data['keyManagerProxyRequestObject'])
+        if (self.config.data['truststorePath']):
+            logging.debug("Setting trusstorePath for auth to {}".format(self.config.data['truststorePath']))
+            self.auth_session.verify=self.config.data['truststorePath']
+        if self.config.data['completeProxyURL']:
+            self.auth_session.proxies.update({
+                "http": self.config.data['completeProxyURL'],
+                "https": self.config.data['completeProxyURL']})
+        else:
+            self.proxies = {}
 
     def get_session_token(self):
         """Return the session token"""
@@ -42,8 +45,8 @@ class SymBotRSAAuth(APIClient):
         Get the session and key manager token
         """
         logging.debug('Auth/authenticate()')
-        if (self.last_auth_time == 0) or \
-                (int(round(time.time() * 1000) - self.last_auth_time >= 3000)):
+        if (self.last_auth_time == 0) or (int(round(time.time() * 1000) -
+                                              self.last_auth_time >= 3000)):
             logging.debug('Auth/authenticate() --> needed to authenticate')
             self.last_auth_time = int(round(time.time() * 1000))
             self.session_authenticate()
@@ -87,34 +90,26 @@ class SymBotRSAAuth(APIClient):
         }
         url = self.config.data['sessionAuthHost']+'/login/pubkey/authenticate'
         response = self.auth_session.post(url, json=data)
-
         if response.status_code == 200:
             data = json.loads(response.text)
-            logging.debug('RSA/session token success')
             self.session_token = data['token']
         else:
-            logging.debug('RSA_auth/get_session_token() function failed: {}'.format(
-                response.status_code)
-            )
-            self.session_authenticate()
+            logging.debug('RSA_auth/get_session_token() function failed')
+            self.authenticate()
 
     def key_manager_authenticate(self):
         """
         Get the key manager token by calling API using jwt token
         """
-        logging.debug('RSA_auth/get_keyauth()')
+        logging.debug('RSA_auth/get_keyauth() function started')
         data = {
             'token': self.create_jwt()
         }
         url = self.config.data['keyAuthHost']+'/relay/pubkey/authenticate'
-        response = self.key_manager_auth_session.post(url, json=data)
-
+        response = self.auth_session.post(url, json=data)
         if response.status_code == 200:
             data = json.loads(response.text)
-            logging.debug('RSA/keymanager token success')
             self.key_manager_token = data['token']
         else:
-            logging.debug(
-                    'RSA_auth/get_keyauth() failed: {}'.format(response.status_code)
-                    )
-            self.key_manager_authenticate()
+            logging.debug('RSA_auth/get_keyauth() function failed')
+            self.authenticate()

@@ -22,7 +22,7 @@ class APIClient:
         elif response.status_code == 401:
             logging.debug('handling 401 error')
             if not bot_client:
-                bot_client.get_sym_auth().authenticate()
+                bot_client.reauth_client()
                 raise UnauthorizedException(
                     'User, unauthorized, refreshing tokens: {}'
                         .format(response.status_code))
