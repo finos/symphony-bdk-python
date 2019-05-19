@@ -76,13 +76,12 @@ class SymBotClient(APIClient):
         if self.pod_session is None:
             self.pod_session = requests.Session()
             self.pod_session.headers.update({'sessionToken' : self.auth.get_session_token()})
+            
+            self.pod_session.proxies.update(self.config.data['podProxyRequestObject']
             if (self.config.data['truststorePath']):
                 logging.debug("Setting trusstorePath for pod to {}".format(self.config.data['truststorePath']))
                 self.pod_session.verify=self.config.data['truststorePath']
-            if self.config.data['completeProxyURL']:
-                self.pod_session.proxies.update({
-                    "http": self.config.data['completeProxyURL'],
-                    "https": self.config.data['completeProxyURL']})
+
         return self.pod_session
 
     def get_agent_session(self):
@@ -92,11 +91,11 @@ class SymBotClient(APIClient):
                 {'sessionToken' : self.auth.get_session_token(), 
                 'keyManagerToken': self.auth.get_key_manager_token()
                 })
+            self.agent_session.proxies.update(self.config.data['agentProxyRequestObject'])
             if (self.config.data['truststorePath']):
                 logging.debug("Setting trusstorePath for agent to {}".format(self.config.data['truststorePath']))
                 self.agent_session.verify=self.config.data['truststorePath']
-            if self.config.data['completeProxyURL']:
-                self.agent_session.proxies.update({})
+
         return self.agent_session
     
     def execute_rest_call(self, method, path, **kwargs):
