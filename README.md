@@ -244,7 +244,7 @@ To interact with the joke bot, try ``/bot joke``
 Symphony REST API offer a range of capabilities for application to integrate, visit the [official documentation](https://rest-api.symphony.com/reference) for more information.
 
 # Release Notes
-## 0.1.14
+## 0.1.15
 - Added podProxyURL, agentProxyURL, and keyManagerProxyURL as supported parameters in the config.json and config loader. If proxyURL is set, all of these proxies will be set to that URL. Otherwise, it will use the proxy address provided.
 - merge to using the same method in configure.py to load RSA and Cert
 
