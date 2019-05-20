@@ -14,7 +14,7 @@ class IMListenerTestImp(IMListener):
     """
 
     def __init__(self, sym_bot_client):
-        self.botClient = sym_bot_client
+        self.bot_client = sym_bot_client
         
     def on_im_message(self, im_message):
         logging.debug('message received in IM', im_message)
