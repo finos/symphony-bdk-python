@@ -64,7 +64,7 @@ An example of json has been provided below.  (The "botPrivateKeyPath" ends with 
       // For bot cert authentication
       "botCertPath": "/path/to/bot-cert/",
       "botCertName": "/bot-cert.p12",
-      "botCertPassword": "bot-cert-password',
+      "botCertPassword": "bot-cert-password",
 
       "botUsername": "YOUR_BOT_USERNAME",
       "botEmailAddress": "YOUR_BOT_EMAIL_ADDRESS",
