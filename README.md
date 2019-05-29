@@ -45,7 +45,7 @@ An example **main_certificate.py** has been provided to illustrate how all compo
 **Notes:**
 Most of the time, the **port numbers** do not need to be changed.
 
-An example of json has been provided below.  (The "botRSAPath" ends with a trailing "/")
+An example of json has been provided below.  (The "botPrivateKeyPath" ends with a trailing "/")
 
     {
       "sessionAuthHost": "MY_ENVIRONMENT.symphony.com",
@@ -58,12 +58,13 @@ An example of json has been provided below.  (The "botRSAPath" ends with a trail
       "agentPort": 443,
 
       // For bot RSA authentication
-      "botRSAPath":"./sym_api_client_python/resources/",
-      "botRSAName": "bot_private_key.pem",
+      "botPrivateKeyPath":"./sym_api_client_python/resources/",
+      "botPrivateKeyName": "bot_private_key.pem",
 
       // For bot cert authentication
       "botCertPath": "/path/to/bot-cert/",
       "botCertName": "/bot-cert.p12",
+      "botCertPassword": "bot-cert-password",
 
       "botUsername": "YOUR_BOT_USERNAME",
       "botEmailAddress": "YOUR_BOT_EMAIL_ADDRESS",

@@ -33,9 +33,13 @@ class SymConfig:
                 self.data['agentHost'] = 'https://'+ data['agentHost'] + ':' + str(data['agentPort'])
             else:
                 self.data['agentHost'] = 'https://'+ data['agentHost']
-
+            
+            #backwards compatible
             if 'botRSAName' in data:
                 self.data['botRSAPath'] = data['botRSAPath'] + data['botRSAName']
+            
+            if 'botPrivateKeyName' in data:
+                self.data['botRSAPath'] = data['botPrivateKeyPath'] + data['botPrivateKeyName']
 
             if 'botCertName' in data:
                 self.data['p.12'] = data['botCertPath'] + data['botCertName']
