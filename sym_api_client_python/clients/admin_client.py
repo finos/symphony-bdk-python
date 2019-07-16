@@ -14,16 +14,7 @@ class AdminClient(APIClient):
 
     def __init__(self, bot_client):
         self.bot_client = bot_client
-"""
-    def list_enterprise_streams(self, stream_id, since, **kwargs):
-        logging.debug('AdminClient/list_enterprise_streams()')
-        url = '/pod/v2/admin/streams/list'
-        params = {
-            'since': since
-        }
-        params.update(kwargs)
-        return self.bot_client.execute_rest_call('GET', url, params=params)
-"""
+
     def admin_get_user(self, user_id):
         """
         Returns details for a particular user.
