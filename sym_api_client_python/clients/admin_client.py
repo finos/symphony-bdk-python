@@ -177,8 +177,8 @@ class AdminClient(APIClient):
         """
         logging.debug('AdminClient/admin_update_user_status()')
         url = '/pod/v1/admin/user/{0}/status/update'.format(user_id)
-        params = {'status': status}
-        return self.bot_client.execute_rest_call("POST", url, params=params)
+        data  = {'status': status}
+        return self.bot_client.execute_rest_call("POST", url, json=data)
 
     def admin_list_pod_features(self):
         """
@@ -241,7 +241,7 @@ Calling this endpoint requires the User Provisioning role with ACCESS_USER_PROVI
         url = '/pod/v1/admin/user/{0}/features/update'.format(user_id)
         return self.bot_client.execute_rest_call("POST", url, json=feature_list)
 
-    def admin_find_users(self, filters={}, skip=0, limit=50):
+    def admin_find_users(self, filters, skip=0, limit=50):
         """
         Finds a list of users based on a specified role or feature entitlement.
 
