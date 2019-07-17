@@ -256,7 +256,7 @@ Calling this endpoint requires the User Provisioning role with ACCESS_USER_PROVI
         logging.debug('AdminClient/admin_find_users()')
         url = '/pod/v1/admin/user/find'
         params = {'skip': skip, 'limit': limit}
-        self.bot_client.execute_rest_call("POST", url, params=params, json=filters)
+        return self.bot_client.execute_rest_call("POST", url, params=params, json=filters)
 
     def admin_list_roles(self):
         """
