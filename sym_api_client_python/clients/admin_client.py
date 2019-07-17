@@ -259,7 +259,7 @@ Calling this endpoint requires the User Provisioning role with ACCESS_USER_PROVI
         headers = {
                 'cache-control': 'no-cache'
         }
-        self.bot_client.execute_rest_call("POST", url, params=params, headers=headers, data=filters)
+        self.bot_client.execute_rest_call("POST", url, params=params, headers=headers, json=filters)
 
     def admin_list_roles(self):
         """
