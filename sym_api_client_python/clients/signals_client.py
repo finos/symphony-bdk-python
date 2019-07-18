@@ -99,9 +99,9 @@ class SignalsClient(APIClient):
         return self.bot_client.execute_rest_call("POST", url, json=user_id_array)
 
 
-    def get_signals(self, signal_id, skip=0, limit=50):
+    def get_subscribers(self, signal_id, skip=0, limit=50):
         """ Gets the subscribers for the specified signal."""
-        logging.debug('SignalsClient/get_signals()')
+        logging.debug('SignalsClient/get_subscribers()')
         url = '/agent/v1/signals/{0}/subscribers'.format(signal_id) 
         params = {'skip': skip, 'limit': limit}
         return self.bot_client.execute_rest_call("GET", url, params=params)
