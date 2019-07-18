@@ -9,6 +9,7 @@ from .stream_client import StreamClient
 from .api_client import APIClient
 from .user_client import UserClient
 from .admin_client import AdminClient
+from .signals_client import SignalsClient
 from .connections_client import ConnectionsClient
 from ..exceptions.UnauthorizedException import UnauthorizedException
 from json.decoder import JSONDecodeError
