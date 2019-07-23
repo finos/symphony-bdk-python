@@ -5,7 +5,7 @@ from .api_client import APIClient
 from ..exceptions.UnauthorizedException import UnauthorizedException
 
 # child class of APIClient --> Extends error handling functionality
-# AdminClient class contains a series of functions corresponding to all
+# ConnectionsClient class contains a series of functions corresponding to all
 # pod admin endpoints on the REST API.
 class ConnectionsClient(APIClient):
 

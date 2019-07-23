@@ -9,6 +9,7 @@ from .stream_client import StreamClient
 from .api_client import APIClient
 from .user_client import UserClient
 from .admin_client import AdminClient
+from .signals_client import SignalsClient
 from .connections_client import ConnectionsClient
 from ..exceptions.UnauthorizedException import UnauthorizedException
 from json.decoder import JSONDecodeError
@@ -34,6 +35,7 @@ class SymBotClient(APIClient):
         self.stream_client = None
         self.user_client = None
         self.connection_client = None
+        self.signals_client = None
         self.admin_client = None
         self.api_client = None
         self.pod_session = None
@@ -59,6 +61,11 @@ class SymBotClient(APIClient):
         if self.admin_client is None:
             self.admin_client = AdminClient(self)
         return self.admin_client
+
+    def get_signals_client(self):
+        if self.signals_client is None:
+            self.signals_client = SignalsClient(self)
+        return self.signals_client
 
     def get_connections_client(self):
         if self.connections_client is None:
