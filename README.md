@@ -95,8 +95,8 @@ An example of json has been provided below.  (The "botPrivateKeyPath" ends with 
       "keyManagerProxyPassword": "proxy-password",
 
 
-      // Optional: If a truststore is required to access on-prem components. Needs to be .pem file.  Instructions below for converting JKS to python pem truststore
-      "truststore": "/path/to/truststore.pem" 
+      // Required: If a truststore is required to access on-prem components, provide a path to the python truststore. Needs to be .pem file.  Instructions below for converting JKS to python pem truststore. If truststore is not needed, set value as empty string ("").
+      "truststorePath": "/path/to/truststore.pem" 
     }
 
 
@@ -245,6 +245,14 @@ To interact with the joke bot, try ``/bot joke``
 Symphony REST API offer a range of capabilities for application to integrate, visit the [official documentation](https://rest-api.symphony.com/reference) for more information.
 
 # Release Notes
+## 0.1.17
+- Added AdminClient, SignalsClient, and ConnectionsClient
+- Added docstrings to new methods
+- Added clarification to README
+
+## 0.1.16
+- Re-released 0.1.15 due to merge issues
+
 ## 0.1.15
 - Added podProxyURL, agentProxyURL, and keyManagerProxyURL as supported parameters in the config.json and config loader. If proxyURL is set, all of these proxies will be set to that URL. Otherwise, it will use the proxy address provided.
 - merge to using the same method in configure.py to load RSA and Cert
