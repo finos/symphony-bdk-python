@@ -8,7 +8,7 @@ def readme():
 
 setuptools.setup(
     name="sym_api_client_python",
-    version="0.1.17",
+    version="0.1.18",
     author="Symphony Platform Solutions",
     author_email="platformsolutions@symphony.com",
     description="Symphony REST API - Python Client",
