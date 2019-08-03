@@ -1,6 +1,8 @@
 import logging
 from .exceptions.UnauthorizedException import UnauthorizedException
 
+#for testing
+import json
 
 class DataFeedEventService:
 
@@ -11,6 +13,8 @@ class DataFeedEventService:
         self.room_listeners = []
         self.im_listeners = []
         self.connection_listeners = []
+        self.elements_listeners = []
+        self.registered_triggers = []
         self.stop = False
         self.datafeed_client = self.bot_client.get_datafeed_client()
 
@@ -37,6 +41,9 @@ class DataFeedEventService:
     def remove_connection_listener(self, connection_listener):
         self.connection_listeners.remove(connection_listener)
 
+    def add_elements_listener(self, elements_listener):
+        self.elements_listeners.append(elements_listener)
+
     def activate_datafeed(self):
         if self.stop:
             self.stop = False
@@ -44,6 +51,25 @@ class DataFeedEventService:
     def deactivate_datafeed(self):
         if not self.stop:
             self.stop = True
+
+    #to be edited
+    def register_trigger_pattern(self, pattern_to_match, commands):
+        trigger = (pattern_to_match, commands)
+        self.registered_triggers.append(trigger)
+    
+    #probably want to create separate entity to store action trigger
+    def register_trigger_action(self, action, value):
+        trigger = (action, value)
+        self.registered_triggers.append(trigger)
+
+    def check_message_for_trigger(self, payload):
+        #check message for trigger, can pass this function to 
+        #the event handlers, and then set a local flag based on the value
+        logic_matches = []
+        if logic_matches:
+            return True
+        else:
+            return False
 
     # read_datafeed function reads an array of events
     # read_datafeed function reads an array of events coming back from
@@ -64,6 +90,8 @@ class DataFeedEventService:
                             events[0]['payload'])
                     )
                     for event in events:
+                        #consider adding a debug flag for demos/testing
+                        #print(json.dumps(event, indent=4))
                         if event['initiator']['user']['userId'] != \
                                 self.bot_client.get_bot_user_info()['id']:
                             self.handle_event(event)
@@ -108,11 +136,13 @@ class DataFeedEventService:
             self.connection_accepted_handler(payload)
         elif event_type == 'CONNECTIONREQUESTED':
             self.connection_requested_handler(payload)
+        elif event_type == 'SYMPHONYELEMENTSACTION':
+            self.elements_action_handler(payload)
         else:
             logging.debug('no event detected')
             return
 
-    # heck streamType --> send data to appropriate listener
+    # check streamType --> send data to appropriate listener
     def msg_sent_handler(self, payload):
         logging.debug('msg_sent_handler function started')
         stream_type = payload['payload']['messageSent']['message']['stream']['streamType']
@@ -200,3 +230,11 @@ class DataFeedEventService:
         logging.debug(connection_requested_data)
         for listener in self.connection_listeners:
             listener.on_connection_requested(connection_requested_data)
+
+    def elements_action_handler(self, payload):
+        print('action received')
+        logging.debug('elements_action_handler')
+        elements_action_data = payload['payload']['symphonyElementsAction']
+        logging.debug(elements_action_data)
+        for listener in self.elements_listeners:
+            listener.on_elements_action(elements_action_data)
