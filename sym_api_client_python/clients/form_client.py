@@ -158,18 +158,30 @@ class Form:
                 with tag('table'):
                     with tag('thead'):
                         with tag('tr'):
-                            line('td', 'Select')
-                            for i in self.table_selectors:
-                                for j in i[3]:
-                                    line('td', j)
+                            if self.table_selectors[0][1] == 'button':
+                                print(self.table_selectors[0][1])
+                                line('td', 'Select')
+                                for i in self.table_selectors:
+                                    for j in i[3]:
+                                        line('td', j)
+                            else:
+                                print('cehck!')
+                                with tag('td'):
+                                    doc.input(name = 'table-header', type = 'checkbox')
+                                for i in self.table_selectors:
+                                    for j in i[3]:
+                                        line('td', j)
 
                     with tag('tbody'):
                             for i in self.table_selectors:
                                     for num, j in enumerate(i[4], start=1):
                                         with tag('tr'):
                                             with tag('td'):
-                                                with tag('button', name=i[2]+str(num)):
-                                                    text('Button')
+                                                if self.table_selectors[0][1] == 'button':
+                                                    with tag('button', name=i[2]+str(num)):
+                                                        text('Button')
+                                                else:
+                                                    doc.input(name=i[2]+str(num), type='checkbox')
                                             for k in j:
                                                 line('td', k)
 
@@ -177,8 +189,11 @@ class Form:
                             for i in self.table_selectors:
                                 with tag('tr'):
                                     with tag('td'):
-                                        with tag('button', name="footer"):
-                                            text('Button')
+                                        if self.table_selectors[0][1] == 'button':
+                                            with tag('button', name="footer"):
+                                                text('Button')
+                                        else:
+                                            doc.input(name='table-footer', type='checkbox')
                                     for j in i[5]:
                                         line('td', j)
 
@@ -188,8 +203,8 @@ class Form:
 
 myform = Form('reed_form')
 myform.set_header('My Object', 'h4')
-myform.add_button_to_form('reed', 'Button1', 'action')
-myform.add_button_to_form('karl', 'Button2', 'action')
+myform.add_button_to_form('reedButton', 'Button1', 'action')
+myform.add_button_to_form('karlButton', 'Button2', 'action')
 myform.add_text_field_to_form('id1', 'Input some text...')
 myform.add_masked_text_field_to_form('id1', 'Input some text...')
 myform.add_text_area_to_form('id', 'My name is..')
@@ -199,7 +214,7 @@ myform.add_dropdown_menu_to_form([('dropdown', 'false', 'value1', 'false', 'Reed
                                      ('dropdown', 'false', 'value2', 'false', 'Reeds Option2'),
                                      ('dropdown', 'false', 'value3', 'false', 'Reeds Option3')])
 myform.add_person_selector_to_form('awesome-users', 'enter names...')
-myform.add_table_selector_to_form('left', 'button', 'table-button', ['H1', 'H2', 'H3'], [["A1", "B1", "C1"],
+myform.add_table_selector_to_form('left', 'checkbox', 'table-box', ['H1', 'H2', 'H3'], [["A1", "B1", "C1"],
                                                                             ["A2", "B2", "C2"],
                                                                     ["A3", "B3", "C3"]], ["F1","F2","F3"])
 myform.create_message_ML()
