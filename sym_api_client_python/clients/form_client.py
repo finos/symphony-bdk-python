@@ -25,17 +25,17 @@ class Form:
         header = (size,text)
         self.headers.append(header)
 
-    def add_button_to_form(self, name, text, button_type='action'):
+    def add_button_to_form(self, name, text, type='action'):
         """
         This function adds a button to a form element.
         Users must specify the name and type.
         If no type is given, it's type will be set by default to 'action'
         """
-        button = (name, button_type, text)
+        button = (name, type, text)
         self.buttons.append(button)
 
 
-    def add_text_field_to_form(self, name, text, placeholder='', required='true', maxlength=100, minlength=0):
+    def add_text_field_to_form(self, name, text, placeholder='', required='true', maxlength=128, minlength=1):
         """
         This function adds a text field to a form element.
         Users must specifiy a name and/or optional parameters placeholder,
@@ -44,7 +44,7 @@ class Form:
         text_field = (name, placeholder, required, maxlength, minlength, text)
         self.text_fields.append(text_field)
 
-    def add_masked_text_field_to_form(self, name, text, placeholder='', required='true', masked='true', maxlength = 100, minlength=0):
+    def add_masked_text_field_to_form(self, name, text, placeholder='', required='true', masked='true', maxlength = 128, minlength=1):
         """
         This function adds a masked text field to a form.
         Users must specifiy a name and/or optional parameters placeholder, masked,
@@ -111,7 +111,7 @@ class Form:
         person_selector = (name, placeholder, required)
         self.person_selectors.append(person_selector)
 
-    def add_table_selector_to_form(self, position, type, header_list, body_list, footer_list):
+    def add_table_selector_to_form(self, position, type, button_name, header_list, body_list, footer_list):
         """
         This function adds a table selector to the form element
         Users must specify a type (button or checkbox) and position (left or right)
@@ -119,7 +119,7 @@ class Form:
         body, and footer data corresponding to this table.
 
         """
-        table_selector = (position, type, header_list, body_list, footer_list)
+        table_selector = (position, type, button_name, header_list, body_list, footer_list)
         self.table_selectors.append(table_selector)
 
 
@@ -130,7 +130,7 @@ class Form:
                 with tag(self.headers[0][0]):
                     text(self.headers[0][1])
                 for i, j, k in self.buttons:
-                    with tag('button', name=i, button_type=j):
+                    with tag('button', name=i, type=j):
                         text(k)
                 for i,j,k,l,m,n in self.text_fields:
                     with tag('text-field', name=i, placeholder=j, required=k, maxlength=l, minlength=m):
@@ -142,10 +142,10 @@ class Form:
                     with tag('textarea', name=i, placeholder=j, required=k):
                         text(l)
                 for i,j,k,l in self.check_boxes:
-                    with tag('checkbox', name=i, placeholder=j, required=k):
+                    with tag('checkbox', name=i, value=j, checked=k):
                         text(l)
                 for i,j,k,l in self.radio_buttons:
-                    with tag('radio', name=i, placeholder=j, required=k):
+                    with tag('radio', name=i, value=j, checked=k):
                         text(l)
                 for i in self.dropdown_menu_groups:
                     with tag('select', name=i[0][0], required=i[0][3]):
@@ -158,26 +158,32 @@ class Form:
                 with tag('table'):
                     with tag('thead'):
                         with tag('tr'):
-                            doc.stag('td', 'Select')
+                            line('td', 'Select')
                             for i in self.table_selectors:
-                                for j in i[2]:
-                                    doc.stag('td', j)
+                                for j in i[3]:
+                                    line('td', j)
 
                     with tag('tbody'):
                             for i in self.table_selectors:
-                                    for j in i[3]:
+                                    for num, j in enumerate(i[4], start=1):
                                         with tag('tr'):
+                                            with tag('td'):
+                                                with tag('button', name=i[2]+str(num)):
+                                                    text('Button')
                                             for k in j:
-                                                doc.stag('td', k)
+                                                line('td', k)
 
                     with tag('tfoot'):
                             for i in self.table_selectors:
                                 with tag('tr'):
-                                    for j in i[4]:
-                                        doc.stag('td', j)
+                                    with tag('td'):
+                                        with tag('button', name="footer"):
+                                            text('Button')
+                                    for j in i[5]:
+                                        line('td', j)
 
 
-            print(doc.getvalue())
+        print(doc.getvalue())
 
 
 myform = Form('reed_form')
@@ -193,7 +199,7 @@ myform.add_dropdown_menu_to_form([('dropdown', 'false', 'value1', 'false', 'Reed
                                      ('dropdown', 'false', 'value2', 'false', 'Reeds Option2'),
                                      ('dropdown', 'false', 'value3', 'false', 'Reeds Option3')])
 myform.add_person_selector_to_form('awesome-users', 'enter names...')
-myform.add_table_selector_to_form('left', 'button', ['H1', 'H2', 'H3'], [["A1", "B1", "C1"],
+myform.add_table_selector_to_form('left', 'button', 'table-button', ['H1', 'H2', 'H3'], [["A1", "B1", "C1"],
                                                                             ["A2", "B2", "C2"],
                                                                     ["A3", "B3", "C3"]], ["F1","F2","F3"])
 myform.create_message_ML()
