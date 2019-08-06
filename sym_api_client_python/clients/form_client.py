@@ -1,5 +1,5 @@
 
-class Form:
+class FormClient:
 
     """
     To start using Symphony Elements, you first need to create a form using the
