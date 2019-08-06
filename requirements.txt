@@ -2,3 +2,4 @@ sym-api-client-python
 urllib3<1.25,>=1.21.
 requests-pkcs12==1.4
 requests-toolbelt==0.9.1
+yattag==1.12.2
