@@ -261,44 +261,80 @@ class Form:
                 with tag('table'):
                     with tag('thead'):
                         with tag('tr'):
-                            if self.table_selectors[0][1] == 'button':
-                                print(self.table_selectors[0][1])
-                                line('td', 'Select')
-                                for i in self.table_selectors:
-                                    for j in i[3]:
-                                        line('td', j)
+                            if self.table_selectors[0][0] == 'left':
+                                if self.table_selectors[0][1] == 'button':
+                                    print('left and button')
+                                    line('td', 'Select')
+                                    for i in self.table_selectors:
+                                        for j in i[3]:
+                                            line('td', j)
+                                else:
+                                    print('left and checkbox')
+                                    with tag('td'):
+                                        doc.input(name = 'table-header', type = 'checkbox')
+                                    for i in self.table_selectors:
+                                        for j in i[3]:
+                                            line('td', j)
                             else:
-                                print('cehck!')
-                                with tag('td'):
-                                    doc.input(name = 'table-header', type = 'checkbox')
-                                for i in self.table_selectors:
-                                    for j in i[3]:
-                                        line('td', j)
+                                if self.table_selectors[0][1] == 'button':
+                                    print('right and button')
+                                    for i in self.table_selectors:
+                                        for j in i[3]:
+                                            line('td', j)
+                                    line('td', 'Select')
+
+                                else:
+                                    print('right and checkbox')
+                                    for i in self.table_selectors:
+                                        for j in i[3]:
+                                            line('td', j)
+                                    with tag('td'):
+                                        doc.input(name = 'table-header', type = 'checkbox')
 
                     with tag('tbody'):
                             for i in self.table_selectors:
                                     for num, j in enumerate(i[4], start=1):
                                         with tag('tr'):
-                                            with tag('td'):
-                                                if self.table_selectors[0][1] == 'button':
-                                                    with tag('button', name=i[2]+str(num)):
-                                                        text('Button')
-                                                else:
-                                                    doc.input(name=i[2]+str(num), type='checkbox')
-                                            for k in j:
-                                                line('td', k)
+                                            if self.table_selectors[0][0] == 'left':
+                                                with tag('td'):
+                                                    if self.table_selectors[0][1] == 'button':
+                                                        with tag('button', name=i[2]+str(num)):
+                                                            text('Button')
+                                                    else:
+                                                        doc.input(name=i[2]+str(num), type='checkbox')
+                                                for k in j:
+                                                    line('td', k)
+                                            else:
+                                                for k in j:
+                                                    line('td', k)
+                                                with tag('td'):
+                                                    if self.table_selectors[0][1] == 'button':
+                                                        with tag('button', name=i[2]+str(num)):
+                                                            text('Button')
+                                                    else:
+                                                        doc.input(name=i[2]+str(num), type='checkbox')
 
                     with tag('tfoot'):
                             for i in self.table_selectors:
                                 with tag('tr'):
-                                    with tag('td'):
-                                        if self.table_selectors[0][1] == 'button':
-                                            with tag('button', name="footer"):
-                                                text('Button')
-                                        else:
-                                            doc.input(name='table-footer', type='checkbox')
-                                    for j in i[5]:
-                                        line('td', j)
+                                    if self.table_selectors[0][0] == 'left':
+                                        with tag('td'):
+                                            if self.table_selectors[0][1] == 'button':
+                                                with tag('button', name="footer"):
+                                                    text('Button')
+                                            else:
+                                                doc.input(name='table-footer', type='checkbox')
+                                        for j in i[5]:
+                                            line('td', j)
+                                    else:
+                                        for j in i[5]:
+                                            line('td', j)
+                                        with tag('td'):
+                                            if self.table_selectors[0][1] == 'button':
+                                                with tag('button', name="footer"):
+                                                    text('Button')
+                                            else:
+                                                doc.input(name='table-footer', type='checkbox')
 
 
         print(doc.getvalue())
