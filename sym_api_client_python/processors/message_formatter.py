@@ -62,13 +62,11 @@ class MessageFormatter:
                         with tag('tr'):
                             if form_object.table_selectors[0][0] == 'left':
                                 if form_object.table_selectors[0][1] == 'button':
-                                    print('left and button')
                                     line('td', 'Select')
                                     for i in form_object.table_selectors:
                                         for j in i[3]:
                                             line('td', j)
                                 else:
-                                    print('left and checkbox')
                                     with tag('td'):
                                         doc.input(name = 'table-header', type = 'checkbox')
                                     for i in form_object.table_selectors:
@@ -76,14 +74,12 @@ class MessageFormatter:
                                             line('td', j)
                             else:
                                 if form_object.table_selectors[0][1] == 'button':
-                                    print('right and button')
                                     for i in form_object.table_selectors:
                                         for j in i[3]:
                                             line('td', j)
                                     line('td', 'Select')
 
                                 else:
-                                    print('right and checkbox')
                                     for i in form_object.table_selectors:
                                         for j in i[3]:
                                             line('td', j)
