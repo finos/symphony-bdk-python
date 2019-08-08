@@ -6,6 +6,11 @@ class MessageFormatter:
         pass
 
     def format_message(self, message):
+        """
+        appends messageML tags to plain text and returns a dictionary:
+
+        {message : messageML object}
+        """
         doc,tag,text,line = Doc().ttl()
         with tag('messageML'):
             text(message)
@@ -13,18 +18,12 @@ class MessageFormatter:
 
     def format_element(self, form_object):
         """
-        create_messageML(FormObject)  --> messageML Object
+        create_messageML() takes in a form object, parses its attritubes/metadata and returns
+        a dictionary: {message : messageML object}.  This is the correct format to send
+        in the Create Message v4 REST call.
 
-        create_messageML() uses the Yattag python library in order to generate MessageML
-        This function takes in a form object, parses its attritubes/metadata and outputes
-        a messageML object.  This messageML object is bootstrapped properly with <form> and
+        This messageML object is bootstrapped properly with <form> and
         <messageML> tags so that it can be rendered as an Element as is.
-
-        Pass the messageML Object into the message_client.send_msg() function:
-
-        message_to_send = dict(message = messageML Object)
-        message_client.send_msg(stream, message_to_send)
-        This renders a Form Element in the corresponding stream.
         """
 
         doc, tag, text, line = Doc().ttl()
