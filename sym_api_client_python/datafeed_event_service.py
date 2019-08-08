@@ -56,14 +56,14 @@ class DataFeedEventService:
     def register_trigger_pattern(self, pattern_to_match, commands):
         trigger = (pattern_to_match, commands)
         self.registered_triggers.append(trigger)
-    
+
     #probably want to create separate entity to store action trigger
     def register_trigger_action(self, action, value):
         trigger = (action, value)
         self.registered_triggers.append(trigger)
 
     def check_message_for_trigger(self, payload):
-        #check message for trigger, can pass this function to 
+        #check message for trigger, can pass this function to
         #the event handlers, and then set a local flag based on the value
         logic_matches = []
         if logic_matches:
@@ -232,7 +232,6 @@ class DataFeedEventService:
             listener.on_connection_requested(connection_requested_data)
 
     def elements_action_handler(self, payload):
-        print('action received')
         logging.debug('elements_action_handler')
         elements_action_data = payload['payload']['symphonyElementsAction']
         logging.debug(elements_action_data)
