@@ -86,8 +86,8 @@ class DataFeedEventService:
                     events = data[0]
                     logging.debug(
                         'DataFeedEventService/read_datafeed() --> '
-                        'Incoming data from read_datafeed(): {}'.format(
-                            events[0]['payload'])
+                        'Incoming data from read_datafeed(): {}'.format(json.dumps(events[0]['payload'], indent=4)
+                            )
                     )
                     for event in events:
                         #consider adding a debug flag for demos/testing
@@ -157,83 +157,71 @@ class DataFeedEventService:
     def instant_msg_handler(self, payload):
         logging.debug('instant_msg_handler function started')
         instant_message_data = payload['payload']['instantMessageCreated']
-        logging.debug(instant_message_data)
         for listener in self.im_listeners:
             listener.on_im_created(instant_message_data)
 
     def room_created_handler(self, payload):
         logging.debug('room_created_handler function started')
         room_created_data = payload['payload']['roomCreated']
-        logging.debug(room_created_data)
         for listener in self.room_listeners:
             listener.on_room_created(room_created_data)
 
     def room_updated_handler(self, payload):
         logging.debug('room_updated_handler')
         room_updated_data = payload['payload']['roomUpdated']
-        logging.debug(room_updated_data)
         for listener in self.room_listeners:
             listener.on_room_updated(room_updated_data)
 
     def room_deactivated_handler(self, payload):
         logging.debug('room_deactivated_handler')
         room_deactivated_data = payload['payload']['roomDeactivated']
-        logging.debug(room_deactivated_data)
         for listener in self.room_listeners:
             listener.on_room_deactivated(room_deactivated_data)
 
     def room_reactivated_handler(self, payload):
         logging.debug('room_reactivated_handler')
         room_reactivated_data = payload['payload']['roomReactivated']
-        logging.debug(room_reactivated_data)
         for listener in self.room_listeners:
             listener.on_room_reactivated(room_reactivated_data)
 
     def user_joined_room_handler(self, payload):
         logging.debug('user_joined_room_handler')
         user_joined_room_data = payload['payload']['userJoinedRoom']
-        logging.debug(user_joined_room_data)
         for listener in self.room_listeners:
             listener.on_user_joined_room(user_joined_room_data)
 
     def user_left_room_handler(self, payload):
         logging.debug('user_left_room_handler')
         user_left_room_data = payload['payload']['userLeftRoom']
-        logging.debug(user_left_room_data)
         for listener in self.room_listeners:
             listener.on_user_left_room(user_left_room_data)
 
     def promoted_to_owner(self, payload):
         logging.debug('promoted_to_owner')
         promoted_to_owner_data = payload['payload']['roomMemberPromotedToOwner']
-        logging.debug(promoted_to_owner_data)
         for listener in self.room_listeners:
             listener.on_room_member_promoted_to_owner(promoted_to_owner_data)
 
     def demoted_to_owner(self, payload):
         logging.debug('demoted_to_Owner')
         demoted_to_owner_data = payload['payload']['roomMemberDemotedFromOwner']
-        logging.debug(demoted_to_owner_data)
         for listener in self.room_listeners:
             listener.on_room_member_demoted_from_owner(demoted_to_owner_data)
 
     def connection_accepted_handler(self, payload):
         logging.debug('connection_accepted_handler')
         connection_accepted_data = payload['payload']['connectionAccepted']
-        logging.debug(connection_accepted_data)
         for listener in self.connection_listeners:
             listener.on_connection_accepted(connection_accepted_data)
 
     def connection_requested_handler(self, payload):
         logging.debug('connection_requested_handler')
         connection_requested_data = payload['payload']['connectionRequested']
-        logging.debug(connection_requested_data)
         for listener in self.connection_listeners:
             listener.on_connection_requested(connection_requested_data)
 
     def elements_action_handler(self, payload):
         logging.debug('elements_action_handler')
         elements_action_data = payload['payload']['symphonyElementsAction']
-        logging.debug(elements_action_data)
         for listener in self.elements_listeners:
             listener.on_elements_action(elements_action_data)

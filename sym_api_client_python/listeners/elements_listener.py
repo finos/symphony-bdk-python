@@ -15,10 +15,3 @@ class ElementsActionListener(ABC):
         """
         Do Something
         """
-
-    #maybe unnecesary
-    @abstractmethod
-    def on_elements_action_trigger(self, action, trigger):
-        """
-        Do Something
-        """
