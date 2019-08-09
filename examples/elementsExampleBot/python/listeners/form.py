@@ -1,6 +1,8 @@
+#IMPORT FormClient Class from sym_api_client_python
 from sym_api_client_python.clients.form_client import FormClient
 
 
+#CREATE AN INSTANCE OF FormClient:
 myform = FormClient('reed_form')
 myform.set_header('My Object', 'h4')
 myform.add_button_to_form('Button1', 'Button1', 'action')

@@ -1,6 +1,8 @@
 import xml.etree.ElementTree as ET
 import logging
+#IMPORT MessageFormatter Class from sym_api_client_python
 from sym_api_client_python.processors.message_formatter import MessageFormatter
+#IMPORT instance of Form Object (myform) from form.py
 from .form import myform
 
 
@@ -20,6 +22,9 @@ class MessageProcessor:
         #format message to send in MessageML see: https://developers.symphony.com/symphony-developer/docs/messagemlv2
         self.msg_to_send = self.message_formatter.format_message('Hello ' + self.msg['user']['firstName']  + ' , you entered: ' +self.msg_txt)
         self.help_message = self.message_formatter.format_message('Command List: ' + '/createroom [roomname] : creates room with roomname')
+
+        #PROCESS FORM OBJECT AND FORMAT SO THAT ITS A MESSAGEML OBJECT
+        #AS A MESSAGEML OBJECT, USERS CAN SEND IT AS A MESSAGE
         self.elements_message = self.message_formatter.format_element(myform)
         self.default_message = self.message_formatter.format_message('type /help to list commands')
         #access send_msg() function in sym_api_client_python

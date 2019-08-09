@@ -1,16 +1,16 @@
 import logging
 
-#Import IMListener class from SDK
-#IMListener is an interface
-#IMListenerTestImp implements this IMListener Interface
+#Import ElementsActionListener class from sym_api_client_python
+#ElementsActionListener is an interface
+#ElementsListenerTestImp implements this ElementsActionListener Interface
 from sym_api_client_python.listeners.elements_listener import ElementsActionListener
-#import MessageProcessor class --> parses message/handles functionality
+#import ActionProcessor class --> contains functionality for handling form submission
 from .action_processor import ActionProcessor
 
 
 
 class ElementsListenerTestImp(ElementsActionListener):
-    """Example implementation of IMListener
+    """Example implementation of ElementsActionListener
 
         sym_bot_client: contains clients which respond to incoming events
 
