@@ -37,7 +37,7 @@ class FormClient:
         """
 
         return dict(message = '<messageML>' +
-                                    '<form id="form_id">'
+                                    '<form id="{}">'.format(self.form_id)
                                         + self.messageML +
                                     '</form>'
                               '</messageML>')
