@@ -1,3 +1,4 @@
+from yattag import Doc
 
 class FormClient:
 
@@ -23,18 +24,25 @@ class FormClient:
 
     def __init__(self, form_id):
         self.form_id = form_id
-        self.headers = []
-        self.buttons = []
-        self.text_fields = []
-        self.masked_text_fields = []
-        self.text_areas = []
-        self.check_boxes = []
-        self.radio_buttons = []
-        self.dropdown_menu_groups = []
-        self.person_selectors = []
-        self.table_selectors = []
+        self.messageML = ''
 
-    def set_header(self, text, size):
+    def format_element(self):
+        """
+        create_messageML() takes in a form object, parses its attritubes/metadata and returns
+        a dictionary: {message : messageML object}.  This is the correct format to send
+        in the Create Message v4 REST call.
+
+        This messageML object is bootstrapped properly with <form> and
+        <messageML> tags so that it can be rendered as an Element as is.
+        """
+
+        return dict(message = '<messageML>' +
+                                    '<form id="form_id">'
+                                        + self.messageML +
+                                    '</form>'
+                              '</messageML>')
+
+    def add_header(self, text, size):
         """
         This function sets a header on the Form Element.
         Users must specify the text and size of the header that
@@ -43,9 +51,13 @@ class FormClient:
         Returns a header: <h4>Form title</h4>
         """
         header = (size,text)
-        self.headers.append(header)
+        doc, tag, text, line = Doc().ttl()
+        with tag(header[0]):
+            text(header[1])
 
-    def add_button_to_form(self, name, text, type='action'):
+        self.messageML += doc.getvalue()
+
+    def add_button_to_form(self, name, display, type='action'):
         """
         This function adds a button to the Form Element.
         Users must specify the name, button text, and type.
@@ -53,11 +65,15 @@ class FormClient:
 
         Returns a button: <button name="test-button" type="action">Click Me!</button>
         """
-        button = (name, type, text)
-        self.buttons.append(button)
+        button = (name, type, display)
+        doc, tag, text, line = Doc().ttl()
+        with tag('button', name=name, type=type):
+            text(display)
+
+        self.messageML += doc.getvalue()
 
 
-    def add_text_field_to_form(self, name, text, placeholder='', required='true', maxlength=128, minlength=1):
+    def add_text_field_to_form(self, name, display, placeholder='', required='true', maxlength=128, minlength=1):
         """
         This function adds a text field to a Form Element.
         Users must specifiy a name, display text, and/or optional parameters placeholder,
@@ -65,10 +81,14 @@ class FormClient:
 
         Returns a text field: <text-field name="id1" placeholder="" required="true" maxlength="128" minlength="1">Input some text...</text-field>
         """
-        text_field = (name, placeholder, required, maxlength, minlength, text)
-        self.text_fields.append(text_field)
+        doc, tag, text, line = Doc().ttl()
 
-    def add_masked_text_field_to_form(self, name, text, placeholder='', required='true', masked='true', maxlength = 128, minlength=1):
+        with tag('text-field', name=name, placeholder=placeholder, required=required, maxlength=maxlength, minlength=minlength):
+            text(display)
+
+        self.messageML += doc.getvalue()
+
+    def add_masked_text_field_to_form(self, name, display, placeholder='', required='true', masked='true', maxlength = 128, minlength=1):
         """
         This function adds a masked text field to a Form Element.
         Users must specifiy a name and text and/or optional parameters placeholder, masked,
@@ -77,10 +97,13 @@ class FormClient:
 
         Returns a masked text field: <text-field name="id1" placeholder="" required="true" masked="true" maxlength="128" minlength="1">Input some text...</text-field>
         """
-        masked_text_field = (name, placeholder, required, masked, maxlength, minlength, text)
-        self.masked_text_fields.append(masked_text_field)
+        doc, tag, text, line = Doc().ttl()
+        with tag('text-field', name=name, placeholder=placeholder, required=required, masked=masked, maxlength=maxlength, minlength=minlength):
+            text(display)
 
-    def add_text_area_to_form(self, name, text, placeholder='', required='true'):
+        self.messageML += doc.getvalue()
+
+    def add_text_area_to_form(self, name, display, placeholder='', required='true'):
         """
         This function adds a text area to a Form Element.
         Users must specifiy name, text and/or optional parameters, placeholder,
@@ -88,10 +111,13 @@ class FormClient:
 
         Returns a text area: <textarea name="id" placeholder="" required="true">My name is..</textarea>
         """
-        text_area = (name, placeholder, required, text)
-        self.text_areas.append(text_area)
+        doc, tag, text, line = Doc().ttl()
+        with tag('textarea', name=name, placeholder=placeholder, required=required):
+            text(display)
 
-    def add_check_box_to_form(self, name, text, value='on', checked='false'):
+        self.messageML += doc.getvalue()
+
+    def add_check_box_to_form(self, name, display, value='on', checked='false'):
         """
         This function adds a checkbox to a Form Element.
         Users must specify name, text, and/or optional parameters checked and value.
@@ -99,10 +125,14 @@ class FormClient:
 
         Returns a checkbox: <checkbox name="id1" value="on" checked="false">Check Me!</checkbox>
         """
-        check_box = (name, value, checked, text)
-        self.check_boxes.append(check_box)
+        doc, tag, text, line = Doc().ttl()
 
-    def add_radio_button_to_form(self, name, text, value='on', checked='false'):
+        with tag('checkbox', name=name, value=value, checked=checked):
+            text(display)
+
+        self.messageML += doc.getvalue()
+
+    def add_radio_button_to_form(self, name, display, value='on', checked='false'):
         """
         This function adds a radio button to a Form Elment.
         Users must specify name, text, and/or optional parameters checked and value.
@@ -110,8 +140,11 @@ class FormClient:
 
         Returns a radio button: <radio name="id1" value="on" checked="false">Click Me!</radio>
         """
-        radio_button = (name, value, checked, text)
-        self.radio_buttons.append(radio_button)
+        doc, tag, text, line = Doc().ttl()
+        with tag('radio', name=name, value=value, checked=checked):
+            text(display)
+
+        self.messageML += doc.getvalue()
 
     def add_dropdown_menu_to_form(self, dropdown_group):
         """
@@ -134,8 +167,13 @@ class FormClient:
         Users should pass a list of these tuples in order to create a dropdown group
         as shown above.
         """
+        doc, tag, text, line = Doc().ttl()
+        with tag('select', name=dropdown_group[0][0], required=dropdown_group[0][3]):
+            for i in dropdown_group:
+                with tag('option', value=i[2], selected=i[1]):
+                    text(i[4])
 
-        self.dropdown_menu_groups.append(dropdown_group)
+        self.messageML += doc.getvalue()
 
     def add_person_selector_to_form(self, name, placeholder='', required='false'):
         """
@@ -146,8 +184,10 @@ class FormClient:
 
         Returns a Person Selector:  <person-selector name="awesome-users" placeholder="enter names..." required="false" />
         """
-        person_selector = (name, placeholder, required)
-        self.person_selectors.append(person_selector)
+        doc, tag, text, line = Doc().ttl()
+        doc.stag('person-selector', name=name, placeholder=placeholder, required=required)
+
+        self.messageML += doc.getvalue()
 
     def add_table_selector_to_form(self, position, type, type_name, header_list, body_list, footer_list):
         """
@@ -212,5 +252,75 @@ class FormClient:
         type: 'checkbox' or 'button'
 
         """
-        table_selector = (position, type, type_name, header_list, body_list, footer_list)
-        self.table_selectors.append(table_selector)
+        doc, tag, text, line = Doc().ttl()
+        with tag('table'):
+            with tag('thead'):
+                with tag('tr'):
+                    if position == 'left':
+                        if type == 'button':
+                            line('td', 'Select')
+                            for i in table_selector:
+                                for j in header_list:
+                                    line('td', j)
+                        else:
+                            with tag('td'):
+                                doc.input(name = 'table-header', type = 'checkbox')
+                                for j in header_list:
+                                    line('td', j)
+                    else:
+                        if type == 'button':
+                            for j in header_list:
+                                line('td', j)
+                            line('td', 'Select')
+
+                        else:
+                            for i in table_selector:
+                                for j in header_list:
+                                    line('td', j)
+                            with tag('td'):
+                                doc.input(name = 'table-header', type = 'checkbox')
+
+            with tag('tbody'):
+                for num, j in enumerate(body_list, start=1):
+                    with tag('tr'):
+                        if position == 'left':
+                            with tag('td'):
+                                if type == 'button':
+                                    with tag('button', name=type_name+str(num)):
+                                        text('Button')
+                                else:
+                                    doc.input(name=type_name+str(num), type='checkbox')
+                            for k in j:
+                                line('td', k)
+                        else:
+                            for k in j:
+                                line('td', k)
+                            with tag('td'):
+                                if type == 'button':
+                                    with tag('button', name=type_name+str(num)):
+                                        text('Button')
+                                else:
+                                    doc.input(name=type_name+str(num), type='checkbox')
+
+            with tag('tfoot'):
+                with tag('tr'):
+                    if position == 'left':
+                        with tag('td'):
+                            if type == 'button':
+                                with tag('button', name="footer"):
+                                    text('Button')
+                            else:
+                                doc.input(name='table-footer', type='checkbox')
+                        for j in footer_list:
+                            line('td', j)
+                    else:
+                        for j in footer_list:
+                            line('td', j)
+                        with tag('td'):
+                            if type == 'button':
+                                with tag('button', name="footer"):
+                                    text('Button')
+                            else:
+                                doc.input(name='table-footer', type='checkbox')
+
+        self.messageML += doc.getvalue()
