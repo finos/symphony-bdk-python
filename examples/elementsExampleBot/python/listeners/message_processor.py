@@ -25,7 +25,7 @@ class MessageProcessor:
 
         #PROCESS FORM OBJECT AND FORMAT SO THAT ITS A MESSAGEML OBJECT
         #AS A MESSAGEML OBJECT, USERS CAN SEND IT AS A MESSAGE
-        self.elements_message = self.message_formatter.format_element(myform)
+        self.elements_message = myform.format_element()
         self.default_message = self.message_formatter.format_message('type /help to list commands')
         #access send_msg() function in sym_api_client_python
         #see symphony-api-client-python/sym_api_client_python/clients/message_client.py for full reference
