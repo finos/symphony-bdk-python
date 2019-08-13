@@ -4,9 +4,7 @@ class FormTemplate:
 
     """
     To start using Symphony Elements, you first need to create a form using the
-    FormClient class.  The available elements are Buttons,
-    Text Field, Text Area, Checkbox, Radio Button, Dropdown Menu, Person Selector,
-    and Table Select.
+    FormClient class.  The available elements can be found here: https://developers.symphony.com/symphony-developer/docs/available-components
 
     The following form contains setter functions corresponding to each element.
 
