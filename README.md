@@ -242,6 +242,16 @@ depending on the message type.
 
 To interact with the joke bot, try ``/bot joke``
 
+### 6 - Using Elements:
+The python SDK now supports the use of Symphony Elements.  When a Elements form submitted (through a submit button) an event of type "SYMPHONYELEMENTSACTION" is sent across the datafeed.  In order to handle this event type, bots listen for this event on the data_feed_event_service and handle the event inside the elements_action_handler() function.  Users must then create an implementation of the elements listener interface and handle their "SYMPHONYELEMENTSACTION" events inside the implementation of the ElementsActionLister.  Specifically, users must handle events inside of the on_elements_action() function within their listener which is called everytime an element is submitted.
+
+In addition to elements_listeners, there are a series of helper function to assits developers in parsing "SYMPHONYELEMENTSACTION" events.  Inside of processors/form_parser contains helper functions for the developer to parse the payload.  For example, to grab the streamId inside of the payload, pass the payload into FormParser and call FormParser.get_form_stream().  
+
+The python SDK also supports the creation of Symphony Elements.  In order to create a Symphony Element, use the FormTemplate class.  This class contians helper functions that correspond to each symphony element.  To create a custom form, instantiate a FormTemplate object and begin building by calling it's methods.  See examples/elementsExamplebot/python/listeners/form.py to see how to construct your own Form Object.  this FormTemplate class programatically generates messageML so that your forms are ready to send as messages via message_client.  
+
+See examples/elementsExampleBot for more details:
+
+
 Symphony REST API offer a range of capabilities for application to integrate, visit the [official documentation](https://rest-api.symphony.com/reference) for more information.
 
 # Release Notes
