@@ -1,6 +1,6 @@
 from yattag import Doc
 
-class FormTemplate:
+class FormBuilder:
 
     """
     To start using Symphony Elements, you first need to create a form using the

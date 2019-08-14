@@ -1,9 +1,9 @@
 #IMPORT FormClient Class from sym_api_client_python
-from sym_api_client_python.clients.form_template import FormTemplate
+from sym_api_client_python.clients.form_builder import FormBuilder
 
 #INSTANTIATE FORM TEMPLATE:
 #ORDER YOU CALL FUNCTION => THE ORDER ELEMENTS WILL RENDER INSIDE CLIENT
-myform = FormTemplate('reed_form')
+myform = FormBuilder('reed_form')
 myform.add_header('Full Name', 'h1')
 myform.add_text_field_to_form('text-field-id', 'Type Your Full Name...')
 myform.add_header('Authentication Key', 'h6')
