@@ -41,9 +41,8 @@ class MessageParser:
         self.HASHTAG_TYPE = "org.symphonyoss.taxonomy.hashtag"
         self.CASHTAG_TYPE = "org.symphonyoss.fin.security.id.ticker"
         self.MENTION_TYPE = "com.symphony.user.userId"
-        self.bot_user_id = '344147139497165'
 
-    def get_text(message_data):
+    def get_text(self, message_data):
         msg_xml = message_data['message']
         soup = BeautifulSoup(msg_xml, 'html.parser')
         x = soup.find('p').text.split(' ')
