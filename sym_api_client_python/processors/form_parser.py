@@ -40,26 +40,26 @@ class FormParser:
         actionStream is where the formMessage is sent, this is a hidden stream
         so that the encryption context is between user and bot only and not everyone else on the room
         """
-        return self.elements_action_data['actionStream']['streamId']
+        return self.elements_action_data['payload']['symphonyElementsAction']['actionStream']['streamId']
 
     def get_form_stream_id(self):
         """
         returns streamId for the formStream.
         form_stream_id matches the stream_id that the element was sent in.
         """
-        return self.elements_action_data['formStream']['streamId'].rstrip('=').replace('/', '_')
+        return self.elements_action_data['payload']['symphonyElementsAction']['formStream']['streamId'].rstrip('=').replace('/', '_')
 
     def get_form_message_id(self):
         """
         returns formMessageId corresponding to the element sent:
         """
-        return self.elements_action_data['formMessageId']
+        return self.elements_action_data['payload']['symphonyElementsAction']['formMessageId']
 
     def get_form_Id(self):
         """
         returns the unique formId assosiated with this form element
         """
-        return self.elements_action_data['formId']
+        return self.elements_action_data['payload']['symphonyElementsAction']['formId']
 
     def get_form_values(self):
         """
@@ -82,10 +82,10 @@ class FormParser:
         }
         """
 
-        return self.elements_action_data['formValues']
+        return self.elements_action_data['payload']['symphonyElementsAction']['formValues']
 
     def get_action(self):
         """
         returns name of button that submitted the form when clicked
         """
-        return self.elements_action_data['formValues']['action']
+        return self.elements_action_data['payload']['symphonyElementsAction']['formValues']['action']
