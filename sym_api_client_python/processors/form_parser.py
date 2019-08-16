@@ -89,3 +89,9 @@ class FormParser:
         returns name of button that submitted the form when clicked
         """
         return self.elements_action_data['payload']['symphonyElementsAction']['formValues']['action']
+
+    def get_initiator_userId(self):
+        """
+        returns id of user that submitted the form
+        """
+        return self.elements_action_data['initiator']['user']['userId']
