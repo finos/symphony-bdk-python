@@ -222,6 +222,5 @@ class DataFeedEventService:
 
     def elements_action_handler(self, payload):
         logging.debug('elements_action_handler')
-        elements_action_data = payload['payload']['symphonyElementsAction']
         for listener in self.elements_listeners:
-            listener.on_elements_action(elements_action_data)
+            listener.on_elements_action(payload)
