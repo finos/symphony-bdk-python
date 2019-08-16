@@ -223,4 +223,5 @@ class DataFeedEventService:
     def elements_action_handler(self, payload):
         logging.debug('elements_action_handler')
         for listener in self.elements_listeners:
+            print(payload)
             listener.on_elements_action(payload)
