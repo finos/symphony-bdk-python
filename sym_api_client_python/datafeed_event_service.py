@@ -83,7 +83,6 @@ class DataFeedEventService:
             try:
                 data = self.datafeed_client.read_datafeed(datafeed_id)
                 if data:
-                    print(data)
                     events = data[0]
                     logging.debug(
                         'DataFeedEventService/read_datafeed() --> '
@@ -224,6 +223,5 @@ class DataFeedEventService:
     def elements_action_handler(self, payload):
         logging.debug('elements_action_handler')
         for listener in self.elements_listeners:
-            print(payload)
             print('in fact pip installed')
             listener.on_elements_action(payload)
