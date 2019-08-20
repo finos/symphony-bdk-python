@@ -55,7 +55,7 @@ class FormBuilder:
 
         self.messageML += doc.getvalue()
 
-    def add_button_to_form(self, name, display, type='action'):
+    def add_button(self, name, display, type='action'):
         """
         This function adds a button to the Form Element.
         Users must specify the name, button text, and type.
@@ -71,7 +71,7 @@ class FormBuilder:
         self.messageML += doc.getvalue()
 
 
-    def add_text_field_to_form(self, name, display, placeholder='', required='true', maxlength=128, minlength=1):
+    def add_text_field(self, name, display, placeholder='', required='true', masked='true', maxlength=128, minlength=1):
         """
         This function adds a text field to a Form Element.
         Users must specifiy a name, display text, and/or optional parameters placeholder,
@@ -81,27 +81,12 @@ class FormBuilder:
         """
         doc, tag, text, line = Doc().ttl()
 
-        with tag('text-field', name=name, placeholder=placeholder, required=required, maxlength=maxlength, minlength=minlength):
-            text(display)
-
-        self.messageML += doc.getvalue()
-
-    def add_masked_text_field_to_form(self, name, display, placeholder='', required='true', masked='true', maxlength = 128, minlength=1):
-        """
-        This function adds a masked text field to a Form Element.
-        Users must specifiy a name and text and/or optional parameters placeholder, masked,
-        required, maxlength, and minlength.
-        Set masked='true' in order to create a masked text field.
-
-        Returns a masked text field: <text-field name="id1" placeholder="" required="true" masked="true" maxlength="128" minlength="1">Input some text...</text-field>
-        """
-        doc, tag, text, line = Doc().ttl()
         with tag('text-field', name=name, placeholder=placeholder, required=required, masked=masked, maxlength=maxlength, minlength=minlength):
             text(display)
 
         self.messageML += doc.getvalue()
 
-    def add_text_area_to_form(self, name, display, placeholder='', required='true'):
+    def add_text_area(self, name, display, placeholder='', required='true'):
         """
         This function adds a text area to a Form Element.
         Users must specifiy name, text and/or optional parameters, placeholder,
@@ -115,7 +100,7 @@ class FormBuilder:
 
         self.messageML += doc.getvalue()
 
-    def add_check_box_to_form(self, name, display, value='on', checked='false'):
+    def add_check_box(self, name, display, value='on', checked='false'):
         """
         This function adds a checkbox to a Form Element.
         Users must specify name, text, and/or optional parameters checked and value.
@@ -130,7 +115,7 @@ class FormBuilder:
 
         self.messageML += doc.getvalue()
 
-    def add_radio_button_to_form(self, name, display, value='on', checked='false'):
+    def add_radio_button(self, name, display, value='on', checked='false'):
         """
         This function adds a radio button to a Form Elment.
         Users must specify name, text, and/or optional parameters checked and value.
@@ -144,7 +129,7 @@ class FormBuilder:
 
         self.messageML += doc.getvalue()
 
-    def add_dropdown_menu_to_form(self, dropdown_group):
+    def add_dropdown_menu(self, dropdown_group):
         """
         add_dropdown_menu_to_form([('dropdown', 'false', 'value1', 'false', 'Reeds Option'),
                                    ('dropdown', 'false', 'value2', 'false', 'Reeds Option2'),
@@ -173,7 +158,7 @@ class FormBuilder:
 
         self.messageML += doc.getvalue()
 
-    def add_person_selector_to_form(self, name, placeholder='', required='false'):
+    def add_person_selector(self, name, placeholder='', required='false'):
         """
         This function adds a person selector to the Form Element.
         Users must specify a name and/or optional parameters placeholder and required
@@ -187,7 +172,7 @@ class FormBuilder:
 
         self.messageML += doc.getvalue()
 
-    def add_table_selector_to_form(self, position, type, type_name, header_list, body_list, footer_list):
+    def add_table_selector(self, position, type, type_name, header_list, body_list, footer_list):
         """
         add_table_selector_to_form('left', 'checkbox', 'table-box',
                                     ['H1', 'H2', 'H3'],
