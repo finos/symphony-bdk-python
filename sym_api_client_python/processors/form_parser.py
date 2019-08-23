@@ -35,9 +35,9 @@ class FormParser:
         pass
 
     def get_stream_id(self, elements_action_data):
-        if elements_action_data['payload']['symphonyElementsAction']['stream'] != None and elements_action_data['payload']['symphonyElementsAction']['stream']['id'] != None:
+        if 'stream' in elements_action_data['payload']['symphonyElementsAction'] and 'id' in elements_action_data['payload']['symphonyElementsAction']['stream']:
             return elements_action_data['payload']['symphonyElementsAction']['stream']['id']
-        if elements_action_data['payload']['symphonyElementsAction']['formStream'] != None and elements_action_data['payload']['symphonyElementsAction']['formStream']['streamId'] != None:
+        if 'formStream' in elements_action_data['payload']['symphonyElementsAction'] and 'streamId' in elements_action_data['payload']['symphonyElementsAction']['formStream']:
             return elements_action_data['payload']['symphonyElementsAction']['formStream']['streamId'].rstrip('=').replace('/', '_').replace('+', '-')
 
     def get_action_stream_id(self, elements_action_data):
