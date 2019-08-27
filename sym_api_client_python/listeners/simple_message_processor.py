@@ -14,7 +14,7 @@ class MessageProcessor:
         # msg_txt = msg_root[0].text
         msg_text = self.message_parser.get_text(msg)
         print('process')
-        print(msg_txt)
+        print(msg_text)
         print('after')
 
         msg_to_send = dict(
@@ -23,7 +23,7 @@ class MessageProcessor:
                 )
 
 
-        if msg_txt:
+        if msg_text:
             stream_id = self.message_parser.get_stream_id(msg)
             self.bot_client.get_message_client(). \
                     send_msg(stream_id, msg_to_send)
