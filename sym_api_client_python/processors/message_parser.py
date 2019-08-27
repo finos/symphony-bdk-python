@@ -43,10 +43,12 @@ class MessageParser:
         self.MENTION_TYPE = "com.symphony.user.userId"
 
     def get_text(self, message_data):
+        text_arr = []
         msg_xml = message_data['message']
         soup = BeautifulSoup(msg_xml, 'html.parser')
-        x = soup.find('p').text.split(' ')
-        return list(filter(lambda x: not x.startswith('@') and not x.startswith('#'), x))
+        for i in soup.find_all('p'):
+            text_arr.extend(i.text.split(' '))
+        return list(filter(lambda x: not x.startswith('@') and not x.startswith('#'), text_arr))
 
     def get_im_firstname(self, message_data):
         return message_data['user']['firstName']
@@ -99,7 +101,7 @@ class MessageParser:
 
     def get_cash_tag_values(self, message_data):
         cash_values = []
-        d = json.loads(data['data'])
+        d = json.loads(message_data['data'])
         if d:
             for k,v in d.items():
                 if v['id'][0]['type'] == self.CASHTAG_TYPE:
