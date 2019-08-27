@@ -1,5 +1,6 @@
 import xml.etree.ElementTree as ET
 from ..processors.message_parser import MessageParser
+import logging
 
 class MessageProcessor:
     def __init__(self, bot_client):

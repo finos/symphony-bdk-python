@@ -4,3 +4,4 @@ requests-pkcs12==1.4
 requests-toolbelt==0.9.1
 yattag==1.12.2
 python-json-logger==0.1.11
+beautifulsoup4==4.8.0
