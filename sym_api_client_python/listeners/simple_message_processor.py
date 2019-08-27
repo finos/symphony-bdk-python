@@ -9,16 +9,8 @@ class MessageProcessor:
 
     def process(self, msg):
         logging.debug('insdie of process')
-        # msg_xml = msg['message']
-        # msg_root = ET.fromstring(msg_xml)
-        # msg_txt = msg_root[0].text
         msg_text = self.message_parser.get_text(msg)
-        print('process')
-        print(msg_text)
-        print('after')
-
         msg_to_send = dict(
-                #message=msg_xml
                 message='<messageML>Hello {}, hope you are doing well!</messageML>'.format(self.message_parser.get_im_firstname(msg))
                 )
 

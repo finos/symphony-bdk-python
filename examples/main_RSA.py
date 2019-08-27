@@ -21,7 +21,7 @@ def main():
         configure_logging()
 
         # RSA Auth flow: pass path to rsa config.json file
-        configure = SymConfig('/Users/reed.feldman/Desktop/SDK/test/templateBots/resources/config.json')
+        configure = SymConfig('../resources/config.json')
         configure.load_config()
         auth = SymBotRSAAuth(configure)
         auth.authenticate()
