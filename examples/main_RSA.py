@@ -2,10 +2,8 @@ import logging
 from sym_api_client_python.configure.configure import SymConfig
 from sym_api_client_python.auth.rsa_auth import SymBotRSAAuth
 from sym_api_client_python.clients.sym_bot_client import SymBotClient
-from sym_api_client_python.listeners.\
-        im_listener_test_imp import IMListenerTestImp
-from sym_api_client_python.listeners.\
-        room_listener_test_imp import RoomListenerTestImp
+from sym_api_client_python.listeners.im_listener_test_imp import IMListenerTestImp
+from sym_api_client_python.listeners.room_listener_test_imp import RoomListenerTestImp
 
 def configure_logging():
         logging.basicConfig(
@@ -23,7 +21,7 @@ def main():
         configure_logging()
 
         # RSA Auth flow: pass path to rsa config.json file
-        configure = SymConfig('../resources/config.json')
+        configure = SymConfig('/Users/reed.feldman/Desktop/SDK/test/templateBots/resources/config.json')
         configure.load_config()
         auth = SymBotRSAAuth(configure)
         auth.authenticate()
@@ -49,4 +47,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

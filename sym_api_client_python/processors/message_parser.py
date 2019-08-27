@@ -48,6 +48,11 @@ class MessageParser:
         x = soup.find('p').text.split(' ')
         return list(filter(lambda x: not x.startswith('@') and not x.startswith('#'), x))
 
+    def get_im_firstname(self, message_data):
+        return message_data['user']['firstName']
+
+    def get_stream_id(self, message_data):
+        return message_data['stream']['streamId']
 
     def get_mentions(self, message_data):
         mention_arr = []
@@ -68,7 +73,7 @@ class MessageParser:
 
     def get_hash_tags(self, message_data):
         tag_arr = []
-        msg_xml = tag_message['message']
+        msg_xml = message_data['message']
         soup = BeautifulSoup(msg_xml, 'html.parser')
         for i in soup.find_all('span'):
             tag_arr.append(i.text)
@@ -86,7 +91,7 @@ class MessageParser:
 
     def get_cash_tags(self, message_data):
         cash_arr = []
-        msg_xml = tag_message['message']
+        msg_xml = message_data['message']
         soup = BeautifulSoup(msg_xml, 'html.parser')
         for i in soup.find_all('span'):
             cash_arr.append(i.text)
