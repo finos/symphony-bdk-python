@@ -8,15 +8,17 @@ class FormBuilder:
 
     The following form contains setter functions corresponding to each element.
 
-    To create a form, instantiate the Form Class with a unique form id.  Add elements
+    To create a form, instantiate the FormBuilder class with a unique form id.  Add elements
     to this form by calling the appropriate setter function in the Form Class.
 
-    The usage of this class is to create a blueprint of a Form corresponding to
-    messageML.  To actually render the messageML pass the instance of a FormClient
-    object to the MessageFormatter.format_element() function:
+    Using this class allows a user to generate a messageML object corresponding to the elements inside the form.
+    When this object is instantiated, it creates an empty string.  With every method called, the empty string is appended
+    with messageML corresponding to the symphony element.  Lastly, users must call the format_element method in order to
+    wrap the messageML string with the appropriate <messageML> tags.  At this point, the object can be sent as a message
+    inside of Symphony.
 
-    MessageFormatter.format_element(myform) returns a messageML representation of
-    your FormClient object.
+    See examples/elementsExampleBot/form.py and examples/elementsExampleBot/message_processor.py for example usage:  
+
 
     """
 
