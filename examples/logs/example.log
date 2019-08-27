@@ -1,19 +1,19 @@
-2019-08-27 12:48:54,400 - root - DEBUG - Auth/authenticate()
-2019-08-27 12:48:54,400 - root - DEBUG - Auth/authenticate() --> needed to authenticate
-2019-08-27 12:48:54,400 - root - DEBUG - RSA_auth/get_session_token() function started
-2019-08-27 12:48:54,400 - root - DEBUG - RSA_auth/getJWT() function started
-2019-08-27 12:48:54,603 - root - DEBUG - RSA/session token success
-2019-08-27 12:48:54,603 - root - DEBUG - RSA_auth/get_keyauth()
-2019-08-27 12:48:54,603 - root - DEBUG - RSA_auth/getJWT() function started
-2019-08-27 12:48:54,742 - root - DEBUG - RSA/keymanager token success
-2019-08-27 12:48:54,743 - root - INFO - DataFeedEventService/startDataFeed()
-2019-08-27 12:48:54,743 - root - DEBUG - DataFeedClient/create_datafeed()
-2019-08-27 12:48:55,797 - root - DEBUG - DataFeedClient/read_datafeed()
-2019-08-27 12:49:03,060 - root - DEBUG - DataFeedEventService/read_datafeed() --> Incoming data from read_datafeed(): {
+2019-08-27 12:51:44,073 - root - DEBUG - Auth/authenticate()
+2019-08-27 12:51:44,073 - root - DEBUG - Auth/authenticate() --> needed to authenticate
+2019-08-27 12:51:44,073 - root - DEBUG - RSA_auth/get_session_token() function started
+2019-08-27 12:51:44,073 - root - DEBUG - RSA_auth/getJWT() function started
+2019-08-27 12:51:44,511 - root - DEBUG - RSA/session token success
+2019-08-27 12:51:44,511 - root - DEBUG - RSA_auth/get_keyauth()
+2019-08-27 12:51:44,511 - root - DEBUG - RSA_auth/getJWT() function started
+2019-08-27 12:51:45,007 - root - DEBUG - RSA/keymanager token success
+2019-08-27 12:51:45,008 - root - INFO - DataFeedEventService/startDataFeed()
+2019-08-27 12:51:45,008 - root - DEBUG - DataFeedClient/create_datafeed()
+2019-08-27 12:51:46,058 - root - DEBUG - DataFeedClient/read_datafeed()
+2019-08-27 12:51:53,943 - root - DEBUG - DataFeedEventService/read_datafeed() --> Incoming data from read_datafeed(): {
     "messageSent": {
         "message": {
-            "messageId": "EXxKwtbh2sHcDPLSo6TfdH___pMsBOy1bQ",
-            "timestamp": 1566924542794,
+            "messageId": "beawZ7dxXaB63QDBhcsI7X___pMsAlFVbQ",
+            "timestamp": 1566924713642,
             "message": "<div data-format=\"PresentationML\" data-version=\"2.0\" class=\"wysiwyg\"><p>hi</p></div>",
             "data": "{}",
             "user": {
@@ -34,7 +34,8 @@
         }
     }
 }
-2019-08-27 12:49:03,061 - root - DEBUG - UserClient/get_session_user()
-2019-08-27 12:49:03,204 - root - DEBUG - DataFeedEventService/handle_event()
-2019-08-27 12:49:03,204 - root - DEBUG - msg_sent_handler function started
-2019-08-27 12:49:03,204 - root - DEBUG - message received in IMM
+2019-08-27 12:51:53,943 - root - DEBUG - UserClient/get_session_user()
+2019-08-27 12:51:54,054 - root - DEBUG - DataFeedEventService/handle_event()
+2019-08-27 12:51:54,054 - root - DEBUG - msg_sent_handler function started
+2019-08-27 12:51:54,054 - root - DEBUG - message received in IMM
+2019-08-27 12:51:54,054 - root - DEBUG - insdie of process
