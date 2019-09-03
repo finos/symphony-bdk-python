@@ -13,14 +13,14 @@ class RoomProcessor:
         self.message_parser = MessageParser()
         #hard code to the userId of bot you are using.
         self.bot_id = 'YOUR BOT USERID' #THIS IS A 15 DIGIT NUMBER
-        self.default_message = self.default_message = self.message_formatter.format_message('type @karlPythonDemo help to view commands')
+        self.default_message = self.default_message = self.message_formatter.format_message('type @YOUR_BOT_USERNAME help to view commands')
 
     def process_room_message(self, msg):
         logging.debug('room_processor/process_room_message()')
         logging.debug(json.dumps(msg, indent=4))
         self.help_message = dict(message = """<messageML>
                                     <h2>This is an demo of how to create, update, and submit an expense form using Symphony Elements</h2>
-                                    <p>Type @karlPythonDemo expense to view expense approval form</p>
+                                    <p>Type '@YOUR_BOT_USERNAME expense' to view expense approval form</p>
                                               </messageML>
                             """)
 
