@@ -18,8 +18,6 @@ class FormBuilder:
     inside of Symphony.
 
     See examples/elementsExampleBot/form.py and examples/elementsExampleBot/message_processor.py for example usage:  
-
-
     """
 
     def __init__(self, form_id):

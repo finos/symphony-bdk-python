@@ -1,0 +1,106 @@
+<table>
+  <thead>
+    <tr>
+      {% if select.position == 'left' %}
+        {% if select.type == 'button' %}
+      <td>Select</td>
+          {% for header in header_list %}
+      <td>{{header}}</td>
+          {% endfor %}
+        {% elif select.type == 'checkbox' %}
+      <td>
+        <input type="checkbox" name="tablesel-header" />
+      </td>
+          {% for header in header_list %}
+      <td>{{header}}</td>
+          {% endfor %}
+        {% endif %}
+      {% else %}
+        {% if select.type == 'button' %}
+          {% for header in header_list %}
+      <td>{{header}}</td>
+          {% endfor %}
+      <td>Select</td>
+        {% elif select.type == 'checkbox' %}
+          {% for header in header_list %}
+      <td>{{header}}</td>
+          {% endfor %}
+      <td><input type="checkbox" name="tablesel-header" /></td>
+        {% endif %}
+      {% endif %}
+    </tr>
+  </thead>
+  <tbody>
+  {% if select.position == 'left'%}
+    {% if select.type == 'button' %}
+      {% for row in body %}
+    <tr>
+      <td><button type="action" name="tablesel-row-button">SELECT</button></td>
+        {% for item in row %}
+      <td>{{item}}</td>
+        {% endfor %}
+    </tr>
+      {% endfor %}
+    {% elif select.type == 'checkbox' %}
+      {% for row in body %}
+      <tr>
+        <td><input type="checkbox" name="tablesel-header" /></td>
+        {% for item in row %}
+        <td>{{item}}</td>
+        {% endfor %}
+      </tr>
+      {% endfor %}
+      {% endif %}
+  {% else %}
+    {% if select.type == 'button' %}
+      {% for row in body %}
+  <tr>
+        {% for item in row %}
+    <td>{{item}}</td>
+        {% endfor %}
+    <td><button type="action" name="tablesel-row-button">SELECT</button></td>
+  </tr>
+      {% endfor %}
+    {% elif select.type == 'checkbox' %}
+      {% for row in body %}
+    <tr>
+        {% for item in row %}
+      <td>{{item}}</td>
+        {% endfor %}
+      <td><input type="checkbox" name="tablesel-header" /></td>
+    </tr>
+      {% endfor %}
+    {% endif %}
+  {% endif %}
+  </tbody>
+  <tfoot>
+    <tr>
+      {% if select.position == 'left' %}
+        {% if select.type == 'button' %}
+      <td>Select</td>
+          {% for footer in footer_list %}
+      <td>{{footer}}</td>
+          {% endfor %}
+        {% elif select.type == 'checkbox' %}
+      <td>
+        <input type="checkbox" name="tablesel-header" />
+      </td>
+          {% for footer in footer_list %}
+      <td>{{footer}}</td>
+          {% endfor %}
+        {% endif %}
+      {% else %}
+        {% if select.type == 'button' %}
+          {% for footer in footer_list %}
+      <td>{{footer}}</td>
+          {% endfor %}
+      <td>Select</td>
+        {% elif select.type == 'checkbox' %}
+          {% for footer in footer_list %}
+      <td>{{header}}</td>
+          {% endfor %}
+      <td><input type="checkbox" name="tablesel-header" /></td>
+        {% endif %}
+      {% endif %}
+  </tfoot>
+</table>
