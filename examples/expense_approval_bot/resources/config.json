@@ -11,7 +11,7 @@
     "botCertPath": "",
     "botCertName": "",
     "botCertPassword": "",
-    "botPrivateKeyPath": "../rsa/",
+    "botPrivateKeyPath": "PATH_TO_botPrivateKeyName",
     "botPrivateKeyName": "bot_private_key.pem",
     "botUsername": "YOUR_BOT_USERNAME",
     "botEmailAddress": "YOUR_BOT_EMAIL_ADDRESS",
