@@ -243,14 +243,46 @@ depending on the message type.
 To interact with the joke bot, try ``/bot joke``
 
 ### 6 - Using Elements:
-The python SDK now supports the use of Symphony Elements.  When an Elements form is submitted (through a submit button), an event of type "SYMPHONYELEMENTSACTION" is sent across the datafeed.  In order to handle this event type, bots listen for this event on the data_feed_event_service and handle the event inside the elements_action_handler() function.  Users must then create an implementation of the ElementsActionListener interface and handle their "SYMPHONYELEMENTSACTION" events inside the implementation of the ElementsActionLister.  Specifically, users must handle events inside of the on_elements_action() function within their listener which is called everytime an element is submitted.
+Symphony Elements allow developers to include native, interactive UI components as part of an inbound message.  When a form Element is submitted, an event of type "SYMPHONYELEMENTSACTION" is sent across the datafeed.  
 
-In addition to event handling architecture inside the ElementsActionListener, there are a series of helper function to assist developers in parsing "SYMPHONYELEMENTSACTION" events.  Inside of processors/form_parser.py file contains helper functions for the developer to parse the json payload describing the event coming across the datafeed.  For example, to grab the streamId inside of the payload, instantiate the FormParser() class and call FormParser().get_stream_id(action) where action represents the json payload.    
+In order to handle Elements events, implement an ElementsActionListener and parse the JSON payload using the [SymElementsParser](https://github.com/SymphonyPlatformSolutions/symphony-api-client-python/blob/staging_elements/sym_api_client_python/processors/sym_elements_parser.py)
 
-The python SDK also allows developers to programatically create their own Symphony Elements.  In order to create a Symphony Element, use the FormTemplate class.  This class contians helper functions that correspond to each symphony element.  To create a custom form, instantiate a FormBuilder object and begin constructing a form element by calling it's class methods. The FormBuilder class contains methods that correspond with each of the symphony elements found in our [documentation](https://developers.symphony.com/symphony-developer/docs/available-components).  See examples/elementsExamplebot/python/listeners/form.py to see how to construct your own Form Object.  This FormBuilder class programatically generates messageML so that your forms are ready to send as messages via the message_client.  
+    from sym_api_client_python.listeners.elements_listener import ElementsActionListener
+    from sym_api_client_python.processors.form_parser import FormParser
+    from .processors.action_processor import ActionProcessor
 
-See examples/elementsExampleBot for more details:
+    class ElementsListenerTestImp(ElementsActionListener):
 
+        def __init__(self, sym_bot_client):
+            self.bot_client = sym_bot_client
+            self.action_processor = ActionProcessor(self.bot_client)
+        
+        def on_elements_action(self, action):
+            stream_type = self.bot_client.get_stream_client().stream_info_v2(FormParser().get_stream_id(action))
+            if stream_type['streamType']['type'] == 'ROOM':
+                self.action_processor.process_room_action(action)
+            elif stream_type['streamType']['type'] == 'IM':
+                self.action_processor.process_im_action(action)
+
+Use SymElementsParser class inside ActionProcessor:
+
+    from sym_api_client_python.processors.message_formatter import MessageFormatter
+    from sym_api_client_python.processors.form_parser import FormParser
+
+    class ActionProcessor:
+
+        def __init__(self, bot_client):
+            self.bot_client = bot_client
+
+        def process_room_action(self, action):
+            try:
+                action_clicked = FormParser().get_action(action)
+                if action_clicked == 'submit':
+                    #do something
+            except:
+                raise 
+
+Note: to send Elements forms as messages, please refer to [this documentation](https://developers.symphony.com/symphony-developer/docs/available-components) for valid messageML samples.  
 
 Symphony REST API offer a range of capabilities for application to integrate, visit the [official documentation](https://rest-api.symphony.com/reference) for more information.
 
