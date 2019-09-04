@@ -248,7 +248,7 @@ Symphony Elements allow developers to include native, interactive UI components 
 In order to handle Elements events, implement an ElementsActionListener and parse the JSON payload using the [SymElementsParser](https://github.com/SymphonyPlatformSolutions/symphony-api-client-python/blob/staging_elements/sym_api_client_python/processors/sym_elements_parser.py)
 
     from sym_api_client_python.listeners.elements_listener import ElementsActionListener
-    from sym_api_client_python.processors.form_parser import FormParser
+    from sym_api_client_python.processors.sym_elements_parser import SymElementsParser
     from .processors.action_processor import ActionProcessor
 
     class ElementsListenerTestImp(ElementsActionListener):
@@ -258,7 +258,7 @@ In order to handle Elements events, implement an ElementsActionListener and pars
             self.action_processor = ActionProcessor(self.bot_client)
         
         def on_elements_action(self, action):
-            stream_type = self.bot_client.get_stream_client().stream_info_v2(FormParser().get_stream_id(action))
+            stream_type = self.bot_client.get_stream_client().stream_info_v2(SymElementsParser().get_stream_id(action))
             if stream_type['streamType']['type'] == 'ROOM':
                 self.action_processor.process_room_action(action)
             elif stream_type['streamType']['type'] == 'IM':
@@ -267,7 +267,7 @@ In order to handle Elements events, implement an ElementsActionListener and pars
 Use SymElementsParser class inside ActionProcessor:
 
     from sym_api_client_python.processors.message_formatter import MessageFormatter
-    from sym_api_client_python.processors.form_parser import FormParser
+    from sym_api_client_python.processors.sym_elements_parser import SymElementsParser
 
     class ActionProcessor:
 
@@ -276,7 +276,7 @@ Use SymElementsParser class inside ActionProcessor:
 
         def process_room_action(self, action):
             try:
-                action_clicked = FormParser().get_action(action)
+                action_clicked = SymElementsParser().get_action(action)
                 if action_clicked == 'submit':
                     #do something
             except:
@@ -287,6 +287,16 @@ Note: to send Elements forms as messages, please refer to [this documentation](h
 Symphony REST API offer a range of capabilities for application to integrate, visit the [official documentation](https://rest-api.symphony.com/reference) for more information.
 
 # Release Notes
+## 0.1.18
+- Added support for Elements actions coming across datafeed
+- Added ElementsActionListener
+- Added Processors, containing MessageFormatter, SymElementsParser, SymMessageParser. Provides helpers for accessing message and action payload information
+- Added Templates folder, containing example templates for sending in Elements
+- Added FormBuilder to programaticaly generate Elements forms
+- Added examples for ExpenseBot using Elements
+- Cleaned up typos and formatting
+
+
 ## 0.1.17
 - Added AdminClient, SignalsClient, and ConnectionsClient
 - Added docstrings to new methods
