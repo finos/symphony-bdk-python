@@ -53,6 +53,12 @@ class MessageParser:
     def get_im_firstname(self, message_data):
         return message_data['user']['firstName']
 
+    def get_im_lastname(self, message_data):
+        return message_data['user']['lastName']
+
+    def get_im_name(self, message_data):
+        return str(message_data['user']['firstName']) + ' '  + str(message_data['user']['lastName'])
+
     def get_stream_id(self, message_data):
         return message_data['stream']['streamId']
 

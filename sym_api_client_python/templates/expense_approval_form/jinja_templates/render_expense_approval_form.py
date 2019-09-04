@@ -44,4 +44,4 @@ def render_expense_approval_form(path_to_html_form):
     html = template.render(expense_data)
     return html
 
-print(render_expense_approval_form('./html/expense_approval_table.html'))
+print(render_expense_approval_form('./html/create_expense_approval_form.html'))

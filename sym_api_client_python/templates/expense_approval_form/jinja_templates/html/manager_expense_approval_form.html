@@ -16,7 +16,7 @@
                 <tr>
                   <td>{{expense.expense_name}}</td>
                   <td>{{expense.expense_date}}</td>
-                  <td>${{expense.expense_price}}</td>
+                  <td>{{"$%.2f"|format(expense.expense_price)}}</td>
                 </tr>
                   {% endfor %}
               </tbody>
@@ -28,9 +28,7 @@
                   </tr>
               </tfoot>
           </table>
-          <button type="action" name="approve-button">Approve</button>
-          <button type="action" name="reject-button">Reject</button>
-          <button type="action" name="add-expense">Add</button>
-          <button type="action" name="remove-expense">Remove</button>
+          <button type="action" name="approve-expense">Approve Expenses</button>
+          <button type="action" name="reject-expense">Reject Expenses</button>
     </form>
 </messageML>
