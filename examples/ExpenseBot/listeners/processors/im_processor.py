@@ -2,7 +2,7 @@ import xml.etree.ElementTree as ET
 import logging
 import json
 from sym_api_client_python.processors.message_formatter import MessageFormatter
-from sym_api_client_python.processors.message_parser import MessageParser
+from sym_api_client_python.processors.sym_message_parser import SymMessageParser
 from ..expense_approval_form.expense_approval_class import expense_data, render_expense_approval_form, upload_expense, remove_item
 
 
@@ -13,7 +13,7 @@ class IMProcessor:
         self.msg = msg
         self.bot_id = '349026222344891'
         self.message_formatter = MessageFormatter()
-        self.message_parser = MessageParser()
+        self.sym_message_parser = SymMessageParser()
         self.process(self.msg)
 
     #reads message and processes it
@@ -28,15 +28,15 @@ class IMProcessor:
                                               </messageML>
                             """)
 
-        mentioned_users = self.message_parser.get_mention_ids(msg)
-        commands = self.message_parser.get_text(msg)
+        mentioned_users = self.sym_message_parser.get_mention_ids(msg)
+        commands = self.sym_message_parser.get_text(msg)
 
         if mentioned_users:
             if mentioned_users[0] == self.bot_id and commands[0] == 'help':
                 self.bot_client.get_message_client().send_msg(msg['stream']['streamId'], self.help_message)
 
             elif mentioned_users[0] == self.bot_id and commands[0] == 'create' and commands[1] == 'expense':
-                expense_data['ExpenseApprovalForm']['person_name'] = self.message_parser.get_im_name(msg)
+                expense_data['ExpenseApprovalForm']['person_name'] = self.sym_message_parser.get_im_name(msg)
                 self.bot_client.get_message_client().send_msg(msg['stream']['streamId'], render_expense_approval_form('listeners/expense_approval_form/html/create_expense_approval_form.html'))
 
             else:
