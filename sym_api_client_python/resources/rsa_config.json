@@ -7,8 +7,8 @@
   "podPort": 443,
   "agentHost": "MY_ENVIRONMENT.symphony.com",
   "agentPort": 443,
-  "botRSAPath":"./sym_api_client_python/resources/",
-  "botRSAName": "bot_private_key.pem",
+  "botPrivateKeyPath":"./sym_api_client_python/resources/",
+  "botPrivateKeyName": "bot_private_key.pem",
   "botUsername": "YOUR_BOT_USERNAME",
   "botEmailAddress": "YOUR_BOT_EMAIL_ADDRESS",
   "appCertPath": "",
@@ -18,5 +18,6 @@
   "proxyPort": "",
   "proxyUsername": "",
   "proxyPassword": "",
-  "authTokenRefreshPeriod": "30"
+  "authTokenRefreshPeriod": "30",
+  "truststorePath": ""
 }

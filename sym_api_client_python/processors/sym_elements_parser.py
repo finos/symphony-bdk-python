@@ -1,6 +1,6 @@
 
 
-class FormParser:
+class SymElementsParser:
     """
     FormParser class takes elements_action_data as its only parameter.
     elements action data is a json object passed from DataFeedEventService
@@ -59,7 +59,7 @@ class FormParser:
         """
         return elements_action_data['payload']['symphonyElementsAction']['formMessageId']
 
-    def get_form_Id(self, elements_action_data):
+    def get_form_id(self, elements_action_data):
         """
         returns the unique formId assosiated with this form element
         """
@@ -94,13 +94,13 @@ class FormParser:
         """
         return elements_action_data['payload']['symphonyElementsAction']['formValues']['action']
 
-    def get_initiator_userId(self, elements_action_data):
+    def get_initiator_user_id(self, elements_action_data):
         """
         returns id of user that submitted the form
         """
         return elements_action_data['initiator']['user']['userId']
 
-    def get_initiator_displayName(self, elements_action_data):
+    def get_initiator_display_name(self, elements_action_data):
         """
         returns displayName of user that submitted the form
         """

@@ -18,5 +18,6 @@
   "proxyPort": 8080,
   "proxyUsername": "",
   "proxyPassword": "",
-  "authTokenRefreshPeriod": "30"
+  "authTokenRefreshPeriod": "30",
+  "truststorePath": ""
 }

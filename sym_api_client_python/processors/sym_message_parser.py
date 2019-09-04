@@ -4,7 +4,7 @@ import logging
 from bs4 import BeautifulSoup
 
 
-class MessageParser:
+class SymMessageParser:
 
     """
     MessageParser class takes message_data as its only parameter.
@@ -50,10 +50,10 @@ class MessageParser:
             text_arr.extend(i.text.split(' '))
         return list(filter(lambda x: not x.startswith('@') and not x.startswith('#'), text_arr))
 
-    def get_im_firstname(self, message_data):
+    def get_im_first_name(self, message_data):
         return message_data['user']['firstName']
 
-    def get_im_lastname(self, message_data):
+    def get_im_last_name(self, message_data):
         return message_data['user']['lastName']
 
     def get_im_name(self, message_data):
