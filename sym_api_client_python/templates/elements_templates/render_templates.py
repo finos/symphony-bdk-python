@@ -137,4 +137,4 @@ def render_table_select(path_to_html_form):
     html = template.render(table_select_template)
     return html
 
-print(render_table_select('forms/table_select.html'))
+#print(render_table_select('forms/table_select.html'))
