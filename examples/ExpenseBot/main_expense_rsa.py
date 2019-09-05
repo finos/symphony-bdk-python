@@ -2,7 +2,6 @@ import sys
 import logging
 from pythonjsonlogger import jsonlogger
 from pathlib import Path
-sys.path.insert(1, '/Users/reed.feldman/Desktop/SDK/test/symphony-api-client-python')
 
 def is_venv():
     return (hasattr(sys, 'real_prefix') or
