@@ -1,0 +1,34 @@
+<messageML>
+    <form id="expense-approval-form">
+      <span>
+          <h3>{{ExpenseApprovalForm.person_name}}</h3>
+      </span>
+          <table>
+              <thead>
+                  <tr>
+                      <td>Expense Name:</td>
+                      <td>Expense Date:</td>
+                      <td>Expense Amount:</td>
+                  </tr>
+              </thead>
+              <tbody>
+                  {% for expense in ExpenseApprovalForm.expenses %}
+                <tr>
+                  <td>{{expense.expense_name}}</td>
+                  <td>{{expense.expense_date}}</td>
+                  <td>{{"$%.2f"|format(expense.expense_price)}}</td>
+                </tr>
+                  {% endfor %}
+              </tbody>
+              <tfoot>
+                  <tr>
+                      <td> </td>
+                      <td> </td>
+                      <td>Total: {{"$%.2f"|format(ExpenseApprovalForm.report_total)}}</td>
+                  </tr>
+              </tfoot>
+          </table>
+          <button type="action" name="approve-expense">Approve Expenses</button>
+          <button type="action" name="reject-expense">Reject Expenses</button>
+    </form>
+</messageML>

@@ -15,11 +15,11 @@ class IMListenerTestImp(IMListener):
 
     def __init__(self, sym_bot_client):
         self.bot_client = sym_bot_client
-        
+
     def on_im_message(self, im_message):
-        logging.debug('message received in IM', im_message)
+        logging.debug('message received in IM')
         msg_processor = MessageProcessor(self.bot_client)
         msg_processor.process(im_message)
-        
+
     def on_im_created(self, im_created):
         logging.debug('IM created!', im_created)

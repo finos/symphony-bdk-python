@@ -73,7 +73,7 @@ An example of json has been provided below.  (The "botPrivateKeyPath" ends with 
       "appCertName": "",
       "appCertPassword": "",
       "authTokenRefreshPeriod": "30"
-     
+
       // Optional: If all the traffic goes through a single proxy, set this parameter. If using multiple proxies or only using a proxy for some of the components, set them below and don't useproxyURL
       "proxyURL": "http://localhost:8888",
       "proxyUsername": "proxy-username",
@@ -96,7 +96,7 @@ An example of json has been provided below.  (The "botPrivateKeyPath" ends with 
 
 
       // Required: If a truststore is required to access on-prem components, provide a path to the python truststore. Needs to be .pem file.  Instructions below for converting JKS to python pem truststore. If truststore is not needed, set value as empty string ("").
-      "truststorePath": "/path/to/truststore.pem" 
+      "truststorePath": "/path/to/truststore.pem"
     }
 
 
@@ -226,7 +226,7 @@ Example Main Class:
 
     if __name__ == "__main__":
         main()
-    
+
 
 
 ### 4 - Converting JKS (Java Key Store) to Python truststore
@@ -242,9 +242,61 @@ depending on the message type.
 
 To interact with the joke bot, try ``/bot joke``
 
+### 6 - Using Elements:
+Symphony Elements allow developers to include native, interactive UI components as part of an inbound message.  When a form Element is submitted, an event of type "SYMPHONYELEMENTSACTION" is sent across the datafeed.  
+
+In order to handle Elements events, implement an ElementsActionListener and parse the JSON payload using the [SymElementsParser](https://github.com/SymphonyPlatformSolutions/symphony-api-client-python/blob/staging_elements/sym_api_client_python/processors/sym_elements_parser.py)
+
+    from sym_api_client_python.listeners.elements_listener import ElementsActionListener
+    from sym_api_client_python.processors.sym_elements_parser import SymElementsParser
+    from .processors.action_processor import ActionProcessor
+
+    class ElementsListenerTestImp(ElementsActionListener):
+
+        def __init__(self, sym_bot_client):
+            self.bot_client = sym_bot_client
+            self.action_processor = ActionProcessor(self.bot_client)
+        
+        def on_elements_action(self, action):
+            stream_type = self.bot_client.get_stream_client().stream_info_v2(SymElementsParser().get_stream_id(action))
+            if stream_type['streamType']['type'] == 'ROOM':
+                self.action_processor.process_room_action(action)
+            elif stream_type['streamType']['type'] == 'IM':
+                self.action_processor.process_im_action(action)
+
+Use SymElementsParser class inside ActionProcessor:
+
+    from sym_api_client_python.processors.message_formatter import MessageFormatter
+    from sym_api_client_python.processors.sym_elements_parser import SymElementsParser
+
+    class ActionProcessor:
+
+        def __init__(self, bot_client):
+            self.bot_client = bot_client
+
+        def process_room_action(self, action):
+            try:
+                action_clicked = SymElementsParser().get_action(action)
+                if action_clicked == 'submit':
+                    #do something
+            except:
+                raise 
+
+Note: to send Elements forms as messages, please refer to [this documentation](https://developers.symphony.com/symphony-developer/docs/available-components) for valid messageML samples.  
+
 Symphony REST API offer a range of capabilities for application to integrate, visit the [official documentation](https://rest-api.symphony.com/reference) for more information.
 
 # Release Notes
+## 0.1.18
+- Added support for Elements actions coming across datafeed
+- Added ElementsActionListener
+- Added Processors, containing MessageFormatter, SymElementsParser, SymMessageParser. Provides helpers for accessing message and action payload information
+- Added Templates folder, containing example templates for sending in Elements
+- Added FormBuilder to programaticaly generate Elements forms
+- Added examples for ExpenseBot using Elements
+- Cleaned up typos and formatting
+
+
 ## 0.1.17
 - Added AdminClient, SignalsClient, and ConnectionsClient
 - Added docstrings to new methods

@@ -1,6 +1,8 @@
 import logging
 from .exceptions.UnauthorizedException import UnauthorizedException
 
+#for testing
+import json
 
 class DataFeedEventService:
 
@@ -11,6 +13,8 @@ class DataFeedEventService:
         self.room_listeners = []
         self.im_listeners = []
         self.connection_listeners = []
+        self.elements_listeners = []
+        self.registered_triggers = []
         self.stop = False
         self.datafeed_client = self.bot_client.get_datafeed_client()
 
@@ -37,6 +41,9 @@ class DataFeedEventService:
     def remove_connection_listener(self, connection_listener):
         self.connection_listeners.remove(connection_listener)
 
+    def add_elements_listener(self, elements_listener):
+        self.elements_listeners.append(elements_listener)
+
     def activate_datafeed(self):
         if self.stop:
             self.stop = False
@@ -44,6 +51,25 @@ class DataFeedEventService:
     def deactivate_datafeed(self):
         if not self.stop:
             self.stop = True
+
+    #to be edited
+    def register_trigger_pattern(self, pattern_to_match, commands):
+        trigger = (pattern_to_match, commands)
+        self.registered_triggers.append(trigger)
+
+    #probably want to create separate entity to store action trigger
+    def register_trigger_action(self, action, value):
+        trigger = (action, value)
+        self.registered_triggers.append(trigger)
+
+    def check_message_for_trigger(self, payload):
+        #check message for trigger, can pass this function to
+        #the event handlers, and then set a local flag based on the value
+        logic_matches = []
+        if logic_matches:
+            return True
+        else:
+            return False
 
     # read_datafeed function reads an array of events
     # read_datafeed function reads an array of events coming back from
@@ -60,10 +86,12 @@ class DataFeedEventService:
                     events = data[0]
                     logging.debug(
                         'DataFeedEventService/read_datafeed() --> '
-                        'Incoming data from read_datafeed(): {}'.format(
-                            events[0]['payload'])
+                        'Incoming data from read_datafeed(): {}'.format(json.dumps(events[0]['payload'], indent=4)
+                            )
                     )
                     for event in events:
+                        #consider adding a debug flag for demos/testing
+                        #print(json.dumps(event, indent=4))
                         if event['initiator']['user']['userId'] != \
                                 self.bot_client.get_bot_user_info()['id']:
                             self.handle_event(event)
@@ -108,11 +136,13 @@ class DataFeedEventService:
             self.connection_accepted_handler(payload)
         elif event_type == 'CONNECTIONREQUESTED':
             self.connection_requested_handler(payload)
+        elif event_type == 'SYMPHONYELEMENTSACTION':
+            self.elements_action_handler(payload)
         else:
             logging.debug('no event detected')
             return
 
-    # heck streamType --> send data to appropriate listener
+    # check streamType --> send data to appropriate listener
     def msg_sent_handler(self, payload):
         logging.debug('msg_sent_handler function started')
         stream_type = payload['payload']['messageSent']['message']['stream']['streamType']
@@ -127,76 +157,70 @@ class DataFeedEventService:
     def instant_msg_handler(self, payload):
         logging.debug('instant_msg_handler function started')
         instant_message_data = payload['payload']['instantMessageCreated']
-        logging.debug(instant_message_data)
         for listener in self.im_listeners:
             listener.on_im_created(instant_message_data)
 
     def room_created_handler(self, payload):
         logging.debug('room_created_handler function started')
         room_created_data = payload['payload']['roomCreated']
-        logging.debug(room_created_data)
         for listener in self.room_listeners:
             listener.on_room_created(room_created_data)
 
     def room_updated_handler(self, payload):
         logging.debug('room_updated_handler')
         room_updated_data = payload['payload']['roomUpdated']
-        logging.debug(room_updated_data)
         for listener in self.room_listeners:
             listener.on_room_updated(room_updated_data)
 
     def room_deactivated_handler(self, payload):
         logging.debug('room_deactivated_handler')
         room_deactivated_data = payload['payload']['roomDeactivated']
-        logging.debug(room_deactivated_data)
         for listener in self.room_listeners:
             listener.on_room_deactivated(room_deactivated_data)
 
     def room_reactivated_handler(self, payload):
         logging.debug('room_reactivated_handler')
         room_reactivated_data = payload['payload']['roomReactivated']
-        logging.debug(room_reactivated_data)
         for listener in self.room_listeners:
             listener.on_room_reactivated(room_reactivated_data)
 
     def user_joined_room_handler(self, payload):
         logging.debug('user_joined_room_handler')
         user_joined_room_data = payload['payload']['userJoinedRoom']
-        logging.debug(user_joined_room_data)
         for listener in self.room_listeners:
             listener.on_user_joined_room(user_joined_room_data)
 
     def user_left_room_handler(self, payload):
         logging.debug('user_left_room_handler')
         user_left_room_data = payload['payload']['userLeftRoom']
-        logging.debug(user_left_room_data)
         for listener in self.room_listeners:
             listener.on_user_left_room(user_left_room_data)
 
     def promoted_to_owner(self, payload):
         logging.debug('promoted_to_owner')
         promoted_to_owner_data = payload['payload']['roomMemberPromotedToOwner']
-        logging.debug(promoted_to_owner_data)
         for listener in self.room_listeners:
             listener.on_room_member_promoted_to_owner(promoted_to_owner_data)
 
     def demoted_to_owner(self, payload):
         logging.debug('demoted_to_Owner')
         demoted_to_owner_data = payload['payload']['roomMemberDemotedFromOwner']
-        logging.debug(demoted_to_owner_data)
         for listener in self.room_listeners:
             listener.on_room_member_demoted_from_owner(demoted_to_owner_data)
 
     def connection_accepted_handler(self, payload):
         logging.debug('connection_accepted_handler')
         connection_accepted_data = payload['payload']['connectionAccepted']
-        logging.debug(connection_accepted_data)
         for listener in self.connection_listeners:
             listener.on_connection_accepted(connection_accepted_data)
 
     def connection_requested_handler(self, payload):
         logging.debug('connection_requested_handler')
         connection_requested_data = payload['payload']['connectionRequested']
-        logging.debug(connection_requested_data)
         for listener in self.connection_listeners:
             listener.on_connection_requested(connection_requested_data)
+
+    def elements_action_handler(self, payload):
+        logging.debug('elements_action_handler')
+        for listener in self.elements_listeners:
+            listener.on_elements_action(payload)

@@ -25,7 +25,7 @@ class StreamClient(APIClient):
         return self.bot_client.execute_rest_call("POST", url, json=users_array)
 
     # Example Room Object. All required
-    # '{   
+    # '{
     #     "name": (string) Room name,
     #     "description": (string) Room description,
     #     "keywords": [
@@ -147,7 +147,7 @@ class StreamClient(APIClient):
         data = {
             'query': query
         }
-        data = data.update(kwargs)
+        data.update(kwargs)
         return self.bot_client.execute_rest_call('POST', url, params=params, json=data)
 
     def get_user_streams(self, skip=0, limit=50, stream_types = 'ALL', include_inactive = True):
@@ -164,7 +164,7 @@ class StreamClient(APIClient):
             }
         data = {
             'streamTypes': stream_types,
-            'includeInactiveStream': include_inactive
+            'includeInactiveStreams': include_inactive
         }
         params = {
             'skip': skip,

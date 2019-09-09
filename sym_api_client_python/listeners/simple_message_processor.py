@@ -1,26 +1,21 @@
 import xml.etree.ElementTree as ET
-
+from ..processors.message_parser import MessageParser
+import logging
 
 class MessageProcessor:
     def __init__(self, bot_client):
         self.bot_client = bot_client
+        self.message_parser = MessageParser()
 
     def process(self, msg):
-        msg_xml = msg['message']
-        msg_root = ET.fromstring(msg_xml)
-        msg_txt = msg_root[0].text
-
+        logging.debug('insdie of process')
+        msg_text = self.message_parser.get_text(msg)
         msg_to_send = dict(
-                #message=msg_xml
-                message='<messageML>Simple response!</messageML>'
+                message='<messageML>Hello {}, hope you are doing well!</messageML>'.format(self.message_parser.get_im_firstname(msg))
                 )
 
-        print(msg_txt)
-        print(msg_to_send)
 
-        if msg_txt:
-            stream_id = msg['stream']['streamId']
+        if msg_text:
+            stream_id = self.message_parser.get_stream_id(msg)
             self.bot_client.get_message_client(). \
                     send_msg(stream_id, msg_to_send)
-           
-
