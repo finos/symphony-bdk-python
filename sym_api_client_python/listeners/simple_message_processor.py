@@ -1,11 +1,11 @@
 import xml.etree.ElementTree as ET
-from ..processors.message_parser import MessageParser
+from ..processors.sym_message_parser import SymMessageParser
 import logging
 
 class MessageProcessor:
     def __init__(self, bot_client):
         self.bot_client = bot_client
-        self.message_parser = MessageParser()
+        self.message_parser = SymMessageParser()
 
     def process(self, msg):
         logging.debug('insdie of process')
