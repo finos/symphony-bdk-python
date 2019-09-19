@@ -256,7 +256,7 @@ In order to handle Elements events, implement an ElementsActionListener and pars
         def __init__(self, sym_bot_client):
             self.bot_client = sym_bot_client
             self.action_processor = ActionProcessor(self.bot_client)
-        
+
         def on_elements_action(self, action):
             stream_type = self.bot_client.get_stream_client().stream_info_v2(SymElementsParser().get_stream_id(action))
             if stream_type['streamType']['type'] == 'ROOM':
@@ -280,13 +280,20 @@ Use SymElementsParser class inside ActionProcessor:
                 if action_clicked == 'submit':
                     #do something
             except:
-                raise 
+                raise
 
 Note: to send Elements forms as messages, please refer to [this documentation](https://developers.symphony.com/symphony-developer/docs/available-components) for valid messageML samples.  
 
 Symphony REST API offer a range of capabilities for application to integrate, visit the [official documentation](https://rest-api.symphony.com/reference) for more information.
 
 # Release Notes
+
+## 0.1.20
+- Updated examples
+
+## 0.1.19
+- Updated examples
+
 ## 0.1.18
 - Added support for Elements actions coming across datafeed
 - Added ElementsActionListener

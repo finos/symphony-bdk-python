@@ -11,7 +11,7 @@ class MessageProcessor:
         logging.debug('insdie of process')
         msg_text = self.message_parser.get_text(msg)
         msg_to_send = dict(
-                message='<messageML>Hello {}, hope you are doing well!</messageML>'.format(self.message_parser.get_im_firstname(msg))
+                message='<messageML>Hello {}, hope you are doing well!</messageML>'.format(self.message_parser.get_im_first_name(msg))
                 )
 
 
