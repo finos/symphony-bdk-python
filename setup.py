@@ -5,6 +5,19 @@ def readme():
     with open('README.md') as f:
         return f.read()
 
+test_dependencies = [
+    'pytest',
+    'requests-mock',
+    'aioresponses',
+]
+
+# This means dependencies for testing can be installed with:
+# pip install .[test]
+# See this Stackoverflow answer for details
+# https://stackoverflow.com/a/41398850
+extras = {
+    "test": test_dependencies,
+}
 
 setuptools.setup(
     name="sym_api_client_python",
@@ -18,12 +31,20 @@ setuptools.setup(
         "symphony-api-client-python",
     packages=setuptools.find_packages(),
     install_requires=[
+        'aiohttp',
         'pyOpenSSL',
         'rsa',
         'requests',
         'python-jose',
-        'urllib3',
+        'urllib3<1.25,>=1.21.',
+        'python-json-logger==0.1.11',
+        'beautifulsoup4==4.8.0',
+        'Jinja2==2.10.1',
+        'requests_pkcs12==1.4',
+        'requests-toolbelt==0.9.1',
+        'yattag==1.12.2'
     ],
+    extras_require=extras,
     include_package_data=True,
     classifiers=(
         "Programming Language :: Python :: 3.6",

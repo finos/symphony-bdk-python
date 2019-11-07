@@ -1,16 +1,22 @@
+import argparse
 import logging
-from sym_api_client_python.configure.configure import SymConfig
+import os
+
 from sym_api_client_python.auth.auth import Auth
 from sym_api_client_python.clients.sym_bot_client import SymBotClient
+from sym_api_client_python.configure.configure import SymConfig
 from sym_api_client_python.listeners.im_listener_test_imp import \
-        IMListenerTestImp
+    IMListenerTestImp
 from sym_api_client_python.listeners.room_listener_test_imp import \
-        RoomListenerTestImp
+    RoomListenerTestImp
 
 
 def configure_logging():
+        log_dir = os.path.join(os.path.dirname(__file__), "logs")
+        if not os.path.exists(log_dir):
+            os.makedirs(log_dir, exist_ok=True)
         logging.basicConfig(
-                filename='./logs/example.log',
+                filename=os.path.join(log_dir, 'example.log'),
                 format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                 filemode='w', level=logging.DEBUG
         )
@@ -19,12 +25,22 @@ def configure_logging():
 
 def main():
         print('Python Client runs using Cert authentication')
+        parser = argparse.ArgumentParser()
+        parser.add_argument("--config", help="Config json file to be used")
+
+        args = parser.parse_args()
 
         # Configure log
         configure_logging()
 
         # Cert Auth flow: pass path to certificate config.json file
-        configure = SymConfig('../resources/config.json')
+        if args.config is None:
+            config_path = os.path.join(os.path.dirname(__file__), "..", "resources", "config.json")
+        else:
+            config_path = args.config
+
+        # Cert Auth flow: pass path to certificate config.json file
+        configure = SymConfig(config_path, __file__)
         configure.load_config()
         auth = Auth(configure)
         auth.authenticate()
@@ -50,4 +66,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

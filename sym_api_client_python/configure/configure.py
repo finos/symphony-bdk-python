@@ -1,15 +1,51 @@
 import json
-
+import logging
+import os
 
 class SymConfig:
     # initialize object by passing in path to config file
     # store configuration data in variable data
-    def __init__(self, path_to_config):
+    def __init__(self, path_to_config, relative_to=None):
+        """If relative_to is supplied, all relative paths will be recomputed to be relative to the file or directory
+        supplied. This allows starting the bots from other directories than where the main is. If a directory is
+        given in this field, it should end with a slash.
+
+        In testing one may want to set relative_to to be the path to the config json, so all references are relative
+        to that. An application may wish to set this to __file__ in its main, meaning an configuration file from anyway
+        could be used.
+        
+        """
         self.path_to_config = path_to_config
+        self.relative_to = os.path.dirname(relative_to) if relative_to is not None else os.curdir
         self.data = {}
+
+    def _fix_relative_path(self, json_data, path_key, filename_key=None, warn_if_absent=True):
+        """Given a json file, a key for a path and an optional key for a filename, extract the path
+        and potentially name, resolve and join them. If warn_if_absent, issue a warning if the file
+        or path does not exist at that location"""
+        
+        path = json_data[path_key]
+
+        # Blank values are used to ignore entry. They should probably be None instead of blank but to maintain
+        # backwards compatibility the function just returns "". If it continued "" would get resolved to "."
+        if path == "":
+            return ""
+
+        if filename_key is not None:
+            filename = json_data[filename_key]
+            path = os.path.join(path, filename)
+        result = os.path.normpath(os.path.join(self.relative_to, path))
+
+        if warn_if_absent and (not os.path.exists(result)):
+            parts = [p for p in [path_key, filename_key] if p is not None]
+            logging.warning(
+                "{} specified in config, but resolved path {} does not exist"
+                .format(", ".join(parts), result))
+        return result
 
 
     def load_config(self):
+        logging.info("Loading config from: {}".format(os.path.realpath(self.path_to_config)))
         with open(self.path_to_config, "r") as read_file:
             data = json.load(read_file)
             self.data = data
@@ -35,14 +71,21 @@ class SymConfig:
                 self.data['agentHost'] = 'https://'+ data['agentHost']
             
             #backwards compatible
+            if 'botCertPath' in data:
+                self.data['botCertPath'] = self._fix_relative_path(data,'botCertPath')
+
             if 'botRSAName' in data:
-                self.data['botRSAPath'] = data['botRSAPath'] + data['botRSAName']
+                self.data['botRSAPath'] = self._fix_relative_path(data, 'botRSAPath', 'botRSAName')
             
             if 'botPrivateKeyName' in data:
-                self.data['botRSAPath'] = data['botPrivateKeyPath'] + data['botPrivateKeyName']
+                # TODO: check this
+                self.data['botRSAPath'] = self._fix_relative_path(data, 'botPrivateKeyPath', 'botPrivateKeyName')
 
             if 'botCertName' in data:
-                self.data['p.12'] = data['botCertPath'] + data['botCertName']
+                self.data['p.12'] = self._fix_relative_path(data, 'botCertPath', 'botCertName')
+
+            if 'truststorePath' in data:
+                self.data['truststorePath'] = self._fix_relative_path(data, 'truststorePath')
             
             if 'proxyURL' in data:
                 self.data['podProxyURL'] = data['proxyURL']
@@ -122,7 +165,17 @@ class SymConfig:
                             'http' : data['keyManagerProxyURL'],
                             'https' : data['keyManagerProxyURL'],
                             }
-            print(json.dumps(self.data))
+            
+            if 'datafeedEventsErrorTimeout' in data:
+                self.data['datafeedEventsErrorTimeout'] = data['datafeedEventsErrorTimeout']
 
-            read_file.close()
+            loggable_config_dict = {}
+            for k, v in self.data.items():
+                if "password" not in k.lower() or v == "":
+                    loggable_config_dict[k] = v
+                else:
+                    loggable_config_dict[k] = "---HIDDEN---"
+
+            logging.info(json.dumps(loggable_config_dict, indent=4))
+
 

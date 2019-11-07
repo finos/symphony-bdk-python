@@ -23,6 +23,11 @@ class MessageClient(APIClient):
         params.update(kwargs)
         return self.bot_client.execute_rest_call('GET', url, params=params)
 
+    async def send_msg_async(self, stream_id, outbound_msg):
+        logging.debug('MessageClient/send_msg()')
+        url = '/agent/v4/stream/{0}/message/create'.format(stream_id)
+        return await self.bot_client.execute_rest_call_async('POST', url, files=outbound_msg)        
+
     def send_msg(self, stream_id, outbound_msg):
         logging.debug('MessageClient/send_msg()')
         url = '/agent/v4/stream/{0}/message/create'.format(stream_id)

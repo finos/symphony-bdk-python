@@ -18,6 +18,21 @@ Activate the virtual environment **(optional)**:
 Install dependencies required for this client by executing the command below.
 ``pip install -r requirements.txt``
 
+### Development
+
+To develop this library run:
+``pip install -e .[test]``
+
+This will give an editable install so the code can be changed while still being installed in the environment. Tests can then be run with:
+
+``pytest tests`` for the whole test suite
+``pytest tests/test_message_parser.py`` for one test file
+``pytest tests -k test_get_text`` for a single test
+
+An environment variable `SYMPHONY_TEST_CONFIG` can be set with the authentication type and configuration file separated by a colon.
+
+``SYMPHONY_TEST_CONFIG=RSA:~/.dev_config.json pytest``
+
 ## Getting Started
 ### 1 - Prepare the service account
 The Python client operates using a [Symphony Service Account](https://support.symphony.com/hc/en-us/articles/360000720863-Create-a-new-service-account), which is a type of account that applications use to work with Symphony APIs. Please contact with Symphony Admin in your company to get the account.
@@ -285,6 +300,81 @@ Use SymElementsParser class inside ActionProcessor:
 Note: to send Elements forms as messages, please refer to [this documentation](https://developers.symphony.com/symphony-developer/docs/available-components) for valid messageML samples.  
 
 Symphony REST API offer a range of capabilities for application to integrate, visit the [official documentation](https://rest-api.symphony.com/reference) for more information.
+
+### 7 - Using the Asychronous version:
+
+Use `pip install --pre sym-api-client-python` or `pip install sym-api-client-python==0.2.0a1`
+
+An experimental non-blocking version of the DataFeed has been created using asyncio. This supports asynchronous behaviour in two ways:
+* Listening on the event feed does not have to be blocking, this would allow for a bot that responds to Symphony events, but also external
+stimulus like timers or REST requests. Using asyncio means this can be done without threading, and therefore without careful threadsafe
+structures
+* Handlers can be asynchronous. This means that while responding to one client with an expensive request, other clients can still get timely
+responses
+
+This API is experimental and you should test all paths of your code carefully as asyncio has lots of pecularities and not using an `await`
+where one is expected for example can make your bot crash. However, successfully employing this strategy can make your bot handle far higher
+loads than would be possible in the synchronous case, without having to resort to threading or complex callbacks.
+
+Blocking listeners will however still block the datafeed. Listeners that need to make HTTP requests however can make them with aiohttp,
+instead of requests for example. aiohttp is already a dependency of this module. These can be awaited to release the thread.
+```
+# Blocking
+requests.get(url)
+# Not blocking 
+async def fetch(session, url):
+    async with session.get(url) as response:
+        return await response.text()
+
+async def main():
+    async with aiohttp.ClientSession() as session:
+        html = await fetch(session, 'http://python.org')
+        print(html)
+```
+To see this functionality, run the `main_async.py` version in the examples folder. The key changes are:
+`main_async.py`
+```
+        datafeed_event_service = bot_client.get_async_datafeed_event_service() 
+
+        ...
+ 
+        async def timed_ringer(period_in_seconds, message):
+            while True:
+                await asyncio.sleep(period_in_seconds)
+                print(message)
+
+        # Create and read the datafeed
+        print('Starting datafeed')
+        loop = asyncio.get_event_loop()
+        awaitables = asyncio.gather(timed_ringer(2, "Ding"), timed_ringer(5, "Dong"), datafeed_event_service.start_datafeed())
+        loop.run_until_complete(awaitables)
+```
+`im_listener_test_imp.py`
+```
+
+class AsyncImListenerImp(IMListener):
+    """Example implementation of RoomListener with asynchronous functionality"""
+
+    def __init__(self, sym_bot_client):
+        self.bot_client = sym_bot_client
+        self.message_parser = SymMessageParser()
+
+    async def on_im_msg(self, msg):
+        logging.debug('message received in IM', msg)
+
+        await asyncio.sleep(5)
+
+        msg_text = self.message_parser.get_text(msg)
+        msg_to_send = dict(
+                message='<messageML>Hello {}, sorry to keep you waiting!</messageML>'.format(
+                    self.message_parser.get_im_first_name(msg))
+                )
+
+        if msg_text:
+            stream_id = self.message_parser.get_stream_id(msg)
+            self.bot_client.get_message_client(). \
+                    send_msg(stream_id, msg_to_send)
+```
 
 # Release Notes
 
