@@ -90,8 +90,6 @@ class DataFeedEventService:
                             )
                     )
                     for event in events:
-                        #consider adding a debug flag for demos/testing
-                        #print(json.dumps(event, indent=4))
                         if event['initiator']['user']['userId'] != \
                                 self.bot_client.get_bot_user_info()['id']:
                             self.handle_event(event)

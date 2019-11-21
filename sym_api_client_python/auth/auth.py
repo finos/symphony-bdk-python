@@ -23,16 +23,16 @@ class Auth:
         self.key_manager_token = None
         self.auth_session = requests.Session()
         self.key_manager_auth_session = requests.Session()
-        
+
         #proxy infomation set in config loader, set to empty object if there is no proxy set in config.json
         self.auth_session.proxies.update(self.config.data['podProxyRequestObject'])
         self.key_manager_auth_session.proxies.update(self.config.data['keyManagerProxyRequestObject'])
-        
+
         if 'truststorePath' in self.config.data:
             logging.debug("Setting trusstorePath for auth to {}".format(self.config.data['truststorePath']))
             self.auth_session.verify = self.config.data['truststorePath']
             self.key_manager_auth_session.verify = self.config.data['truststorePath']
-     
+
         self.auth_session.mount(
             self.config.data['sessionAuthHost'],
             Pkcs12Adapter(
@@ -69,6 +69,7 @@ class Auth:
         return self.key_manager_token
 
     def authenticate(self):
+        print('starting the authenticate function')
         """Get the session and key manager token by calling APIs"""
         logging.debug('Auth/authenticate()')
         if self.last_auth_time == 0 or \
@@ -128,4 +129,3 @@ class Auth:
                 'Auth/get_keyauth() failed: {}'.format(response.status_code)
             )
             self.key_manager_authenticate()
-
