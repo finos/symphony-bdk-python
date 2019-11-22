@@ -29,8 +29,8 @@ class SymBotRSAAuth(APIClient):
         self.auth_session.proxies.update(self.config.data['podProxyRequestObject'])
         self.key_manager_auth_session.proxies.update(self.config.data['keyManagerProxyRequestObject'])
 
-        if 'truststorePath' in self.config.data:
-            logging.debug("Setting trusstorePath for auth to {}".format(self.config.data['truststorePath']))
+        if self.config.data['truststorePath']:
+            logging.debug('truststore being added to requests library')
             self.auth_session.verify = self.config.data['truststorePath']
             self.key_manager_auth_session.verify = self.config.data['truststorePath']
 
