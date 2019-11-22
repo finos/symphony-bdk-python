@@ -289,9 +289,9 @@ Symphony REST API offer a range of capabilities for application to integrate, vi
 # Release Notes
 
 ## 0.1.22
--Updated authentication retry logic for RSA based authentication
--User has a maximum of 5 times to reauthenticate.  If limit is reached, MaxRetryException is raised.
--SDK Recovers and creates new datafeed if reauthenticate succeeds.  
+- Updated authentication retry logic for RSA based authentication
+- User has a maximum of 5 times to reauthenticate.  If limit is reached, MaxRetryException is raised.
+- SDK Recovers and creates new datafeed if reauthenticate succeeds.  
 
 ## 0.1.21
 - Added Truststore support for RSA based authentication
