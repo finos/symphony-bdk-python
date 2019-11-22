@@ -1,0 +1,2 @@
+class DatafeedExpiredException(Exception):
+    pass

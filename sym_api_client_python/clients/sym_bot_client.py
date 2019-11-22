@@ -121,7 +121,7 @@ class SymBotClient(APIClient):
                 )
                 self.agent_session.verify=self.config.data['truststorePath']
         return self.agent_session
-    
+
     def execute_rest_call(self, method, path, **kwargs):
         results = None
         session = None
@@ -133,7 +133,7 @@ class SymBotClient(APIClient):
             session = self.get_pod_session()
         else:
             url = path
-        
+
         response = session.request(method, url, **kwargs)
         if response.status_code == 204:
             results = []
