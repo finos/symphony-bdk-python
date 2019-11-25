@@ -46,7 +46,7 @@ class SymBotRSAAuth(APIClient):
         """
         Get the session and key manager token
         """
-        logging.debug('Auth/authenticate()')
+        logging.debug('RSA Auth/authenticate()')
         try:
             if (self.last_auth_time == 0) or \
                     (int(round(time.time() * 1000) - self.last_auth_time >= auth_endpoint_constants['WAIT_TIME'])):
@@ -108,7 +108,7 @@ class SymBotRSAAuth(APIClient):
                 self.session_authenticate()
         else:
             data = json.loads(response.text)
-            logging.debug('RSA/key_manager_token token success')
+            logging.debug('RSA/session token success')
             self.session_token = data['token']
             self.auth_retries = 0
 
@@ -136,6 +136,6 @@ class SymBotRSAAuth(APIClient):
                 self.key_manager_authenticate()
         else:
             data = json.loads(response.text)
-            logging.debug('RSA/session token success')
+            logging.debug('RSA/key manager token success')
             self.key_manager_token = data['token']
             self.auth_retries = 0
