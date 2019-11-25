@@ -50,7 +50,7 @@ class SymBotRSAAuth(APIClient):
         try:
             if (self.last_auth_time == 0) or \
                     (int(round(time.time() * 1000) - self.last_auth_time >= auth_endpoint_constants['WAIT_TIME'])):
-                logging.debug('Auth/authenticate() --> needed to authenticate')
+                logging.debug('RSA Auth/authenticate() --> needed to authenticate')
 
                 self.last_auth_time = int(round(time.time() * 1000))
                 self.session_authenticate()
