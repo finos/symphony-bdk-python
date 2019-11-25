@@ -2,25 +2,23 @@ import json
 import logging
 import time
 import requests
-from .auth_endpoint_constants import auth_endpoint_constants
+
 from requests import Session
 from requests_pkcs12 import Pkcs12Adapter
-from ..clients.api_client import APIClient
-from ..exceptions.UnauthorizedException import UnauthorizedException
-from ..exceptions.MaxRetryException import MaxRetryException
 
-class Auth(APIClient):
+
+class Auth:
     """Class for certificate authentication"""
 
     def __init__(self, config):
         """
         Set up proxy information if configuration contains proxyURL
+
         :param config: Object contains all certificate configurations
         """
         self.config = config
         self.agentConfig = config
         self.last_auth_time = 0
-        self.auth_retries = 0
         self.session_token = None
         self.key_manager_token = None
         self.auth_session = requests.Session()
@@ -30,8 +28,8 @@ class Auth(APIClient):
         self.auth_session.proxies.update(self.config.data['podProxyRequestObject'])
         self.key_manager_auth_session.proxies.update(self.config.data['keyManagerProxyRequestObject'])
 
-        if self.config.data['truststorePath']:
-            logging.debug('truststore being added to requests library')
+        if 'truststorePath' in self.config.data:
+            logging.debug("Setting trusstorePath for auth to {}".format(self.config.data['truststorePath']))
             self.auth_session.verify = self.config.data['truststorePath']
             self.key_manager_auth_session.verify = self.config.data['truststorePath']
 
@@ -71,25 +69,22 @@ class Auth(APIClient):
         return self.key_manager_token
 
     def authenticate(self):
-        """
-        Get the session and key manager token
-        """
-        logging.debug('Cert based Auth/authenticate()')
-        try:
-            if (self.last_auth_time == 0) or \
-                    (int(round(time.time() * 1000) - self.last_auth_time >= auth_endpoint_constants['WAIT_TIME'])):
-                logging.debug('Auth/authenticate() --> needed to authenticate')
-
-                self.last_auth_time = int(round(time.time() * 1000))
-                self.session_authenticate()
-                self.key_manager_authenticate()
-
-            else:
+        print('starting the authenticate function')
+        """Get the session and key manager token by calling APIs"""
+        logging.debug('Auth/authenticate()')
+        if self.last_auth_time == 0 or \
+                int(round(time.time() * 1000) - self.last_auth_time >= 3000):
+            logging.debug('Auth/authenticate() --> needed to authenticate')
+            self.last_auth_time = int(round(time.time() * 1000))
+            self.session_authenticate()
+            self.key_manager_authenticate()
+        else:
+            try:
                 logging.debug('Retry authentication in 30 seconds.')
-                time.sleep(auth_endpoint_constants['TIMEOUT'])
+                time.sleep(30)
                 self.authenticate()
-        except:
-            raise MaxRetryException('max auth retry limit')
+            except Exception as err:
+                print(err)
 
     # Retrieve session token by calling the session token API
     # Certificates are passed in cert parameter
@@ -99,26 +94,20 @@ class Auth(APIClient):
         passed in through Request Session object
         """
         logging.debug('Auth/get_session_token()')
+        response = self.auth_session.post(
+                self.config.data['sessionAuthHost'] +
+                '/sessionauth/v1/authenticate'
+            )
 
-        url = self.config.data['sessionAuthHost'] + '/sessionauth/v1/authenticate'
-        response = self.auth_session.post(url)
-
-        if response.status_code != 200:
-            self.auth_retries += 1
-            if self.auth_retries > auth_endpoint_constants['MAX_AUTH_RETRY']:
-                logging.debug('more than 5 times tried')
-                raise UnauthorizedException('max auth retry limit: {}'.format(response.__dict__))
-            else:
-                logging.debug('RSA_auth/get_session_token() function failed: {}'.format(
-                    response.status_code)
-                )
-                time.sleep(auth_endpoint_constants['TIMEOUT'])
-                self.session_authenticate()
-        else:
+        if response.status_code == 200:
             data = json.loads(response.text)
-            logging.debug('RSA/session token success')
+            logging.debug('Auth/session token success')
             self.session_token = data['token']
-            self.auth_retries = 0
+        else:
+            logging.debug('Auth/get_session_token() failed: {}'.format(
+                response.status_code)
+            )
+            self.session_authenticate()
 
     def key_manager_authenticate(self):
         """
@@ -126,22 +115,17 @@ class Auth(APIClient):
         passed in through Request Session object
         """
         logging.debug('Auth/get_keyauth()')
+        response = self.key_manager_auth_session.post(
+            self.config.data['keyAuthHost'] +
+            '/keyauth/v1/authenticate'
+        )
 
-        url = self.config.data['keyAuthHost'] + '/keyauth/v1/authenticate'
-        response = self.key_manager_auth_session.post(url)
-
-        if response.status_code != 200:
-            self.auth_retries += 1
-            if self.auth_retries > auth_endpoint_constants['MAX_AUTH_RETRY']:
-                raise UnauthorizedException('max auth retry limit: {}'.format(response.__dict__))
-            else:
-                logging.debug('Auth/get_key_manager_authenticate() function failed: {}'.format(
-                    response.status_code)
-                )
-                time.sleep(auth_endpoint_constants['TIMEOUT'])
-                self.key_manager_authenticate()
-        else:
+        if response.status_code == 200:
             data = json.loads(response.text)
-            logging.debug('RSA/key manager token success')
+            logging.debug('Auth/keymanager token success')
             self.key_manager_token = data['token']
-            self.auth_retries = 0
+        else:
+            logging.debug(
+                'Auth/get_keyauth() failed: {}'.format(response.status_code)
+            )
+            self.key_manager_authenticate()
