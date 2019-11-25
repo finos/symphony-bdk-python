@@ -46,9 +46,9 @@ class SymMessageParser:
         text_arr = []
         msg_xml = message_data['message']
         soup = BeautifulSoup(msg_xml, 'html.parser')
-        for i in soup.find_all('p'):
+        for i in soup.find_all('div'):
             text_arr.extend(i.text.split(' '))
-        return list(filter(lambda x: not x.startswith('@') and not x.startswith('#'), text_arr))
+        return text_arr
 
     def get_im_first_name(self, message_data):
         return message_data['user']['firstName']
