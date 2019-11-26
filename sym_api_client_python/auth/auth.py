@@ -4,11 +4,12 @@ import time
 import requests
 from .auth_endpoint_constants import auth_endpoint_constants
 from requests import Session
+from ..clients.api_client import APIClient
 from requests_pkcs12 import Pkcs12Adapter
 from ..exceptions.UnauthorizedException import UnauthorizedException
 from ..exceptions.MaxRetryException import MaxRetryException
 
-class Auth:
+class Auth(APIClient):
     """Class for certificate authentication"""
 
     def __init__(self, config):
@@ -98,7 +99,7 @@ class Auth:
         passed in through Request Session object
         """
         logging.debug('Auth/get_session_token()')
-        
+
         url = self.config.data['sessionAuthHost'] + '/sessionauth/v1/authenticate'
         response = self.auth_session.post(url)
 
