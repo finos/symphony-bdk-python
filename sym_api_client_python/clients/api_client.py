@@ -20,8 +20,7 @@ class APIClient:
 
     def handle_error(self, response, bot_client):
         logging.debug('handle_error function started')
-        print('response: ', response)
-        x = json.loads(response)
+        x = response.json()
         print(x)
         print(x['message'])
         if response.status_code == 400 and 'Could not find a datafeed with the' in x['message']:
