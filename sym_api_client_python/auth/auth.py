@@ -14,7 +14,6 @@ class Auth:
     def __init__(self, config):
         """
         Set up proxy information if configuration contains proxyURL
-
         :param config: Object contains all certificate configurations
         """
         self.config = config
@@ -99,6 +98,7 @@ class Auth:
         passed in through Request Session object
         """
         logging.debug('Auth/get_session_token()')
+        
         url = self.config.data['sessionAuthHost'] + '/sessionauth/v1/authenticate'
         response = self.auth_session.post(url)
 

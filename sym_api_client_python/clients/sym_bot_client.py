@@ -133,8 +133,13 @@ class SymBotClient(APIClient):
             session = self.get_pod_session()
         else:
             url = path
-
-        response = session.request(method, url, **kwargs)
+        try:
+            response = session.request(method, url, **kwargs)
+        except (requests.exceptions.ConnectionError) as err:
+            logging.debug(err)
+            logging.debug(type(err))
+            logging.debug('ensure pod/agent subdomains are correct')
+            raise
         if response.status_code == 204:
             results = []
         elif response.status_code == 200:
