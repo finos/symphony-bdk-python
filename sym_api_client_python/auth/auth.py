@@ -109,7 +109,7 @@ class Auth(APIClient):
                 logging.debug('more than 5 times tried')
                 raise UnauthorizedException('max auth retry limit: {}'.format(response.__dict__))
             else:
-                logging.debug('RSA_auth/get_session_token() function failed: {}'.format(
+                logging.debug('Auth/get_session_token() function failed: {}'.format(
                     response.status_code)
                 )
                 time.sleep(auth_endpoint_constants['TIMEOUT'])

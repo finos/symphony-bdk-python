@@ -97,8 +97,8 @@ class SymBotRSAAuth(APIClient):
 
         if response.status_code != 200:
             self.auth_retries += 1
-            if self.auth_retries > auth_endpoint_constants['MAX_AUTH_RETRY']:
-                logging.debug('more than 5 times tried')
+            if self.auth_retries > auth_endpoint_constants['MAX_RSA_RETRY']:
+                logging.debug('more than 5 times tried, retry limit reached')
                 raise UnauthorizedException('max auth retry limit: {}'.format(response.__dict__))
             else:
                 logging.debug('RSA_auth/get_session_token() function failed: {}'.format(
@@ -126,7 +126,7 @@ class SymBotRSAAuth(APIClient):
 
         if response.status_code != 200:
             self.auth_retries += 1
-            if self.auth_retries > auth_endpoint_constants['MAX_AUTH_RETRY']:
+            if self.auth_retries > auth_endpoint_constants['MAX_RSA_RETRY']:
                 raise UnauthorizedException('max auth retry limit: {}'.format(response.__dict__))
             else:
                 logging.debug('RSA_auth/get_key_manager_authenticate() function failed: {}'.format(

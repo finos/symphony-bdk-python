@@ -22,7 +22,7 @@ class APIClient:
         logging.debug('handle_error function started')
         x = response.json()
         if response.status_code == 400 and 'Could not find a datafeed with the' in x['message']:
-            #no datafeed found, create new datafeedId and read from it
+            logging.debug('datafeed expired, start_datafeed()')
             bot_client.datafeed_event_service.start_datafeed()
 
         elif response.status_code == 400:
