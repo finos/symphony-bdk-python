@@ -1,4 +1,8 @@
 import logging
+
+import time
+from .auth.auth_endpoint_constants import auth_endpoint_constants
+from .exceptions.ServerErrorException import ServerErrorException
 from .exceptions.UnauthorizedException import UnauthorizedException
 
 #for testing
@@ -86,8 +90,7 @@ class DataFeedEventService:
                     events = data[0]
                     logging.debug(
                         'DataFeedEventService/read_datafeed() --> '
-                        'Incoming data from read_datafeed(): {}'.format(json.dumps(events[0]['payload'], indent=4)
-                            )
+                        'Incoming data from read_datafeed(): {}'.format(json.dumps(events[0]['payload'], indent=4))
                     )
                     for event in events:
                         if event['initiator']['user']['userId'] != \
@@ -104,6 +107,12 @@ class DataFeedEventService:
                     'DataFeedEventService - caught unauthorized exception '
                     '--> startDataFeed()'
                 )
+                self.start_datafeed()
+
+            except ServerErrorException as e:
+                logging.error(str(e))
+                logging.info(f"Waiting for {auth_endpoint_constants['TIMEOUT']} seconds before retrying..")
+                time.sleep(auth_endpoint_constants['TIMEOUT'])
                 self.start_datafeed()
 
     # function takes in single event --> Checks eventType --> forwards event
