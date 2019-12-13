@@ -288,6 +288,9 @@ Symphony REST API offer a range of capabilities for application to integrate, vi
 
 # Release Notes
 
+## 0.1.23
+- Updated Error handling logic for Server Errors (500's) in datafeed_event_service.py
+
 ## 0.1.22
 - Updated authentication retry logic for RSA based authentication
 - User has a maximum of 5 times to reauthenticate.  If limit is reached, MaxRetryException is raised.
