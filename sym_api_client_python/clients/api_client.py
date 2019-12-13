@@ -1,5 +1,4 @@
 import logging
-import asyncio
 import requests
 import json
 from ..exceptions.APIClientErrorException import APIClientErrorException
