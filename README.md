@@ -288,6 +288,11 @@ Symphony REST API offer a range of capabilities for application to integrate, vi
 
 # Release Notes
 
+## 0.1.24
+- Created Wall Post Listener
+- Created Message Suppression Listener
+- Fixed typos and comments
+
 ## 0.1.23
 - Updated Error handling logic for Server Errors (500's) in datafeed_event_service.py
 
