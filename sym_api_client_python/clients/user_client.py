@@ -56,7 +56,7 @@ class UserClient(APIClient):
         url = '/pod/v1/user/search'
         params = {'local': local, 'skip': skip, 'limit': limit}
         data = {'query':query, 'filters': filters}
-        return self.bot_client.execute_rest_call('GET', url, params=params, json=data)
+        return self.bot_client.execute_rest_call('POST', url, params=params, json=data)
 
     def get_session_user(self):
         logging.debug('UserClient/get_session_user()')
