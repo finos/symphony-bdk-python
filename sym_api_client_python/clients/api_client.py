@@ -21,7 +21,7 @@ class APIClient:
         logging.debug('handle_error function started')
         try:
             x = response.json()
-        except json.decoder.JSONDEcodeError:
+        except json.decoder.JSONDecodeError:
             logging.debug(response.text)
             raise
 
