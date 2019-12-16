@@ -44,7 +44,7 @@ class APIClient:
                 'Forbidden: Caller lacks necessary entitlement: {}'
                     .format(response.status_code))
         elif response.status_code == 405:
-            logging.debug('Method Not Allowed')
+            logging.debug('Handling 405 error')
             raise ForbiddenException(
                 'Method Not Allowed: The method received in the request-line is known by the origin server but not supported by the target resource: {}'
                     .format(response.status_code))
