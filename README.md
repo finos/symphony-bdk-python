@@ -288,6 +288,10 @@ Symphony REST API offer a range of capabilities for application to integrate, vi
 
 # Release Notes
 
+## 0.1.25
+- Handle JSONDecodeError
+- fixed bug in search_users()
+
 ## 0.1.24
 - Created Wall Post Listener
 - Created Message Suppression Listener
