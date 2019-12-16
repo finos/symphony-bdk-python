@@ -19,9 +19,12 @@ class APIClient:
 
     def handle_error(self, response, bot_client):
         logging.debug('handle_error function started')
-        logging.debug(response.text)
-        x = response.json()
-        logging.debug('after handle_error function')
+        try:
+            x = response.json()
+        except json.decoder.JSONDEcodeError:
+            logging.debug(response.text)
+            raise
+
         if response.status_code == 400 and 'Could not find a datafeed with the' in x['message']:
             logging.debug('datafeed expired, start_datafeed()')
             bot_client.datafeed_event_service.start_datafeed()
