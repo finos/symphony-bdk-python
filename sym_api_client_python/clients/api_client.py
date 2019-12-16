@@ -19,7 +19,12 @@ class APIClient:
 
     def handle_error(self, response, bot_client):
         logging.debug('handle_error function started')
-        x = response.json()
+        try:
+            x = response.json()
+        except json.decoder.JSONDecodeError:
+            logging.debug('JSON Decoding failed')
+            x = response.text
+
         if response.status_code == 400 and 'Could not find a datafeed with the' in x['message']:
             logging.debug('datafeed expired, start_datafeed()')
             bot_client.datafeed_event_service.start_datafeed()
@@ -37,6 +42,11 @@ class APIClient:
         elif response.status_code == 403:
             raise ForbiddenException(
                 'Forbidden: Caller lacks necessary entitlement: {}'
+                    .format(response.status_code))
+        elif response.status_code == 405:
+            logging.debug('Handling 405 error')
+            raise ForbiddenException(
+                'Method Not Allowed: The method received in the request-line is known by the origin server but not supported by the target resource: {}'
                     .format(response.status_code))
         elif response.status_code >= 500:
             raise ServerErrorException(
