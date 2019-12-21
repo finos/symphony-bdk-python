@@ -140,7 +140,7 @@ class SymBotClient(APIClient):
                 )
                 self.agent_session.verify=self.config.data[_TRUSTSTORE_PATH]
         return self.agent_session
-    
+
     def execute_rest_call(self, method, path, **kwargs):
         results = None
         session = None
@@ -154,7 +154,14 @@ class SymBotClient(APIClient):
             url = path
             session = self.get_agent_session()
 
-        response = session.request(method, url, **kwargs)
+        try:
+            response = session.request(method, url, **kwargs)
+        except requests.exceptions.ConnectionError as err:
+            logging.debug(err)
+            logging.debug(type(err))
+            logging.debug('ensure pod/agent subdomains are correct')
+            raise
+
         if response.status_code == 204:
             results = []
         elif response.status_code == 200:
@@ -259,7 +266,14 @@ class SymBotClient(APIClient):
         else:
             data = None
         
-        response = await session.request(method, url, proxy=http_proxy, data=data, **kwargs)
+
+        try:
+            response = await session.request(method, url, proxy=http_proxy, data=data, **kwargs)
+        except aiohttp.ClientConnectionError as err:
+            logging.debug(err)
+            logging.debug(type(err))
+            logging.debug('ensure pod/agent subdomains are correct')
+            raise
 
         if response.status == 204:
             results = []

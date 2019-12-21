@@ -7,6 +7,8 @@ import datetime
 from collections import namedtuple
 import time
 
+from .auth.auth_endpoint_constants import auth_endpoint_constants
+from .exceptions.ServerErrorException import ServerErrorException
 from .exceptions.UnauthorizedException import UnauthorizedException
 from .exceptions.APIClientErrorException import APIClientErrorException
 from .exceptions.DatafeedExpiredException import DatafeedExpiredException
@@ -28,6 +30,8 @@ class DataFeedEventService:
         self.im_listeners = []
         self.connection_listeners = []
         self.elements_listeners = []
+        self.suppression_listeners = []
+        self.wall_post_listeners = []
         self.registered_triggers = []
         self.stop = False
         self.datafeed_client = self.bot_client.get_datafeed_client()
@@ -37,7 +41,7 @@ class DataFeedEventService:
         # Timeout will start at and eventually reset to this
         _config_key = 'datafeedEventsErrorTimeout'
         if error_timeout_sec is None:
-            self.baseline_timeout_sec = config.data.get(_config_key, 30)
+            self.baseline_timeout_sec = config.data.get(_config_key, auth_endpoint_constants["TIMEOUT"])
         else:
 
             if _config_key in config.data:
@@ -56,10 +60,12 @@ class DataFeedEventService:
         # Mapping of Event type to the function to handle it
         self.routing_dict = {
             'MESSAGESENT' : self.msg_sent_handler,
+            'MESSAGESUPPRESSED' : self.suppressed_message_handler,
             'INSTANTMESSAGECREATED' : self.instant_msg_handler,
             'ROOMCREATED' : self.room_created_handler,
             'ROOMDEACTIVATED' : self.room_deactivated_handler,
             'ROOMREACTIVATED' : self.room_reactivated_handler,
+            'ROOMUPDATED' : self.room_updated_handler,
             'USERJOINEDROOM' : self.user_joined_room_handler,
             'USERLEFTROOM' : self.user_left_room_handler,
             'ROOMMEMBERPROMOTEDTOOWNER' : self.promoted_to_owner,
@@ -67,6 +73,7 @@ class DataFeedEventService:
             'CONNECTIONACCEPTED' : self.connection_accepted_handler,
             'CONNECTIONREQUESTED' : self.connection_requested_handler,
             'SYMPHONYELEMENTSACTION' : self.elements_action_handler,
+            'SHAREDPOST': self.shared_post_handler,
         }
 
     def start_datafeed(self):
@@ -94,6 +101,21 @@ class DataFeedEventService:
 
     def add_elements_listener(self, elements_listener):
         self.elements_listeners.append(elements_listener)
+
+    def remove_elements_listener(self, elements_listener):
+        self.elements_listeners.remove(elements_listener)
+
+    def add_wall_post_listener(self, wall_post_listener):
+        self.wall_post_listeners.append(wall_post_listener)
+
+    def remove_wall_post_listener(self, wall_post_listener):
+        self.wall_post_listeners.remove(self, wall_post_listener)
+
+    def add_suppression_listener(self, suppression_listener):
+        self.suppression_listeners.append(suppression_listener)
+    
+    def remove_suppression_listener(self, suppression_listener):
+        self.suppression_listeners.remove(suppression_listener)
 
     def activate_datafeed(self):
         if self.stop:
@@ -162,7 +184,6 @@ class DataFeedEventService:
                     'DataFeedEventService() - no data coming in from '
                     'datafeed: {}'.format(self.datafeed_id)
                 )
-
 
     # function takes in single event --> Checks eventType --> forwards event
     # to proper handling function there is a handle_event function that
@@ -253,6 +274,9 @@ class DataFeedEventService:
         if str(stream_type) == 'ROOM':
             for listener in self.room_listeners:
                 listener.on_room_msg(message_sent_data)
+        elif str(stream_type) == 'POST':
+            for listener in self.wall_post_listeners:
+                listener.on_wall_post_msg(message_sent_data)
         else:
             for listener in self.im_listeners:
                 listener.on_im_message(message_sent_data)
@@ -328,6 +352,19 @@ class DataFeedEventService:
         logging.debug('elements_action_handler')
         for listener in self.elements_listeners:
             listener.on_elements_action(payload)
+
+    def shared_post_handler(self, payload):
+        logging.debug('shared_post_handler')
+        shared_post = payload['payload']['sharedPost']
+        for listener in self.wall_post_listeners:
+            listener.on_shared_post(shared_post)
+    
+    def suppressed_message_handler(self, payload):
+        logging.debug('suppressed_message_handler')
+        message_suppressed = payload['payload']['messageSuppressed']
+        for listener in self.suppression_listeners:
+            listener.on_message_suppression(message_suppressed)
+
 
 
 # It might be possible to do this all in the same class, but that would require some trickery like:
@@ -644,3 +681,16 @@ class AsyncDataFeedEventService(DataFeedEventService):
         demoted_to_owner_data = payload['payload']['roomMemberDemotedFromOwner']
         for listener in self.room_listeners:
             await listener.on_room_member_demoted_from_owner(demoted_to_owner_data)
+
+    async def shared_post_handler(self, payload):
+        logging.debug('shared_post_handler')
+        shared_post = payload['payload']['sharedPost']
+        for listener in self.wall_post_listeners:
+            await listener.on_shared_post(shared_post)
+    
+    async def suppressed_message_handler(self, payload):
+        logging.debug('suppressed_message_handler')
+        message_suppressed = payload['payload']['messageSuppressed']
+        for listener in self.suppression_listeners:
+            await listener.on_message_suppression(message_suppressed)
+

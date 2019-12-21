@@ -21,7 +21,7 @@ extras = {
 
 setuptools.setup(
     name="sym_api_client_python",
-    version="0.1.20",
+    version="0.1.25",
     author="Symphony Platform Solutions",
     author_email="platformsolutions@symphony.com",
     description="Symphony REST API - Python Client",

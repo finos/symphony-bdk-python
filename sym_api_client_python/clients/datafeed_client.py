@@ -14,12 +14,12 @@ class DataFeedClient(APIClient):
     # raw api call to create_datafeed --> returns datafeed_id
     def create_datafeed(self):
         """
-        Create a new real time messages / events stream ("datafeed"). 
+        Create a new real time messages / events stream ("datafeed").
         The datafeed provides messages and events from all conversations that the user is in.
         The types of events surfaced in the datafeed can be found in the Real Time Events list.
 
         Returns the ID of the datafeed that has just been created. This ID should then be used as input to the Read Messages/Events Stream v4 endpoint.
-        
+
         The datafeed will expire if it is not read before its capacity is reached.
 
         There is a maximum of 5 Datafeed per Service Account configured by default.
@@ -40,7 +40,7 @@ class DataFeedClient(APIClient):
         The types of events surfaced in the datafeed can be found in the Real Time Events list.
 
         If no more messages are available, this method will be blocked for 30 seconds and return an HTTP 204 response (No Content) after. It is intended that the client should re-invoke this method as soon as it has processed the messages received in the previous call.
-If the client is able to consume messages more quickly than they become available, each call will be initially blocked and there is no need to delay before re-invoking this method.
+        If the client is able to consume messages more quickly than they become available, each call will be initially blocked and there is no need to delay before re-invoking this method.
 
         A datafeed will expire if its unread capacity is reached. For a standard datafeed, this will be 250 queued messages, and for firehose 500 messages.
 

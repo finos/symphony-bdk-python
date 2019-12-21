@@ -1,11 +1,13 @@
 import logging
 import asyncio
 import requests
+import json
 from ..exceptions.APIClientErrorException import APIClientErrorException
 from ..exceptions.ServerErrorException import ServerErrorException
 from ..exceptions.UnauthorizedException import UnauthorizedException
 from ..exceptions.ForbiddenException import ForbiddenException
 from ..exceptions.DatafeedExpiredException import DatafeedExpiredException
+from ..exceptions.MaxRetryException import MaxRetryException
 # error handling class --> take status code and raise appropriate exceptions
 # this class acts as a parent class to each of the other client class.
 # each child class extends error handling functionality
@@ -45,7 +47,8 @@ class APIClient:
 
         logging.debug('handle_error function started')
         if status == 400 and 'Could not find a datafeed with the' in err_message:
-            raise DatafeedExpiredException(err_message + ". Try creating a new datafeed")
+            logging.debug('datafeed expired, start_datafeed()')
+            raise DatafeedExpiredException()
 
         # Response dict is a bit of an information overload, could consider trimming it
         elif status == 400:
@@ -54,16 +57,22 @@ class APIClient:
         # if HTTP = 401: reauthorize bot. Then raise UnauthorizedException
         elif status == 401:
             logging.debug('handling 401 error')
-            if not bot_client:
-                bot_client.reauth_client()
-                raise UnauthorizedException(
-                    'User, unauthorized, refreshing tokens: {}'
-                        .format(status))
+            bot_client.reauth_client()
+            raise UnauthorizedException(
+                'User, unauthorized, refreshing tokens: {}'
+                    .format(status))
         elif status == 403:
             raise ForbiddenException(
                 'Forbidden: Caller lacks necessary entitlement: {}'
+                    .format(status))
+        elif status == 405:
+            logging.debug('Handling 405 error')
+            raise ForbiddenException(
+                'Method Not Allowed: The method received in the request-line is known by the origin server but not supported by the target resource: {}'
                     .format(status))
         elif status >= 500:
             raise ServerErrorException(
                 'Server Error Exception: {}, {}'
                     .format(status, err_message))
+        else:
+            raise

@@ -3,11 +3,12 @@ import requests
 import datetime
 import time
 import logging
-
+from .auth_endpoint_constants import auth_endpoint_constants
 from requests import Session
 from jose import jwt
 from ..clients.api_client import APIClient
-
+from ..exceptions.UnauthorizedException import UnauthorizedException
+from ..exceptions.MaxRetryException import MaxRetryException
 
 class SymBotRSAAuth(APIClient):
     """Class for RSA authentication"""
@@ -15,19 +16,23 @@ class SymBotRSAAuth(APIClient):
     def __init__(self, config):
         """
         Set up proxy information if configuration contains proxyURL
-
         :param config: Object contains all RSA configurations
         """
         self.config = config
         self.last_auth_time = 0
+        self.auth_retries = 0
         self.session_token = None
         self.key_manager_token = None
         self.auth_session = requests.Session()
         self.key_manager_auth_session = requests.Session()
 
-        
         self.auth_session.proxies.update(self.config.data['podProxyRequestObject'])
         self.key_manager_auth_session.proxies.update(self.config.data['keyManagerProxyRequestObject'])
+
+        if self.config.data['truststorePath']:
+            logging.debug('truststore being added to requests library')
+            self.auth_session.verify = self.config.data['truststorePath']
+            self.key_manager_auth_session.verify = self.config.data['truststorePath']
 
     def get_session_token(self):
         """Return the session token"""
@@ -41,20 +46,22 @@ class SymBotRSAAuth(APIClient):
         """
         Get the session and key manager token
         """
-        logging.debug('Auth/authenticate()')
-        if (self.last_auth_time == 0) or \
-                (int(round(time.time() * 1000) - self.last_auth_time >= 3000)):
-            logging.debug('Auth/authenticate() --> needed to authenticate')
-            self.last_auth_time = int(round(time.time() * 1000))
-            self.session_authenticate()
-            self.key_manager_authenticate()
-        else:
-            try:
+        logging.debug('RSA Auth/authenticate()')
+        try:
+            if (self.last_auth_time == 0) or \
+                    (int(round(time.time() * 1000) - self.last_auth_time >= auth_endpoint_constants['WAIT_TIME'])):
+                logging.debug('RSA Auth/authenticate() --> needed to authenticate')
+
+                self.last_auth_time = int(round(time.time() * 1000))
+                self.session_authenticate()
+                self.key_manager_authenticate()
+
+            else:
                 logging.debug('Retry authentication in 30 seconds.')
-                time.sleep(30)
+                time.sleep(auth_endpoint_constants['TIMEOUT'])
                 self.authenticate()
-            except Exception as err:
-                print(err)
+        except:
+            raise MaxRetryException('max auth retry limit')
 
     def create_jwt(self):
         """
@@ -88,15 +95,23 @@ class SymBotRSAAuth(APIClient):
         url = self.config.data['sessionAuthHost']+'/login/pubkey/authenticate'
         response = self.auth_session.post(url, json=data)
 
-        if response.status_code == 200:
+        if response.status_code != 200:
+            self.auth_retries += 1
+            if self.auth_retries > auth_endpoint_constants['MAX_RSA_RETRY']:
+                logging.debug('more than 5 times tried, retry limit reached')
+                raise UnauthorizedException('max auth retry limit: {}'.format(response.__dict__))
+            else:
+                logging.debug('RSA_auth/get_session_token() function failed: {}'.format(
+                    response.status_code)
+                )
+                time.sleep(auth_endpoint_constants['TIMEOUT'])
+                self.session_authenticate()
+        else:
             data = json.loads(response.text)
             logging.debug('RSA/session token success')
             self.session_token = data['token']
-        else:
-            logging.debug('RSA_auth/get_session_token() function failed: {}'.format(
-                response.status_code)
-            )
-            self.session_authenticate()
+            self.auth_retries = 0
+
 
     def key_manager_authenticate(self):
         """
@@ -109,12 +124,18 @@ class SymBotRSAAuth(APIClient):
         url = self.config.data['keyAuthHost']+'/relay/pubkey/authenticate'
         response = self.key_manager_auth_session.post(url, json=data)
 
-        if response.status_code == 200:
-            data = json.loads(response.text)
-            logging.debug('RSA/keymanager token success')
-            self.key_manager_token = data['token']
+        if response.status_code != 200:
+            self.auth_retries += 1
+            if self.auth_retries > auth_endpoint_constants['MAX_RSA_RETRY']:
+                raise UnauthorizedException('max auth retry limit: {}'.format(response.__dict__))
+            else:
+                logging.debug('RSA_auth/get_key_manager_authenticate() function failed: {}'.format(
+                    response.status_code)
+                )
+                time.sleep(auth_endpoint_constants['TIMEOUT'])
+                self.key_manager_authenticate()
         else:
-            logging.debug(
-                    'RSA_auth/get_keyauth() failed: {}'.format(response.status_code)
-                    )
-            self.key_manager_authenticate()
+            data = json.loads(response.text)
+            logging.debug('RSA/key manager token success')
+            self.key_manager_token = data['token']
+            self.auth_retries = 0

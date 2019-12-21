@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-# Abstract class for IM listener
+# Abstract class for Elements Action listener
 # class is just an interface of functions to handle the Elements Actions events received
 # from DataFeed
 # (see Real Time Events in REST API documentation for more details)

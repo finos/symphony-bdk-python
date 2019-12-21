@@ -378,6 +378,26 @@ class AsyncImListenerImp(IMListener):
 
 # Release Notes
 
+## 0.1.25
+- Handle JSONDecodeError
+- fixed bug in search_users()
+
+## 0.1.24
+- Created Wall Post Listener
+- Created Message Suppression Listener
+- Fixed typos and comments
+
+## 0.1.23
+- Updated Error handling logic for Server Errors (500's) in datafeed_event_service.py
+
+## 0.1.22
+- Updated authentication retry logic for RSA based authentication
+- User has a maximum of 5 times to reauthenticate.  If limit is reached, MaxRetryException is raised.
+- SDK Recovers and creates new datafeed if reauthenticate succeeds.  
+
+## 0.1.21
+- Added Truststore support for RSA based authentication
+
 ## 0.1.20
 - Updated examples
 
