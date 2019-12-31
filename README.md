@@ -288,6 +288,9 @@ Symphony REST API offer a range of capabilities for application to integrate, vi
 
 # Release Notes
 
+## 0.1.26
+- Fixed Logging Issue in DataFeedEventService
+
 ## 0.1.25
 - Handle JSONDecodeError
 - fixed bug in search_users()
