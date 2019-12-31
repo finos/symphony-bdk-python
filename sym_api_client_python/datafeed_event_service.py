@@ -61,7 +61,7 @@ class DataFeedEventService:
 
     def add_suppression_listener(self, suppression_listener):
         self.suppression_listeners.append(suppression_listener)
-    
+
     def remove_suppression_listener(self, suppression_listener):
         self.suppression_listeners.remove(suppression_listener)
 
@@ -107,7 +107,7 @@ class DataFeedEventService:
                     events = data[0]
                     logging.debug(
                         'DataFeedEventService/read_datafeed() --> '
-                        'Incoming data from read_datafeed(): {}'.format(json.dumps(events[0]['payload'], indent=4))
+                        'Incoming data from read_datafeed(): {}'.format(json.dumps(events, indent=4))
                     )
                     for event in events:
                         if event['initiator']['user']['userId'] != \
@@ -263,7 +263,7 @@ class DataFeedEventService:
         shared_post = payload['payload']['sharedPost']
         for listener in self.wall_post_listeners:
             listener.on_shared_post(shared_post)
-    
+
     def suppressed_message_handler(self, payload):
         logging.debug('suppressed_message_handler')
         message_suppressed = payload['payload']['messageSuppressed']
