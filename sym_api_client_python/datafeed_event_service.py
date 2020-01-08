@@ -116,7 +116,7 @@ class DataFeedEventService:
                 else:
                     logging.debug(
                         'DataFeedEventService() - no data coming in from '
-                        'datafeed --> read_datafeed()'
+                        'datafeed --> {}'.format(data)
                     )
 
             except UnauthorizedException:
@@ -132,6 +132,11 @@ class DataFeedEventService:
                 time.sleep(auth_endpoint_constants['TIMEOUT'])
                 self.start_datafeed()
 
+            except Exception as e:
+                if str(e) == 'max auth retry limit':
+                    raise
+                else:
+                    logging.error(e)
     # function takes in single event --> Checks eventType --> forwards event
     # to proper handling function there is a handle_event function that
     # corresponds to each eventType
