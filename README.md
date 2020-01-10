@@ -288,6 +288,9 @@ Symphony REST API offer a range of capabilities for application to integrate, vi
 
 # Release Notes
 
+## 0.1.27
+- Added Resiliency in read_datafeed() in DataFeedEventService
+
 ## 0.1.26
 - Fixed Logging Issue in DataFeedEventService
 
