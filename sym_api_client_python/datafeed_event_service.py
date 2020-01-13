@@ -115,7 +115,7 @@ class DataFeedEventService:
 
     def add_suppression_listener(self, suppression_listener):
         self.suppression_listeners.append(suppression_listener)
-    
+
     def remove_suppression_listener(self, suppression_listener):
         self.suppression_listeners.remove(suppression_listener)
 
@@ -228,8 +228,12 @@ class DataFeedEventService:
             log.info('DataFeedEventService/handle_event() --> Restarting Datafeed')
     
             self.datafeed_id = self.datafeed_client.create_datafeed()
+      
         except Exception as exc:
-            self.handle_datafeed_errors(exc)
+            if str(exc) == 'max auth retry limit':
+                raise
+            else:
+                self.handle_datafeed_errors(exc)
 
     def get_and_increase_timeout(self, previous_exc=None):
         """Return the current timeout and then increase it for next time. Throw RuntimeError if the
@@ -359,13 +363,12 @@ class DataFeedEventService:
         shared_post = payload['payload']['sharedPost']
         for listener in self.wall_post_listeners:
             listener.on_shared_post(shared_post)
-    
+
     def suppressed_message_handler(self, payload):
         log.debug('suppressed_message_handler')
         message_suppressed = payload['payload']['messageSuppressed']
         for listener in self.suppression_listeners:
             listener.on_message_suppression(message_suppressed)
-
 
 
 # It might be possible to do this all in the same class, but that would require some trickery like:
@@ -508,7 +511,10 @@ class AsyncDataFeedEventService(DataFeedEventService):
     
             self.datafeed_id = self.datafeed_client.create_datafeed()
         except Exception as exc:
-            self.handle_datafeed_errors(exc)
+            if str(exc) == 'max auth retry limit':
+                raise
+            else:
+                self.handle_datafeed_errors(exc)
 
     def _check_result(self, e_id, task):
         """Callback for task completion. If exceptions occurred add them for processing on the

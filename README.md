@@ -378,6 +378,12 @@ class AsyncImListenerImp(IMListener):
 
 # Release Notes
 
+## 0.1.27
+- Added Resiliency in read_datafeed() in DataFeedEventService
+
+## 0.1.26
+- Fixed Logging Issue in DataFeedEventService
+
 ## 0.1.25
 - Handle JSONDecodeError
 - fixed bug in search_users()
