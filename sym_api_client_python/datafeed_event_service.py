@@ -14,6 +14,8 @@ from .exceptions.APIClientErrorException import APIClientErrorException
 from .exceptions.DatafeedExpiredException import DatafeedExpiredException
 from .exceptions.ServerErrorException import ServerErrorException
 
+log = logging.getLogger(__name__)
+
 def make_datetime(unix_timestamp_millis):
     seconds, millis = divmod(unix_timestamp_millis, 1000)
     return datetime.datetime.utcfromtimestamp(seconds).replace(microsecond=millis*1000)
@@ -45,7 +47,7 @@ class DataFeedEventService:
         else:
 
             if _config_key in config.data:
-                logging.info('{} listed in config, but overriden to {}s by parammeter'
+                log.info('{} listed in config, but overriden to {}s by parammeter'
                 .format(_config_key, error_timeout_sec))
             self.baseline_timeout_sec = error_timeout_sec
 
@@ -77,7 +79,7 @@ class DataFeedEventService:
         }
 
     def start_datafeed(self):
-        logging.info('DataFeedEventService/startDataFeed()')
+        log.info('DataFeedEventService/startDataFeed()')
         self.datafeed_id = self.datafeed_client.create_datafeed()
         self.read_datafeed()
 
@@ -154,23 +156,22 @@ class DataFeedEventService:
 
         while not self.stop:
             try:
-                data = self.datafeed_client.read_datafeed(self.datafeed_id)
+                events = self.datafeed_client.read_datafeed(self.datafeed_id)
             except Exception as exc:
                 self.handle_datafeed_errors(exc)
                 continue
             
             self.decrease_timeout()
-            if data:
-                events = data[0]
+            if events:
                 for event in events:
                     if self.log_events:
-                        logging.info(
+                        log.info(
                             'DataFeedEventService/read_datafeed() --> '
                             'Incoming event: {}'.
                             format(json.dumps(event, indent=4)))
 
                     else:
-                        logging.info(
+                        log.info(
                             'DataFeedEventService/read_datafeed() --> '
                             'Incoming event with id: {}'
                             .format(event['id'])
@@ -180,7 +181,7 @@ class DataFeedEventService:
                             self.bot_client.get_bot_user_info()['id']:
                         self.handle_event(event)
             else:
-                logging.debug(
+                log.debug(
                     'DataFeedEventService() - no data coming in from '
                     'datafeed: {}'.format(self.datafeed_id)
                 )
@@ -189,13 +190,13 @@ class DataFeedEventService:
     # to proper handling function there is a handle_event function that
     # corresponds to each eventType
     def handle_event(self, payload):
-        logging.debug('DataFeedEventService/handle_event()')
+        log.debug('DataFeedEventService/handle_event()')
         event_type = str(payload['type'])
 
         try:
             route = self.routing_dict[event_type]
         except KeyError:
-            logging.error('Unrecognised event type: ' + event_type)
+            log.error('Unrecognised event type: ' + event_type)
             return
         
         route(payload)
@@ -209,22 +210,22 @@ class DataFeedEventService:
         try:
             raise thrown_exception
         except UnauthorizedException:
-            logging.error(
+            log.error(
                 'DataFeedEventService - caught unauthorized exception'
             )
         except (DatafeedExpiredException, APIClientErrorException, ServerErrorException) as exc:
-            logging.error(
+            log.error(
                 'DataFeedEventService - ' + str(exc)
             )
         except Exception as exc:
-            logging.exception(
+            log.exception(
                 'DataFeedEventService - Unknown exception: ' + str(exc)
             )
         sleep_for = self.get_and_increase_timeout(thrown_exception)
-        logging.info('DataFeedEventService/handle_event() --> Sleeping for {:.4g}s'.format(sleep_for))
+        log.info('DataFeedEventService/handle_event() --> Sleeping for {:.4g}s'.format(sleep_for))
         time.sleep(sleep_for)
         try:
-            logging.info('DataFeedEventService/handle_event() --> Restarting Datafeed')
+            log.info('DataFeedEventService/handle_event() --> Restarting Datafeed')
     
             self.datafeed_id = self.datafeed_client.create_datafeed()
         except Exception as exc:
@@ -250,7 +251,7 @@ class DataFeedEventService:
             original = self.current_timeout_sec
             new_timeout = original * self.timeout_multiplier
             self.current_timeout_sec = new_timeout
-            logging.debug('DataFeedEventService/get_and_increase_timeout --> '
+            log.debug('DataFeedEventService/get_and_increase_timeout --> '
             'Using current timeout of {:.4g}s, but increasing to {:.4g}s for next time'
             .format(original, new_timeout))
             return max(self.lower_threshold, original)
@@ -259,7 +260,7 @@ class DataFeedEventService:
         original = self.current_timeout_sec
         new_timeout = self.baseline_timeout_sec
         if original != new_timeout:
-            logging.debug('DataFeedEventService/get_and_increase_timeout --> '
+            log.debug('DataFeedEventService/get_and_increase_timeout --> '
                 'Decreasing timeout from {:.4g}s to {:.4g}s'.format(original, new_timeout))
             self.current_timeout_sec = new_timeout
         return self.current_timeout_sec
@@ -268,7 +269,7 @@ class DataFeedEventService:
     def msg_sent_handler(self, payload):
         """This handler is used for both room messages and IMs. Which listener is invoked
         depends on the streamType"""
-        logging.debug('msg_sent_handler function started')
+        log.debug('msg_sent_handler function started')
         stream_type = payload['payload']['messageSent']['message']['stream']['streamType']
         message_sent_data = payload['payload']['messageSent']['message']
         if str(stream_type) == 'ROOM':
@@ -282,85 +283,85 @@ class DataFeedEventService:
                 listener.on_im_message(message_sent_data)
 
     def instant_msg_handler(self, payload):
-        logging.debug('instant_msg_handler function started')
+        log.debug('instant_msg_handler function started')
         instant_message_data = payload['payload']['instantMessageCreated']
         for listener in self.im_listeners:
             listener.on_im_created(instant_message_data)
 
 
     def room_created_handler(self, payload):
-        logging.debug('room_created_handler function started')
+        log.debug('room_created_handler function started')
         room_created_data = payload['payload']['roomCreated']
         for listener in self.room_listeners:
             listener.on_room_created(room_created_data)
 
     def room_updated_handler(self, payload):
-        logging.debug('room_updated_handler')
+        log.debug('room_updated_handler')
         room_updated_data = payload['payload']['roomUpdated']
         for listener in self.room_listeners:
             listener.on_room_updated(room_updated_data)
 
     def room_deactivated_handler(self, payload):
-        logging.debug('room_deactivated_handler')
+        log.debug('room_deactivated_handler')
         room_deactivated_data = payload['payload']['roomDeactivated']
         for listener in self.room_listeners:
             listener.on_room_deactivated(room_deactivated_data)
 
     def room_reactivated_handler(self, payload):
-        logging.debug('room_reactivated_handler')
+        log.debug('room_reactivated_handler')
         room_reactivated_data = payload['payload']['roomReactivated']
         for listener in self.room_listeners:
             listener.on_room_reactivated(room_reactivated_data)
 
     def user_joined_room_handler(self, payload):
-        logging.debug('user_joined_room_handler')
+        log.debug('user_joined_room_handler')
         user_joined_room_data = payload['payload']['userJoinedRoom']
         for listener in self.room_listeners:
             listener.on_user_joined_room(user_joined_room_data)
 
     def user_left_room_handler(self, payload):
-        logging.debug('user_left_room_handler')
+        log.debug('user_left_room_handler')
         user_left_room_data = payload['payload']['userLeftRoom']
         for listener in self.room_listeners:
             listener.on_user_left_room(user_left_room_data)
 
     def promoted_to_owner(self, payload):
-        logging.debug('promoted_to_owner')
+        log.debug('promoted_to_owner')
         promoted_to_owner_data = payload['payload']['roomMemberPromotedToOwner']
         for listener in self.room_listeners:
             listener.on_room_member_promoted_to_owner(promoted_to_owner_data)
 
     def demoted_to_owner(self, payload):
-        logging.debug('demoted_to_Owner')
+        log.debug('demoted_to_Owner')
         demoted_to_owner_data = payload['payload']['roomMemberDemotedFromOwner']
         for listener in self.room_listeners:
             listener.on_room_member_demoted_from_owner(demoted_to_owner_data)
 
     def connection_accepted_handler(self, payload):
-        logging.debug('connection_accepted_handler')
+        log.debug('connection_accepted_handler')
         connection_accepted_data = payload['payload']['connectionAccepted']
         for listener in self.connection_listeners:
             listener.on_connection_accepted(connection_accepted_data)
 
     def connection_requested_handler(self, payload):
-        logging.debug('connection_requested_handler')
+        log.debug('connection_requested_handler')
         connection_requested_data = payload['payload']['connectionRequested']
         for listener in self.connection_listeners:
             listener.on_connection_requested(connection_requested_data)
 
     def elements_action_handler(self, payload):
-        logging.debug('elements_action_handler')
+        log.debug('elements_action_handler')
         for listener in self.elements_listeners:
             listener.on_elements_action(payload)
 
     def shared_post_handler(self, payload):
-        logging.debug('shared_post_handler')
+        log.debug('shared_post_handler')
         shared_post = payload['payload']['sharedPost']
         for listener in self.wall_post_listeners:
             listener.on_shared_post(shared_post)
     
     def suppressed_message_handler(self, payload):
-        logging.debug('suppressed_message_handler')
+        log.debug('suppressed_message_handler')
         message_suppressed = payload['payload']['messageSuppressed']
         for listener in self.suppression_listeners:
             listener.on_message_suppression(message_suppressed)
@@ -419,22 +420,22 @@ class AsyncDataFeedEventService(DataFeedEventService):
     
 
     async def start_datafeed(self):
-        logging.info('AsyncDataFeedEventService/start_datafeed()')
+        log.info('AsyncDataFeedEventService/start_datafeed()')
         self.datafeed_id = self.datafeed_client.create_datafeed()
         await asyncio.gather(self.read_datafeed(), self.handle_events(), self.handle_exceptions())
 
     async def deactivate_datafeed(self, wait_for_handler_completions=True):
         """Deactivating the datafeed may take up to 30 seconds while waiting for
         a 204 from the read_datafeed API"""
-        logging.debug('AsyncDataFeedEventService/deactivate_datafeed()')
+        log.debug('AsyncDataFeedEventService/deactivate_datafeed()')
         if wait_for_handler_completions:
-            logging.info('AsyncDataFeedEventService/deactivate_datafeed() --> '
+            log.info('AsyncDataFeedEventService/deactivate_datafeed() --> '
                          'Waiting for {} events to finish'.format(self.queue.qsize()))
             await self.queue.join()
-            logging.info('AsyncDataFeedEventService/deactivate_datafeed() --> '
+            log.info('AsyncDataFeedEventService/deactivate_datafeed() --> '
                          'Deactivating')
         else:
-            logging.info('AsyncDataFeedEventService/deactivate_datafeed() --> '
+            log.info('AsyncDataFeedEventService/deactivate_datafeed() --> '
                 '{} events still being handled, deactivating anyway'.format(self.queue.qsize()))
         
         if not self.stop:
@@ -445,25 +446,24 @@ class AsyncDataFeedEventService(DataFeedEventService):
     async def read_datafeed(self):
         while not self.stop:
             try:
-                data = await self.datafeed_client.read_datafeed_async(self.datafeed_id)
+                events = await self.datafeed_client.read_datafeed_async(self.datafeed_id)
 
             except Exception as exc:
                 await self.handle_datafeed_errors(exc)
                 continue
             
             self.decrease_timeout()
-            if data:
-                events = data[0]
+            if events:
                 bot_id = self.bot_client.get_bot_user_info()['id']
                 for event in events:
                     if self.log_events:
-                        logging.info(
+                        log.info(
                             'AsyncDataFeedEventService/read_datafeed() --> '
                             'Incoming data from read_datafeed(): {}'
                             .format(json.dumps(event['payload'], indent=4))
                         )
                     else:
-                        logging.info(
+                        log.info(
                             'AsyncDataFeedEventService/read_datafeed() --> '
                             'Incoming event from read_datafeed() with id: {}'.format(event['id'])   
                         )
@@ -471,10 +471,10 @@ class AsyncDataFeedEventService(DataFeedEventService):
                         e_id = event["messageId"] if "messageId" in event else event["id"]
                         self._add_trace(e_id, event["timestamp"])
                         await self.queue.put(event)
-                    logging.debug(f"Event queued. Current queue size: {self.queue.qsize()}")
+                    log.debug(f"Event queued. Current queue size: {self.queue.qsize()}")
 
             else:
-                logging.debug(
+                log.debug(
                     'DataFeedEventService() - no data coming in from '
                     'datafeed: {}'.format(self.datafeed_id)
                 )
@@ -488,23 +488,23 @@ class AsyncDataFeedEventService(DataFeedEventService):
         try:
             raise thrown_exception
         except UnauthorizedException:
-            logging.error(
+            log.error(
                 'AsyncDataFeedEventService - caught unauthorized exception'
             )
         except (DatafeedExpiredException, APIClientErrorException, ServerErrorException) as exc:
-            logging.error(
+            log.error(
                 'AsyncDataFeedEventService - ' + str(exc)
             )
         except Exception as exc:
-            logging.exception(
+            log.exception(
                 'AsyncDataFeedEventService - Unknown exception: ' + str(exc)
             )
 
         sleep_for = self.get_and_increase_timeout(thrown_exception)
-        logging.info('AsyncDataFeedEventService/handle_event() --> Sleeping for {:.4g}s'.format(sleep_for))
+        log.info('AsyncDataFeedEventService/handle_event() --> Sleeping for {:.4g}s'.format(sleep_for))
         await asyncio.sleep(sleep_for)
         try:
-            logging.info('AsyncDataFeedEventService/handle_event() --> Restarting Datafeed')
+            log.info('AsyncDataFeedEventService/handle_event() --> Restarting Datafeed')
     
             self.datafeed_id = self.datafeed_client.create_datafeed()
         except Exception as exc:
@@ -516,7 +516,7 @@ class AsyncDataFeedEventService(DataFeedEventService):
         """
         self._add_trace(e_id)
         if task.exception() is not None:
-            logging.debug("Adding exception to exception queue for event: {}".format(e_id))
+            log.debug("Adding exception to exception queue for event: {}".format(e_id))
             self.exception_queue.put_nowait((e_id, task))
         else:
             self._process_full_trace(e_id)
@@ -539,14 +539,14 @@ class AsyncDataFeedEventService(DataFeedEventService):
 
                 # This just writes out total seconds instead of formatting into minutes and hours
                 # for a typical bot response this seems reasonable
-                logging.info("Responded to message in: {:.4g}s. Including {:.4g}s inside the bot"
+                log.info("Responded to message in: {:.4g}s. Including {:.4g}s inside the bot"
                             .format(total_time.total_seconds(), time_in_bot.total_seconds()))
                 if self.trace_recorder is not None:
                     trace_recorder.append(trace)
                 del self.trace_dict[id]
             except Exception as exc:
-                logging.error("Error while computing trace results for id: " + id)
-                logging.exception(exc)
+                log.error("Error while computing trace results for id: " + id)
+                log.exception(exc)
 
     def _add_trace(self, e_id, first_timestamp=None):
         """Take the current timestamp and add if to the trace_dict, used to trace the time taken
@@ -560,7 +560,7 @@ class AsyncDataFeedEventService(DataFeedEventService):
             try:
                 self.trace_dict[e_id].append(datetime.datetime.utcnow())
             except KeyError:
-                logging.error(
+                log.error(
                     'Error making traces for {}. Has the same messageId appeared'
                     'more than once?'.format(e_id)
                 )
@@ -580,11 +580,11 @@ class AsyncDataFeedEventService(DataFeedEventService):
                 e_id = event["messageId"] if "messageId" in event else event["id"]
                 self._add_trace(e_id)
 
-                logging.debug('AsyncDataFeedEventService/handle_events() --> event-type:' + event_type)
+                log.debug('AsyncDataFeedEventService/handle_events() --> event-type:' + event_type)
                 try:
                     route = self.routing_dict[event_type]
                 except KeyError:
-                    logging.debug('no event detected')
+                    log.debug('no event detected')
                     self.queue.task_done()
                     return
                 
@@ -596,7 +596,7 @@ class AsyncDataFeedEventService(DataFeedEventService):
         This method picks results one by one off the queue and checks if they were successful, using
         the provided exception handler or failing otherwise"""
         while not self.stop:
-            logging.debug("Waiting on new exception, queue size: {}".format(self.exception_queue.qsize()))
+            log.debug("Waiting on new exception, queue size: {}".format(self.exception_queue.qsize()))
             exception_event = await self.exception_queue.get()
             if exception_event is None:
                 # Same as handle_events, None is a sentinel to close the queue and finish
@@ -618,7 +618,7 @@ class AsyncDataFeedEventService(DataFeedEventService):
     async def msg_sent_handler(self, payload):
         """This handler is used for both room messages and IMs. Which listener is invoked
         depends on the streamType"""
-        logging.debug('async msg_sent_handler function started')
+        log.debug('async msg_sent_handler function started')
         stream_type = payload['payload']['messageSent']['message']['stream']['streamType']
         message_sent_data = payload['payload']['messageSent']['message']
         if str(stream_type) == 'ROOM':
@@ -629,67 +629,67 @@ class AsyncDataFeedEventService(DataFeedEventService):
                 await listener.on_im_message(message_sent_data)
 
     async def instant_msg_handler(self, payload):
-        logging.debug('async instant_msg_handler function started')
+        log.debug('async instant_msg_handler function started')
         instant_message_data = payload['payload']['instantMessageCreated']
         for listener in self.im_listeners:
             await listener.on_im_created(instant_message_data)
 
     async def room_created_handler(self, payload):
-        logging.debug('async room_created_handler function started')
+        log.debug('async room_created_handler function started')
         room_created_data = payload['payload']['roomCreated']
         for listener in self.room_listeners:
             await listener.on_room_created(room_created_data)
 
     async def room_updated_handler(self, payload):
-        logging.debug('async room_updated_handler')
+        log.debug('async room_updated_handler')
         room_updated_data = payload['payload']['roomUpdated']
         for listener in self.room_listeners:
             await listener.on_room_updated(room_updated_data)
 
     async def room_deactivated_handler(self, payload):
-        logging.debug('async room_deactivated_handler')
+        log.debug('async room_deactivated_handler')
         room_deactivated_data = payload['payload']['roomDeactivated']
         for listener in self.room_listeners:
             await listener.on_room_deactivated(room_deactivated_data)
 
     async def room_reactivated_handler(self, payload):
-        logging.debug('async room_reactivated_handler')
+        log.debug('async room_reactivated_handler')
         room_reactivated_data = payload['payload']['roomReactivated']
         for listener in self.room_listeners:
             await listener.on_room_reactivated(room_reactivated_data)
 
     async def user_joined_room_handler(self, payload):
-        logging.debug('async user_joined_room_handler')
+        log.debug('async user_joined_room_handler')
         user_joined_room_data = payload['payload']['userJoinedRoom']
         for listener in self.room_listeners:
             await listener.on_user_joined_room(user_joined_room_data)
 
     async def user_left_room_handler(self, payload):
-        logging.debug('async user_left_room_handler')
+        log.debug('async user_left_room_handler')
         user_left_room_data = payload['payload']['userLeftRoom']
         for listener in self.room_listeners:
             await listener.on_user_left_room(user_left_room_data)
 
     async def promoted_to_owner(self, payload):
-        logging.debug('async promoted_to_owner')
+        log.debug('async promoted_to_owner')
         promoted_to_owner_data = payload['payload']['roomMemberPromotedToOwner']
         for listener in self.room_listeners:
             await listener.on_room_member_promoted_to_owner(promoted_to_owner_data)
 
     async def demoted_to_owner(self, payload):
-        logging.debug('async demoted_to_Owner')
+        log.debug('async demoted_to_Owner')
         demoted_to_owner_data = payload['payload']['roomMemberDemotedFromOwner']
         for listener in self.room_listeners:
             await listener.on_room_member_demoted_from_owner(demoted_to_owner_data)
 
     async def shared_post_handler(self, payload):
-        logging.debug('shared_post_handler')
+        log.debug('shared_post_handler')
         shared_post = payload['payload']['sharedPost']
         for listener in self.wall_post_listeners:
             await listener.on_shared_post(shared_post)
     
     async def suppressed_message_handler(self, payload):
-        logging.debug('suppressed_message_handler')
+        log.debug('suppressed_message_handler')
         message_suppressed = payload['payload']['messageSuppressed']
         for listener in self.suppression_listeners:
             await listener.on_message_suppression(message_suppressed)

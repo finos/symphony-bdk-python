@@ -19,7 +19,7 @@ class TestHealthCheck(unittest.TestCase):
             cls.auth = auth
         except ValueError:
             #RSA Auth flow:
-            cls.configure = SymConfig('sym_api_client_python/resources/hackathon_config.json')
+            cls.configure = SymConfig('sym_api_client_python/resources/config.json')
             cls.configure.load_config()
             cls.auth = SymBotRSAAuth(cls.configure)
             cls.auth.authenticate()

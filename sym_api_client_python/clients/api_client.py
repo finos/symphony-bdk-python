@@ -1,7 +1,9 @@
 import logging
 import asyncio
+import aiohttp
 import requests
 import json
+from requests_toolbelt.multipart.encoder import MultipartEncoder
 from ..exceptions.APIClientErrorException import APIClientErrorException
 from ..exceptions.ServerErrorException import ServerErrorException
 from ..exceptions.UnauthorizedException import UnauthorizedException
@@ -17,6 +19,44 @@ class APIClient:
 
     def __init__(self, bot_client):
         self.bot_client = bot_client
+
+    def make_mulitpart_form(self, fields, aio=False):
+        """Create a multipart form to be used across the Symphony API, that works for both requests
+        and the asynchronous aiohttp. Requests basically uses requests-toolbelt, but it's a little
+        bit more involved for aiohttp. The output of this is expected to be passed to either
+        execute_rest_request or execute_rest_request_async depending whether aio was true"""
+    
+        if aio:
+
+            # This appears to be the canonical way to use aiohttp to pass mulipart data into the API
+            # in the same way that MultipartEncoder does for Requests.
+            # aiohttp.FormData does appear to work because of the way the Symphony API demands a boundary
+            # in the header. aiohttp.MultipartWriter.append_form doesn't appear to work because it
+            # encodes as a application/x-www-form-urlencoded that Symphony doesn't appear to like for
+            # attachments
+            with aiohttp.MultipartWriter("form-data") as data:
+                for k, v in fields.items():
+                    if len(v) == 1:
+                        part = data.append(v)
+                        part.set_content_disposition("form-data", name=k)
+                    if len(v) == 3:
+                        filename, file_object, content_type = v
+                        part = data.append(file_object, {'Content-Type': content_type})
+                        part.set_content_disposition('form-data', name=k, filename=filename)
+
+            headers = {
+                'Content-Type': 'multipart/form-data; boundary=' + data.boundary
+            }
+
+        else:
+            data = MultipartEncoder(
+                fields
+            )
+            headers = {
+                'Content-Type': data.content_type
+            }
+        
+        return {"data": data, "headers": headers}
 
     def handle_error(self, response, bot_client, error_json=None, text=None):
 
@@ -50,10 +90,6 @@ class APIClient:
             logging.debug('datafeed expired, start_datafeed()')
             raise DatafeedExpiredException()
 
-        # Response dict is a bit of an information overload, could consider trimming it
-        elif status == 400:
-            raise APIClientErrorException('Client Error Occurred: {}. Response contents: {}'
-                                          .format(err_message, response.__dict__))
         # if HTTP = 401: reauthorize bot. Then raise UnauthorizedException
         elif status == 401:
             logging.debug('handling 401 error')
@@ -70,9 +106,17 @@ class APIClient:
             raise ForbiddenException(
                 'Method Not Allowed: The method received in the request-line is known by the origin server but not supported by the target resource: {}'
                     .format(status))
+
+        # Response dict is a bit of an information overload, could consider trimming it
+        elif 400 <= status < 500:
+
+            raise APIClientErrorException('Client Error Occurred: {}. Response contents: {}'
+                                          .format(err_message, response.__dict__))
+
         elif status >= 500:
             raise ServerErrorException(
                 'Server Error Exception: {}, {}'
                     .format(status, err_message))
         else:
-            raise
+            # This shouldn't happen
+            raise RuntimeError("Unhandled error: {}".format(response.__dict__))

@@ -34,7 +34,7 @@ class TestUsers(unittest.TestCase):
             self.auth = auth
         except ValueError:
             #RSA Auth flow:
-            self.configure = SymConfig('sym_api_client_python/resources/hackathon_config.json')
+            self.configure = SymConfig('sym_api_client_python/resources/config.json')
             self.configure.load_config()
             auth = SymBotRSAAuth(self.configure)
             auth.authenticate()

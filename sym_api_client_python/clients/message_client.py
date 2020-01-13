@@ -1,14 +1,15 @@
-import requests
 import json
 import logging
 from .api_client import APIClient
 from ..exceptions.UnauthorizedException import UnauthorizedException
-from requests_toolbelt.multipart.encoder import MultipartEncoder
-
 
 # child class of APIClient --> Extends error handling functionality
 # MessageClient class contains a series of functions corresponding to all
 # messaging endpoints on the REST API.
+
+MESSAGE_STREAM_API = '/agent/v4/stream/{stream_id}/message'
+MESSAGE_CREATE = MESSAGE_STREAM_API + '/create'
+
 class MessageClient(APIClient):
 
     def __init__(self, bot_client):
@@ -16,36 +17,65 @@ class MessageClient(APIClient):
 
     def get_msg_from_stream(self, stream_id, since, **kwargs):
         logging.debug('MessageClient/get_msg_from_stream()')
-        url = '/agent/v4/stream/{0}/message'.format(stream_id)
+        url = MESSAGE_STREAM_API.format(stream_id=stream_id)
         params = {
             'since': since
         }
         params.update(kwargs)
         return self.bot_client.execute_rest_call('GET', url, params=params)
-
-    async def send_msg_async(self, stream_id, outbound_msg):
-        logging.debug('MessageClient/send_msg()')
-        url = '/agent/v4/stream/{0}/message/create'.format(stream_id)
-        return await self.bot_client.execute_rest_call_async('POST', url, files=outbound_msg)        
+    
+    async def get_msg_from_stream_async(self, stream_id, since, **kwargs):
+        logging.debug('MessageClient/get_msg_from_stream_async()')
+        url = MESSAGE_STREAM_API.format(stream_id=stream_id)
+        params = {
+            'since': since
+        }
+        params.update(kwargs)
+        return await self.bot_client.execute_rest_call_async('GET', url, params=params)
 
     def send_msg(self, stream_id, outbound_msg):
         logging.debug('MessageClient/send_msg()')
-        url = '/agent/v4/stream/{0}/message/create'.format(stream_id)
+        url = MESSAGE_CREATE.format(stream_id=stream_id)
         return self.bot_client.execute_rest_call('POST', url, files=outbound_msg)
+
+    async def send_msg_async(self, stream_id, outbound_msg):
+        logging.debug('MessageClient/send_msg()')
+        url = MESSAGE_CREATE.format(stream_id=stream_id)
+        return await self.bot_client.execute_rest_call_async('POST', url, files=outbound_msg)        
+    
+    def _data_and_headers_for_attachment(self, stream_id, msg, filename, path_to_attachment, aio=False):
+        """Build an attachment out of either a path or a stream"""
+        url = MESSAGE_CREATE.format(stream_id=stream_id)
+
+        try:
+            attachment_file_object = open(path_to_attachment, 'rb')
+        except TypeError:
+            # If it doesn't support open treat it as a stream already
+            attachment_file_object = path_to_attachment
+
+        # The below states that Content-Type for attachments should be 'file' which is almost
+        # certainly wrong - it's not a valid MIME-type. text/plain seems right
+        fields={'message': msg,
+                'attachment': (
+                filename, attachment_file_object, "file")}
+
+        parts = self.make_mulitpart_form(fields, aio=aio)
+
+        return {'path': url, **parts}
 
     def send_msg_with_attachment(self, stream_id, msg,
                                  filename, path_to_attachment):
         logging.debug('MessageClient/send_msg_with_attachment()')
-        url = '/agent/v4/stream/{0}/message/create'.format(stream_id)
-        data = MultipartEncoder(
-            fields={'message': msg,
-                    'attachment': (
-                    filename, open(path_to_attachment, 'rb'), 'file')}
-        )
-        headers = {
-            'Content-Type': data.content_type
-        }
-        return self.bot_client.execute_rest_call("POST", url, data=data, headers=headers)
+        parts = self._data_and_headers_for_attachment(stream_id, msg, filename, path_to_attachment)
+
+        return self.bot_client.execute_rest_call("POST", **parts)
+    
+    async def send_msg_with_attachment_async(self, stream_id, msg,
+                                       filename, path_to_attachment):
+        logging.debug('MessageClient/send_msg_with_attachment()')
+
+        parts = self._data_and_headers_for_attachment(stream_id, msg, filename, path_to_attachment, aio=True)
+        return await self.bot_client.execute_rest_call_async('POST', **parts)
 
     def get_msg_attachment(self, stream_id, msg_id, file_id):
         logging.debug('MessageClient/get_msg_attachment()')

@@ -28,8 +28,14 @@ def load_from_env_var(env_var, delimiter=":"):
     if len(split) == 1:
         raise ValueError(f"Did not find {delimiter} in environment variable: {env_value}")
     elif len(split) > 2:
-        raise ValueError(f"Found more than one {delimiter} in environment_variable: {env_value}") 
-    elif split[0].lower() not in ["rsa", "cert"]:
+        # On windows you can have a colon in the path
+        if len(split) == 3 and os.name == "nt":
+            split = [split[0], split[1] + ":" + split[2]]
+        else:
+            raise ValueError(f"Found more than one {delimiter} in environment_variable: {env_value}") 
+    
+    
+    if split[0].lower() not in ["rsa", "cert"]:
         raise ValueError(f"Didn't recognise f{split[0]}, expected one of: RSA, CERT")
     
     logging.info(f"Loading config from {split[1]} with authentication mode: {split[0]}")

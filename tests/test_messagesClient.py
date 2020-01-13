@@ -2,6 +2,9 @@ import unittest
 import requests
 import json
 import logging
+import asyncio
+import io
+
 logging.basicConfig(filename='sym_api_client_python/logs/example.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filemode='w', level=logging.DEBUG)
 logging.getLogger("urllib3").setLevel(logging.WARNING)
 from sym_api_client_python.configure.configure import SymConfig
@@ -26,7 +29,7 @@ class TestMessages(unittest.TestCase):
             self.auth = auth
         except ValueError:
             #RSA Auth flow:
-            self.configure = SymConfig('sym_api_client_python/resources/hackathon_config.json')
+            self.configure = SymConfig('sym_api_client_python/resources/config.json')
             self.configure.load_config()
             auth = SymBotRSAAuth(self.configure)
             auth.authenticate()
@@ -34,19 +37,53 @@ class TestMessages(unittest.TestCase):
         #initialize SymBotClient with auth and configure objects
         self.bot_client = SymBotClient(self.auth, self.configure)
         self.streamId = 'iUiESCsMk5E0rFMTkaSj1n///pI+2flzbQ=='
-
-    # def test_blah (self):
-    #     self.assertEqual(1, 1)
+        self.test_message = dict(message = '<messageML><hash tag="reed"/></messageML>')
 
     def test_createMessage(self):
         print('testing create messages function')
-        message = dict(message = '<messageML><hash tag="reed"/></messageML>')
+        message = self.test_message
         self.assertTrue(self.bot_client.get_message_client().send_msg(self.streamId, message))
+
+    def test_create_message_async(self):
+        asyncio.get_event_loop().run_until_complete(
+            self.bot_client.get_message_client().send_msg(self.streamId, self.test_message)
+            )
 
     def test_getMessageFromStream(self):
         print('testing get_msg_from_stream function')
         self.assertTrue(self.bot_client.get_message_client().get_msg_from_stream(self.streamId, 0))
+    
+    def test_get_message_from_stream_async(self):
+        asyncio.get_event_loop().run_until_complete(
+            self.bot_client.get_message_client().get_msg_from_stream_async(self.streamId, 0)
+            )
 
+    def test_create_message_attachment(self):
+        fp = __file__
+        self.bot_client.get_message_client().send_msg_with_attachment(
+            self.streamId, self.test_message["message"], "testfilename.txt", fp
+            )
+
+    def test_create_message_attachment_iostream(self):
+        file_like_object = io.StringIO("This is a test")
+        self.bot_client.get_message_client().send_msg_with_attachment(
+            self.streamId, self.test_message["message"], "testfilename.txt", file_like_object
+            )
+
+    def test_create_message_attachment_async(self):
+        file_like_object = io.StringIO("This is a test")
+        asyncio.get_event_loop().run_until_complete(
+            self.bot_client.get_message_client().send_msg_with_attachment_async(
+                self.streamId, self.test_message["message"], "testfilename.txt", file_like_object
+            )
+        )
+    def test_create_message_attachment_iostream_async(self):
+        file_like_object = io.StringIO("This is a test")
+        asyncio.get_event_loop().run_until_complete(
+            self.bot_client.get_message_client().send_msg_with_attachment_async(
+                self.streamId, self.test_message["message"], "testfilename.txt", file_like_object
+            )
+        )
     def test_getMessageAttachments(self):
         pass
 

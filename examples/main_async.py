@@ -44,7 +44,7 @@ def main():
         else:
             config_path = args.config
 
-        configure = SymConfig(config_path, __file__)
+        configure = SymConfig(config_path, config_path)
         configure.load_config()
 
         if args.auth == "rsa":

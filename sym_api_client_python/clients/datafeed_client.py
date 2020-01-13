@@ -56,12 +56,9 @@ class DataFeedClient(APIClient):
 
         logging.debug('DataFeedClient/read_datafeed()')
         url = '/agent/v4/datafeed/{0}/read'.format(datafeed_id)
-        new_events = []
         datafeed_read = self.bot_client.execute_rest_call("GET", url)
         
-        if (datafeed_read != []):
-            new_events.append(datafeed_read)
-        return new_events
+        return datafeed_read
 
     async def read_datafeed_async(self, datafeed_id):
         """
@@ -72,9 +69,6 @@ class DataFeedClient(APIClient):
 
         logging.debug('DataFeedClient/read_datafeed()')
         url = '/agent/v4/datafeed/{0}/read'.format(datafeed_id)
-        new_events = []
         datafeed_read = await self.bot_client.execute_rest_call_async("GET", url)
 
-        if (datafeed_read != []):
-            new_events.append(datafeed_read)
-        return new_events
+        return datafeed_read

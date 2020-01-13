@@ -7,8 +7,6 @@ def readme():
 
 test_dependencies = [
     'pytest',
-    'requests-mock',
-    'aioresponses',
 ]
 
 # This means dependencies for testing can be installed with:
@@ -21,7 +19,7 @@ extras = {
 
 setuptools.setup(
     name="sym_api_client_python",
-    version="0.1.25",
+    version="0.2.0",
     author="Symphony Platform Solutions",
     author_email="platformsolutions@symphony.com",
     description="Symphony REST API - Python Client",
@@ -32,6 +30,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     install_requires=[
         'aiohttp',
+        'aioresponses>=0.6.1',
         'pyOpenSSL',
         'rsa',
         'requests',
@@ -42,6 +41,7 @@ setuptools.setup(
         'Jinja2==2.10.1',
         'requests_pkcs12==1.4',
         'requests-toolbelt==0.9.1',
+        'requests-mock>=1.7.0',
         'yattag==1.12.2'
     ],
     extras_require=extras,
