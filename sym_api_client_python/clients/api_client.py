@@ -25,7 +25,7 @@ class APIClient:
         and the asynchronous aiohttp. Requests basically uses requests-toolbelt, but it's a little
         bit more involved for aiohttp. The output of this is expected to be passed to either
         execute_rest_request or execute_rest_request_async depending whether aio was true"""
-    
+
         if aio:
 
             # This appears to be the canonical way to use aiohttp to pass mulipart data into the API
@@ -55,18 +55,18 @@ class APIClient:
             headers = {
                 'Content-Type': data.content_type
             }
-        
+
         return {"data": data, "headers": headers}
 
     def handle_error(self, response, bot_client, error_json=None, text=None):
-
+        logging.debug('api_client/handle_error() function started')
         _error_field = "message"
         if isinstance(response, requests.Response):
             status = response.status_code
         else:
             # The assumption is that it's an aiohttp response from an async request
             status = response.status
-        
+
         try:
             if error_json is not None:
                 try:
@@ -80,20 +80,19 @@ class APIClient:
                 err_message = text
             else:
                 err_message = ""
-                
+
         except Exception:
             logging.error("Unable to parse error message: {}".format(text))
             err_message = ""
 
-        logging.debug('handle_error function started')
         if status == 400 and 'Could not find a datafeed with the' in err_message:
             logging.debug('datafeed expired, start_datafeed()')
             raise DatafeedExpiredException()
 
-        # if HTTP = 401: reauthorize bot. Then raise UnauthorizedException
         elif status == 401:
-            logging.debug('handling 401 error')
+            logging.debug('api_client()/handling 401 error')
             bot_client.reauth_client()
+            logging.debug('api_client()/successfully reauthenticated')
             raise UnauthorizedException(
                 'User, unauthorized, refreshing tokens: {}'
                     .format(status))

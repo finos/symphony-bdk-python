@@ -58,7 +58,7 @@ class SymBotClient(APIClient):
         if self.datafeed_event_service is None:
             self.datafeed_event_service = DataFeedEventService(self)
         return self.datafeed_event_service
-    
+
     def get_async_datafeed_event_service(self):
         if self.async_datafeed_event_service is None:
             self.async_datafeed_event_service = AsyncDataFeedEventService(self)
@@ -114,6 +114,7 @@ class SymBotClient(APIClient):
     def get_pod_session(self):
         """This is the method to retrieve the session object for synchronous calls with requests"""
         if self.pod_session is None:
+            logging.debug('bot_client/get_pod_session() - creating pod session')
             self.pod_session = requests.Session()
             self.pod_session.headers.update({
                 'sessionToken': self.auth.get_session_token()}
@@ -128,6 +129,7 @@ class SymBotClient(APIClient):
     def get_agent_session(self):
         """This is the method to retrieve the session object for synchronous calls with requests"""
         if self.agent_session is None:
+            logging.debug('bot_client/get_agent_session() - creating agent session')
             self.agent_session = requests.Session()
             self.agent_session.headers.update({
                 'sessionToken': self.auth.get_session_token(),
@@ -139,6 +141,7 @@ class SymBotClient(APIClient):
                     self.config.data[_TRUSTSTORE_PATH])
                 )
                 self.agent_session.verify=self.config.data[_TRUSTSTORE_PATH]
+
         return self.agent_session
 
     def execute_rest_call(self, method, path, **kwargs):
@@ -183,6 +186,7 @@ class SymBotClient(APIClient):
             try:
                 super().handle_error(response, self, error_json, text)
             except UnauthorizedException:
+                logging.debug('caught UnauthorizedException - try execute_rest_call() again')
                 self.execute_rest_call(method, path, **kwargs)
         return results
 
@@ -190,10 +194,10 @@ class SymBotClient(APIClient):
     def get_async_pod_session(self):
         """This is the method to retrieve the session object for asynchronous calls with aiohttp"""
         if self.async_pod_session is None:
+            logging.debug('bot_client/get_pod_session() - creating async pod session')
             self.async_pod_session = aiohttp.ClientSession(
-                headers = {
-                    'sessionToken': self.auth.get_session_token(),
-                }
+            headers = {
+                'sessionToken': self.auth.get_session_token()}
                 )
             # For aiohttp proxies are handled when the request is made
             if self.config.data[_TRUSTSTORE_PATH]:
@@ -206,12 +210,12 @@ class SymBotClient(APIClient):
     def get_async_agent_session(self):
         """This is the method to retrieve the session object for asynchronous calls with aiohttp"""
         if self.async_agent_session is None:
+            logging.debug('bot_client/get_agent_session() - creating async agent session')
             self.async_agent_session = aiohttp.ClientSession(
             headers = {
                 'sessionToken': self.auth.get_session_token(),
                 'keyManagerToken': self.auth.get_key_manager_token()}
             )
-
             # For aiohttp proxies are handled when the request is made
             if self.config.data[_TRUSTSTORE_PATH]:
                 logging.debug("Setting truststorePath for agent to {}".format(
@@ -244,7 +248,7 @@ class SymBotClient(APIClient):
             url = path
             session = self.get_async_pod_session()
             http_proxy = self.config.data['podProxyRequestObject'].get("http")
-        
+
         # This is to handle the files keyword
         files = kwargs.pop("files", None)
 
@@ -265,7 +269,7 @@ class SymBotClient(APIClient):
             data = kwargs.pop("data")
         else:
             data = None
-        
+
 
         try:
             response = await session.request(method, url, proxy=http_proxy, data=data, **kwargs)
@@ -304,22 +308,29 @@ class SymBotClient(APIClient):
     def reauth_client(self):
         self.auth.authenticate()
         if self.pod_session:
+            logging.debug('bot_client/reauth_client() - pod session exists')
             self.pod_session.headers.update({
                 'sessionToken': self.auth.get_session_token()}
             )
         if self.agent_session:
+            logging.debug('bot_client/reauth_client() - agent session exists')
             self.agent_session.headers.update({
                 'sessionToken' : self.auth.get_session_token(),
                 'keyManagerToken': self.auth.get_key_manager_token()}
             )
-        
+
         if self.async_pod_session:
-            self.async_pod_session.headers.update({
+            logging.debug('bot_client/reauth_client() - async pod session exists')
+            self.async_pod_session = aiohttp.ClientSession(
+            headers = {
                 'sessionToken': self.auth.get_session_token()}
             )
+
         if self.async_agent_session:
-            self.async_agent_session.headers.update({
-                'sessionToken' : self.auth.get_session_token(),
+            logging.debug('bot_client/reauth_client() - async agent session exists')
+            self.async_agent_session = aiohttp.ClientSession(
+            headers = {
+                'sessionToken': self.auth.get_session_token(),
                 'keyManagerToken': self.auth.get_key_manager_token()}
             )
 

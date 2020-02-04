@@ -13,8 +13,9 @@ from .exceptions.UnauthorizedException import UnauthorizedException
 from .exceptions.APIClientErrorException import APIClientErrorException
 from .exceptions.DatafeedExpiredException import DatafeedExpiredException
 from .exceptions.ServerErrorException import ServerErrorException
+from .exceptions.MaxRetryException import MaxRetryException
 
-log = logging.getLogger(__name__)
+log = logging.getLogger("asyncio")
 
 def make_datetime(unix_timestamp_millis):
     seconds, millis = divmod(unix_timestamp_millis, 1000)
@@ -127,25 +128,6 @@ class DataFeedEventService:
         if not self.stop:
             self.stop = True
 
-    #to be edited
-    def register_trigger_pattern(self, pattern_to_match, commands):
-        trigger = (pattern_to_match, commands)
-        self.registered_triggers.append(trigger)
-
-    #probably want to create separate entity to store action trigger
-    def register_trigger_action(self, action, value):
-        trigger = (action, value)
-        self.registered_triggers.append(trigger)
-
-    def check_message_for_trigger(self, payload):
-        #check message for trigger, can pass this function to
-        #the event handlers, and then set a local flag based on the value
-        logic_matches = []
-        if logic_matches:
-            return True
-        else:
-            return False
-
     # read_datafeed function reads an array of events coming back from
     # DataFeedClient checks to see that sender's email is not equal to Bot's
     # email in config filemthis functionality helps bot avoid entering an
@@ -160,7 +142,7 @@ class DataFeedEventService:
             except Exception as exc:
                 self.handle_datafeed_errors(exc)
                 continue
-            
+
             self.decrease_timeout()
             if events:
                 for event in events:
@@ -198,7 +180,7 @@ class DataFeedEventService:
         except KeyError:
             log.error('Unrecognised event type: ' + event_type)
             return
-        
+
         route(payload)
 
     def handle_datafeed_errors(self, thrown_exception):
@@ -213,6 +195,10 @@ class DataFeedEventService:
             log.error(
                 'DataFeedEventService - caught unauthorized exception'
             )
+        except MaxRetryException as e:
+            log.error('DataFeedEventService - Bot has tried to authenticate more than 5 times ')
+            raise
+
         except (DatafeedExpiredException, APIClientErrorException, ServerErrorException) as exc:
             log.error(
                 'DataFeedEventService - ' + str(exc)
@@ -226,19 +212,15 @@ class DataFeedEventService:
         time.sleep(sleep_for)
         try:
             log.info('DataFeedEventService/handle_event() --> Restarting Datafeed')
-    
             self.datafeed_id = self.datafeed_client.create_datafeed()
-      
+
         except Exception as exc:
-            if str(exc) == 'max auth retry limit':
-                raise
-            else:
-                self.handle_datafeed_errors(exc)
+            self.handle_datafeed_errors(exc)
 
     def get_and_increase_timeout(self, previous_exc=None):
         """Return the current timeout and then increase it for next time. Throw RuntimeError if the
         current timeout is larger than the upper threshold - if one exists.
-            
+
             previous_exc: provide the exception that causes the original timeout to have that
                           attached to the stacktrace of the runtime error, showing more clearly
                           why the timeout occurred. """
@@ -259,16 +241,16 @@ class DataFeedEventService:
             'Using current timeout of {:.4g}s, but increasing to {:.4g}s for next time'
             .format(original, new_timeout))
             return max(self.lower_threshold, original)
-    
+
     def decrease_timeout(self):
         original = self.current_timeout_sec
         new_timeout = self.baseline_timeout_sec
         if original != new_timeout:
-            log.debug('DataFeedEventService/get_and_increase_timeout --> '
+            log.debug('DataFeedEventService/decrease_timeout() --> '
                 'Decreasing timeout from {:.4g}s to {:.4g}s'.format(original, new_timeout))
             self.current_timeout_sec = new_timeout
         return self.current_timeout_sec
-        
+
 
     def msg_sent_handler(self, payload):
         """This handler is used for both room messages and IMs. Which listener is invoked
@@ -371,16 +353,6 @@ class DataFeedEventService:
             listener.on_message_suppression(message_suppressed)
 
 
-# It might be possible to do this all in the same class, but that would require some trickery like:
-# async def message_sent_handler(payload):
-#     for listener in listeners:
-#         handler = listener.on_im_message
-#         if asyncio.iscoroutinefunction(handler):
-#             await handler(payload):
-#         else:
-#             handler(payload)
-#
-# So for now this is a separate subclass with a lot of copy and pasted code
 class AsyncDataFeedEventService(DataFeedEventService):
     """Non-blocking datafeed event service.
 
@@ -393,7 +365,7 @@ class AsyncDataFeedEventService(DataFeedEventService):
 
         loop = asyncio.get_event_loop()
         loop.run_until_complete(datafeed_event_service.start_datafeed())
-    
+
     There are several things to note about using this datafeed instead of the synchronous version:
         * All methods in the listener must be declared async def. Even if there is no async code
           inside them failing to declare them as such will likely cause an error when the service
@@ -420,7 +392,6 @@ class AsyncDataFeedEventService(DataFeedEventService):
         self.handle_events_task = None
         self.tasks = []
         super().__init__(*args, **kwargs)
-    
 
     async def start_datafeed(self):
         log.info('AsyncDataFeedEventService/start_datafeed()')
@@ -440,7 +411,7 @@ class AsyncDataFeedEventService(DataFeedEventService):
         else:
             log.info('AsyncDataFeedEventService/deactivate_datafeed() --> '
                 '{} events still being handled, deactivating anyway'.format(self.queue.qsize()))
-        
+
         if not self.stop:
             self.stop = True
         await self.queue.put(None)
@@ -454,7 +425,7 @@ class AsyncDataFeedEventService(DataFeedEventService):
             except Exception as exc:
                 await self.handle_datafeed_errors(exc)
                 continue
-            
+
             self.decrease_timeout()
             if events:
                 bot_id = self.bot_client.get_bot_user_info()['id']
@@ -468,7 +439,7 @@ class AsyncDataFeedEventService(DataFeedEventService):
                     else:
                         log.info(
                             'AsyncDataFeedEventService/read_datafeed() --> '
-                            'Incoming event from read_datafeed() with id: {}'.format(event['id'])   
+                            'Incoming event from read_datafeed() with id: {}'.format(event['id'])
                         )
                     if event['initiator']['user']['userId'] != bot_id:
                         e_id = event["messageId"] if "messageId" in event else event["id"]
@@ -478,7 +449,7 @@ class AsyncDataFeedEventService(DataFeedEventService):
 
             else:
                 log.debug(
-                    'DataFeedEventService() - no data coming in from '
+                    'AsyncDataFeedEventService() - no data coming in from '
                     'datafeed: {}'.format(self.datafeed_id)
                 )
 
@@ -494,10 +465,15 @@ class AsyncDataFeedEventService(DataFeedEventService):
             log.error(
                 'AsyncDataFeedEventService - caught unauthorized exception'
             )
+        except MaxRetryException as exc:
+            log.error('AsyncDataFeedEventService - Bot has failed to authenticate more than 5 timess ')
+            raise
+
         except (DatafeedExpiredException, APIClientErrorException, ServerErrorException) as exc:
             log.error(
                 'AsyncDataFeedEventService - ' + str(exc)
             )
+
         except Exception as exc:
             log.exception(
                 'AsyncDataFeedEventService - Unknown exception: ' + str(exc)
@@ -508,13 +484,9 @@ class AsyncDataFeedEventService(DataFeedEventService):
         await asyncio.sleep(sleep_for)
         try:
             log.info('AsyncDataFeedEventService/handle_event() --> Restarting Datafeed')
-    
             self.datafeed_id = self.datafeed_client.create_datafeed()
         except Exception as exc:
-            if str(exc) == 'max auth retry limit':
-                raise
-            else:
-                self.handle_datafeed_errors(exc)
+            await self.handle_datafeed_errors(exc)
 
     def _check_result(self, e_id, task):
         """Callback for task completion. If exceptions occurred add them for processing on the
@@ -531,14 +503,14 @@ class AsyncDataFeedEventService(DataFeedEventService):
     def _process_full_trace(self, id):
         """Process all tracedata for the current request and append it to trace_recorder, if defined.
 
-        Use with messagedId if available        
+        Use with messagedId if available
         """
 
         if self.trace_enabled:
             try:
                 intermediates = self.trace_dict[id]
                 assert len(intermediates) == 4
-                trace = EventTrace(id, intermediates[0], intermediates[1], intermediates[2], 
+                trace = EventTrace(id, intermediates[0], intermediates[1], intermediates[2],
                                 intermediates[3])
                 total_time = intermediates[3] - intermediates[0]
                 time_in_bot = intermediates[3] - intermediates[1]
@@ -557,7 +529,7 @@ class AsyncDataFeedEventService(DataFeedEventService):
     def _add_trace(self, e_id, first_timestamp=None):
         """Take the current timestamp and add if to the trace_dict, used to trace the time taken
         to process events.
-        
+
         Use with messageId if available
         """
         if self.trace_enabled:
@@ -593,10 +565,10 @@ class AsyncDataFeedEventService(DataFeedEventService):
                     log.debug('no event detected')
                     self.queue.task_done()
                     return
-                
+
                 future = asyncio.ensure_future(route(event))
                 future.add_done_callback(partial(self._check_result, e_id))
-    
+
     async def handle_exceptions(self):
         """If exceptions are not excplicitly handled they'll silently fail in the co-routine.
         This method picks results one by one off the queue and checks if they were successful, using
@@ -619,7 +591,7 @@ class AsyncDataFeedEventService(DataFeedEventService):
 
                 self._add_trace(e_id)
                 self._process_full_trace(e_id)
-                self.exception_queue.task_done()          
+                self.exception_queue.task_done()
 
     async def msg_sent_handler(self, payload):
         """This handler is used for both room messages and IMs. Which listener is invoked
@@ -693,10 +665,9 @@ class AsyncDataFeedEventService(DataFeedEventService):
         shared_post = payload['payload']['sharedPost']
         for listener in self.wall_post_listeners:
             await listener.on_shared_post(shared_post)
-    
+
     async def suppressed_message_handler(self, payload):
         log.debug('suppressed_message_handler')
         message_suppressed = payload['payload']['messageSuppressed']
         for listener in self.suppression_listeners:
             await listener.on_message_suppression(message_suppressed)
-
