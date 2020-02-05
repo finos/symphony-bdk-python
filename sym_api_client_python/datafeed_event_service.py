@@ -15,7 +15,7 @@ from .exceptions.DatafeedExpiredException import DatafeedExpiredException
 from .exceptions.ServerErrorException import ServerErrorException
 from .exceptions.MaxRetryException import MaxRetryException
 
-log = logging.getLogger("asyncio")
+log = logging.getLogger(__name__)
 
 def make_datetime(unix_timestamp_millis):
     seconds, millis = divmod(unix_timestamp_millis, 1000)
