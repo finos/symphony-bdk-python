@@ -25,7 +25,7 @@ EventTrace = namedtuple('EventTrace', 'message_id creation_time bot_received lis
 
 class DataFeedEventService:
 
-    def __init__(self, sym_bot_client, log_events=True, error_timeout_sec=None):
+    def __init__(self, sym_bot_client, log_events=True, error_timeout_sec=None, maximum_timeout_sec=None):
         self.bot_client = sym_bot_client
         self.datafeed_id = None
         self.datafeed_events = []
@@ -56,7 +56,10 @@ class DataFeedEventService:
         # Never wait less than this
         self.lower_threshold = self.baseline_timeout_sec
         # Raise a RuntimeError once this is exceeded
-        self.upper_threshold = None
+        if maximum_timeout_sec is None:
+            self.upper_threshold = config.data.get('datafeedEventsErrorMaxTimeout', 60)
+        else:
+            self.upper_threshold = maximum_timeout_sec
         # After every failure multiply the timeout by a factor
         self.timeout_multiplier = 2
 
@@ -414,8 +417,11 @@ class AsyncDataFeedEventService(DataFeedEventService):
 
         if not self.stop:
             self.stop = True
+
         await self.queue.put(None)
         await self.exception_queue.put(None)
+        await self.bot_client.close_async_sessions()
+
 
     async def read_datafeed(self):
         while not self.stop:
@@ -423,7 +429,11 @@ class AsyncDataFeedEventService(DataFeedEventService):
                 events = await self.datafeed_client.read_datafeed_async(self.datafeed_id)
 
             except Exception as exc:
-                await self.handle_datafeed_errors(exc)
+                try:
+                    await self.handle_datafeed_errors(exc)
+                except Exception as inner_exc:
+                    await self.deactivate_datafeed(wait_for_handler_completions=False)
+                    raise inner_exc from None
                 continue
 
             self.decrease_timeout()
@@ -467,7 +477,7 @@ class AsyncDataFeedEventService(DataFeedEventService):
             )
         except MaxRetryException as exc:
             log.error('AsyncDataFeedEventService - Bot has failed to authenticate more than 5 timess ')
-            raise
+            raise exc from None
 
         except (DatafeedExpiredException, APIClientErrorException, ServerErrorException) as exc:
             log.error(

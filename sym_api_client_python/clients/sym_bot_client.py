@@ -54,14 +54,15 @@ class SymBotClient(APIClient):
         self.health_check_client = None
 
 
-    def get_datafeed_event_service(self):
+
+    def get_datafeed_event_service(self, *args, **kwargs):
         if self.datafeed_event_service is None:
-            self.datafeed_event_service = DataFeedEventService(self)
+            self.datafeed_event_service = DataFeedEventService(self, *args, **kwargs)
         return self.datafeed_event_service
 
-    def get_async_datafeed_event_service(self):
+    def get_async_datafeed_event_service(self, *args, **kwargs):
         if self.async_datafeed_event_service is None:
-            self.async_datafeed_event_service = AsyncDataFeedEventService(self)
+            self.async_datafeed_event_service = AsyncDataFeedEventService(self, *args, **kwargs)
         return self.async_datafeed_event_service
 
     def get_datafeed_client(self):
@@ -343,3 +344,25 @@ class SymBotClient(APIClient):
         if self.health_check_client is None:
             self.health_check_client = HealthCheckClient(self)
         return self.health_check_client
+
+    async def close_async_sessions(self):
+        """Close the open aiohttp.ClientSession objects
+
+        In general this shouldn't be necessary as the interpreter should tear down
+        any Python objects, and subsequently the OS should terminate any other
+        resources (in this case sockets). However due to bugs in the Python standard
+        library certain situations trigger a race condition between asyncio and the
+        logging library that clobbers the stacktrace and raises a NameError. This
+        just ensures that doesn't happen and gives a cleaner output from the SDK.
+
+        For most usecases this method can be safely omitted.
+        """
+        logging.debug("Manually closing sessions")
+        if self.async_pod_session:
+            await self.async_pod_session.close()
+            self.async_pod_session = None
+
+        if self.async_agent_session:
+            await self.async_agent_session.close()
+            self.async_agent_session = None
+
