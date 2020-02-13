@@ -10,7 +10,7 @@ type of listener needs to be implemented by inheriting the interfaces in the **l
 This client is compatible with **Python 3.6 or above**
 
 Create a virtual environment by executing the following command **(optional)**:
-``python -m venv ./venv``
+``python3 -m venv ./venv``
 
 Activate the virtual environment **(optional)**:
 ``source ./venv/bin/activate``
@@ -303,25 +303,23 @@ Symphony REST API offer a range of capabilities for application to integrate, vi
 
 ### 7 - Using the Asychronous version:
 
-Use `pip install --pre sym-api-client-python` or `pip install sym-api-client-python==0.2.0a1`
+Use `pip install sym-api-client-python` or `pip install sym-api-client-python==0.2.0`
 
-An experimental non-blocking version of the DataFeed has been created using asyncio. This supports asynchronous behaviour in two ways:
+A non-blocking version of the DataFeed has been created using asyncio. This supports asynchronous behaviour in two ways:
 * Listening on the event feed does not have to be blocking, this would allow for a bot that responds to Symphony events, but also external
 stimulus like timers or REST requests. Using asyncio means this can be done without threading, and therefore without careful threadsafe
 structures
 * Handlers can be asynchronous. This means that while responding to one client with an expensive request, other clients can still get timely
 responses
 
-This API is experimental and you should test all paths of your code carefully as asyncio has lots of pecularities and not using an `await`
-where one is expected for example can make your bot crash. However, successfully employing this strategy can make your bot handle far higher
-loads than would be possible in the synchronous case, without having to resort to threading or complex callbacks.
+* Successfully employing this strategy can make your bot handle far higher loads than would be possible in the synchronous case, without having to resort to threading or complex callbacks.
 
 Blocking listeners will however still block the datafeed. Listeners that need to make HTTP requests however can make them with aiohttp,
 instead of requests for example. aiohttp is already a dependency of this module. These can be awaited to release the thread.
 ```
 # Blocking
 requests.get(url)
-# Not blocking 
+# Not blocking
 async def fetch(session, url):
     async with session.get(url) as response:
         return await response.text()
@@ -334,10 +332,10 @@ async def main():
 To see this functionality, run the `main_async.py` version in the examples folder. The key changes are:
 `main_async.py`
 ```
-        datafeed_event_service = bot_client.get_async_datafeed_event_service() 
+        datafeed_event_service = bot_client.get_async_datafeed_event_service()
 
         ...
- 
+
         async def timed_ringer(period_in_seconds, message):
             while True:
                 await asyncio.sleep(period_in_seconds)
@@ -377,6 +375,9 @@ class AsyncImListenerImp(IMListener):
 ```
 
 # Release Notes
+
+## 0.2.0
+- Introduced asynchronous datafeed listening service.      
 
 ## 0.1.27
 - Added Resiliency in read_datafeed() in DataFeedEventService

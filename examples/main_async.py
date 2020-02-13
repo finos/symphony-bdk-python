@@ -26,10 +26,9 @@ def configure_logging():
 
 
 def main():
-        print('Python Client runs using Cert authentication')
 
         parser = argparse.ArgumentParser()
-        parser.add_argument("--auth", choices=["rsa", "cert"], default="rsa", 
+        parser.add_argument("--auth", choices=["rsa", "cert"], default="rsa",
             help="Authentication method to use")
         parser.add_argument("--config", help="Config json file to be used")
 
