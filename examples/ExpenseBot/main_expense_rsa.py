@@ -1,11 +1,16 @@
+import os
 import sys
 import logging
 from pythonjsonlogger import jsonlogger
 from pathlib import Path
 
 def is_venv():
+    conda_env = os.environ.get('CONDA_DEFAULT_ENV')
+    is_conda_env = (conda_env is not None) and (conda_env != "base")
     return (hasattr(sys, 'real_prefix') or
-            (hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix))
+            (hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix) or
+            is_conda_env
+            )
 
 if is_venv():
     print('In virtual environment. Proceeding.')

@@ -6,14 +6,14 @@ import sys
 # logging.basicConfig(filename='sym_api_client_python/logs/example.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filemode='w', level=logging.DEBUG)
 # logging.getLogger("urllib3").setLevel(logging.WARNING)
 # sys.path.insert(1, '/Users/reed.feldman/Desktop/SDK/test/symphony-api-client-python')
-from sym_api_client_python.processors.message_parser import MessageParser
+from sym_api_client_python.processors.sym_message_parser import SymMessageParser
 
 
 class TestMessageParser(unittest.TestCase):
 
     def setUp(self):
         logging.debug('testing Message Parser File:')
-        self.message_parser = MessageParser()
+        self.message_parser = SymMessageParser()
         self.test_message_json = {
                             "messageId": "LKX55AtesGPxrv16ed_TIX___pMru4hmbQ",
                             "timestamp": 1566929352601,
@@ -36,32 +36,32 @@ class TestMessageParser(unittest.TestCase):
                             "originalFormat": "com.symphony.messageml.v2"
                         }
 
-    # def test_get_text(self):
-    #     print(self.message_parser.get_text(self.test_message_json))
-    #
-    # def test_get_im_firstname(self):
-    #     print(self.message_parser.get_im_firstname(self.test_message_json))
-    #
-    # def test_get_stream_id(self):
-    #     print(self.message_parser.get_stream_id(self.test_message_json))
+    def test_get_text(self):
+        print(self.message_parser.get_text(self.test_message_json))
 
-    # def test_get_mentions(self):
-    #     print(self.message_parser.get_mentions(self.test_message_json))
+    def test_get_im_firstname(self):
+        print(self.message_parser.get_im_first_name(self.test_message_json))
 
-    # def test_get_mention_ids(self):
-    #     print(self.message_parser.get_mention_ids(self.test_message_json))
+    def test_get_stream_id(self):
+        print(self.message_parser.get_stream_id(self.test_message_json))
 
-    # def test_get_hash_tags(self):
-    #     print(self.message_parser.get_hash_tags(self.test_message_json))
+    def test_get_mentions(self):
+        print(self.message_parser.get_mentions(self.test_message_json))
 
-    # def test_get_hash_tag_values(self):
-    #     print(self.message_parser.get_hash_tag_values(self.test_message_json))
+    def test_get_mention_ids(self):
+        print(self.message_parser.get_mention_ids(self.test_message_json))
 
-    # def test_cash_tags(self):
-    #     print(self.message_parser.get_cash_tags(self.test_message_json))
-    #
-    # def test_get_cash_tag_values(self):
-    #     print(self.message_parser.get_cash_tag_values(self.test_message_json))
+    def test_get_hash_tags(self):
+        print(self.message_parser.get_hash_tags(self.test_message_json))
+
+    def test_get_hash_tag_values(self):
+        print(self.message_parser.get_hash_tag_values(self.test_message_json))
+
+    def test_cash_tags(self):
+        print(self.message_parser.get_cash_tags(self.test_message_json))
+
+    def test_get_cash_tag_values(self):
+        print(self.message_parser.get_cash_tag_values(self.test_message_json))
 
 
 if __name__ == '__main__':

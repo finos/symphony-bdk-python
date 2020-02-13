@@ -25,11 +25,11 @@ class DataFeedClient(APIClient):
         There is a maximum of 5 Datafeed per Service Account configured by default.
         This setting can be changed in the API Agent's property file.
         """
-        logging.debug('DataFeedClient/create_datafeed()')
-        # messaging_logger.debug('DataFeedClient/create_datafeed()')
         url = '/agent/v4/datafeed/create'
         response = self.bot_client.execute_rest_call("POST", url)
-        return response['id']
+        datafeed_id = response['id']
+        logging.debug('DataFeedClient/create_datafeed() --> {}'.format(datafeed_id))
+        return datafeed_id
 
     # raw api call to read_datafeed --> returns an array of events returned
     # from DataFeed
@@ -56,10 +56,19 @@ class DataFeedClient(APIClient):
 
         logging.debug('DataFeedClient/read_datafeed()')
         url = '/agent/v4/datafeed/{0}/read'.format(datafeed_id)
-        new_events = []
         datafeed_read = self.bot_client.execute_rest_call("GET", url)
-        if (datafeed_read != []):
-            new_events.append(datafeed_read)
-            return new_events
-        else:
-            return new_events
+
+        return datafeed_read
+
+    async def read_datafeed_async(self, datafeed_id):
+        """
+        This works the same as the previous datafeed apart from it's asynchronous and therefore should be called with the await keyword
+
+        See read_datafeed for more info
+        """
+
+        logging.debug('DataFeedClient/read_datafeed_async()')
+        url = '/agent/v4/datafeed/{0}/read'.format(datafeed_id)
+        datafeed_read = await self.bot_client.execute_rest_call_async("GET", url)
+
+        return datafeed_read

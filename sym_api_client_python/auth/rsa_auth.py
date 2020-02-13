@@ -60,8 +60,9 @@ class SymBotRSAAuth(APIClient):
                 logging.debug('Retry authentication in 30 seconds.')
                 time.sleep(auth_endpoint_constants['TIMEOUT'])
                 self.authenticate()
-        except:
-            raise MaxRetryException('max auth retry limit')
+        except MaxRetryException as e:
+            logging.exception(e)
+            raise MaxRetryException
 
     def create_jwt(self):
         """
@@ -98,8 +99,8 @@ class SymBotRSAAuth(APIClient):
         if response.status_code != 200:
             self.auth_retries += 1
             if self.auth_retries > auth_endpoint_constants['MAX_RSA_RETRY']:
-                logging.debug('more than 5 times tried, retry limit reached')
-                raise UnauthorizedException('max auth retry limit: {}'.format(response.__dict__))
+                # raise UnauthorizedException('max auth retry limit: {}'.format(response.__dict__))
+                raise MaxRetryException('bot failed to authenticate more than 5 times.')
             else:
                 logging.debug('RSA_auth/get_session_token() function failed: {}'.format(
                     response.status_code)
@@ -127,7 +128,8 @@ class SymBotRSAAuth(APIClient):
         if response.status_code != 200:
             self.auth_retries += 1
             if self.auth_retries > auth_endpoint_constants['MAX_RSA_RETRY']:
-                raise UnauthorizedException('max auth retry limit: {}'.format(response.__dict__))
+
+                raise MaxRetryException('bot failed to authenticate more than 5 times.')
             else:
                 logging.debug('RSA_auth/get_key_manager_authenticate() function failed: {}'.format(
                     response.status_code)

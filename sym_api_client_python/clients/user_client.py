@@ -47,7 +47,6 @@ class UserClient(APIClient):
         logging.debug('UserClient/get_users_from_email_list()')
         url = '/pod/v3/users'
         usersArray = ','.join(map(str, email_list))
-        print(usersArray)
         params = {'email': usersArray, 'local': local}
         return self.bot_client.execute_rest_call('GET', url, params=params)
 
