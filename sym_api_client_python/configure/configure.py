@@ -78,8 +78,8 @@ class SymConfig:
                 self.data['botRSAPath'] = self._fix_relative_path(data, 'botRSAPath', 'botRSAName')
 
             if 'botPrivateKeyName' in data:
-                # TODO: check this
                 self.data['botRSAPath'] = self._fix_relative_path(data, 'botPrivateKeyPath', 'botPrivateKeyName')
+                print(self.data)
 
             if 'botCertName' in data:
                 self.data['p.12'] = self._fix_relative_path(data, 'botCertPath', 'botCertName')

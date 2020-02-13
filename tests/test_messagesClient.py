@@ -36,8 +36,10 @@ class TestMessages(unittest.TestCase):
 
         #initialize SymBotClient with auth and configure objects
         self.bot_client = SymBotClient(self.auth, self.configure)
-        self.streamId = 'iUiESCsMk5E0rFMTkaSj1n///pI+2flzbQ=='
+        self.streamId = 'ychiFHXta__zF7YqoLOnN3___pBQNr6mdA'
+        self.messageId = 'g05bspw5c5E7Aq2SMZjIJX___o_KIUG2bQ'
         self.test_message = dict(message = '<messageML><hash tag="reed"/></messageML>')
+        self.params = {"text" : "hi", "streamId" : "ychiFHXta__zF7YqoLOnN3___pBQNr6mdA"}
 
     def test_createMessage(self):
         print('testing create messages function')
@@ -46,13 +48,13 @@ class TestMessages(unittest.TestCase):
 
     def test_create_message_async(self):
         asyncio.get_event_loop().run_until_complete(
-            self.bot_client.get_message_client().send_msg(self.streamId, self.test_message)
+            self.bot_client.get_message_client().send_msg_async(self.streamId, self.test_message)
             )
 
     def test_getMessageFromStream(self):
         print('testing get_msg_from_stream function')
         self.assertTrue(self.bot_client.get_message_client().get_msg_from_stream(self.streamId, 0))
-    
+
     def test_get_message_from_stream_async(self):
         asyncio.get_event_loop().run_until_complete(
             self.bot_client.get_message_client().get_msg_from_stream_async(self.streamId, 0)
@@ -93,15 +95,15 @@ class TestMessages(unittest.TestCase):
     #this function returns a 200 but its empty
     def test_postMessageSearch(self):
         print('testing post Message search function')
-        self.assertTrue(self.bot_client.get_message_client().post_msg_search("message"))
+        self.assertTrue(self.bot_client.get_message_client().post_msg_search(self.params))
 
     def test_getMessageSearch(self):
         print('testing getMessage Search function')
-        self.assertTrue(self.bot_client.get_message_client().get_msg_search("message"))
+        self.assertTrue(self.bot_client.get_message_client().get_msg_search({'streamId' : self.streamId, 'texr'}))
 
     def test_getMessageStatus(self):
         print('testing getMessage Status function')
-        self.assertTrue(self.bot_client.get_message_client().get_msg_status(self.streamId))
+        self.assertTrue(self.bot_client.get_message_client().get_msg_status(self.messageId))
 
     def test_getSupportedAttachmentTypes(self):
         print('testing getAttachmentType function')

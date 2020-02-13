@@ -74,7 +74,7 @@ class SymphonyApiMocker:
     """Mocker to wrap requests_mock and aioresponses in one
 
     For testing the synchronous datafeed, only requests_mock is needed. However for testing the
-    async datafeed both are needed as requests_mock handles the mocking for the methods that 
+    async datafeed both are needed as requests_mock handles the mocking for the methods that
     don't have an async counterpart like create_datafeed().
 
     Pass aio=True to mock through to the asynchronous datafeed, which uses aiohttp for REST
@@ -88,14 +88,14 @@ class SymphonyApiMocker:
         with SymphonyApiMocker() as m:
             m.add_mock_events(events)
             event_service.start_datafeed()
-            
+
     """
     def __init__(self, aio=False):
         self.requests_mock_manager = requests_mock.Mocker()
         if aio:
             self.aioresponses_manager = aioresponses()
         self.aio = aio
-    
+
     def __enter__(self):
         """This function just makes sure various core URLs like the create and session datafeed
         examples are allowed to make real http requests. Without this NoMockFound errors will be
@@ -108,7 +108,7 @@ class SymphonyApiMocker:
         if self.aio:
             self.aioresponses_manager.__enter__()
         return self
-    
+
     def __exit__(self, *args):
         self.requests_mock_manager.__exit__(*args)
 
@@ -136,7 +136,8 @@ class SymphonyApiMocker:
         else:
             if add_stop_event:
                 events_list.append(make_events([STOP_EVENT]))
-            
+            #anyrequest that goes through this url will return events_list
+            #find event list
             self.requests_mock_manager.register_uri('GET', READ_DATAFEED_URL, events_list)
 
     def dummy_id_provider(self):
@@ -147,7 +148,7 @@ class SymphonyApiMocker:
             }
             return feed_response
         return f
-    
+
 def make_events(event_types=None, count=None, messages=None, aio=False):
     """Returns a dict to be consumed by the SymphonyApiMocker, specifically for the
     read_datafeed API.
@@ -161,10 +162,10 @@ def make_events(event_types=None, count=None, messages=None, aio=False):
     else:
         if count is not None and len(event_types) != count:
             raise ValueError("Mismatching length")
-    
+
     if messages is None:
         messages = [None for _ in event_types]
-        
+
     for event_type, message in zip(event_types, messages):
         event = copy.deepcopy(BASIC_EVENT)
 
@@ -173,7 +174,7 @@ def make_events(event_types=None, count=None, messages=None, aio=False):
         message_id = "MESSAGE-" + str(uuid.uuid4())
         if "messageId" in event:
             event["messageId"] = message_id
-        
+
         if "messageId" in event["payload"]["messageSent"]["message"]:
             event["payload"]["messageSent"]["message"]["messageId"] = message_id
         else:
@@ -202,7 +203,7 @@ def make_error(status_code, error_message=None, aio=False):
         error_message = "An error occurred"
 
     json_body = {"code": status_code, "message": error_message}
-    
+
     if aio:
         return {"payload": json_body, "status": status_code}
     else:
@@ -252,4 +253,3 @@ class StoppableAsyncService(AsyncDataFeedEventService):
 
     async def _stop_feed_handler(self, payload):
         asyncio.ensure_future(self.deactivate_datafeed())
-    

@@ -476,7 +476,7 @@ class AsyncDataFeedEventService(DataFeedEventService):
                 'AsyncDataFeedEventService - caught unauthorized exception'
             )
         except MaxRetryException as exc:
-            log.error('AsyncDataFeedEventService - Bot has failed to authenticate more than 5 timess ')
+            log.error('AsyncDataFeedEventService - Bot has failed to authenticate more than 5 times ')
             raise exc from None
 
         except (DatafeedExpiredException, APIClientErrorException, ServerErrorException) as exc:

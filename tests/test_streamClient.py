@@ -38,8 +38,8 @@ class TestStreams(unittest.TestCase):
 
         # Initialize SymBotClient with auth and configure objects
         self.bot_client = SymBotClient(self.auth, self.configure)
-        self.streamId = 'GVYRWwxRnEI7xde31EQz63___prrBEtgdA'
-        self.room_id = 'T2kCFe0mJk7eGuVLE83iA3///pI+15eIdA=='
+        self.streamId = 'qfC1jCKzQ0ELq96TMs58dX___o_kveOkdA'
+        self.user_id = '349026222344902'
 
     #always passes
     # def test_facts(self):
@@ -47,7 +47,7 @@ class TestStreams(unittest.TestCase):
     #pass
     def test_createIM(self):
         print('testing CreateIm function')
-        self.assertTrue(self.bot_client.get_stream_client().create_im(self.user))
+        self.assertTrue(self.bot_client.get_stream_client().create_im([self.user_id]))
 
     #pass but will fail if you pass data thats already been used like name and description
     def test_createRoom(self):
@@ -64,53 +64,53 @@ class TestStreams(unittest.TestCase):
     def test_roomInfo(self):
         print('testing roomInfo function')
 
-        self.assertTrue(self.bot_client.get_stream_client().get_room_info(self.room_id))
+        self.assertTrue(self.bot_client.get_stream_client().get_room_info(self.streamId))
 
     #pass
     def test_activateRoom(self):
         print('testing activate_room function')
         active = False
 
-        self.assertTrue(self.bot_client.get_stream_client().activate_room(self.room_id, active))
+        self.assertTrue(self.bot_client.get_stream_client().activate_room(self.streamId))
 
     #pass
     def test_getRoomMembers(self):
 
-        self.assertTrue(self.bot_client.get_stream_client().get_room_members(self.room_id))
+        self.assertTrue(self.bot_client.get_stream_client().get_room_members(self.streamId))
 
     #pass
     def test_addMember(self):
         print('testing addmember function')
 
         userId = '344147139494862'
-        self.assertTrue(self.bot_client.get_stream_client().add_member_to_room(self.room_id, userId))
+        self.assertTrue(self.bot_client.get_stream_client().add_member_to_room(self.streamId, self.user_id))
 
     #pass
     def test_shareRoom(self):
         print('testing share_room function')
 
-        self.assertTrue(self.bot_client.get_stream_client().share_room(self.room_id))
+        self.assertTrue(self.bot_client.get_stream_client().share_room(self.stream_id))
 
     #pass
     def test_removeMemberFromRoom(self):
         print('testing remove Member function')
 
         userId = '344147139494862'
-        self.assertTrue(self.bot_client.get_stream_client().remove_member_from_room(self.room_id, userId))
+        self.assertTrue(self.bot_client.get_stream_client().remove_member_from_room(self.stream_id, self.user_id))
 
     #pass
     def test_promoteUserToOwner(self):
         print('testing promote owner function')
 
         userId = '344147139494862'
-        self.assertTrue(self.bot_client.get_stream_client().promote_user_to_owner(self.room_id, userId))
+        self.assertTrue(self.bot_client.get_stream_client().promote_user_to_owner(self.stream_id, self.user_id))
 
     #pass
     def test_demoteUserFromOwner(self):
         print('testing demote owner function')
 
         userId = '344147139494862'
-        self.assertTrue(self.bot_client.get_stream_client().demote_user_from_owner(self.room_id, userId))
+        self.assertTrue(self.bot_client.get_stream_client().demote_user_from_owner(self.stream_id, self.user_id))
 
     #pass
     def test_searchRooms(self):

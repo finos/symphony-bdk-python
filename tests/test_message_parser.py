@@ -38,10 +38,10 @@ class TestMessageParser(unittest.TestCase):
 
     def test_get_text(self):
         print(self.message_parser.get_text(self.test_message_json))
-    
+
     def test_get_im_firstname(self):
-        print(self.message_parser.get_im_firstname(self.test_message_json))
-    
+        print(self.message_parser.get_im_first_name(self.test_message_json))
+
     def test_get_stream_id(self):
         print(self.message_parser.get_stream_id(self.test_message_json))
 
@@ -59,7 +59,7 @@ class TestMessageParser(unittest.TestCase):
 
     def test_cash_tags(self):
         print(self.message_parser.get_cash_tags(self.test_message_json))
-    
+
     def test_get_cash_tag_values(self):
         print(self.message_parser.get_cash_tag_values(self.test_message_json))
 

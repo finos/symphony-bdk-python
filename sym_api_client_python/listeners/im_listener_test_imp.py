@@ -1,11 +1,11 @@
 import asyncio
 import logging
-
-from sym_api_client_python.processors.sym_message_parser import \
-    SymMessageParser
-
 from .im_listener import IMListener
 from .simple_message_processor import MessageProcessor
+from sym_api_client_python.processors.sym_message_parser import SymMessageParser
+
+
+
 
 # A sample implementation of Abstract imListener class
 # The listener can respond to incoming events if the respective event
@@ -32,7 +32,7 @@ class IMListenerTestImp(IMListener):
 
 class AsyncIMListenerImp(IMListener):
     """Example implementation of IMListener with asynchronous functionality
-    
+
     Call the bot with /wait to see an example of a non-blocking wait
 
     """

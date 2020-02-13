@@ -7,6 +7,10 @@ from sym_api_client_python.auth.rsa_auth import SymBotRSAAuth
 from sym_api_client_python.clients.sym_bot_client import SymBotClient
 from sym_api_client_python.configure.configure import SymConfig
 
+logging.basicConfig(filename='sym_api_client_python/logs/example.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filemode='w', level=logging.DEBUG)
+logging.getLogger("urllib3").setLevel(logging.WARNING)
+
+
 class TestHealthCheck(unittest.TestCase):
 
     # Unlike setUp this only fires once per class
@@ -29,8 +33,7 @@ class TestHealthCheck(unittest.TestCase):
 
     def test_do_health_check(self):
         client = self.bot_client.get_health_check_client()
-        print(client.get_health_check())
-    
+
     # This isn't a great test of the SDK, it just checks the local services
     def test_ensure_services(self):
         client = self.bot_client.get_health_check_client()
@@ -60,4 +63,3 @@ class TestHealthCheck(unittest.TestCase):
                 'ceServiceUser': True}
         client = self.bot_client.get_health_check_client()
         client.ensure_all_services_up(fields_to_check=["ceServiceUser", "agentServiceUser"])
-

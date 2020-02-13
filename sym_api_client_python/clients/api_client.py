@@ -27,7 +27,6 @@ class APIClient:
         execute_rest_request or execute_rest_request_async depending whether aio was true"""
 
         if aio:
-
             # This appears to be the canonical way to use aiohttp to pass mulipart data into the API
             # in the same way that MultipartEncoder does for Requests.
             # aiohttp.FormData does appear to work because of the way the Symphony API demands a boundary
@@ -49,8 +48,9 @@ class APIClient:
             }
 
         else:
+            print(fields)
             data = MultipartEncoder(
-                fields
+                fields=fields
             )
             headers = {
                 'Content-Type': data.content_type

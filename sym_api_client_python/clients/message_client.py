@@ -23,7 +23,7 @@ class MessageClient(APIClient):
         }
         params.update(kwargs)
         return self.bot_client.execute_rest_call('GET', url, params=params)
-    
+
     async def get_msg_from_stream_async(self, stream_id, since, **kwargs):
         logging.debug('MessageClient/get_msg_from_stream_async()')
         url = MESSAGE_STREAM_API.format(stream_id=stream_id)
@@ -41,8 +41,8 @@ class MessageClient(APIClient):
     async def send_msg_async(self, stream_id, outbound_msg):
         logging.debug('MessageClient/send_msg()')
         url = MESSAGE_CREATE.format(stream_id=stream_id)
-        return await self.bot_client.execute_rest_call_async('POST', url, files=outbound_msg)        
-    
+        return await self.bot_client.execute_rest_call_async('POST', url, files=outbound_msg)
+
     def _data_and_headers_for_attachment(self, stream_id, msg, filename, path_to_attachment, aio=False):
         """Build an attachment out of either a path or a stream"""
         url = MESSAGE_CREATE.format(stream_id=stream_id)
@@ -65,11 +65,13 @@ class MessageClient(APIClient):
 
     def send_msg_with_attachment(self, stream_id, msg,
                                  filename, path_to_attachment):
+        """In this function make sure that msg parameter is set to just the messageML string.
+        Do not set msg parameter to dict(message='<messageML>testing attachement</messageML>')
+        for this function"""
         logging.debug('MessageClient/send_msg_with_attachment()')
         parts = self._data_and_headers_for_attachment(stream_id, msg, filename, path_to_attachment)
-
         return self.bot_client.execute_rest_call("POST", **parts)
-    
+
     async def send_msg_with_attachment_async(self, stream_id, msg,
                                        filename, path_to_attachment):
         logging.debug('MessageClient/send_msg_with_attachment()')
