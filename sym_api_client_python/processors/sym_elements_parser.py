@@ -55,14 +55,14 @@ class SymElementsParser:
         pass
 
     def get_stream_id(self, elements_action_data):
-        if 'stream' in elements_action_data['payload']['symphonyElementsAction'] and 'id' in elements_action_data['payload']['symphonyElementsAction']['stream']:
-            return elements_action_data['payload']['symphonyElementsAction']['stream']['id']
+        if 'stream' in elements_action_data['payload']['symphonyElementsAction'] and 'streamId' in elements_action_data['payload']['symphonyElementsAction']['stream']:
+            return elements_action_data['payload']['symphonyElementsAction']['stream']['streamId']
         if 'formStream' in elements_action_data['payload']['symphonyElementsAction'] and 'streamId' in elements_action_data['payload']['symphonyElementsAction']['formStream']:
             return elements_action_data['payload']['symphonyElementsAction']['formStream']['streamId'].rstrip('=').replace('/', '_').replace('+', '-')
 
     def get_stream_type(self, elements_action_data):
-        if 'stream' in elements_action_data['payload']['symphonyElementsAction'] and 'type' in elements_action_data['payload']['symphonyElementsAction']['stream']:
-            return elements_action_data['payload']['symphonyElementsAction']['stream']['type']
+        if 'stream' in elements_action_data['payload']['symphonyElementsAction'] and 'streamType' in elements_action_data['payload']['symphonyElementsAction']['stream']:
+            return elements_action_data['payload']['symphonyElementsAction']['stream']['streamType']
 
     def get_action_stream_id(self, elements_action_data):
         """
