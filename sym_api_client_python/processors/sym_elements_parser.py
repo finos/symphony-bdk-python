@@ -8,47 +8,44 @@ class SymElementsParser:
     follows the structure below:
 
     [
-    {
-        "id": "kzwn0A",
-        "messageId": "Yzy7OoPQnLI9DTCKWmIRMX___pQEChSZbQ",
-        "timestamp": 1563300326246,
-        "type": "SYMPHONYELEMENTSACTION",
-        "initiator": {
-            "user": {
-                "userId": 7078106482890,
-                "firstName": "User",
-                "lastName": "Bot",
-                "displayName": "User",
-                "email": "user_bot@symphony.com",
-                "username": "user_bot"
-            }
-        },
-        "payload": {
-            "symphonyElementsAction": {
-                "actionStream": {
-                    "streamId": "0YeiA-neZa1PrdHy1L82jX___pQjntU-dA"
-                },
-                "formStream": {
-                    "streamId": "YuK1c2y2yuie6+UfQnjSPX///pQEn69idA=="
-                },
-                "formMessageId": "q79Am2NpPefaV42JogMPRX///pQEDbD+dA==5653",
-                "formId": "form_id",
-                "formValues": {
-                    "action": "submit_button",
-                    "name_01": "John Doe",
-                    "country": "opt1",
-                    "example_radio": "option_01",
-                    "checkbox_1": "value01",
-                    "checkbox_2": "value02",
-                    "comment": "In my opinion..."
+        {
+            "id": "kzwn0A",
+            "messageId": "Yzy7OoPQnLI9DTCKWmIRMX___pQEChSZbQ",
+            "timestamp": 1563300326246,
+            "type": "SYMPHONYELEMENTSACTION",
+            "initiator": {
+                "user": {
+                    "userId": 7078106482890,
+                    "firstName": "User",
+                    "lastName": "Bot",
+                    "displayName": "User",
+                    "email": "user_bot@symphony.com",
+                    "username": "user_bot"
+                }
+            },
+            "payload": {
+                "symphonyElementsAction": {
+                    "stream": {
+                        "streamId": "0YeiA-neZa1PrdHy1L82jX___pQjntU-dA",
+                        "streamType": "IM"
+                    },
+                    "formId": "form_id",
+                    "formValues": {
+                        "action": "submit_button",
+                        "name_01": "John Doe",
+                        "country": "opt1",
+                        "example_radio": "option_01",
+                        "checkbox_1": "value01",
+                        "checkbox_2": "value02",
+                        "comment": "In my opinion..."
                     }
                 }
             }
         }
     ]
 
-    This class provides methods to the developer to easily access data in this
-    elements action payload corresponding to each element in the form.
+    This Class provides methods to the developer to easily access data in this
+    elements action payload corresponding to each element in the form:
     """
 
     def __init__(self):
@@ -91,9 +88,7 @@ class SymElementsParser:
         {
             "element_name": "element_value"
         }
-
         For Example:
-
         {
             "action": "submit_button",
             "name_01": "John Doe",
@@ -102,7 +97,6 @@ class SymElementsParser:
             "checkbox_1": "value01",
             "checkbox_2": "value02",
             "comment": "In my opinion..."
-
         }
         """
 
