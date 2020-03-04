@@ -376,6 +376,10 @@ class AsyncImListenerImp(IMListener):
 
 # Release Notes
 
+## 1.1.0
+
+- Updated SymElementsParser to read new JSON payload introduced in elements 1.1
+
 ## 0.2.0
 - Introduced asynchronous datafeed listening service.      
 
