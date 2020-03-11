@@ -376,6 +376,10 @@ class AsyncImListenerImp(IMListener):
 
 # Release Notes
 
+## 1.1.1
+
+- Updated sub packages included in requirements.txt  
+
 ## 1.1.0
 
 - Updated SymElementsParser to read new JSON payload introduced in elements 1.1
