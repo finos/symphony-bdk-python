@@ -670,6 +670,11 @@ class AsyncDataFeedEventService(DataFeedEventService):
         for listener in self.room_listeners:
             await listener.on_room_member_demoted_from_owner(demoted_to_owner_data)
 
+    async def elements_action_handler(self, payload):
+        log.debug('async elements_action_handler')
+        for listener in self.elements_listeners:
+            await listener.on_elements_action(payload)
+
     async def shared_post_handler(self, payload):
         log.debug('shared_post_handler')
         shared_post = payload['payload']['sharedPost']
