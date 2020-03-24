@@ -376,6 +376,12 @@ class AsyncImListenerImp(IMListener):
 
 # Release Notes
 
+## 1.1.2
+
+- Updated requirements.txt to allow developers to pip install editable version
+- fixed bug in test_MessagesClient.py
+- Added AsyncElementsListener Class to elements_listener_test_imp.py
+
 ## 1.1.1
 
 - Updated sub packages included in requirements.txt  

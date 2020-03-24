@@ -7,6 +7,7 @@ import io
 
 logging.basicConfig(filename='sym_api_client_python/logs/example.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filemode='w', level=logging.DEBUG)
 logging.getLogger("urllib3").setLevel(logging.WARNING)
+
 from sym_api_client_python.configure.configure import SymConfig
 from sym_api_client_python.auth.auth import Auth
 from sym_api_client_python.auth.rsa_auth import SymBotRSAAuth
@@ -99,7 +100,7 @@ class TestMessages(unittest.TestCase):
 
     def test_getMessageSearch(self):
         print('testing getMessage Search function')
-        self.assertTrue(self.bot_client.get_message_client().get_msg_search({'streamId' : self.streamId, 'texr'}))
+        self.assertTrue(self.bot_client.get_message_client().get_msg_search({'streamId' : self.streamId, 'text'}))
 
     def test_getMessageStatus(self):
         print('testing getMessage Status function')
