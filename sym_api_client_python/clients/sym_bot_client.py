@@ -42,7 +42,7 @@ class SymBotClient(APIClient):
         self.msg_client = None
         self.stream_client = None
         self.user_client = None
-        self.connection_client = None
+        self.connections_client = None
         self.signals_client = None
         self.admin_client = None
         self.api_client = None
@@ -365,4 +365,3 @@ class SymBotClient(APIClient):
         if self.async_agent_session:
             await self.async_agent_session.close()
             self.async_agent_session = None
-

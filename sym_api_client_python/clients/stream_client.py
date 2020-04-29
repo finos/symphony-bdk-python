@@ -324,4 +324,4 @@ class StreamClient(APIClient):
             'skip': skip,
             'limit': limit
         }
-        return self.bot_client.execute_rest_call('POST', url, params=params)
+        return self.bot_client.execute_rest_call('GET', url, params=params)
