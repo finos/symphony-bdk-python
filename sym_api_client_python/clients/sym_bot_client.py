@@ -118,7 +118,8 @@ class SymBotClient(APIClient):
             logging.debug('bot_client/get_pod_session() - creating pod session')
             self.pod_session = requests.Session()
             self.pod_session.headers.update({
-                'sessionToken': self.auth.get_session_token()}
+                'sessionToken': self.auth.get_session_token(),
+                'cache-control': 'no-cache'}
             )
             self.pod_session.proxies.update(self.config.data['podProxyRequestObject'])
             if self.config.data[_TRUSTSTORE_PATH]:
@@ -134,7 +135,8 @@ class SymBotClient(APIClient):
             self.agent_session = requests.Session()
             self.agent_session.headers.update({
                 'sessionToken': self.auth.get_session_token(),
-                'keyManagerToken': self.auth.get_key_manager_token()}
+                'keyManagerToken': self.auth.get_key_manager_token(),
+                'cache-control': 'no-cache'}
             )
             self.agent_session.proxies.update(self.config.data['agentProxyRequestObject'])
             if self.config.data[_TRUSTSTORE_PATH]:
@@ -198,7 +200,8 @@ class SymBotClient(APIClient):
             logging.debug('bot_client/get_pod_session() - creating async pod session')
             self.async_pod_session = aiohttp.ClientSession(
             headers = {
-                'sessionToken': self.auth.get_session_token()}
+                'sessionToken': self.auth.get_session_token(),
+                'cache-control': 'no-cache'}
                 )
             # For aiohttp proxies are handled when the request is made
             if self.config.data[_TRUSTSTORE_PATH]:
@@ -215,7 +218,8 @@ class SymBotClient(APIClient):
             self.async_agent_session = aiohttp.ClientSession(
             headers = {
                 'sessionToken': self.auth.get_session_token(),
-                'keyManagerToken': self.auth.get_key_manager_token()}
+                'keyManagerToken': self.auth.get_key_manager_token(),
+                'cache-control': 'no-cache'}
             )
             # For aiohttp proxies are handled when the request is made
             if self.config.data[_TRUSTSTORE_PATH]:

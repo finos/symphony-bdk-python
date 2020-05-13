@@ -16,10 +16,8 @@ class PresenceClient(APIClient):
         """Returns the online status of the calling user."""
         logging.debug('PresenceClient/get_presence()')
         url = '/pod/v2/user/presence/'
-        headers = {
-                'cache-control': 'no-cache'
-                }
-        return self.bot_client.execute_rest_call('GET', url, headers=headers)
+
+        return self.bot_client.execute_rest_call('GET', url)
 
     def get_all_presence(self, last_user_id, limit):
         """
@@ -39,10 +37,7 @@ class PresenceClient(APIClient):
                 'lastUserId': last_user_id,
                 'limit': limit
                 }
-        headers = {
-                'cache-control': 'no-cache'
-                }
-        return self.bot_client.execute_rest_call('GET', url, params=params, headers=headers)
+        return self.bot_client.execute_rest_call('GET', url, params=params)
 
     def get_user_status(self, user_id, local=True):
         """
@@ -71,8 +66,7 @@ class PresenceClient(APIClient):
         logging.debug('PresenceClient/get_user_status()')
         url = '/pod/v3/user/{0}/presence'.format(user_id)
         params = {'local': local}
-        headers = {'cache-control': 'no-cache'}
-        return self.bot_client.execute_rest_call("GET", url, params=params, headers=headers)
+        return self.bot_client.execute_rest_call("GET", url, params=params)
 
     def external_presence_interest(self, array_user_ids):
         """
@@ -96,8 +90,7 @@ Getting an external user’s presence is limited to one call every 5 minutes.
         logging.debug('PresenceClient/external_presence_interest()')
         url = '/pod/v1/user/presence/register'
         data = {'userIds': array_user_ids}
-        headers = {'cache-control': 'no-cache'}
-        return self.bot_client.execute_rest_call("POST", url, json=data, headers=headers)
+        return self.bot_client.execute_rest_call("POST", url, json=data)
 
     def set_presence(self, category):
         """
@@ -112,8 +105,7 @@ Getting an external user’s presence is limited to one call every 5 minutes.
         logging.debug('PresenceClient/set_presence()')
         url = '/pod/v2/user/presence'
         data = {'category': category}
-        headers = {'cache-control': 'no-cache'}
-        return self.bot_client.execute_rest_call("POST", url, json=data, headers=headers)
+        return self.bot_client.execute_rest_call("POST", url, json=data)
 
     def create_presence_feed(self):
         """
@@ -155,5 +147,4 @@ Getting an external user’s presence is limited to one call every 5 minutes.
                 'category': category,
                 'userId': user_id
                 }
-        headers = {'cache-control': 'no-cache'}
-        return self.bot_client.execute_rest_call("POST", url, json=data, headers=headers)
+        return self.bot_client.execute_rest_call("POST", url, json=data)
