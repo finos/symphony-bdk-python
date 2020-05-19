@@ -21,7 +21,7 @@ Install dependencies required for this client by executing the command below.
 ### Development
 
 To develop this library run:
-``pip install -e .[test]``
+``pip install -e .``
 
 This will give an editable install so the code can be changed while still being installed in the environment. Tests can then be run with:
 
@@ -375,6 +375,11 @@ class AsyncImListenerImp(IMListener):
 ```
 
 # Release Notes
+## 1.1.4
+- Added "cache-control" header value to pod and agent sessions
+
+## 1.1.3
+- Bug fixes in SymBotClient and StreamClient
 
 ## 1.1.2
 
