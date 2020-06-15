@@ -1,0 +1,5 @@
+# These owners will be the default owners for everything in
+# the repo. Wanna know more about this ?
+# https://help.github.com/en/articles/about-code-owners
+
+*       @SymphonyPlatformSolutions/symphony-sdk
