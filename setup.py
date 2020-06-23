@@ -42,7 +42,8 @@ setuptools.setup(
         'requests_pkcs12==1.4',
         'requests-toolbelt==0.9.1',
         'requests-mock>=1.7.0',
-        'yattag==1.12.2'
+        'yattag==1.12.2',
+        'defusedxml==0.6.0'
     ],
     extras_require=extras,
     include_package_data=True,

@@ -1,5 +1,5 @@
 from .joke import JokeClient
-import xml.etree.ElementTree as ET
+import defusedxml.ElementTree as ET
 
 
 class MessageProcessor:
