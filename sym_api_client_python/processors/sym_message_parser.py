@@ -1,4 +1,3 @@
-import xml.etree.ElementTree as ET
 import json
 import logging
 from bs4 import BeautifulSoup

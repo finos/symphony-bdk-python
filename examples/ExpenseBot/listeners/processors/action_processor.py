@@ -1,4 +1,3 @@
-import xml.etree.ElementTree as ET
 import logging
 import base64
 import json
