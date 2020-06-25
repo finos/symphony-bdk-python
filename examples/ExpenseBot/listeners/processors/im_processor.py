@@ -1,4 +1,3 @@
-import xml.etree.ElementTree as ET
 import logging
 import json
 from sym_api_client_python.processors.message_formatter import MessageFormatter

@@ -1,4 +1,3 @@
-import xml.etree.ElementTree as ET
 from ..processors.sym_message_parser import SymMessageParser
 import logging
 
