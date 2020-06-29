@@ -1,6 +1,7 @@
 from .elements_listener import ElementsActionListener
 import logging
-import asyncio
+
+
 # A sample implementation of Abstract imListener class
 # The listener can respond to incoming events if the respective event
 # handler has been implemented
@@ -18,7 +19,6 @@ class ElementsListenerTestImp(ElementsActionListener):
 
     def on_elements_action(self, action):
         logging.debug('element submitted :')
-
 
 
 class AsyncElementsListenerTestImp(ElementsActionListener):

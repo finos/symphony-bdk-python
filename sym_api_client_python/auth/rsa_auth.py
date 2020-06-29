@@ -4,10 +4,8 @@ import datetime
 import time
 import logging
 from .auth_endpoint_constants import auth_endpoint_constants
-from requests import Session
 from jose import jwt
 from ..clients.api_client import APIClient
-from ..exceptions.UnauthorizedException import UnauthorizedException
 from ..exceptions.MaxRetryException import MaxRetryException
 
 class SymBotRSAAuth(APIClient):

@@ -2,6 +2,7 @@ import json
 import logging
 import os
 
+
 class SymConfig:
     # initialize object by passing in path to config file
     # store configuration data in variable data
@@ -40,9 +41,8 @@ class SymConfig:
             parts = [p for p in [path_key, filename_key] if p is not None]
             logging.warning(
                 "{} specified in config, but resolved path {} does not exist"
-                .format(", ".join(parts), result))
+                    .format(", ".join(parts), result))
         return result
-
 
     def load_config(self):
         logging.info("Loading config from: {}".format(os.path.realpath(self.path_to_config)))
@@ -51,28 +51,28 @@ class SymConfig:
             self.data = data
 
             if 'sessionAuthPort' in data:
-                self.data['sessionAuthHost'] = 'https://'+ data['sessionAuthHost'] + ':' + str(data['sessionAuthPort'])
+                self.data['sessionAuthHost'] = 'https://' + data['sessionAuthHost'] + ':' + str(data['sessionAuthPort'])
             else:
-                self.data['sessionAuthHost'] = 'https://'+ data['sessionAuthHost']
+                self.data['sessionAuthHost'] = 'https://' + data['sessionAuthHost']
 
             if 'keyAuthPort' in data:
-                self.data['keyAuthHost'] = 'https://'+ data['keyAuthHost'] + ':' + str(data['keyAuthPort'])
+                self.data['keyAuthHost'] = 'https://' + data['keyAuthHost'] + ':' + str(data['keyAuthPort'])
             else:
-                self.data['keyAuthHost'] = 'https://'+ data['keyAuthHost']
+                self.data['keyAuthHost'] = 'https://' + data['keyAuthHost']
 
             if 'podPort' in data:
-                self.data['podHost'] = 'https://'+ data['podHost'] + ':' + str(data['podPort'])
+                self.data['podHost'] = 'https://' + data['podHost'] + ':' + str(data['podPort'])
             else:
-                self.data['podHost'] = 'https://'+ data['podHost']
+                self.data['podHost'] = 'https://' + data['podHost']
 
             if 'agentPort' in data:
-                self.data['agentHost'] = 'https://'+ data['agentHost'] + ':' + str(data['agentPort'])
+                self.data['agentHost'] = 'https://' + data['agentHost'] + ':' + str(data['agentPort'])
             else:
-                self.data['agentHost'] = 'https://'+ data['agentHost']
+                self.data['agentHost'] = 'https://' + data['agentHost']
 
-            #backwards compatible
+            # backwards compatible
             if 'botCertPath' in data:
-                self.data['botCertPath'] = self._fix_relative_path(data,'botCertPath')
+                self.data['botCertPath'] = self._fix_relative_path(data, 'botCertPath')
 
             if 'botRSAName' in data:
                 self.data['botRSAPath'] = self._fix_relative_path(data, 'botRSAPath', 'botRSAName')
@@ -97,8 +97,6 @@ class SymConfig:
                 self.data['keyManagerProxyUsername'] = data['proxyUsername'] if 'proxyUsername' in data else ""
                 self.data['keyManagerProxyPassword'] = data['proxyPassword'] if 'proxyPassword' in data else ""
 
-
-
             if 'podProxyURL' not in data or not data['podProxyURL']:
                 self.data['podProxyRequestObject'] = {}
                 self.data['podProxyURL'] = ""
@@ -112,14 +110,14 @@ class SymConfig:
                     pod_proxy_auth = data['podProxyUsername'] + ':' + data['podProxyPassword']
                     pod_proxy_url = pod_proxy_parse[0] + '://' + pod_proxy_auth + '@' + pod_proxy_parse[1]
                     self.data['podProxyRequestObject'] = {
-                            'http' : pod_proxy_url,
-                            'https' : pod_proxy_url,
-                            }
+                        'http': pod_proxy_url,
+                        'https': pod_proxy_url,
+                    }
                 else:
                     self.data['podProxyRequestObject'] = {
-                            'http' : data['podProxyURL'],
-                            'https' : data['podProxyURL'],
-                            }
+                        'http': data['podProxyURL'],
+                        'https': data['podProxyURL'],
+                    }
 
             if 'agentProxyURL' not in data or not data['agentProxyURL']:
                 self.data['agentProxyRequestObject'] = {}
@@ -134,14 +132,14 @@ class SymConfig:
                     agent_proxy_auth = data['agentProxyUsername'] + ':' + data['agentProxyPassword']
                     agent_proxy_url = agent_proxy_parse[0] + '://' + agent_proxy_auth + '@' + agent_proxy_parse[1]
                     self.data['agentProxyRequestObject'] = {
-                            'http' : agent_proxy_url,
-                            'https' : agent_proxy_url,
-                            }
+                        'http': agent_proxy_url,
+                        'https': agent_proxy_url,
+                    }
                 else:
                     self.data['agentProxyRequestObject'] = {
-                            'http' : data['agentProxyURL'],
-                            'https' : data['agentProxyURL'],
-                            }
+                        'http': data['agentProxyURL'],
+                        'https': data['agentProxyURL'],
+                    }
 
             if 'keyManagerProxyURL' not in data or not data['keyManagerProxyURL']:
                 self.data['keyManagerProxyRequestObject'] = {}
@@ -156,14 +154,14 @@ class SymConfig:
                     km_proxy_auth = data['keyManagerProxyUsername'] + ':' + data['keyManagerProxyPassword']
                     km_proxy_url = km_proxy_parse[0] + '://' + km_proxy_auth + '@' + km_proxy_parse[1]
                     self.data['keyManagerProxyRequestObject'] = {
-                            'http' : km_proxy_url,
-                            'https' : km_proxy_url,
-                            }
+                        'http': km_proxy_url,
+                        'https': km_proxy_url,
+                    }
                 else:
                     self.data['keyManagerProxyRequestObject'] = {
-                            'http' : data['keyManagerProxyURL'],
-                            'https' : data['keyManagerProxyURL'],
-                            }
+                        'http': data['keyManagerProxyURL'],
+                        'https': data['keyManagerProxyURL'],
+                    }
 
             if 'datafeedEventsErrorTimeout' in data:
                 self.data['datafeedEventsErrorTimeout'] = data['datafeedEventsErrorTimeout']

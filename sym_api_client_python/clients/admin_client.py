@@ -1,10 +1,6 @@
-import requests
-import json
 import logging
-import base64
+
 from .api_client import APIClient
-from ..exceptions.UnauthorizedException import UnauthorizedException
-from requests_toolbelt.multipart.encoder import MultipartEncoder
 
 
 # child class of APIClient --> Extends error handling functionality

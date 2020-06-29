@@ -3,11 +3,11 @@ import logging
 import time
 import requests
 from .auth_endpoint_constants import auth_endpoint_constants
-from requests import Session
 from ..clients.api_client import APIClient
 from requests_pkcs12 import Pkcs12Adapter
 from ..exceptions.UnauthorizedException import UnauthorizedException
 from ..exceptions.MaxRetryException import MaxRetryException
+
 
 class Auth(APIClient):
     """Class for certificate authentication"""
@@ -26,7 +26,7 @@ class Auth(APIClient):
         self.auth_session = requests.Session()
         self.key_manager_auth_session = requests.Session()
 
-        #proxy infomation set in config loader, set to empty object if there is no proxy set in config.json
+        # proxy infomation set in config loader, set to empty object if there is no proxy set in config.json
         self.auth_session.proxies.update(self.config.data['podProxyRequestObject'])
         self.key_manager_auth_session.proxies.update(self.config.data['keyManagerProxyRequestObject'])
 
@@ -60,7 +60,6 @@ class Auth(APIClient):
                 pkcs12_filename=self.config.data['p.12'],
                 pkcs12_password=self.config.data['botCertPassword']
             ))
-
 
     def get_session_token(self):
         """Return the session token"""
