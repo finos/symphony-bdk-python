@@ -1,5 +1,3 @@
-
-
 class SymElementsParser:
     """
     FormParser class takes elements_action_data as its only parameter.
@@ -52,13 +50,17 @@ class SymElementsParser:
         pass
 
     def get_stream_id(self, elements_action_data):
-        if 'stream' in elements_action_data['payload']['symphonyElementsAction'] and 'streamId' in elements_action_data['payload']['symphonyElementsAction']['stream']:
+        if 'stream' in elements_action_data['payload']['symphonyElementsAction'] and 'streamId' in \
+                elements_action_data['payload']['symphonyElementsAction']['stream']:
             return elements_action_data['payload']['symphonyElementsAction']['stream']['streamId']
-        if 'formStream' in elements_action_data['payload']['symphonyElementsAction'] and 'streamId' in elements_action_data['payload']['symphonyElementsAction']['formStream']:
-            return elements_action_data['payload']['symphonyElementsAction']['formStream']['streamId'].rstrip('=').replace('/', '_').replace('+', '-')
+        if 'formStream' in elements_action_data['payload']['symphonyElementsAction'] and 'streamId' in \
+                elements_action_data['payload']['symphonyElementsAction']['formStream']:
+            return elements_action_data['payload']['symphonyElementsAction']['formStream']['streamId'].rstrip(
+                '=').replace('/', '_').replace('+', '-')
 
     def get_stream_type(self, elements_action_data):
-        if 'stream' in elements_action_data['payload']['symphonyElementsAction'] and 'streamType' in elements_action_data['payload']['symphonyElementsAction']['stream']:
+        if 'stream' in elements_action_data['payload']['symphonyElementsAction'] and 'streamType' in \
+                elements_action_data['payload']['symphonyElementsAction']['stream']:
             return elements_action_data['payload']['symphonyElementsAction']['stream']['streamType']
 
     def get_action_stream_id(self, elements_action_data):
@@ -67,7 +69,8 @@ class SymElementsParser:
         actionStream is where the formMessage is sent, this is a hidden stream
         so that the encryption context is between user and bot only and not everyone else on the room
         """
-        if elements_action_data['payload']['symphonyElementsAction']['actionStream'] != None and elements_action_data['payload']['symphonyElementsAction']['actionStream']['streamId'] != None:
+        if elements_action_data['payload']['symphonyElementsAction']['actionStream'] != None and \
+                elements_action_data['payload']['symphonyElementsAction']['actionStream']['streamId'] != None:
             return elements_action_data['payload']['symphonyElementsAction']['actionStream']['streamId']
 
     def get_form_message_id(self, elements_action_data):

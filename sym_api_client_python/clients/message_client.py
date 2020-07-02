@@ -1,7 +1,6 @@
-import json
 import logging
+
 from .api_client import APIClient
-from ..exceptions.UnauthorizedException import UnauthorizedException
 
 # child class of APIClient --> Extends error handling functionality
 # MessageClient class contains a series of functions corresponding to all
@@ -9,6 +8,7 @@ from ..exceptions.UnauthorizedException import UnauthorizedException
 
 MESSAGE_STREAM_API = '/agent/v4/stream/{stream_id}/message'
 MESSAGE_CREATE = MESSAGE_STREAM_API + '/create'
+
 
 class MessageClient(APIClient):
 
@@ -55,9 +55,9 @@ class MessageClient(APIClient):
 
         # The below states that Content-Type for attachments should be 'file' which is almost
         # certainly wrong - it's not a valid MIME-type. text/plain seems right
-        fields={'message': msg,
-                'attachment': (
-                filename, attachment_file_object, "file")}
+        fields = {'message': msg,
+                  'attachment': (
+                      filename, attachment_file_object, "file")}
 
         parts = self.make_mulitpart_form(fields, aio=aio)
 
@@ -73,7 +73,7 @@ class MessageClient(APIClient):
         return self.bot_client.execute_rest_call("POST", **parts)
 
     async def send_msg_with_attachment_async(self, stream_id, msg,
-                                       filename, path_to_attachment):
+                                             filename, path_to_attachment):
         logging.debug('MessageClient/send_msg_with_attachment()')
 
         parts = self._data_and_headers_for_attachment(stream_id, msg, filename, path_to_attachment, aio=True)

@@ -1,5 +1,6 @@
 from yattag import Doc
 
+
 class MessageFormatter:
 
     def __init__(self):
@@ -11,8 +12,8 @@ class MessageFormatter:
 
         {message : messageML object}
         """
-        doc,tag,text,line = Doc().ttl()
+        doc, tag, text, line = Doc().ttl()
         with tag('messageML'):
             text(message)
 
-        return dict(message = doc.getvalue())
+        return dict(message=doc.getvalue())

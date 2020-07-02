@@ -1,11 +1,6 @@
-import unittest
-import requests
-import json
 import logging
-import sys
-# logging.basicConfig(filename='sym_api_client_python/logs/example.log', format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', filemode='w', level=logging.DEBUG)
-# logging.getLogger("urllib3").setLevel(logging.WARNING)
-# sys.path.insert(1, '/Users/reed.feldman/Desktop/SDK/test/symphony-api-client-python')
+import unittest
+
 from sym_api_client_python.processors.sym_message_parser import SymMessageParser
 
 

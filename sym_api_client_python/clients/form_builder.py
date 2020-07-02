@@ -1,7 +1,7 @@
 from yattag import Doc
 
-class FormBuilder:
 
+class FormBuilder:
     """
     To start using Symphony Elements, you first need to create a form using the
     FormClient class.  The available elements can be found here: https://developers.symphony.com/symphony-developer/docs/available-components
@@ -34,11 +34,11 @@ class FormBuilder:
         <messageML> tags so that it can be rendered as an Element as is.
         """
 
-        return dict(message = '<messageML>' +
-                                    '<form id="{}">'.format(self.form_id)
-                                        + self.messageML +
-                                    '</form>'
-                              '</messageML>')
+        return dict(message='<messageML>' +
+                            '<form id="{}">'.format(self.form_id)
+                            + self.messageML +
+                            '</form>'
+                            '</messageML>')
 
     def add_header(self, text, size):
         """
@@ -48,7 +48,7 @@ class FormBuilder:
 
         Returns a header: <h4>Form title</h4>
         """
-        header = (size,text)
+        header = (size, text)
         doc, tag, text, line = Doc().ttl()
         with tag(header[0]):
             text(header[1])
@@ -70,7 +70,6 @@ class FormBuilder:
 
         self.messageML += doc.getvalue()
 
-
     def add_text_field(self, name, display, placeholder='', required='true', masked='true', maxlength=128, minlength=1):
         """
         This function adds a text field to a Form Element.
@@ -81,7 +80,8 @@ class FormBuilder:
         """
         doc, tag, text, line = Doc().ttl()
 
-        with tag('text-field', name=name, placeholder=placeholder, required=required, masked=masked, maxlength=maxlength, minlength=minlength):
+        with tag('text-field', name=name, placeholder=placeholder, required=required, masked=masked,
+                 maxlength=maxlength, minlength=minlength):
             text(display)
 
         self.messageML += doc.getvalue()
@@ -247,7 +247,7 @@ class FormBuilder:
                                     line('td', j)
                         else:
                             with tag('td'):
-                                doc.input(name = 'table-header', type = 'checkbox')
+                                doc.input(name='table-header', type='checkbox')
                                 for j in header_list:
                                     line('td', j)
                     else:
@@ -261,7 +261,7 @@ class FormBuilder:
                                 for j in header_list:
                                     line('td', j)
                             with tag('td'):
-                                doc.input(name = 'table-header', type = 'checkbox')
+                                doc.input(name='table-header', type='checkbox')
 
             with tag('tbody'):
                 for num, j in enumerate(body_list, start=1):
@@ -269,10 +269,10 @@ class FormBuilder:
                         if position == 'left':
                             with tag('td'):
                                 if type == 'button':
-                                    with tag('button', name=type_name+str(num)):
+                                    with tag('button', name=type_name + str(num)):
                                         text('Button')
                                 else:
-                                    doc.input(name=type_name+str(num), type='checkbox')
+                                    doc.input(name=type_name + str(num), type='checkbox')
                             for k in j:
                                 line('td', k)
                         else:
@@ -280,10 +280,10 @@ class FormBuilder:
                                 line('td', k)
                             with tag('td'):
                                 if type == 'button':
-                                    with tag('button', name=type_name+str(num)):
+                                    with tag('button', name=type_name + str(num)):
                                         text('Button')
                                 else:
-                                    doc.input(name=type_name+str(num), type='checkbox')
+                                    doc.input(name=type_name + str(num), type='checkbox')
 
             with tag('tfoot'):
                 with tag('tr'):
