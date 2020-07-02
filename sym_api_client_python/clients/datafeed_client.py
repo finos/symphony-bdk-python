@@ -1,8 +1,6 @@
-import requests
-import json
 import logging
+
 from .api_client import APIClient
-from ..exceptions.UnauthorizedException import UnauthorizedException
 
 
 # child class of APIClient --> Extends error handling functionality

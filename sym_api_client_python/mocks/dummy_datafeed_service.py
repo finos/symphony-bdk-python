@@ -15,16 +15,15 @@ To see examples of how things mocks are used, check the tests in test_datafeed.p
 
 import asyncio
 import copy
-from itertools import count
 import logging
 import re
 import uuid
+from itertools import count
 
 import requests_mock
 from aioresponses import aioresponses, CallbackResult
 
 from sym_api_client_python.datafeed_event_service import DataFeedEventService, AsyncDataFeedEventService
-from sym_api_client_python.clients.datafeed_client import DataFeedClient
 
 STOP_EVENT = 'TEST_STOP_EVENT'
 READ_DATAFEED_URL = re.compile('^.*/agent/v4/datafeed/.*/read')
@@ -70,6 +69,7 @@ BASIC_EVENT = {
     }
 }
 
+
 class SymphonyApiMocker:
     """Mocker to wrap requests_mock and aioresponses in one
 
@@ -90,6 +90,7 @@ class SymphonyApiMocker:
             event_service.start_datafeed()
 
     """
+
     def __init__(self, aio=False):
         self.requests_mock_manager = requests_mock.Mocker()
         if aio:
@@ -102,7 +103,7 @@ class SymphonyApiMocker:
         thrown when non-mocked errors are accessed."""
         self.requests_mock_manager.register_uri(
             'POST', _CREATE_DATAFEED_URL, status_code=200, json=self.dummy_id_provider()
-            )
+        )
         self.requests_mock_manager.register_uri('GET', _SESSION_INFO, real_http=True)
         self.requests_mock_manager.__enter__()
         if self.aio:
@@ -136,18 +137,21 @@ class SymphonyApiMocker:
         else:
             if add_stop_event:
                 events_list.append(make_events([STOP_EVENT]))
-            #anyrequest that goes through this url will return events_list
-            #find event list
+            # anyrequest that goes through this url will return events_list
+            # find event list
             self.requests_mock_manager.register_uri('GET', READ_DATAFEED_URL, events_list)
 
     def dummy_id_provider(self):
         counter = count(1)
+
         def f(*args, _counter=counter, **kwargs):
             feed_response = {
                 "id": "DUMMY-DATAFEED-ID-{}".format(next(_counter))
             }
             return feed_response
+
         return f
+
 
 def make_events(event_types=None, count=None, messages=None, aio=False):
     """Returns a dict to be consumed by the SymphonyApiMocker, specifically for the
@@ -193,6 +197,7 @@ def make_events(event_types=None, count=None, messages=None, aio=False):
     else:
         return {"json": events, "status_code": 200}
 
+
 def make_error(status_code, error_message=None, aio=False):
     """Returns an error as a dict to be consumed by the SymphonyApiMocker like:
         error = make_error()
@@ -220,11 +225,13 @@ def make_timed_callback(sleep_time=1):
 
     return timed_callback
 
+
 class StoppableService(DataFeedEventService):
     """The synchronous datafeed blocks on read, meaning anything that tests it will run forever.
     This custom version allows for passing in a STOP event to cancel reading, and end the test.
     All tests that are expected to end without exception should pass a final stop event.
     """
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -240,10 +247,12 @@ class StoppableService(DataFeedEventService):
     def _stop_feed_handler(self, payload):
         self.deactivate_datafeed()
 
+
 class StoppableAsyncService(AsyncDataFeedEventService):
     """While other strategies could be employed to stop the async services, it's simpler for the
     purposes of these tests to keep the sync model.
     """
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if STOP_EVENT not in self.routing_dict:

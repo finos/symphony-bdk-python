@@ -1,4 +1,3 @@
-import asyncio
 import json
 import logging
 from json.decoder import JSONDecodeError
@@ -6,17 +5,17 @@ from json.decoder import JSONDecodeError
 import aiohttp
 import requests
 
-from ..datafeed_event_service import AsyncDataFeedEventService, DataFeedEventService
-from ..exceptions.UnauthorizedException import UnauthorizedException
 from .admin_client import AdminClient
 from .api_client import APIClient
 from .connections_client import ConnectionsClient
 from .datafeed_client import DataFeedClient
+from .health_check_client import HealthCheckClient
 from .message_client import MessageClient
 from .signals_client import SignalsClient
 from .stream_client import StreamClient
 from .user_client import UserClient
-from .health_check_client import HealthCheckClient
+from ..datafeed_event_service import AsyncDataFeedEventService, DataFeedEventService
+from ..exceptions.UnauthorizedException import UnauthorizedException
 
 # SymBotClient class is the Client class that has access to all of the other
 # client classes upon initialization, SymBotClient class gets an instance of

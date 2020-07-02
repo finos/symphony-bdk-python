@@ -1,15 +1,16 @@
 import logging
-import asyncio
+
 import aiohttp
 import requests
-import json
 from requests_toolbelt.multipart.encoder import MultipartEncoder
+
 from ..exceptions.APIClientErrorException import APIClientErrorException
+from ..exceptions.DatafeedExpiredException import DatafeedExpiredException
+from ..exceptions.ForbiddenException import ForbiddenException
 from ..exceptions.ServerErrorException import ServerErrorException
 from ..exceptions.UnauthorizedException import UnauthorizedException
-from ..exceptions.ForbiddenException import ForbiddenException
-from ..exceptions.DatafeedExpiredException import DatafeedExpiredException
-from ..exceptions.MaxRetryException import MaxRetryException
+
+
 # error handling class --> take status code and raise appropriate exceptions
 # this class acts as a parent class to each of the other client class.
 # each child class extends error handling functionality

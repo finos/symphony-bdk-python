@@ -1,8 +1,10 @@
-import requests
-import json
 import logging
 from .api_client import APIClient
-from ..exceptions.UnauthorizedException import UnauthorizedException
+import logging
+
+from .api_client import APIClient
+
+
 # logging.basicConfig(filename='logs/example.log', format='%(asctime)s - %(
 # name)s - %(levelname)s - %(message)s', filemode='w', level=logging.DEBUG)
 # logging.getLogger("urllib3").setLevel(logging.WARNING)
