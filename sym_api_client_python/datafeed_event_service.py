@@ -69,7 +69,7 @@ class DataFeedEventService():
     def remove_im_listener(self, im_listener):
         self.datafeed_event_service.remove_im_listener(im_listener)
 
-    def add_element_listener(self, elements_listener):
+    def add_elements_listener(self, elements_listener):
         self.datafeed_event_service.add_elements_listener(elements_listener)
 
     def remove_elements_listener(self, elements_listener):
