@@ -45,7 +45,7 @@ class AbstractDatafeedEventService(ABC):
             'USERJOINEDROOM': self.user_joined_room_handler,
             'USERLEFTROOM': self.user_left_room_handler,
             'ROOMMEMBERPROMOTEDTOOWNER': self.promoted_to_owner,
-            'ROOMMEMBERDEMOTEDFROMOWNER': self.demoted_to_owner,
+            'ROOMMEMBERDEMOTEDFROMOWNER': self.demoted_from_owner,
             'CONNECTIONACCEPTED': self.connection_accepted_handler,
             'CONNECTIONREQUESTED': self.connection_requested_handler,
             'SYMPHONYELEMENTSACTION': self.elements_action_handler,
@@ -251,11 +251,11 @@ class AbstractDatafeedEventService(ABC):
         for listener in self.room_listeners:
             listener.on_room_member_promoted_to_owner(promoted_to_owner_data)
 
-    def demoted_to_owner(self, payload):
-        log.debug('demoted_to_Owner')
-        demoted_to_owner_data = payload['payload']['roomMemberDemotedFromOwner']
+    def demoted_from_owner(self, payload):
+        log.debug('demoted_from_Owner')
+        demoted_from_owner_data = payload['payload']['roomMemberDemotedFromOwner']
         for listener in self.room_listeners:
-            listener.on_room_member_demoted_from_owner(demoted_to_owner_data)
+            listener.on_room_member_demoted_from_owner(demoted_from_owner_data)
 
     def connection_accepted_handler(self, payload):
         log.debug('connection_accepted_handler')
