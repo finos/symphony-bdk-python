@@ -127,8 +127,8 @@ class DataFeedEventService():
     def promoted_to_owner(self, payload):
         self.datafeed_event_service.promoted_to_owner(payload)
 
-    def demoted_to_owner(self, payload):
-        self.datafeed_event_service.demoted_to_owner(payload)
+    def demoted_from_owner(self, payload):
+        self.datafeed_event_service.demoted_from_owner(payload)
 
     def connection_accepted_handler(self, payload):
         self.datafeed_event_service.connection_accepted_handler(payload)
