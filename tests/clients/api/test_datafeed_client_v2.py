@@ -8,6 +8,7 @@ from sym_api_client_python.clients.sym_bot_client import SymBotClient
 from sym_api_client_python.configure.configure import SymConfig
 
 
+@patch('sym_api_client_python.clients.sym_bot_client.requests.sessions.Session.request')
 class TestDataFeedClientV2(unittest.TestCase):
     def setUp(self):
         configure = SymConfig(get_path_relative_to_resources_folder('./bot-config.json'))
@@ -18,21 +19,19 @@ class TestDataFeedClientV2(unittest.TestCase):
 
         self.datafeed_client = bot_client.get_datafeed_client()
 
-    def test_create_datafeed(self):
-        with patch('sym_api_client_python.clients.sym_bot_client.requests.sessions.Session.request') as mock_request:
-            mock_response, url_call = mocked_response('CREATE_DATAFEED', self.datafeed_client.config.data['agentHost'])
-            mock_request.return_value = mock_response
-            datafeed_id = self.datafeed_client.create_datafeed()
+    def test_create_datafeed(self, mock_request):
+        mock_response, url_call = mocked_response('CREATE_DATAFEED', self.datafeed_client.config.data['agentHost'])
+        mock_request.return_value = mock_response
+        datafeed_id = self.datafeed_client.create_datafeed()
 
         self.assertEqual(mock_response.status_code, 201)
         self.assertEqual(datafeed_id, '21449143d35a86461e254d28697214b4_f')
         mock_request.assert_called_with('POST', url_call)
 
-    def test_list_datafeed(self):
-        with patch('sym_api_client_python.clients.sym_bot_client.requests.sessions.Session.request') as mock_request:
-            mock_response, url_call = mocked_response('LIST_DATAFEED', self.datafeed_client.config.data['agentHost'])
-            mock_request.return_value = mock_response
-            datafeed_ids = self.datafeed_client.list_datafeed_id()
+    def test_list_datafeed(self, mock_request):
+        mock_response, url_call = mocked_response('LIST_DATAFEED', self.datafeed_client.config.data['agentHost'])
+        mock_request.return_value = mock_response
+        datafeed_ids = self.datafeed_client.list_datafeed_id()
 
         self.assertEqual(mock_response.status_code, 200)
         self.assertEqual(datafeed_ids[0]['id'], mock_response.get_json()[0]['id'])
@@ -40,47 +39,44 @@ class TestDataFeedClientV2(unittest.TestCase):
         self.assertEqual(datafeed_ids[2]['id'], mock_response.get_json()[2]['id'])
         mock_request.assert_called_with('GET', url_call)
 
-    def test_read_datafeed_empty_ackid(self):
+    def test_read_datafeed_empty_ackid(self, mock_request):
         """Test Datafeed Read first call conversation
 
         Test of handling of ackId when not provided to read_datafeed and call of the function with the right parameters"""
-        with patch('sym_api_client_python.clients.sym_bot_client.requests.sessions.Session.request') as mock_request:
-            mock_response, url_call = mocked_response('READ_DATAFEED', self.datafeed_client.config.data['agentHost'],
-                                                      'test_datafeed_id')
-            mock_request.return_value = mock_response
-            events = self.datafeed_client.read_datafeed('test_datafeed_id')
-            ack_id = self.datafeed_client.datafeed_client.get_ack_id()
+        mock_response, url_call = mocked_response('READ_DATAFEED', self.datafeed_client.config.data['agentHost'],
+                                                  'test_datafeed_id')
+        mock_request.return_value = mock_response
+        events = self.datafeed_client.read_datafeed('test_datafeed_id')
+        ack_id = self.datafeed_client.datafeed_client.get_ack_id()
 
         self.assertEqual(mock_response.status_code, 200)
         self.assertEqual(ack_id, mock_response.get_json()['ackId'])
         self.assertEqual(events, mock_response.get_json()['events'])
         mock_request.assert_called_with('POST', url_call, json={'ackId': ''})
 
-    def test_read_datafeed(self):
+    def test_read_datafeed(self, mock_request):
         """Test a datafeed read during conversation
 
         Testing the handling of the ackId when provided to read_datafeed() and call of the function with the right parameters """
-        with patch('sym_api_client_python.clients.sym_bot_client.requests.sessions.Session.request') as mock_request:
-            mock_response, url_call = mocked_response('READ_DATAFEED', self.datafeed_client.config.data['agentHost'],
-                                                      'test_datafeed_id')
-            mock_request.return_value = mock_response
-            events = self.datafeed_client.read_datafeed('test_datafeed_id', 'test_ack_id')
-            ack_id = self.datafeed_client.datafeed_client.get_ack_id()
+        mock_response, url_call = mocked_response('READ_DATAFEED', self.datafeed_client.config.data['agentHost'],
+                                                  'test_datafeed_id')
+        mock_request.return_value = mock_response
+        events = self.datafeed_client.read_datafeed('test_datafeed_id', 'test_ack_id')
+        ack_id = self.datafeed_client.datafeed_client.get_ack_id()
 
         self.assertEqual(mock_response.status_code, 200)
         self.assertEqual(ack_id, mock_response.get_json()['ackId'])
         self.assertEqual(events, mock_response.get_json()['events'])
         mock_request.assert_called_with('POST', url_call, json={'ackId': 'test_ack_id'})
 
-    def test_delete_datafeed(self):
+    def test_delete_datafeed(self, mock_request):
         """Test deleting the datafeed
 
         Because it's a no content response, we need to make sure of the call parameters """
-        with patch('sym_api_client_python.clients.sym_bot_client.requests.sessions.Session.request') as mock_request:
-            mock_response, url_call = mocked_response('DELETE_DATAFEED', self.datafeed_client.config.data['agentHost'],
-                                                      'test_datafeed_id')
-            mock_request.return_value = mock_response
-            self.datafeed_client.delete_datafeed('test_datafeed_id')
+        mock_response, url_call = mocked_response('DELETE_DATAFEED', self.datafeed_client.config.data['agentHost'],
+                                                  'test_datafeed_id')
+        mock_request.return_value = mock_response
+        self.datafeed_client.delete_datafeed('test_datafeed_id')
 
         self.assertEqual(mock_response.status_code, 204)
         mock_request.assert_called_with('DELETE', url_call)

@@ -13,16 +13,13 @@ class TestDataFeedClient(unittest.TestCase):
         self.config = SymConfig(get_path_relative_to_resources_folder('./bot-config.json'))
         self.config.load_config()
 
-    @patch('sym_api_client_python.clients.sym_bot_client.SymBotClient', autospec=True)
-    def test_datafeed_client_v1(self, mock_client):
+    def test_datafeed_client_v1(self):
         self.assert_configured_df_version_leads_to_df_client_type('v1', DataFeedClientV1)
 
-    @patch('sym_api_client_python.clients.sym_bot_client.SymBotClient', autospec=True)
-    def test_datafeed_client_v2(self, mock_client):
+    def test_datafeed_client_v2(self):
         self.assert_configured_df_version_leads_to_df_client_type('v2', DataFeedClientV2)
 
-    @patch('sym_api_client_python.clients.sym_bot_client.SymBotClient', autospec=True)
-    def test_datafeed_client_wrong_version(self, mock_client):
+    def test_datafeed_client_wrong_version(self):
         self.assert_configured_df_version_leads_to_df_client_type('25', DataFeedClientV1)
 
     def assert_configured_df_version_leads_to_df_client_type(self, datafeed_version, expected_class):
