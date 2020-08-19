@@ -26,7 +26,7 @@ To develop this library run:
 This will give an editable install so the code can be changed while still being installed in the environment. Tests can then be run with:
 
 ``pytest tests`` for the whole test suite
-``pytest tests/test_message_parser.py`` for one test file
+``pytest tests/clients/test_datafeed_client.py`` for one test file
 ``pytest tests -k test_get_text`` for a single test
 
 An environment variable `SYMPHONY_TEST_CONFIG` can be set with the authentication type and configuration file separated by a colon.

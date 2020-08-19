@@ -1,0 +1,41 @@
+{
+  "ackId": "ack_id_string",
+  "events": [
+    {
+      "id": "ulPr8a:eFFDL7",
+      "messageId": "CszQa6uPAA9V",
+      "timestamp": 1536346282592,
+      "type": "MESSAGESENT",
+      "initiator": {
+        "user": {
+          "userId": 1456852,
+          "displayName": "Local Bot01",
+          "email": "bot.user1@test.com",
+          "username": "bot.user1"
+        }
+      },
+      "payload": {
+        "messageSent": {
+          "message": {
+            "messageId": "CszQa6uPAA9",
+            "timestamp": 1536346282592,
+            "message": "<div data-format=\"PresentationML\" data-version=\"2.0\">Hello World</div>",
+            "user": {
+              "userId": 14568529,
+              "displayName": "Local Bot01",
+              "email": "bot.user1@test.com",
+              "username": "bot.user1"
+            },
+            "stream": {
+              "streamId": "wTmSDJSNPXgB",
+              "streamType": "ROOM"
+            },
+            "externalRecipients": false,
+            "userAgent": "Agent-2.2.8-Linux-4.9.77-31.58.amzn1.x86_64",
+            "originalFormat": "com.symphony.messageml.v2"
+          }
+        }
+      }
+    }
+  ]
+}

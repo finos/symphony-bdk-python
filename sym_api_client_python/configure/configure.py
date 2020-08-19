@@ -163,6 +163,14 @@ class SymConfig:
                         'https': data['keyManagerProxyURL'],
                     }
 
+            # datafeedVersion
+            if "datafeedVersion" not in data:
+                self.data["datafeedVersion"] = "v1"
+            elif self.data.get("datafeedVersion").lower() == "v2":
+                self.data["datafeedVersion"] = "v2"
+            else:
+                self.data["datafeedVersion"] = "v1"
+
             if 'datafeedEventsErrorTimeout' in data:
                 self.data['datafeedEventsErrorTimeout'] = data['datafeedEventsErrorTimeout']
 
