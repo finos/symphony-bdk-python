@@ -5,17 +5,6 @@ def readme():
     with open('README.md') as f:
         return f.read()
 
-test_dependencies = [
-    'pytest',
-]
-
-# This means dependencies for testing can be installed with:
-# pip install .[test]
-# See this Stackoverflow answer for details
-# https://stackoverflow.com/a/41398850
-extras = {
-    "test": test_dependencies,
-}
 
 setuptools.setup(
     name="sym_api_client_python",
@@ -35,7 +24,7 @@ setuptools.setup(
         'pyOpenSSL',
         'rsa',
         'requests',
-        'python-jose',
+        'python-jose~=3.2.0',
         'python-json-logger==0.1.11',
         'beautifulsoup4==4.8.0',
         'Jinja2==2.10.1',
@@ -45,7 +34,7 @@ setuptools.setup(
         'yattag==1.12.2',
         'defusedxml==0.6.0'
     ],
-    extras_require=extras,
+    tests_require=['pytest'],
     include_package_data=True,
     classifiers=(
         "Programming Language :: Python :: 3.6",
