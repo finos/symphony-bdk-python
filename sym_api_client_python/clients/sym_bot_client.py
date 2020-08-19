@@ -166,10 +166,9 @@ class SymBotClient(APIClient):
             logging.debug(type(err))
             logging.debug('ensure pod/agent subdomains are correct')
             raise
-
         if response.status_code == 204:
             results = []
-        elif response.status_code == 200:
+        elif response.status_code == 200 or response.status_code == 201:
             try:
                 results = json.loads(response.text)
             except JSONDecodeError:
