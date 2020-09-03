@@ -62,10 +62,6 @@ class SymMessageParser:
 
     def get_tags(self, json_nodes, tag_type):
         tags = []
-        # if json_nodes:
-        #     for k, v in json_nodes.items():
-        #         print(k, v)
-        # return tags
         if json_nodes:
             for k, v in json_nodes.items():
                 if 'id' in v and len(v['id']) > 0 and v['id'][0]['type'] == self.MENTION_TYPE:
