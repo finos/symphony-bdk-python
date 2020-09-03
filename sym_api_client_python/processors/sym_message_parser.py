@@ -60,11 +60,11 @@ class SymMessageParser:
     def get_stream_id(self, message_data):
         return message_data['stream']['streamId']
 
-    def get_tags(self, json_nodes, tag_type):
+    def __get_tags(self, json_nodes, tag_type):
         tags = []
         if json_nodes:
             for k, v in json_nodes.items():
-                if 'id' in v and len(v['id']) > 0 and v['id'][0]['type'] == self.MENTION_TYPE:
+                if 'id' in v and len(v['id']) > 0 and 'type' in v['id'][0] and v['id'][0]['type'] == tag_type and 'value' in v['id'][0]:
                     tags.append(v['id'][0]['value'])
         return tags
 
@@ -78,7 +78,7 @@ class SymMessageParser:
 
     def get_mention_ids(self, message_data):
         d = json.loads(message_data['data'])
-        return self.get_tags(d, self.MENTION_TYPE)
+        return self.__get_tags(d, self.MENTION_TYPE)
 
     def get_hash_tags(self, message_data):
         tag_arr = []
@@ -90,7 +90,7 @@ class SymMessageParser:
 
     def get_hash_tag_values(self, message_data):
         d = json.loads(message_data['data'])
-        return self.get_tags(d, self.HASHTAG_TYPE)
+        return self.__get_tags(d, self.HASHTAG_TYPE)
 
     def get_cash_tags(self, message_data):
         cash_arr = []
@@ -102,5 +102,5 @@ class SymMessageParser:
 
     def get_cash_tag_values(self, message_data):
         d = json.loads(message_data['data'])
-        return self.get_tags(d, self.CASHTAG_TYPE)
+        return self.__get_tags(d, self.CASHTAG_TYPE)
 
