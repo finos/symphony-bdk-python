@@ -68,7 +68,7 @@ class StreamClient(APIClient):
             "description": "testing update room function",
         }
 
-        update_room(stream_id, kwargs=room_obj)
+        update_room(stream_id, **room_obj)
         """
         logging.debug('StreamClient/update_room()')
         url = '/pod/v3/room/{0}/update'.format(stream_id)
