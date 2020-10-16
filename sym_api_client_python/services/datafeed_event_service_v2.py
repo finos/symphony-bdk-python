@@ -71,21 +71,15 @@ class DataFeedEventServiceV2(AbstractDatafeedEventService):
         try:
             raise thrown_exception
         except UnauthorizedException:
-            log.error(
-                'DataFeedEventService - caught unauthorized exception'
-            )
+            log.error('DataFeedEventService - caught unauthorized exception')
         except MaxRetryException as e:
             log.error('DataFeedEventService - Bot has tried to authenticate more than 5 times ')
             raise
 
         except (DatafeedExpiredException, APIClientErrorException, ServerErrorException) as exc:
-            log.error(
-                'DataFeedEventService - ' + str(exc)
-            )
+            log.error('DataFeedEventService - ' + str(exc))
         except Exception as exc:
-            log.exception(
-                'DataFeedEventService - Unknown exception: ' + str(exc)
-            )
+            log.exception('DataFeedEventService - Unknown exception: ' + str(exc))
         sleep_for = self.get_and_increase_timeout(thrown_exception)
         log.info('DataFeedEventService/handle_event() --> Sleeping for {:.4g}s'.format(sleep_for))
         time.sleep(sleep_for)
