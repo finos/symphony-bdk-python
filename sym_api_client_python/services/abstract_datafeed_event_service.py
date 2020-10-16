@@ -14,7 +14,7 @@ log = logging.getLogger(__name__)
 
 class AbstractDatafeedEventService(ABC):
 
-    def __init__(self, sym_bot_client, log_events=True, error_timeout_sec=None, maximum_timeout_sec=None):
+    def __init__(self, sym_bot_client, error_timeout_sec=None, maximum_timeout_sec=None):
         self.datafeed_events = []
         self.room_listeners = []
         self.im_listeners = []
@@ -26,7 +26,6 @@ class AbstractDatafeedEventService(ABC):
 
         self.bot_client = sym_bot_client
         self.datafeed_client = self.bot_client.get_datafeed_client()
-        self.log_events = log_events
         self.stop = False
 
         config = sym_bot_client.get_sym_config()
@@ -154,20 +153,12 @@ class AbstractDatafeedEventService(ABC):
         """
         log.debug('DataFeedEventService/handle_events()')
         for event in events:
-            if self.log_events:
-                log.info(
-                    'DataFeedEventService/read_datafeed() --> '
-                    'Incoming event: {}'.
-                        format(json.dumps(event, indent=4)))
+            log.info(
+                'DataFeedEventService/read_datafeed() --> '
+                'Incoming event with id: {}'.format(event['id'])
+            )
 
-            else:
-                log.info(
-                    'DataFeedEventService/read_datafeed() --> '
-                    'Incoming event with id: {}'
-                        .format(event['id'])
-                )
-
-            if event == None or event['initiator']['user']['userId'] == self.bot_client.get_bot_user_info()['id']:
+            if event is None or event['initiator']['user']['userId'] == self.bot_client.get_bot_user_info()['id']:
                 continue
             else:
                 self.handle_event(event)
