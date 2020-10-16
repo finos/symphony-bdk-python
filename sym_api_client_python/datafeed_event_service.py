@@ -30,18 +30,18 @@ def make_datetime(unix_timestamp_millis):
 EventTrace = namedtuple('EventTrace', 'message_id creation_time bot_received listeners_complete bot_complete')
 
 
-class DataFeedEventService():
+class DataFeedEventService:
 
-    def __init__(self, sym_bot_client, log_events=True, error_timeout_sec=None, maximum_timeout_sec=None):
+    def __init__(self, sym_bot_client, error_timeout_sec=None, maximum_timeout_sec=None):
         config = sym_bot_client.get_sym_config()
 
         # Creating the DataFeed Event Service
         if DatafeedVersion.version_of(config.data.get("datafeedVersion")) == DatafeedVersion.V2:
-            self.datafeed_event_service = DataFeedEventServiceV2(sym_bot_client, log_events=log_events,
-                                                                 error_timeout_sec=error_timeout_sec, maximum_timeout_sec=maximum_timeout_sec)
+            self.datafeed_event_service = DataFeedEventServiceV2(sym_bot_client, error_timeout_sec=error_timeout_sec,
+                                                                 maximum_timeout_sec=maximum_timeout_sec)
         else:
-            self.datafeed_event_service = DataFeedEventServiceV1(sym_bot_client, log_events=log_events,
-                                                                 error_timeout_sec=error_timeout_sec, maximum_timeout_sec=maximum_timeout_sec)
+            self.datafeed_event_service = DataFeedEventServiceV1(sym_bot_client, error_timeout_sec=error_timeout_sec,
+                                                                 maximum_timeout_sec=maximum_timeout_sec)
 
     def start_datafeed(self):
         """Start reading events from datafeed.
@@ -235,17 +235,11 @@ class AsyncDataFeedEventService(AbstractDatafeedEventService):
             if events:
                 bot_id = self.bot_client.get_bot_user_info()['id']
                 for event in events:
-                    if self.log_events:
-                        log.info(
-                            'AsyncDataFeedEventService/read_datafeed() --> '
-                            'Incoming data from read_datafeed(): {}'
-                                .format(json.dumps(event['payload'], indent=4))
-                        )
-                    else:
-                        log.info(
-                            'AsyncDataFeedEventService/read_datafeed() --> '
-                            'Incoming event from read_datafeed() with id: {}'.format(event['id'])
-                        )
+                    log.info(
+                        'AsyncDataFeedEventService/read_datafeed() --> '
+                        'Incoming event from read_datafeed() with id: {}'.format(event['id'])
+                    )
+
                     if event['initiator']['user']['userId'] != bot_id:
                         e_id = event["messageId"] if "messageId" in event else event["id"]
                         self._add_trace(e_id, event["timestamp"])
@@ -267,22 +261,16 @@ class AsyncDataFeedEventService(AbstractDatafeedEventService):
         try:
             raise thrown_exception
         except UnauthorizedException:
-            log.error(
-                'AsyncDataFeedEventService - caught unauthorized exception'
-            )
+            log.error('AsyncDataFeedEventService - caught unauthorized exception')
         except MaxRetryException as exc:
             log.error('AsyncDataFeedEventService - Bot has failed to authenticate more than 5 times ')
             raise exc from None
 
         except (DatafeedExpiredException, APIClientErrorException, ServerErrorException) as exc:
-            log.error(
-                'AsyncDataFeedEventService - ' + str(exc)
-            )
+            log.error('AsyncDataFeedEventService - ' + str(exc))
 
         except Exception as exc:
-            log.exception(
-                'AsyncDataFeedEventService - Unknown exception: ' + str(exc)
-            )
+            log.exception('AsyncDataFeedEventService - Unknown exception: ' + str(exc))
 
         sleep_for = self.get_and_increase_timeout(thrown_exception)
         log.info('AsyncDataFeedEventService/handle_event() --> Sleeping for {:.4g}s'.format(sleep_for))
