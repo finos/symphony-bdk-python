@@ -91,7 +91,7 @@ class SymBotRSAAuth(APIClient):
         data = {
             'token': self.create_jwt()
         }
-        url = self.config.data['sessionAuthHost']+'/login/pubkey/authenticate'
+        url = self.config.data['sessionAuthUrl']+'/login/pubkey/authenticate'
         response = self.auth_session.post(url, json=data)
 
         if response.status_code != 200:
@@ -120,7 +120,7 @@ class SymBotRSAAuth(APIClient):
         data = {
             'token': self.create_jwt()
         }
-        url = self.config.data['keyAuthHost']+'/relay/pubkey/authenticate'
+        url = self.config.data['keyAuthUrl']+'/relay/pubkey/authenticate'
         response = self.key_manager_auth_session.post(url, json=data)
 
         if response.status_code != 200:

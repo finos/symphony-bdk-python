@@ -1,10 +1,13 @@
 {
   "sessionAuthHost": "MY_ENVIRONMENT.symphony.com",
   "sessionAuthPort": 443,
+  "sessionAuthContextPath": "sessionAuthContext",
   "keyAuthHost": "MY_ENVIRONMENT.symphony.com",
   "keyAuthPort": 443,
+  "keyAuthContextPath": "/keyAuthContext",
   "podHost": "MY_ENVIRONMENT.symphony.com",
   "podPort": 443,
+  "podContextPath": "/podContext/",
   "agentHost": "MY_ENVIRONMENT.symphony.com",
   "agentPort": 443,
   "botPrivateKeyPath":"./resources/",
