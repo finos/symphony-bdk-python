@@ -50,25 +50,16 @@ class SymConfig:
             data = json.load(read_file)
             self.data = data
 
-            if 'sessionAuthPort' in data:
-                self.data['sessionAuthHost'] = 'https://' + data['sessionAuthHost'] + ':' + str(data['sessionAuthPort'])
-            else:
-                self.data['sessionAuthHost'] = 'https://' + data['sessionAuthHost']
+            self.data['sessionAuthUrl'] = self._build_url(data.get('sessionAuthHost'), data.get('sessionAuthPort'), data.get('sessionAuthContextPath'))
+            self.data['keyAuthUrl'] = self._build_url(data.get('keyAuthHost'), data.get('keyAuthPort'), data.get('keyAuthContextPath'))
+            self.data['podUrl'] = self._build_url(data.get('podHost'), data.get('podPort'), data.get('podContextPath'))
+            self.data['agentUrl'] = self._build_url(data.get('agentHost'), data.get('agentPort'), data.get('agentContextPath'))
 
-            if 'keyAuthPort' in data:
-                self.data['keyAuthHost'] = 'https://' + data['keyAuthHost'] + ':' + str(data['keyAuthPort'])
-            else:
-                self.data['keyAuthHost'] = 'https://' + data['keyAuthHost']
-
-            if 'podPort' in data:
-                self.data['podHost'] = 'https://' + data['podHost'] + ':' + str(data['podPort'])
-            else:
-                self.data['podHost'] = 'https://' + data['podHost']
-
-            if 'agentPort' in data:
-                self.data['agentHost'] = 'https://' + data['agentHost'] + ':' + str(data['agentPort'])
-            else:
-                self.data['agentHost'] = 'https://' + data['agentHost']
+            # re-assign url to host to keep backward compatibility
+            self.data['sessionAuthHost'] = self.data['sessionAuthUrl']
+            self.data['keyAuthHost'] = self.data['keyAuthUrl']
+            self.data['podHost'] = self.data['podUrl']
+            self.data['agentHost'] = self.data['agentUrl']
 
             # backwards compatible
             if 'botCertPath' in data:
@@ -182,3 +173,15 @@ class SymConfig:
                     loggable_config_dict[k] = "---HIDDEN---"
 
             logging.info(json.dumps(loggable_config_dict, indent=4))
+
+
+    def _build_url(self, host, port, contextPath):
+        port = port if port else 443
+        contextPath = contextPath if contextPath else ""
+
+        if not(contextPath.startswith('/')):
+            contextPath = '/' + contextPath;
+        if contextPath.endswith('/'):
+            contextPath = contextPath[:-1]
+
+        return 'https://' + host + ':' + str(port) + contextPath 

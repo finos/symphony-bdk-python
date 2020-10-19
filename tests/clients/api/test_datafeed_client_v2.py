@@ -20,7 +20,7 @@ class TestDataFeedClientV2(unittest.TestCase):
         self.datafeed_client = bot_client.get_datafeed_client()
 
     def test_create_datafeed(self, mock_request):
-        mock_response, url_call = mocked_response('CREATE_DATAFEED', self.datafeed_client.config.data['agentHost'])
+        mock_response, url_call = mocked_response('CREATE_DATAFEED', self.datafeed_client.config.data['agentUrl'])
         mock_request.return_value = mock_response
         datafeed_id = self.datafeed_client.create_datafeed()
 
@@ -29,7 +29,7 @@ class TestDataFeedClientV2(unittest.TestCase):
         mock_request.assert_called_with('POST', url_call)
 
     def test_list_datafeed(self, mock_request):
-        mock_response, url_call = mocked_response('LIST_DATAFEED', self.datafeed_client.config.data['agentHost'])
+        mock_response, url_call = mocked_response('LIST_DATAFEED', self.datafeed_client.config.data['agentUrl'])
         mock_request.return_value = mock_response
         datafeed_ids = self.datafeed_client.list_datafeed_id()
 
@@ -43,7 +43,7 @@ class TestDataFeedClientV2(unittest.TestCase):
         """Test Datafeed Read first call conversation
 
         Test of handling of ackId when not provided to read_datafeed and call of the function with the right parameters"""
-        mock_response, url_call = mocked_response('READ_DATAFEED', self.datafeed_client.config.data['agentHost'],
+        mock_response, url_call = mocked_response('READ_DATAFEED', self.datafeed_client.config.data['agentUrl'],
                                                   'test_datafeed_id')
         mock_request.return_value = mock_response
         events = self.datafeed_client.read_datafeed('test_datafeed_id')
@@ -58,7 +58,7 @@ class TestDataFeedClientV2(unittest.TestCase):
         """Test a datafeed read during conversation
 
         Testing the handling of the ackId when provided to read_datafeed() and call of the function with the right parameters """
-        mock_response, url_call = mocked_response('READ_DATAFEED', self.datafeed_client.config.data['agentHost'],
+        mock_response, url_call = mocked_response('READ_DATAFEED', self.datafeed_client.config.data['agentUrl'],
                                                   'test_datafeed_id')
         mock_request.return_value = mock_response
         events = self.datafeed_client.read_datafeed('test_datafeed_id', 'test_ack_id')
@@ -73,7 +73,7 @@ class TestDataFeedClientV2(unittest.TestCase):
         """Test deleting the datafeed
 
         Because it's a no content response, we need to make sure of the call parameters """
-        mock_response, url_call = mocked_response('DELETE_DATAFEED', self.datafeed_client.config.data['agentHost'],
+        mock_response, url_call = mocked_response('DELETE_DATAFEED', self.datafeed_client.config.data['agentUrl'],
                                                   'test_datafeed_id')
         mock_request.return_value = mock_response
         self.datafeed_client.delete_datafeed('test_datafeed_id')
