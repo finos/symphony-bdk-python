@@ -49,7 +49,6 @@ class APIClient:
             }
 
         else:
-            print(fields)
             data = MultipartEncoder(
                 fields=fields
             )

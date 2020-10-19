@@ -11,7 +11,6 @@ def render_form(path_to_html_form):
     html = template.render(form_template)
     return html
 
-# print(render_form('forms/form.html'))
 
 button_template = {
     "name": "example-button",
@@ -25,7 +24,6 @@ def render_button(path_to_html_form):
     html = template.render(button_template)
     return html
 
-# print(render_button('forms/button.html'))
 
 text_field_template = {
     "name":"exmaple-text-field",
@@ -42,7 +40,6 @@ def render_text_field(path_to_html_form):
     html = template.render(text_field_template)
     return html
 
-# print(render_text_field('forms/text_field.html'))
 
 text_area_template = {
     "name":"exmaple-text-area",
@@ -56,7 +53,6 @@ def render_text_area(path_to_html_form):
     html = template.render(text_area_template)
     return html
 
-# print(render_text_area('forms/text_area.html'))
 
 checkbox_template = {
 "name":"example-name",
@@ -71,7 +67,6 @@ def render_checkbox(path_to_html_form):
     html = template.render(checkbox_template)
     return html
 
-# print(render_checkbox('forms/checkbox.html'))
 
 radio_button_template = {
 "name":"example-name",
@@ -86,7 +81,6 @@ def render_radio_button(path_to_html_form):
     html = template.render(radio_button_template)
     return html
 
-# print(render_radio_button('forms/radio_button.html'))
 
 dropdown_menu_template = {
 "name":"dropdown-name",
@@ -103,7 +97,6 @@ def render_dropdown_menu(path_to_html_form):
     html = template.render(dropdown_menu_template)
     return html
 
-# print(render_dropdown_menu('forms/dropdown_menu.html'))
 
 person_selector_template = {
 "name":"person-selector-name",
@@ -117,7 +110,6 @@ def render_person_selector(path_to_html_form):
     html = template.render(person_selector_template)
     return html
 
-# print(render_dropdown_menu('forms/person_selector.html'))
 
 table_select_template = {
 "select":{
@@ -137,4 +129,3 @@ def render_table_select(path_to_html_form):
     html = template.render(table_select_template)
     return html
 
-#print(render_table_select('forms/table_select.html'))

@@ -45,15 +45,18 @@ class SymConfig:
         return result
 
     def load_config(self):
-        logging.info("Loading config from: {}".format(os.path.realpath(self.path_to_config)))
+        logging.debug("Loading config from: {}".format(os.path.realpath(self.path_to_config)))
         with open(self.path_to_config, "r") as read_file:
             data = json.load(read_file)
             self.data = data
 
-            self.data['sessionAuthUrl'] = self._build_url(data.get('sessionAuthHost'), data.get('sessionAuthPort'), data.get('sessionAuthContextPath'))
-            self.data['keyAuthUrl'] = self._build_url(data.get('keyAuthHost'), data.get('keyAuthPort'), data.get('keyAuthContextPath'))
+            self.data['sessionAuthUrl'] = self._build_url(data.get('sessionAuthHost'), data.get('sessionAuthPort'),
+                                                          data.get('sessionAuthContextPath'))
+            self.data['keyAuthUrl'] = self._build_url(data.get('keyAuthHost'), data.get('keyAuthPort'),
+                                                      data.get('keyAuthContextPath'))
             self.data['podUrl'] = self._build_url(data.get('podHost'), data.get('podPort'), data.get('podContextPath'))
-            self.data['agentUrl'] = self._build_url(data.get('agentHost'), data.get('agentPort'), data.get('agentContextPath'))
+            self.data['agentUrl'] = self._build_url(data.get('agentHost'), data.get('agentPort'),
+                                                    data.get('agentContextPath'))
 
             # re-assign url to host to keep backward compatibility
             self.data['sessionAuthHost'] = self.data['sessionAuthUrl']
@@ -165,23 +168,13 @@ class SymConfig:
             if 'datafeedEventsErrorTimeout' in data:
                 self.data['datafeedEventsErrorTimeout'] = data['datafeedEventsErrorTimeout']
 
-            loggable_config_dict = {}
-            for k, v in self.data.items():
-                if "password" not in k.lower() or v == "":
-                    loggable_config_dict[k] = v
-                else:
-                    loggable_config_dict[k] = "---HIDDEN---"
-
-            logging.info(json.dumps(loggable_config_dict, indent=4))
-
-
     def _build_url(self, host, port, contextPath):
         port = port if port else 443
         contextPath = contextPath if contextPath else ""
 
-        if not(contextPath.startswith('/')):
-            contextPath = '/' + contextPath;
+        if not (contextPath.startswith('/')):
+            contextPath = '/' + contextPath
         if contextPath.endswith('/'):
             contextPath = contextPath[:-1]
 
-        return 'https://' + host + ':' + str(port) + contextPath 
+        return 'https://' + host + ':' + str(port) + contextPath
