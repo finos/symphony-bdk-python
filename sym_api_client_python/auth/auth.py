@@ -36,26 +36,26 @@ class Auth(APIClient):
             self.key_manager_auth_session.verify = self.config.data['truststorePath']
 
         self.auth_session.mount(
-            self.config.data['sessionAuthHost'],
+            self.config.data['sessionAuthUrl'],
             Pkcs12Adapter(
                 pkcs12_filename=self.config.data['p.12'],
                 pkcs12_password=self.config.data['botCertPassword']
             ))
         self.auth_session.mount(
-            self.config.data['keyAuthHost'],
+            self.config.data['keyAuthUrl'],
             Pkcs12Adapter(
                 pkcs12_filename=self.config.data['p.12'],
                 pkcs12_password=self.config.data['botCertPassword']
             ))
 
         self.key_manager_auth_session.mount(
-            self.config.data['sessionAuthHost'],
+            self.config.data['sessionAuthUrl'],
             Pkcs12Adapter(
                 pkcs12_filename=self.config.data['p.12'],
                 pkcs12_password=self.config.data['botCertPassword']
             ))
         self.key_manager_auth_session.mount(
-            self.config.data['keyAuthHost'],
+            self.config.data['keyAuthUrl'],
             Pkcs12Adapter(
                 pkcs12_filename=self.config.data['p.12'],
                 pkcs12_password=self.config.data['botCertPassword']
@@ -99,7 +99,7 @@ class Auth(APIClient):
         """
         logging.debug('Auth/get_session_token()')
 
-        url = self.config.data['sessionAuthHost'] + '/sessionauth/v1/authenticate'
+        url = self.config.data['sessionAuthUrl'] + '/sessionauth/v1/authenticate'
         response = self.auth_session.post(url)
 
         if response.status_code != 200:
@@ -125,7 +125,7 @@ class Auth(APIClient):
         passed in through Request Session object
         """
         logging.debug('Auth/get_keyauth()')
-        url = self.config.data['keyAuthHost'] + '/keyauth/v1/authenticate'
+        url = self.config.data['keyAuthUrl'] + '/keyauth/v1/authenticate'
         response = self.key_manager_auth_session.post(url)
 
         if response.status_code != 200:

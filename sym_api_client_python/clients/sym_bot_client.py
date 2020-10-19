@@ -150,10 +150,10 @@ class SymBotClient(APIClient):
         results = None
         session = None
         if path.startswith("/agent/"):
-            url = self.config.data["agentHost"] + path
+            url = self.config.data["agentUrl"] + path
             session = self.get_agent_session()
         elif path.startswith("/pod/"):
-            url = self.config.data["podHost"] + path
+            url = self.config.data["podUrl"] + path
             session = self.get_pod_session()
         else:
             url = path
@@ -237,12 +237,12 @@ class SymBotClient(APIClient):
         is_pod = False
 
         if path.startswith("/agent/"):
-            url = self.config.data["agentHost"] + path
+            url = self.config.data["agentUrl"] + path
             session = self.get_async_agent_session()
             http_proxy = self.config.data['agentProxyRequestObject'].get("http")
 
         elif path.startswith("/pod/"):
-            url = self.config.data["podHost"] + path
+            url = self.config.data["podUrl"] + path
             session = self.get_async_pod_session()
             http_proxy = self.config.data['podProxyRequestObject'].get("http")
         else:
