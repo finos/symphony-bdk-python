@@ -193,7 +193,7 @@ class AsyncDataFeedEventService(AbstractDatafeedEventService):
         super().__init__(*args, **kwargs)
 
     async def start_datafeed(self):
-        log.info('AsyncDataFeedEventService/start_datafeed()')
+        log.debug('AsyncDataFeedEventService/start_datafeed()')
         self.datafeed_id = self.datafeed_client.create_datafeed()
         await asyncio.gather(self.read_datafeed(), self.handle_events(), self.handle_exceptions())
 
@@ -202,13 +202,13 @@ class AsyncDataFeedEventService(AbstractDatafeedEventService):
         a 204 from the read_datafeed API"""
         log.debug('AsyncDataFeedEventService/deactivate_datafeed()')
         if wait_for_handler_completions:
-            log.info('AsyncDataFeedEventService/deactivate_datafeed() --> '
+            log.debug('AsyncDataFeedEventService/deactivate_datafeed() --> '
                      'Waiting for {} events to finish'.format(self.queue.qsize()))
             await self.queue.join()
-            log.info('AsyncDataFeedEventService/deactivate_datafeed() --> '
+            log.debug('AsyncDataFeedEventService/deactivate_datafeed() --> '
                      'Deactivating')
         else:
-            log.info('AsyncDataFeedEventService/deactivate_datafeed() --> '
+            log.debug('AsyncDataFeedEventService/deactivate_datafeed() --> '
                      '{} events still being handled, deactivating anyway'.format(self.queue.qsize()))
 
         if not self.stop:
@@ -235,7 +235,7 @@ class AsyncDataFeedEventService(AbstractDatafeedEventService):
             if events:
                 bot_id = self.bot_client.get_bot_user_info()['id']
                 for event in events:
-                    log.info(
+                    log.debug(
                         'AsyncDataFeedEventService/read_datafeed() --> '
                         'Incoming event from read_datafeed() with id: {}'.format(event['id'])
                     )
@@ -273,10 +273,10 @@ class AsyncDataFeedEventService(AbstractDatafeedEventService):
             log.exception('AsyncDataFeedEventService - Unknown exception: ' + str(exc))
 
         sleep_for = self.get_and_increase_timeout(thrown_exception)
-        log.info('AsyncDataFeedEventService/handle_event() --> Sleeping for {:.4g}s'.format(sleep_for))
+        log.debug('AsyncDataFeedEventService/handle_event() --> Sleeping for {:.4g}s'.format(sleep_for))
         await asyncio.sleep(sleep_for)
         try:
-            log.info('AsyncDataFeedEventService/handle_event() --> Restarting Datafeed')
+            log.debug('AsyncDataFeedEventService/handle_event() --> Restarting Datafeed')
             self.datafeed_id = self.datafeed_client.create_datafeed()
         except Exception as exc:
             await self.handle_datafeed_errors(exc)
@@ -310,7 +310,7 @@ class AsyncDataFeedEventService(AbstractDatafeedEventService):
 
                 # This just writes out total seconds instead of formatting into minutes and hours
                 # for a typical bot response this seems reasonable
-                log.info("Responded to message in: {:.4g}s. Including {:.4g}s inside the bot"
+                log.debug("Responded to message in: {:.4g}s. Including {:.4g}s inside the bot"
                          .format(total_time.total_seconds(), time_in_bot.total_seconds()))
                 if self.trace_recorder is not None:
                     # TODO: Verify that we should have self.trace_recorder - it should as we want to keep trace so we should use the instance variable

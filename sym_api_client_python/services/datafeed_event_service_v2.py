@@ -20,7 +20,7 @@ class DataFeedEventServiceV2(AbstractDatafeedEventService):
 
 
     def start_datafeed(self):
-        log.info('DataFeedEventServiceV2/startDataFeed()')
+        log.debug('DataFeedEventServiceV2/startDataFeed()')
         self.read_datafeed()
 
     def activate_datafeed(self):
@@ -81,17 +81,17 @@ class DataFeedEventServiceV2(AbstractDatafeedEventService):
         except Exception as exc:
             log.exception('DataFeedEventService - Unknown exception: ' + str(exc))
         sleep_for = self.get_and_increase_timeout(thrown_exception)
-        log.info('DataFeedEventService/handle_event() --> Sleeping for {:.4g}s'.format(sleep_for))
+        log.debug('DataFeedEventService/handle_event() --> Sleeping for {:.4g}s'.format(sleep_for))
         time.sleep(sleep_for)
 
         try:
-            log.info('DataFeedEventServiceV2 --> Deleting previous Datafeed')
+            log.debug('DataFeedEventServiceV2 --> Deleting previous Datafeed')
             self.datafeed_client.delete_datafeed(self.datafeed_id)
         except Exception as exc:
             self.handle_datafeed_errors(exc)
 
         try:
-            log.info('DataFeedEventServiceV2/handle_event() --> Restarting Datafeed')
+            log.debug('DataFeedEventServiceV2/handle_event() --> Restarting Datafeed')
             self.datafeed_id = self.datafeed_client.create_datafeed()
 
         except Exception as exc:
