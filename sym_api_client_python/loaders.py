@@ -38,7 +38,7 @@ def load_from_env_var(env_var, delimiter=":"):
     if split[0].lower() not in ["rsa", "cert"]:
         raise ValueError(f"Didn't recognise f{split[0]}, expected one of: RSA, CERT")
     
-    logging.info(f"Loading config from {split[1]} with authentication mode: {split[0]}")
+    logging.debug(f"Loading config from {split[1]} with authentication mode: {split[0]}")
 
     conf = SymConfig(split[1], split[1])
     conf.load_config()

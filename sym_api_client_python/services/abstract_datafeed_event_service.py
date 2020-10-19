@@ -55,7 +55,7 @@ class AbstractDatafeedEventService(ABC):
             self.baseline_timeout_sec = config.data.get(_config_key, auth_endpoint_constants["TIMEOUT"])
         else:
             if _config_key in config.data:
-                log.info('{} listed in config, but overriden to {}s by parammeter'
+                log.debug('{} listed in config, but overriden to {}s by parammeter'
                          .format(_config_key, error_timeout_sec))
             self.baseline_timeout_sec = error_timeout_sec
 
@@ -153,7 +153,7 @@ class AbstractDatafeedEventService(ABC):
         """
         log.debug('DataFeedEventService/handle_events()')
         for event in events:
-            log.info(
+            log.debug(
                 'DataFeedEventService/read_datafeed() --> '
                 'Incoming event with id: {}'.format(event['id'])
             )
