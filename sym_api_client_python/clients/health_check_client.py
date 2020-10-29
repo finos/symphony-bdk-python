@@ -1,8 +1,6 @@
-
 import logging
 
 from .api_client import APIClient
-from ..exceptions.ServerErrorException import ServerErrorException
 
 
 class HealthCheckClient(APIClient):

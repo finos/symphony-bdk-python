@@ -3,11 +3,11 @@ import logging
 import time
 import requests
 from .auth_endpoint_constants import auth_endpoint_constants
-from requests import Session
 from ..clients.api_client import APIClient
 from requests_pkcs12 import Pkcs12Adapter
 from ..exceptions.UnauthorizedException import UnauthorizedException
 from ..exceptions.MaxRetryException import MaxRetryException
+
 
 class Auth(APIClient):
     """Class for certificate authentication"""
@@ -26,7 +26,7 @@ class Auth(APIClient):
         self.auth_session = requests.Session()
         self.key_manager_auth_session = requests.Session()
 
-        #proxy infomation set in config loader, set to empty object if there is no proxy set in config.json
+        # proxy infomation set in config loader, set to empty object if there is no proxy set in config.json
         self.auth_session.proxies.update(self.config.data['podProxyRequestObject'])
         self.key_manager_auth_session.proxies.update(self.config.data['keyManagerProxyRequestObject'])
 
@@ -36,31 +36,30 @@ class Auth(APIClient):
             self.key_manager_auth_session.verify = self.config.data['truststorePath']
 
         self.auth_session.mount(
-            self.config.data['sessionAuthHost'],
+            self.config.data['sessionAuthUrl'],
             Pkcs12Adapter(
                 pkcs12_filename=self.config.data['p.12'],
                 pkcs12_password=self.config.data['botCertPassword']
             ))
         self.auth_session.mount(
-            self.config.data['keyAuthHost'],
+            self.config.data['keyAuthUrl'],
             Pkcs12Adapter(
                 pkcs12_filename=self.config.data['p.12'],
                 pkcs12_password=self.config.data['botCertPassword']
             ))
 
         self.key_manager_auth_session.mount(
-            self.config.data['sessionAuthHost'],
+            self.config.data['sessionAuthUrl'],
             Pkcs12Adapter(
                 pkcs12_filename=self.config.data['p.12'],
                 pkcs12_password=self.config.data['botCertPassword']
             ))
         self.key_manager_auth_session.mount(
-            self.config.data['keyAuthHost'],
+            self.config.data['keyAuthUrl'],
             Pkcs12Adapter(
                 pkcs12_filename=self.config.data['p.12'],
                 pkcs12_password=self.config.data['botCertPassword']
             ))
-
 
     def get_session_token(self):
         """Return the session token"""
@@ -100,7 +99,7 @@ class Auth(APIClient):
         """
         logging.debug('Auth/get_session_token()')
 
-        url = self.config.data['sessionAuthHost'] + '/sessionauth/v1/authenticate'
+        url = self.config.data['sessionAuthUrl'] + '/sessionauth/v1/authenticate'
         response = self.auth_session.post(url)
 
         if response.status_code != 200:
@@ -126,7 +125,7 @@ class Auth(APIClient):
         passed in through Request Session object
         """
         logging.debug('Auth/get_keyauth()')
-        url = self.config.data['keyAuthHost'] + '/keyauth/v1/authenticate'
+        url = self.config.data['keyAuthUrl'] + '/keyauth/v1/authenticate'
         response = self.key_manager_auth_session.post(url)
 
         if response.status_code != 200:

@@ -1,8 +1,7 @@
-import requests
-import json
 import logging
+
 from .api_client import APIClient
-from ..exceptions.UnauthorizedException import UnauthorizedException
+
 
 # child class of APIClient --> Extends error handling functionality
 # StreamClient class contains a series of functions corresponding to all stream
@@ -69,7 +68,7 @@ class StreamClient(APIClient):
             "description": "testing update room function",
         }
 
-        update_room(stream_id, kwargs=room_obj)
+        update_room(stream_id, **room_obj)
         """
         logging.debug('StreamClient/update_room()')
         url = '/pod/v3/room/{0}/update'.format(stream_id)

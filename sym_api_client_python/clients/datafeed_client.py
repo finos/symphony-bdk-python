@@ -1,15 +1,20 @@
-import requests
-import json
 import logging
-from .api_client import APIClient
-from ..exceptions.UnauthorizedException import UnauthorizedException
 
+from .api_client import APIClient
+from .constants.DatafeedVersion import DatafeedVersion
+from .datafeed_client_v1 import DataFeedClientV1
+from .datafeed_client_v2 import DataFeedClientV2
 
 # child class of APIClient --> Extends error handling functionality
 class DataFeedClient(APIClient):
 
     def __init__(self, bot_client):
-        self.bot_client = bot_client
+        self.config = bot_client.get_sym_config()
+
+        if DatafeedVersion.version_of(self.config.data.get("datafeedVersion")) == DatafeedVersion.V2:
+            self.datafeed_client = DataFeedClientV2(bot_client)
+        else:
+            self.datafeed_client = DataFeedClientV1(bot_client)
 
     # raw api call to create_datafeed --> returns datafeed_id
     def create_datafeed(self):
@@ -25,17 +30,14 @@ class DataFeedClient(APIClient):
         There is a maximum of 5 Datafeed per Service Account configured by default.
         This setting can be changed in the API Agent's property file.
         """
-        url = '/agent/v4/datafeed/create'
-        response = self.bot_client.execute_rest_call("POST", url)
-        datafeed_id = response['id']
-        logging.debug('DataFeedClient/create_datafeed() --> {}'.format(datafeed_id))
-        return datafeed_id
+        return self.datafeed_client.create_datafeed()
 
     # raw api call to read_datafeed --> returns an array of events returned
     # from DataFeed
-    def read_datafeed(self, datafeed_id):
+    def read_datafeed(self, datafeed_id, *ackId):
         """
         Reads messages from a given real time messages / events stream ("datafeed").
+
         The datafeed provides messages and events from all conversations that the user is in.
         The types of events surfaced in the datafeed can be found in the Real Time Events list.
 
@@ -53,12 +55,48 @@ class DataFeedClient(APIClient):
         There is no guarantee of message delivery for this endpoint. If errors occur while processing the request, either on the server or the API Agent, the messages that would have been returned may not be readable from the current stream. The messages are still available via the Messages endpoint and the Content Export function.
 
         """
+        return self.datafeed_client.read_datafeed(datafeed_id, *ackId)
 
-        logging.debug('DataFeedClient/read_datafeed()')
-        url = '/agent/v4/datafeed/{0}/read'.format(datafeed_id)
-        datafeed_read = self.bot_client.execute_rest_call("GET", url)
+    def list_datafeed_id(self):
+        """
+        List datafeeds for a user's auth session.
 
-        return datafeed_read
+        Returns
+        -------
+        Dictionary of datafeed ids a user is following. {"id": datafeed_id1, "id": datafeed_id2 ...}
+
+        This feature is not supported in datafeed v1.
+        """
+        return self.datafeed_client.list_datafeed_id()
+
+    def delete_datafeed(self, datafeed_id):
+        """
+        Delete a given datafeed
+
+        Parameters
+        ----------
+        datafeed_id : int
+            Datafeed id of the datafeed we want to delete.
+
+        This feature is not supported in datafeed v1.
+        """
+        self.datafeed_client.delete_datafeed(datafeed_id)
+
+    def get_ack_id(self):
+        """
+        Get the ack id for reading a V2 datafeed.
+
+        This is stored in the DF client from the previous datafeed read.
+        We give the user the freedom of altering the handling of the ack Id.
+
+        Returns
+        -------
+        Ack id present in the previous read. Empty string if no read has been done
+
+        This feature is not supported in datafeed v1.
+        """
+        return self.datafeed_client.get_ack_id()
+
 
     async def read_datafeed_async(self, datafeed_id):
         """
@@ -66,9 +104,4 @@ class DataFeedClient(APIClient):
 
         See read_datafeed for more info
         """
-
-        logging.debug('DataFeedClient/read_datafeed_async()')
-        url = '/agent/v4/datafeed/{0}/read'.format(datafeed_id)
-        datafeed_read = await self.bot_client.execute_rest_call_async("GET", url)
-
-        return datafeed_read
+        return await self.datafeed_client.read_datafeed_async(datafeed_id)

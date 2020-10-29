@@ -1,10 +1,9 @@
 import json
-import logging
+
 from bs4 import BeautifulSoup
 
 
 class SymMessageParser:
-
     """
     MessageParser class takes message_data as its only parameter.
     message action data is a json object passed from DataFeedEventService
@@ -56,10 +55,18 @@ class SymMessageParser:
         return message_data['user']['lastName']
 
     def get_im_name(self, message_data):
-        return str(message_data['user']['firstName']) + ' '  + str(message_data['user']['lastName'])
+        return str(message_data['user']['firstName']) + ' ' + str(message_data['user']['lastName'])
 
     def get_stream_id(self, message_data):
         return message_data['stream']['streamId']
+
+    def __get_tags(self, json_nodes, tag_type):
+        tags = []
+        if json_nodes:
+            for k, v in json_nodes.items():
+                if 'id' in v and len(v['id']) > 0 and 'type' in v['id'][0] and v['id'][0]['type'] == tag_type and 'value' in v['id'][0]:
+                    tags.append(v['id'][0]['value'])
+        return tags
 
     def get_mentions(self, message_data):
         mention_arr = []
@@ -70,13 +77,8 @@ class SymMessageParser:
         return mention_arr
 
     def get_mention_ids(self, message_data):
-        mention_ids = []
         d = json.loads(message_data['data'])
-        if d:
-            for k,v in d.items():
-                if v['id'][0]['type'] == self.MENTION_TYPE:
-                    mention_ids.append(v['id'][0]['value'])
-        return mention_ids
+        return self.__get_tags(d, self.MENTION_TYPE)
 
     def get_hash_tags(self, message_data):
         tag_arr = []
@@ -87,14 +89,8 @@ class SymMessageParser:
         return tag_arr
 
     def get_hash_tag_values(self, message_data):
-        tag_values = []
         d = json.loads(message_data['data'])
-        if d:
-            for k,v in d.items():
-                if v['id'][0]['type'] == self.HASHTAG_TYPE:
-                    tag_values.append(v['id'][0]['value'])
-        return tag_values
-
+        return self.__get_tags(d, self.HASHTAG_TYPE)
 
     def get_cash_tags(self, message_data):
         cash_arr = []
@@ -105,10 +101,6 @@ class SymMessageParser:
         return cash_arr
 
     def get_cash_tag_values(self, message_data):
-        cash_values = []
         d = json.loads(message_data['data'])
-        if d:
-            for k,v in d.items():
-                if v['id'][0]['type'] == self.CASHTAG_TYPE:
-                    cash_values.append(v['id'][0]['value'])
-        return cash_values
+        return self.__get_tags(d, self.CASHTAG_TYPE)
+

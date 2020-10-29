@@ -4,7 +4,6 @@ from .expense_approval_class import ExpenseApprovalForm
 
 reeds_expense_form = ExpenseApprovalForm('food report', 'summary of lunch expenses', 'Reed Feldman')
 reeds_expense_form.upload_expenses([('conde', 'august 22', 12.00), ('fooda', 'august 21', 10.00), ('bento', 'august 2', 12.00)])
-# print(json.dumps(reeds_expense_form, default=convert_to_dict, indent=4, sort_keys=True))
 
 def generate_expense_approval_table(expense_approval_table_data):
     return dict(message = """<messageML>

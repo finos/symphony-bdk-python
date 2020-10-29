@@ -1,4 +1,3 @@
-import asyncio
 import json
 import logging
 from json.decoder import JSONDecodeError
@@ -6,17 +5,17 @@ from json.decoder import JSONDecodeError
 import aiohttp
 import requests
 
-from ..datafeed_event_service import AsyncDataFeedEventService, DataFeedEventService
-from ..exceptions.UnauthorizedException import UnauthorizedException
 from .admin_client import AdminClient
 from .api_client import APIClient
 from .connections_client import ConnectionsClient
 from .datafeed_client import DataFeedClient
+from .health_check_client import HealthCheckClient
 from .message_client import MessageClient
 from .signals_client import SignalsClient
 from .stream_client import StreamClient
 from .user_client import UserClient
-from .health_check_client import HealthCheckClient
+from ..datafeed_event_service import AsyncDataFeedEventService, DataFeedEventService
+from ..exceptions.UnauthorizedException import UnauthorizedException
 
 # SymBotClient class is the Client class that has access to all of the other
 # client classes upon initialization, SymBotClient class gets an instance of
@@ -151,10 +150,10 @@ class SymBotClient(APIClient):
         results = None
         session = None
         if path.startswith("/agent/"):
-            url = self.config.data["agentHost"] + path
+            url = self.config.data["agentUrl"] + path
             session = self.get_agent_session()
         elif path.startswith("/pod/"):
-            url = self.config.data["podHost"] + path
+            url = self.config.data["podUrl"] + path
             session = self.get_pod_session()
         else:
             url = path
@@ -167,10 +166,9 @@ class SymBotClient(APIClient):
             logging.debug(type(err))
             logging.debug('ensure pod/agent subdomains are correct')
             raise
-
         if response.status_code == 204:
             results = []
-        elif response.status_code == 200:
+        elif response.status_code == 200 or response.status_code == 201:
             try:
                 results = json.loads(response.text)
             except JSONDecodeError:
@@ -239,12 +237,12 @@ class SymBotClient(APIClient):
         is_pod = False
 
         if path.startswith("/agent/"):
-            url = self.config.data["agentHost"] + path
+            url = self.config.data["agentUrl"] + path
             session = self.get_async_agent_session()
             http_proxy = self.config.data['agentProxyRequestObject'].get("http")
 
         elif path.startswith("/pod/"):
-            url = self.config.data["podHost"] + path
+            url = self.config.data["podUrl"] + path
             session = self.get_async_pod_session()
             http_proxy = self.config.data['podProxyRequestObject'].get("http")
         else:

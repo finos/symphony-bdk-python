@@ -40,7 +40,7 @@ def main():
 
         # Cert Auth flow: pass path to certificate config.json file
         if args.config is None:
-            config_path = os.path.join(os.path.dirname(__file__), "..", "resources", "config.json")
+            config_path = os.path.join(os.path.dirname(__file__), "..", "sym_api_client_python", "resources", "config.json")
         else:
             config_path = args.config
 

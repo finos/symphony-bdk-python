@@ -2,6 +2,7 @@ import json
 import logging
 import os
 
+
 class SymConfig:
     # initialize object by passing in path to config file
     # store configuration data in variable data
@@ -40,39 +41,32 @@ class SymConfig:
             parts = [p for p in [path_key, filename_key] if p is not None]
             logging.warning(
                 "{} specified in config, but resolved path {} does not exist"
-                .format(", ".join(parts), result))
+                    .format(", ".join(parts), result))
         return result
 
-
     def load_config(self):
-        logging.info("Loading config from: {}".format(os.path.realpath(self.path_to_config)))
+        logging.debug("Loading config from: {}".format(os.path.realpath(self.path_to_config)))
         with open(self.path_to_config, "r") as read_file:
             data = json.load(read_file)
             self.data = data
 
-            if 'sessionAuthPort' in data:
-                self.data['sessionAuthHost'] = 'https://'+ data['sessionAuthHost'] + ':' + str(data['sessionAuthPort'])
-            else:
-                self.data['sessionAuthHost'] = 'https://'+ data['sessionAuthHost']
+            self.data['sessionAuthUrl'] = self._build_url(data.get('sessionAuthHost'), data.get('sessionAuthPort'),
+                                                          data.get('sessionAuthContextPath'))
+            self.data['keyAuthUrl'] = self._build_url(data.get('keyAuthHost'), data.get('keyAuthPort'),
+                                                      data.get('keyAuthContextPath'))
+            self.data['podUrl'] = self._build_url(data.get('podHost'), data.get('podPort'), data.get('podContextPath'))
+            self.data['agentUrl'] = self._build_url(data.get('agentHost'), data.get('agentPort'),
+                                                    data.get('agentContextPath'))
 
-            if 'keyAuthPort' in data:
-                self.data['keyAuthHost'] = 'https://'+ data['keyAuthHost'] + ':' + str(data['keyAuthPort'])
-            else:
-                self.data['keyAuthHost'] = 'https://'+ data['keyAuthHost']
+            # re-assign url to host to keep backward compatibility
+            self.data['sessionAuthHost'] = self.data['sessionAuthUrl']
+            self.data['keyAuthHost'] = self.data['keyAuthUrl']
+            self.data['podHost'] = self.data['podUrl']
+            self.data['agentHost'] = self.data['agentUrl']
 
-            if 'podPort' in data:
-                self.data['podHost'] = 'https://'+ data['podHost'] + ':' + str(data['podPort'])
-            else:
-                self.data['podHost'] = 'https://'+ data['podHost']
-
-            if 'agentPort' in data:
-                self.data['agentHost'] = 'https://'+ data['agentHost'] + ':' + str(data['agentPort'])
-            else:
-                self.data['agentHost'] = 'https://'+ data['agentHost']
-
-            #backwards compatible
+            # backwards compatible
             if 'botCertPath' in data:
-                self.data['botCertPath'] = self._fix_relative_path(data,'botCertPath')
+                self.data['botCertPath'] = self._fix_relative_path(data, 'botCertPath')
 
             if 'botRSAName' in data:
                 self.data['botRSAPath'] = self._fix_relative_path(data, 'botRSAPath', 'botRSAName')
@@ -97,8 +91,6 @@ class SymConfig:
                 self.data['keyManagerProxyUsername'] = data['proxyUsername'] if 'proxyUsername' in data else ""
                 self.data['keyManagerProxyPassword'] = data['proxyPassword'] if 'proxyPassword' in data else ""
 
-
-
             if 'podProxyURL' not in data or not data['podProxyURL']:
                 self.data['podProxyRequestObject'] = {}
                 self.data['podProxyURL'] = ""
@@ -112,14 +104,14 @@ class SymConfig:
                     pod_proxy_auth = data['podProxyUsername'] + ':' + data['podProxyPassword']
                     pod_proxy_url = pod_proxy_parse[0] + '://' + pod_proxy_auth + '@' + pod_proxy_parse[1]
                     self.data['podProxyRequestObject'] = {
-                            'http' : pod_proxy_url,
-                            'https' : pod_proxy_url,
-                            }
+                        'http': pod_proxy_url,
+                        'https': pod_proxy_url,
+                    }
                 else:
                     self.data['podProxyRequestObject'] = {
-                            'http' : data['podProxyURL'],
-                            'https' : data['podProxyURL'],
-                            }
+                        'http': data['podProxyURL'],
+                        'https': data['podProxyURL'],
+                    }
 
             if 'agentProxyURL' not in data or not data['agentProxyURL']:
                 self.data['agentProxyRequestObject'] = {}
@@ -134,14 +126,14 @@ class SymConfig:
                     agent_proxy_auth = data['agentProxyUsername'] + ':' + data['agentProxyPassword']
                     agent_proxy_url = agent_proxy_parse[0] + '://' + agent_proxy_auth + '@' + agent_proxy_parse[1]
                     self.data['agentProxyRequestObject'] = {
-                            'http' : agent_proxy_url,
-                            'https' : agent_proxy_url,
-                            }
+                        'http': agent_proxy_url,
+                        'https': agent_proxy_url,
+                    }
                 else:
                     self.data['agentProxyRequestObject'] = {
-                            'http' : data['agentProxyURL'],
-                            'https' : data['agentProxyURL'],
-                            }
+                        'http': data['agentProxyURL'],
+                        'https': data['agentProxyURL'],
+                    }
 
             if 'keyManagerProxyURL' not in data or not data['keyManagerProxyURL']:
                 self.data['keyManagerProxyRequestObject'] = {}
@@ -156,23 +148,33 @@ class SymConfig:
                     km_proxy_auth = data['keyManagerProxyUsername'] + ':' + data['keyManagerProxyPassword']
                     km_proxy_url = km_proxy_parse[0] + '://' + km_proxy_auth + '@' + km_proxy_parse[1]
                     self.data['keyManagerProxyRequestObject'] = {
-                            'http' : km_proxy_url,
-                            'https' : km_proxy_url,
-                            }
+                        'http': km_proxy_url,
+                        'https': km_proxy_url,
+                    }
                 else:
                     self.data['keyManagerProxyRequestObject'] = {
-                            'http' : data['keyManagerProxyURL'],
-                            'https' : data['keyManagerProxyURL'],
-                            }
+                        'http': data['keyManagerProxyURL'],
+                        'https': data['keyManagerProxyURL'],
+                    }
+
+            # datafeedVersion
+            if "datafeedVersion" not in data:
+                self.data["datafeedVersion"] = "v1"
+            elif self.data.get("datafeedVersion").lower() == "v2":
+                self.data["datafeedVersion"] = "v2"
+            else:
+                self.data["datafeedVersion"] = "v1"
 
             if 'datafeedEventsErrorTimeout' in data:
                 self.data['datafeedEventsErrorTimeout'] = data['datafeedEventsErrorTimeout']
 
-            loggable_config_dict = {}
-            for k, v in self.data.items():
-                if "password" not in k.lower() or v == "":
-                    loggable_config_dict[k] = v
-                else:
-                    loggable_config_dict[k] = "---HIDDEN---"
+    def _build_url(self, host, port, contextPath):
+        port = port if port else 443
+        contextPath = contextPath if contextPath else ""
 
-            logging.info(json.dumps(loggable_config_dict, indent=4))
+        if not (contextPath.startswith('/')):
+            contextPath = '/' + contextPath
+        if contextPath.endswith('/'):
+            contextPath = contextPath[:-1]
+
+        return 'https://' + host + ':' + str(port) + contextPath
