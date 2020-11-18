@@ -1,7 +1,5 @@
 import asyncio
-from concurrent.futures import CancelledError
 from functools import partial
-import json
 import logging
 import datetime
 from collections import namedtuple
@@ -13,7 +11,6 @@ from .exceptions.DatafeedExpiredException import DatafeedExpiredException
 from .exceptions.ServerErrorException import ServerErrorException
 from .exceptions.MaxRetryException import MaxRetryException
 
-from .auth.auth_endpoint_constants import auth_endpoint_constants
 from .services.abstract_datafeed_event_service import AbstractDatafeedEventService
 from .clients.constants.DatafeedVersion import DatafeedVersion
 from .services.datafeed_event_service_v1 import DataFeedEventServiceV1
@@ -152,6 +149,7 @@ class DataFeedEventService:
     def decrease_timeout(self):
         self.datafeed_event_service.decrease_timeout()
 
+
 class AsyncDataFeedEventService(AbstractDatafeedEventService):
     """Non-blocking datafeed event service.
 
@@ -181,6 +179,7 @@ class AsyncDataFeedEventService(AbstractDatafeedEventService):
     """
 
     def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.queue = asyncio.Queue()
         self.exception_queue = asyncio.Queue()
         self.exception_handler = kwargs.pop('exception_handler', None)
@@ -189,12 +188,11 @@ class AsyncDataFeedEventService(AbstractDatafeedEventService):
         self.trace_dict = {}
         self.handle_events_task = None
         self.tasks = []
-
-        super().__init__(*args, **kwargs)
+        self.datafeed_id = None
 
     async def start_datafeed(self):
         log.debug('AsyncDataFeedEventService/start_datafeed()')
-        self.datafeed_id = self.datafeed_client.create_datafeed()
+        self.datafeed_id = self._get_from_file_or_create_datafeed_id()
         await asyncio.gather(self.read_datafeed(), self.handle_events(), self.handle_exceptions())
 
     async def deactivate_datafeed(self, wait_for_handler_completions=True):
@@ -277,7 +275,7 @@ class AsyncDataFeedEventService(AbstractDatafeedEventService):
         await asyncio.sleep(sleep_for)
         try:
             log.debug('AsyncDataFeedEventService/handle_event() --> Restarting Datafeed')
-            self.datafeed_id = self.datafeed_client.create_datafeed()
+            self.datafeed_id = self._create_datafeed_and_persist()
         except Exception as exc:
             await self.handle_datafeed_errors(exc)
 
@@ -313,8 +311,7 @@ class AsyncDataFeedEventService(AbstractDatafeedEventService):
                 log.debug("Responded to message in: {:.4g}s. Including {:.4g}s inside the bot"
                          .format(total_time.total_seconds(), time_in_bot.total_seconds()))
                 if self.trace_recorder is not None:
-                    # TODO: Verify that we should have self.trace_recorder - it should as we want to keep trace so we should use the instance variable
-                    trace_recorder.append(trace)
+                    self.trace_recorder.append(trace)
                 del self.trace_dict[id]
             except Exception as exc:
                 log.error("Error while computing trace results for id: " + id)

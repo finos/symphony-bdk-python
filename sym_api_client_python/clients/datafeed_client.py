@@ -1,9 +1,9 @@
 import logging
 
 from .api_client import APIClient
-from .constants.DatafeedVersion import DatafeedVersion
 from .datafeed_client_v1 import DataFeedClientV1
 from .datafeed_client_v2 import DataFeedClientV2
+
 
 # child class of APIClient --> Extends error handling functionality
 class DataFeedClient(APIClient):
@@ -11,10 +11,10 @@ class DataFeedClient(APIClient):
     def __init__(self, bot_client):
         self.config = bot_client.get_sym_config()
 
-        if DatafeedVersion.version_of(self.config.data.get("datafeedVersion")) == DatafeedVersion.V2:
-            self.datafeed_client = DataFeedClientV2(bot_client)
-        else:
+        if self.config.is_datafeed_v1():
             self.datafeed_client = DataFeedClientV1(bot_client)
+        else:
+            self.datafeed_client = DataFeedClientV2(bot_client)
 
     # raw api call to create_datafeed --> returns datafeed_id
     def create_datafeed(self):

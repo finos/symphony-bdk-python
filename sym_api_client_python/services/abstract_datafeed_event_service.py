@@ -1,8 +1,7 @@
 from abc import ABC, abstractmethod
 import logging
-import json
-import time
 
+from .datafeed_id_repository import OnDiskDatafeedIdRepository
 from ..listeners.elements_listener import ElementsActionListener
 from ..listeners.connection_listener import ConnectionListener
 from ..listeners.im_listener import IMListener
@@ -11,6 +10,7 @@ from ..listeners.room_listener import RoomListener
 from ..auth.auth_endpoint_constants import auth_endpoint_constants
 
 log = logging.getLogger(__name__)
+
 
 class AbstractDatafeedEventService(ABC):
 
@@ -25,10 +25,11 @@ class AbstractDatafeedEventService(ABC):
         self.registered_triggers = []
 
         self.bot_client = sym_bot_client
+        self.config = sym_bot_client.get_sym_config()
         self.datafeed_client = self.bot_client.get_datafeed_client()
+        self.datafeed_id_repository = OnDiskDatafeedIdRepository(self.config.get_datafeed_id_folder_path())
         self.stop = False
 
-        config = sym_bot_client.get_sym_config()
         # TODO: Should not be handled in the DF ES like this, why put a timeout in the config if we can put a parameter with default value(config related)
         # Timeout will start at and eventually reset to this
         _config_key = 'datafeedEventsErrorTimeout'
@@ -52,9 +53,9 @@ class AbstractDatafeedEventService(ABC):
         }
 
         if error_timeout_sec is None:
-            self.baseline_timeout_sec = config.data.get(_config_key, auth_endpoint_constants["TIMEOUT"])
+            self.baseline_timeout_sec = self.config.data.get(_config_key, auth_endpoint_constants["TIMEOUT"])
         else:
-            if _config_key in config.data:
+            if _config_key in self.config.data:
                 log.debug('{} listed in config, but overriden to {}s by parammeter'
                          .format(_config_key, error_timeout_sec))
             self.baseline_timeout_sec = error_timeout_sec
@@ -64,7 +65,7 @@ class AbstractDatafeedEventService(ABC):
         self.lower_threshold = self.baseline_timeout_sec
         # Raise a RuntimeError once this upper threshold exceeded
         if maximum_timeout_sec is None:
-            self.upper_threshold = config.data.get('datafeedEventsErrorMaxTimeout', 60)
+            self.upper_threshold = self.config.data.get('datafeedEventsErrorMaxTimeout', 60)
         else:
             self.upper_threshold = maximum_timeout_sec
         # After every failure multiply the timeout by a factor
@@ -311,3 +312,16 @@ class AbstractDatafeedEventService(ABC):
                       'Decreasing timeout from {:.4g}s to {:.4g}s'.format(original, new_timeout))
             self.current_timeout_sec = new_timeout
         return self.current_timeout_sec
+
+    def _get_from_file_or_create_datafeed_id(self):
+        if self.config.should_store_datafeed_id():
+            datafeed_id = self.datafeed_id_repository.read_datafeed_id_from_file()
+            if datafeed_id:
+                return datafeed_id
+        return self._create_datafeed_and_persist()
+
+    def _create_datafeed_and_persist(self):
+        datafeed_id = self.datafeed_client.create_datafeed()
+        if self.config.should_store_datafeed_id():
+            self.datafeed_id_repository.store_datafeed_id_to_file(datafeed_id, self.config.get_agent_url())
+        return datafeed_id
