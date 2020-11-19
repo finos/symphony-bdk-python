@@ -8,7 +8,7 @@ log = logging.getLogger(__name__)
 
 class OnDiskDatafeedIdRepository:
     def __init__(self, datafeed_id_folder):
-        self.datafeed_id_file_path = OnDiskDatafeedIdRepository._get_datafeed_id_file_path(datafeed_id_folder)
+        self.datafeed_id_file_path = self._get_datafeed_id_file_path(datafeed_id_folder)
 
     def read_datafeed_id_from_file(self):
         log.debug(f'Retrieving datafeed id from file {self.datafeed_id_file_path}')
@@ -30,8 +30,7 @@ class OnDiskDatafeedIdRepository:
             log.debug(f'Writing {line} to {self.datafeed_id_file_path}')
             datafeed_id_file.write(line)
 
-    @staticmethod
-    def _get_datafeed_id_file_path(datafeed_id_folder):
+    def _get_datafeed_id_file_path(self, datafeed_id_folder):
         datafeed_id_file_path = os.path.join(datafeed_id_folder, DATAFEED_ID_FILE)
         if os.path.exists(datafeed_id_file_path) and os.path.isdir(datafeed_id_file_path):
             datafeed_id_file_path = os.path.join(datafeed_id_file_path, DATAFEED_ID_FILE)
