@@ -198,4 +198,4 @@ class SymConfig:
         datafeed_id_file_path = self.data.get("datafeedIdFilePath")
         if datafeed_id_file_path:
             return datafeed_id_file_path
-        return "./"
+        return os.getcwd()

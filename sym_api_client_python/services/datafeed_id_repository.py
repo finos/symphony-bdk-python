@@ -25,14 +25,14 @@ class OnDiskDatafeedIdRepository:
         return None
 
     def store_datafeed_id_to_file(self, datafeed_id, agent_url):
-        with open(self._get_datafeed_id_file_path(), 'w') as datafeed_id_file:
+        with open(self.datafeed_id_file_path, 'w') as datafeed_id_file:
             line = f'{datafeed_id}@{agent_url}'
             log.debug(f'Writing {line} to {self.datafeed_id_file_path}')
             datafeed_id_file.write(line)
 
     @staticmethod
     def _get_datafeed_id_file_path(datafeed_id_folder):
-        datafeed_id_file_path = datafeed_id_folder + "/" + DATAFEED_ID_FILE
+        datafeed_id_file_path = os.path.join(datafeed_id_folder, DATAFEED_ID_FILE)
         if os.path.exists(datafeed_id_file_path) and os.path.isdir(datafeed_id_file_path):
-            datafeed_id_file_path = datafeed_id_file_path + "/" + DATAFEED_ID_FILE
+            datafeed_id_file_path = os.path.join(datafeed_id_file_path, DATAFEED_ID_FILE)
         return os.path.abspath(datafeed_id_file_path)
