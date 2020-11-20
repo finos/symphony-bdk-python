@@ -11,16 +11,16 @@ from ..exceptions.MaxRetryException import MaxRetryException
 
 log = logging.getLogger(__name__)
 
+
 class DataFeedEventServiceV1(AbstractDatafeedEventService):
 
     def __init__(self, *args, **kwargs):
-        self.datafeed_id = None
         super().__init__(*args, **kwargs)
-
+        self.datafeed_id = None
 
     def start_datafeed(self):
         log.debug('DataFeedEventService/startDataFeed()')
-        self.datafeed_id = self.datafeed_client.create_datafeed()
+        self.datafeed_id = self._get_from_file_or_create_datafeed_id()
         self.read_datafeed()
 
     def activate_datafeed(self):
@@ -78,7 +78,7 @@ class DataFeedEventServiceV1(AbstractDatafeedEventService):
 
         try:
             log.debug('DataFeedEventService/handle_event() --> Restarting Datafeed')
-            self.datafeed_id = self.datafeed_client.create_datafeed()
+            self.datafeed_id = self._create_datafeed_and_persist()
 
         except Exception as exc:
             self.handle_datafeed_errors(exc)

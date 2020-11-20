@@ -109,9 +109,16 @@ An example of json has been provided below.  (The "botPrivateKeyPath" ends with 
       "keyManagerProxyUsername": "proxy-username",
       "keyManagerProxyPassword": "proxy-password",
 
-
       // Required: If a truststore is required to access on-prem components, provide a path to the python truststore. Needs to be .pem file.  Instructions below for converting JKS to python pem truststore. If truststore is not needed, set value as empty string ("").
-      "truststorePath": "/path/to/truststore.pem"
+      "truststorePath": "/path/to/truststore.pem",
+
+      // Optional: if set to true, the datafeed id will be stored on the filesystem and subsequently reused.
+      // Applies for DFv1 only. Default value is true.
+      "reuseDatafeedID": true,
+
+      // Optional: path to the folder where to store the datafeed id. Applies for DFv1 and if reuseDatafeedID set to true.
+      // Default value is os.getcwd().
+      "datafeedIdFilePath": "/some/folder/"
     }
 
 

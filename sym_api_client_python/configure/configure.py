@@ -2,6 +2,8 @@ import json
 import logging
 import os
 
+from sym_api_client_python.clients.constants.DatafeedVersion import DatafeedVersion
+
 
 class SymConfig:
     # initialize object by passing in path to config file
@@ -178,3 +180,22 @@ class SymConfig:
             contextPath = contextPath[:-1]
 
         return 'https://' + host + ':' + str(port) + contextPath
+
+    def get_agent_url(self):
+        return self.data.get('agentUrl')
+
+    def should_store_datafeed_id(self):
+        return self.is_datafeed_v1() and self.is_datafeed_id_reused()
+
+    def is_datafeed_v1(self):
+        return DatafeedVersion.version_of(self.data.get("datafeedVersion")) != DatafeedVersion.V2
+
+    def is_datafeed_id_reused(self):
+        reuse_datafeed_id = self.data.get("reuseDatafeedID")
+        return reuse_datafeed_id is None or reuse_datafeed_id
+
+    def get_datafeed_id_folder_path(self):
+        datafeed_id_file_path = self.data.get("datafeedIdFilePath")
+        if datafeed_id_file_path:
+            return datafeed_id_file_path
+        return os.getcwd()
