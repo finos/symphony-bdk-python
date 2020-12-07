@@ -445,11 +445,23 @@ class AsyncDataFeedEventService(AbstractDatafeedEventService):
         for listener in self.room_listeners:
             await listener.on_room_member_promoted_to_owner(promoted_to_owner_data)
 
-    async def demoted_to_owner(self, payload):
-        log.debug('async demoted_to_Owner')
+    async def demoted_from_owner(self, payload):
+        log.debug('async demoted_from_owner')
         demoted_to_owner_data = payload['payload']['roomMemberDemotedFromOwner']
         for listener in self.room_listeners:
             await listener.on_room_member_demoted_from_owner(demoted_to_owner_data)
+
+    async def connection_accepted_handler(self, payload):
+        log.debug('async connection_accepted_handler')
+        connection_accepted_data = payload['payload']['connectionAccepted']
+        for listener in self.connection_listeners:
+            await listener.on_connection_accepted(connection_accepted_data)
+
+    async def connection_requested_handler(self, payload):
+        log.debug('async connection_requested_handler')
+        connection_requested_data = payload['payload']['connectionRequested']
+        for listener in self.connection_listeners:
+            await listener.on_connection_requested(connection_requested_data)
 
     async def elements_action_handler(self, payload):
         log.debug('async elements_action_handler')
