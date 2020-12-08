@@ -244,7 +244,7 @@ class AbstractDatafeedEventService(ABC):
             listener.on_room_member_promoted_to_owner(promoted_to_owner_data)
 
     def demoted_from_owner(self, payload):
-        log.debug('demoted_from_Owner')
+        log.debug('demoted_from_owner')
         demoted_from_owner_data = payload['payload']['roomMemberDemotedFromOwner']
         for listener in self.room_listeners:
             listener.on_room_member_demoted_from_owner(demoted_from_owner_data)
