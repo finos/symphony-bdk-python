@@ -17,7 +17,7 @@ node {
             }
 
             stage('Publish legacy BDK project') {
-                withDockerContainer('python:3') {
+                withDockerContainer('python:3.9-alpine') {
                     sh './jenkins/release.sh'
                 }
             }
