@@ -1,8 +1,7 @@
 import asyncio
-from unittest import TestCase, mock, IsolatedAsyncioTestCase
+from unittest import mock
+from unittest.async_case import IsolatedAsyncioTestCase
 from unittest.mock import MagicMock, AsyncMock
-
-import pytest
 
 from sym_api_client_python.clients.sym_bot_client import SymBotClient
 from sym_api_client_python.configure.configure import SymConfig
@@ -23,17 +22,17 @@ class TestDataFeedEventService(IsolatedAsyncioTestCase):
         'sym_api_client_python.clients.datafeed_client.DataFeedClient',
         new_callable=AsyncMock)
     async def test_read_datafeed_event_no_id(self, datafeed_client_mock):
-        self.service = AsyncDataFeedEventService(self.client)
+        service = AsyncDataFeedEventService(self.client)
         self.client.get_bot_user_info = MagicMock(return_value={'id': 456})
 
-        self.service.datafeed_client = datafeed_client_mock
+        service.datafeed_client = datafeed_client_mock
         datafeed_client_mock.read_datafeed_async.side_effect = self.return_event_no_id_first_time
 
-        listener = IMListenerRecorder(self.service)
-        self.service.add_im_listener(listener)
+        listener = IMListenerRecorder(service)
+        service.add_im_listener(listener)
 
         # Simulate start_datafeed
-        await asyncio.gather(self.service.read_datafeed(), self.service.handle_events())
+        await asyncio.gather(service.read_datafeed(), service.handle_events())
 
         self.assertIsNotNone(listener.last_message)
 
@@ -43,12 +42,11 @@ class TestDataFeedEventService(IsolatedAsyncioTestCase):
             await asyncio.sleep(0)
             return []
 
-        else:
-            self.ran = True
-            event = {'type': 'MESSAGESENT', 'timestamp': 0,
-                     'payload': {'messageSent': {'message': {'stream': {'streamType': 'IM'}}}},
-                     'initiator': {'user': {'userId': 123}}}
-            return [event]
+        self.ran = True
+        event = {'type': 'MESSAGESENT', 'timestamp': 0,
+                 'payload': {'messageSent': {'message': {'stream': {'streamType': 'IM'}}}},
+                 'initiator': {'user': {'userId': 123}}}
+        return [event]
 
 
 class IMListenerRecorder(IMListener):
