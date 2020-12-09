@@ -382,6 +382,10 @@ class AsyncImListenerImp(IMListener):
 ```
 
 # Release Notes
+
+## 1.2.0 and above
+See the [release page](https://github.com/SymphonyPlatformSolutions/symphony-api-client-python/releases).
+
 ## 1.1.4
 - Added "cache-control" header value to pod and agent sessions
 
