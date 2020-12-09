@@ -1,4 +1,5 @@
 import asyncio
+import uuid
 from functools import partial
 import logging
 import datetime
@@ -235,11 +236,11 @@ class AsyncDataFeedEventService(AbstractDatafeedEventService):
                 for event in events:
                     log.debug(
                         'AsyncDataFeedEventService/read_datafeed() --> '
-                        'Incoming event from read_datafeed() with id: {}'.format(event['id'])
+                        'Incoming event from read_datafeed() with id: {}'.format(event.get('id'))
                     )
 
                     if event['initiator']['user']['userId'] != bot_id:
-                        e_id = event["messageId"] if "messageId" in event else event["id"]
+                        e_id = self._get_event_id(event)
                         self._add_trace(e_id, event["timestamp"])
                         await self.queue.put(event)
                     log.debug(f"Event queued. Current queue size: {self.queue.qsize()}")
@@ -317,6 +318,14 @@ class AsyncDataFeedEventService(AbstractDatafeedEventService):
                 log.error("Error while computing trace results for id: " + id)
                 log.exception(exc)
 
+    @staticmethod
+    def _get_event_id(event):
+        event_id = event["messageId"] if "messageId" in event else event.get('id')
+        if event_id is None:
+            event['id'] = str(uuid.uuid4())
+            return event['id']
+        return event_id
+
     def _add_trace(self, e_id, first_timestamp=None):
         """Take the current timestamp and add if to the trace_dict, used to trace the time taken
         to process events.
@@ -346,7 +355,7 @@ class AsyncDataFeedEventService(AbstractDatafeedEventService):
                 self.queue.task_done()
             else:
                 event_type = str(event['type'])
-                e_id = event["messageId"] if "messageId" in event else event["id"]
+                e_id = self._get_event_id(event)
                 self._add_trace(e_id)
 
                 log.debug('AsyncDataFeedEventService/handle_events() --> event-type:' + event_type)
