@@ -156,7 +156,7 @@ class AbstractDatafeedEventService(ABC):
         for event in events:
             log.debug(
                 'DataFeedEventService/read_datafeed() --> '
-                'Incoming event with id: {}'.format(event['id'])
+                'Incoming event with id: {}'.format(event.get('id'))
             )
 
             if event is None or event['initiator']['user']['userId'] == self.bot_client.get_bot_user_info()['id']:
@@ -244,7 +244,7 @@ class AbstractDatafeedEventService(ABC):
             listener.on_room_member_promoted_to_owner(promoted_to_owner_data)
 
     def demoted_from_owner(self, payload):
-        log.debug('demoted_from_Owner')
+        log.debug('demoted_from_owner')
         demoted_from_owner_data = payload['payload']['roomMemberDemotedFromOwner']
         for listener in self.room_listeners:
             listener.on_room_member_demoted_from_owner(demoted_from_owner_data)

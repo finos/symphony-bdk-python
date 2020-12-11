@@ -11,7 +11,7 @@ from sym_api_client_python.listeners.im_listener_test_imp import (
     AsyncIMListenerImp, IMListenerTestImp)
 from sym_api_client_python.listeners.room_listener_test_imp import (
     AsyncRoomListenerImp, RoomListenerTestImp)
-from sym_api_client_python.listeners.elements_listener_test_imp import AsyncElementsListenerImp
+from sym_api_client_python.listeners.elements_listener_test_imp import AsyncElementsListenerTestImp
 
 
 def configure_logging():

@@ -1,4 +1,5 @@
 import asyncio
+import uuid
 from functools import partial
 import logging
 import datetime
@@ -235,11 +236,11 @@ class AsyncDataFeedEventService(AbstractDatafeedEventService):
                 for event in events:
                     log.debug(
                         'AsyncDataFeedEventService/read_datafeed() --> '
-                        'Incoming event from read_datafeed() with id: {}'.format(event['id'])
+                        'Incoming event from read_datafeed() with id: {}'.format(event.get('id'))
                     )
 
                     if event['initiator']['user']['userId'] != bot_id:
-                        e_id = event["messageId"] if "messageId" in event else event["id"]
+                        e_id = self._get_event_id(event)
                         self._add_trace(e_id, event["timestamp"])
                         await self.queue.put(event)
                     log.debug(f"Event queued. Current queue size: {self.queue.qsize()}")
@@ -317,6 +318,14 @@ class AsyncDataFeedEventService(AbstractDatafeedEventService):
                 log.error("Error while computing trace results for id: " + id)
                 log.exception(exc)
 
+    @staticmethod
+    def _get_event_id(event):
+        event_id = event["messageId"] if "messageId" in event else event.get('id')
+        if event_id is None:
+            event['id'] = str(uuid.uuid4())
+            return event['id']
+        return event_id
+
     def _add_trace(self, e_id, first_timestamp=None):
         """Take the current timestamp and add if to the trace_dict, used to trace the time taken
         to process events.
@@ -346,7 +355,7 @@ class AsyncDataFeedEventService(AbstractDatafeedEventService):
                 self.queue.task_done()
             else:
                 event_type = str(event['type'])
-                e_id = event["messageId"] if "messageId" in event else event["id"]
+                e_id = self._get_event_id(event)
                 self._add_trace(e_id)
 
                 log.debug('AsyncDataFeedEventService/handle_events() --> event-type:' + event_type)
@@ -445,11 +454,23 @@ class AsyncDataFeedEventService(AbstractDatafeedEventService):
         for listener in self.room_listeners:
             await listener.on_room_member_promoted_to_owner(promoted_to_owner_data)
 
-    async def demoted_to_owner(self, payload):
-        log.debug('async demoted_to_Owner')
+    async def demoted_from_owner(self, payload):
+        log.debug('async demoted_from_owner')
         demoted_to_owner_data = payload['payload']['roomMemberDemotedFromOwner']
         for listener in self.room_listeners:
             await listener.on_room_member_demoted_from_owner(demoted_to_owner_data)
+
+    async def connection_accepted_handler(self, payload):
+        log.debug('async connection_accepted_handler')
+        connection_accepted_data = payload['payload']['connectionAccepted']
+        for listener in self.connection_listeners:
+            await listener.on_connection_accepted(connection_accepted_data)
+
+    async def connection_requested_handler(self, payload):
+        log.debug('async connection_requested_handler')
+        connection_requested_data = payload['payload']['connectionRequested']
+        for listener in self.connection_listeners:
+            await listener.on_connection_requested(connection_requested_data)
 
     async def elements_action_handler(self, payload):
         log.debug('async elements_action_handler')
