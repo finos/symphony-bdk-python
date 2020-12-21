@@ -321,6 +321,18 @@ responses
 
 * Successfully employing this strategy can make your bot handle far higher loads than would be possible in the synchronous case, without having to resort to threading or complex callbacks.
 
+---
+**NOTE**
+
+There is an outstanding issue with aiohttp and Python 3.8+ on Windows. This affects our client when you specify a proxy on Windows with Python 3.8+.
+
+If you are using a proxy, you may need to implement the following workaround before you start the async datafeed or make any async calls with aiohttp:
+```
+if sys.version_info[0] == 3 and sys.version_info[1] >= 8 and sys.platform.startswith('win'):
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+```
+---
+
 Blocking listeners will however still block the datafeed. Listeners that need to make HTTP requests however can make them with aiohttp,
 instead of requests for example. aiohttp is already a dependency of this module. These can be awaited to release the thread.
 ```
