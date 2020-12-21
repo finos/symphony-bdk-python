@@ -3,8 +3,6 @@ import logging
 from json.decoder import JSONDecodeError
 
 import aiohttp
-import asyncio
-import sys
 import requests
 import ssl
 
@@ -54,17 +52,7 @@ class SymBotClient(APIClient):
         self.async_agent_session = None
         self.bot_user_info = None
         self.health_check_client = None
-        #Required for aiohttp to use truststore
-        if self.config.data[_TRUSTSTORE_PATH]:
-            logging.debug("Setting truststorePath for async calls to {}".format(config.data[_TRUSTSTORE_PATH]))
-            self.async_ssl_context = ssl.create_default_context(cafile=self.config.data[_TRUSTSTORE_PATH])
-        else: 
-            logging.debug("Setting truststore for async calls to system truststore")
-            self.async_ssl_context = ssl.create_default_context()
-        #Required to work around a bug in Python 3.8+ on Windows. Can be removed once fixed in aiohttp
-        if sys.version_info[0] == 3 and sys.version_info[1] >= 8 and sys.platform.startswith('win'):
-            asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
-
+        self.async_ssl_context = None
 
 
     def get_datafeed_event_service(self, *args, **kwargs):
@@ -230,6 +218,8 @@ class SymBotClient(APIClient):
             # For aiohttp proxies and truststore are handled when the request is made
         return self.async_agent_session
 
+    # Known issue on this function when using a proxy due to an outstanding issue with aiohttp
+    # To workaround this please check README.md
     async def execute_rest_call_async(self, method, path, **kwargs):
         """This is the asynchronous method to hit the rest api, it should be awaited"""
         results = None
@@ -274,7 +264,7 @@ class SymBotClient(APIClient):
 
 
         try:
-            response = await session.request(method, url, proxy=http_proxy, ssl=self.async_ssl_context, data=data, **kwargs)
+            response = await session.request(method, url, proxy=http_proxy, ssl=self.get_async_ssl_context(), data=data, **kwargs)
         except aiohttp.ClientConnectionError as err:
             logging.debug(err)
             logging.debug(type(err))
@@ -345,6 +335,16 @@ class SymBotClient(APIClient):
         if self.health_check_client is None:
             self.health_check_client = HealthCheckClient(self)
         return self.health_check_client
+
+    #Required for aiohttp to use truststore
+    def get_async_ssl_context(self):
+        if self.async_ssl_context is None:
+            if self.config.data[_TRUSTSTORE_PATH]:
+                logging.debug("Setting truststorePath for async calls to {}".format(self.config.data[_TRUSTSTORE_PATH]))
+                self.async_ssl_context = ssl.create_default_context(cafile=self.config.data[_TRUSTSTORE_PATH])
+            else:
+                self.async_ssl_context = ssl.create_default_context()
+        return self.async_ssl_context
 
     async def close_async_sessions(self):
         """Close the open aiohttp.ClientSession objects
