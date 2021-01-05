@@ -9,6 +9,8 @@ python = "^3.7"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2"
+pylint = "^2.6.0"
+pytest-cov = "^2.10.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -18,3 +20,9 @@ build-backend = "poetry.core.masonry.api"
 testpaths = ["tests"]
 norecursedirs = ["*.egg", ".*", "build", "dist", "venv", "legacy"]
 
+[tool.coverage.run]
+branch = true
+source = ["symphony_api_client_python"]
+
+[tool.coverage.report]
+fail_under = 90.0

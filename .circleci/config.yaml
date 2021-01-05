@@ -1,0 +1,40 @@
+version: 2
+
+jobs:
+  build:
+    docker:
+      - image: cimg/python:3.7
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - deps-{{ checksum "poetry.lock" }}
+
+      - run:
+          name: Install Dependencies
+          command: poetry install
+
+      - save_cache:
+          key: deps-{{ checksum "poetry.lock" }}
+          paths:
+            - /home/circleci/.cache/pypoetry/virtualenvs
+
+      - run:
+          name: Run pylint
+          command: poetry run pylint symphony_api_client_python tests > pylint_report.txt
+
+      - run:
+          name: Run tests with coverage
+          command: |
+            mkdir test-results
+            poetry run pytest --junitxml=test-results/junit.xml --cov --cov-report=html
+
+      - store_test_results:
+          path: test-results
+
+      - store_artifacts:
+          path: htmlcov
+
+      - store_artifacts:
+          path: pylint_report.txt
