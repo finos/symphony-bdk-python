@@ -32,4 +32,7 @@ jobs:
           path: junit.xml
 
       - store_artifacts:
+          path: junit.xml
+
+      - store_artifacts:
           path: htmlcov
