@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "symphony-api-client-python"
+name = "symphony-bdk"
 version = "2.0.dev0"
 description = "Symphony Bot Development Kit for Python"
 authors = ["Symphony Platform Solutions <platformsolutions@symphony.com>"]
@@ -24,7 +24,7 @@ junit_logging = "all"
 
 [tool.coverage.run]
 branch = true
-source = ["symphony_api_client_python"]
+source = ["symphony"]
 
 [tool.coverage.report]
 fail_under = 90.0

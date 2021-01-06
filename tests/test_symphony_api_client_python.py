@@ -1,4 +1,4 @@
-from symphony_api_client_python import __version__
+from symphony.bdk import __version__
 
 
 def test_version():

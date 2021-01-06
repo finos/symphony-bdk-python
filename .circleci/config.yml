@@ -22,7 +22,7 @@ jobs:
 
       - run:
           name: Run pylint
-          command: poetry run pylint symphony_api_client_python tests
+          command: poetry run pylint symphony tests
 
       - run:
           name: Run tests with coverage
