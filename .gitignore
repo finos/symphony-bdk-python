@@ -46,6 +46,7 @@ coverage.xml
 *.cover
 .hypothesis/
 .pytest_cache/
+test-results/
 
 # Translations
 *.mo
@@ -73,9 +74,6 @@ target/
 
 # pyenv
 .python-version
-
-# poetry
-poetry.lock
 
 # celery beat schedule file
 celerybeat-schedule

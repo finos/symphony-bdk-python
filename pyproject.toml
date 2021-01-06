@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "symphony-api-client-python"
+name = "symphony-bdk"
 version = "2.0.dev0"
 description = "Symphony Bot Development Kit for Python"
 authors = ["Symphony Platform Solutions <platformsolutions@symphony.com>"]
@@ -9,12 +9,22 @@ python = "^3.7"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2"
+pylint = "^2.6.0"
+pytest-cov = "^2.10.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
+addopts = "--junitxml=test-results/junit.xml --cov --cov-report=html"
 testpaths = ["tests"]
 norecursedirs = ["*.egg", ".*", "build", "dist", "venv", "legacy"]
+junit_logging = "all"
 
+[tool.coverage.run]
+branch = true
+source = ["symphony"]
+
+[tool.coverage.report]
+fail_under = 90.0
