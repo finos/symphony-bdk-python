@@ -29,10 +29,10 @@ jobs:
           command: poetry run pytest
 
       - store_test_results:
-          path: junit.xml
+          path: test-results
 
       - store_artifacts:
-          path: junit.xml
+          path: test-results
 
       - store_artifacts:
           path: htmlcov
