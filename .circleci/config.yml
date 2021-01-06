@@ -1,4 +1,7 @@
-version: 2
+version: 2.1
+
+orbs:
+  snyk: snyk/snyk@0.0.12
 
 jobs:
   build:
@@ -23,6 +26,8 @@ jobs:
       - run:
           name: Run pylint
           command: poetry run pylint symphony tests
+
+      - snyk/scan
 
       - run:
           name: Run tests with coverage
