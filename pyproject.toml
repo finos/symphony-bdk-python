@@ -3,18 +3,23 @@ name = "symphony-bdk"
 version = "2.0.dev0"
 description = "Symphony Bot Development Kit for Python"
 authors = ["Symphony Platform Solutions <platformsolutions@symphony.com>"]
+packages = [
+    {include = "symphony"}]
 
 [tool.poetry.dependencies]
 python = "^3.7"
+requests = "^2.25.1"
+openapi-generator-cli = "^4.3.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2"
 pylint = "^2.6.0"
 pytest-cov = "^2.10.1"
 
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+client_generation = "symphony.bdk.client_generation:generate"
+
 
 [tool.pytest.ini_options]
 addopts = "--junitxml=test-results/junit.xml --cov --cov-report=html"
@@ -28,3 +33,7 @@ source = ["symphony"]
 
 [tool.coverage.report]
 fail_under = 90.0
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
