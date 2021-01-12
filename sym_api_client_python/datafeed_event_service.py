@@ -234,7 +234,10 @@ class AsyncDataFeedEventService(AbstractDatafeedEventService):
         while not self.stop:
             try:
                 events = await self.datafeed_client.read_datafeed_async(self.datafeed_id)
-
+            except CancelledError as exc:
+                log.info("Cancel request received. Stopping datafeed...")
+                await self.deactivate_datafeed()
+                raise
             except Exception as exc:
                 try:
                     await self.handle_datafeed_errors(exc)
@@ -272,10 +275,6 @@ class AsyncDataFeedEventService(AbstractDatafeedEventService):
         """
         try:
             raise thrown_exception
-        except CancelledError as exc:
-            log.info("Cancel request received. Stopping datafeed...")
-            await self.deactivate_datafeed()
-            raise
         except UnauthorizedException:
             log.error('AsyncDataFeedEventService - caught unauthorized exception')
         except MaxRetryException as exc:
