@@ -36,9 +36,9 @@ setuptools.setup(
     ],
     tests_require=['pytest'],
     include_package_data=True,
-    classifiers=(
+    classifiers=[
         "Programming Language :: Python :: 3.6",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
-    ),
+    ],
 )
