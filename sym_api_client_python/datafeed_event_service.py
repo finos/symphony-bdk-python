@@ -5,6 +5,8 @@ import logging
 import datetime
 from collections import namedtuple
 
+from asyncio import CancelledError
+
 #TODO: These imports are duplicated over the abstract class to avoid errors in the Async version
 from .exceptions.UnauthorizedException import UnauthorizedException
 from .exceptions.APIClientErrorException import APIClientErrorException
@@ -177,6 +179,17 @@ class AsyncDataFeedEventService(AbstractDatafeedEventService):
     Potential improvements:
         * Provide a timeout to allow handlers to be cancelled after a certain period
         * Allow exception handling around listeners to be customised
+
+    Known Issues:
+        On Windows with Python 3.8+ there is a known issue with aiohttp and setting a proxy
+        that can be found at https://github.com/aio-libs/aiohttp/issues/4536
+
+        To work around this we must specify the event loop to use WindowsSelectorEventLoopPolicy with:
+        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
+        If cross-platform code is needed you can use a check:
+        if sys.version_info[0] == 3 and sys.version_info[1] >= 8 and sys.platform.startswith('win'):
+            asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     """
 
     def __init__(self, *args, **kwargs):
@@ -221,7 +234,10 @@ class AsyncDataFeedEventService(AbstractDatafeedEventService):
         while not self.stop:
             try:
                 events = await self.datafeed_client.read_datafeed_async(self.datafeed_id)
-
+            except CancelledError as exc:
+                log.info("Cancel request received. Stopping datafeed...")
+                await self.deactivate_datafeed()
+                raise
             except Exception as exc:
                 try:
                     await self.handle_datafeed_errors(exc)

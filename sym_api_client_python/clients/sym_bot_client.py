@@ -4,6 +4,7 @@ from json.decoder import JSONDecodeError
 
 import aiohttp
 import requests
+import ssl
 
 from .admin_client import AdminClient
 from .api_client import APIClient
@@ -51,7 +52,7 @@ class SymBotClient(APIClient):
         self.async_agent_session = None
         self.bot_user_info = None
         self.health_check_client = None
-
+        self.async_ssl_context = None
 
 
     def get_datafeed_event_service(self, *args, **kwargs):
@@ -201,12 +202,7 @@ class SymBotClient(APIClient):
                 'sessionToken': self.auth.get_session_token(),
                 'cache-control': 'no-cache'}
                 )
-            # For aiohttp proxies are handled when the request is made
-            if self.config.data[_TRUSTSTORE_PATH]:
-                logging.debug("Setting truststorePath for pod to {}".format(
-                    self.config.data[_TRUSTSTORE_PATH])
-                )
-                self.async_pod_session.verify=self.config.data[_TRUSTSTORE_PATH]
+            # For aiohttp proxies and truststore are handled when the request is made
         return self.async_pod_session
 
     def get_async_agent_session(self):
@@ -219,22 +215,15 @@ class SymBotClient(APIClient):
                 'keyManagerToken': self.auth.get_key_manager_token(),
                 'cache-control': 'no-cache'}
             )
-            # For aiohttp proxies are handled when the request is made
-            if self.config.data[_TRUSTSTORE_PATH]:
-                logging.debug("Setting truststorePath for agent to {}".format(
-                    self.config.data[_TRUSTSTORE_PATH])
-                )
-                # TODO: this verify section needs to be confirmed. It might be worth putting
-                # a layer in to check all the certificate paths supplied
-                self.async_agent_session.verify=self.config.data[_TRUSTSTORE_PATH]
+            # For aiohttp proxies and truststore are handled when the request is made
         return self.async_agent_session
 
+    # Known issue on this function when using a proxy due to an outstanding issue with aiohttp
+    # To workaround this please check README.md
     async def execute_rest_call_async(self, method, path, **kwargs):
         """This is the asynchronous method to hit the rest api, it should be awaited"""
         results = None
         session = None
-
-        is_pod = False
 
         if path.startswith("/agent/"):
             url = self.config.data["agentUrl"] + path
@@ -247,7 +236,7 @@ class SymBotClient(APIClient):
             http_proxy = self.config.data['podProxyRequestObject'].get("http")
         else:
             # TODO: Confirm whether this should just throw
-            # Not sure what the best course of action is here, taking agent values
+            # Not sure what the best course of action is here, taking pod values
             url = path
             session = self.get_async_pod_session()
             http_proxy = self.config.data['podProxyRequestObject'].get("http")
@@ -275,7 +264,7 @@ class SymBotClient(APIClient):
 
 
         try:
-            response = await session.request(method, url, proxy=http_proxy, data=data, **kwargs)
+            response = await session.request(method, url, proxy=http_proxy, ssl=self.get_async_ssl_context(), data=data, **kwargs)
         except aiohttp.ClientConnectionError as err:
             logging.debug(err)
             logging.debug(type(err))
@@ -346,6 +335,16 @@ class SymBotClient(APIClient):
         if self.health_check_client is None:
             self.health_check_client = HealthCheckClient(self)
         return self.health_check_client
+
+    #Required for aiohttp to use truststore
+    def get_async_ssl_context(self):
+        if self.async_ssl_context is None:
+            if self.config.data[_TRUSTSTORE_PATH]:
+                logging.debug("Setting truststorePath for async calls to {}".format(self.config.data[_TRUSTSTORE_PATH]))
+                self.async_ssl_context = ssl.create_default_context(cafile=self.config.data[_TRUSTSTORE_PATH])
+            else:
+                self.async_ssl_context = ssl.create_default_context()
+        return self.async_ssl_context
 
     async def close_async_sessions(self):
         """Close the open aiohttp.ClientSession objects
