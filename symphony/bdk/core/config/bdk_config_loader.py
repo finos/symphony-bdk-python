@@ -22,9 +22,9 @@ class BdkConfigLoader:
         return cls.parse_config(BdkConfigParser.parse(content))
 
     @staticmethod
-    def parse_config(json_tree):
-        if json_tree is not None:
-            return BdkConfig(**json_tree)
+    def parse_config(data_dict: dict):
+        if data_dict is not None:
+            return BdkConfig(**data_dict)
         else:
             raise BdkConfigException("Config file exists but is empty")
 
