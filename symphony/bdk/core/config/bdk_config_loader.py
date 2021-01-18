@@ -37,8 +37,4 @@ class BdkConfigLoader:
         :return: Symphony bot configuration object
         """
         config_path = (Path.home() / ".symphony" / relative_path).resolve()
-
-        if config_path.exists():
-            return cls.load_from_content(config_path.read_text())
-        else:
-            raise BdkConfigException("Unable to load the configuration file from .symphony directory.")
+        return cls.load_from_file(str(config_path))
