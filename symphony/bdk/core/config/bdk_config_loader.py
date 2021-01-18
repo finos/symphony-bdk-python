@@ -7,9 +7,20 @@ from symphony.bdk.core.config.model.bdk_config import BdkConfig
 
 
 class BdkConfigLoader:
+    """ Config loader class
+
+    Provide methods to load the a JSON or YAML configuration
+    from an absolute path or `USER_HOME_PATH/.symphony``
+    directory or string object to a Python object.
+    """
 
     @classmethod
     def load_from_file(cls, config_path: str):
+        """Load config from an absolute filepath
+
+        :param config_path: Configuration file absolute path
+        :return Symphony bot configuration object
+        """
         config_path = Path(config_path)
         if config_path.exists():
             config_content = config_path.read_text()
@@ -19,6 +30,11 @@ class BdkConfigLoader:
 
     @classmethod
     def load_from_content(cls, content: str) -> BdkConfig:
+        """Load config from a string containing all config
+
+        :param content: Content of the config file as one string.
+        :return Symphony bot configuration object
+        """
         return cls.load_config(BdkConfigParser.parse(content))
 
     @staticmethod

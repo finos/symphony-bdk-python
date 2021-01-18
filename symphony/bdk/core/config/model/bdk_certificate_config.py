@@ -1,5 +1,6 @@
 class BdkCertificateConfig:
-
+    """Class containing a Certificate configuration
+    """
     def __init__(self, path=None, content="", password=None, **kwargs):
         self._path = path
         self._content = content

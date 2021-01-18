@@ -1,11 +1,13 @@
 class BdkServerConfig:
+    """Base class for server and client configurations
+    """
     _DEFAULT_SCHEME: str = "https"
     _DEFAULT_HTTPS_PORT: int = 443
 
-    def __init__(self, scheme=None, port=None, host=None, context=None, **kwargs):
-        self._scheme = scheme if scheme is not None else self._DEFAULT_SCHEME
-        self._port = port if port is not None else self._DEFAULT_HTTPS_PORT
-        self.context = context if context is not None else ""
+    def __init__(self, scheme=_DEFAULT_SCHEME, port=_DEFAULT_HTTPS_PORT, context="",  host=None, **kwargs):
+        self._scheme = scheme
+        self._port = port
+        self.context = context
         self._host = host
 
     def get_base_path(self) -> str:

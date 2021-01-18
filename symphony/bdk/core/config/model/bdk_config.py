@@ -5,18 +5,21 @@ from symphony.bdk.core.config.model.bdk_ssl_config import BdkSslConfig
 
 
 class BdkConfig(BdkServerConfig):
-    """Class containing the Bdk configuration """
+    """Class containing the Bdk configuration
 
-    def __init__(self, **kwargs):
-        super().__init__(scheme=kwargs.get("scheme"), host=kwargs.get("host"), port=kwargs.get("port"),
-                         context=kwargs.get("context"))
-        self.__agent = BdkClientConfig(self, kwargs.get("agent"))
-        self.__pod = BdkClientConfig(self, kwargs.get("pod"))
-        self.__key_manager = BdkClientConfig(self, kwargs.get("keyManager"))
-        self.__session_auth = BdkClientConfig(self, kwargs.get("sessionAuth"))
+    :param **config: dict Configuration parameters
+    :return self: BdkConfig instance
+    """
+    def __init__(self, **config):
+        super().__init__(scheme=config.get("scheme"), host=config.get("host"), port=config.get("port"),
+                         context=config.get("context"))
+        self.__agent = BdkClientConfig(self, config.get("agent"))
+        self.__pod = BdkClientConfig(self, config.get("pod"))
+        self.__key_manager = BdkClientConfig(self, config.get("keyManager"))
+        self.__session_auth = BdkClientConfig(self, config.get("sessionAuth"))
 
-        self.__bot = BdkBotConfig(kwargs.get("bot"))
-        self.__ssl = BdkSslConfig(kwargs.get("ssl"))
+        self.__bot = BdkBotConfig(config.get("bot"))
+        self.__ssl = BdkSslConfig(config.get("ssl"))
 
     @property
     def agent(self): return self.__agent

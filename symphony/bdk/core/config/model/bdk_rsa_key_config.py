@@ -1,5 +1,6 @@
 class BdkRsaKeyConfig:
-
+    """Class containing the bot's RSA Key configuration
+    """
     def __init__(self, path=None, **kwargs):
         self._path = path
         self._content = ""

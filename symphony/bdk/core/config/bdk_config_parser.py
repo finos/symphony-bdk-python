@@ -4,6 +4,11 @@ from symphony.bdk.core.config.exception.bdk_config_exception import BdkConfigExc
 
 
 class BdkConfigParser:
+    """ Config Parser class
+
+    Provide methods to Deserialize a configuration_content ``str``
+    in a JSON or YAML format to a Python object.
+    """
 
     @classmethod
     def parse(cls, config_content: str):
