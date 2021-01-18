@@ -28,7 +28,7 @@ setuptools.setup(
         'python-json-logger==0.1.11',
         'beautifulsoup4==4.8.0',
         'Jinja2==2.10.1',
-        'requests_pkcs12==1.4',
+        'requests_pkcs12==1.9',
         'requests-toolbelt==0.9.1',
         'requests-mock>=1.7.0',
         'yattag==1.12.2',
