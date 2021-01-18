@@ -11,10 +11,9 @@ class ConfigMain:
         with open("/absolute/path/to/config.yaml") as config_file:
             config_2 = BdkConfigLoader.load_from_content(config_file.read())
 
-        config_3 = BdkConfigLoader.load_from_symphony_dir("/absolute/path/to/config.yaml")
+        config_3 = BdkConfigLoader.load_from_symphony_dir("config.yaml")
 
         config_4 = BdkConfig()
-
 
 if __name__ == "__main__":
     ConfigMain.run()

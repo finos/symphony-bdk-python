@@ -18,11 +18,9 @@
     "scheme": "http"
   },
   "bot": {
-    "username": "tibot",
-    "privateKeyPath": "/Users/local/conf/agent/privatekey.pem"
-  },
-  "app": {
-    "appId": "tibapp",
-    "privateKeyPath": "/Users/local/conf/agent/privatekey.pem"
+      "username": "youbot",
+      "privateKey": {
+          "path": "/Users/local/conf/agent/privatekey.pem"
+      }
   }
 }

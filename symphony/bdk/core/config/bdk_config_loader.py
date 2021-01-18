@@ -9,13 +9,13 @@ from symphony.bdk.core.config.model.bdk_config import BdkConfig
 class BdkConfigLoader:
     """ Config loader class
 
-    Provide methods to load the a JSON or YAML configuration
-    from an absolute path or `USER_HOME_PATH/.symphony``
-    directory or string object to a Python object.
+    Provide methods to load a JSON or YAML configuration
+    from an absolute path or `$HOME/.symphony``
+    directory or string object to a BdkConfig object.
     """
 
     @classmethod
-    def load_from_file(cls, config_path: str):
+    def load_from_file(cls, config_path: str) -> BdkConfig:
         """Load config from an absolute filepath
 
         :param config_path: Configuration file absolute path
@@ -35,21 +35,19 @@ class BdkConfigLoader:
         :param content: Content of the config file as one string.
         :return Symphony bot configuration object
         """
-        return cls.load_config(BdkConfigParser.parse(content))
-
-    @staticmethod
-    def load_config(data_dict: dict):
+        data_dict = BdkConfigParser.parse(content)
         return BdkConfig(**data_dict)
 
+
     @classmethod
-    def load_from_symphony_dir(cls, relative_path: str):
+    def load_from_symphony_dir(cls, relative_path: str) -> BdkConfig:
         """Load BdkConfig from a relative path located in the .symphony directory.
 
         Note: The .symphony directory is located under your home directory.
         It's a convention adopted in order to avoid storing sensitive information (such as usernames, private keys...)
         within the code base.
 
-        :param relative_path: configuration's relative path from the ``USER_HOME_PATH/.symphony`` directory
+        :param relative_path: configuration's relative path from the ``$HOME/.symphony`` directory
         :return: Symphony bot configuration object
         """
         config_path = (Path.home() / ".symphony" / relative_path).resolve()

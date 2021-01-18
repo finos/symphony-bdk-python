@@ -1,9 +1,9 @@
 class BdkRsaKeyConfig:
     """Class containing the bot's RSA Key configuration
     """
-    def __init__(self, path=None, **kwargs):
-        self._path = path
-        self._content = ""
+    def __init__(self, path=None, content="", **kwargs):
+        self.path = path
+        self.content = content
 
     def is_configured(self) -> bool:
         """"Check if the RSA authentication is configured or not
@@ -19,19 +19,3 @@ class BdkRsaKeyConfig:
         :return: true if the RSA configuration is invalid.
         """
         return self.path is not None and self.content
-
-    @property
-    def path(self):
-        return self._path
-
-    @path.setter
-    def path(self, value):
-        self._path = value
-
-    @property
-    def content(self):
-        return self._content
-
-    @content.setter
-    def content(self, value):
-        self._content = value

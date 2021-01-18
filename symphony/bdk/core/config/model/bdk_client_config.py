@@ -7,6 +7,7 @@ class BdkClientConfig(BdkServerConfig):
     :param parent_config: BdkConfig The parent configuration
     :param  config: dict Client configuration parameters
     """
+
     def __init__(self, parent_config, config):
         self.parent_config = parent_config
         if config is not None:
@@ -19,7 +20,6 @@ class BdkClientConfig(BdkServerConfig):
             self._port = None
             self._host = None
             self._context = None
-
 
     @property
     def scheme(self):
@@ -36,10 +36,6 @@ class BdkClientConfig(BdkServerConfig):
     @property
     def context(self):
         return self._self_or_parent(self._context, self.parent_config.context)
-
-    @property
-    def proxy(self):
-        return self._self_or_parent(self._proxy, self.parent_config.proxy)
 
     @staticmethod
     def _self_or_parent(instance_value, parent_value):

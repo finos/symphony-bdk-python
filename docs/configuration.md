@@ -35,7 +35,7 @@ class ConfigMain:
         with open("/absolute/path/to/config.yaml") as config_file:                 #2
             config_2 = BdkConfigLoader.load_from_content(config_file.read())
 
-        config_3 = BdkConfigLoader.load_from_symphony_dir("/absolute/path/to/config.yaml") #3
+        config_3 = BdkConfigLoader.load_from_symphony_dir("config.yaml") #3
 
         config_4 = BdkConfig() #4
 
