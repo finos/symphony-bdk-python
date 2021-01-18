@@ -13,8 +13,8 @@ workflows:
           filters:
             branches:
               only:
-                - master
-                - 2.0
+                - "master"
+                - "2.0"
 
 jobs:
   build:
