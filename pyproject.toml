@@ -6,6 +6,10 @@ authors = ["Symphony Platform Solutions <platformsolutions@symphony.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.7"
+nulltype = "^2.3.1"
+python-dateutil = "^2.8.1"
+urllib3 = "^1.26.2"
+aiohttp = "^3.7.3"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2"
@@ -25,6 +29,7 @@ junit_logging = "all"
 [tool.coverage.run]
 branch = true
 source = ["symphony"]
+omit = ["symphony/bdk/gen/*"]
 
 [tool.coverage.report]
 fail_under = 90.0
