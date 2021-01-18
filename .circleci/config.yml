@@ -3,10 +3,24 @@ version: 2.1
 orbs:
   snyk: snyk/snyk@0.0.12
 
+workflows:
+  build-workflow:
+    jobs:
+      - build
+      - snyk:
+          context:
+            - devx
+          filters:
+            branches:
+              only:
+                - "master"
+                - "2.0"
+
 jobs:
   build:
     docker:
       - image: cimg/python:3.7
+
     steps:
       - checkout
 
@@ -27,8 +41,6 @@ jobs:
           name: Run pylint
           command: poetry run pylint symphony tests
 
-      - snyk/scan
-
       - run:
           name: Run tests with coverage
           command: poetry run pytest
@@ -41,3 +53,21 @@ jobs:
 
       - store_artifacts:
           path: htmlcov
+
+  snyk:
+    docker:
+      - image: cimg/python:3.7
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          keys:
+            - deps-{{ checksum "poetry.lock" }}
+
+      - run:
+          name: Install Dependencies
+          command: poetry install
+
+      - snyk/scan:
+          severity-threshold: high
