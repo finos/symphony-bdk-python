@@ -12,7 +12,9 @@ workflows:
             - devx
           filters:
             branches:
-              only: master,2.0
+              only:
+                - master
+                - 2.0
 
 jobs:
   build:
