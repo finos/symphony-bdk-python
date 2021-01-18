@@ -63,5 +63,9 @@ jobs:
           keys:
             - deps-{{ checksum "poetry.lock" }}
 
+      - run:
+          name: Install Dependencies
+          command: poetry install
+
       - snyk/scan:
           severity-threshold: high
