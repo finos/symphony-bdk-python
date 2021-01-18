@@ -8,7 +8,10 @@ class BdkConfigParser:
     @classmethod
     def parse(cls, config_content: str):
         config_data = cls.parse_input(config_content)
-        return config_data
+        if config_data is not None:
+            return config_data
+        raise BdkConfigException("Config file exists but is empty.")
+
 
     @staticmethod
     def parse_input(config_content: str):
@@ -22,4 +25,4 @@ class BdkConfigParser:
         except yaml.YAMLError as e:
             pass
 
-        raise BdkConfigException("Config file is not the right file type")
+        raise BdkConfigException("Config file has a wrong format.")
