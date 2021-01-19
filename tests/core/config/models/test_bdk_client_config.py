@@ -29,3 +29,18 @@ def test_full_client(parent_config):
     assert client_config.host == "client_host"
     assert client_config.port == 1111
     assert client_config.context == "client_context"
+
+
+def test_get_base_path_from_client(parent_config):
+    client_config_dict = {"host": "dev.symphony.com", "port": 1234}
+    client_config = BdkClientConfig(parent_config, client_config_dict)
+
+    assert client_config.get_base_path() == "parent_scheme://dev.symphony.com:1234/parent_context"
+
+
+def test_get_base_path_from_client_no_root():
+    parent_config = BdkServerConfig()
+    client_config_dict = {"host": "dev.symphony.com", "port": 1234}
+    client_config = BdkClientConfig(parent_config, client_config_dict)
+
+    assert client_config.get_base_path() == "https://dev.symphony.com:1234"
