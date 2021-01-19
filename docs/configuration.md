@@ -22,28 +22,15 @@ The Symphony BDK provides a single way to configure your bot environment.
 
 ```python
 from symphony.bdk.core.config.bdk_config_loader import BdkConfigLoader
-from symphony.bdk.core.config.model.bdk_config import BdkConfig
 
+config_1 = BdkConfigLoader.load_from_file("/absolute/path/to/config.yaml") #1
 
-class ConfigMain:
+config_2 = BdkConfigLoader.load_from_content(config_content_as_string) #2
 
-    @staticmethod
-    def run():
-        #
-        config_1 = BdkConfigLoader.load_from_file("/absolute/path/to/config.yaml") #1
-
-        with open("/absolute/path/to/config.yaml") as config_file:                 #2
-            config_2 = BdkConfigLoader.load_from_content(config_file.read())
-
-        config_3 = BdkConfigLoader.load_from_symphony_dir("config.yaml") #3
-
-        config_4 = BdkConfig() #4
-
-if __name__ == "__main__":
-    ConfigMain.run()
+config_3 = BdkConfigLoader.load_from_symphony_dir("config.yaml") #3
 ```
 1. Load configuration from a file
-2. Load configuration from content
+2. Load configuration from a string object
 3. Load configuration from the Symphony directory. The Symphony directory is located under `.symphony` folder in your home directory 
     . It can be useful when you don't want to share your own Symphony credentials within your project codebase
-4. Last but not least, you can obviously define your configuration object and load it from any external system
+

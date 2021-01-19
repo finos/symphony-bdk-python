@@ -19,4 +19,4 @@ class BdkCertificateConfig:
 
         :return: true if the RSA configuration is invalid.
         """
-        return (self.path is not None and self.content != "") and self.password is not None
+        return not (self.path is not None and self.content != "")

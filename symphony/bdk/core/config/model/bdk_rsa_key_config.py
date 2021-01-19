@@ -18,4 +18,4 @@ class BdkRsaKeyConfig:
 
         :return: true if the RSA configuration is invalid.
         """
-        return self.path is not None and self.content != ""
+        return not (self.path is not None and self.content != "")

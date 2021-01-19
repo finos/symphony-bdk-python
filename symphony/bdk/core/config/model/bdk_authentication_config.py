@@ -19,9 +19,13 @@ class BdkAuthenticationConfig:
     def is_rsa_configuration_valid(self) -> bool:
         """Check of the RSA authentication is valid
 
+        If both of private_key path and content, the configuration is invalid.
         :return: True if the the RSA key valid
         """
-        return self.private_key.is_valid()
+        if self.private_key.is_configured():
+            return self.private_key.is_valid()
+        else:
+            return False
 
     def is_certificate_authentication_configured(self) -> bool:
         """Check if the certificate authentication is configured
@@ -33,6 +37,10 @@ class BdkAuthenticationConfig:
     def is_certificate_configuration_valid(self) -> bool:
         """Check of the certificate authentication is valid
 
+        If both of certificate key path and content, the configuration is invalid.
         :return: True if the the certificate key valid
         """
-        return self.certificate.is_valid()
+        if self.certificate.is_configured():
+            return self.certificate.is_valid()
+        else:
+            return False

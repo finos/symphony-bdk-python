@@ -1,5 +1,4 @@
 from symphony.bdk.core.config.bdk_config_loader import BdkConfigLoader
-from symphony.bdk.core.config.model.bdk_config import BdkConfig
 
 
 class ConfigMain:
@@ -13,7 +12,6 @@ class ConfigMain:
 
         config_3 = BdkConfigLoader.load_from_symphony_dir("config.yaml")
 
-        config_4 = BdkConfig()
 
 if __name__ == "__main__":
     ConfigMain.run()
