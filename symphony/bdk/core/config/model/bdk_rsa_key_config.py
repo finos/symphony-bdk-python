@@ -10,7 +10,7 @@ class BdkRsaKeyConfig:
 
         :return: true if the RSA authentication is configured
         """
-        return self.path is not None or self.content
+        return self.path is not None or self.content != ""
 
     def is_valid(self) -> bool:
         """Check if the RSA configuration is valid.
@@ -18,4 +18,4 @@ class BdkRsaKeyConfig:
 
         :return: true if the RSA configuration is invalid.
         """
-        return self.path is not None and self.content
+        return self.path is not None and self.content != ""

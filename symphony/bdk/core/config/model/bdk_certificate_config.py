@@ -11,7 +11,7 @@ class BdkCertificateConfig:
 
         :return: true if the certificate authentication is configured
         """
-        return (self.path is not None or self.content) and self.password is not None
+        return (self.path is not None or self.content != "") and self.password is not None
 
     def is_valid(self) -> bool:
         """Check if the certificate configuration is valid.
@@ -19,4 +19,4 @@ class BdkCertificateConfig:
 
         :return: true if the RSA configuration is invalid.
         """
-        return self.path is not None and self.content
+        return (self.path is not None and self.content != "") and self.password is not None

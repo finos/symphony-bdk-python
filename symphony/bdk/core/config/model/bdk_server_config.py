@@ -4,7 +4,7 @@ class BdkServerConfig:
     DEFAULT_SCHEME: str = "https"
     DEFAULT_HTTPS_PORT: int = 443
 
-    def __init__(self, scheme=None, port=None, context="",  host=None, **kwargs):
+    def __init__(self, scheme=None, port=None, context="", host=None, **kwargs):
         self.scheme = scheme if scheme is not None else self.DEFAULT_SCHEME
         self.port = self._port = port if port is not None else self.DEFAULT_HTTPS_PORT
         self.context = context
@@ -13,10 +13,10 @@ class BdkServerConfig:
     def get_base_path(self) -> str:
         """Constructs the base path of the current config
 
-        :return: scheme://host:port + formated_context
+        :return: scheme://host:port + formatted_context
         :rtype: str
         """
-        return self.scheme + "://" + self.host + self.get_port_as_string() + self.get_formatted_context()
+        return f"{self.scheme}://{self.host}{self.get_port_as_string()}{self.get_formatted_context()}"
 
     def get_formatted_context(self) -> str:
         """Formats the context field
@@ -25,7 +25,7 @@ class BdkServerConfig:
         :rtype str
         """
         local_context = self.context
-        if local_context is None:
+        if local_context is None or type(local_context) is not str:
             return ""
         if local_context and local_context[0] != "/":
             return "/" + local_context
