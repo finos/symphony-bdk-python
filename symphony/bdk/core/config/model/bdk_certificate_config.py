@@ -17,6 +17,6 @@ class BdkCertificateConfig:
         """Check if the certificate configuration is valid.
         If both certificate path and content, the configuration is invalid.
 
-        :return: true if the RSA configuration is invalid.
+        :return: true if the certificate configuration is valid.
         """
         return not (self.path is not None and self.content != "")
