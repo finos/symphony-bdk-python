@@ -11,7 +11,9 @@
     "host": "devx1.symphony.com"
   },
   "bot": {
-    "username": "youbot",
-    "privateKeyPath": "/Users/local/conf/agent/privatekey.pem"
+      "username": "youbot",
+      "privateKey": {
+          "path": "/Users/local/conf/agent/privatekey.pem"
+      }
   }
 }
