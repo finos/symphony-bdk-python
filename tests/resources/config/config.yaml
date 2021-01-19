@@ -1,0 +1,15 @@
+_version: '2.0'
+
+pod:
+  host: devx1.symphony.com
+
+agent:
+  host: devx1.symphony.com
+
+keyManager:
+  host: devx1.symphony.com
+
+bot:
+  username: youbot
+  privateKey:
+    path: /Users/local/conf/agent/privatekey.pem
