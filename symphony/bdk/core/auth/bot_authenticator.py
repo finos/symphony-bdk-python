@@ -52,8 +52,6 @@ class BotAuthenticatorRSA(BotAuthenticator):
             return token.token
         except ApiException:
             raise AuthUnauthorizedException(unauthorized_message)
-        finally:
-            await api_client.close()
 
     async def retrieve_session_token(self) -> str:
         """Make the api call to the pod to get the pod's session token.
