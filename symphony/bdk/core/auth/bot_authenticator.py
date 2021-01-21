@@ -4,7 +4,7 @@ from symphony.bdk.gen.login_model.authenticate_request import AuthenticateReques
 from symphony.bdk.gen.exceptions import ApiException
 from symphony.bdk.gen.api_client import ApiClient
 from symphony.bdk.core.auth.jwt_helper import create_signed_jwt
-from symphony.bdk.core.auth.auth_session import AuthSessionRSA
+from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.auth.exception.bdk_authentication_exception import AuthUnauthorizedException
 from symphony.bdk.core.config.model.bdk_bot_config import BdkBotConfig
 
@@ -14,11 +14,11 @@ class BotAuthenticator(ABC):
     Bot authentication service.
     """
 
-    async def _retrieve_token(self, api_client: ApiClient):
+    async def _retrieve_token(self, api_client: ApiClient) -> str:
         return await self._authenticate_and_get_token(api_client)
 
     @abstractmethod
-    async def _authenticate_and_get_token(self, api_client: ApiClient):
+    async def _authenticate_and_get_token(self, api_client: ApiClient) -> str:
         pass
 
     @abstractmethod
@@ -36,14 +36,14 @@ class BotAuthenticatorRSA(BotAuthenticator):
         self.login_api_client = login_api_client
         self.relay_api_client = relay_api_client
 
-    async def authenticate_bot(self) -> AuthSessionRSA:
+    async def authenticate_bot(self) -> AuthSession:
         """
         Authenticates a Bot's service account.
 
         Returns: the authentication session.
 
         """
-        auth_session = AuthSessionRSA(self)
+        auth_session = AuthSession(self)
         await auth_session.refresh()
         return auth_session
 

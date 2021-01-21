@@ -8,11 +8,11 @@ class SymphonyBdk:
     """
 
     def __init__(self, config):
-        self.__config = config
-        self.__api_client_factory = ApiClientFactory(config)
+        self._config = config
+        self._api_client_factory = ApiClientFactory(config)
 
-        self.__authenticator_factory = AuthenticatorFactory(config, api_client_factory=self.__api_client_factory)
-        self.__bot_session = None
+        self._authenticator_factory = AuthenticatorFactory(config, api_client_factory=self._api_client_factory)
+        self._bot_session = None
 
     async def bot_session(self):
         """
@@ -22,6 +22,6 @@ class SymphonyBdk:
         Returns: The bot authentication session.
 
         """
-        if self.__bot_session is None:
-            self.__bot_session = await self.__authenticator_factory.get_bot_authenticator().authenticate_bot()
-        return self.__bot_session
+        if self._bot_session is None:
+            self._bot_session = await self._authenticator_factory.get_bot_authenticator().authenticate_bot()
+        return self._bot_session

@@ -8,7 +8,7 @@ class ApiClientFactory:
     """
 
     def __init__(self, config):
-        self.config = config
+        self._config = config
 
     def get_login_client(self) -> ApiClient:
         """
@@ -17,7 +17,7 @@ class ApiClientFactory:
         Returns: a new ApiClient instance for Login API.
 
         """
-        return self.__get_api_client(self.config.pod, '/login')
+        return self.__get_api_client(self._config.pod, '/login')
 
     def get_pod_client(self) -> ApiClient:
         """
@@ -26,7 +26,7 @@ class ApiClientFactory:
         Returns: a new ApiClient instance for Pod API.
 
         """
-        return self.__get_api_client(self.config.key_manager, '/pod')
+        return self.__get_api_client(self._config.key_manager, '/pod')
 
     def get_relay_client(self) -> ApiClient:
         """
@@ -35,7 +35,7 @@ class ApiClientFactory:
         Returns: a new ApiClient instance for Key Manager API.
 
         """
-        return self.__get_api_client(self.config.key_manager, '/relay')
+        return self.__get_api_client(self._config.key_manager, '/relay')
 
     def get_session_auth_client(self) -> ApiClient:
         """
@@ -44,7 +44,7 @@ class ApiClientFactory:
         Returns: a new ApiClient instance for Session Auth API.
 
         """
-        return self.__get_api_client(self.config.session_auth, '/sessionauth')
+        return self.__get_api_client(self._config.session_auth, '/sessionauth')
 
     def get_agent_client(self) -> ApiClient:
         """
@@ -53,7 +53,7 @@ class ApiClientFactory:
         Returns: a new ApiClient instance for Agent API.
 
         """
-        return self.__get_api_client(self.config.agent, '/agent')
+        return self.__get_api_client(self._config.agent, '/agent')
 
     @staticmethod
     def __get_api_client(server_config, context='') -> ApiClient:

@@ -13,8 +13,8 @@ class AuthenticatorFactory:
     """
 
     def __init__(self, config: BdkConfig, api_client_factory: ApiClientFactory):
-        self.__config = config
-        self.__api_client_factory = api_client_factory
+        self._config = config
+        self._api_client_factory = api_client_factory
 
     def get_bot_authenticator(self) -> BotAuthenticator:
         """
@@ -23,12 +23,12 @@ class AuthenticatorFactory:
         Returns: a new BotAuthenticator instance.
 
         """
-        if self.__config.bot.is_rsa_authentication_configured:
-            if not self.__config.bot.is_rsa_configuration_valid:
+        if self._config.bot.is_rsa_authentication_configured():
+            if not self._config.bot.is_rsa_configuration_valid():
                 raise AuthInitializationException("Only one of private key path or content should be configured for "
                                                   "bot authentication.")
             return BotAuthenticatorRSA(
-                bot_config=self.__config.bot,
-                login_api_client=self.__api_client_factory.get_login_client(),
-                relay_api_client=self.__api_client_factory.get_relay_client()
+                bot_config=self._config.bot,
+                login_api_client=self._api_client_factory.get_login_client(),
+                relay_api_client=self._api_client_factory.get_relay_client()
             )
