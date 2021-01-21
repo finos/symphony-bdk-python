@@ -8,8 +8,9 @@ class AuthenticatorFactory:
     """Authenticator Factory class
 
     Provides new instances for the main authenticators :
-    Bot Authenticator   : to authenticate the main Bot service account
-    OboAuthenticator    : to perform on-behalf-of authentication
+
+        - Bot Authenticator   : to authenticate the main Bot service account
+        - OboAuthenticator    : to perform on-behalf-of authentication
     """
 
     def __init__(self, config: BdkConfig, api_client_factory: ApiClientFactory):
@@ -17,10 +18,9 @@ class AuthenticatorFactory:
         self._api_client_factory = api_client_factory
 
     def get_bot_authenticator(self) -> BotAuthenticator:
-        """
-        Creates a new instance of a Bot Authenticator service.
+        """Creates a new instance of a Bot Authenticator service.
 
-        Returns: a new BotAuthenticator instance.
+        :return: a new BotAuthenticator instance.
 
         """
         if self._config.bot.is_rsa_authentication_configured():

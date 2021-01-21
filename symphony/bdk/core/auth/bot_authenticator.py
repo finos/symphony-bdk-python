@@ -10,8 +10,7 @@ from symphony.bdk.core.config.model.bdk_bot_config import BdkBotConfig
 
 
 class BotAuthenticator(ABC):
-    """
-    Bot authentication service.
+    """Bot authentication service.
     """
 
     async def _retrieve_token(self, api_client: ApiClient) -> str:
@@ -27,8 +26,7 @@ class BotAuthenticator(ABC):
 
 
 class BotAuthenticatorRSA(BotAuthenticator):
-    """
-    Bot authenticator RSA implementation.
+    """Bot authenticator RSA implementation.
     """
 
     def __init__(self, bot_config: BdkBotConfig, login_api_client: ApiClient, relay_api_client: ApiClient):
@@ -37,11 +35,9 @@ class BotAuthenticatorRSA(BotAuthenticator):
         self.relay_api_client = relay_api_client
 
     async def authenticate_bot(self) -> AuthSession:
-        """
-        Authenticates a Bot's service account.
+        """Authenticate a Bot's service account.
 
-        Returns: the authentication session.
-
+        :return: the authentication session.
         """
         auth_session = AuthSession(self)
         await auth_session.refresh()
@@ -60,19 +56,15 @@ class BotAuthenticatorRSA(BotAuthenticator):
             await api_client.close()
 
     async def retrieve_session_token(self) -> str:
-        """
-        Make the api call to the pod to get the pod's session token.
+        """Make the api call to the pod to get the pod's session token.
 
-        Returns: The pod's session token
-
+        :return: The pod's session token
         """
         return await self._retrieve_token(self.login_api_client)
 
     async def retrieve_key_manager_token(self) -> str:
-        """
-        Make the api to the key manager server to get the key manager's token.
+        """Make the api to the key manager server to get the key manager's token.
 
-        Returns: The key manager's token
-
+        :return: The key manager's token
         """
         return await self._retrieve_token(self.relay_api_client)
