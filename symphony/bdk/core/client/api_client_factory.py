@@ -8,11 +8,11 @@ class ApiClientFactory:
 
     def __init__(self, config):
         self._config = config
-        self._login_client = self.__get_api_client(self._config.pod, '/login')
-        self._pod_client = self.__get_api_client(self._config.pod, '/pod')
-        self._relay_client = self.__get_api_client(self._config.key_manager, '/relay')
-        self._agent_client = self.__get_api_client(self._config.session_auth, '/sessionauth')
-        self._session_auth_client = self.__get_api_client(self._config.session_auth, '/sessionauth')
+        self._login_client = self._get_api_client(self._config.pod, '/login')
+        self._pod_client = self._get_api_client(self._config.pod, '/pod')
+        self._relay_client = self._get_api_client(self._config.key_manager, '/relay')
+        self._agent_client = self._get_api_client(self._config.session_auth, '/sessionauth')
+        self._session_auth_client = self._get_api_client(self._config.session_auth, '/sessionauth')
 
     def get_login_client(self) -> ApiClient:
         """Returns a fully initialized ApiClient for Login API.
@@ -60,7 +60,7 @@ class ApiClientFactory:
         await self._session_auth_client.close()
 
     @staticmethod
-    def __get_api_client(server_config, context='') -> ApiClient:
+    def _get_api_client(server_config, context='') -> ApiClient:
         path = server_config.get_base_path() + context
         configuration = Configuration(host=path)
         return ApiClient(configuration=configuration)
