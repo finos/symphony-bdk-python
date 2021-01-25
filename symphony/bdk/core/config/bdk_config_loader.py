@@ -38,7 +38,6 @@ class BdkConfigLoader:
         data_dict = BdkConfigParser.parse(content)
         return BdkConfig(**data_dict)
 
-
     @classmethod
     def load_from_symphony_dir(cls, relative_path: str) -> BdkConfig:
         """Load BdkConfig from a relative path located in the .symphony directory.
