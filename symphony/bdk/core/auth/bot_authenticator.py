@@ -30,9 +30,9 @@ class BotAuthenticatorRSA(BotAuthenticator):
     """
 
     def __init__(self, bot_config: BdkBotConfig, login_api_client: ApiClient, relay_api_client: ApiClient):
-        self.bot_config = bot_config
-        self.login_api_client = login_api_client
-        self.relay_api_client = relay_api_client
+        self._bot_config = bot_config
+        self._login_api_client = login_api_client
+        self._relay_api_client = relay_api_client
 
     async def authenticate_bot(self) -> AuthSession:
         """Authenticate a Bot's service account.
@@ -45,7 +45,7 @@ class BotAuthenticatorRSA(BotAuthenticator):
 
     async def _authenticate_and_get_token(self, api_client: ApiClient) -> str:
         unauthorized_message = "Service account is not authorized to authenticate. Check if credentials are valid."
-        jwt = create_signed_jwt(self.bot_config.private_key, self.bot_config.username)
+        jwt = create_signed_jwt(self._bot_config.private_key, self._bot_config.username)
         req = AuthenticateRequest(token=jwt)
         try:
             token = await AuthenticationApi(api_client).pubkey_authenticate_post(req)
@@ -58,11 +58,11 @@ class BotAuthenticatorRSA(BotAuthenticator):
 
         :return: The pod's session token
         """
-        return await self._retrieve_token(self.login_api_client)
+        return await self._retrieve_token(self._login_api_client)
 
     async def retrieve_key_manager_token(self) -> str:
         """Make the api to the key manager server to get the key manager's token.
 
         :return: The key manager's token
         """
-        return await self._retrieve_token(self.relay_api_client)
+        return await self._retrieve_token(self._relay_api_client)
