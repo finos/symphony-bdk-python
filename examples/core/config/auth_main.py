@@ -1,7 +1,7 @@
 import asyncio
+
 from symphony.bdk.core.config.bdk_config_loader import BdkConfigLoader
 from symphony.bdk.core.symphony_bdk import SymphonyBdk
-from symphony.bdk.core.auth.exception.bdk_authentication_exception import *
 
 
 class AuthMain:
