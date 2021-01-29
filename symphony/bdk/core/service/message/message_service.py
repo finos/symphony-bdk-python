@@ -123,7 +123,7 @@ class MessageService:
             stream_id: str,
             message_id: str,
             attachment_id: str
-    ):
+    ) -> str:
         params = {
             'sid': stream_id,
             'file_id': attachment_id,
@@ -208,6 +208,7 @@ class MessageService:
     ) -> MessageMetadataResponse:
         params = {
             'message_id': message_id,
-            'session_token': self._auth_session.session_token
+            'session_token': self._auth_session.session_token,
+            'user_agent': ''
         }
         return await self._default_api.v1_admin_messages_message_id_metadata_relationships_get(**params)

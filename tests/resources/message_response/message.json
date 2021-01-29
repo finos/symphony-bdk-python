@@ -1,0 +1,19 @@
+{
+    "messageId": "-AANBHKtUC-2q6_0WSjBGX___pHnSfBKdA",
+    "timestamp": 1572372615137,
+    "message": "<div data-format=\"PresentationML\" data-version=\"2.0\">Hello world</div>",
+    "user": {
+        "userId": 7078106482890,
+        "firstName": "John",
+        "lastName": "Doe",
+        "displayName": "John Doe",
+        "email": "john_doe@symphony.com",
+        "username": "john_doe"
+    },
+    "stream": {
+        "streamId": "YuK1c2y2yuie6-UfQnjSPX___pQEn69idA",
+        "streamType": "ROOM"
+    },
+    "originalFormat": "com.symphony.messageml.v2",
+    "sid": "a4d08d18-0729-4b54-9c4568da"
+}
