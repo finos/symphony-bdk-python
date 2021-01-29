@@ -16,10 +16,10 @@ class MessageMain:
         try:
             message_service = await bdk.messages()
             with open("/path/to/attachment1", "rb") as file1, \
-                    open("/path/to/attachment1", "rb") as file2:
+                    open("/path/to/attachment2", "rb") as file2:
                 await message_service.blast_message(
                     [stream_id_1, stream_id_2],
-                    "<messageML>asd</messageML>",
+                    "<messageML>Hello, World!</messageML>",
                     attachment=[file1, file2]
                 )
 
