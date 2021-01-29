@@ -38,6 +38,12 @@ class SymphonyBdk:
         return self._bot_session
 
     async def messages(self):
+        """
+        Get the MessageService from the BDK entry point.
+
+        :return: The MessageService instance.
+
+        """
         if self._message_service is None:
             self._message_service = MessageService(
                 MultiAttachmentsMessagesApi(self._agent_client),
