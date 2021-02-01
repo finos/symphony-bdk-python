@@ -26,7 +26,8 @@ class RealTimeEventListener:
 
     """
 
-    def is_accepting_event(self, event: V4Event, username: str) -> bool:
+    @staticmethod
+    def is_accepting_event(event: V4Event, username: str) -> bool:
         # should check if the event is passed correctly.
         # i.e is the event passed possibly None, empty ..etc
         initiator = event.initiator

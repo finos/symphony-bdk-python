@@ -48,8 +48,22 @@ class AbstractDatafeedLoop(DatafeedLoop, ABC):
         self.bdk_config = config
         self.api_client = datafeed_api.api_client
         self.dispatch_dict = {
-            'MESSAGESENT': ('on_message_sent', 'message_sent')
-        }
+            'MESSAGESENT': ('on_message_sent', 'message_sent'),
+            'SHAREDPOST': ('on_shared_post', 'shared_post'),
+            'INSTANTMESSAGECREATED': ('on_instant_message_created', 'instant_message_created'),
+            'ROOMCREATED': ('on_room_created', 'room_created'),
+            'ROOMUPDATED': ('on_room_updated', 'room_updated'),
+            'ROOMDEACTIVATED': ('on_room_deactivated', 'room_deactivated'),
+            'ROOMREACTIVATED': ('on_room_reactivated', 'room_reactivated'),
+            'USERREQUESTEDTOJOINROOM': ('on_user_requested_to_join_room', 'user_requested_to_join_room'),
+            'USERJOINEDROOM': ('on_user_joined_room', 'user_joined_room'),
+            'USERLEFTROOM': ('on_user_left_room', 'user_left_room'),
+            'ROOMMEMBERPROMOTEDTOOWNER': ('on_room_member_promoted_to_owner', 'room_member_promoted_to_owner'),
+            'ROOMMEMBERDEMOTEDFROMOWNER': ('on_room_demoted_from_owner', 'room_member_demoted_from_owner'),
+            'CONNECTIONREQUESTED': ('on_connection_requested', 'connection_requested'),
+            'CONNECTIONACCEPTED': ('on_connection_accepted', 'connection_accepted'),
+            'SYMPHONYELEMENTSACTION': ('on_symphony_elements_action', 'symphony_elements_action'),
+            'MESSAGESUPPRESSED': ('on_message_suppressed', 'message_suppressed')}
 
     def subscribe(self, listener):
         self.listeners.append(listener)

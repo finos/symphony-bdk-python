@@ -11,6 +11,7 @@ class BdkConfig(BdkServerConfig):
     :param **config: dict Configuration parameters
     :return self: BdkConfig instance
     """
+
     def __init__(self, **config):
         super().__init__(scheme=config.get("scheme"), host=config.get("host"), port=config.get("port"),
                          context=config.get("context"))
