@@ -245,12 +245,14 @@ class ApiClient(object):
             collection_types = (dict)
         for k, v in params.items() if isinstance(params, dict) else params:  # noqa: E501
             if isinstance(v, collection_types): # v is instance of collection_type, formatting as application/json
-                 v = json.dumps(v, ensure_ascii=False).encode("utf-8")
-                 field = RequestField(k, v)
-                 field.make_multipart(content_type="application/json; charset=utf-8")
-                 new_params.append(field)
+                v = json.dumps(v, ensure_ascii=False).encode("utf-8")
+                field = RequestField(k, v)
+                field.make_multipart(content_type="application/json; charset=utf-8")
+                new_params.append(field)
+            elif isinstance(v, str):
+                params.append((k, (v, "text/plain; charset=utf-8")))
             else:
-                 new_params.append((k, v))
+                new_params.append((k, v))
         return new_params
 
     @classmethod
