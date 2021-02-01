@@ -42,24 +42,24 @@ class OnDiskDatafeedIdRepository(DatafeedIdRepository):
 
     def write(self, datafeed_id, agent_base_path=""):
         content = datafeed_id + "@" + agent_base_path
-        self._get_datafeed_id_file().write_text(content)
+        self.__get_datafeed_id_file().write_text(content)
 
-    def read(self):
-        content = self._read_datafeed_information()
+    def read(self) -> str:
+        content = self.__read_datafeed_information()
         if content:
             datafeed_id = content.split("@")[0]
             return datafeed_id
         return ""
 
-    def read_agent_base_path(self):
-        content = self._read_datafeed_information()
+    def read_agent_base_path(self) -> str:
+        content = self.__read_datafeed_information()
         if content:
             agent_base_path = content.split("@")[1]
             return agent_base_path
         return ""
 
-    def _read_datafeed_information(self):
-        datafeed_id_path = self._get_datafeed_id_file()
+    def __read_datafeed_information(self) -> str:
+        datafeed_id_path = self.__get_datafeed_id_file()
         try:
             lines = datafeed_id_path.read_text(encoding='utf-8')
             first_line = lines.split("\n")[0]
@@ -70,7 +70,7 @@ class OnDiskDatafeedIdRepository(DatafeedIdRepository):
             print("No persisted datafeed id could be retrieved from disk", e)
             return ""
 
-    def _get_datafeed_id_file(self) -> Path:
+    def __get_datafeed_id_file(self) -> Path:
         filepath = self.config.datafeed.get_id_file_path()
         if filepath.is_dir():
             filepath = filepath / OnDiskDatafeedIdRepository.DATAFEED_ID_FILE
