@@ -13,5 +13,5 @@ async def test_refresh():
 
     auth_session = AuthSession(mock_bot_authenticator)
     await auth_session.refresh()
-    assert auth_session.session_token == "session_token"
-    assert auth_session.key_manager_token == "km_token"
+    assert await auth_session.session_token == "session_token"
+    assert await auth_session.key_manager_token == "km_token"

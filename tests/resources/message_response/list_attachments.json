@@ -1,0 +1,34 @@
+{
+  "value": [
+    {
+        "messageId": "PYLHNm/1K6p...peOpj+FbQ",
+        "userId": "USER_ID",
+        "ingestionDate": 1548089933946,
+        "fileId": "internal_14362370637825%2FT2vTuh%2BgWTtZFQtI%2FHDXYg%3D%3D",
+        "name": "butterfly.jpg",
+        "size": 70186,
+        "contentType": "image/jpeg",
+        "previews": [
+            {
+                "fileId": "internal_14362370637825%2F7hTa3TGPSGtiFunpolPnBg%3D%3D",
+                "width": 600
+            }
+        ]
+    },
+    {
+        "messageId": "KpjYuzMLR+JK1co7QBfukX///peOpZmdbQ==",
+        "userId": "USER_ID",
+        "ingestionDate": 1548089976418,
+        "fileId": "internal_14362370637825%2FeM6zGAILWFakDObCwMANrw%3D%3D",
+        "name": "car.png",
+        "size": 15754,
+        "contentType": "image/png",
+        "previews": [
+            {
+                "fileId": "internal_14362370637825%2FaDuc%2FDRVOGwkvXzrwN49gg%3D%3D",
+                "width": 600
+            }
+        ]
+    }
+  ]
+}

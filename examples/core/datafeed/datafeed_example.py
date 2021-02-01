@@ -13,14 +13,11 @@ class AuthMain:
     async def run():
 
         config = BdkConfigLoader.load_from_symphony_dir("config.yaml")
-        bdk = SymphonyBdk(config)
-        try:
-            auth_session = await bdk.bot_session()
-            print("authentication successful", auth_session.session_token, auth_session.key_manager_token, sep="\n")
-            bdk.datafeed().subscribe(RealTimeEventListenerImpl())
-            await bdk.datafeed().start()
-        finally:
-            await bdk.close_clients()
+
+        async with SymphonyBdk(config) as bdk:
+            datafeed_loop = bdk.datafeed()
+            datafeed_loop.subscribe(RealTimeEventListenerImpl())
+            await datafeed_loop.start()
 
 
 class RealTimeEventListenerImpl(RealTimeEventListener):
