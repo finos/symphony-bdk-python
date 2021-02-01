@@ -28,9 +28,9 @@ class DatafeedLoopV1(AbstractDatafeedLoop):
         self.started = False
 
     async def read_datafeed(self):
-        events = await self.datafeed_api.v4_datafeed_id_read_get(self.datafeed_id,
-                                                                 self.auth_session.session_token,
-                                                                 self.auth_session.key_manager_token)
+        events = await self.datafeed_api.v4_datafeed_id_read_get(id=self.datafeed_id,
+                                                                 session_token=self.auth_session.session_token,
+                                                                 key_manager_token=self.auth_session.key_manager_token)
         if events is not None and not (events.value == []):  # need to check if the call ever return None
             self.handle_v4_event_list(events.value)
 
@@ -38,11 +38,8 @@ class DatafeedLoopV1(AbstractDatafeedLoop):
         return self.datafeed_repository.read()
 
     async def create_datafeed_and_persist(self):
-        params = {
-            'session_token': self.auth_session.session_token,
-            'key_manager_token': self.auth_session.key_manager_token,
-        }
-        response = await self.datafeed_api.v4_datafeed_create_post(**params)
+        response = await self.datafeed_api.v4_datafeed_create_post(session_token=self.auth_session.session_token,
+                                                                   key_manager_token=self.auth_session.key_manager_token)
         datafeed_id = response.id
         self.datafeed_repository.write(response.id)
         return datafeed_id

@@ -86,8 +86,3 @@ class AbstractDatafeedLoop(DatafeedLoop, ABC):
             listener_method(event.initiator, getattr(event.payload, payload_field_name))
         except KeyError:
             print(f"Received event with an unknown type: {event.type}")
-
-    def handle_event(self, event: V4Event):
-        # try:
-        #     event.type
-        pass

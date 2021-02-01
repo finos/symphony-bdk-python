@@ -42,10 +42,7 @@ class OnDiskDatafeedIdRepository(DatafeedIdRepository):
 
     def write(self, datafeed_id, agent_base_path=""):
         content = datafeed_id + "@" + agent_base_path
-        try:
-            self._get_datafeed_id_file().write_text(content, encoding='utf-8')
-        except ValueError:
-            raise ValueError("Error occurred when writing the datafeed Id")
+        self._get_datafeed_id_file().write_text(content)
 
     def read(self):
         content = self._read_datafeed_information()
