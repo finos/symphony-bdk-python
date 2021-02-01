@@ -32,28 +32,28 @@ class DatafeedLoopV1(AbstractDatafeedLoop):
 
     async def start(self):
         if self.datafeed_id == "":
-            self.datafeed_id = await self.__create_datafeed_and_persist()
+            self.datafeed_id = await self._create_datafeed_and_persist()
         self.started = True
         while self.started:
             try:
-                await self.__read_datafeed()
+                await self._read_datafeed()
             except ApiException as e:
                 if e.status == 400:
-                    self.datafeed_id = await self.__create_datafeed_and_persist()
+                    self.datafeed_id = await self._create_datafeed_and_persist()
                 else:
                     raise e
 
     def stop(self):
         self.started = False
 
-    async def __read_datafeed(self):
+    async def _read_datafeed(self):
         events = await self.datafeed_api.v4_datafeed_id_read_get(id=self.datafeed_id,
                                                                  session_token=self.auth_session.session_token,
                                                                  key_manager_token=self.auth_session.key_manager_token)
         if events is not None and not (events.value == []):  # need to check if the call ever return None
             self.handle_v4_event_list(events.value)
 
-    async def __create_datafeed_and_persist(self):
+    async def _create_datafeed_and_persist(self):
         response = await self.datafeed_api.v4_datafeed_create_post(session_token=self.auth_session.session_token,
                                                                    key_manager_token=self.auth_session.key_manager_token)
         datafeed_id = response.id
