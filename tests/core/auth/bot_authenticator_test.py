@@ -80,8 +80,8 @@ async def test_authenticate_bot(config, mocked_api_client):
         bot_authenticator = BotAuthenticatorRSA(config, login_api_client, relay_api_client)
         auth_session = await bot_authenticator.authenticate_bot()
 
-        assert auth_session.session_token == "session_token"
-        assert auth_session.key_manager_token == "km_token"
+        assert await auth_session.session_token == "session_token"
+        assert await auth_session.key_manager_token == "km_token"
 
 
 class MockedToken:

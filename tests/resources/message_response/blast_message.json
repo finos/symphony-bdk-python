@@ -1,0 +1,44 @@
+{
+  "messages": [
+    {
+      "messageId": "-AANBHKtUC-2q6_0WSjBGX___pHnSfBKdA-1",
+      "timestamp": 1572372615137,
+      "message": "<div data-format=\"PresentationML\" data-version=\"2.0\">Hello world</div>",
+      "user": {
+        "userId": 7078106482890,
+        "firstName": "John",
+        "lastName": "Doe",
+        "displayName": "John Doe",
+        "email": "john_doe@symphony.com",
+        "username": "john_doe"
+      },
+      "stream": {
+        "streamId": "stream_id1",
+        "streamType": "ROOM"
+      },
+      "userAgent": "Agent-2.63.0-SNAPSHOT-Windows 10-10.0",
+      "originalFormat": "com.symphony.messageml.v2",
+      "sid": "a4d08d18-0729-4b54-9c4568da"
+    },
+    {
+      "messageId": "-AANBHKtUC-2q6_0WSjBGX___pHnSfBKdA-2",
+      "timestamp": 1572372615137,
+      "message": "<div data-format=\"PresentationML\" data-version=\"2.0\">Hello world</div>",
+      "user": {
+        "userId": 7078106482890,
+        "firstName": "John",
+        "lastName": "Doe",
+        "displayName": "John Doe",
+        "email": "john_doe@symphony.com",
+        "username": "john_doe"
+      },
+      "stream": {
+        "streamId": "stream_id2",
+        "streamType": "IM"
+      },
+      "userAgent": "Agent-2.63.0-SNAPSHOT-Windows 10-10.0",
+      "originalFormat": "com.symphony.messageml.v2",
+      "sid": "a4d08d18-0729-4b54-9c4568da"
+    }
+  ]
+}
