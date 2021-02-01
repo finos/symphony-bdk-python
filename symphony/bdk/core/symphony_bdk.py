@@ -3,7 +3,7 @@ from symphony.bdk.core.auth.authenticator_factory import AuthenticatorFactory
 from symphony.bdk.core.auth.auth_session import AuthSession
 
 from symphony.bdk.core.config.exception.bot_not_configured_exception import BotNotConfiguredException
-from symphony.bdk.core.datafeed.datafeed_loop_v1 import DatafeedLoopV1
+from symphony.bdk.core.service.datafeed.datafeed_loop_v1 import DatafeedLoopV1
 from symphony.bdk.gen.agent_api.datafeed_api import DatafeedApi
 
 

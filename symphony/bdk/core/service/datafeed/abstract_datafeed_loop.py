@@ -5,7 +5,7 @@ from symphony.bdk.core.config.model.bdk_config import BdkConfig
 from symphony.bdk.core.auth.auth_session import AuthSession
 
 from symphony.bdk.gen.agent_api.datafeed_api import DatafeedApi
-from symphony.bdk.core.datafeed.real_time_event_listener import RealTimeEventListener
+from symphony.bdk.core.service.datafeed.real_time_event_listener import RealTimeEventListener
 from symphony.bdk.gen.agent_model.v4_event import V4Event
 
 

@@ -1,5 +1,5 @@
-from symphony.bdk.core.datafeed.abstract_datafeed_loop import AbstractDatafeedLoop
-from symphony.bdk.core.datafeed.on_disk_datafeed_id_repository import OnDiskDatafeedIdRepository
+from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import AbstractDatafeedLoop
+from symphony.bdk.core.service.datafeed.on_disk_datafeed_id_repository import OnDiskDatafeedIdRepository
 from symphony.bdk.gen.exceptions import ApiException
 
 
