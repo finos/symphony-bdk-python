@@ -37,11 +37,9 @@ class DatafeedLoopV1(AbstractDatafeedLoop):
         while self.started:
             try:
                 await self.__read_datafeed()
-            except ApiException:
-                try:
+            except ApiException as e:
+                if e.status == 400:
                     self.datafeed_id = await self.__create_datafeed_and_persist()
-                except ApiException:
-                    raise
 
     def stop(self):
         self.started = False
