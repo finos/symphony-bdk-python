@@ -10,13 +10,10 @@ class AuthMain:
     async def run():
 
         config_3 = BdkConfigLoader.load_from_symphony_dir("config.yaml")
-        bdk = SymphonyBdk(config_3)
-        try:
+        async with SymphonyBdk(config_3) as bdk:
             auth_session = await bdk.bot_session()
             print(auth_session.key_manager_token)
             print(auth_session.session_token)
-        finally:
-            await bdk.close_clients()
 
 
 if __name__ == "__main__":

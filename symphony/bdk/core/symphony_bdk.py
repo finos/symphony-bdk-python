@@ -16,6 +16,12 @@ class SymphonyBdk:
     BDK entry point
     """
 
+    async def __aenter__(self):
+        return self
+
+    async def __aexit__(self, exc_type, exc_val, exc_tb):
+        await self._close_clients()
+
     def __init__(self, config):
         self._config = config
         self._api_client_factory = ApiClientFactory(config)
@@ -37,7 +43,7 @@ class SymphonyBdk:
             self._bot_session = await self._authenticator_factory.get_bot_authenticator().authenticate_bot()
         return self._bot_session
 
-    async def messages(self):
+    async def messages(self) -> MessageService:
         """
         Get the MessageService from the BDK entry point.
 
@@ -57,7 +63,7 @@ class SymphonyBdk:
             )
         return self._message_service
 
-    async def close_clients(self):
+    async def _close_clients(self):
         """
         Close all the existing api clients created by the api client factory.
         """

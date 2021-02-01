@@ -27,8 +27,8 @@ class MessageMain:
         stream_id_1 = "stream-id-1"
 
         bdk_config = BdkConfigLoader.load_from_file("path/to/config.yaml")
-        bdk = SymphonyBdk(bdk_config)
-        try:
+    
+        async with SymphonyBdk(bdk_config) as bdk:
             message_service = await bdk.messages()
             with open("/path/to/attachment1", "rb") as file1, \
                     open("/path/to/attachment2", "rb") as file2:
@@ -37,9 +37,6 @@ class MessageMain:
                     "<messageML>Hello, World!</messageML>",
                     attachment=[file1, file2]
                 )
-
-        finally:
-            await bdk.close_clients()
 
 
 if __name__ == "__main__":
