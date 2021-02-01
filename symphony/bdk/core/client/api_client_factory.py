@@ -11,7 +11,7 @@ class ApiClientFactory:
         self._login_client = self._get_api_client(self._config.pod, '/login')
         self._pod_client = self._get_api_client(self._config.pod, '/pod')
         self._relay_client = self._get_api_client(self._config.key_manager, '/relay')
-        self._agent_client = self._get_api_client(self._config.session_auth, '/sessionauth')
+        self._agent_client = self._get_api_client(self._config.session_auth, '/agent')
         self._session_auth_client = self._get_api_client(self._config.session_auth, '/sessionauth')
 
     def get_login_client(self) -> ApiClient:
