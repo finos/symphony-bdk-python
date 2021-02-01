@@ -20,7 +20,7 @@ class SymphonyBdk:
         return self
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
-        await self._close_clients()
+        await self.close_clients()
 
     def __init__(self, config):
         self._config = config
@@ -63,7 +63,7 @@ class SymphonyBdk:
             )
         return self._message_service
 
-    async def _close_clients(self):
+    async def close_clients(self):
         """
         Close all the existing api clients created by the api client factory.
         """
