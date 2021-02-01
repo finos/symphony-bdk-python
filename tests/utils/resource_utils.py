@@ -1,4 +1,6 @@
 from pathlib import Path
+import json
+from types import SimpleNamespace
 
 
 def get_resource_filepath(relative_path, as_text=True):
@@ -8,6 +10,18 @@ def get_resource_filepath(relative_path, as_text=True):
         return str(resource_path.resolve())
     else:
         return resource_path.resolve()
+
+
+def get_resource_content(relative_path):
+    return get_resource_filepath(relative_path, as_text=False).read_text()
+
+
+def object_from_json(json_content):
+    return json.loads(json_content, object_hook=lambda d: SimpleNamespace(**d))
+
+
+def object_from_json_relative_path(relative_path):
+    return object_from_json(get_resource_content(relative_path))
 
 
 def get_config_resource_filepath(relative_path, as_text=True):

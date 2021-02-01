@@ -1,0 +1,54 @@
+{
+  "author":
+  	{
+      "userId": "7078106103901",
+      "firstName": "Gustav",
+      "lastName": "Mahler",
+      "displayName": "Gustav Mahler",
+      "email": "gustav.mahler@music.org",
+      "userName": "gmahler",
+      "timestamp": "1531968487845"
+    },
+  "read": [
+    {
+      "userId": "7078106103901",
+      "firsName": "Gustav",
+      "lastName": "Mahler",
+      "displayName": "Gustav Mahler",
+      "email": "gustav.mahler@music.org",
+      "userName": "gmahler",
+      "timestamp": "1489769156271"
+    },
+    {
+      "userId": "7078106103902",
+      "firsName": "Hildegard",
+      "lastName": "Bingen",
+      "displayName": "Hildegard Bingen",
+      "email": "hildegard.bingen@music.org",
+      "userName": "hbingen",
+      "timestamp": "1487352923000"
+    }
+  ],
+  "delivered": [
+    {
+      "userId": "7078106103903",
+      "firsName": "Franz",
+      "lastName": "Liszt",
+      "displayName": "Franz Liszt",
+      "email": "franz.liszt@music.org",
+      "userName": "fliszt",
+      "timestamp": "1484674523000"
+    }
+  ],
+  "sent": [
+    {
+      "userId": "7078106103904",
+      "firsName": "Benjamin",
+      "lastName": "Britten",
+      "displayName": "Benjamin Britten",
+      "email": "benjamin.britten@music.org",
+      "userName": "gmahler",
+      "timestamp": "1484156123000"
+    }
+  ]
+}
