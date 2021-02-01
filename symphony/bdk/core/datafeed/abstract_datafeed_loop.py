@@ -41,6 +41,11 @@ class DatafeedLoop(ABC):
 
 
 class AbstractDatafeedLoop(DatafeedLoop, ABC):
+    """Base class for implementing the datafeed services.
+
+    A datafeed services can help a bot subscribe or unsubscribe to a RealTimeEventListener and handle the received
+    event by the subscribed listeners.
+    """
     def __init__(self, datafeed_api: DatafeedApi, auth_session: AuthSession, config: BdkConfig):
         self.datafeed_api = datafeed_api
         self.listeners = []

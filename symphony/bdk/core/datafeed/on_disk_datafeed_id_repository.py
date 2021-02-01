@@ -13,7 +13,7 @@ class DatafeedIdRepository(ABC):
         """Persists the created datafeed id into the storage.
 
         :param datafeed_id: the datafeed id to be persisted
-        :param agent_base_path: the afent base path (i.e. scheme, host, port, context) to be persisted
+        :param agent_base_path: the agent base path (i.e. scheme, host, port, context) to be persisted
         """
         pass
 
@@ -35,6 +35,7 @@ class DatafeedIdRepository(ABC):
 
 
 class OnDiskDatafeedIdRepository(DatafeedIdRepository):
+    """Implementation of DatafeedIdRepository interface for persisting a datafeed id on disk."""
     DATAFEED_ID_FILE = "datafeed.id"
 
     def __init__(self, config: BdkConfig):
