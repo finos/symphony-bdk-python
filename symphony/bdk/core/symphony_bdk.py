@@ -29,38 +29,34 @@ class SymphonyBdk:
         self._agent_client = self._api_client_factory.get_agent_client()
 
         self._authenticator_factory = AuthenticatorFactory(config, api_client_factory=self._api_client_factory)
-        self._bot_session = None
-        self._message_service = None
+        self._bot_session = AuthSession(self._authenticator_factory.get_bot_authenticator())
+        self._message_service = MessageService(
+            MultiAttachmentsMessagesApi(self._agent_client),
+            MessageApi(self._pod_client),
+            MessageSuppressionApi(self._pod_client),
+            StreamsApi(self._pod_client),
+            PodApi(self._pod_client),
+            AttachmentsApi(self._agent_client),
+            DefaultApi(self._pod_client),
+            self._bot_session
+        )
 
-    async def bot_session(self) -> AuthSession:
+    def bot_session(self) -> AuthSession:
         """
         Get the Bot authentication session. If the bot is not authenticated yet, perform the authentication for a new
         session.
 
         :return: The bot authentication session.
         """
-        if self._bot_session is None:
-            self._bot_session = await self._authenticator_factory.get_bot_authenticator().authenticate_bot()
         return self._bot_session
 
-    async def messages(self) -> MessageService:
+    def messages(self) -> MessageService:
         """
         Get the MessageService from the BDK entry point.
 
         :return: The MessageService instance.
 
         """
-        if self._message_service is None:
-            self._message_service = MessageService(
-                MultiAttachmentsMessagesApi(self._agent_client),
-                MessageApi(self._pod_client),
-                MessageSuppressionApi(self._pod_client),
-                StreamsApi(self._pod_client),
-                PodApi(self._pod_client),
-                AttachmentsApi(self._agent_client),
-                DefaultApi(self._pod_client),
-                await self.bot_session()
-            )
         return self._message_service
 
     async def close_clients(self):

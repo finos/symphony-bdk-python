@@ -29,7 +29,7 @@ class MessageMain:
         bdk_config = BdkConfigLoader.load_from_file("path/to/config.yaml")
     
         async with SymphonyBdk(bdk_config) as bdk:
-            message_service = await bdk.messages()
+            message_service = bdk.messages()
             with open("/path/to/attachment1", "rb") as file1, \
                     open("/path/to/attachment2", "rb") as file2:
                 await message_service.send_message(

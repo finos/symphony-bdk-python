@@ -65,8 +65,8 @@ class MessageService:
         params = {
             'sid': stream_id,
             'since': since,
-            'session_token': self._auth_session.session_token,
-            'key_manager_token': self._auth_session.key_manager_token,
+            'session_token': await self._auth_session.session_token,
+            'key_manager_token': await self._auth_session.key_manager_token,
             'skip': skip,
             'limit': limit
         }
@@ -99,8 +99,8 @@ class MessageService:
         """
         params = {
             'sid': stream_id,
-            'session_token': self._auth_session.session_token,
-            'key_manager_token': self._auth_session.key_manager_token,
+            'session_token': await self._auth_session.session_token,
+            'key_manager_token': await self._auth_session.key_manager_token,
             'message': message,
             'data': data,
             'version': version
@@ -138,8 +138,8 @@ class MessageService:
         """
         params = {
             'sids': stream_ids,
-            'session_token': self._auth_session.session_token,
-            'key_manager_token': self._auth_session.key_manager_token,
+            'session_token': await self._auth_session.session_token,
+            'key_manager_token': await self._auth_session.key_manager_token,
             'message': message,
             'data': data,
             'version': version
@@ -165,8 +165,8 @@ class MessageService:
         """
         params = {
             'message_list': V4MessageImportList(value=messages),
-            'session_token': self._auth_session.session_token,
-            'key_manager_token': self._auth_session.key_manager_token
+            'session_token': await self._auth_session.session_token,
+            'key_manager_token': await self._auth_session.key_manager_token
         }
         import_response_list = await self._messages_api.v4_message_import_post(**params)
         return import_response_list.value
@@ -191,8 +191,8 @@ class MessageService:
             'sid': stream_id,
             'file_id': attachment_id,
             'message_id': message_id,
-            'session_token': self._auth_session.session_token,
-            'key_manager_token': self._auth_session.key_manager_token
+            'session_token': await self._auth_session.session_token,
+            'key_manager_token': await self._auth_session.key_manager_token
         }
         return await self._attachment_api.v1_stream_sid_attachment_get(**params)
 
@@ -210,7 +210,7 @@ class MessageService:
         """
         params = {
             'id': message_id,
-            'session_token': self._auth_session.session_token
+            'session_token': await self._auth_session.session_token
         }
         return await self._message_suppression_api.v1_admin_messagesuppression_id_suppress_post(**params)
 
@@ -229,7 +229,7 @@ class MessageService:
         """
         params = {
             'mid': message_id,
-            'session_token': self._auth_session.session_token
+            'session_token': await self._auth_session.session_token
         }
         return await self._message_api.v1_message_mid_status_get(**params)
 
@@ -241,7 +241,7 @@ class MessageService:
 
         """
         params = {
-            'session_token': self._auth_session.session_token
+            'session_token': await self._auth_session.session_token
         }
         type_list = await self._pod_api.v1_files_allowed_types_get(**params)
         return type_list.value
@@ -260,8 +260,8 @@ class MessageService:
         """
         params = {
             'id': message_id,
-            'session_token': self._auth_session.session_token,
-            'key_manager_token': self._auth_session.key_manager_token
+            'session_token': await self._auth_session.session_token,
+            'key_manager_token': await self._auth_session.key_manager_token
         }
         return await self._messages_api.v1_message_id_get(**params)
 
@@ -288,7 +288,7 @@ class MessageService:
         """
         params = {
             'sid': stream_id,
-            'session_token': self._auth_session.session_token,
+            'session_token': await self._auth_session.session_token,
             'limit': limit,
             'sort_dir': sort_dir
         }
@@ -313,7 +313,7 @@ class MessageService:
         """
         params = {
             'message_id': message_id,
-            'session_token': self._auth_session.session_token
+            'session_token': await self._auth_session.session_token
         }
         return await self._default_api.v1_admin_messages_message_id_receipts_get(**params)
 
@@ -334,7 +334,7 @@ class MessageService:
         """
         params = {
             'message_id': message_id,
-            'session_token': self._auth_session.session_token,
+            'session_token': await self._auth_session.session_token,
             'user_agent': ''
         }
         return await self._default_api.v1_admin_messages_message_id_metadata_relationships_get(**params)
