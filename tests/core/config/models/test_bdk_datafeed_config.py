@@ -15,7 +15,7 @@ def test_empty_datafeed_config():
 
     assert datafeed_config.id_file_path == ""
     assert isinstance(datafeed_config.get_id_file_path(), Path)
-    assert datafeed_config.get_id_file_path() == Path(".")
+    assert datafeed_config.get_id_file_path().resolve() == Path(".").resolve()
 
 
 def test_version(datafeed_version):
@@ -24,8 +24,5 @@ def test_version(datafeed_version):
 
 
 def test_get_id_file_path():
-    datafeed_config = BdkDatafeedConfig({})
-    assert datafeed_config.get_id_file_path() == Path(".")
-
-    datafeed_config.id_file_path = Path("dummy_path").resolve()
-    assert datafeed_config.id_file_path == Path("dummy_path").resolve()
+    datafeed_config = BdkDatafeedConfig({"idFilePath": Path("dummy_path")})
+    assert datafeed_config.get_id_file_path().resolve() == Path("dummy_path").resolve()

@@ -7,6 +7,7 @@ class BdkDatafeedConfig:
         self.id_file_path = ""
         self.version = "v1"
         if config is not None:
+            self.id_file_path = config.get("idFilePath") if "idFilePath" in config else ""
             self.version = config.get("version") if "version" in config else "v1"
 
     def get_id_file_path(self):
