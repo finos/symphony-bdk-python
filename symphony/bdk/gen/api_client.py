@@ -218,7 +218,7 @@ class ApiClient(object):
             response_data.data = response_data.data.decode(encoding)
 
         # deserialize response data
-        if response_type:
+        if response_type and response_data.status != 204:
             return_data = self.deserialize(
                 response_data,
                 response_type,
