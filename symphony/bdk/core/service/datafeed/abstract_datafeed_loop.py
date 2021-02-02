@@ -78,8 +78,6 @@ class AbstractDatafeedLoop(DatafeedLoop, ABC):
 
     def handle_v4_event_list(self, events: List[V4Event]):
         for event in events:
-            if event.type is None:  # should we ever check this ? Isn't the generated code supposed to check for nullity or not the right type and raise an exception
-                continue
             for listener in self.listeners:
                 if listener.is_accepting_event(event, self.bdk_config.bot.username):
                     self.dispatch_on_event_type(listener, event)
@@ -89,5 +87,7 @@ class AbstractDatafeedLoop(DatafeedLoop, ABC):
             listener_method_name, payload_field_name = self.dispatch_dict[event.type]
             listener_method = getattr(listener, listener_method_name)
             listener_method(event.initiator, getattr(event.payload, payload_field_name))
+        except AttributeError:
+            print(f"The event has no type attribute {event}")
         except KeyError:
             print(f"Received event with an unknown type: {event.type}")

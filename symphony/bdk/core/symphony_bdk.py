@@ -76,8 +76,7 @@ class SymphonyBdk:
 
     def get_datafeed_loop(self) -> DatafeedLoopV1:
         if self._config.is_bot_configured():
-            datafeed_agent_client = self._api_client_factory.get_agent_client()
-            return DatafeedLoopV1(DatafeedApi(datafeed_agent_client), self._bot_session, self._config)
+            return DatafeedLoopV1(DatafeedApi(self._agent_client), self._bot_session, self._config)
         else:
             raise BotNotConfiguredException
 
