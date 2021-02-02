@@ -137,6 +137,8 @@ class RESTClientObject(object):
                                        value=v[1],
                                        filename=v[0],
                                        content_type=v[2])
+                    elif isinstance(v, tuple) and len(v) == 2:
+                        data.add_field(k, v[0], content_type=v[1])
                     else:
                         data.add_field(k, v)
                 args["data"] = data
