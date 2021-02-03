@@ -9,7 +9,7 @@ def readme():
 setuptools.setup(
     name="sym_api_client_python",
 
-    version="1.3.1",
+    version="1.3.2",
     author="Symphony Platform Solutions",
     author_email="platformsolutions@symphony.com",
     description="Symphony REST API - Python Client",
@@ -28,7 +28,7 @@ setuptools.setup(
         'python-json-logger==0.1.11',
         'beautifulsoup4==4.8.0',
         'Jinja2==2.10.1',
-        'requests_pkcs12==1.4',
+        'requests_pkcs12==1.9',
         'requests-toolbelt==0.9.1',
         'requests-mock>=1.7.0',
         'yattag==1.12.2',
@@ -36,9 +36,9 @@ setuptools.setup(
     ],
     tests_require=['pytest'],
     include_package_data=True,
-    classifiers=(
+    classifiers=[
         "Programming Language :: Python :: 3.6",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
-    ),
+    ],
 )

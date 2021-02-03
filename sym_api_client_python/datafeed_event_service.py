@@ -5,6 +5,8 @@ import logging
 import datetime
 from collections import namedtuple
 
+from asyncio import CancelledError
+
 #TODO: These imports are duplicated over the abstract class to avoid errors in the Async version
 from .exceptions.UnauthorizedException import UnauthorizedException
 from .exceptions.APIClientErrorException import APIClientErrorException
@@ -232,7 +234,10 @@ class AsyncDataFeedEventService(AbstractDatafeedEventService):
         while not self.stop:
             try:
                 events = await self.datafeed_client.read_datafeed_async(self.datafeed_id)
-
+            except CancelledError as exc:
+                log.info("Cancel request received. Stopping datafeed...")
+                await self.deactivate_datafeed()
+                raise
             except Exception as exc:
                 try:
                     await self.handle_datafeed_errors(exc)
