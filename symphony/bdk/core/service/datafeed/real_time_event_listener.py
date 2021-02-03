@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+from symphony.bdk.gen import ApiAttributeError
 from symphony.bdk.gen.agent_model.v4_event import V4Event
 from symphony.bdk.gen.agent_model.v4_message_sent import V4MessageSent
 from symphony.bdk.gen.agent_model.v4_initiator import V4Initiator
@@ -37,8 +38,10 @@ class RealTimeEventListener:
         :param username: Username of the initiator.
         :return: True if the event is accepted, False otherwise
         """
-        initiator_username = event.initiator.user.username
-        return initiator_username is not None and not (initiator_username == username)
+        try:
+            return not (event.initiator.user.username == username)
+        except ApiAttributeError:
+            return False
 
     def on_message_sent(self, initiator: V4Initiator, event: V4MessageSent):
         """ Called when a MESSAGESENT event is received.

@@ -46,6 +46,7 @@ class AbstractDatafeedLoop(DatafeedLoop, ABC):
     A datafeed services can help a bot subscribe or unsubscribe to a RealTimeEventListener and handle the received
     event by the subscribed listeners.
     """
+
     def __init__(self, datafeed_api: DatafeedApi, auth_session: AuthSession, config: BdkConfig):
         self.datafeed_api = datafeed_api
         self.listeners = []
@@ -87,7 +88,8 @@ class AbstractDatafeedLoop(DatafeedLoop, ABC):
             listener_method_name, payload_field_name = self.dispatch_dict[event.type]
             listener_method = getattr(listener, listener_method_name)
             listener_method(event.initiator, getattr(event.payload, payload_field_name))
-        except AttributeError:
-            print(f"The event has no type attribute {event}")
+        except AttributeError as e:
+            print(f"Attribute error while dispatching the {event}. {e}")
+            raise
         except KeyError:
             print(f"Received event with an unknown type: {event.type}")
