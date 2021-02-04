@@ -25,6 +25,7 @@ from symphony.bdk.gen.pod_model.feature import Feature
 from symphony.bdk.gen.pod_model.user_status import UserStatus
 from symphony.bdk.gen.pod_model.v2_user_create import V2UserCreate
 from symphony.bdk.gen.pod_model.v2_user_attributes import V2UserAttributes
+from symphony.bdk.gen.pod_model.user_suspension import UserSuspension
 
 
 @pytest.fixture()
@@ -657,3 +658,24 @@ async def test_list_audit_trail(audit_trail_api, user_service):
     assert len(audit_trail_initiator_list.items) == 2
     assert audit_trail_initiator_list.items[0].initiatorId == 1353716993
     assert audit_trail_initiator_list.items[1].authorizationRoles[0] == 'SUPER_ADMINISTRATOR'
+
+
+@pytest.mark.asyncio
+async def test_suspend_user(user_api, user_service):
+    user_api.v1_admin_user_user_id_suspension_update_put = AsyncMock()
+    user_api.v1_admin_user_user_id_suspension_update_put.return_value = object_from_json(
+        '{'
+        '   "format": "TEXT",'
+        '   "message": "User suspended with success"'
+        '}'
+    )
+
+    user_suspension = UserSuspension(suspended=True, suspended_until=1601596799999, suspension_reason='testing')
+
+    await user_service.suspend_user(1234, user_suspension)
+
+    user_api.v1_admin_user_user_id_suspension_update_put.assert_called_with(
+        user_id=1234,
+        payload=user_suspension,
+        session_token='session_token'
+    )

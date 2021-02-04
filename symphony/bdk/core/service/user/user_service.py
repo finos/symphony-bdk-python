@@ -29,6 +29,7 @@ from symphony.bdk.gen.pod_model.v2_user_attributes import V2UserAttributes
 from symphony.bdk.gen.pod_model.v2_user_create import V2UserCreate
 from symphony.bdk.gen.pod_model.v2_user_detail import V2UserDetail
 from symphony.bdk.gen.pod_model.v2_user_list import V2UserList
+from symphony.bdk.gen.pod_model.user_suspension import UserSuspension
 
 
 class UserService:
@@ -77,7 +78,7 @@ class UserService:
         :return: Users found by user ids.
 
         """
-        user_ids_str = ','.join([str(user_id) for user_id in user_ids])
+        user_ids_str = ','.join(map(str, user_ids))
         params = {
             'uid': user_ids_str,
             'local': local,
@@ -702,3 +703,24 @@ class UserService:
         if after is not None:
             params['after'] = after
         return await self._audit_trail_api.v1_audittrail_privilegeduser_get(**params)
+
+    async def suspend_user(
+            self,
+            user_id: int,
+            user_suspension: UserSuspension
+    ) -> None:
+        """
+        Suspends or re-activates (unsuspend) a user account.
+        See: `Suspend User Account v1 <https://developers.symphony.com/restapi/v20.10/reference#suspend-user-v1>`_
+
+        :param user_id:         User id.
+        :param user_suspension: User suspension payload.
+
+        """
+        params = {
+            'user_id': user_id,
+            'payload': user_suspension,
+            'session_token': await self._auth_session.session_token
+        }
+
+        await self._user_api.v1_admin_user_user_id_suspension_update_put(**params)
