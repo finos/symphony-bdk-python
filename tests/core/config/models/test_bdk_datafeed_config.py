@@ -1,4 +1,4 @@
-from symphony.bdk.core.config.model.bdk_datafeed_config import BdkDatafeedConfig
+from symphony.bdk.core.config.model.bdk_datafeed_config import BdkDatafeedConfig, DF_V1
 from pathlib import Path
 import pytest
 
@@ -8,7 +8,6 @@ def datafeed_version(request):
     return request.param
 
 
-# maybe can find an alternative to cucumber
 def test_empty_datafeed_config():
     datafeed_config = BdkDatafeedConfig(None)
     assert datafeed_config.version == "v1"
@@ -18,9 +17,9 @@ def test_empty_datafeed_config():
     assert datafeed_config.get_id_file_path().resolve() == Path(".").resolve()
 
 
-def test_version(datafeed_version):
+def test_version_should_default_on_v1(datafeed_version):
     datafeed_config = BdkDatafeedConfig({"version": datafeed_version})
-    assert datafeed_config.version == datafeed_version
+    assert datafeed_config.version == DF_V1
 
 
 def test_get_id_file_path():

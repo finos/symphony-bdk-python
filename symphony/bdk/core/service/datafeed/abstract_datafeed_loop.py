@@ -1,3 +1,4 @@
+import logging
 from abc import ABC, abstractmethod
 from typing import List
 
@@ -84,12 +85,12 @@ class AbstractDatafeedLoop(DatafeedLoop, ABC):
                     self.dispatch_on_event_type(listener, event)
 
     def dispatch_on_event_type(self, listener: RealTimeEventListener, event: V4Event):
-        try:
-            listener_method_name, payload_field_name = self.dispatch_dict[event.type]
-            listener_method = getattr(listener, listener_method_name)
-            listener_method(event.initiator, getattr(event.payload, payload_field_name))
-        except AttributeError as e:
-            print(f"Attribute error while dispatching the {event}. {e}")
-            raise
-        except KeyError:
-            print(f"Received event with an unknown type: {event.type}")
+        if event.type not in self.dispatch_dict:
+            logging.info(f"Received event with an unknown type: {event.type}")
+            return
+
+        listener_method_name, payload_field_name = self.dispatch_dict[event.type]
+        listener_method = getattr(listener, listener_method_name)
+        event_field = getattr(event.payload, payload_field_name)
+
+        listener_method(event.initiator, event_field)

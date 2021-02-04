@@ -8,7 +8,7 @@ class DatafeedLoopV1(AbstractDatafeedLoop):
 
     This service will be started by calling :func:`~DatafeedLoopV1.start`.
 
-    On the vert first run, the datafeed will be created and the BDK bot will listen to this datafeed to receive
+    On the very first run, the datafeed will be created and the BDK bot will listen to this datafeed to receive
     real-time events. With datafeed service v1, we don't have the api endpoint to retrieve the datafeed id that a
     service account is listening to, so, the id of the created datafeed must be persisted in the bot side.
 
@@ -27,7 +27,7 @@ class DatafeedLoopV1(AbstractDatafeedLoop):
     def __init__(self, datafeed_api, auth_session, config, repository=None):
         super().__init__(datafeed_api, auth_session, config)
         self.datafeed_repository = OnDiskDatafeedIdRepository(config) if repository is None else repository
-        self.datafeed_id = self.retrieve_datafeed()
+        self.datafeed_id = self.datafeed_repository.read()
         self.started = False
 
     async def start(self):
@@ -59,6 +59,3 @@ class DatafeedLoopV1(AbstractDatafeedLoop):
         datafeed_id = response.id
         self.datafeed_repository.write(response.id)
         return datafeed_id
-
-    def retrieve_datafeed(self):
-        return self.datafeed_repository.read()

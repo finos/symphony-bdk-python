@@ -9,7 +9,7 @@ The datafeed service is a core service built on top of the Datafeed API and prov
 
 
 ## How to use
-The central component for the contract between bot developers and  the Datafeed API is the `DatafeedService`.
+The central component for the contract between bot developers and the Datafeed API is the `DatafeedLoop`.
 This service is accessible from the `SymphonyBdk` object by calling the `datafeed()` method.
 For instance:
 

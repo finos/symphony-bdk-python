@@ -1,3 +1,4 @@
+import logging
 from abc import ABC, abstractmethod
 from pathlib import Path
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
@@ -68,7 +69,7 @@ class OnDiskDatafeedIdRepository(DatafeedIdRepository):
                 return ""
             return first_line
         except (OSError, IndexError) as e:
-            print("No persisted datafeed id could be retrieved from disk", e)
+            logging.info("No persisted datafeed id could be retrieved from disk", e)
             return ""
 
     def _get_datafeed_id_file(self) -> Path:

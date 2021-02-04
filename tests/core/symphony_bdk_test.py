@@ -1,7 +1,7 @@
 from unittest.mock import patch
 
 import pytest
-from asyncmock import AsyncMock
+from unittest.mock import AsyncMock
 
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.auth.bot_authenticator import BotAuthenticatorRSA

@@ -159,7 +159,7 @@ async def test_retrieve_datafeed_from_datafeed_file(tmpdir, datafeed_api, auth_s
 
     datafeed_loop = datafeed_loop_v1(datafeed_api, auth_session, config)
 
-    assert datafeed_loop.retrieve_datafeed() == "8e7c8672-220"
+    assert datafeed_loop.datafeed_id == "8e7c8672-220"
 
 
 @pytest.mark.asyncio
@@ -173,7 +173,7 @@ async def test_retrieve_datafeed_from_invalid_datafeed_dir(tmpdir, datafeed_api,
 
     datafeed_loop = datafeed_loop_v1(datafeed_api, auth_session, config)
 
-    assert datafeed_loop.retrieve_datafeed() == "8e7c8672-220"
+    assert datafeed_loop.datafeed_id == "8e7c8672-220"
 
 
 @pytest.mark.asyncio
@@ -183,7 +183,7 @@ async def test_retrieve_datafeed_id_from_unknown_path(datafeed_api, auth_session
 
     datafeed_loop = datafeed_loop_v1(datafeed_api, auth_session, config)
 
-    assert datafeed_loop.retrieve_datafeed() == ""
+    assert datafeed_loop.datafeed_id == ""
 
 
 @pytest.mark.asyncio
@@ -195,7 +195,7 @@ async def test_retrieve_datafeed_id_from_empty_file(tmpdir, datafeed_api, auth_s
 
     datafeed_loop = datafeed_loop_v1(datafeed_api, auth_session, config)
 
-    assert datafeed_loop.retrieve_datafeed() == ""
+    assert datafeed_loop.datafeed_id == ""
 
 
 def test_handle_v4_event(datafeed_api, auth_session, config):

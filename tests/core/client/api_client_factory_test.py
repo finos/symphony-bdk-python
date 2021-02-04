@@ -1,5 +1,4 @@
 from unittest.mock import patch
-from asyncmock import AsyncMock
 
 import pytest
 
