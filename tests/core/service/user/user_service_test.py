@@ -328,7 +328,7 @@ async def test_update_avatar(user_api, user_service):
         session_token="session_token"
     )
 
-    with open(get_resource_filepath('user/lenna.png', as_text=True), 'rb') as f:
+    with open(get_resource_filepath('user/FINOS_icon_rgb.png', as_text=True), 'rb') as f:
         avatar_bytes = f.read()
         await user_service.update_avatar(1234, avatar_bytes)
 
