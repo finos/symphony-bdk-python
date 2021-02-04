@@ -1,0 +1,60 @@
+{
+   "users": [
+        {
+            "id": 15942919536460,
+            "emailAddress": "technicalwriter@symphony.com",
+            "firstName": "Technical",
+            "lastName": "Writer",
+            "displayName": "Technical Writer",
+            "title": "Technical Writer",
+            "company": "Symphony",
+            "department": "Marketing",
+            "username": "tw",
+            "accountType": "NORMAL",
+            "location": "France",
+            "avatars": [
+                {
+                    "size": "original",
+                    "url": "../avatars/static/150/default.png"
+                },
+                {
+                    "size": "small",
+                    "url": "../avatars/static/50/default.png"
+                }
+            ]
+        },
+        {
+            "id": 15942919536461,
+            "emailAddress": "serviceaccount@symphony.com",
+            "firstName": "null",
+            "lastName": "null",
+            "displayName": "Service Account",
+            "title": "null",
+            "company": "pod232",
+            "department": "Marketing",
+            "username": "SA",
+            "location": "France",
+            "accountType": "SYSTEM",
+            "avatars": [
+                {
+                    "size": "original",
+                    "url": "../avatars/static/150/default.png"
+                },
+                {
+                    "size": "small",
+                    "url": "../avatars/static/50/default.png"
+                }
+            ]
+        }
+    ],
+    "errors": [
+        {
+            "error": "invalid.format",
+            "email": "notavalidemail"
+        },
+        {
+            "error": "invalid.format",
+            "id": 654321
+        }
+    ]
+}
