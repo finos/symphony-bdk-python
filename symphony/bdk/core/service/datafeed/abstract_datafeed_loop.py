@@ -1,5 +1,6 @@
 import logging
 from abc import ABC, abstractmethod
+from enum import Enum
 from typing import List
 
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
@@ -41,6 +42,25 @@ class DatafeedLoop(ABC):
         pass
 
 
+class RealTimeEvent(Enum):
+    MESSAGESENT = ("on_message_sent", "message_sent")
+    SHAREDPOST = ("on_shared_post", "shared_post")
+    INSTANTMESSAGECREATED = ("on_instant_message_created", "instant_message_created")
+    ROOMCREATED = ("on_room_created", "room_created")
+    ROOMUPDATED = ("on_room_updated", "room_updated")
+    ROOMDEACTIVATED = ("on_room_deactivated", "room_deactivated")
+    ROOMREACTIVATED = ("on_room_reactivated", "room_reactivated")
+    USERREQUESTEDTOJOINROOM = ("on_user_requested_to_join_room", "user_requested_to_join_room")
+    USERJOINEDROOM = ("on_user_joined_room", "user_joined_room")
+    USERLEFTROOM = ("on_user_left_room", "user_left_room")
+    ROOMMEMBERPROMOTEDTOOWNER = ("on_room_member_promoted_to_owner", "room_member_promoted_to_owner")
+    ROOMMEMBERDEMOTEDFROMOWNER = ("on_room_demoted_from_owner", "room_member_demoted_from_owner")
+    CONNECTIONREQUESTED = ("on_connection_requested", "connection_requested")
+    CONNECTIONACCEPTED = ("on_connection_accepted", "connection_accepted")
+    SYMPHONYELEMENTSACTION = ("on_symphony_elements_action", "symphony_elements_action")
+    MESSAGESUPPRESSED = ("on_message_suppressed", "message_suppressed")
+
+
 class AbstractDatafeedLoop(DatafeedLoop, ABC):
     """Base class for implementing the datafeed services.
 
@@ -54,23 +74,6 @@ class AbstractDatafeedLoop(DatafeedLoop, ABC):
         self.auth_session = auth_session
         self.bdk_config = config
         self.api_client = datafeed_api.api_client
-        self.dispatch_dict = {
-            'MESSAGESENT': ('on_message_sent', 'message_sent'),
-            'SHAREDPOST': ('on_shared_post', 'shared_post'),
-            'INSTANTMESSAGECREATED': ('on_instant_message_created', 'instant_message_created'),
-            'ROOMCREATED': ('on_room_created', 'room_created'),
-            'ROOMUPDATED': ('on_room_updated', 'room_updated'),
-            'ROOMDEACTIVATED': ('on_room_deactivated', 'room_deactivated'),
-            'ROOMREACTIVATED': ('on_room_reactivated', 'room_reactivated'),
-            'USERREQUESTEDTOJOINROOM': ('on_user_requested_to_join_room', 'user_requested_to_join_room'),
-            'USERJOINEDROOM': ('on_user_joined_room', 'user_joined_room'),
-            'USERLEFTROOM': ('on_user_left_room', 'user_left_room'),
-            'ROOMMEMBERPROMOTEDTOOWNER': ('on_room_member_promoted_to_owner', 'room_member_promoted_to_owner'),
-            'ROOMMEMBERDEMOTEDFROMOWNER': ('on_room_demoted_from_owner', 'room_member_demoted_from_owner'),
-            'CONNECTIONREQUESTED': ('on_connection_requested', 'connection_requested'),
-            'CONNECTIONACCEPTED': ('on_connection_accepted', 'connection_accepted'),
-            'SYMPHONYELEMENTSACTION': ('on_symphony_elements_action', 'symphony_elements_action'),
-            'MESSAGESUPPRESSED': ('on_message_suppressed', 'message_suppressed')}
 
     def subscribe(self, listener):
         self.listeners.append(listener)
@@ -79,17 +82,18 @@ class AbstractDatafeedLoop(DatafeedLoop, ABC):
         self.listeners.remove(listener)
 
     def handle_v4_event_list(self, events: List[V4Event]):
-        for event in events:
+        for event in filter(lambda e: e is not None, events):
             for listener in self.listeners:
                 if listener.is_accepting_event(event, self.bdk_config.bot.username):
                     self.dispatch_on_event_type(listener, event)
 
     def dispatch_on_event_type(self, listener: RealTimeEventListener, event: V4Event):
-        if event.type not in self.dispatch_dict:
+        try:
+            listener_method_name, payload_field_name = RealTimeEvent[event.type].value
+        except KeyError:
             logging.info(f"Received event with an unknown type: {event.type}")
             return
 
-        listener_method_name, payload_field_name = self.dispatch_dict[event.type]
         listener_method = getattr(listener, listener_method_name)
         event_field = getattr(event.payload, payload_field_name)
 

@@ -113,3 +113,6 @@ sym_api_client_python/resources/bot_private_key.pem
 *.log
 
 .DS_Store
+
+# Datafeed V1
+datafeed.id

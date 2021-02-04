@@ -31,7 +31,7 @@ class DatafeedLoopV1(AbstractDatafeedLoop):
         self.started = False
 
     async def start(self):
-        if self.datafeed_id == "":
+        if not self.datafeed_id:
             self.datafeed_id = await self._create_datafeed_and_persist()
         self.started = True
         while self.started:
@@ -50,7 +50,7 @@ class DatafeedLoopV1(AbstractDatafeedLoop):
         events = await self.datafeed_api.v4_datafeed_id_read_get(id=self.datafeed_id,
                                                                  session_token=await self.auth_session.session_token,
                                                                  key_manager_token=await self.auth_session.key_manager_token)
-        if events is not None and not (events.value == []):
+        if events is not None and events.value:
             self.handle_v4_event_list(events.value)
 
     async def _create_datafeed_and_persist(self):

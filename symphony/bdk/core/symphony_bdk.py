@@ -78,7 +78,7 @@ class SymphonyBdk:
         if self._config.is_bot_configured():
             return DatafeedLoopV1(DatafeedApi(self._agent_client), self._bot_session, self._config)
         else:
-            raise BotNotConfiguredException
+            raise BotNotConfiguredException()
 
     async def close_clients(self):
         """

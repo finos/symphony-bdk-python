@@ -1,4 +1,6 @@
 from unittest.mock import Mock, MagicMock, AsyncMock
+
+from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import RealTimeEvent
 from tests.utils.resource_utils import get_resource_content
 import pytest
 
@@ -44,8 +46,8 @@ DEFAULT_AGENT_BASE_PATH: str = "https://agent:8443/context"
 @pytest.fixture()
 def auth_session():
     auth_session = AuthSession(None)
-    auth_session.session_token = 'session_token'
-    auth_session.key_manager_token = 'km_token'
+    auth_session.session_token = "session_token"
+    auth_session.key_manager_token = "km_token"
     return auth_session
 
 
@@ -68,7 +70,7 @@ def datafeed_api():
     return datafeed_api
 
 
-def datafeed_loop_v1(datafeed_api, auth_session, config, repository=None):
+def auto_stopping_datafeed_loop_v1(datafeed_api, auth_session, config, repository=None):
     datafeed_loop = DatafeedLoopV1(datafeed_api, auth_session, config, repository=repository)
 
     class RealTimeEventListenerImpl(RealTimeEventListener):
@@ -80,9 +82,9 @@ def datafeed_loop_v1(datafeed_api, auth_session, config, repository=None):
     return datafeed_loop
 
 
-@pytest.fixture(name="datafeed_loop_v1")
-def fixture_datafeed_loop_v1_fixture(datafeed_api, auth_session, config, datafeed_repository):
-    return datafeed_loop_v1(datafeed_api, auth_session, config, datafeed_repository)
+@pytest.fixture()
+def datafeed_loop_v1(datafeed_api, auth_session, config, datafeed_repository):
+    return auto_stopping_datafeed_loop_v1(datafeed_api, auth_session, config, datafeed_repository)
 
 
 @pytest.fixture()
@@ -91,7 +93,7 @@ def message_sent_event():
         def __init__(self, individual_event):
             self.value = [individual_event]
 
-    v4_event = V4Event(type="MESSAGESENT",
+    v4_event = V4Event(type=RealTimeEvent.MESSAGESENT.name,
                        payload=V4Payload(message_sent=V4MessageSent()),
                        initiator=V4Initiator(user=V4User(username="username")))
     event = EventsMock(v4_event)
@@ -116,23 +118,23 @@ async def test_start(datafeed_loop_v1, datafeed_api, message_sent_event):
 @pytest.mark.asyncio
 async def test_datafeed_is_reused(datafeed_repository, datafeed_api, auth_session, config, message_sent_event):
     datafeed_repository.write("persisted_id")
-    datafeed_loop = datafeed_loop_v1(datafeed_api, auth_session, config, datafeed_repository)
+    datafeed_loop = auto_stopping_datafeed_loop_v1(datafeed_api, auth_session, config, datafeed_repository)
 
     datafeed_api.v4_datafeed_id_read_get.return_value = message_sent_event
 
     await datafeed_loop.start()
 
     datafeed_api.v4_datafeed_create_post.assert_not_called()
-    datafeed_api.v4_datafeed_id_read_get.assert_called_once_with(id='persisted_id',
-                                                                 session_token='session_token',
-                                                                 key_manager_token='km_token')
+    datafeed_api.v4_datafeed_id_read_get.assert_called_once_with(id="persisted_id",
+                                                                 session_token="session_token",
+                                                                 key_manager_token="km_token")
 
 
 @pytest.mark.asyncio
 async def test_start_recreate_datafeed_error(datafeed_repository, datafeed_api, auth_session, config,
                                              message_sent_event):
     datafeed_repository.write("persisted_id")
-    datafeed_loop = datafeed_loop_v1(datafeed_api, auth_session, config, datafeed_repository)
+    datafeed_loop = auto_stopping_datafeed_loop_v1(datafeed_api, auth_session, config, datafeed_repository)
 
     datafeed_api.v4_datafeed_id_read_get.side_effect = ApiException(400, "Expired Datafeed id")
     datafeed_api.v4_datafeed_create_post.side_effect = ApiException(500, "Unhandled exception")
@@ -140,12 +142,12 @@ async def test_start_recreate_datafeed_error(datafeed_repository, datafeed_api, 
     with pytest.raises(ApiException):
         await datafeed_loop.start()
 
-    datafeed_api.v4_datafeed_id_read_get.assert_called_once_with(id='persisted_id',
-                                                                 session_token='session_token',
-                                                                 key_manager_token='km_token')
+    datafeed_api.v4_datafeed_id_read_get.assert_called_once_with(id="persisted_id",
+                                                                 session_token="session_token",
+                                                                 key_manager_token="km_token")
 
-    datafeed_api.v4_datafeed_create_post.assert_called_once_with(session_token='session_token',
-                                                                 key_manager_token='km_token')
+    datafeed_api.v4_datafeed_create_post.assert_called_once_with(session_token="session_token",
+                                                                 key_manager_token="km_token")
 
 
 @pytest.mark.asyncio
@@ -157,7 +159,7 @@ async def test_retrieve_datafeed_from_datafeed_file(tmpdir, datafeed_api, auth_s
     datafeed_config = BdkDatafeedConfig({"idFilePath": str(datafeed_file_path)})
     config.datafeed = datafeed_config
 
-    datafeed_loop = datafeed_loop_v1(datafeed_api, auth_session, config)
+    datafeed_loop = auto_stopping_datafeed_loop_v1(datafeed_api, auth_session, config)
 
     assert datafeed_loop.datafeed_id == "8e7c8672-220"
 
@@ -171,7 +173,7 @@ async def test_retrieve_datafeed_from_invalid_datafeed_dir(tmpdir, datafeed_api,
     datafeed_config = BdkDatafeedConfig({"idFilePath": str(tmpdir)})
     config.datafeed = datafeed_config
 
-    datafeed_loop = datafeed_loop_v1(datafeed_api, auth_session, config)
+    datafeed_loop = auto_stopping_datafeed_loop_v1(datafeed_api, auth_session, config)
 
     assert datafeed_loop.datafeed_id == "8e7c8672-220"
 
@@ -181,7 +183,7 @@ async def test_retrieve_datafeed_id_from_unknown_path(datafeed_api, auth_session
     datafeed_config = BdkDatafeedConfig({"idFilePath": "unknown_path"})
     config.datafeed = datafeed_config
 
-    datafeed_loop = datafeed_loop_v1(datafeed_api, auth_session, config)
+    datafeed_loop = auto_stopping_datafeed_loop_v1(datafeed_api, auth_session, config)
 
     assert datafeed_loop.datafeed_id == ""
 
@@ -193,16 +195,12 @@ async def test_retrieve_datafeed_id_from_empty_file(tmpdir, datafeed_api, auth_s
     datafeed_config = BdkDatafeedConfig({"idFilePath": str(datafeed_file_path)})
     config.datafeed = datafeed_config
 
-    datafeed_loop = datafeed_loop_v1(datafeed_api, auth_session, config)
+    datafeed_loop = auto_stopping_datafeed_loop_v1(datafeed_api, auth_session, config)
 
     assert datafeed_loop.datafeed_id == ""
 
 
 def test_handle_v4_event(datafeed_api, auth_session, config):
-    datafeed_loop = DatafeedLoopV1(datafeed_api, auth_session, config)
-
-    events = []
-    types = list(datafeed_loop.dispatch_dict.keys())
     payload = V4Payload(message_sent=V4MessageSent(),
                         shared_post=V4SharedPost(),
                         instant_message_created=V4InstantMessageCreated(),
@@ -221,20 +219,12 @@ def test_handle_v4_event(datafeed_api, auth_session, config):
                         symphony_elements_action=V4SymphonyElementsAction())
     initiator = V4Initiator(user=V4User(username="username"))
 
-    for event_type in types:
-        v4_event = V4Event(type=event_type, payload=payload, initiator=initiator)
-        events.append(v4_event)
-    events.append(V4Event())
-    events.append(V4Event(type="unknown_type"))
-    events.append(V4Event(type=types[0], initiator=V4Initiator(user=V4User(username=config.bot.username))))
+    spied_listener = Mock(wraps=RealTimeEventListener())
 
-    listener = RealTimeEventListener()
-    spied_listener = Mock(wraps=listener)
-
-    spied_listener.on_message_sent.assert_not_called()
-
+    datafeed_loop = DatafeedLoopV1(datafeed_api, auth_session, config)
     datafeed_loop.subscribe(spied_listener)
-    datafeed_loop.handle_v4_event_list(events)
+
+    datafeed_loop.handle_v4_event_list(create_events(config, initiator, payload))
 
     spied_listener.on_message_sent.assert_called_once_with(initiator, payload.message_sent)
     spied_listener.on_shared_post.assert_called_once_with(initiator, payload.shared_post)
@@ -243,12 +233,24 @@ def test_handle_v4_event(datafeed_api, auth_session, config):
     spied_listener.on_room_updated.assert_called_once_with(initiator, payload.room_updated)
     spied_listener.on_room_deactivated.assert_called_once_with(initiator, payload.room_deactivated)
     spied_listener.on_room_reactivated.assert_called_once_with(initiator, payload.room_reactivated)
-    spied_listener.on_user_requested_to_join_room.assert_called_once_with(initiator, payload.user_requested_to_join_room)
+    spied_listener.on_user_requested_to_join_room.assert_called_once_with(initiator,
+                                                                          payload.user_requested_to_join_room)
     spied_listener.on_user_joined_room.assert_called_once_with(initiator, payload.user_joined_room)
     spied_listener.on_user_left_room.assert_called_once_with(initiator, payload.user_left_room)
-    spied_listener.on_room_member_promoted_to_owner.assert_called_once_with(initiator, payload.room_member_promoted_to_owner)
+    spied_listener.on_room_member_promoted_to_owner.assert_called_once_with(initiator,
+                                                                            payload.room_member_promoted_to_owner)
     spied_listener.on_room_demoted_from_owner.assert_called_once_with(initiator, payload.room_member_demoted_from_owner)
     spied_listener.on_connection_requested.assert_called_once_with(initiator, payload.connection_requested)
     spied_listener.on_connection_accepted.assert_called_once_with(initiator, payload.connection_accepted)
     spied_listener.on_message_suppressed.assert_called_once_with(initiator, payload.message_suppressed)
     spied_listener.on_symphony_elements_action.assert_called_once_with(initiator, payload.symphony_elements_action)
+
+
+def create_events(config, initiator, payload):
+    events = []
+    for event_type in RealTimeEvent.__members__.keys():
+        events.append(V4Event(type=event_type, payload=payload, initiator=initiator))
+    events.append(V4Event())
+    events.append(V4Event(type="unknown_type"))
+    events.append(V4Event(type=RealTimeEvent.MESSAGESENT.name, initiator=V4Initiator(user=V4User(username=config.bot.username))))
+    return events
