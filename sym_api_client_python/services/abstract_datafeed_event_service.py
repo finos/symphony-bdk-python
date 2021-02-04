@@ -154,12 +154,15 @@ class AbstractDatafeedEventService(ABC):
         """
         log.debug('DataFeedEventService/handle_events()')
         for event in events:
+            if event is None:
+                continue
+            
             log.debug(
                 'DataFeedEventService/read_datafeed() --> '
                 'Incoming event with id: {}'.format(event.get('id'))
             )
-
-            if event is None or event['initiator']['user']['userId'] == self.bot_client.get_bot_user_info()['id']:
+            
+            if event['initiator']['user']['userId'] == self.bot_client.get_bot_user_info()['id']:
                 continue
             else:
                 self.handle_event(event)
