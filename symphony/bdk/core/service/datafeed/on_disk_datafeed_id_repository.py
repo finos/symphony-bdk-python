@@ -6,8 +6,8 @@ from symphony.bdk.core.config.model.bdk_config import BdkConfig
 
 
 class DatafeedIdRepository(ABC):
-    """A repository interface for storing a datafeed id
-    By using the DatafeedLoopV1, the created datafeed id and agent base url should be persisted manually on the BDK side.
+    """A repository interface for storing a datafeed id.
+    By using the DatafeedLoopV1, the created datafeed id and agent base url has to be persisted on the BDK side.
     """
 
     @abstractmethod
@@ -17,7 +17,6 @@ class DatafeedIdRepository(ABC):
         :param datafeed_id: the datafeed id to be persisted
         :param agent_base_path: the agent base path (i.e. scheme, host, port, context) to be persisted
         """
-        pass
 
     @abstractmethod
     def read(self):
@@ -25,7 +24,6 @@ class DatafeedIdRepository(ABC):
 
         :return the persisted datafeed id if present in storage, an empty string otherwise
         """
-        pass
 
 
 class OnDiskDatafeedIdRepository(DatafeedIdRepository):

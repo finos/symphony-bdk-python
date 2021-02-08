@@ -25,8 +25,8 @@ def test_parse_config_yaml():
 
 
 def test_parse_config_wrong_format(invalid_config_path):
-    fail_error_message = "Config file has a wrong format."
+    fail_error_message = "Config file is neither in JSON nor in YAML format."
     with pytest.raises(BdkConfigException, match=fail_error_message):
         with open(invalid_config_path) as invalid_config_file:
-            config_data = BdkConfigParser.parse(invalid_config_file.read())
+            BdkConfigParser.parse(invalid_config_file.read())
 

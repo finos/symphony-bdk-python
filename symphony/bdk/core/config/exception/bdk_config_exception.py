@@ -1,2 +1,3 @@
 class BdkConfigException(Exception):
-    pass
+    """Exception class raised when configuration is invalid.
+    """

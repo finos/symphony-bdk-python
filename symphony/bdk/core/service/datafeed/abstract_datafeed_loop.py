@@ -1,3 +1,6 @@
+"""This module gathers all base classes related to the datafeed loop and real time events.
+"""
+
 import logging
 from abc import ABC, abstractmethod
 from enum import Enum
@@ -12,6 +15,14 @@ from symphony.bdk.gen.agent_model.v4_event import V4Event
 
 
 class RealTimeEvent(Enum):
+    """This enum lists all possible
+    `Real Time Events <https://docs.developers.symphony.com/building-bots-on-symphony/datafeed/real-time-events>`_
+    received from the datafeed loop.
+
+    Enum field name is the maps the exact value of field type in the datafeed payload.
+    First element in enum value corresponds to the listener method who should be called when given event is received.
+    Second element in enum value corresponds to the field name of event in the received payload.
+    """
     MESSAGESENT = ("on_message_sent", "message_sent")
     SHAREDPOST = ("on_shared_post", "shared_post")
     INSTANTMESSAGECREATED = ("on_instant_message_created", "instant_message_created")
@@ -30,20 +41,17 @@ class RealTimeEvent(Enum):
     MESSAGESUPPRESSED = ("on_message_suppressed", "message_suppressed")
 
 
-# TODO make start and stop async
 class DatafeedLoop(ABC):
     """Interface for a loop service to be used for handling the datafeed API.
     """
 
     @abstractmethod
-    def start(self):
+    async def start(self):
         """Start the datafeed event service"""
-        pass
 
     @abstractmethod
-    def stop(self):
+    async def stop(self):
         """Stop the datafeed event service"""
-        pass
 
     @abstractmethod
     def subscribe(self, listener: RealTimeEventListener):
@@ -51,7 +59,6 @@ class DatafeedLoop(ABC):
 
         :param listener: RealTimeEventListener a Datafeed event listener to be subscribed
         """
-        pass
 
     @abstractmethod
     def unsubscribe(self, listener: RealTimeEventListener):
@@ -59,7 +66,6 @@ class DatafeedLoop(ABC):
 
         :param listener: RealTimeEventListener a Datafeed event listener to be subscribed
         """
-        pass
 
 
 class AbstractDatafeedLoop(DatafeedLoop, ABC):
@@ -70,25 +76,44 @@ class AbstractDatafeedLoop(DatafeedLoop, ABC):
     """
 
     def __init__(self, datafeed_api: DatafeedApi, auth_session: AuthSession, config: BdkConfig):
+        """
+
+        :param datafeed_api: The file location of the spreadsheet
+        :type auth_session: the AuthSession instance used to get session and key manager tokens
+        :param config: the bot configuration
+        """
         self.datafeed_api = datafeed_api
         self.listeners = []
         self.auth_session = auth_session
         self.bdk_config = config
         self.api_client = datafeed_api.api_client
 
-    def subscribe(self, listener):
+    def subscribe(self, listener: RealTimeEventListener):
+        """Subscribes a new listener to the datafeed loop instance.
+
+        :param listener: the RealTimeEventListener to be added.
+        """
         self.listeners.append(listener)
 
-    def unsubscribe(self, listener):
+    def unsubscribe(self, listener: RealTimeEventListener):
+        """Removes a given listener from the datafeed loop instance.
+
+        :param listener: the RealTimeEventListener to be removed.
+        """
         self.listeners.remove(listener)
 
     async def handle_v4_event_list(self, events: List[V4Event]):
+        """Handles the event list received from the read datafeed endpoint.
+        Calls each listeners for each received events.
+
+        :param events: the list of the received datafeed events.
+        """
         for event in filter(lambda e: e is not None, events):
             for listener in self.listeners:
                 if await listener.is_accepting_event(event, self.bdk_config.bot.username):
-                    await self.dispatch_on_event_type(listener, event)
+                    await self._dispatch_on_event_type(listener, event)
 
-    async def dispatch_on_event_type(self, listener: RealTimeEventListener, event: V4Event):
+    async def _dispatch_on_event_type(self, listener: RealTimeEventListener, event: V4Event):
         try:
             listener_method_name, payload_field_name = RealTimeEvent[event.type].value
         except KeyError:

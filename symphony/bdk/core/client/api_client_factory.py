@@ -1,3 +1,5 @@
+"""Module containing the ApiClientFactory class.
+"""
 from symphony.bdk.gen.configuration import Configuration
 from symphony.bdk.gen.api_client import ApiClient
 

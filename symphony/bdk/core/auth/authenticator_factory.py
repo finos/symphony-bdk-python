@@ -14,6 +14,11 @@ class AuthenticatorFactory:
     """
 
     def __init__(self, config: BdkConfig, api_client_factory: ApiClientFactory):
+        """
+
+        :param config: the bot configuration
+        :param api_client_factory: the ApiClientFactory instance to create the BotAuthenticator from.
+        """
         self._config = config
         self._api_client_factory = api_client_factory
 
@@ -21,14 +26,12 @@ class AuthenticatorFactory:
         """Creates a new instance of a Bot Authenticator service.
 
         :return: a new BotAuthenticator instance.
-
         """
-        if self._config.bot.is_rsa_authentication_configured():
-            if not self._config.bot.is_rsa_configuration_valid():
-                raise AuthInitializationException("Only one of private key path or content should be configured for "
-                                                  "bot authentication.")
+        if self._config.bot.is_rsa_authentication_configured() and self._config.bot.is_rsa_configuration_valid():
             return BotAuthenticatorRSA(
                 bot_config=self._config.bot,
                 login_api_client=self._api_client_factory.get_login_client(),
                 relay_api_client=self._api_client_factory.get_relay_client()
             )
+        raise AuthInitializationException("RSA authentication should be configured. Only one field among private key "
+                                          "path or content should be configured for bot authentication.")

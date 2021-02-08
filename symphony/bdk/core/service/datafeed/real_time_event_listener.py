@@ -39,7 +39,7 @@ class RealTimeEventListener:
         :return: True if the event is accepted, False otherwise
         """
         try:
-            return not (event.initiator.user.username == username)
+            return event.initiator.user.username != username
         except ApiAttributeError:
             return False
 

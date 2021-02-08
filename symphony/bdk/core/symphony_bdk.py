@@ -1,5 +1,3 @@
-from symphony.bdk.core.client.api_client_factory import ApiClientFactory
-from symphony.bdk.core.auth.authenticator_factory import AuthenticatorFactory
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.auth.authenticator_factory import AuthenticatorFactory
 from symphony.bdk.core.client.api_client_factory import ApiClientFactory
@@ -23,8 +21,7 @@ from symphony.bdk.gen.agent_api.datafeed_api import DatafeedApi
 
 
 class SymphonyBdk:
-    """
-    BDK entry point
+    """BDK entry point
     """
 
     async def __aenter__(self):
@@ -61,8 +58,7 @@ class SymphonyBdk:
         )
 
     def bot_session(self) -> AuthSession:
-        """
-        Get the Bot authentication session. If the bot is not authenticated yet, perform the authentication for a new
+        """Get the Bot authentication session. If the bot is not authenticated yet, perform the authentication for a new
         session.
 
         :return: The bot authentication session.
@@ -70,8 +66,7 @@ class SymphonyBdk:
         return self._bot_session
 
     def messages(self) -> MessageService:
-        """
-        Get the MessageService from the BDK entry point.
+        """Get the MessageService from the BDK entry point.
 
         :return: The MessageService instance.
 
@@ -89,12 +84,10 @@ class SymphonyBdk:
     def _get_datafeed_loop(self) -> DatafeedLoopV1:
         if self._config.is_bot_configured():
             return DatafeedLoopV1(DatafeedApi(self._agent_client), self._bot_session, self._config)
-        else:
-            raise BotNotConfiguredException()
+        raise BotNotConfiguredException()
 
     def users(self) -> UserService:
-        """
-        Get the UserService from the BDK entry point.
+        """Get the UserService from the BDK entry point.
 
         :return: The UserService instance.
 
@@ -102,7 +95,6 @@ class SymphonyBdk:
         return self._user_service
 
     async def close_clients(self):
-        """
-        Close all the existing api clients created by the api client factory.
+        """Close all the existing api clients created by the api client factory.
         """
         await self._api_client_factory.close_clients()

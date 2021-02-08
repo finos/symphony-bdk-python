@@ -1,4 +1,3 @@
-import json
 from pathlib import Path
 
 from symphony.bdk.core.config.bdk_config_parser import BdkConfigParser
@@ -25,8 +24,7 @@ class BdkConfigLoader:
         if config_path.exists():
             config_content = config_path.read_text()
             return cls.load_from_content(config_content)
-        else:
-            raise BdkConfigException(f"Config file has not been found at: {config_path.absolute()}")
+        raise BdkConfigException(f"Config file has not been found at: {config_path.absolute()}")
 
     @classmethod
     def load_from_content(cls, content: str) -> BdkConfig:

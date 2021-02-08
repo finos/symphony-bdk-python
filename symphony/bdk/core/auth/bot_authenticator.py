@@ -21,7 +21,12 @@ class BotAuthenticator(ABC):
         pass
 
     @abstractmethod
-    async def authenticate_bot(self):
+    async def authenticate_bot(self) -> AuthSession:
+        """Authenticate a Bot's service account.
+
+        :return: the authentication session.
+        :rtype: AuthSession
+        """
         pass
 
 
@@ -50,8 +55,8 @@ class BotAuthenticatorRSA(BotAuthenticator):
         try:
             token = await AuthenticationApi(api_client).pubkey_authenticate_post(req)
             return token.token
-        except ApiException:
-            raise AuthUnauthorizedException(unauthorized_message)
+        except ApiException as e:
+            raise AuthUnauthorizedException(unauthorized_message, e)
 
     async def retrieve_session_token(self) -> str:
         """Make the api call to the pod to get the pod's session token.

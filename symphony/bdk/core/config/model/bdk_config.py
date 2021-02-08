@@ -6,13 +6,14 @@ from symphony.bdk.core.config.model.bdk_datafeed_config import BdkDatafeedConfig
 
 
 class BdkConfig(BdkServerConfig):
-    """Class containing the Bdk configuration
-
-    :param **config: dict Configuration parameters
-    :return self: BdkConfig instance
+    """Class containing the whole BDK configuration.
     """
 
     def __init__(self, **config):
+        """
+
+        :param config: the dict containing the server configuration parameters.
+        """
         super().__init__(scheme=config.get("scheme"), host=config.get("host"), port=config.get("port"),
                          context=config.get("context"))
         self.agent = BdkClientConfig(self, config.get("agent"))
@@ -24,4 +25,8 @@ class BdkConfig(BdkServerConfig):
         self.datafeed = BdkDatafeedConfig(config.get("datafeed"))
 
     def is_bot_configured(self) -> bool:
+        """
+
+        :return: true if bot service account is specified in the configuration.
+        """
         return self.bot.username is not None

@@ -104,7 +104,7 @@ def auto_stopping_datafeed_loop_v1(datafeed_api, auth_session, config, repositor
     class RealTimeEventListenerImpl(RealTimeEventListener):
 
         async def on_message_sent(self, initiator: V4Initiator, event: V4MessageSent):
-            datafeed_loop.stop()
+            await datafeed_loop.stop()
 
     datafeed_loop.subscribe(RealTimeEventListenerImpl())
     return datafeed_loop
