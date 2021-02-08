@@ -56,7 +56,7 @@ class MessageService:
         :param stream_id: The stream where to look for messages
         :param since: Timestamp of the earliest possible date of the first message returned.
         :param skip: Number of messages to skip. Default: 0
-        :param limit: Maximum number of messages to return. Default: 0
+        :param limit: Maximum number of messages to return. Default: 50
 
         :return: the list of matching messages in the stream.
 

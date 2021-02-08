@@ -5,12 +5,17 @@ from symphony.bdk.core.auth.authenticator_factory import AuthenticatorFactory
 from symphony.bdk.core.client.api_client_factory import ApiClientFactory
 from symphony.bdk.core.service.message.message_service import MessageService
 from symphony.bdk.core.service.message.multi_attachments_messages_api import MultiAttachmentsMessagesApi
+from symphony.bdk.core.service.user.user_service import UserService
 from symphony.bdk.gen.agent_api.attachments_api import AttachmentsApi
+from symphony.bdk.gen.agent_api.audit_trail_api import AuditTrailApi
 from symphony.bdk.gen.pod_api.default_api import DefaultApi
 from symphony.bdk.gen.pod_api.message_api import MessageApi
 from symphony.bdk.gen.pod_api.message_suppression_api import MessageSuppressionApi
 from symphony.bdk.gen.pod_api.pod_api import PodApi
 from symphony.bdk.gen.pod_api.streams_api import StreamsApi
+from symphony.bdk.gen.pod_api.system_api import SystemApi
+from symphony.bdk.gen.pod_api.user_api import UserApi
+from symphony.bdk.gen.pod_api.users_api import UsersApi
 
 from symphony.bdk.core.config.exception.bot_not_configured_exception import BotNotConfiguredException
 from symphony.bdk.core.service.datafeed.datafeed_loop_v1 import DatafeedLoopV1
@@ -46,7 +51,14 @@ class SymphonyBdk:
             DefaultApi(self._pod_client),
             self._bot_session
         )
-        self._datafeed_loop = self.get_datafeed_loop()
+        self._datafeed_loop = self._get_datafeed_loop()
+        self._user_service = UserService(
+            UserApi(self._pod_client),
+            UsersApi(self._pod_client),
+            AuditTrailApi(self._agent_client),
+            SystemApi(self._pod_client),
+            self._bot_session
+        )
 
     def bot_session(self) -> AuthSession:
         """
@@ -74,11 +86,20 @@ class SymphonyBdk:
         """
         return self._datafeed_loop
 
-    def get_datafeed_loop(self) -> DatafeedLoopV1:
+    def _get_datafeed_loop(self) -> DatafeedLoopV1:
         if self._config.is_bot_configured():
             return DatafeedLoopV1(DatafeedApi(self._agent_client), self._bot_session, self._config)
         else:
             raise BotNotConfiguredException()
+
+    def users(self) -> UserService:
+        """
+        Get the UserService from the BDK entry point.
+
+        :return: The UserService instance.
+
+        """
+        return self._user_service
 
     async def close_clients(self):
         """

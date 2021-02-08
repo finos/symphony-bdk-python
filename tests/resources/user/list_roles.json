@@ -1,0 +1,105 @@
+{
+  "value": [
+    {
+      "id": "CONTENT_MANAGEMENT",
+      "name": "Content Management",
+      "userTypes": [
+          "SYSTEM"
+      ],
+      "optionalActions": []
+    },
+    {
+      "id": "COMPLIANCE_OFFICER",
+      "name": "Compliance Officer",
+      "userTypes": [
+          "NORMAL"
+      ],
+      "optionalActions": [
+        "BAN_AND_UNBAN_ROOM_MEMBER",
+        "LOCK_AND_UNLOCK_ROOM",
+        "MONITOR_ROOMS",
+        "MONITOR_WALL_POSTS"
+      ]
+    },
+    {
+      "id": "EF_POLICY_MANAGEMENT",
+      "userTypes": [
+          "SYSTEM"
+      ],
+      "optionalActions": []
+    },
+    {
+      "id": "AGENT",
+      "name": "Agent",
+      "userTypes": [
+          "SYSTEM"
+      ],
+      "optionalActions": []
+    },
+    {
+      "id": "INDIVIDUAL",
+      "name": "Individual",
+      "userTypes": [
+          "SYSTEM",
+          "NORMAL"
+      ],
+      "optionalActions": []
+    },
+    {
+      "id": "L2_SUPPORT",
+      "name": "L2 Support",
+      "userTypes": [
+          "NORMAL"
+      ],
+      "optionalActions": []
+    },
+    {
+      "id": "L1_SUPPORT",
+      "name": "L1 Support",
+      "userTypes": [
+          "NORMAL"
+      ],
+      "optionalActions": []
+    },
+    {
+      "id": "USER_PRESENCE_UPDATE",
+      "name": "User Presence Update",
+      "userTypes": [
+          "SYSTEM"
+      ],
+      "optionalActions": []
+    },
+    {
+      "id": "SUPER_COMPLIANCE_OFFICER",
+      "name": "Super Compliance Officer",
+      "userTypes": [
+          "NORMAL"
+      ],
+      "optionalActions": []
+    },
+    {
+      "id": "ADMINISTRATOR",
+      "name": "Administrator",
+      "userTypes": [
+          "NORMAL"
+      ],
+      "optionalActions": []
+    },
+    {
+      "id": "USER_PROVISIONING",
+      "name": "User Provisioning",
+      "userTypes": [
+          "SYSTEM"
+      ],
+      "optionalActions": []
+    },
+    {
+      "id": "SUPER_ADMINISTRATOR",
+      "name": "Super Administrator",
+      "userTypes": [
+          "NORMAL"
+      ],
+      "optionalActions": []
+    }
+  ]
+}

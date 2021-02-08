@@ -1,0 +1,35 @@
+{
+    "count": 1,
+    "skip": 0,
+    "limit": 1,
+    "searchQuery": {
+        "query": "jane",
+        "filters": {
+            "title": "Sales Manager",
+            "company": "Symphony"
+        }
+    },
+    "users": [
+        {
+            "id": 13056700581099,
+            "emailAddress": "janedoe@symphony.com",
+            "firstName": "Jane",
+            "lastName": "Doe",
+            "displayName": "Jane Doe",
+            "title": "Sales Manager",
+            "company": "Symphony",
+            "location": "San Francisco",
+            "accountType": "NORMAL",
+            "avatars": [
+                {
+                    "size": "original",
+                    "url": "../avatars/static/150/default.png"
+                },
+                {
+                    "size": "small",
+                    "url": "../avatars/static/50/default.png"
+                }
+            ]
+        }
+    ]
+}
