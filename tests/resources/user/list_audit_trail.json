@@ -1,0 +1,70 @@
+{
+  "items": [
+      {
+
+          "action": "Profile info update",
+
+          "actionName": "profileInfoUpdate",
+
+          "attribute": "roles",
+
+          "newValue": "[Content Management,Individual,User Provisioning,Audit Trail Management]",
+
+          "oldValue": "[Content Management,Individual,User Provisioning]",
+
+          "date": 1551888601279,
+
+          "initiatorId": 1353716993,
+
+          "initiatorUsername": "admin@symphony.com",
+
+          "initiatorEmailAddress": "admin@symphony.com",
+
+          "affectedId": 1353716999,
+
+          "affectedUsername": "test",
+
+          "affectedEmailAddress": "test@symphony.com",
+
+          "authorizationRoles": [
+
+          "SUPER_ADMINISTRATOR"
+
+          ]
+
+      },
+      {
+
+          "action": "Profile info update",
+
+          "actionName": "profileInfoUpdate",
+
+          "attribute": "roles",
+
+          "newValue": "[Content Management,Individual,User Provisioning,Audit Trail Management]",
+
+          "oldValue": "[Content Management,Individual,User Provisioning]",
+
+          "date": 1551888601279,
+
+          "initiatorId": 1356993,
+
+          "initiatorUsername": "admin@symphony.com",
+
+          "initiatorEmailAddress": "admin@symphony.com",
+
+          "affectedId": 1356999,
+
+          "affectedUsername": "test.test",
+
+          "affectedEmailAddress": "test.test@symphony.com",
+
+          "authorizationRoles": [
+
+          "SUPER_ADMINISTRATOR"
+
+          ]
+
+      }
+  ]
+}
