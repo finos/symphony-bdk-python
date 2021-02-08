@@ -83,12 +83,9 @@ class OboAuthSession(AuthSession):
     @property
     async def session_token(self):
         if self._session_token is None:
-            if self.user_id is not None:
-                self._session_token = await self._authenticator.retrieve_obo_session_token_by_user_id(self.user_id)
-            if self.username is not None:
-                self._session_token = await self._authenticator.retrieve_obo_session_token_by_username(self.username)
+            await self.refresh()
         return self._session_token
 
     @property
     async def key_manager_token(self):
-        return self._key_manager_token
+        return None
