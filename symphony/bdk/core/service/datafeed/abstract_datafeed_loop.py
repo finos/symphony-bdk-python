@@ -41,34 +41,7 @@ class RealTimeEvent(Enum):
     MESSAGESUPPRESSED = ("on_message_suppressed", "message_suppressed")
 
 
-class DatafeedLoop(ABC):
-    """Interface for a loop service to be used for handling the datafeed API.
-    """
-
-    @abstractmethod
-    async def start(self):
-        """Start the datafeed event service"""
-
-    @abstractmethod
-    async def stop(self):
-        """Stop the datafeed event service"""
-
-    @abstractmethod
-    def subscribe(self, listener: RealTimeEventListener):
-        """The bot subscribes to a RealTimeEventListener
-
-        :param listener: RealTimeEventListener a Datafeed event listener to be subscribed
-        """
-
-    @abstractmethod
-    def unsubscribe(self, listener: RealTimeEventListener):
-        """The bot unsubscribes to a RealtimeEventListener
-
-        :param listener: RealTimeEventListener a Datafeed event listener to be subscribed
-        """
-
-
-class AbstractDatafeedLoop(DatafeedLoop, ABC):
+class AbstractDatafeedLoop(ABC):
     """Base class for implementing the datafeed services.
 
     A datafeed services can help a bot subscribe or unsubscribe to a RealTimeEventListener and handle the received
@@ -87,6 +60,14 @@ class AbstractDatafeedLoop(DatafeedLoop, ABC):
         self.auth_session = auth_session
         self.bdk_config = config
         self.api_client = datafeed_api.api_client
+
+    @abstractmethod
+    async def start(self):
+        """Start the datafeed event service"""
+
+    @abstractmethod
+    async def stop(self):
+        """Stop the datafeed event service"""
 
     def subscribe(self, listener: RealTimeEventListener):
         """Subscribes a new listener to the datafeed loop instance.

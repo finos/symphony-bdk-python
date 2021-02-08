@@ -1,6 +1,6 @@
 import asyncio
 
-from symphony.bdk.core.config.bdk_config_loader import BdkConfigLoader
+from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.symphony_bdk import SymphonyBdk
 
 

@@ -28,7 +28,7 @@ from symphony.bdk.gen.agent_model.v4_user import V4User
 from symphony.bdk.gen.exceptions import ApiException
 
 from symphony.bdk.core.auth.auth_session import AuthSession
-from symphony.bdk.core.config.bdk_config_loader import BdkConfigLoader
+from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.config.model.bdk_datafeed_config import BdkDatafeedConfig
 
 from symphony.bdk.core.service.datafeed.real_time_event_listener import RealTimeEventListener

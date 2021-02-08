@@ -1,5 +1,5 @@
 from tests.utils.resource_utils import get_config_resource_filepath
-from symphony.bdk.core.config.bdk_config_loader import BdkConfigLoader
+from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.config.exception import BdkConfigException
 
 import os

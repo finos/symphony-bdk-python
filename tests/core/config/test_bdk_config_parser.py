@@ -1,5 +1,5 @@
 from symphony.bdk.core.config.exception import BdkConfigException
-from symphony.bdk.core.config.bdk_config_parser import BdkConfigParser
+from symphony.bdk.core.config.loader import BdkConfigParser
 
 from tests.utils.resource_utils import get_config_resource_filepath
 import pytest

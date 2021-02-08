@@ -18,16 +18,16 @@ bot:
 3. your bot RSA private key according to the RSA public key upload in your pod admin console (https://mypod.symphony.com/admin-console)
 
 ## How to load configuration
-The Symphony BDK provides a single way to configure your bot environment. 
+The Symphony BDK provides a single way to configure your bot environment.
 
 ```python
-from symphony.bdk.core.config.bdk_config_loader import BdkConfigLoader
+from symphony.bdk.core.config.loader import BdkConfigLoader
 
-config_1 = BdkConfigLoader.load_from_file("/absolute/path/to/config.yaml") #1
+config_1 = BdkConfigLoader.load_from_file("/absolute/path/to/config.yaml")  # 1
 
-config_2 = BdkConfigLoader.load_from_content(config_content_as_string) #2
+config_2 = BdkConfigLoader.load_from_content(config_content_as_string)  # 2
 
-config_3 = BdkConfigLoader.load_from_symphony_dir("config.yaml") #3
+config_3 = BdkConfigLoader.load_from_symphony_dir("config.yaml")  # 3
 ```
 1. Load configuration from a file
 2. Load configuration from a string object
