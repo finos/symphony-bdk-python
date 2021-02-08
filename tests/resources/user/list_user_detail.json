@@ -1,0 +1,130 @@
+{
+  "value": [
+    {
+        "userAttributes": {
+            "emailAddress": "agentservice@acme.com",
+            "firstName": "Agent Service",
+            "userName": "agentservice",
+            "displayName": "Agent Service",
+            "accountType": "SYSTEM"
+        },
+        "userSystemInfo": {
+            "id": 9826885173252,
+            "status": "ENABLED",
+            "createdDate": 1498665229000,
+            "lastUpdatedDate": 1498665229886,
+            "lastLoginDate": 1504899004993
+        },
+        "roles": [
+            "USER_PROVISIONING",
+            "CONTENT_MANAGEMENT",
+            "L2_SUPPORT",
+            "INDIVIDUAL",
+            "AGENT",
+            "SUPER_ADMINISTRATOR",
+            "SUPER_COMPLIANCE_OFFICER"
+        ]
+    },
+    {
+        "userAttributes": {
+            "emailAddress": "bot.user1@acme.yaml.com",
+            "firstName": "Nexus1",
+            "lastName": "Bot01",
+            "userName": "bot.user1",
+            "displayName": "ACME Bot01",
+            "accountType": "NORMAL",
+            "assetClasses": [],
+            "industries": []
+        },
+        "userSystemInfo": {
+            "id": 9826885173258,
+            "status": "ENABLED",
+            "createdDate": 1499347606000,
+            "createdBy": "9826885173252",
+            "lastUpdatedDate": 1499348554853,
+            "lastLoginDate": 1504839044527
+        },
+        "roles": [
+            "USER_PROVISIONING",
+            "CONTENT_EXPORT_SERVICE",
+            "CONTENT_MANAGEMENT",
+            "L2_SUPPORT",
+            "INDIVIDUAL",
+            "SUPER_ADMINISTRATOR",
+            "SUPER_COMPLIANCE_OFFICER"
+        ]
+    },
+    {
+        "userAttributes": {
+            "emailAddress": "bot.user@email.com",
+            "userName": "bot.user",
+            "displayName": "bot.user",
+            "accountType": "SYSTEM"
+        },
+        "userSystemInfo": {
+            "id": 9826885173289,
+            "status": "ENABLED",
+            "createdDate": 1499373423000,
+            "createdBy": "9826885173255",
+            "lastUpdatedDate": 1499373423803
+        },
+        "roles": [
+            "USER_PROVISIONING",
+            "CONTENT_MANAGEMENT",
+            "INDIVIDUAL"
+        ]
+    },
+    {
+        "userAttributes": {
+            "emailAddress": "nexus.user@email.com",
+            "userName": "nexus.user",
+            "displayName": "nexus.user",
+            "accountType": "SYSTEM"
+        },
+        "userSystemInfo": {
+            "id": 9826885173290,
+            "status": "ENABLED",
+            "createdDate": 1499375475000,
+            "createdBy": "9826885173255",
+            "lastUpdatedDate": 1499375475852,
+            "lastLoginDate": 1504899124191
+        },
+        "roles": [
+            "USER_PROVISIONING",
+            "CONTENT_MANAGEMENT",
+            "INDIVIDUAL"
+        ]
+    },
+    {
+        "userAttributes": {
+            "emailAddress": "admin@mail.com",
+            "firstName": "admin",
+            "lastName": "admin",
+            "userName": "admin@mail.com",
+            "displayName": "Admin Admin",
+            "companyName": "Company Name",
+            "department": "Departament",
+            "division": "Division",
+            "title": "Administrator",
+            "twoFactorAuthPhone": "+15419999999",
+            "workPhoneNumber": "+15419999999",
+            "mobilePhoneNumber": "+15419999999",
+            "accountType": "NORMAL",
+            "assetClasses": [],
+            "industries": []
+        },
+        "userSystemInfo": {
+            "id": 7696581394433,
+            "status": "ENABLED",
+            "createdDate": 1438054194000,
+            "lastUpdatedDate": 1527532171729,
+            "lastLoginDate": 1523912043015
+        },
+        "roles": [
+            "SUPER_COMPLIANCE_OFFICER",
+            "INDIVIDUAL",
+            "SUPER_ADMINISTRATOR"
+        ]
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "userAttributes": {
+    "emailAddress": "johndoe@symphony.com",
+    "firstName": "John",
+    "lastName": "Doe",
+    "userName": "johndoe",
+    "displayName": "John Doe",
+    "companyName": "Company",
+    "department": "Departament",
+    "division": "Division",
+    "title": "Junior Trader",
+    "twoFactorAuthPhone": "+15419999999",
+    "workPhoneNumber": "+15419999999",
+    "mobilePhoneNumber": "+15419999999",
+    "accountType": "NORMAL",
+    "location": "New York",
+    "jobFunction": "Trader",
+    "assetClasses": [
+      "Equities"
+    ],
+    "industries": [
+      "Healthcare",
+      "Technology"
+    ]
+  },
+  "userSystemInfo": {
+    "id": 7215545078461,
+    "status": "ENABLED",
+    "createdDate": 1461508270000,
+    "createdBy": "7215545057281",
+    "lastUpdatedDate": 1461508270000,
+    "lastLoginDate": 1461508270000,
+    "deactivatedDate": 1461508270000
+  },
+  "roles": [
+    "INDIVIDUAL",
+    "COMPLIANCE_OFFICER",
+    "COMPLIANCE_OFFICER.MONITOR_ROOMS",
+    "COMPLIANCE_OFFICER.MONITOR_WALL_POSTS",
+    "COMPLIANCE_OFFICER.LOCK_AND_UNLOCK_ROOM",
+    "COMPLIANCE_OFFICER.BAN_AND_UNBAN_ROOM_MEMBER"
+  ]
+}
