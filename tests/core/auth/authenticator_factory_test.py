@@ -3,7 +3,7 @@ from unittest.mock import MagicMock, Mock
 import pytest
 
 from symphony.bdk.core.auth.authenticator_factory import AuthenticatorFactory
-from symphony.bdk.core.auth.exception.bdk_authentication_exception import AuthInitializationException
+from symphony.bdk.core.auth.exception import AuthInitializationException
 from symphony.bdk.core.client.api_client_factory import ApiClientFactory
 from symphony.bdk.core.config.bdk_config_loader import BdkConfigLoader
 from tests.utils.resource_utils import get_config_resource_filepath

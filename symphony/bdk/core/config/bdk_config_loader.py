@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from symphony.bdk.core.config.bdk_config_parser import BdkConfigParser
-from symphony.bdk.core.config.exception.bdk_config_exception import BdkConfigException
+from symphony.bdk.core.config.exception import BdkConfigException
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
 
 

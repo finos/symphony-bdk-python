@@ -1,4 +1,4 @@
-"""Module containing all configuration related exception.
+"""Module containing all authentication related exception.
 """
 
 

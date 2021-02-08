@@ -2,7 +2,7 @@ import json
 
 import yaml
 
-from symphony.bdk.core.config.exception.bdk_config_exception import BdkConfigException
+from symphony.bdk.core.config.exception import BdkConfigException
 
 
 class BdkConfigParser:

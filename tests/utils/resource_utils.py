@@ -24,16 +24,12 @@ def object_from_json_relative_path(relative_path):
     return object_from_json(get_resource_content(relative_path))
 
 
-def get_config_resource_filepath(relative_path, as_text=True):
+def get_config_resource_filepath(relative_path):
     """Gets the absolute path of the resource
 
     :param relative_path: str relative path of the resources at "test/resources/"
-    :param as_text: bool  return a string path if True,  a pathlib.Path object otherwise
     :return: the absolute path of the specified resource
     """
     resources_path = Path(__file__).parent / "../resources/config"
     resource_path = resources_path / relative_path
-    if as_text:
-        return str(resource_path.resolve())
-    else:
-        return resource_path.resolve()
+    return str(resource_path.resolve())

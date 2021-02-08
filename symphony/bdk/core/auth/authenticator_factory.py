@@ -1,4 +1,4 @@
-from symphony.bdk.core.auth.exception.bdk_authentication_exception import AuthInitializationException
+from symphony.bdk.core.auth.exception import AuthInitializationException
 from symphony.bdk.core.auth.bot_authenticator import BotAuthenticator, BotAuthenticatorRSA
 from symphony.bdk.core.client.api_client_factory import ApiClientFactory
 from symphony.bdk.core.config.model.bdk_config import BdkConfig

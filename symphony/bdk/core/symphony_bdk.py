@@ -15,7 +15,7 @@ from symphony.bdk.gen.pod_api.system_api import SystemApi
 from symphony.bdk.gen.pod_api.user_api import UserApi
 from symphony.bdk.gen.pod_api.users_api import UsersApi
 
-from symphony.bdk.core.config.exception.bot_not_configured_exception import BotNotConfiguredException
+from symphony.bdk.core.config.exception import BotNotConfiguredException
 from symphony.bdk.core.service.datafeed.datafeed_loop_v1 import DatafeedLoopV1
 from symphony.bdk.gen.agent_api.datafeed_api import DatafeedApi
 

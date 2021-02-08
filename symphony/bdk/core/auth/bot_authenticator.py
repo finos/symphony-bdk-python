@@ -5,7 +5,7 @@ from symphony.bdk.gen.exceptions import ApiException
 from symphony.bdk.gen.api_client import ApiClient
 from symphony.bdk.core.auth.jwt_helper import create_signed_jwt
 from symphony.bdk.core.auth.auth_session import AuthSession
-from symphony.bdk.core.auth.exception.bdk_authentication_exception import AuthUnauthorizedException
+from symphony.bdk.core.auth.exception import AuthUnauthorizedException
 from symphony.bdk.core.config.model.bdk_bot_config import BdkBotConfig
 
 
