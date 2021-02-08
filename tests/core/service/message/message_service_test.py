@@ -1,7 +1,6 @@
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, AsyncMock
 
 import pytest
-from asyncmock import AsyncMock
 
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.service.message.message_service import MessageService

@@ -1,2 +1,0 @@
-class BdkConfigException(Exception):
-    pass
