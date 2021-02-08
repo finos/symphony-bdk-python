@@ -1,5 +1,6 @@
-from symphony.bdk.core.auth.auth_session import AuthSession
+from symphony.bdk.core.auth.auth_session import AuthSession, OboAuthSession
 from symphony.bdk.core.auth.authenticator_factory import AuthenticatorFactory
+from symphony.bdk.core.auth.exception.bdk_authentication_exception import AuthInitializationException
 from symphony.bdk.core.client.api_client_factory import ApiClientFactory
 from symphony.bdk.core.service.message.message_service import MessageService
 from symphony.bdk.core.service.message.multi_attachments_messages_api import MultiAttachmentsMessagesApi
@@ -61,6 +62,19 @@ class SymphonyBdk:
         :return: The bot authentication session.
         """
         return self._bot_session
+
+    def obo(self, user_id=None, username=None) -> OboAuthSession:
+        """
+        Get the Obo authentication session.
+
+        :return: The obo authentication session
+        """
+        if user_id is not None:
+            return self._authenticator_factory.get_obo_authenticator().authenticate_by_user_id(user_id)
+        if username is not None:
+            return self._authenticator_factory.get_obo_authenticator().authenticate_by_username(username)
+        raise AuthInitializationException("At least user_id or username should be given to OBO authenticate the "
+                                          "extension app")
 
     def messages(self) -> MessageService:
         """

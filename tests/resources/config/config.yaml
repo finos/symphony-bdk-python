@@ -13,3 +13,8 @@ bot:
   username: youbot
   privateKey:
     path: /Users/local/conf/agent/privatekey.pem
+
+app:
+  appId: app-id
+  privateKey:
+    path: /Users/local/conf/agent/privatekey.pem

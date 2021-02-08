@@ -14,6 +14,9 @@ class AuthMain:
             auth_session = bdk.bot_session()
             print(await auth_session.key_manager_token)
             print(await auth_session.session_token)
+            print("Obo example:")
+            obo_auth_session = bdk.obo(username="username")
+            print(await obo_auth_session.session_token)
 
 
 if __name__ == "__main__":

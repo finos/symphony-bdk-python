@@ -1,5 +1,6 @@
-from symphony.bdk.core.auth.exception.bdk_authentication_exception import AuthInitializationException
 from symphony.bdk.core.auth.bot_authenticator import BotAuthenticator, BotAuthenticatorRSA
+from symphony.bdk.core.auth.exception.bdk_authentication_exception import AuthInitializationException
+from symphony.bdk.core.auth.obo_authenticator import OboAuthenticator, OboAuthenticatorRSA
 from symphony.bdk.core.client.api_client_factory import ApiClientFactory
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
 
@@ -31,4 +32,19 @@ class AuthenticatorFactory:
                 bot_config=self._config.bot,
                 login_api_client=self._api_client_factory.get_login_client(),
                 relay_api_client=self._api_client_factory.get_relay_client()
+            )
+
+    def get_obo_authenticator(self) -> OboAuthenticator:
+        """Creates a new instance of a Obo Authenticator service.
+
+        :return: a new OboAuthenticator instance.
+
+        """
+        if self._config.app.is_rsa_authentication_configured():
+            if not self._config.app.is_rsa_configuration_valid():
+                raise AuthInitializationException("Only one of private key path or content should be configured for "
+                                                  "extension app authentication.")
+            return OboAuthenticatorRSA(
+                app_config=self._config.app,
+                login_api_client=self._api_client_factory.get_login_client()
             )

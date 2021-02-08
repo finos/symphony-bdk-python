@@ -1,12 +1,13 @@
 from abc import ABC, abstractmethod
-from symphony.bdk.gen.login_api.authentication_api import AuthenticationApi
-from symphony.bdk.gen.login_model.authenticate_request import AuthenticateRequest
-from symphony.bdk.gen.exceptions import ApiException
-from symphony.bdk.gen.api_client import ApiClient
-from symphony.bdk.core.auth.jwt_helper import create_signed_jwt
+
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.auth.exception.bdk_authentication_exception import AuthUnauthorizedException
+from symphony.bdk.core.auth.jwt_helper import create_signed_jwt
 from symphony.bdk.core.config.model.bdk_bot_config import BdkBotConfig
+from symphony.bdk.gen.api_client import ApiClient
+from symphony.bdk.gen.exceptions import ApiException
+from symphony.bdk.gen.login_api.authentication_api import AuthenticationApi
+from symphony.bdk.gen.login_model.authenticate_request import AuthenticateRequest
 
 
 class BotAuthenticator(ABC):
@@ -22,6 +23,14 @@ class BotAuthenticator(ABC):
 
     @abstractmethod
     async def authenticate_bot(self):
+        pass
+
+    @abstractmethod
+    async def retrieve_session_token(self):
+        pass
+
+    @abstractmethod
+    async def retrieve_key_manager_token(self):
         pass
 
 
