@@ -92,7 +92,7 @@ class AbstractDatafeedLoop(DatafeedLoop, ABC):
         try:
             listener_method_name, payload_field_name = RealTimeEvent[event.type].value
         except KeyError:
-            logging.info(f"Received event with an unknown type: {event.type}")
+            logging.info("Received event with an unknown type: %s", event.type)
             return
 
         listener_method = getattr(listener, listener_method_name)
