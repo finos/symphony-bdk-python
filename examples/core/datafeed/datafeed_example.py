@@ -22,7 +22,7 @@ class AuthMain:
 
 class RealTimeEventListenerImpl(RealTimeEventListener):
 
-    def on_message_sent(self, initiator: V4Initiator, event: V4MessageSent):
+    async def on_message_sent(self, initiator: V4Initiator, event: V4MessageSent):
         print(event)
 
 

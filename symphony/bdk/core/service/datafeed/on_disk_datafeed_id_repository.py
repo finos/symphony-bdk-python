@@ -1,4 +1,5 @@
 import logging
+import os
 from abc import ABC, abstractmethod
 from pathlib import Path
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
@@ -26,14 +27,6 @@ class DatafeedIdRepository(ABC):
         """
         pass
 
-    @abstractmethod
-    def read_agent_base_path(self):
-        """Reads the persisted agent base path from the storage.
-
-        :return: the persisted agent base path if present in storage, an empty string otherwise
-        """
-        pass
-
 
 class OnDiskDatafeedIdRepository(DatafeedIdRepository):
     """Implementation of DatafeedIdRepository interface for persisting a datafeed id on disk."""
@@ -41,36 +34,34 @@ class OnDiskDatafeedIdRepository(DatafeedIdRepository):
 
     def __init__(self, config: BdkConfig):
         self.config = config
+        self.datafeed_id_file_path = self._get_datafeed_id_file()
 
     def write(self, datafeed_id, agent_base_path=""):
-        content = datafeed_id + "@" + agent_base_path
-        self._get_datafeed_id_file().write_text(content)
+        self.datafeed_id_file_path.write_text(f"{datafeed_id}@{agent_base_path}")
 
     def read(self) -> str:
-        content = self._read_datafeed_information()
-        if content:
-            datafeed_id = content.split("@")[0]
-            return datafeed_id
-        return ""
+        logging.debug(f"Retrieving datafeed id from file {self.datafeed_id_file_path.absolute()}")
+        if not os.path.exists(self.datafeed_id_file_path):
+            logging.debug(
+                f"Could not retrieve datafeed id from file {self.datafeed_id_file_path.absolute()}: file not found")
+            return None
 
-    def read_agent_base_path(self) -> str:
-        content = self._read_datafeed_information()
-        if content:
-            agent_base_path = content.split("@")[1]
-            return agent_base_path
-        return ""
+        return self._read_in_file()
 
-    def _read_datafeed_information(self) -> str:
-        datafeed_id_path = self._get_datafeed_id_file()
-        try:
-            lines = datafeed_id_path.read_text(encoding='utf-8')
-            first_line = lines.split("\n")[0]
-            if "@" not in first_line:
-                return ""
-            return first_line
-        except (OSError, IndexError) as e:
-            logging.info("No persisted datafeed id could be retrieved from disk", e)
-            return ""
+    def _read_in_file(self):
+        with open(self.datafeed_id_file_path, "r") as datafeed_id_file:
+            line = datafeed_id_file.readline()
+            return self._read_in_line(line)
+
+    def _read_in_line(self, line):
+        index = line.find("@")
+        if index == -1:
+            logging.debug(f"Could not retrieve datafeed id from file {self.datafeed_id_file_path.absolute()}: "
+                          f"file without datafeed id information")
+            return None
+        datafeed_id = line[0:index]
+        logging.debug(f"Retrieved datafeed id: {datafeed_id}")
+        return datafeed_id
 
     def _get_datafeed_id_file(self) -> Path:
         filepath = self.config.datafeed.get_id_file_path()

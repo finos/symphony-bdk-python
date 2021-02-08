@@ -11,6 +11,26 @@ from symphony.bdk.core.service.datafeed.real_time_event_listener import RealTime
 from symphony.bdk.gen.agent_model.v4_event import V4Event
 
 
+class RealTimeEvent(Enum):
+    MESSAGESENT = ("on_message_sent", "message_sent")
+    SHAREDPOST = ("on_shared_post", "shared_post")
+    INSTANTMESSAGECREATED = ("on_instant_message_created", "instant_message_created")
+    ROOMCREATED = ("on_room_created", "room_created")
+    ROOMUPDATED = ("on_room_updated", "room_updated")
+    ROOMDEACTIVATED = ("on_room_deactivated", "room_deactivated")
+    ROOMREACTIVATED = ("on_room_reactivated", "room_reactivated")
+    USERREQUESTEDTOJOINROOM = ("on_user_requested_to_join_room", "user_requested_to_join_room")
+    USERJOINEDROOM = ("on_user_joined_room", "user_joined_room")
+    USERLEFTROOM = ("on_user_left_room", "user_left_room")
+    ROOMMEMBERPROMOTEDTOOWNER = ("on_room_member_promoted_to_owner", "room_member_promoted_to_owner")
+    ROOMMEMBERDEMOTEDFROMOWNER = ("on_room_demoted_from_owner", "room_member_demoted_from_owner")
+    CONNECTIONREQUESTED = ("on_connection_requested", "connection_requested")
+    CONNECTIONACCEPTED = ("on_connection_accepted", "connection_accepted")
+    SYMPHONYELEMENTSACTION = ("on_symphony_elements_action", "symphony_elements_action")
+    MESSAGESUPPRESSED = ("on_message_suppressed", "message_suppressed")
+
+
+# TODO make start and stop async
 class DatafeedLoop(ABC):
     """Interface for a loop service to be used for handling the datafeed API.
     """
@@ -42,25 +62,6 @@ class DatafeedLoop(ABC):
         pass
 
 
-class RealTimeEvent(Enum):
-    MESSAGESENT = ("on_message_sent", "message_sent")
-    SHAREDPOST = ("on_shared_post", "shared_post")
-    INSTANTMESSAGECREATED = ("on_instant_message_created", "instant_message_created")
-    ROOMCREATED = ("on_room_created", "room_created")
-    ROOMUPDATED = ("on_room_updated", "room_updated")
-    ROOMDEACTIVATED = ("on_room_deactivated", "room_deactivated")
-    ROOMREACTIVATED = ("on_room_reactivated", "room_reactivated")
-    USERREQUESTEDTOJOINROOM = ("on_user_requested_to_join_room", "user_requested_to_join_room")
-    USERJOINEDROOM = ("on_user_joined_room", "user_joined_room")
-    USERLEFTROOM = ("on_user_left_room", "user_left_room")
-    ROOMMEMBERPROMOTEDTOOWNER = ("on_room_member_promoted_to_owner", "room_member_promoted_to_owner")
-    ROOMMEMBERDEMOTEDFROMOWNER = ("on_room_demoted_from_owner", "room_member_demoted_from_owner")
-    CONNECTIONREQUESTED = ("on_connection_requested", "connection_requested")
-    CONNECTIONACCEPTED = ("on_connection_accepted", "connection_accepted")
-    SYMPHONYELEMENTSACTION = ("on_symphony_elements_action", "symphony_elements_action")
-    MESSAGESUPPRESSED = ("on_message_suppressed", "message_suppressed")
-
-
 class AbstractDatafeedLoop(DatafeedLoop, ABC):
     """Base class for implementing the datafeed services.
 
@@ -81,13 +82,13 @@ class AbstractDatafeedLoop(DatafeedLoop, ABC):
     def unsubscribe(self, listener):
         self.listeners.remove(listener)
 
-    def handle_v4_event_list(self, events: List[V4Event]):
+    async def handle_v4_event_list(self, events: List[V4Event]):
         for event in filter(lambda e: e is not None, events):
             for listener in self.listeners:
-                if listener.is_accepting_event(event, self.bdk_config.bot.username):
-                    self.dispatch_on_event_type(listener, event)
+                if await listener.is_accepting_event(event, self.bdk_config.bot.username):
+                    await self.dispatch_on_event_type(listener, event)
 
-    def dispatch_on_event_type(self, listener: RealTimeEventListener, event: V4Event):
+    async def dispatch_on_event_type(self, listener: RealTimeEventListener, event: V4Event):
         try:
             listener_method_name, payload_field_name = RealTimeEvent[event.type].value
         except KeyError:
@@ -97,4 +98,4 @@ class AbstractDatafeedLoop(DatafeedLoop, ABC):
         listener_method = getattr(listener, listener_method_name)
         event_field = getattr(event.payload, payload_field_name)
 
-        listener_method(event.initiator, event_field)
+        await listener_method(event.initiator, event_field)

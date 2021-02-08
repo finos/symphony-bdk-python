@@ -51,7 +51,7 @@ class DatafeedLoopV1(AbstractDatafeedLoop):
                                                                  session_token=await self.auth_session.session_token,
                                                                  key_manager_token=await self.auth_session.key_manager_token)
         if events is not None and events.value:
-            self.handle_v4_event_list(events.value)
+            await self.handle_v4_event_list(events.value)
 
     async def _create_datafeed_and_persist(self):
         response = await self.datafeed_api.v4_datafeed_create_post(session_token=await self.auth_session.session_token,

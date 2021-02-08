@@ -72,7 +72,7 @@ def datafeed_api():
 
 @pytest.fixture()
 def mock_listener():
-    return Mock(wraps=RealTimeEventListener())
+    return AsyncMock(wraps=RealTimeEventListener())
 
 
 @pytest.fixture()
@@ -103,7 +103,7 @@ def auto_stopping_datafeed_loop_v1(datafeed_api, auth_session, config, repositor
 
     class RealTimeEventListenerImpl(RealTimeEventListener):
 
-        def on_message_sent(self, initiator: V4Initiator, event: V4MessageSent):
+        async def on_message_sent(self, initiator: V4Initiator, event: V4MessageSent):
             datafeed_loop.stop()
 
     datafeed_loop.subscribe(RealTimeEventListenerImpl())
@@ -128,8 +128,7 @@ async def test_start(datafeed_loop_v1, datafeed_api, message_sent_event):
     datafeed_api.v4_datafeed_id_read_get.assert_called_once()
 
     assert datafeed_loop_v1.datafeed_id == "test_id"
-    assert datafeed_loop_v1.datafeed_repository.read() != ""
-    assert datafeed_loop_v1.datafeed_repository.read_agent_base_path() == DEFAULT_AGENT_BASE_PATH
+    assert datafeed_loop_v1.datafeed_repository.read()
 
 
 @pytest.mark.asyncio
@@ -202,7 +201,7 @@ async def test_retrieve_datafeed_id_from_unknown_path(datafeed_api, auth_session
 
     datafeed_loop = auto_stopping_datafeed_loop_v1(datafeed_api, auth_session, config)
 
-    assert datafeed_loop.datafeed_id == ""
+    assert datafeed_loop.datafeed_id is None
 
 
 @pytest.mark.asyncio
@@ -214,180 +213,197 @@ async def test_retrieve_datafeed_id_from_empty_file(tmpdir, datafeed_api, auth_s
 
     datafeed_loop = auto_stopping_datafeed_loop_v1(datafeed_api, auth_session, config)
 
-    assert datafeed_loop.datafeed_id == ""
+    assert datafeed_loop.datafeed_id is None
 
 
-def test_handle_message_sent(datafeed_loop_with_listener, mock_listener, initiator):
+@pytest.mark.asyncio
+async def test_handle_message_sent(datafeed_loop_with_listener, mock_listener, initiator):
     payload = V4Payload(message_sent=V4MessageSent())
 
-    datafeed_loop_with_listener.handle_v4_event_list(
+    await datafeed_loop_with_listener.handle_v4_event_list(
         [V4Event(type=RealTimeEvent.MESSAGESENT.name, payload=payload, initiator=initiator)])
 
     mock_listener.on_message_sent.assert_called_once_with(initiator, payload.message_sent)
 
 
-def test_handle_shared_post(datafeed_loop_with_listener, mock_listener, initiator):
+@pytest.mark.asyncio
+async def test_handle_shared_post(datafeed_loop_with_listener, mock_listener, initiator):
     payload = V4Payload(shared_post=V4SharedPost())
 
-    datafeed_loop_with_listener.handle_v4_event_list(
+    await datafeed_loop_with_listener.handle_v4_event_list(
         [V4Event(type=RealTimeEvent.SHAREDPOST.name, payload=payload, initiator=initiator)])
 
     mock_listener.on_shared_post.assert_called_once_with(initiator, payload.shared_post)
 
 
-def test_handle_instant_message_created(datafeed_loop_with_listener, mock_listener, initiator):
+@pytest.mark.asyncio
+async def test_handle_instant_message_created(datafeed_loop_with_listener, mock_listener, initiator):
     payload = V4Payload(instant_message_created=V4InstantMessageCreated())
 
-    datafeed_loop_with_listener.handle_v4_event_list(
+    await datafeed_loop_with_listener.handle_v4_event_list(
         [V4Event(type=RealTimeEvent.INSTANTMESSAGECREATED.name, payload=payload, initiator=initiator)])
 
     mock_listener.on_instant_message_created.assert_called_once_with(initiator, payload.instant_message_created)
 
 
-def test_handle_room_created(datafeed_loop_with_listener, mock_listener, initiator):
+@pytest.mark.asyncio
+async def test_handle_room_created(datafeed_loop_with_listener, mock_listener, initiator):
     payload = V4Payload(room_created=V4RoomCreated())
 
-    datafeed_loop_with_listener.handle_v4_event_list(
+    await datafeed_loop_with_listener.handle_v4_event_list(
         [V4Event(type=RealTimeEvent.ROOMCREATED.name, payload=payload, initiator=initiator)])
 
     mock_listener.on_room_created.assert_called_once_with(initiator, payload.room_created)
 
 
-def test_handle_room_updated(datafeed_loop_with_listener, mock_listener, initiator):
+@pytest.mark.asyncio
+async def test_handle_room_updated(datafeed_loop_with_listener, mock_listener, initiator):
     payload = V4Payload(room_updated=V4RoomUpdated())
 
-    datafeed_loop_with_listener.handle_v4_event_list(
+    await datafeed_loop_with_listener.handle_v4_event_list(
         [V4Event(type=RealTimeEvent.ROOMUPDATED.name, payload=payload, initiator=initiator)])
 
     mock_listener.on_room_updated.assert_called_once_with(initiator, payload.room_updated)
 
 
-def test_handle_room_deactivated(datafeed_loop_with_listener, mock_listener, initiator):
+@pytest.mark.asyncio
+async def test_handle_room_deactivated(datafeed_loop_with_listener, mock_listener, initiator):
     payload = V4Payload(room_deactivated=V4RoomDeactivated())
 
-    datafeed_loop_with_listener.handle_v4_event_list(
+    await datafeed_loop_with_listener.handle_v4_event_list(
         [V4Event(type=RealTimeEvent.ROOMDEACTIVATED.name, payload=payload, initiator=initiator)])
 
     mock_listener.on_room_deactivated.assert_called_once_with(initiator, payload.room_deactivated)
 
 
-def test_handle_room_reactivated(datafeed_loop_with_listener, mock_listener, initiator):
+@pytest.mark.asyncio
+async def test_handle_room_reactivated(datafeed_loop_with_listener, mock_listener, initiator):
     payload = V4Payload(room_reactivated=V4RoomReactivated())
 
-    datafeed_loop_with_listener.handle_v4_event_list(
+    await datafeed_loop_with_listener.handle_v4_event_list(
         [V4Event(type=RealTimeEvent.ROOMREACTIVATED.name, payload=payload, initiator=initiator)])
 
     mock_listener.on_room_reactivated.assert_called_once_with(initiator, payload.room_reactivated)
 
 
-def test_handle_user_requested_to_join_room(datafeed_loop_with_listener, mock_listener, initiator):
+@pytest.mark.asyncio
+async def test_handle_user_requested_to_join_room(datafeed_loop_with_listener, mock_listener, initiator):
     payload = V4Payload(user_requested_to_join_room=V4UserRequestedToJoinRoom())
 
-    datafeed_loop_with_listener.handle_v4_event_list(
+    await datafeed_loop_with_listener.handle_v4_event_list(
         [V4Event(type=RealTimeEvent.USERREQUESTEDTOJOINROOM.name, payload=payload, initiator=initiator)])
 
     mock_listener.on_user_requested_to_join_room.assert_called_once_with(initiator, payload.user_requested_to_join_room)
 
 
-def test_handle_user_joined_room(datafeed_loop_with_listener, mock_listener, initiator):
+@pytest.mark.asyncio
+async def test_handle_user_joined_room(datafeed_loop_with_listener, mock_listener, initiator):
     payload = V4Payload(user_joined_room=V4UserJoinedRoom())
 
-    datafeed_loop_with_listener.handle_v4_event_list(
+    await datafeed_loop_with_listener.handle_v4_event_list(
         [V4Event(type=RealTimeEvent.USERJOINEDROOM.name, payload=payload, initiator=initiator)])
 
     mock_listener.on_user_joined_room.assert_called_once_with(initiator, payload.user_joined_room)
 
 
-def test_handle_user_left_room(datafeed_loop_with_listener, mock_listener, initiator):
+@pytest.mark.asyncio
+async def test_handle_user_left_room(datafeed_loop_with_listener, mock_listener, initiator):
     payload = V4Payload(user_left_room=V4UserLeftRoom())
 
-    datafeed_loop_with_listener.handle_v4_event_list(
+    await datafeed_loop_with_listener.handle_v4_event_list(
         [V4Event(type=RealTimeEvent.USERLEFTROOM.name, payload=payload, initiator=initiator)])
 
     mock_listener.on_user_left_room.assert_called_once_with(initiator, payload.user_left_room)
 
 
-def test_handle_room_member_promoted_to_owner(datafeed_loop_with_listener, mock_listener, initiator):
+@pytest.mark.asyncio
+async def test_handle_room_member_promoted_to_owner(datafeed_loop_with_listener, mock_listener, initiator):
     payload = V4Payload(room_member_promoted_to_owner=V4RoomMemberPromotedToOwner())
 
-    datafeed_loop_with_listener.handle_v4_event_list(
+    await datafeed_loop_with_listener.handle_v4_event_list(
         [V4Event(type=RealTimeEvent.ROOMMEMBERPROMOTEDTOOWNER.name, payload=payload, initiator=initiator)])
 
     mock_listener.on_room_member_promoted_to_owner.assert_called_once_with(initiator,
                                                                            payload.room_member_promoted_to_owner)
 
 
-def test_handle_room_member_demoted_from_owner(datafeed_loop_with_listener, mock_listener, initiator):
+@pytest.mark.asyncio
+async def test_handle_room_member_demoted_from_owner(datafeed_loop_with_listener, mock_listener, initiator):
     payload = V4Payload(room_member_demoted_from_owner=V4RoomMemberDemotedFromOwner())
 
-    datafeed_loop_with_listener.handle_v4_event_list(
+    await datafeed_loop_with_listener.handle_v4_event_list(
         [V4Event(type=RealTimeEvent.ROOMMEMBERDEMOTEDFROMOWNER.name, payload=payload, initiator=initiator)])
 
     mock_listener.on_room_demoted_from_owner.assert_called_once_with(initiator, payload.room_member_demoted_from_owner)
 
 
-def test_handle_connection_requested(datafeed_loop_with_listener, mock_listener, initiator):
+@pytest.mark.asyncio
+async def test_handle_connection_requested(datafeed_loop_with_listener, mock_listener, initiator):
     payload = V4Payload(connection_requested=V4ConnectionRequested())
 
-    datafeed_loop_with_listener.handle_v4_event_list(
+    await datafeed_loop_with_listener.handle_v4_event_list(
         [V4Event(type=RealTimeEvent.CONNECTIONREQUESTED.name, payload=payload, initiator=initiator)])
 
     mock_listener.on_connection_requested.assert_called_once_with(initiator, payload.connection_requested)
 
 
-def test_handle_connection_accepted(datafeed_loop_with_listener, mock_listener, initiator):
+@pytest.mark.asyncio
+async def test_handle_connection_accepted(datafeed_loop_with_listener, mock_listener, initiator):
     payload = V4Payload(connection_accepted=V4ConnectionAccepted())
 
-    datafeed_loop_with_listener.handle_v4_event_list(
+    await datafeed_loop_with_listener.handle_v4_event_list(
         [V4Event(type=RealTimeEvent.CONNECTIONACCEPTED.name, payload=payload, initiator=initiator)])
 
     mock_listener.on_connection_accepted.assert_called_once_with(initiator, payload.connection_accepted)
 
 
-def test_handle_message_suppressed(datafeed_loop_with_listener, mock_listener, initiator):
+@pytest.mark.asyncio
+async def test_handle_message_suppressed(datafeed_loop_with_listener, mock_listener, initiator):
     payload = V4Payload(message_suppressed=V4MessageSuppressed())
 
-    datafeed_loop_with_listener.handle_v4_event_list(
+    await datafeed_loop_with_listener.handle_v4_event_list(
         [V4Event(type=RealTimeEvent.MESSAGESUPPRESSED.name, payload=payload, initiator=initiator)])
 
     mock_listener.on_message_suppressed.assert_called_once_with(initiator, payload.message_suppressed)
 
 
-def test_handle_symphony_element(datafeed_loop_with_listener, mock_listener, initiator):
+@pytest.mark.asyncio
+async def test_handle_symphony_element(datafeed_loop_with_listener, mock_listener, initiator):
     payload = V4Payload(symphony_elements_action=V4SymphonyElementsAction())
 
-    datafeed_loop_with_listener.handle_v4_event_list(
+    await datafeed_loop_with_listener.handle_v4_event_list(
         [V4Event(type=RealTimeEvent.SYMPHONYELEMENTSACTION.name, payload=payload, initiator=initiator)])
 
     mock_listener.on_symphony_elements_action.assert_called_once_with(initiator, payload.symphony_elements_action)
 
 
-# TODO: test with event from bot -> it is filtered out
-# test with None list, test with None event, test with unknown event type, test with None event type
-
-def test_handle_bot_event(datafeed_loop_with_listener, mock_listener, config):
+@pytest.mark.asyncio
+async def test_handle_bot_event(datafeed_loop_with_listener, mock_listener, config):
     initiator = V4Initiator(user=V4User(username=config.bot.username))
     payload = V4Payload(message_sent=V4MessageSent())
 
-    datafeed_loop_with_listener.handle_v4_event_list(
+    await datafeed_loop_with_listener.handle_v4_event_list(
         [V4Event(type=RealTimeEvent.MESSAGESENT.name, payload=payload, initiator=initiator)])
 
     mock_listener.assert_not_called()
 
 
-def test_handle_empty_event_list(datafeed_loop_with_listener, mock_listener, initiator):
-    datafeed_loop_with_listener.handle_v4_event_list([])
+@pytest.mark.asyncio
+async def test_handle_empty_event_list(datafeed_loop_with_listener, mock_listener, initiator):
+    await datafeed_loop_with_listener.handle_v4_event_list([])
 
     mock_listener.assert_not_called()
 
 
-def test_handle_event_list_with_none(datafeed_loop_with_listener, mock_listener, initiator):
-    datafeed_loop_with_listener.handle_v4_event_list([None])
+@pytest.mark.asyncio
+async def test_handle_event_list_with_none(datafeed_loop_with_listener, mock_listener, initiator):
+    await datafeed_loop_with_listener.handle_v4_event_list([None])
 
     mock_listener.assert_not_called()
 
 
-def test_handle_event_with_unknown_event_type(datafeed_loop_with_listener, mock_listener, initiator):
-    datafeed_loop_with_listener.handle_v4_event_list([V4Event(type="unknown type")])
+@pytest.mark.asyncio
+async def test_handle_event_with_unknown_event_type(datafeed_loop_with_listener, mock_listener, initiator):
+    await datafeed_loop_with_listener.handle_v4_event_list([V4Event(type="unknown type")])
 
     mock_listener.assert_not_called()

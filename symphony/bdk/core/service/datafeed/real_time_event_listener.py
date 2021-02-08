@@ -27,7 +27,7 @@ class RealTimeEventListener:
     """
 
     @staticmethod
-    def is_accepting_event(event: V4Event, username: str) -> bool:
+    async def is_accepting_event(event: V4Event, username: str) -> bool:
         """Checks if the event is accepted to be handled.
 
         By default, all the events that is created by the bot  itself will not be accepted to be handled by the
@@ -43,7 +43,7 @@ class RealTimeEventListener:
         except ApiAttributeError:
             return False
 
-    def on_message_sent(self, initiator: V4Initiator, event: V4MessageSent):
+    async def on_message_sent(self, initiator: V4Initiator, event: V4MessageSent):
         """ Called when a MESSAGESENT event is received.
 
         :param initiator: Event initiator.
@@ -51,7 +51,7 @@ class RealTimeEventListener:
         """
         pass
 
-    def on_shared_post(self, initiator: V4Initiator, event: V4SharedPost):
+    async def on_shared_post(self, initiator: V4Initiator, event: V4SharedPost):
         """ Called when an INSTANTMESSAGECREATED event is received.
 
         :param initiator: Event initiator.
@@ -59,7 +59,7 @@ class RealTimeEventListener:
         """
         pass
 
-    def on_instant_message_created(self, initiator: V4Initiator, event: V4InstantMessageCreated):
+    async def on_instant_message_created(self, initiator: V4Initiator, event: V4InstantMessageCreated):
         """ Called when a ROOMCREATED event is received.
 
         :param initiator: Event initiator.
@@ -67,7 +67,7 @@ class RealTimeEventListener:
         """
         pass
 
-    def on_room_created(self, initiator: V4Initiator, event: V4RoomCreated):
+    async def on_room_created(self, initiator: V4Initiator, event: V4RoomCreated):
         """
 
         :param initiator: Event initiator.
@@ -75,7 +75,7 @@ class RealTimeEventListener:
         """
         pass
 
-    def on_room_updated(self, initiator: V4Initiator, event: V4RoomUpdated):
+    async def on_room_updated(self, initiator: V4Initiator, event: V4RoomUpdated):
         """
 
         :param initiator: Event initiator.
@@ -83,7 +83,7 @@ class RealTimeEventListener:
         """
         pass
 
-    def on_room_deactivated(self, initiator: V4Initiator, event: V4RoomDeactivated):
+    async def on_room_deactivated(self, initiator: V4Initiator, event: V4RoomDeactivated):
         """
 
         :param initiator: Event initiator.
@@ -91,7 +91,7 @@ class RealTimeEventListener:
         """
         pass
 
-    def on_room_reactivated(self, initiator: V4Initiator, event: V4RoomReactivated):
+    async def on_room_reactivated(self, initiator: V4Initiator, event: V4RoomReactivated):
         """
 
         :param initiator: Event initiator.
@@ -99,7 +99,7 @@ class RealTimeEventListener:
         """
         pass
 
-    def on_user_requested_to_join_room(self, initiator: V4Initiator, event: V4UserRequestedToJoinRoom):
+    async def on_user_requested_to_join_room(self, initiator: V4Initiator, event: V4UserRequestedToJoinRoom):
         """
 
         :param initiator: Event initiator.
@@ -107,7 +107,7 @@ class RealTimeEventListener:
         """
         pass
 
-    def on_user_joined_room(self, initiator: V4Initiator, event: V4UserJoinedRoom):
+    async def on_user_joined_room(self, initiator: V4Initiator, event: V4UserJoinedRoom):
         """
 
         :param initiator: Event initiator.
@@ -115,7 +115,7 @@ class RealTimeEventListener:
         """
         pass
 
-    def on_user_left_room(self, initiator: V4Initiator, event: V4UserLeftRoom):
+    async def on_user_left_room(self, initiator: V4Initiator, event: V4UserLeftRoom):
         """
 
         :param initiator: Event initiator.
@@ -123,7 +123,7 @@ class RealTimeEventListener:
         """
         pass
 
-    def on_room_member_promoted_to_owner(self, initiator: V4Initiator, event: V4RoomMemberPromotedToOwner):
+    async def on_room_member_promoted_to_owner(self, initiator: V4Initiator, event: V4RoomMemberPromotedToOwner):
         """
 
         :param initiator: Event initiator.
@@ -131,7 +131,7 @@ class RealTimeEventListener:
         """
         pass
 
-    def on_room_demoted_from_owner(self, initiator: V4Initiator, event: V4RoomMemberDemotedFromOwner):
+    async def on_room_demoted_from_owner(self, initiator: V4Initiator, event: V4RoomMemberDemotedFromOwner):
         """
 
         :param initiator: Event initiator.
@@ -139,7 +139,7 @@ class RealTimeEventListener:
         """
         pass
 
-    def on_connection_requested(self, initiator: V4Initiator, event: V4ConnectionRequested):
+    async def on_connection_requested(self, initiator: V4Initiator, event: V4ConnectionRequested):
         """
 
         :param initiator: Event initiator.
@@ -147,7 +147,7 @@ class RealTimeEventListener:
         """
         pass
 
-    def on_connection_accepted(self, initiator: V4Initiator, event: V4ConnectionAccepted):
+    async def on_connection_accepted(self, initiator: V4Initiator, event: V4ConnectionAccepted):
         """
 
         :param initiator: Event initiator.
@@ -155,7 +155,7 @@ class RealTimeEventListener:
         """
         pass
 
-    def on_message_suppressed(self, initiator: V4Initiator, event: V4MessageSuppressed):
+    async def on_message_suppressed(self, initiator: V4Initiator, event: V4MessageSuppressed):
         """
 
         :param initiator: Event initiator.
@@ -163,7 +163,7 @@ class RealTimeEventListener:
         """
         pass
 
-    def on_symphony_elements_action(self, initiator: V4Initiator, event: V4SymphonyElementsAction):
+    async def on_symphony_elements_action(self, initiator: V4Initiator, event: V4SymphonyElementsAction):
         """
 
         :param initiator: Event initiator.

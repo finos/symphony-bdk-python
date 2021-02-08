@@ -12,7 +12,4 @@ class InMemoryDatafeedIdRepository(DatafeedIdRepository):
         self.agent_base_path = self.default_agent_base_path if agent_base_path is None else agent_base_path
 
     def read(self):
-        return "" if self.datafeed_id is None else self.datafeed_id
-
-    def read_agent_base_path(self):
-        return "" if self.agent_base_path is None else self.agent_base_path
+        return self.datafeed_id
