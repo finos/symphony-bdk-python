@@ -32,8 +32,7 @@ class MessageService:
                  pod_api: PodApi,
                  attachment_api: AttachmentsApi,
                  default_api: DefaultApi,
-                 auth_session: AuthSession
-                 ):
+                 auth_session: AuthSession):
         self._messages_api = messages_api
         self._message_api = message_api
         self._message_suppression_api = message_suppression_api
@@ -59,7 +58,6 @@ class MessageService:
         :param limit: Maximum number of messages to return. Default: 50
 
         :return: the list of matching messages in the stream.
-
 
         """
         params = {
@@ -106,9 +104,9 @@ class MessageService:
             'version': version
         }
         if attachment is not None:
-            params['attachment'] = attachment if type(attachment) is list else [attachment]
+            params['attachment'] = attachment if isinstance(attachment, list) else [attachment]
         if preview is not None:
-            params['preview'] = preview if type(preview) is list else [preview]
+            params['preview'] = preview if isinstance(preview, list) else [preview]
 
         return await self._messages_api.v4_stream_sid_multi_attachment_message_create_post(**params)
 
@@ -145,9 +143,9 @@ class MessageService:
             'version': version
         }
         if attachment is not None:
-            params['attachment'] = attachment if type(attachment) is list else [attachment]
+            params['attachment'] = attachment if isinstance(attachment, list) else [attachment]
         if preview is not None:
-            params['preview'] = preview if type(preview) is list else [preview]
+            params['preview'] = preview if isinstance(preview, list) else [preview]
 
         return await self._messages_api.v4_multi_attachment_message_blast_post(**params)
 

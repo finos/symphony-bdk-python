@@ -1,11 +1,11 @@
 from unittest.mock import patch
 
 import pytest
-from asyncmock import AsyncMock
+from unittest.mock import AsyncMock
 
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.auth.bot_authenticator import BotAuthenticatorRSA
-from symphony.bdk.core.config.bdk_config_loader import BdkConfigLoader
+from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.symphony_bdk import SymphonyBdk
 from tests.utils.resource_utils import get_config_resource_filepath
 

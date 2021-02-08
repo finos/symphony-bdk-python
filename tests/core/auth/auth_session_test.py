@@ -1,4 +1,4 @@
-from asyncmock import AsyncMock
+from unittest.mock import AsyncMock
 
 import pytest
 
