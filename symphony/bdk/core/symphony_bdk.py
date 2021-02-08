@@ -1,12 +1,15 @@
 from symphony.bdk.core.auth.auth_session import AuthSession, OboAuthSession
 from symphony.bdk.core.auth.authenticator_factory import AuthenticatorFactory
-from symphony.bdk.core.auth.exception.bdk_authentication_exception import AuthInitializationException
+from symphony.bdk.core.auth.exception import AuthInitializationException
 from symphony.bdk.core.client.api_client_factory import ApiClientFactory
+from symphony.bdk.core.config.exception import BotNotConfiguredException
+from symphony.bdk.core.service.datafeed.datafeed_loop_v1 import DatafeedLoopV1
 from symphony.bdk.core.service.message.message_service import MessageService
 from symphony.bdk.core.service.message.multi_attachments_messages_api import MultiAttachmentsMessagesApi
 from symphony.bdk.core.service.user.user_service import UserService
 from symphony.bdk.gen.agent_api.attachments_api import AttachmentsApi
 from symphony.bdk.gen.agent_api.audit_trail_api import AuditTrailApi
+from symphony.bdk.gen.agent_api.datafeed_api import DatafeedApi
 from symphony.bdk.gen.pod_api.default_api import DefaultApi
 from symphony.bdk.gen.pod_api.message_api import MessageApi
 from symphony.bdk.gen.pod_api.message_suppression_api import MessageSuppressionApi
@@ -18,8 +21,7 @@ from symphony.bdk.gen.pod_api.users_api import UsersApi
 
 
 class SymphonyBdk:
-    """
-    BDK entry point
+    """BDK entry point
     """
 
     async def __aenter__(self):
@@ -46,6 +48,7 @@ class SymphonyBdk:
             DefaultApi(self._pod_client),
             self._bot_session
         )
+        self._datafeed_loop = self._get_datafeed_loop()
         self._user_service = UserService(
             UserApi(self._pod_client),
             UsersApi(self._pod_client),
@@ -55,8 +58,7 @@ class SymphonyBdk:
         )
 
     def bot_session(self) -> AuthSession:
-        """
-        Get the Bot authentication session. If the bot is not authenticated yet, perform the authentication for a new
+        """Get the Bot authentication session. If the bot is not authenticated yet, perform the authentication for a new
         session.
 
         :return: The bot authentication session.
@@ -77,17 +79,28 @@ class SymphonyBdk:
                                           "extension app")
 
     def messages(self) -> MessageService:
-        """
-        Get the MessageService from the BDK entry point.
+        """Get the MessageService from the BDK entry point.
 
         :return: The MessageService instance.
 
         """
         return self._message_service
 
-    def users(self) -> UserService:
+    def datafeed(self) -> DatafeedLoopV1:
+        """Get the Datafeed loop from the BDK entry point.
+
+        :return: The Datafeed Loop instance.
+
         """
-        Get the UserService from the BDK entry point.
+        return self._datafeed_loop
+
+    def _get_datafeed_loop(self) -> DatafeedLoopV1:
+        if self._config.is_bot_configured():
+            return DatafeedLoopV1(DatafeedApi(self._agent_client), self._bot_session, self._config)
+        raise BotNotConfiguredException()
+
+    def users(self) -> UserService:
+        """Get the UserService from the BDK entry point.
 
         :return: The UserService instance.
 
@@ -95,7 +108,6 @@ class SymphonyBdk:
         return self._user_service
 
     async def close_clients(self):
-        """
-        Close all the existing api clients created by the api client factory.
+        """Close all the existing api clients created by the api client factory.
         """
         await self._api_client_factory.close_clients()

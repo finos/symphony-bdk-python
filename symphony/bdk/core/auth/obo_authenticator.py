@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 from symphony.bdk.core.auth.auth_session import OboAuthSession
-from symphony.bdk.core.auth.exception.bdk_authentication_exception import AuthUnauthorizedException
+from symphony.bdk.core.auth.exception import AuthUnauthorizedException
 from symphony.bdk.core.auth.jwt_helper import create_signed_jwt
 from symphony.bdk.core.config.model.bdk_app_config import BdkAppConfig
 from symphony.bdk.gen.api_client import ApiClient
@@ -35,6 +35,15 @@ class OboAuthenticator(ABC):
             self,
             user_id: int
     ):
+
+        """
+        Retrieve the OBO session token by username.
+
+        :param user_id: User Id.
+
+        :return: The obo session token.
+
+        """
         pass
 
     @abstractmethod
@@ -42,6 +51,14 @@ class OboAuthenticator(ABC):
             self,
             username: str
     ):
+        """
+        Retrieve the OBO session token by username.
+
+        :param username: Username
+
+        :return: The obo session token.
+
+        """
         pass
 
     def authenticate_by_username(self, username: str):

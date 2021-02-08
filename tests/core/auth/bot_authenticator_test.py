@@ -1,10 +1,9 @@
-from unittest.mock import patch, MagicMock
-from asyncmock import AsyncMock
+from unittest.mock import patch, MagicMock, AsyncMock
 
 import pytest
 
 from symphony.bdk.core.auth.bot_authenticator import BotAuthenticatorRSA
-from symphony.bdk.core.auth.exception.bdk_authentication_exception import AuthUnauthorizedException
+from symphony.bdk.core.auth.exception import AuthUnauthorizedException
 from symphony.bdk.core.config.model.bdk_config import *
 from symphony.bdk.gen.api_client import ApiClient
 from symphony.bdk.gen.configuration import Configuration

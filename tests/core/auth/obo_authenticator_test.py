@@ -2,7 +2,7 @@ from unittest.mock import MagicMock, AsyncMock, patch
 
 import pytest
 
-from symphony.bdk.core.auth.exception.bdk_authentication_exception import AuthUnauthorizedException
+from symphony.bdk.core.auth.exception import AuthUnauthorizedException
 from symphony.bdk.core.auth.obo_authenticator import OboAuthenticatorRSA
 from symphony.bdk.core.config.model.bdk_app_config import BdkAppConfig
 from symphony.bdk.gen.api_client import ApiClient, Configuration

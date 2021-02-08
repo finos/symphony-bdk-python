@@ -1,10 +1,9 @@
 from unittest.mock import patch
-from asyncmock import AsyncMock
 
 import pytest
 
 from symphony.bdk.core.client.api_client_factory import ApiClientFactory
-from symphony.bdk.core.config.bdk_config_loader import BdkConfigLoader
+from symphony.bdk.core.config.loader import BdkConfigLoader
 from tests.utils.resource_utils import get_config_resource_filepath
 
 
