@@ -62,10 +62,22 @@ class OboAuthenticator(ABC):
         pass
 
     def authenticate_by_username(self, username: str):
+        """Authenticate On-Behalf-Of user by username.
+
+        :param username: Username
+
+        :return: the OBO authentication session.
+        """
         auth_session = OboAuthSession(self, username=username)
         return auth_session
 
     def authenticate_by_user_id(self, user_id: int):
+        """Authenticate On-Behalf-Of user by user id.
+
+        :param user_id: User Id
+
+        :return: the OBO authentication session.
+        """
         auth_session = OboAuthSession(self, user_id=user_id)
         return auth_session
 
