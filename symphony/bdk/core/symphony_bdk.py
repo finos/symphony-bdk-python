@@ -1,12 +1,16 @@
-from symphony.bdk.core.auth.auth_session import AuthSession
+from symphony.bdk.core.auth.auth_session import AuthSession, OboAuthSession
 from symphony.bdk.core.auth.authenticator_factory import AuthenticatorFactory
+from symphony.bdk.core.auth.exception import AuthInitializationException
 from symphony.bdk.core.client.api_client_factory import ApiClientFactory
+from symphony.bdk.core.config.exception import BotNotConfiguredException
+from symphony.bdk.core.service.datafeed.datafeed_loop_v1 import DatafeedLoopV1
 from symphony.bdk.core.service.message.message_service import MessageService
 from symphony.bdk.core.service.message.multi_attachments_messages_api import MultiAttachmentsMessagesApi
 from symphony.bdk.core.service.stream.stream_service import StreamService
 from symphony.bdk.core.service.user.user_service import UserService
 from symphony.bdk.gen.agent_api.attachments_api import AttachmentsApi
 from symphony.bdk.gen.agent_api.audit_trail_api import AuditTrailApi
+from symphony.bdk.gen.agent_api.datafeed_api import DatafeedApi
 from symphony.bdk.gen.agent_api.share_api import ShareApi
 from symphony.bdk.gen.pod_api.default_api import DefaultApi
 from symphony.bdk.gen.pod_api.message_api import MessageApi
@@ -17,10 +21,6 @@ from symphony.bdk.gen.pod_api.streams_api import StreamsApi
 from symphony.bdk.gen.pod_api.system_api import SystemApi
 from symphony.bdk.gen.pod_api.user_api import UserApi
 from symphony.bdk.gen.pod_api.users_api import UsersApi
-
-from symphony.bdk.core.config.exception import BotNotConfiguredException
-from symphony.bdk.core.service.datafeed.datafeed_loop_v1 import DatafeedLoopV1
-from symphony.bdk.gen.agent_api.datafeed_api import DatafeedApi
 
 
 class SymphonyBdk:
@@ -72,6 +72,19 @@ class SymphonyBdk:
         :return: The bot authentication session.
         """
         return self._bot_session
+
+    def obo(self, user_id: int = None, username: str = None) -> OboAuthSession:
+        """
+        Get the Obo authentication session.
+
+        :return: The obo authentication session
+        """
+        if user_id is not None:
+            return self._authenticator_factory.get_obo_authenticator().authenticate_by_user_id(user_id)
+        if username is not None:
+            return self._authenticator_factory.get_obo_authenticator().authenticate_by_username(username)
+        raise AuthInitializationException("At least user_id or username should be given to OBO authenticate the "
+                                          "extension app")
 
     def messages(self) -> MessageService:
         """Get the MessageService from the BDK entry point.

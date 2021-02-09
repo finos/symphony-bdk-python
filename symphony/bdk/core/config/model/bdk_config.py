@@ -1,6 +1,7 @@
+from symphony.bdk.core.config.model.bdk_app_config import BdkAppConfig
 from symphony.bdk.core.config.model.bdk_bot_config import BdkBotConfig
-from symphony.bdk.core.config.model.bdk_server_config import BdkServerConfig
 from symphony.bdk.core.config.model.bdk_client_config import BdkClientConfig
+from symphony.bdk.core.config.model.bdk_server_config import BdkServerConfig
 from symphony.bdk.core.config.model.bdk_ssl_config import BdkSslConfig
 from symphony.bdk.core.config.model.bdk_datafeed_config import BdkDatafeedConfig
 
@@ -22,6 +23,7 @@ class BdkConfig(BdkServerConfig):
         self.session_auth = BdkClientConfig(self, config.get("sessionAuth"))
         self.bot = BdkBotConfig(config.get("bot"))
         self.ssl = BdkSslConfig(config.get("ssl"))
+        self.app = BdkAppConfig(config.get("app"))
         self.datafeed = BdkDatafeedConfig(config.get("datafeed"))
 
     def is_bot_configured(self) -> bool:
