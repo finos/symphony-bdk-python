@@ -1,0 +1,13 @@
+{
+  "id": "ubaSiuUsc_j-_lVQ8vhAz3___opSJdJZdA",
+  "crossPod": false,
+  "origin": "INTERNAL",
+  "active": true,
+  "lastMessageDate": 1612872744186,
+  "streamType": {
+    "type": "ROOM"
+  },
+  "roomAttributes": {
+    "name": "New room name"
+  }
+}

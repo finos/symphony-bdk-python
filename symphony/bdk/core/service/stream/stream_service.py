@@ -61,7 +61,7 @@ class StreamService:
         return await self._streams_api.v1_streams_list_post(filter=stream_filter, skip=skip, limit=limit,
                                                             session_token=await self._auth_session.session_token)
 
-    async def add_member_to_room(self, user_id: int, room_id: int):
+    async def add_member_to_room(self, user_id: int, room_id: str):
         """Adds a member to an existing room.
         Wraps the `Add Member <https://developers.symphony.com/restapi/reference#add-member>`_ endpoint.
 
@@ -98,7 +98,7 @@ class StreamService:
             sid=stream_id, share_content=content, session_token=await self._auth_session.session_token,
             key_manager_token=await self._auth_session.key_manager_token)
 
-    async def promote_user_to_room_owner(self, user_id: int, room_id: int):
+    async def promote_user_to_room_owner(self, user_id: int, room_id: str):
         """Promotes user to owner of the chat room.
         Wraps the `Promote Owner <https://developers.symphony.com/restapi/reference#promote-owner>`_ endpoint.
 
@@ -109,7 +109,7 @@ class StreamService:
         await self._room_membership_api.v1_room_id_membership_promote_owner_post(
             id=room_id, payload=UserId(id=user_id), session_token=await self._auth_session.session_token)
 
-    async def demote_owner_to_room_participant(self, user_id: int, room_id: int):
+    async def demote_owner_to_room_participant(self, user_id: int, room_id: str):
         """Demotes room owner to a participant in the chat room.
         Wraps the `Demote Owner <https://developers.symphony.com/restapi/reference#demote-owner>`_ endpoint.
 

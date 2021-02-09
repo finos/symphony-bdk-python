@@ -37,7 +37,6 @@ class MessageMain:
                                    article_url="https://ophirgottlieb.tumblr.com/post/146623530819/the-secrets-out-tesla-enters-china-and-is",
                                    summary="Tesla Motors Inc. (NASDAQ:TSLA) has a CEO more famous than the firm itself, perhaps. Elon Musk has made some bold predictions, first stating that the firm would grow sales from 50,000 units in 2015 to 500,000 by 2020 powered by the less expensive Model 3 and the massive manufacturing capability of the Gigafactory.",
                                    app_id="unknown")
-
             message = await streams.share(stream_id,
                                           ShareContent(type="com.symphony.sharing.article", content=article))
 

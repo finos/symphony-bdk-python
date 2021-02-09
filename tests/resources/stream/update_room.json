@@ -1,0 +1,26 @@
+{
+  "roomAttributes": {
+    "name": "Test bot room",
+    "keywords": [
+      {
+        "key": "fancyLabel",
+        "value": "value"
+      }
+    ],
+    "description": "new description",
+    "membersCanInvite": false,
+    "discoverable": false,
+    "readOnly": false,
+    "copyProtected": false,
+    "crossPod": false,
+    "viewHistory": true,
+    "multiLateralRoom": false,
+    "public": false
+  },
+  "roomSystemInfo": {
+    "id": "ubaSiuUsc_j-_lVQ8vhAz3___opSJdJZdA",
+    "creationDate": 1604939558310,
+    "createdByUserId": 13056700579872,
+    "active": true
+  }
+}
