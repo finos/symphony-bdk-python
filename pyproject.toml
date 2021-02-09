@@ -3,6 +3,7 @@ name = "symphony-bdk"
 version = "2.0.dev0"
 description = "Symphony Bot Development Kit for Python"
 authors = ["Symphony Platform Solutions <platformsolutions@symphony.com>"]
+packages = [{ include = "symphony" }]
 
 [tool.poetry.dependencies]
 python = "^3.8"
