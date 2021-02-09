@@ -65,15 +65,24 @@ class MessageClient(APIClient):
 
     def send_msg_with_attachment(self, stream_id, msg,
                                  filename, path_to_attachment):
-        """In this function make sure that msg parameter is set to just the messageML string.
+        """
+        In this function make sure that msg parameter is set to just the messageML string.
         Do not set msg parameter to dict(message='<messageML>testing attachement</messageML>')
-        for this function"""
+        for this function
+
+        :param str | io.BytesIO path_to_attachment:
+            A path to a file or a stream of bytes.
+        """
         logging.debug('MessageClient/send_msg_with_attachment()')
         parts = self._data_and_headers_for_attachment(stream_id, msg, filename, path_to_attachment)
         return self.bot_client.execute_rest_call("POST", **parts)
 
     async def send_msg_with_attachment_async(self, stream_id, msg,
                                              filename, path_to_attachment):
+        """
+        :param str | io.BytesIO path_to_attachment:
+            A path to a file or a stream of bytes.
+        """
         logging.debug('MessageClient/send_msg_with_attachment()')
 
         parts = self._data_and_headers_for_attachment(stream_id, msg, filename, path_to_attachment, aio=True)
