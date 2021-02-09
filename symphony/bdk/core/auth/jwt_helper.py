@@ -10,7 +10,8 @@ def create_signed_jwt(private_key_config, username, expiration=None):
     :param private_key_config:  The private key configuration for a service account or an extension app.
     :param username:            The username of the user to authenticate
     :param expiration:          Expiration of the authentication request in seconds.
-                                By default the signed jwt will be valid in maximum 290 seconds.
+                                By default the signed jwt will be valid in maximum 290 seconds
+                                which is the maximum expiration accepted by the Symphony backend.
 
     :return: a signed JWT for a specific user or an extension app.
     """
