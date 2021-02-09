@@ -116,3 +116,7 @@ sym_api_client_python/resources/bot_private_key.pem
 
 # Datafeed V1
 datafeed.id
+
+# Log files created by examples
+bdk.log*
+examples/bdk.log*
