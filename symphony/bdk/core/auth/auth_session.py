@@ -1,3 +1,6 @@
+from symphony.bdk.core.auth.exception import AuthInitializationException
+
+
 class AuthSession:
     """RSA Authentication session handle to get session and key manager tokens from.
     It uses a BotAuthenticator to actually retrieve the tokens when needed.
@@ -69,6 +72,12 @@ class OboAuthSession(AuthSession):
         :param username: Username
         """
         super().__init__(authenticator)
+        if user_id is not None and username is not None:
+            raise AuthInitializationException('Username and user id for OBO authentication should not be defined at '
+                                              'a same time.')
+        if user_id is None and username is None:
+            raise AuthInitializationException('At least username or user id should be defined for '
+                                              'OBO authentication.')
         self.user_id = user_id
         self.username = username
 

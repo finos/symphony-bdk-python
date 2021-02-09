@@ -3,7 +3,7 @@ from unittest.mock import MagicMock, AsyncMock, patch
 import pytest
 
 from symphony.bdk.core.auth.exception import AuthUnauthorizedException
-from symphony.bdk.core.auth.obo_authenticator import OboAuthenticatorRSA
+from symphony.bdk.core.auth.obo_authenticator import OboAuthenticatorRsa
 from symphony.bdk.core.config.model.bdk_app_config import BdkAppConfig
 from symphony.bdk.gen.api_client import ApiClient, Configuration
 from symphony.bdk.gen.exceptions import ApiException
@@ -34,7 +34,7 @@ async def test_obo_session_username(config, api_client):
     with patch('symphony.bdk.core.auth.obo_authenticator.create_signed_jwt', return_value='privateKey'):
         api_client.call_api.return_value = Token(token="session_token")
 
-        obo_authenticator = OboAuthenticatorRSA(config, api_client)
+        obo_authenticator = OboAuthenticatorRsa(config, api_client)
         session_token = await obo_authenticator.retrieve_obo_session_token_by_username("username")
 
         assert session_token == "session_token"
@@ -45,7 +45,7 @@ async def test_obo_session_user_id(config, api_client):
     with patch('symphony.bdk.core.auth.obo_authenticator.create_signed_jwt', return_value='privateKey'):
         api_client.call_api.return_value = Token(token="session_token")
 
-        obo_authenticator = OboAuthenticatorRSA(config, api_client)
+        obo_authenticator = OboAuthenticatorRsa(config, api_client)
         session_token = await obo_authenticator.retrieve_obo_session_token_by_user_id(1234)
 
         assert session_token == "session_token"
@@ -56,7 +56,7 @@ async def test_api_exception(config, api_client):
     with patch('symphony.bdk.core.auth.obo_authenticator.create_signed_jwt', return_value='privateKey'):
         api_client.call_api.side_effect = ApiException()
 
-        obo_authenticator = OboAuthenticatorRSA(config, api_client)
+        obo_authenticator = OboAuthenticatorRsa(config, api_client)
 
         with pytest.raises(AuthUnauthorizedException):
             await obo_authenticator.retrieve_obo_session_token_by_username("username")
@@ -70,7 +70,7 @@ async def test_authenticate_by_username(config, api_client):
     with patch('symphony.bdk.core.auth.obo_authenticator.create_signed_jwt', return_value='privateKey'):
         api_client.call_api.return_value = Token(token="session_token")
 
-        obo_authenticator = OboAuthenticatorRSA(config, api_client)
+        obo_authenticator = OboAuthenticatorRsa(config, api_client)
         obo_session = obo_authenticator.authenticate_by_username("username")
 
         assert await obo_session.session_token == "session_token"
@@ -81,7 +81,7 @@ async def test_authenticate_by_user_id(config, api_client):
     with patch('symphony.bdk.core.auth.obo_authenticator.create_signed_jwt', return_value='privateKey'):
         api_client.call_api.return_value = Token(token="session_token")
 
-        obo_authenticator = OboAuthenticatorRSA(config, api_client)
+        obo_authenticator = OboAuthenticatorRsa(config, api_client)
         obo_session = obo_authenticator.authenticate_by_user_id(1234)
 
         assert await obo_session.session_token == "session_token"

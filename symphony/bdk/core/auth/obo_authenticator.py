@@ -82,7 +82,7 @@ class OboAuthenticator(ABC):
         return auth_session
 
 
-class OboAuthenticatorRSA(OboAuthenticator):
+class OboAuthenticatorRsa(OboAuthenticator):
     """Obo authenticator RSA implementation.
     """
 

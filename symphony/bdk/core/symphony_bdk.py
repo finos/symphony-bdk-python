@@ -65,7 +65,7 @@ class SymphonyBdk:
         """
         return self._bot_session
 
-    def obo(self, user_id=None, username=None) -> OboAuthSession:
+    def obo(self, user_id: int = None, username: str = None) -> OboAuthSession:
         """
         Get the Obo authentication session.
 

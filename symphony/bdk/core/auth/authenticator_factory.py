@@ -1,6 +1,6 @@
-from symphony.bdk.core.auth.bot_authenticator import BotAuthenticator, BotAuthenticatorRSA
+from symphony.bdk.core.auth.bot_authenticator import BotAuthenticator, BotAuthenticatorRsa
 from symphony.bdk.core.auth.exception import AuthInitializationException
-from symphony.bdk.core.auth.obo_authenticator import OboAuthenticator, OboAuthenticatorRSA
+from symphony.bdk.core.auth.obo_authenticator import OboAuthenticator, OboAuthenticatorRsa
 from symphony.bdk.core.client.api_client_factory import ApiClientFactory
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
 
@@ -29,7 +29,7 @@ class AuthenticatorFactory:
         :return: a new BotAuthenticator instance.
         """
         if self._config.bot.is_rsa_authentication_configured() and self._config.bot.is_rsa_configuration_valid():
-            return BotAuthenticatorRSA(
+            return BotAuthenticatorRsa(
                 bot_config=self._config.bot,
                 login_api_client=self._api_client_factory.get_login_client(),
                 relay_api_client=self._api_client_factory.get_relay_client()
@@ -43,7 +43,7 @@ class AuthenticatorFactory:
         :return: a new OboAuthenticator instance.
         """
         if self._config.app.is_rsa_authentication_configured() and self._config.app.is_rsa_configuration_valid():
-            return OboAuthenticatorRSA(
+            return OboAuthenticatorRsa(
                 app_config=self._config.app,
                 login_api_client=self._api_client_factory.get_login_client()
             )

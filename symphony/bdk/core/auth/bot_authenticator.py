@@ -39,7 +39,7 @@ class BotAuthenticator(ABC):
         pass
 
 
-class BotAuthenticatorRSA(BotAuthenticator):
+class BotAuthenticatorRsa(BotAuthenticator):
     """Bot authenticator RSA implementation.
     """
 

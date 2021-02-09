@@ -4,7 +4,7 @@ import pytest
 from unittest.mock import AsyncMock
 
 from symphony.bdk.core.auth.auth_session import AuthSession
-from symphony.bdk.core.auth.bot_authenticator import BotAuthenticatorRSA
+from symphony.bdk.core.auth.bot_authenticator import BotAuthenticatorRsa
 from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.symphony_bdk import SymphonyBdk
 from tests.utils.resource_utils import get_config_resource_filepath
@@ -18,7 +18,7 @@ def config():
 @pytest.mark.asyncio
 async def test_bot_session(config):
     with patch('symphony.bdk.core.auth.bot_authenticator.create_signed_jwt', return_value='privateKey'):
-        bot_authenticator = AsyncMock(BotAuthenticatorRSA)
+        bot_authenticator = AsyncMock(BotAuthenticatorRsa)
         bot_authenticator.retrieve_session_token.return_value = "session_token"
         bot_authenticator.retrieve_key_manager_token.return_value = "km_token"
         bot_session = AuthSession(bot_authenticator)
