@@ -51,7 +51,9 @@ class StreamService:
 
     async def list_streams(self, stream_filter: StreamFilter, skip: int = 0,
                            limit: int = 50) -> StreamList:
-        """Wraps the `List Streams <https://developers.symphony.com/restapi/reference#add-member>`_ endpoint.
+        """Returns a list of all the streams of which the requesting user is a member,
+        sorted by creation date (ascending - oldest to newest).
+        Wraps the `List User Streams <https://developers.symphony.com/restapi/reference#list-user-streams>`_ endpoint.
 
         :param stream_filter: the stream searching criteria.
         :param skip: number of stream results to skip.
@@ -149,7 +151,7 @@ class StreamService:
 
     async def search_rooms(self, query: V2RoomSearchCriteria, skip: int = 0,
                            limit: int = 50) -> V3RoomSearchResults:
-        """Search rooms according to the specified criteria.
+        """Search for rooms according to the specified criteria.
         Wraps the `Search Rooms V3 <https://developers.symphony.com/restapi/reference#search-rooms-v3>`_ endpoint.
 
         :param query: the search criteria.
