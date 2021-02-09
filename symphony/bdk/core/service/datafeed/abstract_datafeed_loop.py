@@ -13,6 +13,7 @@ from symphony.bdk.gen.agent_api.datafeed_api import DatafeedApi
 from symphony.bdk.core.service.datafeed.real_time_event_listener import RealTimeEventListener
 from symphony.bdk.gen.agent_model.v4_event import V4Event
 
+logger = logging.getLogger(__name__)
 
 class RealTimeEvent(Enum):
     """This enum lists all possible
@@ -98,7 +99,7 @@ class AbstractDatafeedLoop(ABC):
         try:
             listener_method_name, payload_field_name = RealTimeEvent[event.type].value
         except KeyError:
-            logging.info("Received event with an unknown type: %s", event.type)
+            logger.info("Received event with an unknown type: %s", event.type)
             return
 
         listener_method = getattr(listener, listener_method_name)
