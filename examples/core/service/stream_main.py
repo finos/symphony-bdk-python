@@ -13,7 +13,7 @@ from symphony.bdk.gen.pod_model.v2_room_search_criteria import V2RoomSearchCrite
 from symphony.bdk.gen.pod_model.v3_room_attributes import V3RoomAttributes
 
 
-class MessageMain:
+class StreamMain:
 
     @staticmethod
     async def run():
