@@ -3,21 +3,11 @@ from symphony.bdk.core.auth.authenticator_factory import AuthenticatorFactory
 from symphony.bdk.core.auth.exception import AuthInitializationException
 from symphony.bdk.core.client.api_client_factory import ApiClientFactory
 from symphony.bdk.core.config.exception import BotNotConfiguredException
+from symphony.bdk.core.service.connection.connection_service import ConnectionService
 from symphony.bdk.core.service.datafeed.datafeed_loop_v1 import DatafeedLoopV1
 from symphony.bdk.core.service.message.message_service import MessageService
-from symphony.bdk.core.service.message.multi_attachments_messages_api import MultiAttachmentsMessagesApi
 from symphony.bdk.core.service.user.user_service import UserService
-from symphony.bdk.gen.agent_api.attachments_api import AttachmentsApi
-from symphony.bdk.gen.agent_api.audit_trail_api import AuditTrailApi
-from symphony.bdk.gen.agent_api.datafeed_api import DatafeedApi
-from symphony.bdk.gen.pod_api.default_api import DefaultApi
-from symphony.bdk.gen.pod_api.message_api import MessageApi
-from symphony.bdk.gen.pod_api.message_suppression_api import MessageSuppressionApi
-from symphony.bdk.gen.pod_api.pod_api import PodApi
-from symphony.bdk.gen.pod_api.streams_api import StreamsApi
-from symphony.bdk.gen.pod_api.system_api import SystemApi
-from symphony.bdk.gen.pod_api.user_api import UserApi
-from symphony.bdk.gen.pod_api.users_api import UsersApi
+from symphony.bdk.core.service_factory import ServiceFactory
 
 
 class SymphonyBdk:
@@ -38,24 +28,15 @@ class SymphonyBdk:
 
         self._authenticator_factory = AuthenticatorFactory(config, api_client_factory=self._api_client_factory)
         self._bot_session = AuthSession(self._authenticator_factory.get_bot_authenticator())
-        self._message_service = MessageService(
-            MultiAttachmentsMessagesApi(self._agent_client),
-            MessageApi(self._pod_client),
-            MessageSuppressionApi(self._pod_client),
-            StreamsApi(self._pod_client),
-            PodApi(self._pod_client),
-            AttachmentsApi(self._agent_client),
-            DefaultApi(self._pod_client),
-            self._bot_session
-        )
-        self._datafeed_loop = self._get_datafeed_loop()
-        self._user_service = UserService(
-            UserApi(self._pod_client),
-            UsersApi(self._pod_client),
-            AuditTrailApi(self._agent_client),
-            SystemApi(self._pod_client),
-            self._bot_session
-        )
+
+        self._service_factory = ServiceFactory(self._api_client_factory, self._bot_session, self._config)
+        self._user_service = self._service_factory.get_user_service()
+        self._message_service = self._service_factory.get_message_service()
+        self._connection_service = self._service_factory.get_connection_service()
+        if self._config.is_bot_configured():
+            self._datafeed_loop = self._service_factory.get_datafeed_loop()
+        else:
+            raise BotNotConfiguredException()
 
     def bot_session(self) -> AuthSession:
         """Get the Bot authentication session. If the bot is not authenticated yet, perform the authentication for a new
@@ -94,11 +75,6 @@ class SymphonyBdk:
         """
         return self._datafeed_loop
 
-    def _get_datafeed_loop(self) -> DatafeedLoopV1:
-        if self._config.is_bot_configured():
-            return DatafeedLoopV1(DatafeedApi(self._agent_client), self._bot_session, self._config)
-        raise BotNotConfiguredException()
-
     def users(self) -> UserService:
         """Get the UserService from the BDK entry point.
 
@@ -106,6 +82,14 @@ class SymphonyBdk:
 
         """
         return self._user_service
+
+    def connections(self) -> ConnectionService:
+        """Get the ConnectionService from the BDK entry point.
+
+        :return: The ConnectionService instance.
+
+        """
+        return self._connection_service
 
     async def close_clients(self):
         """Close all the existing api clients created by the api client factory.
