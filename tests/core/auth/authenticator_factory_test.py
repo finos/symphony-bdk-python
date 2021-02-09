@@ -35,3 +35,18 @@ def test_get_bot_authenticator_failed(config, api_client_factory):
     authenticator_factory = AuthenticatorFactory(config, api_client_factory)
     with pytest.raises(AuthInitializationException):
         authenticator_factory.get_bot_authenticator()
+
+
+def test_get_obo_authenticator(config, api_client_factory):
+    authenticator_factory = AuthenticatorFactory(config, api_client_factory)
+    assert authenticator_factory.get_obo_authenticator() is not None
+
+
+def test_get_obo_authenticator_failed(config, api_client_factory):
+    app_config = MagicMock()
+    app_config.is_rsa_authentication_configured.return_value = True
+    app_config.is_rsa_configuration_valid.return_value = False
+    config.app = app_config
+    authenticator_factory = AuthenticatorFactory(config, api_client_factory)
+    with pytest.raises(AuthInitializationException):
+        authenticator_factory.get_obo_authenticator()
