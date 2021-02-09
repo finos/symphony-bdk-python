@@ -12,10 +12,17 @@ bot:
     username: bot-username                                  # (2)
     privateKey:
       path: /path/to/bot/rsa-private-key.pem                # (3)
+
+app:
+    appId: app-id                                           # (4)
+    privateKey:
+      path: /path/to/bot/rsa-private-key.pem                # (5)
 ```
 1. hostname of your Symphony pod environment
 2. your bot (or service account) username as configured in your pod admin console (https://mypod.symphony.com/admin-console)
 3. your bot RSA private key according to the RSA public key upload in your pod admin console (https://mypod.symphony.com/admin-console)
+4. the app id of your extension application configured in your pod admin console.
+5. your RSA private key to authenticate the extension application according to the RSA public key associated with your extension application.
 
 ## How to load configuration
 The Symphony BDK provides a single way to configure your bot environment.
