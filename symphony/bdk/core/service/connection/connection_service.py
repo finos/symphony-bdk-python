@@ -17,15 +17,11 @@ class ConnectionService:
     * Remove a connection with an user
     """
 
-    def __init__(self, connection_api: ConnectionApi,
-                 auth_session: AuthSession):
+    def __init__(self, connection_api: ConnectionApi, auth_session: AuthSession):
         self._connection_api = connection_api
         self._auth_session = auth_session
 
-    async def get_connection(
-            self,
-            user_id: int
-    ) -> UserConnection:
+    async def get_connection(self, user_id: int) -> UserConnection:
         """
         Get connection status, i.e. check if the calling user is connected to the specified user.
         See: `Get Connection <https://developers.symphony.com/restapi/reference#get-connection>`_
@@ -41,11 +37,7 @@ class ConnectionService:
         }
         return await self._connection_api.v1_connection_user_user_id_info_get(**params)
 
-    async def list_connections(
-            self,
-            status: ConnectionStatus,
-            user_ids: [int]
-    ) -> [UserConnection]:
+    async def list_connections(self, status: ConnectionStatus = None, user_ids: [int] = None) -> [UserConnection]:
         """
         List all current connection statuses with external or specified users.
         See: `List Connections <https://developers.symphony.com/restapi/reference#list-connections>`_
@@ -61,19 +53,18 @@ class ConnectionService:
         :return: List of connection statuses with the specified users and status.
 
         """
-        user_ids_str = ','.join(map(str, user_ids))
         params = {
-            'user_ids': user_ids_str,
-            'status': status.value,
             'session_token': await self._auth_session.session_token
         }
+        if user_ids is not None:
+            params['user_ids'] = ','.join(map(str, user_ids))
+        if status is not None:
+            params['status'] = status.value
+
         user_connection_list = await self._connection_api.v1_connection_list_get(**params)
         return user_connection_list.value
 
-    async def create_connection(
-            self,
-            user_id: int
-    ) -> UserConnection:
+    async def create_connection(self, user_id: int) -> UserConnection:
         """
         Sends a connection request to another user.
         See: `Create Connection <https://developers.symphony.com/restapi/reference#create-connection>`_
@@ -90,10 +81,7 @@ class ConnectionService:
         }
         return await self._connection_api.v1_connection_create_post(**params)
 
-    async def accept_connection(
-            self,
-            user_id: int
-    ) -> UserConnection:
+    async def accept_connection(self, user_id: int) -> UserConnection:
         """
         Accept the connection request from a requesting user.
         See: `Accept Connection <https://developers.symphony.com/restapi/reference#accepted-connection>`_
@@ -110,10 +98,7 @@ class ConnectionService:
         }
         return await self._connection_api.v1_connection_accept_post(**params)
 
-    async def reject_connection(
-            self,
-            user_id: int
-    ) -> UserConnection:
+    async def reject_connection(self, user_id: int) -> UserConnection:
         """
         Reject the connection request from a requesting user.
         See: `Reject Connection <https://developers.symphony.com/restapi/reference#reject-connection>`_

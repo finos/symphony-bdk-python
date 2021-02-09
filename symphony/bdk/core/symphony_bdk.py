@@ -33,10 +33,7 @@ class SymphonyBdk:
         self._user_service = self._service_factory.get_user_service()
         self._message_service = self._service_factory.get_message_service()
         self._connection_service = self._service_factory.get_connection_service()
-        if self._config.is_bot_configured():
-            self._datafeed_loop = self._service_factory.get_datafeed_loop()
-        else:
-            raise BotNotConfiguredException()
+        self._datafeed_loop = self._service_factory.get_datafeed_loop()
 
     def bot_session(self) -> AuthSession:
         """Get the Bot authentication session. If the bot is not authenticated yet, perform the authentication for a new
