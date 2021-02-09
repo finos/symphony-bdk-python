@@ -7,8 +7,8 @@ from symphony.bdk.gen.pod_api.streams_api import StreamsApi
 from symphony.bdk.gen.pod_model.membership_list import MembershipList
 from symphony.bdk.gen.pod_model.room_detail import RoomDetail
 from symphony.bdk.gen.pod_model.stream import Stream
-from symphony.bdk.gen.pod_model.stream_attributes import StreamAttributes
 from symphony.bdk.gen.pod_model.stream_filter import StreamFilter
+from symphony.bdk.gen.pod_model.stream_list import StreamList
 from symphony.bdk.gen.pod_model.user_id import UserId
 from symphony.bdk.gen.pod_model.user_id_list import UserIdList
 from symphony.bdk.gen.pod_model.v2_admin_stream_filter import V2AdminStreamFilter
@@ -49,18 +49,17 @@ class StreamService:
         return await self._streams_api.v2_streams_sid_info_get(sid=stream_id,
                                                                session_token=await self._auth_session.session_token)
 
-    async def list_streams(self, stream_filter: StreamFilter, skip: int = None,
-                           limit: int = None) -> [StreamAttributes]:
+    async def list_streams(self, stream_filter: StreamFilter, skip: int = 0,
+                           limit: int = 50) -> StreamList:
         """Wraps the `List Streams <https://developers.symphony.com/restapi/reference#add-member>`_ endpoint.
 
         :param stream_filter: the stream searching criteria.
-        :param skip: number of stream results to skip, defaults to 0.
-        :param limit: maximum number of streams to return, defaults to 50.
+        :param skip: number of stream results to skip.
+        :param limit: maximum number of streams to return.
         :return: the list of stream retrieved matching the search filter.
         """
-        streams = self._streams_api.v1_streams_list_post(filter=stream_filter, skip=skip, limit=limit,
-                                                         session_token=await self._auth_session.session_token)
-        return await streams.value
+        return await self._streams_api.v1_streams_list_post(filter=stream_filter, skip=skip, limit=limit,
+                                                            session_token=await self._auth_session.session_token)
 
     async def add_member_to_room(self, user_id: int, room_id: int):
         """Adds a member to an existing room.
@@ -121,7 +120,7 @@ class StreamService:
         await self._room_membership_api.v1_room_id_membership_demote_owner_post(
             id=room_id, payload=UserId(id=user_id), session_token=await self._auth_session.session_token)
 
-    async def create(self, user_ids: [int]) -> Stream:
+    async def create_im_or_mim(self, user_ids: [int]) -> Stream:
         """Create a new single or multi party instant message conversation between the caller and specified users.
         The caller is implicitly included in the members of the created chat.
         Duplicate users will be included in the membership of the chat but the duplication will be silently ignored.
@@ -137,7 +136,7 @@ class StreamService:
         return await self._streams_api.v1_im_create_post(uid_list=UserIdList(value=user_ids),
                                                          session_token=await self._auth_session.session_token)
 
-    async def create(self, room_attributes: V3RoomAttributes) -> V3RoomDetail:
+    async def create_room(self, room_attributes: V3RoomAttributes) -> V3RoomDetail:
         """Creates a new chatroom.
         If no  attributes are specified, the room is created as a private chatroom.
         Wraps the `Create Room V3 <https://developers.symphony.com/restapi/reference#create-room-v3>`_ endpoint.
@@ -148,8 +147,8 @@ class StreamService:
         return await self._streams_api.v3_room_create_post(payload=room_attributes,
                                                            session_token=await self._auth_session.session_token)
 
-    async def search_rooms(self, query: V2RoomSearchCriteria, skip: int = None,
-                           limit: int = None) -> V3RoomSearchResults:
+    async def search_rooms(self, query: V2RoomSearchCriteria, skip: int = 0,
+                           limit: int = 50) -> V3RoomSearchResults:
         """Search rooms according to the specified criteria.
         Wraps the `Search Rooms V3 <https://developers.symphony.com/restapi/reference#search-rooms-v3>`_ endpoint.
 
@@ -223,8 +222,8 @@ class StreamService:
             id=room_id, active=active,
             session_token=await self._auth_session.session_token)
 
-    async def list_streams_admin(self, stream_filter: V2AdminStreamFilter, skip: int = None,
-                                 limit: int = None) -> V2AdminStreamList:
+    async def list_streams_admin(self, stream_filter: V2AdminStreamFilter, skip: int = 0,
+                                 limit: int = 50) -> V2AdminStreamList:
         """Retrieves all the streams across the enterprise.
         Wraps the `List Streams for Enterprise V2
         <https://developers.symphony.com/restapi/reference#list-streams-for-enterprise-v2>`_ endpoint.
@@ -237,7 +236,7 @@ class StreamService:
         return await self._streams_api.v2_admin_streams_list_post(filter=stream_filter, skip=skip, limit=limit,
                                                                   session_token=await self._auth_session.session_token)
 
-    async def list_stream_members(self, stream_id: str, skip: int = None, limit: int = None) -> V2MembershipList:
+    async def list_stream_members(self, stream_id: str, skip: int = 0, limit: int = 100) -> V2MembershipList:
         """List the current members of an existing stream. The stream can be of type IM, MIM, or ROOM.
         Wraps the `Stream Members <https://developers.symphony.com/restapi/reference#stream-members>`_ endpoint.
 
