@@ -1,5 +1,7 @@
 """Module containing the ApiClientFactory class.
 """
+import urllib3
+
 from symphony.bdk.gen.configuration import Configuration
 from symphony.bdk.gen.api_client import ApiClient
 
@@ -61,8 +63,18 @@ class ApiClientFactory:
         await self._agent_client.close()
         await self._session_auth_client.close()
 
-    @staticmethod
-    def _get_api_client(server_config, context='') -> ApiClient:
+    def _get_api_client(self, server_config, context='') -> ApiClient:
         path = server_config.get_base_path() + context
         configuration = Configuration(host=path)
+
+        if server_config.proxy is not None:
+            self._configure_proxy(server_config.proxy, configuration)
+
         return ApiClient(configuration=configuration)
+
+    @staticmethod
+    def _configure_proxy(proxy_config, configuration):
+        configuration.proxy = proxy_config.get_url()
+
+        if proxy_config.are_credentials_defined():
+            configuration.proxy_headers = urllib3.util.make_headers(proxy_basic_auth=proxy_config.get_credentials())

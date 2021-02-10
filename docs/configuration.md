@@ -38,6 +38,65 @@ config_3 = BdkConfigLoader.load_from_symphony_dir("config.yaml")  # 3
 ```
 1. Load configuration from a file
 2. Load configuration from a string object
-3. Load configuration from the Symphony directory. The Symphony directory is located under `.symphony` folder in your home directory 
-    . It can be useful when you don't want to share your own Symphony credentials within your project codebase
+3. Load configuration from the Symphony directory. The Symphony directory is located under `.symphony` folder in your
+   home directory. It can be useful when you don't want to share your own Symphony credentials within your project
+   codebase
 
+## Full configuration example
+```yaml
+scheme: https
+host: localhost.symphony.com
+port: 8443
+
+proxy:
+  host: proxy.symphony.com
+  port: 1234
+  username: proxyuser
+  password: proxypassword
+
+pod:
+  host: dev.symphony.com
+  port: 443
+
+agent:
+   host: dev-agent.symphony.com
+   port: 5678
+
+keyManager:
+  host: dev-key.symphony.com
+  port: 8444
+
+sessionAuth:
+  host: dev-session.symphony.com
+  port: 8444
+
+bot:
+  username: bot-name
+  privateKey:
+    path: /path/to/bot/rsa-private-key.pem
+
+app:
+  appId: app-id
+  privateKey:
+    path: path/to/private-key.pem
+```
+
+### Configuration structure
+
+The BDK configuration now includes the following properties:
+- The BDK configuration can contain the global properties for `host`, `port`, `context` and `scheme`.
+These global properties can be used by the client configuration by default or can be overridden if
+user specify the dedicated `host`, `port`, `context`, `scheme` inside the client configuration.
+- `proxy` contains proxy related information. This field is optional.
+If set, it will use the provided `host` (mandatory), `port` (mandatory), `username` and `password`.
+It can be overridden in each of the `pod`, `agent`, `keyManager` and `sessionAuth` fields.
+- `pod` contains information like host, port, scheme, context, proxy... of the pod on which
+the service account using by the bot is created.
+- `agent` contains information like host, port, scheme, context, proxy... of the agent which
+the bot connects to.
+- `keyManager` contains information like host, port, scheme, context, proxy... of the key
+manager which manages the key token of the bot.
+- `bot` contains information about the bot like the username, the private key for authenticating the service account
+  on pod.
+- `app` contains information about the extension app that the bot will use like
+the appId, the private key for authenticating the extension app.

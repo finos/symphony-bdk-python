@@ -16,7 +16,7 @@ class BdkConfig(BdkServerConfig):
         :param config: the dict containing the server configuration parameters.
         """
         super().__init__(scheme=config.get("scheme"), host=config.get("host"), port=config.get("port"),
-                         context=config.get("context"))
+                         context=config.get("context"), proxy=config.get("proxy"))
         self.agent = BdkClientConfig(self, config.get("agent"))
         self.pod = BdkClientConfig(self, config.get("pod"))
         self.key_manager = BdkClientConfig(self, config.get("keyManager"))
