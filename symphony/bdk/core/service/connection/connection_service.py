@@ -43,7 +43,7 @@ class ConnectionService:
             user_ids: [int] = None
     ) -> [UserConnection]:
         """
-        List all current connection statuses with external or specified users.
+        List all connection statuses of the requesting user with external or specified users.
         See: `List Connections <https://developers.symphony.com/restapi/reference#list-connections>`_
 
         :param status:      Filter the connection list based on the connection status.
