@@ -37,7 +37,11 @@ class ConnectionService:
         }
         return await self._connection_api.v1_connection_user_user_id_info_get(**params)
 
-    async def list_connections(self, status: ConnectionStatus = None, user_ids: [int] = None) -> [UserConnection]:
+    async def list_connections(
+            self,
+            status: ConnectionStatus = ConnectionStatus.ALL,
+            user_ids: [int] = None
+    ) -> [UserConnection]:
         """
         List all current connection statuses with external or specified users.
         See: `List Connections <https://developers.symphony.com/restapi/reference#list-connections>`_
@@ -54,12 +58,11 @@ class ConnectionService:
 
         """
         params = {
+            'status': status.value,
             'session_token': await self._auth_session.session_token
         }
         if user_ids is not None:
             params['user_ids'] = ','.join(map(str, user_ids))
-        if status is not None:
-            params['status'] = status.value
 
         user_connection_list = await self._connection_api.v1_connection_list_get(**params)
         return user_connection_list.value
