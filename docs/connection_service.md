@@ -23,8 +23,10 @@ class ConnectionMain:
             connection_service = bdk.connections()
             user_connections = await connection_service.list_connections()
             print(user_connections)
+
+
 if __name__ == "__main__":
     asyncio.run(ConnectionMain.run())
 ```
 
-You can check more examples [here](../examples/core/service/connection_main.py)
+You can check more examples [here](../examples/connection.py)
