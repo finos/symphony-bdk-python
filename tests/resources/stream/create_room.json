@@ -1,0 +1,21 @@
+{
+  "roomAttributes": {
+    "name": "New fancy room",
+    "keywords": [],
+    "description": "test room",
+    "membersCanInvite": false,
+    "discoverable": false,
+    "readOnly": false,
+    "copyProtected": false,
+    "crossPod": false,
+    "viewHistory": false,
+    "multiLateralRoom": false,
+    "public": false
+  },
+  "roomSystemInfo": {
+    "id": "7X1cP_3wMD4mr6rcp7j26X___oh4uDkVdA",
+    "creationDate": 1612882364138,
+    "createdByUserId": 13056700579891,
+    "active": true
+  }
+}

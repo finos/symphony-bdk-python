@@ -1,0 +1,19 @@
+{
+  "roomAttributes": {
+    "name": "New room name",
+    "description": "new description",
+    "membersCanInvite": false,
+    "discoverable": false
+  },
+  "roomSystemInfo": {
+    "id": "ubaSiuUsc_j-_lVQ8vhAz3___opSJdJZdA",
+    "creationDate": 1604939558310,
+    "createdByUserId": 13056700579872,
+    "active": false
+  },
+  "immutableRoomAttributes": {
+    "readOnly": false,
+    "copyProtected": false,
+    "public": false
+  }
+}

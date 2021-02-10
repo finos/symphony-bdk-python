@@ -5,6 +5,7 @@ from symphony.bdk.core.client.api_client_factory import ApiClientFactory
 from symphony.bdk.core.service.connection.connection_service import ConnectionService
 from symphony.bdk.core.service.datafeed.datafeed_loop_v1 import DatafeedLoopV1
 from symphony.bdk.core.service.message.message_service import MessageService
+from symphony.bdk.core.service.stream.stream_service import StreamService
 from symphony.bdk.core.service.user.user_service import UserService
 from symphony.bdk.core.service_factory import ServiceFactory
 
@@ -32,6 +33,7 @@ class SymphonyBdk:
         self._user_service = self._service_factory.get_user_service()
         self._message_service = self._service_factory.get_message_service()
         self._connection_service = self._service_factory.get_connection_service()
+        self._stream_service = self._service_factory.get_stream_service()
         self._datafeed_loop = self._service_factory.get_datafeed_loop()
 
     def bot_session(self) -> AuthSession:
@@ -62,6 +64,14 @@ class SymphonyBdk:
 
         """
         return self._message_service
+
+    def streams(self) -> StreamService:
+        """Get the StreamService from the BDK entry point.
+
+        :return: The StreamService instance.
+
+        """
+        return self._stream_service
 
     def datafeed(self) -> DatafeedLoopV1:
         """Get the Datafeed loop from the BDK entry point.

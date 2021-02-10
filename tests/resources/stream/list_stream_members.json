@@ -1,0 +1,35 @@
+{
+  "count": 2,
+  "skip": 0,
+  "limit": 100,
+  "members": [
+    {
+      "user": {
+        "userId": 13056700579872,
+        "email": "elias.croze@symphony.com",
+        "firstName": "Elias",
+        "lastName": "Croze",
+        "displayName": "Elias Croze",
+        "company": "Symphony",
+        "companyId": 190,
+        "isExternal": false
+      },
+      "isOwner": true,
+      "isCreator": true,
+      "joinDate": 1604939558432
+    },
+    {
+      "user": {
+        "userId": 13056700579891,
+        "email": "fake@symphony.com",
+        "displayName": "postman-ecroze",
+        "company": "Symphony",
+        "companyId": 190,
+        "isExternal": false
+      },
+      "isOwner": true,
+      "isCreator": false,
+      "joinDate": 1604939562723
+    }
+  ]
+}
