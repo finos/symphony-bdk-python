@@ -75,7 +75,7 @@ class StreamService:
             payload=UserId(id=user_id), id=room_id,
             session_token=await self._auth_session.session_token)
 
-    async def remove_member_from_room(self, user_id: int, room_id: int):
+    async def remove_member_from_room(self, user_id: int, room_id: str):
         """Removes a member from an existing room.
         Wraps the `Remove Member <https://developers.symphony.com/restapi/reference#remove-member>`_ endpoint.
 

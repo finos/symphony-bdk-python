@@ -40,7 +40,7 @@ class StreamMain:
 
 
 if __name__ == "__main__":
-    asyncio.run(MessageMain.run())
+    asyncio.run(StreamMain.run())
 ```
 
 You can check more examples [here](../examples/core/service/stream_main.py)
