@@ -1,0 +1,24 @@
+[
+  {
+    "id": "ouAS1QXEHtIhXdZq4NzJBX___oscpQFcdA",
+    "crossPod": false,
+    "active": true,
+    "streamType": {
+      "type": "ROOM"
+    },
+    "roomAttributes": {
+      "name": "Room APP-3033"
+    }
+  },
+  {
+    "id": "z22OMRPxSdRFBfH_oojGkn___orihaxrdA",
+    "crossPod": false,
+    "active": true,
+    "streamType": {
+      "type": "ROOM"
+    },
+    "roomAttributes": {
+      "name": "Test BDK"
+    }
+  }
+]

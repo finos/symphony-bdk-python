@@ -1,0 +1,52 @@
+{
+  "count": 426,
+  "skip": 0,
+  "limit": 2,
+  "filter": {
+    "streamTypes": []
+  },
+  "streams": [
+    {
+      "id": "hpRd80zAUnLv3NMhLVF3Ln___o3ULKRDdA",
+      "isExternal": false,
+      "isActive": true,
+      "type": "IM",
+      "crossPod": false,
+      "origin": "INTERNAL",
+      "attributes": {
+        "members": [
+          13056700579841,
+          13056700579847
+        ],
+        "createdByUserId": 13056700579841,
+        "createdDate": 1589873171396,
+        "lastModifiedDate": 1589873171396,
+        "originCompany": "Symphony",
+        "originCompanyId": 190,
+        "membersCount": 2,
+        "lastMessageDate": 1589891455016
+      }
+    },
+    {
+      "id": "6hEzTqQjVPLLE9KgXLvsKn___o3TtL3ddA",
+      "isExternal": false,
+      "isActive": false,
+      "type": "IM",
+      "crossPod": false,
+      "origin": "INTERNAL",
+      "attributes": {
+        "members": [
+          13056700579841,
+          13056700579846
+        ],
+        "createdByUserId": 13056700579841,
+        "createdDate": 1589881029155,
+        "lastModifiedDate": 1597894162180,
+        "originCompany": "Symphony",
+        "originCompanyId": 190,
+        "membersCount": 2,
+        "lastMessageDate": 1590377037554
+      }
+    }
+  ]
+}
