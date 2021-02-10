@@ -33,6 +33,7 @@ class SymphonyBdk:
         self._user_service = self._service_factory.get_user_service()
         self._message_service = self._service_factory.get_message_service()
         self._connection_service = self._service_factory.get_connection_service()
+        self._stream_service = self._service_factory.get_stream_service()
         self._datafeed_loop = self._service_factory.get_datafeed_loop()
 
     def bot_session(self) -> AuthSession:
