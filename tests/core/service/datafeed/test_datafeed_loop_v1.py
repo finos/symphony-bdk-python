@@ -167,7 +167,7 @@ async def test_start_recreate_datafeed_error(datafeed_repository, datafeed_api, 
 
 
 @pytest.mark.asyncio
-async def test_retrieve_datafeed_from_datafeed_file(tmpdir, datafeed_api, auth_session, config):
+async def test_retrieve_datafeed_from_datafeed_file(tmpdir, datafeed_api, auth_session, config, message_sent_event):
     datafeed_file_content = get_resource_content("datafeed/datafeedId")
     datafeed_file_path = tmpdir.join("datafeed.id")
     datafeed_file_path.write(datafeed_file_content)
@@ -176,12 +176,14 @@ async def test_retrieve_datafeed_from_datafeed_file(tmpdir, datafeed_api, auth_s
     config.datafeed = datafeed_config
 
     datafeed_loop = auto_stopping_datafeed_loop_v1(datafeed_api, auth_session, config)
+    datafeed_api.v4_datafeed_id_read_get.return_value = message_sent_event
+    await datafeed_loop.start()
 
     assert datafeed_loop.datafeed_id == "8e7c8672-220"
 
 
 @pytest.mark.asyncio
-async def test_retrieve_datafeed_from_invalid_datafeed_dir(tmpdir, datafeed_api, auth_session, config):
+async def test_retrieve_datafeed_from_invalid_datafeed_dir(tmpdir, datafeed_api, auth_session, config, message_sent_event):
     datafeed_id_file_content = get_resource_content("datafeed/datafeedId")
     datafeed_id_file_path = tmpdir.join("datafeed.id")
     datafeed_id_file_path.write(datafeed_id_file_content)
@@ -190,6 +192,8 @@ async def test_retrieve_datafeed_from_invalid_datafeed_dir(tmpdir, datafeed_api,
     config.datafeed = datafeed_config
 
     datafeed_loop = auto_stopping_datafeed_loop_v1(datafeed_api, auth_session, config)
+    datafeed_api.v4_datafeed_id_read_get.return_value = message_sent_event
+    await datafeed_loop.start()
 
     assert datafeed_loop.datafeed_id == "8e7c8672-220"
 
