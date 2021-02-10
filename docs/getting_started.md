@@ -5,7 +5,7 @@
 The Symphony BDK uses
 the [standard Python logging module](https://docs.python.org/3/howto/logging.html). To troubleshoot
 your bot you might want to enable the DEBUG level to get the full logs from the BDK.
-The [Datafeed example](../examples/datafeed_example.py) uses
+The [Datafeed example](../examples/datafeed.py) uses
 a [sample logging configuration](../examples/logging.conf)
 and illustrates how you can configure logging as a bot developer.
 
