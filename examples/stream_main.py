@@ -65,4 +65,4 @@ class StreamMain:
 
 
 if __name__ == "__main__":
-    asyncio.run(MessageMain.run())
+    asyncio.run(StreamMain.run())
