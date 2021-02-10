@@ -27,10 +27,11 @@ class DatafeedLoopV1(AbstractDatafeedLoop):
     def __init__(self, datafeed_api, auth_session, config, repository=None):
         super().__init__(datafeed_api, auth_session, config)
         self.datafeed_repository = OnDiskDatafeedIdRepository(config) if repository is None else repository
-        self.datafeed_id = self.datafeed_repository.read()
+        self.datafeed_id = None
         self.started = False
 
     async def start(self):
+        self.datafeed_id = self.datafeed_repository.read()
         if not self.datafeed_id:
             self.datafeed_id = await self._create_datafeed_and_persist()
         self.started = True
