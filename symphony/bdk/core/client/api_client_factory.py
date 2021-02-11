@@ -66,7 +66,7 @@ class ApiClientFactory:
     def _get_api_client(self, server_config, context) -> ApiClient:
         configuration = Configuration(host=(server_config.get_base_path() + context))
         configuration.verify_ssl = True
-        configuration.ssl_ca_cert = self._config.ssl.trust_store.path
+        configuration.ssl_ca_cert = self._config.ssl.trust_store_path
 
         if server_config.proxy is not None:
             self._configure_proxy(server_config.proxy, configuration)
