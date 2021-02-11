@@ -61,6 +61,9 @@ pod:
 agent:
    host: dev-agent.symphony.com
    port: 5678
+   proxy:
+     host: agent-proxy
+     port: 3396
 
 keyManager:
   host: dev-key.symphony.com
