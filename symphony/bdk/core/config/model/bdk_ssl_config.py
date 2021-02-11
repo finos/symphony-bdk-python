@@ -4,8 +4,7 @@ TRUST_STORE = "trustStore"
 
 
 class BdkSslConfig:
-    """Class containing the SSL configuration.
-    """
+    """Class containing the SSL configuration."""
 
     def __init__(self, config):
         """
@@ -13,8 +12,6 @@ class BdkSslConfig:
         :param config: the dict containing the SSL specific configuration.
         """
         if config is not None and TRUST_STORE in config:
-            truststore_config = config.get(TRUST_STORE)
-            self.trust_store = BdkCertificateConfig(path=truststore_config.get("path"),
-                                                    password=truststore_config.get("password"))
+            self.trust_store = BdkCertificateConfig(path=config[TRUST_STORE].get("path"))
         else:
             self.trust_store = BdkCertificateConfig()

@@ -1,8 +1,11 @@
+from unittest.mock import patch
+
 import pytest
 
 from symphony.bdk.core.client.api_client_factory import ApiClientFactory
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
 from symphony.bdk.core.config.model.bdk_server_config import BdkProxyConfig
+from symphony.bdk.core.config.model.bdk_ssl_config import BdkSslConfig
 
 HOST = "acme.symphony.com"
 
@@ -56,6 +59,16 @@ async def test_proxy_credentials_configured(config):
                                                  proxy_port)
     assert_host_and_proxy_credentials_configured(client_factory.get_relay_client().configuration, "/relay", proxy_host,
                                                  proxy_port)
+
+
+def test_trust_store_configured(config):
+    with patch("symphony.bdk.gen.rest.RESTClientObject"):
+        truststore_path = "/path/to/truststore.pem"
+        config.ssl = BdkSslConfig({"trustStore": {"path": truststore_path}})
+
+        client_factory = ApiClientFactory(config)
+
+        assert client_factory.get_pod_client().configuration.ssl_ca_cert == truststore_path
 
 
 def assert_host_configured_only(configuration, url_suffix):

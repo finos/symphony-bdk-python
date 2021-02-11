@@ -70,6 +70,10 @@ sessionAuth:
   host: dev-session.symphony.com
   port: 8444
 
+ssl:
+  trustStore:
+    path: /path/to/truststore.pem
+
 bot:
   username: bot-name
   privateKey:
@@ -96,6 +100,7 @@ the service account using by the bot is created.
 the bot connects to.
 - `keyManager` contains information like host, port, scheme, context, proxy... of the key
 manager which manages the key token of the bot.
+- `ssl` contains the path to the truststore in pem format for SSL verification.
 - `bot` contains information about the bot like the username, the private key for authenticating the service account
   on pod.
 - `app` contains information about the extension app that the bot will use like
