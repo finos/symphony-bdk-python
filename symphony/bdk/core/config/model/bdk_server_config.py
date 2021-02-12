@@ -1,14 +1,14 @@
 class BdkServerConfig:
-    """Base class for server and client configurations
-    """
+    """Base class for server and client configurations"""
     DEFAULT_SCHEME: str = "https"
     DEFAULT_HTTPS_PORT: int = 443
 
-    def __init__(self, scheme=None, port=None, context="", host=None):
+    def __init__(self, scheme=None, port=None, context="", host=None, proxy=None):
         self.scheme = scheme if scheme is not None else self.DEFAULT_SCHEME
         self.port = self.port = port if port is not None else self.DEFAULT_HTTPS_PORT
         self.context = context
         self.host = host
+        self.proxy = BdkProxyConfig(**proxy) if proxy is not None else None
 
     def get_base_path(self) -> str:
         """Constructs the base path of the current config
@@ -39,3 +39,41 @@ class BdkServerConfig:
         :return: the port information to be appended to the built URL
         """
         return ":" + str(self.port) if self.port else ""
+
+
+class BdkProxyConfig:
+    """Class to configure a proxy with a host, port and optional proxy credentials"""
+
+    def __init__(self, host, port, username=None, password=None):
+        """
+
+        :param host: host of the proxy (mandatory)
+        :param port: port of the proxy (mandatory)
+        :param username: username for proxy basic authentication (optional)
+        :param password: password for proxy basic authentication (optional, must be not None if username specified)
+        """
+        self.host = host
+        self.port = port
+        self.username = username
+        self.password = password
+
+    def get_url(self):
+        """Builds the proxy URL.
+
+        :return: the URL of the http proxy to target
+        """
+        return f"http://{self.host}:{self.port}"
+
+    def are_credentials_defined(self):
+        """Check if proxy credentials were set
+
+        :return: True if username and password set
+        """
+        return self.username and self.password is not None
+
+    def get_credentials(self):
+        """Builds the credentials information to pass to the proxy-authorization header before base64 encoding.
+
+        :return: username + ":" + password
+        """
+        return f"{self.username}:{self.password}"

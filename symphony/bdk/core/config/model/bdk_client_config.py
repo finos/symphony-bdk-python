@@ -1,4 +1,4 @@
-from symphony.bdk.core.config.model.bdk_server_config import BdkServerConfig
+from symphony.bdk.core.config.model.bdk_server_config import BdkServerConfig, BdkProxyConfig
 
 
 class BdkClientConfig(BdkServerConfig):
@@ -17,17 +17,15 @@ class BdkClientConfig(BdkServerConfig):
         :param parent_config: the parent configuration of type BdkConfig
         :param config: client configuration parameters of type dict
         """
+        if config is None:
+            config = {}
+
+        self._scheme = config.get("scheme")
+        self._port = config.get("port")
+        self._host = config.get("host")
+        self._context = config.get("context")
+        self._proxy = BdkProxyConfig(**config.get("proxy")) if "proxy" in config else None
         self.parent_config = parent_config
-        if config is not None:
-            self._scheme = config.get("scheme")
-            self._port = config.get("port")
-            self._host = config.get("host")
-            self._context = config.get("context")
-        else:
-            self._scheme = None
-            self._port = None
-            self._host = None
-            self._context = None
 
     @property
     def scheme(self):
@@ -60,6 +58,15 @@ class BdkClientConfig(BdkServerConfig):
         :return: the applicable context path
         """
         return self._self_or_parent(self._context, self.parent_config.context)
+
+    @property
+    def proxy(self):
+        """Return the applicable proxy information: either the one configured at child level (e.g. 'pod')
+        or at global level.
+
+        :return: the applicable proxy information
+        """
+        return self._self_or_parent(self._proxy, self.parent_config.proxy)
 
     @staticmethod
     def _self_or_parent(instance_value, parent_value):

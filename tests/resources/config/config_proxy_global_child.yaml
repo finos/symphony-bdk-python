@@ -1,0 +1,10 @@
+proxy:
+  host: "proxy.symphony.com"
+  port: 1234
+  username: proxyuser
+  password: proxypass
+
+agent:
+  proxy:
+    host: "agent-proxy.symphony.com"
+    port: 5678

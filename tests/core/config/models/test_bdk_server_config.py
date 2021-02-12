@@ -1,4 +1,4 @@
-from symphony.bdk.core.config.model.bdk_server_config import BdkServerConfig
+from symphony.bdk.core.config.model.bdk_server_config import BdkServerConfig, BdkProxyConfig
 
 
 def test_get_base_path():
@@ -24,3 +24,18 @@ def test_get_port_as_string():
 
     config.port = None
     assert config.get_port_as_string() == ""
+
+
+def test_proxy_config_no_credentials():
+    proxy = BdkProxyConfig("proxy.symphony.com", 1234)
+
+    assert proxy.get_url() == "http://proxy.symphony.com:1234"
+    assert not proxy.are_credentials_defined()
+
+
+def test_proxy_config_with_credentials():
+    proxy = BdkProxyConfig("proxy.symphony.com", 1234, "user", "password")
+
+    assert proxy.get_url() == "http://proxy.symphony.com:1234"
+    assert proxy.are_credentials_defined()
+    assert proxy.get_credentials() == "user:password"

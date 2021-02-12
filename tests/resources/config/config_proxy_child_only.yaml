@@ -1,0 +1,4 @@
+agent:
+  proxy:
+    host: "agent-proxy.symphony.com"
+    port: 5678
