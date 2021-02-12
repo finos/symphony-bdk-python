@@ -1,3 +1,4 @@
+from symphony.bdk.core.config.model.bdk_server_config import BdkProxyConfig
 from tests.utils.resource_utils import get_config_resource_filepath
 from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.config.exception import BdkConfigException
@@ -76,3 +77,49 @@ def test_load_client_global_config(global_config_path):
     assert config.session_auth.host == "devx1.symphony.com"
     assert config.session_auth.port == 8443
     assert config.session_auth.context == "context"
+
+
+def test_load_proxy_defined_at_global_level():
+    config = BdkConfigLoader.load_from_file(get_config_resource_filepath("config_global_proxy.yaml"))
+
+    assert config.proxy.host == "proxy.symphony.com"
+    assert config.proxy.port == 1234
+    assert config.proxy.username == "proxyuser"
+    assert config.proxy.password == "proxypass"
+
+    assert config.agent.proxy == config.proxy
+    assert config.pod.proxy == config.proxy
+    assert config.key_manager.proxy == config.proxy
+    assert config.session_auth.proxy == config.proxy
+
+
+def test_load_proxy_defined_at_global_and_child_level():
+    config = BdkConfigLoader.load_from_file(get_config_resource_filepath("config_proxy_global_child.yaml"))
+
+    assert config.proxy.host == "proxy.symphony.com"
+    assert config.proxy.port == 1234
+    assert config.proxy.username == "proxyuser"
+    assert config.proxy.password == "proxypass"
+
+    assert config.pod.proxy == config.proxy
+    assert config.key_manager.proxy == config.proxy
+    assert config.session_auth.proxy == config.proxy
+
+    assert config.agent.proxy.host == "agent-proxy.symphony.com"
+    assert config.agent.proxy.port == 5678
+    assert config.agent.proxy.username is None
+    assert config.agent.proxy.password is None
+
+
+def test_load_proxy_defined_at_child_level_only():
+    config = BdkConfigLoader.load_from_file(get_config_resource_filepath("config_proxy_child_only.yaml"))
+
+    assert config.proxy is None
+    assert config.pod.proxy is None
+    assert config.key_manager.proxy is None
+    assert config.session_auth.proxy is None
+
+    assert config.agent.proxy.host == "agent-proxy.symphony.com"
+    assert config.agent.proxy.port == 5678
+    assert config.agent.proxy.username is None
+    assert config.agent.proxy.password is None
