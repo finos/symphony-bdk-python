@@ -1,3 +1,5 @@
+from abc import ABC, abstractmethod
+
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.service.connection.model.connection_status import ConnectionStatus
 from symphony.bdk.gen.pod_api.connection_api import ConnectionApi
@@ -5,16 +7,16 @@ from symphony.bdk.gen.pod_model.user_connection import UserConnection
 from symphony.bdk.gen.pod_model.user_connection_request import UserConnectionRequest
 
 
-class ConnectionService:
-    """Service class for managing the connections between users
+class OboConnectionService:
+    """Class exposing OBO-enabled endpoints for connection management.
 
-    This service is used for retrieving the connection status if the calling user with a specified user or with many
+    This service is used for retrieving the connection status between the OBO user and a specified user or several
     other internal or external users in the pod, and perform some actions related to the connection status like:
 
     * Send a connection request to an user
-    * Accept a connection request from an user
-    * Reject a connection request from an user
-    * Remove a connection with an user
+    * Accept a connection request from a user
+    * Reject a connection request from a user
+    * Remove a connection with a user
     """
 
     def __init__(self, connection_api: ConnectionApi, auth_session: AuthSession):
@@ -131,3 +133,19 @@ class ConnectionService:
             'session_token': await self._auth_session.session_token
         }
         await self._connection_api.v1_connection_user_uid_remove_post(**params)
+
+
+class ConnectionService(OboConnectionService):
+    """Service class for managing the connections between users
+
+    This service is used for retrieving the connection status between the calling user and a specified user or several
+    other internal or external users in the pod, and perform some actions related to the connection status like:
+
+    * Send a connection request to an user
+    * Accept a connection request from a user
+    * Reject a connection request from a user
+    * Remove a connection with a user
+    """
+
+    def __init__(self, connection_api: ConnectionApi, auth_session: AuthSession):
+        super().__init__(connection_api, auth_session)

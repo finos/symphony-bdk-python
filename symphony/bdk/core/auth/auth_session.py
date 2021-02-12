@@ -97,4 +97,4 @@ class OboAuthSession(AuthSession):
 
     @property
     async def key_manager_token(self):
-        return None
+        return ""

@@ -28,7 +28,7 @@ class AuthenticatorFactory:
 
         :return: a new BotAuthenticator instance.
         """
-        if self._config.bot.is_rsa_authentication_configured() and self._config.bot.is_rsa_configuration_valid():
+        if self._config.bot.is_rsa_configuration_valid():
             return BotAuthenticatorRsa(
                 bot_config=self._config.bot,
                 login_api_client=self._api_client_factory.get_login_client(),

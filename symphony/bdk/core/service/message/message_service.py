@@ -1,3 +1,5 @@
+from abc import ABC, abstractmethod
+
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.service.message.multi_attachments_messages_api import MultiAttachmentsMessagesApi
 from symphony.bdk.gen.agent_api.attachments_api import AttachmentsApi
@@ -21,55 +23,12 @@ from symphony.bdk.gen.pod_model.message_suppression_response import MessageSuppr
 from symphony.bdk.gen.pod_model.stream_attachment_item import StreamAttachmentItem
 
 
-class MessageService:
-    """Service class for managing messages.
-    """
+class OboMessageService:
+    """Class exposing OBO enabled endpoints for message management, e.g. send a message."""
 
-    def __init__(self, messages_api: MultiAttachmentsMessagesApi,
-                 message_api: MessageApi,
-                 message_suppression_api: MessageSuppressionApi,
-                 streams_api: StreamsApi,
-                 pod_api: PodApi,
-                 attachment_api: AttachmentsApi,
-                 default_api: DefaultApi,
-                 auth_session: AuthSession):
+    def __init__(self, messages_api: MultiAttachmentsMessagesApi, auth_session: AuthSession):
         self._messages_api = messages_api
-        self._message_api = message_api
-        self._message_suppression_api = message_suppression_api
-        self._streams_api = streams_api
-        self._pod_api = pod_api
-        self._attachment_api = attachment_api
-        self._default_api = default_api
         self._auth_session = auth_session
-
-    async def list_messages(
-            self,
-            stream_id: str,
-            since: int = 0,
-            skip: int = 0,
-            limit: int = 50
-    ) -> [V4Message]:
-        """Get messages from an existing stream. Additionally returns any attachments associated with the message.
-        See: `Messages <https://developers.symphony.com/restapi/reference#messages-v4>`_
-
-        :param stream_id: The stream where to look for messages
-        :param since: Timestamp of the earliest possible date of the first message returned.
-        :param skip: Number of messages to skip. Default: 0
-        :param limit: Maximum number of messages to return. Default: 50
-
-        :return: the list of matching messages in the stream.
-
-        """
-        params = {
-            'sid': stream_id,
-            'since': since,
-            'session_token': await self._auth_session.session_token,
-            'key_manager_token': await self._auth_session.key_manager_token,
-            'skip': skip,
-            'limit': limit
-        }
-        message_list = await self._messages_api.v4_stream_sid_message_get(**params)
-        return message_list.value
 
     async def send_message(
             self,
@@ -109,6 +68,56 @@ class MessageService:
             params['preview'] = preview if isinstance(preview, list) else [preview]
 
         return await self._messages_api.v4_stream_sid_multi_attachment_message_create_post(**params)
+
+
+class MessageService(OboMessageService):
+    """Service class for managing messages.
+    """
+
+    def __init__(self, messages_api: MultiAttachmentsMessagesApi,
+                 message_api: MessageApi,
+                 message_suppression_api: MessageSuppressionApi,
+                 streams_api: StreamsApi,
+                 pod_api: PodApi,
+                 attachment_api: AttachmentsApi,
+                 default_api: DefaultApi,
+                 auth_session: AuthSession):
+        super().__init__(messages_api, auth_session)
+        self._message_api = message_api
+        self._message_suppression_api = message_suppression_api
+        self._streams_api = streams_api
+        self._pod_api = pod_api
+        self._attachment_api = attachment_api
+        self._default_api = default_api
+
+    async def list_messages(
+            self,
+            stream_id: str,
+            since: int = 0,
+            skip: int = 0,
+            limit: int = 50
+    ) -> [V4Message]:
+        """Get messages from an existing stream. Additionally returns any attachments associated with the message.
+        See: `Messages <https://developers.symphony.com/restapi/reference#messages-v4>`_
+
+        :param stream_id: The stream where to look for messages
+        :param since: Timestamp of the earliest possible date of the first message returned.
+        :param skip: Number of messages to skip. Default: 0
+        :param limit: Maximum number of messages to return. Default: 50
+
+        :return: the list of matching messages in the stream.
+
+        """
+        params = {
+            'sid': stream_id,
+            'since': since,
+            'session_token': await self._auth_session.session_token,
+            'key_manager_token': await self._auth_session.key_manager_token,
+            'skip': skip,
+            'limit': limit
+        }
+        message_list = await self._messages_api.v4_stream_sid_message_get(**params)
+        return message_list.value
 
     async def blast_message(
             self,

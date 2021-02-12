@@ -21,9 +21,8 @@ from symphony.bdk.gen.pod_model.v3_room_detail import V3RoomDetail
 from symphony.bdk.gen.pod_model.v3_room_search_results import V3RoomSearchResults
 
 
-class StreamService:
-    """Service class to manage streams.
-    """
+class OboStreamService:
+    """Class exposing OBO-enabled endpoints for stream management."""
 
     def __init__(self, streams_api: StreamsApi, room_membership_api: RoomMembershipApi, share_api: ShareApi,
                  auth_session: AuthSession):
@@ -121,6 +120,15 @@ class StreamService:
         """
         await self._room_membership_api.v1_room_id_membership_demote_owner_post(
             id=room_id, payload=UserId(id=user_id), session_token=await self._auth_session.session_token)
+
+
+class StreamService(OboStreamService):
+    """Service class to manage streams.
+    """
+
+    def __init__(self, streams_api: StreamsApi, room_membership_api: RoomMembershipApi, share_api: ShareApi,
+                 auth_session: AuthSession):
+        super().__init__(streams_api, room_membership_api, share_api, auth_session)
 
     async def create_im_or_mim(self, user_ids: [int]) -> Stream:
         """Create a new single or multi party instant message conversation between the caller and specified users.
