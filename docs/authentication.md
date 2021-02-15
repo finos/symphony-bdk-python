@@ -81,8 +81,8 @@ async def run():
     config = BdkConfigLoader.load_from_symphony_dir("config.yaml")
     async with SymphonyBdk(config) as bdk:
         obo_auth_session = bdk.obo(username="username")
-        obo_services = bdk.obo_services(obo_auth_session) # entry point for all OBO-enables services and endpoints
-        obo_services.messages().send_message("stream_id", "<messageML>Hello on behalf of user!</messageML>")
+        async with bdk.obo_services(obo_auth_session) as obo_services:
+            obo_services.messages().send_message("stream_id", "<messageML>Hello on behalf of user!</messageML>")
 ```
 
 ### BDK running without Bot username (service account) configured
