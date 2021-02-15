@@ -2,7 +2,7 @@ from unittest.mock import MagicMock, AsyncMock, patch
 
 import pytest
 
-from symphony.bdk.core.auth.exception import AuthUnauthorizedException
+from symphony.bdk.core.auth.exception import AuthUnauthorizedError
 from symphony.bdk.core.auth.obo_authenticator import OboAuthenticatorRsa
 from symphony.bdk.core.config.model.bdk_app_config import BdkAppConfig
 from symphony.bdk.gen.api_client import ApiClient, Configuration
@@ -58,10 +58,10 @@ async def test_api_exception(config, api_client):
 
         obo_authenticator = OboAuthenticatorRsa(config, api_client)
 
-        with pytest.raises(AuthUnauthorizedException):
+        with pytest.raises(AuthUnauthorizedError):
             await obo_authenticator.retrieve_obo_session_token_by_username("username")
 
-        with pytest.raises(AuthUnauthorizedException):
+        with pytest.raises(AuthUnauthorizedError):
             await obo_authenticator.retrieve_obo_session_token_by_user_id(1234)
 
 

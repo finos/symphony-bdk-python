@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 from symphony.bdk.core.auth.auth_session import AuthSession
-from symphony.bdk.core.auth.exception import AuthUnauthorizedException
+from symphony.bdk.core.auth.exception import AuthUnauthorizedError
 from symphony.bdk.core.auth.jwt_helper import create_signed_jwt
 from symphony.bdk.core.config.model.bdk_bot_config import BdkBotConfig
 from symphony.bdk.gen.api_client import ApiClient
@@ -65,7 +65,7 @@ class BotAuthenticatorRsa(BotAuthenticator):
             token = await AuthenticationApi(api_client).pubkey_authenticate_post(req)
             return token.token
         except ApiException as e:
-            raise AuthUnauthorizedException(unauthorized_message, e)
+            raise AuthUnauthorizedError(unauthorized_message, e)
 
     async def retrieve_session_token(self) -> str:
         """Make the api call to the pod to get the pod's session token.

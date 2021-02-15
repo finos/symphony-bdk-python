@@ -3,9 +3,9 @@ import logging
 
 from symphony.bdk.core.auth.auth_session import AuthSession, OboAuthSession
 from symphony.bdk.core.auth.authenticator_factory import AuthenticatorFactory
-from symphony.bdk.core.auth.exception import AuthInitializationException
+from symphony.bdk.core.auth.exception import AuthInitializationError
 from symphony.bdk.core.client.api_client_factory import ApiClientFactory
-from symphony.bdk.core.config.exception import BotNotConfiguredException
+from symphony.bdk.core.config.exception import BotNotConfiguredError
 from symphony.bdk.core.service.connection.connection_service import ConnectionService
 from symphony.bdk.core.service.datafeed.datafeed_loop_v1 import DatafeedLoopV1
 from symphony.bdk.core.service.message.message_service import MessageService
@@ -22,7 +22,7 @@ def bot_service(func):
     def check_if_bot_configured_and_execute(*args):
         symphony_bdk = args[0]
         if not symphony_bdk._config.bot.is_rsa_configuration_valid():
-            raise BotNotConfiguredException("Error calling bot service ")
+            raise BotNotConfiguredError("Error calling bot service ")
         return func(*args)
 
     return check_if_bot_configured_and_execute
@@ -87,7 +87,7 @@ class SymphonyBdk:
             return self._authenticator_factory.get_obo_authenticator().authenticate_by_user_id(user_id)
         if username is not None:
             return self._authenticator_factory.get_obo_authenticator().authenticate_by_username(username)
-        raise AuthInitializationException("At least user_id or username should be given to OBO authenticate the "
+        raise AuthInitializationError("At least user_id or username should be given to OBO authenticate the "
                                           "extension app")
 
     def obo_services(self, obo_session: OboAuthSession) -> OboServices:

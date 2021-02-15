@@ -1,5 +1,5 @@
 from symphony.bdk.core.auth.bot_authenticator import BotAuthenticator, BotAuthenticatorRsa
-from symphony.bdk.core.auth.exception import AuthInitializationException
+from symphony.bdk.core.auth.exception import AuthInitializationError
 from symphony.bdk.core.auth.obo_authenticator import OboAuthenticator, OboAuthenticatorRsa
 from symphony.bdk.core.client.api_client_factory import ApiClientFactory
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
@@ -34,7 +34,7 @@ class AuthenticatorFactory:
                 login_api_client=self._api_client_factory.get_login_client(),
                 relay_api_client=self._api_client_factory.get_relay_client()
             )
-        raise AuthInitializationException("RSA authentication should be configured. Only one field among private key "
+        raise AuthInitializationError("RSA authentication should be configured. Only one field among private key "
                                           "path or content should be configured for bot authentication.")
 
     def get_obo_authenticator(self) -> OboAuthenticator:
@@ -47,5 +47,5 @@ class AuthenticatorFactory:
                 app_config=self._config.app,
                 login_api_client=self._api_client_factory.get_login_client()
             )
-        raise AuthInitializationException("Only one of private key path or content should be configured for "
+        raise AuthInitializationError("Only one of private key path or content should be configured for "
                                           "extension app authentication.")

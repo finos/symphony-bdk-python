@@ -3,7 +3,7 @@ from unittest.mock import MagicMock, Mock
 import pytest
 
 from symphony.bdk.core.auth.authenticator_factory import AuthenticatorFactory
-from symphony.bdk.core.auth.exception import AuthInitializationException
+from symphony.bdk.core.auth.exception import AuthInitializationError
 from symphony.bdk.core.client.api_client_factory import ApiClientFactory
 from symphony.bdk.core.config.loader import BdkConfigLoader
 from tests.utils.resource_utils import get_config_resource_filepath
@@ -33,7 +33,7 @@ def test_get_bot_authenticator_failed(config, api_client_factory):
     bot_config.is_rsa_configuration_valid.return_value = False
     config.bot = bot_config
     authenticator_factory = AuthenticatorFactory(config, api_client_factory)
-    with pytest.raises(AuthInitializationException):
+    with pytest.raises(AuthInitializationError):
         authenticator_factory.get_bot_authenticator()
 
 
@@ -48,5 +48,5 @@ def test_get_obo_authenticator_failed(config, api_client_factory):
     app_config.is_rsa_configuration_valid.return_value = False
     config.app = app_config
     authenticator_factory = AuthenticatorFactory(config, api_client_factory)
-    with pytest.raises(AuthInitializationException):
+    with pytest.raises(AuthInitializationError):
         authenticator_factory.get_obo_authenticator()

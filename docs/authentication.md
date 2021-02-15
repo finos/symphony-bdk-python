@@ -100,7 +100,7 @@ app:
       path: /path/to/private-key.pem
 ```
 
-If users still try to access to Bdk services directly from `SymphonyBdk` facade object, a `BotNotConfiguredException`
+If users still try to access to Bdk services directly from `SymphonyBdk` facade object, a `BotNotConfiguredError`
 will be thrown.
 
 The example in [part above](#obo-on-behalf-of-authentication) shows how a bot project works without bot `username`

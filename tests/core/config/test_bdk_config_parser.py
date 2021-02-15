@@ -1,4 +1,4 @@
-from symphony.bdk.core.config.exception import BdkConfigException
+from symphony.bdk.core.config.exception import BdkConfigError
 from symphony.bdk.core.config.loader import BdkConfigParser
 
 from tests.utils.resource_utils import get_config_resource_filepath
@@ -26,7 +26,7 @@ def test_parse_config_yaml():
 
 def test_parse_config_wrong_format(invalid_config_path):
     fail_error_message = "Config file is neither in JSON nor in YAML format."
-    with pytest.raises(BdkConfigException, match=fail_error_message):
+    with pytest.raises(BdkConfigError, match=fail_error_message):
         with open(invalid_config_path) as invalid_config_file:
             BdkConfigParser.parse(invalid_config_file.read())
 

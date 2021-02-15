@@ -5,9 +5,9 @@ import pytest
 
 from symphony.bdk.core.auth.auth_session import AuthSession, OboAuthSession
 from symphony.bdk.core.auth.bot_authenticator import BotAuthenticatorRsa
-from symphony.bdk.core.auth.exception import AuthInitializationException
+from symphony.bdk.core.auth.exception import AuthInitializationError
 from symphony.bdk.core.auth.obo_authenticator import OboAuthenticatorRsa
-from symphony.bdk.core.config.exception import BotNotConfiguredException
+from symphony.bdk.core.config.exception import BotNotConfiguredError
 from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
 from symphony.bdk.core.symphony_bdk import SymphonyBdk
@@ -105,7 +105,7 @@ async def test_obo_services(config, mock_obo_session):
 
 @pytest.mark.asyncio
 async def test_obo_fails(config):
-    with pytest.raises(AuthInitializationException):
+    with pytest.raises(AuthInitializationError):
         async with SymphonyBdk(config) as symphony_bdk:
             symphony_bdk.obo()
 
@@ -113,20 +113,20 @@ async def test_obo_fails(config):
 @pytest.mark.asyncio
 async def test_non_obo_services_fail_with_obo_only(obo_only_config):
     async with SymphonyBdk(obo_only_config) as symphony_bdk:
-        with pytest.raises(BotNotConfiguredException):
+        with pytest.raises(BotNotConfiguredError):
             symphony_bdk.bot_session()
 
-        with pytest.raises(BotNotConfiguredException):
+        with pytest.raises(BotNotConfiguredError):
             symphony_bdk.messages()
 
-        with pytest.raises(BotNotConfiguredException):
+        with pytest.raises(BotNotConfiguredError):
             symphony_bdk.streams()
 
-        with pytest.raises(BotNotConfiguredException):
+        with pytest.raises(BotNotConfiguredError):
             symphony_bdk.datafeed()
 
-        with pytest.raises(BotNotConfiguredException):
+        with pytest.raises(BotNotConfiguredError):
             symphony_bdk.users()
 
-        with pytest.raises(BotNotConfiguredException):
+        with pytest.raises(BotNotConfiguredError):
             symphony_bdk.connections()
