@@ -28,15 +28,20 @@ class BotAuthenticator(ABC):
         :return: the authentication session.
         :rtype: AuthSession
         """
-        pass
 
     @abstractmethod
     async def retrieve_session_token(self):
-        pass
+        """Authenticates and retrieves a new session token.
+
+        :return: the retrieved session token.
+        """
 
     @abstractmethod
     async def retrieve_key_manager_token(self):
-        pass
+        """Authenticated and retrieved a new key manager session.
+
+        :return: the retrieved key manager session.
+        """
 
 
 class BotAuthenticatorRsa(BotAuthenticator):

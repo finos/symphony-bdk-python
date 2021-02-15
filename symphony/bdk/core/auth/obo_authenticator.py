@@ -44,7 +44,6 @@ class OboAuthenticator(ABC):
         :return: The obo session token.
 
         """
-        pass
 
     @abstractmethod
     async def retrieve_obo_session_token_by_username(
@@ -59,7 +58,6 @@ class OboAuthenticator(ABC):
         :return: The obo session token.
 
         """
-        pass
 
     def authenticate_by_username(self, username: str):
         """Authenticate On-Behalf-Of user by username.

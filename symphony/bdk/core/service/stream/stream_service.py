@@ -126,10 +126,6 @@ class StreamService(OboStreamService):
     """Service class to manage streams.
     """
 
-    def __init__(self, streams_api: StreamsApi, room_membership_api: RoomMembershipApi, share_api: ShareApi,
-                 auth_session: AuthSession):
-        super().__init__(streams_api, room_membership_api, share_api, auth_session)
-
     async def create_im_or_mim(self, user_ids: [int]) -> Stream:
         """Create a new single or multi party instant message conversation between the caller and specified users.
         The caller is implicitly included in the members of the created chat.

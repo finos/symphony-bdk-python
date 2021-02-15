@@ -18,14 +18,20 @@ logger = logging.getLogger(__name__)
 
 
 def bot_service(func):
+    """Decorator to check if a bot service account is configured before making the actual function call.
+
+    :param func: the decorated function.
+    :return: the value returned by the decorated function with the passed arguments.
+    :raise BotNotConfiguredError if the bit service account is not configured.
+    """
     @functools.wraps(func)
-    def check_if_bot_configured_and_execute(*args):
+    def check_if_bot_configured_and_call_function(*args):
         symphony_bdk = args[0]
         if not symphony_bdk._config.bot.is_rsa_configuration_valid():
             raise BotNotConfiguredError("Error calling bot service ")
         return func(*args)
 
-    return check_if_bot_configured_and_execute
+    return check_if_bot_configured_and_call_function
 
 
 class SymphonyBdk:

@@ -1,5 +1,3 @@
-from abc import ABC, abstractmethod
-
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.service.message.multi_attachments_messages_api import MultiAttachmentsMessagesApi
 from symphony.bdk.gen.agent_api.attachments_api import AttachmentsApi
@@ -8,9 +6,7 @@ from symphony.bdk.gen.agent_model.v4_imported_message import V4ImportedMessage
 from symphony.bdk.gen.agent_model.v4_message import V4Message
 from symphony.bdk.gen.agent_model.v4_message_blast_response import V4MessageBlastResponse
 from symphony.bdk.gen.agent_model.v4_message_import_list import V4MessageImportList
-from symphony.bdk.gen.model_utils import (
-    file_type
-)
+from symphony.bdk.gen.model_utils import file_type
 from symphony.bdk.gen.pod_api.default_api import DefaultApi
 from symphony.bdk.gen.pod_api.message_api import MessageApi
 from symphony.bdk.gen.pod_api.message_suppression_api import MessageSuppressionApi

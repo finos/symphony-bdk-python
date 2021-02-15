@@ -1,5 +1,3 @@
-from abc import ABC, abstractmethod
-
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.service.connection.model.connection_status import ConnectionStatus
 from symphony.bdk.gen.pod_api.connection_api import ConnectionApi
@@ -146,6 +144,3 @@ class ConnectionService(OboConnectionService):
     * Reject a connection request from a user
     * Remove a connection with a user
     """
-
-    def __init__(self, connection_api: ConnectionApi, auth_session: AuthSession):
-        super().__init__(connection_api, auth_session)
