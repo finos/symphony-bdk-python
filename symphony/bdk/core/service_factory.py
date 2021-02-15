@@ -2,7 +2,9 @@ from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.client.api_client_factory import ApiClientFactory
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
 from symphony.bdk.core.service.connection.connection_service import ConnectionService
+from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import DatafeedVersion, AbstractDatafeedLoop
 from symphony.bdk.core.service.datafeed.datafeed_loop_v1 import DatafeedLoopV1
+from symphony.bdk.core.service.datafeed.datafeed_loop_v2 import DatafeedLoopV2
 from symphony.bdk.core.service.message.message_service import MessageService
 from symphony.bdk.core.service.message.multi_attachments_messages_api import MultiAttachmentsMessagesApi
 from symphony.bdk.core.service.stream.stream_service import StreamService
@@ -94,11 +96,18 @@ class ServiceFactory:
             ShareApi(self._agent_client),
             self._auth_session)
 
-    def get_datafeed_loop(self) -> DatafeedLoopV1:
+    def get_datafeed_loop(self) -> AbstractDatafeedLoop:
         """Returns a fully initialized DatafeedLoop
 
         :return: a new DatafeedLoop instance.
         """
+        df_version = self._config.datafeed.version
+        if df_version.lower() == DatafeedVersion.V2.value.lower():
+            return DatafeedLoopV2(
+                DatafeedApi(self._agent_client),
+                self._auth_session,
+                self._config
+            )
         return DatafeedLoopV1(
             DatafeedApi(self._agent_client),
             self._auth_session,
