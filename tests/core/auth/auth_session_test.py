@@ -3,7 +3,7 @@ from unittest.mock import AsyncMock
 import pytest
 
 from symphony.bdk.core.auth.auth_session import AuthSession, OboAuthSession
-from symphony.bdk.core.auth.exception import AuthInitializationException
+from symphony.bdk.core.auth.exception import AuthInitializationError
 
 
 @pytest.mark.asyncio
@@ -40,8 +40,8 @@ async def test_refresh_obo():
 
 
 def test_obo_init_failed():
-    with pytest.raises(AuthInitializationException):
+    with pytest.raises(AuthInitializationError):
         OboAuthSession(None, user_id=1234, username="username")
 
-    with pytest.raises(AuthInitializationException):
+    with pytest.raises(AuthInitializationError):
         OboAuthSession(None)

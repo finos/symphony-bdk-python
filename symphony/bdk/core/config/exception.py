@@ -2,12 +2,12 @@
 """
 
 
-class BdkConfigException(Exception):
+class BdkConfigError(Exception):
     """Exception class raised when configuration is invalid.
     """
 
 
-class BotNotConfiguredException(Exception):
+class BotNotConfiguredError(Exception):
     """Thrown when the bot configuration is not specified."""
 
     def __init__(self, message="Bot (service account) credentials have not been configured."):
