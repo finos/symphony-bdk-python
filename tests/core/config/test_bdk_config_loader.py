@@ -1,7 +1,7 @@
 from symphony.bdk.core.config.model.bdk_server_config import BdkProxyConfig
 from tests.utils.resource_utils import get_config_resource_filepath
 from symphony.bdk.core.config.loader import BdkConfigLoader
-from symphony.bdk.core.config.exception import BdkConfigException
+from symphony.bdk.core.config.exception import BdkConfigError
 
 import os
 import pytest
@@ -38,7 +38,7 @@ def test_load_from_content(simple_config_path):
 
 def test_load_from_file_not_found(wrong_path):
     fail_error_message = f"Config file has not been found at: {Path(wrong_path).absolute()}"
-    with pytest.raises(BdkConfigException, match=fail_error_message):
+    with pytest.raises(BdkConfigError, match=fail_error_message):
         config = BdkConfigLoader.load_from_file(wrong_path)
 
 

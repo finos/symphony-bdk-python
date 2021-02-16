@@ -1,5 +1,3 @@
-from abc import ABC, abstractmethod
-
 from symphony.bdk.gen import ApiAttributeError
 from symphony.bdk.gen.agent_model.v4_event import V4Event
 from symphony.bdk.gen.agent_model.v4_message_sent import V4MessageSent
@@ -22,7 +20,7 @@ from symphony.bdk.gen.agent_model.v4_symphony_elements_action import V4SymphonyE
 
 
 class RealTimeEventListener:
-    """Interface for a callback to be invoked when a RealTimeEvent is received  from the datafeed
+    """Interface for a callback to be invoked when a RealTimeEvent is received from the datafeed
     `real-time-events <https://developers.symphony.com/restapi/docs/real-time-events>_`
     """
 
@@ -49,7 +47,6 @@ class RealTimeEventListener:
         :param initiator: Event initiator.
         :param event: Message sent payload.
         """
-        pass
 
     async def on_shared_post(self, initiator: V4Initiator, event: V4SharedPost):
         """ Called when an INSTANTMESSAGECREATED event is received.
@@ -57,7 +54,6 @@ class RealTimeEventListener:
         :param initiator: Event initiator.
         :param event:  Shared post payload.
         """
-        pass
 
     async def on_instant_message_created(self, initiator: V4Initiator, event: V4InstantMessageCreated):
         """ Called when a ROOMCREATED event is received.
@@ -65,7 +61,6 @@ class RealTimeEventListener:
         :param initiator: Event initiator.
         :param event: Instant Message Created payload.
         """
-        pass
 
     async def on_room_created(self, initiator: V4Initiator, event: V4RoomCreated):
         """
@@ -73,7 +68,6 @@ class RealTimeEventListener:
         :param initiator: Event initiator.
         :param event: Room Created payload.
         """
-        pass
 
     async def on_room_updated(self, initiator: V4Initiator, event: V4RoomUpdated):
         """
@@ -81,7 +75,6 @@ class RealTimeEventListener:
         :param initiator: Event initiator.
         :param event: Room Updated payload.
         """
-        pass
 
     async def on_room_deactivated(self, initiator: V4Initiator, event: V4RoomDeactivated):
         """
@@ -89,7 +82,6 @@ class RealTimeEventListener:
         :param initiator: Event initiator.
         :param event: Room Deactivated payload.
         """
-        pass
 
     async def on_room_reactivated(self, initiator: V4Initiator, event: V4RoomReactivated):
         """
@@ -97,7 +89,6 @@ class RealTimeEventListener:
         :param initiator: Event initiator.
         :param event: Room Reactivated payload.
         """
-        pass
 
     async def on_user_requested_to_join_room(self, initiator: V4Initiator, event: V4UserRequestedToJoinRoom):
         """
@@ -105,7 +96,6 @@ class RealTimeEventListener:
         :param initiator: Event initiator.
         :param event: User Requested To Join Room payload.
         """
-        pass
 
     async def on_user_joined_room(self, initiator: V4Initiator, event: V4UserJoinedRoom):
         """
@@ -113,7 +103,6 @@ class RealTimeEventListener:
         :param initiator: Event initiator.
         :param event: User Joined Room payload.
         """
-        pass
 
     async def on_user_left_room(self, initiator: V4Initiator, event: V4UserLeftRoom):
         """
@@ -121,7 +110,6 @@ class RealTimeEventListener:
         :param initiator: Event initiator.
         :param event: User Left Room payload.
         """
-        pass
 
     async def on_room_member_promoted_to_owner(self, initiator: V4Initiator, event: V4RoomMemberPromotedToOwner):
         """
@@ -129,7 +117,6 @@ class RealTimeEventListener:
         :param initiator: Event initiator.
         :param event: Room Member Promoted To Owner payload.
         """
-        pass
 
     async def on_room_demoted_from_owner(self, initiator: V4Initiator, event: V4RoomMemberDemotedFromOwner):
         """
@@ -137,7 +124,6 @@ class RealTimeEventListener:
         :param initiator: Event initiator.
         :param event: Room Member Demoted From Owner payload.
         """
-        pass
 
     async def on_connection_requested(self, initiator: V4Initiator, event: V4ConnectionRequested):
         """
@@ -145,7 +131,6 @@ class RealTimeEventListener:
         :param initiator: Event initiator.
         :param event: Connection Requested payload.
         """
-        pass
 
     async def on_connection_accepted(self, initiator: V4Initiator, event: V4ConnectionAccepted):
         """
@@ -153,7 +138,6 @@ class RealTimeEventListener:
         :param initiator: Event initiator.
         :param event: Connection Accepted payload.
         """
-        pass
 
     async def on_message_suppressed(self, initiator: V4Initiator, event: V4MessageSuppressed):
         """
@@ -161,7 +145,6 @@ class RealTimeEventListener:
         :param initiator: Event initiator.
         :param event: Message Suppressed payload.
         """
-        pass
 
     async def on_symphony_elements_action(self, initiator: V4Initiator, event: V4SymphonyElementsAction):
         """
@@ -169,4 +152,3 @@ class RealTimeEventListener:
         :param initiator: Event initiator.
         :param event: Symphony Elements Action payload.
         """
-        pass

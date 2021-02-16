@@ -3,7 +3,7 @@ from pathlib import Path
 
 import yaml
 
-from symphony.bdk.core.config.exception import BdkConfigException
+from symphony.bdk.core.config.exception import BdkConfigError
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
 
 
@@ -26,7 +26,7 @@ class BdkConfigLoader:
         if config_path.exists():
             config_content = config_path.read_text()
             return cls.load_from_content(config_content)
-        raise BdkConfigException(f"Config file has not been found at: {config_path.absolute()}")
+        raise BdkConfigError(f"Config file has not been found at: {config_path.absolute()}")
 
     @classmethod
     def load_from_content(cls, content: str) -> BdkConfig:
@@ -77,4 +77,4 @@ class BdkConfigParser:
         except yaml.YAMLError:
             pass
 
-        raise BdkConfigException("Config file is neither in JSON nor in YAML format.")
+        raise BdkConfigError("Config file is neither in JSON nor in YAML format.")

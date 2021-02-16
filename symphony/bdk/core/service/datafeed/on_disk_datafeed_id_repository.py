@@ -6,6 +6,7 @@ from symphony.bdk.core.config.model.bdk_config import BdkConfig
 
 logger = logging.getLogger(__name__)
 
+
 class DatafeedIdRepository(ABC):
     """A repository interface for storing a datafeed id.
     By using the DatafeedLoopV1, the created datafeed id and agent base url has to be persisted on the BDK side.
