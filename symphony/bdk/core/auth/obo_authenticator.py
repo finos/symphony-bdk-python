@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 from symphony.bdk.core.auth.auth_session import OboAuthSession
-from symphony.bdk.core.auth.exception import AuthUnauthorizedException
+from symphony.bdk.core.auth.exception import AuthUnauthorizedError
 from symphony.bdk.core.auth.jwt_helper import create_signed_jwt
 from symphony.bdk.core.config.model.bdk_app_config import BdkAppConfig
 from symphony.bdk.gen.api_client import ApiClient
@@ -44,7 +44,6 @@ class OboAuthenticator(ABC):
         :return: The obo session token.
 
         """
-        pass
 
     @abstractmethod
     async def retrieve_obo_session_token_by_username(
@@ -59,7 +58,6 @@ class OboAuthenticator(ABC):
         :return: The obo session token.
 
         """
-        pass
 
     def authenticate_by_username(self, username: str):
         """Authenticate On-Behalf-Of user by username.
@@ -97,7 +95,7 @@ class OboAuthenticatorRsa(OboAuthenticator):
             token = await self._authentication_api.pubkey_app_authenticate_post(req)
             return token.token
         except ApiException:
-            raise AuthUnauthorizedException(self.unauthorized_message)
+            raise AuthUnauthorizedError(self.unauthorized_message)
 
     async def _authenticate_and_retrieve_obo_session_token(
             self,
@@ -118,7 +116,7 @@ class OboAuthenticatorRsa(OboAuthenticator):
                 token = await self._authentication_api.pubkey_app_username_username_authenticate_post(**params)
                 return token.token
         except ApiException:
-            raise AuthUnauthorizedException(self.unauthorized_message)
+            raise AuthUnauthorizedError(self.unauthorized_message)
 
     async def retrieve_obo_session_token_by_user_id(self, user_id: int):
         """

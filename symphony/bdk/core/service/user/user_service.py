@@ -32,29 +32,21 @@ from symphony.bdk.gen.pod_model.v2_user_list import V2UserList
 from symphony.bdk.gen.pod_model.user_suspension import UserSuspension
 
 
-class UserService:
-    """Service class for managing users
-
+class OboUserService:
+    """Class exposing OBO-enabled endpoints for user management.
     This service is used for retrieving information about a particular user,
     search users by ids, emails or usernames, perform some action related to
     user like:
 
-    * Add or remove roles from an user
-    * Get or update avatar of an user
-    * Get, assign or unassign disclaimer to an user
-    * Get, update feature entitlements of an user
-    * Get, update status of an user
+    * list/search users
+    * follow/unfollow users
     """
 
     def __init__(self, user_api: UserApi,
                  users_api: UsersApi,
-                 audit_trail_api: AuditTrailApi,
-                 system_api: SystemApi,
                  auth_session: AuthSession):
         self._user_api = user_api
         self._users_api = users_api
-        self._audit_trail_api = audit_trail_api
-        self._system_api = system_api
         self._auth_session = auth_session
 
     async def list_users_by_ids(
@@ -157,6 +149,7 @@ class UserService:
         Search for users by first name, last name, display name, and email; optionally, filter results by company,
         title, location, marketCoverage, responsibility, function, or instrument.
         See: `Search Users <https://developers.symphony.com/restapi/v20.10/reference#search-users>`_
+
         :param query:   Searching query containing complicated information like title, location, company...
         :param local:   If true then a local DB search will be performed and only local pod users will be
                         returned. If absent or false then a directory search will be performed and users
@@ -217,6 +210,30 @@ class UserService:
             'session_token': await self._auth_session.session_token
         }
         await self._user_api.v1_user_uid_unfollow_post(**params)
+
+
+class UserService(OboUserService):
+    """Service class for managing users
+
+    This service is used for retrieving information about a particular user,
+    search users by ids, emails or usernames, perform some action related to
+    user like:
+
+    * Add or remove roles from an user
+    * Get or update avatar of an user
+    * Get, assign or unassign disclaimer to an user
+    * Get, update feature entitlements of an user
+    * Get, update status of an user
+    """
+
+    def __init__(self, user_api: UserApi,
+                 users_api: UsersApi,
+                 audit_trail_api: AuditTrailApi,
+                 system_api: SystemApi,
+                 auth_session: AuthSession):
+        super().__init__(user_api, users_api, auth_session)
+        self._audit_trail_api = audit_trail_api
+        self._system_api = system_api
 
     async def get_user_detail(
             self,

@@ -1,4 +1,4 @@
-from symphony.bdk.core.auth.exception import AuthInitializationException
+from symphony.bdk.core.auth.exception import AuthInitializationError
 
 
 class AuthSession:
@@ -73,10 +73,10 @@ class OboAuthSession(AuthSession):
         """
         super().__init__(authenticator)
         if user_id is not None and username is not None:
-            raise AuthInitializationException('Username and user id for OBO authentication should not be defined at '
+            raise AuthInitializationError('Username and user id for OBO authentication should not be defined at '
                                               'a same time.')
         if user_id is None and username is None:
-            raise AuthInitializationException('At least username or user id should be defined for '
+            raise AuthInitializationError('At least username or user id should be defined for '
                                               'OBO authentication.')
         self.user_id = user_id
         self.username = username
@@ -97,4 +97,4 @@ class OboAuthSession(AuthSession):
 
     @property
     async def key_manager_token(self):
-        return None
+        return ""

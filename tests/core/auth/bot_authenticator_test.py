@@ -3,7 +3,7 @@ from unittest.mock import patch, MagicMock, AsyncMock
 import pytest
 
 from symphony.bdk.core.auth.bot_authenticator import BotAuthenticatorRsa
-from symphony.bdk.core.auth.exception import AuthUnauthorizedException
+from symphony.bdk.core.auth.exception import AuthUnauthorizedError
 from symphony.bdk.core.config.model.bdk_config import *
 from symphony.bdk.gen.api_client import ApiClient
 from symphony.bdk.gen.configuration import Configuration
@@ -61,10 +61,10 @@ async def test_api_exception(config, mocked_api_client):
 
         bot_authenticator = BotAuthenticatorRsa(config, login_api_client, relay_api_client)
 
-        with pytest.raises(AuthUnauthorizedException):
+        with pytest.raises(AuthUnauthorizedError):
             await bot_authenticator.retrieve_session_token()
 
-        with pytest.raises(AuthUnauthorizedException):
+        with pytest.raises(AuthUnauthorizedError):
             await bot_authenticator.retrieve_key_manager_token()
 
 

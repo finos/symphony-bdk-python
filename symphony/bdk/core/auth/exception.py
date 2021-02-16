@@ -2,7 +2,7 @@
 """
 
 
-class AuthInitializationException(Exception):
+class AuthInitializationError(Exception):
     """Thrown when unable to read/parse a RSA Private Key or a certificate.
     """
 
@@ -10,7 +10,7 @@ class AuthInitializationException(Exception):
         self.message = message
 
 
-class AuthUnauthorizedException(Exception):
+class AuthUnauthorizedError(Exception):
     """When thrown, it means that authentication cannot be performed for several reasons
     """
 
