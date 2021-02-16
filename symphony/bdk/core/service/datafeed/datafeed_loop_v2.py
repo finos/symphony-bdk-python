@@ -1,3 +1,5 @@
+from typing import Optional
+
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
 from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import AbstractDatafeedLoop
@@ -5,7 +7,6 @@ from symphony.bdk.gen import ApiException
 from symphony.bdk.gen.agent_api.datafeed_api import DatafeedApi
 from symphony.bdk.gen.agent_model.ack_id import AckId
 from symphony.bdk.gen.agent_model.v5_datafeed import V5Datafeed
-from typing import Optional
 
 
 class DatafeedLoopV2(AbstractDatafeedLoop):
@@ -30,27 +31,27 @@ class DatafeedLoopV2(AbstractDatafeedLoop):
     def __init__(self, datafeed_api: DatafeedApi, auth_session: AuthSession, config: BdkConfig):
         super().__init__(datafeed_api, auth_session, config)
         self._ack_id = ""
-        self.started = False
-        self.datafeed_id = None
+        self._started = False
+        self._datafeed_id = None
 
     async def start(self):
         datafeed = await self._retrieve_datafeed()
         if not datafeed:
             datafeed = await self._create_datafeed()
-        self.datafeed_id = datafeed.id
-        self.started = True
-        while self.started:
+        self._datafeed_id = datafeed.id
+        self._started = True
+        while self._started:
             try:
                 await self._read_datafeed()
             except ApiException as e:
                 if e.status == 400:
                     datafeed = await self._recreate_datafeed()
-                    self.datafeed_id = datafeed.id
+                    self._datafeed_id = datafeed.id
                 else:
                     raise e
 
     async def stop(self):
-        self.started = False
+        self._started = False
 
     async def _retrieve_datafeed(self) -> Optional[V5Datafeed]:
         session_token = await self.auth_session.session_token
@@ -70,7 +71,7 @@ class DatafeedLoopV2(AbstractDatafeedLoop):
         params = {
             'session_token': await self.auth_session.session_token,
             'key_manager_token': await self.auth_session.key_manager_token,
-            'datafeed_id': self.datafeed_id,
+            'datafeed_id': self._datafeed_id,
             'ack_id': AckId(ack_id=self._ack_id)
         }
         event_list = await self.datafeed_api.read_datafeed(**params)
@@ -81,10 +82,11 @@ class DatafeedLoopV2(AbstractDatafeedLoop):
     async def _delete_datafeed(self) -> None:
         session_token = await self.auth_session.session_token
         key_manager_token = await self.auth_session.key_manager_token
-        await self.datafeed_api.delete_datafeed(datafeed_id=self.datafeed_id,
+        await self.datafeed_api.delete_datafeed(datafeed_id=self._datafeed_id,
                                                 session_token=session_token,
                                                 key_manager_token=key_manager_token)
 
     async def _recreate_datafeed(self):
         await self._delete_datafeed()
+        self._ack_id = ""
         return await self._create_datafeed()

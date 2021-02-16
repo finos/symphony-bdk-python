@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 
 
-@pytest.fixture(params=["v1", 25, True])
+@pytest.fixture(params=["v1"])
 def datafeed_version(request):
     return request.param
 
