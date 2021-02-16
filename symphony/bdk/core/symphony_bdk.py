@@ -7,7 +7,7 @@ from symphony.bdk.core.auth.exception import AuthInitializationError
 from symphony.bdk.core.client.api_client_factory import ApiClientFactory
 from symphony.bdk.core.config.exception import BotNotConfiguredError
 from symphony.bdk.core.service.connection.connection_service import ConnectionService
-from symphony.bdk.core.service.datafeed.datafeed_loop_v1 import DatafeedLoopV1
+from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import AbstractDatafeedLoop
 from symphony.bdk.core.service.message.message_service import MessageService
 from symphony.bdk.core.service.obo_services import OboServices
 from symphony.bdk.core.service.stream.stream_service import StreamService
@@ -123,7 +123,7 @@ class SymphonyBdk:
         return self._stream_service
 
     @bot_service
-    def datafeed(self) -> DatafeedLoopV1:
+    def datafeed(self) -> AbstractDatafeedLoop:
         """Get the Datafeed loop from the BDK entry point.
 
         :return: The Datafeed Loop instance.

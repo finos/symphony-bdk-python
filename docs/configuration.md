@@ -86,6 +86,9 @@ app:
   appId: app-id
   privateKey:
     path: path/to/private-key.pem
+
+datafeed:
+  version: v2
 ```
 
 ### Configuration structure
@@ -110,3 +113,6 @@ manager which manages the key token of the bot.
   on pod.
 - `app` contains information about the extension app that the bot will use like
 the appId, the private key for authenticating the extension app.
+- `datafeed` contains information about the datafeed service that the bot will use for the `DatafeedLoop` service.
+If the version field is configured to `v2`, the datafeed service v2 will be used. Otherwise, the datafeed service v1 
+will be used by default.
