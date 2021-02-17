@@ -1,0 +1,34 @@
+name: build
+
+on:
+  push:
+    branches: [ "2.0" ]
+  pull_request:
+    branches: [ "2.0" ]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+      strategy:
+        matrix:
+          os: [ ubuntu-latest, macos-latest, windows-latest ]
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Install Poetry
+        run: pip install poetry
+
+      - name: Install dependencies
+        run: poetry install
+
+      - name: Run tests with coverage
+        run: poetry run pytest
+
+      - name: Run pylint
+        run: poetry run pylint symphony tests
