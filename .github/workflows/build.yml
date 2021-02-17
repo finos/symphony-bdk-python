@@ -1,0 +1,63 @@
+name: build
+
+on:
+  push:
+    branches: [ "2.0" ]
+  pull_request:
+    branches: [ "2.0" ]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, macos-latest, windows-latest ]
+        include:
+          - os: ubuntu-latest
+            path: ~/.cache/pypoetry/virtualenvs
+          - os: macos-latest
+            path: ~/Library/Caches/pypoetry/virtualenvs
+          - os: windows-latest
+            path: ~\AppData\Local\pypoetry\Cache\virtualenvs
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Install Poetry
+        run: pip install poetry
+
+      - name: Cache poetry
+        uses: actions/cache@v2
+        with:
+          path: ${{ matrix.path }}
+          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-poetry-
+
+      - name: Install dependencies
+        run: poetry install
+
+      - name: Run tests with coverage
+        run: poetry run pytest
+
+      - name: Run pylint
+        run: poetry run pylint symphony tests
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v2
+        with:
+          name: pytest-results-${{ matrix.os }}
+          path: test-results/junit.xml
+        if: ${{ always() }}
+
+      - name: Upload test coverage
+        uses: actions/upload-artifact@v2
+        with:
+          name: pytest-coverage-${{ matrix.os }}
+          path: htmlcov
+        if: ${{ always() }}

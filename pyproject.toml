@@ -2,6 +2,7 @@
 name = "sym_api_client_python"
 version = "2.0.dev0"
 description = "Symphony Bot Development Kit for Python"
+readme = "README.md"
 authors = ["Symphony Platform Solutions <platformsolutions@symphony.com>"]
 packages = [
     { include = "symphony" }
