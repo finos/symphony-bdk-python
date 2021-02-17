@@ -30,4 +30,5 @@ jobs:
       - name: publish
         env:
           PYPI_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
-        run: poetry publish --build --username symphony-platform-solutions --password "$PYPI_PASSWORD"
+          PYPI_USERNAME: ${{ secrets.PYPI_USERNAME }}
+        run: poetry publish --build --username "$PYPI_USERNAME" --password "$PYPI_PASSWORD"
