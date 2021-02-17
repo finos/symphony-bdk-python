@@ -1,4 +1,5 @@
-from symphony.bdk.core.config.model.bdk_server_config import BdkProxyConfig
+import re
+
 from tests.utils.resource_utils import get_config_resource_filepath
 from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.config.exception import BdkConfigError
@@ -38,12 +39,12 @@ def test_load_from_content(simple_config_path):
 
 def test_load_from_file_not_found(wrong_path):
     fail_error_message = f"Config file has not been found at: {Path(wrong_path).absolute()}"
-    with pytest.raises(BdkConfigError, match=fail_error_message):
-        config = BdkConfigLoader.load_from_file(wrong_path)
+    with pytest.raises(BdkConfigError, match=re.escape(fail_error_message)):
+        BdkConfigLoader.load_from_file(wrong_path)
 
 
-@pytest.mark.skipif(os.environ.get("CIRCLECI") == "true",
-                    reason="CircleCI does not allow to create file in the home directory")
+@pytest.mark.skipif(os.environ.get("CI") == "true",
+                    reason="GitHub actions does not allow to create file in the home directory")
 def test_load_from_symphony_directory(simple_config_path):
     tmp_config_filename = str(uuid.uuid4()) + "-config.yaml"
     tmp_config_path = Path.home() / ".symphony" / tmp_config_filename
