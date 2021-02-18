@@ -10,7 +10,7 @@ from symphony.bdk.core.service_factory import OboServiceFactory
 
 class OboServices:
     """Entry point for OBO-enabled services, see
-    `the list of OBO-enabled endpoints <https://developers.symphony.com/restapi/reference#obo-enabled-endpoints`_
+        `the list of OBO-enabled endpoints <https://developers.symphony.com/restapi/reference#obo-enabled-endpoints>`_
     """
 
     async def __aenter__(self):

@@ -1,3 +1,5 @@
+"""Module containing SymphonyBdk class which acts as en entry point for all BDK services.
+"""
 import functools
 import logging
 
@@ -22,7 +24,7 @@ def bot_service(func):
 
     :param func: the decorated function.
     :return: the value returned by the decorated function with the passed arguments.
-    :raise BotNotConfiguredError if the bit service account is not configured.
+    :raise: BotNotConfiguredError if the bit service account is not configured.
     """
     @functools.wraps(func)
     def check_if_bot_configured_and_call_function(*args):
