@@ -48,6 +48,15 @@ jobs:
       - name: Run pylint
         run: poetry run pylint symphony tests
 
+      - name: Generate Sphinx documentation
+        run: cd docs/ && make html
+
+      - name: Upload html documentation
+        uses: actions/upload-artifact@v2
+        with:
+          name: sphinx-${{ matrix.os }}
+          path: docs/_build/html
+
       - name: Upload test results
         uses: actions/upload-artifact@v2
         with:
