@@ -6,7 +6,7 @@ Welcome to the Symphony BDK documentation!
    :glob:
    :caption: Contents:
 
-   markdown/*
+   markdown/index
 
 .. autosummary::
    :toctree: _autosummary
