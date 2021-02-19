@@ -64,4 +64,4 @@ jobs:
           git config user.email github-actions@github.com
           git add docs/
           git commit -m "Generated commit for Sphinx documentation"
-          git push -f origin github-pages
+          git push -f origin gh-pages
