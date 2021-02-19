@@ -1,0 +1,67 @@
+name: On 2.0 push
+
+on:
+  push:
+    branches: [ "2.0" ]
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: Run Snyk to check for vulnerabilities
+        uses: snyk/actions/python@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high
+          command: monitor
+
+  documentation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Copy 2.0 branch into gh-pages
+        run: |
+          git checkout gh-pages
+          git reset --hard 2.0
+
+      - name: Install Poetry
+        run: pip install poetry
+
+      - name: Cache poetry
+        uses: actions/cache@v2
+        with:
+          path: ~/.cache/pypoetry/virtualenvs
+          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-poetry-
+
+      - name: Install Poetry deps
+        run: poetry install
+
+      - name: Generate Sphinx documentation
+        working-directory: ./docsrc
+        run: |
+          . `poetry env info --path`/bin/activate
+          make html
+
+      - name: Copy Sphinx documentation into docs/
+        working-directory: ./docsrc/_build/html
+        run: mv * $GITHUB_WORKSPACE/docs/
+
+      - name: Commit changes
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          git add docs/
+          git commit -m "Generated commit for Sphinx documentation"
+          git push -f origin github-pages
