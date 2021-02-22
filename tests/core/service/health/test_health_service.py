@@ -53,8 +53,7 @@ async def test_health_check(health_service, mocked_system_api_client):
 
 @pytest.mark.asyncio
 async def test_health_check_failed(health_service, mocked_system_api_client):
-    mocked_system_api_client.v3_health.side_effect = ApiException(
-        400)  # TODO: Check if we should add an ApiRuntimeException
+    mocked_system_api_client.v3_health.side_effect = ApiException(400)
 
     with pytest.raises(ApiException):
         await health_service.health_check()
