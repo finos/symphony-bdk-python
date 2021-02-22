@@ -3,6 +3,18 @@
 This guide provides detailed information for beginners who want to bootstrap their first Symphony BDK project
 in Python.
 
+## Starting with Symphony Generator
+> This section requires `npm` ([Node Package Manager](https://www.npmjs.com/)) to be installed on your local machine as a prerequisite
+
+For all Symphony BDK applications, you should start with the [Symphony Generator](https://github.com/SymphonyPlatformSolutions/generator-symphony).
+The Symphony Generator offers a fast way to bootstrap your Symphony BDK project in several languages, including Python:
+```
+npm i -g generator-symphony
+yo symphony 2.0
+```
+After entering pod and bot information and selecting `Bot Application` as application type, you should be able to select
+Python as programming language. This will generated a configuration file, a `requirements.txt` and a simple python script.
+
 ## Creating your project _from scratch_
 This section will help you to understand how to create your bot application from scratch.
 
@@ -48,9 +60,6 @@ build-backend = "poetry.core.masonry.api"
 ```
 
 You can then run your script by running `poetry run python main.py`
-
-### Requirements.txt based project
-
 
 ### Create configuration file
 Before implement any code, you need to create your `~/.symphony/config.yaml` configuration file according
