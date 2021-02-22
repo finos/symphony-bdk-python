@@ -16,4 +16,7 @@ The reference documentation consists of the following sections:
 * [Datafeed](./datafeed.md): Listening and reacting to real-time events
 
 ### Technical Documentation
-You can find information on how we generate client side code from swagger specs in the [Generated API](./generated_api.md).
+* Information on how we generate client side code from swagger specs in the
+[Generated API](./tech/generated_api.md) page.
+* Information about logging and logging configuration can be found in the
+  [Production Readiness](./tech/production_readiness.md) page.
