@@ -1,24 +1,15 @@
-import pytest
 from unittest.mock import MagicMock, AsyncMock
+import pytest
 
 from symphony.bdk.gen import ApiException
 from symphony.bdk.gen.agent_model.agent_info import AgentInfo
 from tests.utils.resource_utils import object_from_json_relative_path
 
-from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.service.health.health_service import HealthService
 
 from symphony.bdk.gen.agent_api.system_api import SystemApi
 from symphony.bdk.gen.agent_api.signals_api import SignalsApi
 from symphony.bdk.gen.agent_model.v3_health import V3Health
-
-
-@pytest.fixture()
-def auth_session():
-    auth_session = AuthSession(None)
-    auth_session.session_token = "session_token"
-    auth_session.key_manager_token = "km_token"
-    return auth_session
 
 
 @pytest.fixture()
@@ -88,7 +79,7 @@ async def test_get_agent_info(health_service, mocked_signals_api_client):
 
     assert agent_info.hostname == "agent-75...4b6"
     assert agent_info.ipAddress == "22.222.222.22"
-    assert agent_info.onPrem == True
+    assert agent_info.onPrem
 
 
 @pytest.mark.asyncio

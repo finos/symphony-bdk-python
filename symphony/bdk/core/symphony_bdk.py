@@ -8,6 +8,7 @@ from symphony.bdk.core.client.api_client_factory import ApiClientFactory
 from symphony.bdk.core.config.exception import BotNotConfiguredError
 from symphony.bdk.core.service.connection.connection_service import ConnectionService
 from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import AbstractDatafeedLoop
+from symphony.bdk.core.service.health.health_service import HealthService
 from symphony.bdk.core.service.message.message_service import MessageService
 from symphony.bdk.core.service.obo_services import OboServices
 from symphony.bdk.core.service.stream.stream_service import StreamService
@@ -59,6 +60,7 @@ class SymphonyBdk:
         self._connection_service = None
         self._stream_service = None
         self._datafeed_loop = None
+        self._health_service = None
 
         if self._config.bot.is_rsa_configuration_valid():
             self._initialize_bot_services()
@@ -74,6 +76,7 @@ class SymphonyBdk:
         self._connection_service = self._service_factory.get_connection_service()
         self._stream_service = self._service_factory.get_stream_service()
         self._datafeed_loop = self._service_factory.get_datafeed_loop()
+        self._health_service = self._service_factory.get_health_service()
 
     @bot_service
     def bot_session(self) -> AuthSession:
@@ -148,6 +151,15 @@ class SymphonyBdk:
 
         """
         return self._connection_service
+
+    @bot_service
+    def health(self) -> HealthService:
+        """Get the HealthService from the BDK entry point.
+
+        :return: The HealthService instance.
+
+        """
+        return self._health_service
 
     async def close_clients(self):
         """Close all the existing api clients created by the api client factory.
