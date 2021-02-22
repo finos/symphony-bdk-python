@@ -1,0 +1,26 @@
+{
+  "status": "UP",
+  "version": "2.57.0",
+  "services": {
+    "pod": {
+      "status": "UP",
+      "version": "1.57.0"
+    },
+    "datafeed": {
+      "status": "UP",
+      "version": "2.1.28"
+    },
+    "key_manager": {
+      "status": "UP",
+      "version": "1.56.0"
+    }
+  },
+  "users": {
+    "agentservice": {
+      "status": "UP"
+    },
+    "ceservice": {
+      "status": "UP"
+    }
+  }
+}
