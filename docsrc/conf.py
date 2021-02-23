@@ -44,20 +44,18 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store', 'docs']
 
 # -- Options for HTML output -------------------------------------------------
 
-# The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
-#
 html_theme = 'furo'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+
 html_favicon = '_static/symphony-favicon.png'
 html_logo = '_static/symphony-logo.png'
 
 
-# At the bottom of conf.py
+# To enable auto toc and eval_rst in index.md
 def setup(app):
     app.add_config_value('recommonmark_config', {
         'auto_toc_tree_section': 'Contents'
