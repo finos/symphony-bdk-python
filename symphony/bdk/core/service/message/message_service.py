@@ -325,15 +325,14 @@ class MessageService(OboMessageService):
             message_id: str
     ) -> MessageMetadataResponse:
         """Gets the message metadata relationship.
-        This API allows users to track the relationship between a message and all the forwards
-        and replies of that message.
+        This API allows users to track the relationship between a message and all the forwards and replies of that
+        message.
         See: `Message Metadata <https://developers.symphony.com/restapi/reference#message-metadata-relationship>`_
 
-        :param message_id: MessageId the ID of the message to get relationships from.
 
-        :return: a MessageMetadataResponse object holding information about
-        the current message relationships (parent, replies, forwards and form replies).
-
+        :param message_id: the ID of the message to get relationships from.
+        :return: a MessageMetadataResponse object holding information about the current message relationships (parent,
+            replies, forwards and form replies).
         """
         params = {
             'message_id': message_id,

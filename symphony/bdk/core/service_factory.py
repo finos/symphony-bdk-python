@@ -1,3 +1,4 @@
+"""Service factory module"""
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.client.api_client_factory import ApiClientFactory
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
@@ -27,6 +28,7 @@ from symphony.bdk.gen.pod_api.users_api import UsersApi
 
 class ServiceFactory:
     """Factory responsible for creating BDK service instances for Symphony Bdk entry point:
+
     * User Service
     * Message Service
     * Connection Service
@@ -117,10 +119,12 @@ class ServiceFactory:
 
 class OboServiceFactory:
     """Factory responsible for creating BDK service instances for OBO-enabled endpoints only:
+
     * User Service
     * Message Service
     * Connection Service
     * Stream Service
+
     See: `OBO-enabled endpoints <https://developers.symphony.com/restapi/reference#obo-enabled-endpoints>`_
     """
 

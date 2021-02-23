@@ -22,7 +22,7 @@ class BdkServerConfig:
         """Formats the context field
 
         :return: "/" + context if the context is not empty
-        :rtype str
+        :rtype: str
         """
         local_context = self.context
         if local_context is None or not isinstance(local_context, str):

@@ -120,7 +120,7 @@ class OboUserService:
         Search users by usernames.
         See : `Users Lookup v3 <https://developers.symphony.com/restapi/v20.10/reference#users-lookup-v3>`_
 
-        :param usernames    List of usernames.
+        :param usernames:   List of usernames.
         :param active:      If not set all user status will be returned,
                             if true all active users will be returned,
                             if false all inactive users will be returned.
