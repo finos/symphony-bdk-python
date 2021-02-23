@@ -64,8 +64,7 @@ class OboAuthSession(AuthSession):
     """
 
     def __init__(self, authenticator, user_id: int = None, username: str = None):
-        """
-        At least user_id or username should be defined.
+        """At least user_id or username should be defined.
 
         :param authenticator: the OboAuthenticator instance to retrieve the tokens from.
         :param user_id: User Id.

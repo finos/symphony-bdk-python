@@ -29,4 +29,5 @@ if __name__ == "__main__":
     asyncio.run(ConnectionMain.run())
 ```
 
-You can check more examples [here](../examples/connection.py)
+You can check more examples
+[here](https://github.com/SymphonyPlatformSolutions/symphony-api-client-python/blob/2.0/examples/connection.py)

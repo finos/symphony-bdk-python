@@ -1,12 +1,13 @@
-# Getting started
+# Production Readiness
+Production readiness documentation for BDK-based applications.
 
 ## Logging
 
 The Symphony BDK uses
 the [standard Python logging module](https://docs.python.org/3/howto/logging.html). To troubleshoot
 your bot you might want to enable the DEBUG level to get the full logs from the BDK.
-The [Datafeed example](../examples/datafeed.py) uses
-a [sample logging configuration](../examples/logging.conf)
+The [Datafeed example](https://github.com/SymphonyPlatformSolutions/symphony-api-client-python/blob/2.0/examples/datafeed.py) uses
+a [sample logging configuration](https://github.com/SymphonyPlatformSolutions/symphony-api-client-python/blob/2.0/examples/logging.conf)
 and illustrates how you can configure logging as a bot developer.
 
 If you are logging to a file we recommend that you use
