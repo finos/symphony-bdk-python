@@ -6,6 +6,7 @@ from symphony.bdk.core.service.connection.connection_service import ConnectionSe
 from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import DatafeedVersion, AbstractDatafeedLoop
 from symphony.bdk.core.service.datafeed.datafeed_loop_v1 import DatafeedLoopV1
 from symphony.bdk.core.service.datafeed.datafeed_loop_v2 import DatafeedLoopV2
+from symphony.bdk.core.service.health.health_service import HealthService
 from symphony.bdk.core.service.message.message_service import MessageService, OboMessageService
 from symphony.bdk.core.service.message.multi_attachments_messages_api import MultiAttachmentsMessagesApi
 from symphony.bdk.core.service.stream.stream_service import StreamService, OboStreamService
@@ -14,6 +15,8 @@ from symphony.bdk.gen.agent_api.attachments_api import AttachmentsApi
 from symphony.bdk.gen.agent_api.audit_trail_api import AuditTrailApi
 from symphony.bdk.gen.agent_api.datafeed_api import DatafeedApi
 from symphony.bdk.gen.agent_api.share_api import ShareApi
+from symphony.bdk.gen.agent_api.signals_api import SignalsApi
+from symphony.bdk.gen.agent_api.system_api import SystemApi as AgentSystemApi
 from symphony.bdk.gen.pod_api.connection_api import ConnectionApi
 from symphony.bdk.gen.pod_api.default_api import DefaultApi
 from symphony.bdk.gen.pod_api.message_api import MessageApi
@@ -21,7 +24,7 @@ from symphony.bdk.gen.pod_api.message_suppression_api import MessageSuppressionA
 from symphony.bdk.gen.pod_api.pod_api import PodApi
 from symphony.bdk.gen.pod_api.room_membership_api import RoomMembershipApi
 from symphony.bdk.gen.pod_api.streams_api import StreamsApi
-from symphony.bdk.gen.pod_api.system_api import SystemApi
+from symphony.bdk.gen.pod_api.system_api import SystemApi as PodSystemApi
 from symphony.bdk.gen.pod_api.user_api import UserApi
 from symphony.bdk.gen.pod_api.users_api import UsersApi
 
@@ -57,7 +60,7 @@ class ServiceFactory:
             UserApi(self._pod_client),
             UsersApi(self._pod_client),
             AuditTrailApi(self._agent_client),
-            SystemApi(self._pod_client),
+            PodSystemApi(self._pod_client),
             self._auth_session
         )
 
@@ -115,6 +118,13 @@ class ServiceFactory:
             self._auth_session,
             self._config
         )
+
+    def get_health_service(self):
+        """Returns a fully initialized HealthService
+
+        :return: a new HealthService instance
+        """
+        return HealthService(AgentSystemApi(self._agent_client), SignalsApi(self._agent_client))
 
 
 class OboServiceFactory:
