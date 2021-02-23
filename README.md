@@ -25,6 +25,8 @@ To install poetry, follow instructions [here](https://python-poetry.org/docs/#in
 On the first time, run `poetry install`. Then run `poetry build` to build the sdist and wheel packages.
 To run the tests, use `poetry run pytest`.
 
+To generate locally the Sphinx documentation, run: `cd docsrc && make html`.
+
 ## Contributing
 
 If you want to contribute, please check the [contributing guidelines](CONTRIBUTING.md).
