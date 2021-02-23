@@ -12,6 +12,8 @@
 #
 import os
 import sys
+from recommonmark.transform import AutoStructify
+
 sys.path.insert(0, os.path.abspath('..'))
 
 
@@ -30,11 +32,7 @@ extensions = ['recommonmark', 'sphinx.ext.autodoc', 'sphinx.ext.autosummary']
 
 autosummary_generate = True
 
-source_suffix = {
-    '.rst': 'restructuredtext',
-    '.txt': 'restructuredtext',
-    '.md': 'markdown',
-}
+source_suffix = ['.rst', '.md']
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -56,4 +54,12 @@ html_theme = 'furo'
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 html_favicon = '_static/symphony-favicon.png'
-html_logo = '_static/symphony-favicon.png'
+html_logo = '_static/symphony-logo.png'
+
+
+# At the bottom of conf.py
+def setup(app):
+    app.add_config_value('recommonmark_config', {
+        'auto_toc_tree_section': 'Contents'
+    }, True)
+    app.add_transform(AutoStructify)
