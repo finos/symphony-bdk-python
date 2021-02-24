@@ -5,6 +5,7 @@ import pytest
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.client.api_client_factory import ApiClientFactory
 from symphony.bdk.core.config.loader import BdkConfigLoader
+from symphony.bdk.core.service.application.application_service import ApplicationService
 from symphony.bdk.core.service.connection.connection_service import ConnectionService
 from symphony.bdk.core.service.datafeed.datafeed_loop_v1 import DatafeedLoopV1
 from symphony.bdk.core.service.datafeed.datafeed_loop_v2 import DatafeedLoopV2
@@ -59,6 +60,12 @@ def test_get_stream_service(service_factory):
     stream_service = service_factory.get_stream_service()
     assert stream_service is not None
     assert type(stream_service) == StreamService
+
+
+def test_get_application_service(service_factory):
+    application_service = service_factory.get_application_service()
+    assert application_service is not None
+    assert type(application_service) == ApplicationService
 
 
 def test_get_datafeed_loop(config, service_factory):
