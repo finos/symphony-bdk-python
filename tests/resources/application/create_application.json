@@ -1,0 +1,21 @@
+{
+  "applicationInfo": {
+    "appId": "my-test-app",
+    "name": "my-test-app",
+    "appUrl": "https://joe.mydomain.com",
+    "domain": "mydomain.com",
+    "publisher": "Joe Smith"
+  },
+  "description": "a test app",
+  "allowOrigins": "mydomain.com",
+  "permissions": [
+    "ACT_AS_USER",
+    "SEND_MESSAGES"
+  ],
+  "notification": {
+    "url": "https://some.url",
+    "apiKey":"123456"
+  },
+  "cert": "-----BEGIN PUBLIC KEY-----\nMIICIANBgkqhw0BAQ...cCAwEAAQ==\n-----END PUBLIC KEY-----",
+  "authenticationKeys": "null"
+}

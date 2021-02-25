@@ -8,6 +8,7 @@ from symphony.bdk.core.auth.authenticator_factory import AuthenticatorFactory
 from symphony.bdk.core.auth.exception import AuthInitializationError
 from symphony.bdk.core.client.api_client_factory import ApiClientFactory
 from symphony.bdk.core.config.exception import BotNotConfiguredError
+from symphony.bdk.core.service.application.application_service import ApplicationService
 from symphony.bdk.core.service.connection.connection_service import ConnectionService
 from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import AbstractDatafeedLoop
 from symphony.bdk.core.service.health.health_service import HealthService
@@ -61,6 +62,7 @@ class SymphonyBdk:
         self._message_service = None
         self._connection_service = None
         self._stream_service = None
+        self._application_service = None
         self._datafeed_loop = None
         self._health_service = None
 
@@ -77,6 +79,7 @@ class SymphonyBdk:
         self._message_service = self._service_factory.get_message_service()
         self._connection_service = self._service_factory.get_connection_service()
         self._stream_service = self._service_factory.get_stream_service()
+        self._application_service = self._service_factory.get_application_service()
         self._datafeed_loop = self._service_factory.get_datafeed_loop()
         self._health_service = self._service_factory.get_health_service()
 
@@ -153,6 +156,15 @@ class SymphonyBdk:
 
         """
         return self._connection_service
+
+    @bot_service
+    def applications(self) -> ApplicationService:
+        """Get the ApplicationService from the BDK entry point.
+
+        :return: The ApplicationService instance.
+
+        """
+        return self._application_service
 
     @bot_service
     def health(self) -> HealthService:
