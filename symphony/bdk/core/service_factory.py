@@ -9,6 +9,7 @@ from symphony.bdk.core.service.datafeed.datafeed_loop_v2 import DatafeedLoopV2
 from symphony.bdk.core.service.health.health_service import HealthService
 from symphony.bdk.core.service.message.message_service import MessageService, OboMessageService
 from symphony.bdk.core.service.message.multi_attachments_messages_api import MultiAttachmentsMessagesApi
+from symphony.bdk.core.service.presence.presence_service import PresenceService, OboPresenceService
 from symphony.bdk.core.service.stream.stream_service import StreamService, OboStreamService
 from symphony.bdk.core.service.user.user_service import UserService, OboUserService
 from symphony.bdk.gen.agent_api.attachments_api import AttachmentsApi
@@ -22,6 +23,7 @@ from symphony.bdk.gen.pod_api.default_api import DefaultApi
 from symphony.bdk.gen.pod_api.message_api import MessageApi
 from symphony.bdk.gen.pod_api.message_suppression_api import MessageSuppressionApi
 from symphony.bdk.gen.pod_api.pod_api import PodApi
+from symphony.bdk.gen.pod_api.presence_api import PresenceApi
 from symphony.bdk.gen.pod_api.room_membership_api import RoomMembershipApi
 from symphony.bdk.gen.pod_api.streams_api import StreamsApi
 from symphony.bdk.gen.pod_api.system_api import SystemApi as PodSystemApi
@@ -119,12 +121,25 @@ class ServiceFactory:
             self._config
         )
 
-    def get_health_service(self):
+    def get_health_service(self) -> HealthService:
         """Returns a fully initialized HealthService
 
         :return: a new HealthService instance
         """
-        return HealthService(AgentSystemApi(self._agent_client), SignalsApi(self._agent_client))
+        return HealthService(
+            AgentSystemApi(self._agent_client),
+            SignalsApi(self._agent_client)
+        )
+
+    def get_presence_service(self) -> PresenceService:
+        """Returns a fully initialized PresenceService
+
+        :return: a new PresenceService instance
+        """
+        return PresenceService(
+            PresenceApi(self._pod_client),
+            self._auth_session
+        )
 
 
 class OboServiceFactory:
@@ -190,3 +205,13 @@ class OboServiceFactory:
             RoomMembershipApi(self._pod_client),
             ShareApi(self._agent_client),
             self._auth_session)
+
+    def get_presence_service(self) -> OboPresenceService:
+        """Returns a fully initialized PresenceService
+
+        :return: a new PresenceService instance
+        """
+        return OboPresenceService(
+            PresenceApi(self._pod_client),
+            self._auth_session
+        )
