@@ -2,6 +2,7 @@
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.client.api_client_factory import ApiClientFactory
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
+from symphony.bdk.core.service.application.application_service import ApplicationService
 from symphony.bdk.core.service.connection.connection_service import ConnectionService, OboConnectionService
 from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import DatafeedVersion, AbstractDatafeedLoop
 from symphony.bdk.core.service.datafeed.datafeed_loop_v1 import DatafeedLoopV1
@@ -17,6 +18,8 @@ from symphony.bdk.gen.agent_api.datafeed_api import DatafeedApi
 from symphony.bdk.gen.agent_api.share_api import ShareApi
 from symphony.bdk.gen.agent_api.signals_api import SignalsApi
 from symphony.bdk.gen.agent_api.system_api import SystemApi as AgentSystemApi
+from symphony.bdk.gen.pod_api.app_entitlement_api import AppEntitlementApi
+from symphony.bdk.gen.pod_api.application_api import ApplicationApi
 from symphony.bdk.gen.pod_api.connection_api import ConnectionApi
 from symphony.bdk.gen.pod_api.default_api import DefaultApi
 from symphony.bdk.gen.pod_api.message_api import MessageApi
@@ -100,6 +103,17 @@ class ServiceFactory:
             RoomMembershipApi(self._pod_client),
             ShareApi(self._agent_client),
             self._auth_session)
+
+    def get_application_service(self) -> ApplicationService:
+        """Returns a fully initialized ApplicationService
+
+        :return: a new ApplicationService instance
+        """
+        return ApplicationService(
+            ApplicationApi(self._pod_client),
+            AppEntitlementApi(self._pod_client),
+            self._auth_session
+        )
 
     def get_datafeed_loop(self) -> AbstractDatafeedLoop:
         """Returns a fully initialized DatafeedLoop

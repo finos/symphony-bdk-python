@@ -11,7 +11,7 @@ More precisely:
 
 
 ## How to use
-The central component for the Message Service is the `ConnectionService` class.
+The central component for the Connection Service is the `ConnectionService` class.
 This class exposes the user-friendly service APIs which serve all the services mentioned above 
 and is accessible from the `SymphonyBdk` object by calling the `connections()` method:
 ```python

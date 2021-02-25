@@ -7,6 +7,7 @@ Contents
 * [Message service](markdown/message_service.md)
 * [Stream service](markdown/stream_service.md)
 * [Connection service](markdown/connection_service.md)
+* [Application service](markdown/application_service.md)
 * [Datafeed](markdown/datafeed.md)
 
 ```eval_rst
