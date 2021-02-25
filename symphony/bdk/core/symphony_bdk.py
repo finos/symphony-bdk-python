@@ -13,6 +13,7 @@ from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import AbstractDa
 from symphony.bdk.core.service.health.health_service import HealthService
 from symphony.bdk.core.service.message.message_service import MessageService
 from symphony.bdk.core.service.obo_services import OboServices
+from symphony.bdk.core.service.presence.presence_service import PresenceService
 from symphony.bdk.core.service.stream.stream_service import StreamService
 from symphony.bdk.core.service.user.user_service import UserService
 from symphony.bdk.core.service_factory import ServiceFactory
@@ -63,6 +64,7 @@ class SymphonyBdk:
         self._stream_service = None
         self._datafeed_loop = None
         self._health_service = None
+        self._presence_service = None
 
         if self._config.bot.is_rsa_configuration_valid():
             self._initialize_bot_services()
@@ -79,6 +81,7 @@ class SymphonyBdk:
         self._stream_service = self._service_factory.get_stream_service()
         self._datafeed_loop = self._service_factory.get_datafeed_loop()
         self._health_service = self._service_factory.get_health_service()
+        self._presence_service = self._service_factory.get_presence_service()
 
     @bot_service
     def bot_session(self) -> AuthSession:
@@ -162,6 +165,15 @@ class SymphonyBdk:
 
         """
         return self._health_service
+
+    @bot_service
+    def presence(self) -> PresenceService:
+        """Get the PresenceService from the BDK entry point.
+
+        :return: The PresenceService instance.
+
+        """
+        return self._presence_service
 
     async def close_clients(self):
         """Close all the existing api clients created by the api client factory.

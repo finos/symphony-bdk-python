@@ -12,6 +12,7 @@ class PresenceStatus(Enum):
     """The list of all possible values for the presence status.
     Set Presence <https://developers.symphony.com/restapi/reference#set-presence>`_
     """
+
     def _generate_next_value_(name, start, count, last_values):
         """Overrides the base method to set value of the Enum member to its name"""
         return name
@@ -24,8 +25,6 @@ class PresenceStatus(Enum):
     IN_A_MEETING = auto()
     OUT_OF_OFFICE = auto()
     OFF_WORK = auto()
-
-
 
 
 class OboPresenceService:
