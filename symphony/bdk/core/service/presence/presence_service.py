@@ -89,7 +89,7 @@ class OboPresenceService:
         await self._presence_api.v1_user_presence_register_post(session_token=await self._auth_session.session_token,
                                                                 uid_list=user_ids)
 
-    async def set_presence(self, status: PresenceStatus, soft: bool):
+    async def set_presence(self, status: PresenceStatus, soft: bool) -> V2Presence:
         """ Set the presence info of the calling user.
 
         :param status: The new presence state for the user.
@@ -108,7 +108,7 @@ class OboPresenceService:
                                                               presence=presence_status,
                                                               soft=soft)
 
-    async def create_presence_feed(self):
+    async def create_presence_feed(self) -> str:
         """ Creates a new stream capturing online status changes ("presence feed") for the company (pod) and returns the
         ID of the new feed. The feed will return the presence of users whose presence status has changed since it was
         last read.
@@ -120,7 +120,7 @@ class OboPresenceService:
             session_token=await self._auth_session.session_token)
         return string_id.id
 
-    async def read_presence_feed(self, feed_id):
+    async def read_presence_feed(self, feed_id: str) -> List[V2Presence]:
         """ Reads the specified presence feed that was created.
         The feed returned includes the user presence statuses that have changed since they were last read.
 
@@ -132,7 +132,7 @@ class OboPresenceService:
             session_token=await self._auth_session.session_token,
             feed_id=feed_id)
 
-    async def delete_presence_feed(self, feed_id):
+    async def delete_presence_feed(self, feed_id: str) -> str:
         """ Delete the specified presence feed that was created.
 
         :param feed_id: The presence feed id to be deleted.
@@ -143,7 +143,7 @@ class OboPresenceService:
             session_token=await self._auth_session.session_token, feed_id=feed_id)
         return string_id.id
 
-    async def set_user_presence(self, user_id, status, soft):
+    async def set_user_presence(self, user_id: int, status: PresenceStatus, soft: bool) -> V2Presence:
         """ Set the presence state of a another user.
 
         :param user_id: The id of the specified user.
