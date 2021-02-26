@@ -13,10 +13,6 @@ class PresenceStatus(Enum):
     Set Presence <https://developers.symphony.com/restapi/reference#set-presence>`_
     """
 
-    def _generate_next_value_(name, start, count, last_values):
-        """Overrides the base method to set value of the Enum member to its name"""
-        return name
-
     AVAILABLE = auto()
     BUSY = auto()
     AWAY = auto()
@@ -103,7 +99,7 @@ class OboPresenceService:
         :return: Presence info of the calling user.
         `Set Presence <https://developers.symphony.com/restapi/reference#set-presence"`_
         """
-        presence_status: V2PresenceStatus = V2PresenceStatus(category=status.value)
+        presence_status: V2PresenceStatus = V2PresenceStatus(category=status.name)
         return await self._presence_api.v2_user_presence_post(session_token=await self._auth_session.session_token,
                                                               presence=presence_status,
                                                               soft=soft)
@@ -156,7 +152,7 @@ class OboPresenceService:
         AWAY)
         :return: The presence info of the specified user.
         """
-        user_presence: V2UserPresence = V2UserPresence(category=status.value, user_id=user_id)
+        user_presence: V2UserPresence = V2UserPresence(category=status.name, user_id=user_id)
         return await self._presence_api.v3_user_presence_post(session_token=await self._auth_session.session_token,
                                                               presence=user_presence,
                                                               soft=soft)
