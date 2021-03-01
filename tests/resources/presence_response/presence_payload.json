@@ -1,0 +1,39 @@
+{
+  "user_presence": {
+    "category": "AVAILABLE",
+    "userId": 14568529068038,
+    "timestamp": 1533928483800
+  },
+  "user_away_presence": {
+    "category": "AWAY",
+    "userId": 14568529068038,
+    "timestamp": 1533928483810
+  },
+  "multiple_presences": [
+    {
+      "category": "AVAILABLE",
+      "userId": 14568529068038,
+      "timestamp": 1533928483800
+    },
+    {
+      "category": "OFFLINE",
+      "userId": 974217539631,
+      "timestamp": 1503286226030
+    }
+  ],
+  "presence_feed_id": {
+    "id": "c4dca251-8639-48db-a9d4-f387089e17cf"
+  },
+  "presence_feed": [
+    {
+      "category": "AVAILABLE",
+      "userId": 7078106103901,
+      "timestamp": 1489769156271
+    },
+    {
+      "category": "ON_THE_PHONE",
+      "userId": 7078106103902,
+      "timestamp": 1489769156273
+    }
+  ]
+}
