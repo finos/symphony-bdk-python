@@ -16,6 +16,14 @@ class BdkAuthenticationConfig:
         self.certificate = BdkCertificateConfig(
             **certificate_config) if certificate_config is not None else BdkCertificateConfig()
 
+    def setPrivatekey(self, private_key_config=None):
+        self.private_key = BdkRsaKeyConfig(
+            **private_key_config) if private_key_config is not None else BdkRsaKeyConfig()
+
+    def setCertificate(self, certificate_config=None):
+        self.certificate = BdkCertificateConfig(
+            **certificate_config) if certificate_config is not None else BdkCertificateConfig()
+
     def is_rsa_authentication_configured(self) -> bool:
         """Check if the RSA authentication is configured
 
