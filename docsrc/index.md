@@ -9,6 +9,7 @@ Contents
 * [Connection service](markdown/connection_service.md)
 * [Application service](markdown/application_service.md)
 * [Datafeed](markdown/datafeed.md)
+* [Presence service](markdown/presence_service.md)
 
 ```eval_rst
 .. autosummary::
@@ -35,7 +36,7 @@ The reference documentation consists of the following sections:
 * [Stream service](markdown/stream_service.md): Creating, searching streams, manage stream membership
 * [Connection service](markdown/connection_service.md): Managing connections between users
 * [Datafeed](markdown/datafeed.md): Listening and reacting to real-time events
-
+* [Presence service](markdown/presence_service.md): Reacting and managing presences
 ### Technical Documentation
 * Information on how we generate client side code from swagger specs in the
 [Generated API](markdown/tech/generated_api.md) page.
