@@ -1,7 +1,8 @@
 import base64
-from typing import Union
+from typing import Union, AsyncGenerator
 
 from symphony.bdk.core.auth.auth_session import AuthSession
+from symphony.bdk.core.service.pagination import generator
 from symphony.bdk.core.service.user.model.delegate_action_enum import DelegateActionEnum
 from symphony.bdk.core.service.user.model.role_id import RoleId
 from symphony.bdk.gen.agent_api.audit_trail_api import AuditTrailApi
@@ -25,6 +26,7 @@ from symphony.bdk.gen.pod_model.user_id_list import UserIdList
 from symphony.bdk.gen.pod_model.user_search_query import UserSearchQuery
 from symphony.bdk.gen.pod_model.user_search_results import UserSearchResults
 from symphony.bdk.gen.pod_model.user_status import UserStatus
+from symphony.bdk.gen.pod_model.user_v2 import UserV2
 from symphony.bdk.gen.pod_model.v2_user_attributes import V2UserAttributes
 from symphony.bdk.gen.pod_model.v2_user_create import V2UserCreate
 from symphony.bdk.gen.pod_model.v2_user_detail import V2UserDetail
@@ -55,8 +57,7 @@ class OboUserService:
             local: bool = False,
             active: bool = None
     ) -> V2UserList:
-        """
-        Search users by user ids.
+        """Search users by user ids.
         See : `Users Lookup v3 <https://developers.symphony.com/restapi/v20.10/reference#users-lookup-v3>`_
 
         :param user_ids:    List of user ids.
@@ -68,7 +69,6 @@ class OboUserService:
                             if false all inactive users will be returned.
 
         :return: Users found by user ids.
-
         """
         user_ids_str = ','.join(map(str, user_ids))
         params = {
@@ -86,8 +86,7 @@ class OboUserService:
             local: bool = False,
             active: bool = None
     ) -> V2UserList:
-        """
-        Search users by emails.
+        """Search users by emails.
         See : `Users Lookup v3 <https://developers.symphony.com/restapi/v20.10/reference#users-lookup-v3>`_
 
         :param emails:      List of emails.
@@ -99,7 +98,6 @@ class OboUserService:
                             if false all inactive users will be returned.
 
         :return: Users found by emails.
-
         """
         emails_str = ','.join(emails)
         params = {
@@ -116,8 +114,7 @@ class OboUserService:
             usernames: [str],
             active: bool = None
     ) -> V2UserList:
-        """
-        Search users by usernames.
+        """Search users by usernames.
         See : `Users Lookup v3 <https://developers.symphony.com/restapi/v20.10/reference#users-lookup-v3>`_
 
         :param usernames:   List of usernames.
@@ -126,7 +123,6 @@ class OboUserService:
                             if false all inactive users will be returned.
 
         :return: Users found by usernames.
-
         """
         usernames_str = ','.join(usernames)
         params = {
@@ -140,17 +136,16 @@ class OboUserService:
 
     async def search_users(
             self,
-            query: [UserSearchQuery],
+            query: UserSearchQuery,
             local: bool = False,
             skip: int = 0,
             limit: int = 50
     ) -> UserSearchResults:
-        """
-        Search for users by first name, last name, display name, and email; optionally, filter results by company,
+        """Search for users by first name, last name, display name, and email; optionally, filter results by company,
         title, location, marketCoverage, responsibility, function, or instrument.
         See: `Search Users <https://developers.symphony.com/restapi/v20.10/reference#search-users>`_
 
-        :param query:   Searching query containing complicated information like title, location, company...
+        :param query:   Searching query containing complex information like title, location, company...
         :param local:   If true then a local DB search will be performed and only local pod users will be
                         returned. If absent or false then a directory search will be performed and users
                         from other pods who are visible to the calling user will also be returned.
@@ -169,18 +164,45 @@ class OboUserService:
         }
         return await self._users_api.v1_user_search_post(**params)
 
+    async def search_all_users(
+            self,
+            query: UserSearchQuery,
+            local: bool = False,
+            chunk_size: int = 50,
+            max_number: int = None
+    ) -> AsyncGenerator[UserV2, None]:
+        """Search for users by first name, last name, display name, and email; optionally, filter results by company,
+        title, location, marketCoverage, responsibility, function, or instrument.
+
+        Same as :func:`~search_users` but returns an asynchronous generator which performs the paginated calls with the
+        correct skip and limit values.
+        See: `Search Users <https://developers.symphony.com/restapi/v20.10/reference#search-users>`_
+
+        :param query: Searching query containing complex information like title, location, company...
+        :param local: If true then a local DB search will be performed and only local pod users will be returned.
+          If absent or false then a directory search will be performed and users from other pods who are visible
+          to the calling user will also be returned.
+        :param chunk_size: the maximum number of elements to retrieve in one underlying HTTP call
+        :param max_number: the total maximum number of elements to retrieve
+        :return: an asynchronous generator of users
+        """
+
+        async def search_users_one_page(skip: int, limit: int):
+            results = await self.search_users(query, local, skip, limit)
+            return results.users if results else None
+
+        return generator(search_users_one_page, chunk_size, max_number)
+
     async def follow_user(
             self,
             follower_ids: [int],
             user_id: int
     ) -> None:
-        """
-        Make a list of users to start following a specific user.
+        """Make a list of users to start following a specific user.
         See: `Follow User <https://developers.symphony.com/restapi/v20.9/reference#follow-user>`_
 
         :param follower_ids:    List of the ids of the followers.
         :param user_id:         The id of the user to be followed.
-
         """
         params = {
             'uid': user_id,
@@ -194,15 +216,11 @@ class OboUserService:
             follower_ids: [int],
             user_id: int
     ) -> None:
-        """
-        Make a list of users to stop following a specific user.
+        """Make a list of users to stop following a specific user.
         See: `Unfollow User <https://developers.symphony.com/restapi/v20.9/reference#unfollow-user>`_
 
         :param follower_ids:    List of the ids of the followers.
         :param user_id:         The id of the user to be unfollowed.
-
-        Returns:
-
         """
         params = {
             'uid': user_id,
@@ -239,14 +257,11 @@ class UserService(OboUserService):
             self,
             user_id: int
     ) -> V2UserDetail:
-        """
-        Retrieve user details of a particular user.
+        """Retrieve user details of a particular user.
         See: 'Get User v2 <https://developers.symphony.com/restapi/reference#get-user-v2>'_
 
         :param user_id: User Id
-
         :return: Details of the user.
-
         """
         params = {
             'uid': user_id,
@@ -259,15 +274,12 @@ class UserService(OboUserService):
             skip: int = 0,
             limit: int = 50
     ) -> [V2UserDetail]:
-        """
-        Retrieve all users in the company (pod).
+        """Retrieve all users in the company (pod).
         See: 'List Users V2 <https://developers.symphony.com/restapi/reference#list-users-v2>'_
 
         :param skip:    Number of users to skip. Default: 0
         :param limit:   Maximum number of users to return. Default: 50
-
         :return: List of details of all users in the company.
-
         """
         params = {
             'session_token': await self._auth_session.session_token,
@@ -277,22 +289,35 @@ class UserService(OboUserService):
         user_detail_list = await self._user_api.v2_admin_user_list_get(**params)
         return user_detail_list.value
 
+    async def list_all_user_details(
+            self,
+            chunk_size: int = 50,
+            max_number: int = None
+    ) -> AsyncGenerator[V2UserDetail, None]:
+        """Retrieve all users in the company (pod).
+        Same as :func:`~list_user_details` but returns an asynchronous generator which performs the paginated calls with the
+        correct skip and limit values.
+        See: 'List Users V2 <https://developers.symphony.com/restapi/reference#list-users-v2>'_
+
+        :param chunk_size: the maximum number of elements to retrieve in one underlying HTTP call
+        :param max_number: the total maximum number of elements to retrieve
+        :return: an asynchronous generator of user details
+        """
+        return generator(self.list_user_details, chunk_size, max_number)
+
     async def list_user_details_by_filter(
             self,
             user_filter: UserFilter,
             skip: int = 0,
             limit: int = 50
     ) -> [V2UserDetail]:
-        """
-        Retrieve a list of users in the company (pod) by a filter.
+        """Retrieve a list of users in the company (pod) by a filter.
         See: `Find Users V1 <https://developers.symphony.com/restapi/reference#find-users>`_
 
         :param user_filter: Filter using to filter users by.
         :param skip:    Number of users to skip. Default: 0
         :param limit:   Maximum number of users to return. Default: 50
-
         :return: List of retrieved users.
-
         """
         params = {
             'payload': user_filter,
@@ -303,18 +328,38 @@ class UserService(OboUserService):
         user_detail_list = await self._user_api.v1_admin_user_find_post(**params)
         return user_detail_list.value
 
+    async def list_all_user_details_by_filter(
+            self,
+            user_filter: UserFilter,
+            chunk_size: int = 50,
+            max_number: int = None
+    ) -> AsyncGenerator[V2UserDetail, None]:
+        """Retrieve an asynchronous generator of users in the company (pod) by a filter.
+        Same as :func:`~list_user_details_by_filter` but returns an generator which performs the paginated
+        calls with the correct skip and limit values.
+        See: `Find Users V1 <https://developers.symphony.com/restapi/reference#find-users>`_
+
+        :param user_filter: Filter using to filter users by.
+        :param chunk_size: the maximum number of elements to retrieve in one underlying HTTP call
+        :param max_number: the total maximum number of elements to retrieve
+        :return: an asynchronous generator of user details
+        """
+
+        async def list_user_details_one_page(skip, limit):
+            return await self.list_user_details_by_filter(user_filter, skip, limit)
+
+        return generator(list_user_details_one_page, chunk_size, max_number)
+
     async def add_role(
             self,
             user_id: int,
             role_id: RoleId
     ) -> None:
-        """
-        Add a role to an user.
+        """Add a role to an user.
         See: `Add Role <https://developers.symphony.com/restapi/reference#add-role>`_
 
         :param user_id: user id
         :param role_id: role id
-
         """
         params = {
             'uid': user_id,
@@ -324,12 +369,10 @@ class UserService(OboUserService):
         await self._user_api.v1_admin_user_uid_roles_add_post(**params)
 
     async def list_roles(self) -> [RoleDetail]:
-        """
-        List all roles in the pod.
+        """List all roles in the pod.
         See: `List Roles <https://developers.symphony.com/restapi/reference#list-roles>`_
 
         :return: List of all roles details in the pod.
-
         """
         params = {
             'session_token': await self._auth_session.session_token
@@ -342,13 +385,11 @@ class UserService(OboUserService):
             user_id: int,
             role_id: RoleId
     ) -> None:
-        """
-        Remove a role from an user.
+        """Remove a role from an user.
         See: `Remove Role <https://developers.symphony.com/restapi/reference#remove-role>`_
 
         :param user_id: user id
         :param role_id: role id
-
         """
         params = {
             'uid': user_id,
@@ -361,14 +402,11 @@ class UserService(OboUserService):
             self,
             user_id: int
     ) -> [Avatar]:
-        """
-        Get the url of avatar of an user.
+        """Get the url of avatar of an user.
         See: `User Avatar <https://developers.symphony.com/restapi/reference#user-avatar>`_
 
         :param user_id: User id
-
         :return: List of avatar urls of the user
-
         """
         params = {
             'uid': user_id,
@@ -382,14 +420,12 @@ class UserService(OboUserService):
             user_id: int,
             image: Union[str, bytes]
     ) -> None:
-        """
-        Update avatar of an user.
+        """Update avatar of an user.
         See: `Update User Avatar <https://developers.symphony.com/restapi/reference#update-user-avatar>`_
 
         :param user_id: User id
         :param image:   The avatar image for the user profile picture.
                         The image must be a base64-encoded string or a bytes array.
-
         """
         if isinstance(image, bytes):
             image = str(base64.standard_b64encode(image))
@@ -404,14 +440,11 @@ class UserService(OboUserService):
             self,
             user_id: int
     ) -> Disclaimer:
-        """
-        Get disclaimer assigned to an user.
+        """Get disclaimer assigned to a user.
         See: `User Disclaimer <https://developers.symphony.com/restapi/reference#user-disclaimer>`_
 
         :param user_id: user id
-
         :return: Disclaimer assigned to the user.
-
         """
         params = {
             'uid': user_id,
@@ -423,12 +456,10 @@ class UserService(OboUserService):
             self,
             user_id: int
     ) -> None:
-        """
-        Unassign disclaimer from an user.
+        """Unassign disclaimer from a user.
         See: `Unassign User Disclaimer <https://developers.symphony.com/restapi/reference#unassign-user-disclaimer>`_
 
         :param user_id: user id
-
         """
         params = {
             'uid': user_id,
@@ -441,13 +472,11 @@ class UserService(OboUserService):
             user_id: int,
             disclaimer_id: str
     ) -> None:
-        """
-        Assign disclaimer to an user.
+        """Assign disclaimer to a user.
         See: `Update User Disclaimer <https://developers.symphony.com/restapi/reference#update-disclaimer>`_
 
         :param user_id:         User id
         :param disclaimer_id:   Disclaimer to be assigned
-
         """
         params = {
             'uid': user_id,
@@ -460,14 +489,11 @@ class UserService(OboUserService):
             self,
             user_id: int
     ) -> [int]:
-        """
-        Get delegates assigned to an user.
+        """Get delegates assigned to a user.
         See: `User Delegates <https://developers.symphony.com/restapi/reference#delegates>`_
 
         :param user_id: User id.
-
         :return: List of delegates assigned to an user.
-
         """
         params = {
             'uid': user_id,
@@ -482,14 +508,12 @@ class UserService(OboUserService):
             delegate_user_id: int,
             action: DelegateActionEnum
     ) -> None:
-        """
-        Update delegates assigned to an user.
+        """Update delegates assigned to an user.
         See: `Update User Delegates <https://developers.symphony.com/restapi/reference#update-delegates>`_
 
         :param user_id:             User id.
         :param delegate_user_id:    Delegated user Id to be assigned
         :param action:              Action to be performed
-
         """
         params = {
             'uid': user_id,
@@ -502,14 +526,11 @@ class UserService(OboUserService):
             self,
             user_id: int
     ) -> [Feature]:
-        """
-        Get feature entitlements of an user.
+        """Get feature entitlements of an user.
         See: `User Features <https://developers.symphony.com/restapi/reference#features>`_
 
         :param user_id: User id.
-
         :return: List of feature entitlements of the user.
-
         """
         params = {
             'uid': user_id,
@@ -523,13 +544,11 @@ class UserService(OboUserService):
             user_id: int,
             features: [Feature]
     ) -> None:
-        """
-        Update feature entitlements of an user.
+        """Update feature entitlements of an user.
         See: `Update User Features <https://developers.symphony.com/restapi/reference#update-features>`_
 
         :param user_id:     User id.
         :param features:    List of feature entitlements to be updated
-
         """
         params = {
             'uid': user_id,
@@ -542,14 +561,11 @@ class UserService(OboUserService):
             self,
             user_id: int
     ) -> UserStatus:
-        """
-        Get status of an user.
+        """Get status of an user.
         See: `User Status <https://developers.symphony.com/restapi/reference#user-status>`_
 
         :param user_id: User id.
-
         :return: Status of the user.
-
         """
         params = {
             'uid': user_id,
@@ -562,13 +578,11 @@ class UserService(OboUserService):
             user_id: int,
             user_status: UserStatus
     ) -> None:
-        """
-        Update the status of an user.
+        """Update the status of an user.
         See: `Update User Status <https://developers.symphony.com/restapi/reference#update-user-status>`_
 
         :param user_id:     User id.
         :param user_status: Status to be updated to the user.
-
         """
         params = {
             'uid': user_id,
@@ -584,17 +598,14 @@ class UserService(OboUserService):
             before: int = None,
             after: int = None
     ) -> FollowersListResponse:
-        """
-        Returns the list of followers of a specific user.
+        """Returns the list of followers of a specific user.
         See: `List User Followers <https://developers.symphony.com/restapi/v20.9/reference#list-user-followers>`_
 
         :param user_id: User id.
         :param limit:   Maximum number of followers to return. Default: 100
         :param before:  Returns results from an opaque “before” cursor value as presented via a response cursor.
         :param after:   Returns results from an opaque “after” cursor value as presented via a response cursor.
-
         :return: List of followers of a specific user.
-
         """
         params = {
             'uid': user_id,
@@ -614,17 +625,14 @@ class UserService(OboUserService):
             before: int = None,
             after: int = None
     ) -> FollowingListResponse:
-        """
-        Returns the list of users followed by a specific user.
+        """Returns the list of users followed by a specific user.
         See: `List Users Followed <https://developers.symphony.com/restapi/v20.9/reference#list-users-followed>`_
 
         :param user_id: User id.
         :param limit:   Maximum number of users to return. Default: 100
         :param before:  Returns results from an opaque “before” cursor value as presented via a response cursor.
         :param after:   Returns results from an opaque “after” cursor value as presented via a response cursor.
-
         :return: The list of users followed by a specific user.
-
         """
         params = {
             'uid': user_id,
@@ -641,14 +649,11 @@ class UserService(OboUserService):
             self,
             payload: V2UserCreate
     ) -> V2UserDetail:
-        """
-        Create a new user.
+        """Create a new user.
         See: `Create User v2 <https://developers.symphony.com/restapi/reference#create-user-v2>`_
 
         :param payload: User's details to create.
-
         :return: Created user details.
-
         """
         params = {
             'payload': payload,
@@ -661,15 +666,12 @@ class UserService(OboUserService):
             user_id: int,
             payload: V2UserAttributes
     ) -> V2UserDetail:
-        """
-        Updates an existing user.
+        """Updates an existing user.
         See: `Update User v2 <https://developers.symphony.com/restapi/reference#update-user-v2>`_
 
         :param user_id: User Id
         :param payload: User's new attributes for update.
-
         :return: User with the updated user details.
-
         """
         params = {
             'uid': user_id,
@@ -688,8 +690,7 @@ class UserService(OboUserService):
             before: int = None,
             after: int = None
     ) -> V1AuditTrailInitiatorList:
-        """
-        Returns audit trail of actions performed by a privileged user in a given period of time.
+        """Returns audit trail of actions performed by a privileged user in a given period of time.
         See: `List Audit Trail v1 <https://developers.symphony.com/restapi/reference#list-audit-trail-v1>`_
 
         :param start_timestamp: The start time of the period to retrieve the data.
@@ -699,9 +700,7 @@ class UserService(OboUserService):
         :param limit:           Maximum number of audit trail to return. Default: 50
         :param before:          Returns results from an opaque “before” cursor value as presented via a response cursor.
         :param after:           Returns results from an opaque “after” cursor value as presented via a response cursor.
-
         :return: List of audit trail initiator.
-
         """
         params = {
             'start_timestamp': start_timestamp,
@@ -726,13 +725,11 @@ class UserService(OboUserService):
             user_id: int,
             user_suspension: UserSuspension
     ) -> None:
-        """
-        Suspends or re-activates (unsuspend) a user account.
+        """Suspends or re-activates (unsuspend) a user account.
         See: `Suspend User Account v1 <https://developers.symphony.com/restapi/v20.10/reference#suspend-user-v1>`_
 
         :param user_id:         User id.
         :param user_suspension: User suspension payload.
-
         """
         params = {
             'user_id': user_id,
