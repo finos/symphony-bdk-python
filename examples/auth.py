@@ -26,6 +26,7 @@ async def run():
         certificate_string = '-----BEGIN CERTIFICATE-----\n' \
                              'ggEBAL5Z8cEbWs5jnXxWneP1nO9Hu6oCWErdK4aPDb/otarsMF0ZYmWKR3Urr1Fe\n' \
                              'rTadMDHOFki40JPibkUxTmW0IfSV4Hw3QOordMtMyhLfGes9f45VrkSH74VjfsPa\n' \
+                             '...\n'\
                              '-----END CERTIFICATE-----'
 
         # update private key
