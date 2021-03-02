@@ -22,7 +22,7 @@ async def run():
                              'ZS5cuoJd+hOuPYZasZrQBv03hp+t4DGPRNFhHIRbqkxxZo3MC6R13cqdTyhRsewG\n'\
                              '...\n'\
                              '-----END RSA PRIVATE KEY-----'
-        config.setBotConfig(private_key_content=private_key_string)
+        config.set_bot_config(private_key_content=private_key_string)
 
         async with SymphonyBdk(config) as bdk:
             auth_session = bdk.bot_session()

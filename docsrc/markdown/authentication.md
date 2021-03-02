@@ -57,7 +57,7 @@ async def run():
         # update private key with content
         private_key_string = '-----BEGIN RSA PRIVATE KEY-----\n'\
                              'zI2OZtdb8fu/xl7itIAOzKLFg3mhA...\n'\
-        config.setBotConfig(private_key_content=private_key_string)
+        config.set_bot_config(private_key_content=private_key_string)
         async with SymphonyBdk(config) as bdk:
             auth_session = bdk.bot_session()
             logging.info(await auth_session.key_manager_token)
