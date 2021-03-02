@@ -38,6 +38,33 @@ async def run():
         logging.info(await auth_session.session_token)
 ```
 
+### Authentication using private key content
+Instead of configuring the path of RSA private key config file, you can also authenticate the bot 
+and extension app by using directly the private key or certificate content. This feature is useful when either 
+RSA private key is fetched from an external secrets storage. The code snippet below will give you 
+an example showing how to set directly the private key content to the Bdk configuration for authenticating the bot.
+````python
+import asyncio
+import logging
+
+from symphony.bdk.core.config.loader import BdkConfigLoader
+from symphony.bdk.core.symphony_bdk import SymphonyBdk
+
+async def run():
+    # loading configuration
+    config = BdkConfigLoader.load_from_symphony_dir("config.yaml")
+    async with SymphonyBdk(config) as bdk:
+        # update private key with content
+        private_key_string = '-----BEGIN RSA PRIVATE KEY-----\n'\
+                             'zI2OZtdb8fu/xl7itIAOzKLFg3mhA...\n'\
+        config.setBotConfig(private_key_content=private_key_string)
+        async with SymphonyBdk(config) as bdk:
+            auth_session = bdk.bot_session()
+            logging.info(await auth_session.key_manager_token)
+            logging.info(await auth_session.session_token)
+
+````
+
 ### Multiple bot instances
 By design, the `SymphonyBdk` object contains a single bot session. However, you might want to create an application that
 has to handle multiple bot sessions, potentially using different authentication modes. This is possible by creating
