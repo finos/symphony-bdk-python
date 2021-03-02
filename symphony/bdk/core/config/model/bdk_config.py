@@ -26,19 +26,11 @@ class BdkConfig(BdkServerConfig):
         self.app = BdkAppConfig(config.get("app"))
         self.datafeed = BdkDatafeedConfig(config.get("datafeed"))
 
-    def setBotConfig(self, privateKey=None, certificate=None):
-        data = {}
-        data['privateKey'] = None
-        data['certificate'] = None
-        if (privateKey is not None):
-            data['privateKey'] = {}
-            data['privateKey']['path'] = privateKey
-
-        if (certificate is not None):
-            data['certificate'] = {}
-            data['certificate']['path'] = certificate
-
-        self.bot.setConfig(data['privateKey'], data['certificate'])
+    def setBotConfig(self, private_key_content=None, certificate_content=None):
+        if private_key_content is not  None :
+            self.bot.setPrivatekey(path=None, private_key_content=private_key_content)
+        if certificate_content is not None :
+            self.bot.setCertificate(path=None, certificate_content=certificate_content)
 
     def is_bot_configured(self) -> bool:
         """
