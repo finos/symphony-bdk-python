@@ -33,7 +33,7 @@ class BdkCertificateConfig:
     def setPath(self, certificate_path):
         """Sets certificate path and overrides content to None to keep certificate config valid
         Args:
-            rsa_path: rsa private key path
+            certificate_path: rsa private key path
         """
         self.path = certificate_path
         self.content = None
