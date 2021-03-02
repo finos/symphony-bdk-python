@@ -21,3 +21,20 @@ class BdkCertificateConfig:
         :return: true if the certificate configuration is valid.
         """
         return not (self.path is not None and self.content != "")
+
+    def setContent(self, certificate_content):
+        """Sets ceritficate content and overrides path to None to keep certificate config valid
+        Args:
+            certificate_content: certificate content
+        """
+        self.content = certificate_content
+        self.path = None
+
+    def setPath(self, certificate_path):
+        """Sets certificate path and overrides content to None to keep certificate config valid
+        Args:
+            rsa_path: rsa private key path
+        """
+        self.path = certificate_path
+        self.content = None
+

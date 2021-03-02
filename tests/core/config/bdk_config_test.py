@@ -91,13 +91,13 @@ def simple_config_path(request):
 
 def test_update_privateKey(simple_config_path):
     config = BdkConfigLoader.load_from_file(simple_config_path)
-    config.set_bot_config(private_key_content=pk)
+    config.bot.private_key.setContent(rsa_key_content=pk)
     assert config.bot.private_key.content == pk
     assert config.bot.private_key.path is None
 
 def test_update_certificate(simple_config_path):
     config = BdkConfigLoader.load_from_file(simple_config_path)
-    config.set_bot_config(certificate_content=cert)
+    config.bot.certificate.setContent(certificate_content=cert)
     assert config.bot.certificate.content == cert
     assert config.bot.certificate.path is None
 

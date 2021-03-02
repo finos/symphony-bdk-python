@@ -19,3 +19,19 @@ class BdkRsaKeyConfig:
         :return: true if the RSA configuration is valid.
         """
         return not (self.path is not None and self.content != "")
+
+    def setContent(self, rsa_key_content):
+        """Sets rsa content and overrides path to None to keep key's config valid
+        Args:
+            rsa_content: rsa private key content
+        """
+        self.content = rsa_key_content
+        self.path = None
+
+    def setPath(self, rsa_key_path):
+        """Sets rsa path and overrides content to None to keep key's config valid
+        Args:
+            rsa_path: rsa private key path
+        """
+        self.path = rsa_key_path
+        self.content = None

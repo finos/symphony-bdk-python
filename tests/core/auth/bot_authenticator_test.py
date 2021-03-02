@@ -98,7 +98,7 @@ async def test_authenticate_with_private_key_content(bdk_config, mocked_api_clie
         private_key_string = '-----BEGIN RSA PRIVATE KEY-----\n'\
                              '1Tgj93dkNzk7HwjdpxDDn2wQgaRA6lDAQ+NMYZ2i81J8lhC5toRHtSzLp5Ku+IKL\n'\
                              '-----END RSA PRIVATE KEY-----'
-        bdk_config.set_bot_config(private_key_content=private_key_string)
+        bdk_config.bot.private_key.setContent(rsa_key_content=private_key_string)
 
         bot_authenticator = BotAuthenticatorRsa(bdk_config.bot, login_api_client, relay_api_client)
         auth_session = await bot_authenticator.authenticate_bot()
@@ -120,7 +120,7 @@ async def test_authenticate_with_certificate_content(bdk_config, mocked_api_clie
         certificate_string = '-----BEGIN CERTIFICATE-----\n'\
                              'ggEBAL5Z8cEbWs5jnXxWneP1nO9Hu6oCWErdK4aPDb/otarsMF0ZYmWKR3Urr1Fe\n'\
                              '-----END CERTIFICATE-----'
-        bdk_config.set_bot_config(certificate_content=certificate_string)
+        bdk_config.bot.certificate.setContent(certificate_content=certificate_string)
 
         bot_authenticator = BotAuthenticatorRsa(bdk_config.bot, login_api_client, relay_api_client)
         auth_session = await bot_authenticator.authenticate_bot()
