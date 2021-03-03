@@ -26,6 +26,6 @@ def test_create_signed_jwt(key_config):
     key_config.set_content(get_resource_filepath('key/private_key.pem', as_text=False).read_text())
     key_config.set_path(get_resource_filepath('key/private_key.pem'))
 
-    assert key_config.content is None
-    assert key_config.path is not None
+    assert key_config._content is None
+    assert key_config._path is not None
     assert create_signed_jwt(key_config, "test_bot") is not None

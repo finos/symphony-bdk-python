@@ -91,14 +91,14 @@ async def test_authenticate_with_private_key_content(config, mocked_api_client):
         relay_api_client.call_api.return_value = Token(token="km_token")
 
         private_key_string = get_resource_filepath('key/private_key.pem', as_text=False).read_text()
-        assert config.private_key.path is not None
-        assert config.private_key.content == ""
+        assert config.private_key._path is not None
+        assert config.private_key._content == ""
         config.private_key.set_content(private_key_string)
 
         bot_authenticator = BotAuthenticatorRsa(config, login_api_client, relay_api_client)
         auth_session = await bot_authenticator.authenticate_bot()
 
-        assert config.private_key.path is None
-        assert config.private_key.content == private_key_string
+        assert config.private_key._path is None
+        assert config.private_key._content == private_key_string
         assert await auth_session.session_token == "session_token"
         assert await auth_session.key_manager_token == "km_token"
