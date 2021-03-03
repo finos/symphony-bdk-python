@@ -2,6 +2,7 @@ from unittest.mock import patch, MagicMock, AsyncMock
 
 import pytest
 
+from tests.utils.resource_utils import get_resource_filepath
 from symphony.bdk.core.auth.bot_authenticator import BotAuthenticatorRsa
 from symphony.bdk.core.auth.exception import AuthUnauthorizedError
 from symphony.bdk.core.config.model.bdk_config import *
@@ -89,12 +90,10 @@ async def test_authenticate_with_private_key_content(config, mocked_api_client):
         login_api_client.call_api.return_value = Token(token="session_token")
         relay_api_client.call_api.return_value = Token(token="km_token")
 
-        private_key_string = '-----BEGIN RSA PRIVATE KEY-----\n'\
-                             '1Tgj93dkNzk7HwjdpxDDn2wQgaRA6lDAQ+NMYZ2i81J8lhC5toRHtSzLp5Ku+IKL\n'\
-                             '-----END RSA PRIVATE KEY-----'
+        private_key_string = get_resource_filepath('key/private_key.pem', as_text=False).read_text()
         assert config.private_key.path is not None
         assert config.private_key.content == ""
-        config.private_key.setContent(private_key_string)
+        config.private_key.set_content(private_key_string)
 
         bot_authenticator = BotAuthenticatorRsa(config, login_api_client, relay_api_client)
         auth_session = await bot_authenticator.authenticate_bot()

@@ -53,16 +53,14 @@ from symphony.bdk.core.symphony_bdk import SymphonyBdk
 async def run():
     # loading configuration
     config = BdkConfigLoader.load_from_symphony_dir("config.yaml")
+    # update private key with content
+    private_key_string = '-----BEGIN RSA PRIVATE KEY-----'
+    config.bot.private_key.set_content(rsa_key_content=private_key_string)
+                                      
     async with SymphonyBdk(config) as bdk:
-        # update private key with content
-        private_key_string = '-----BEGIN RSA PRIVATE KEY-----\n'\
-                             'zI2OZtdb8fu/xl7itIAOzKLFg3mhA...\n'\
-        config.bot.private_key.setContent((rsa_key_content=private_key_string)
-        async with SymphonyBdk(config) as bdk:
-            auth_session = bdk.bot_session()
-            logging.info(await auth_session.key_manager_token)
-            logging.info(await auth_session.session_token)
-
+        auth_session = bdk.bot_session()
+        logging.info(await auth_session.key_manager_token)
+        logging.info(await auth_session.session_token)
 ````
 
 ### Multiple bot instances

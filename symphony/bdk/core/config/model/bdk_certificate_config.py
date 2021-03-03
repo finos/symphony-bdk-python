@@ -22,7 +22,7 @@ class BdkCertificateConfig:
         """
         return not (self.path is not None and self.content != "")
 
-    def setContent(self, certificate_content):
+    def set_content(self, certificate_content):
         """Sets ceritficate content and overrides path to None to keep certificate config valid
         Args:
             certificate_content: certificate content
@@ -30,7 +30,7 @@ class BdkCertificateConfig:
         self.content = certificate_content
         self.path = None
 
-    def setPath(self, certificate_path):
+    def set_path(self, certificate_path):
         """Sets certificate path and overrides content to None to keep certificate config valid
         Args:
             certificate_path: rsa private key path
