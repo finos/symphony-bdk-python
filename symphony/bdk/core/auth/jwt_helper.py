@@ -23,12 +23,3 @@ def create_signed_jwt(private_key_config, username, expiration=None):
         "exp": expiration
     }
     return jwt.encode(payload, private_key, algorithm="RS512")
-
-
-'''
-def _get_key(private_key_path):
-    with open(private_key_path, "r") as f:
-        content = f.readlines()
-        key = "".join(content)
-        return key
-'''
