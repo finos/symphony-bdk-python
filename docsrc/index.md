@@ -8,6 +8,7 @@ Contents
 * [Stream service](markdown/stream_service.md)
 * [Connection service](markdown/connection_service.md)
 * [Application service](markdown/application_service.md)
+* [Signal service](markdown/signal_service.md)
 * [Datafeed](markdown/datafeed.md)
 * [Presence service](markdown/presence_service.md)
 
@@ -35,7 +36,8 @@ The reference documentation consists of the following sections:
 * [Message service](markdown/message_service.md): Sending or searching messages, usage of templates
 * [Stream service](markdown/stream_service.md): Creating, searching streams, manage stream membership
 * [Connection service](markdown/connection_service.md): Managing connections between users
-* [Datafeed](markdown/datafeed.md): Listening and reacting to real-time events
+* [Signal service](markdown/signal_service.md): Managing signals, subscribing/unsubscribing to signals
+* [Datafeed](markdown/datafeed.md): Listening and reacting to real-time events 
 * [Presence service](markdown/presence_service.md): Reacting and managing presences
 ### Technical Documentation
 * Information on how we generate client side code from swagger specs in the

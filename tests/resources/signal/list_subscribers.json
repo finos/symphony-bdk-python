@@ -1,0 +1,28 @@
+{
+  "offset": 0,
+  "hasMore": true,
+  "total": 150,
+  "data": [
+    {
+      "pushed": false,
+      "owner": true,
+      "subscriberName": "John Doe 01",
+      "userId": 68719476742,
+      "timestamp": 1519231972000
+    },
+    {
+      "pushed": false,
+      "owner": false,
+      "subscriberName": "John Doe 02",
+      "userId": 68719476742,
+      "timestamp": 1519296588000
+    },
+    {
+      "pushed": false,
+      "owner": false,
+      "subscriberName": "John Doe 03",
+      "userId": 68719476744,
+      "timestamp": 1519296589000
+    }
+  ]
+}

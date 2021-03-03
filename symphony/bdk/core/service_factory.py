@@ -11,6 +11,7 @@ from symphony.bdk.core.service.health.health_service import HealthService
 from symphony.bdk.core.service.message.message_service import MessageService, OboMessageService
 from symphony.bdk.core.service.message.multi_attachments_messages_api import MultiAttachmentsMessagesApi
 from symphony.bdk.core.service.presence.presence_service import PresenceService, OboPresenceService
+from symphony.bdk.core.service.signal.signal_service import SignalService, OboSignalService
 from symphony.bdk.core.service.stream.stream_service import StreamService, OboStreamService
 from symphony.bdk.core.service.user.user_service import UserService, OboUserService
 from symphony.bdk.gen.agent_api.attachments_api import AttachmentsApi
@@ -114,6 +115,16 @@ class ServiceFactory:
         return ApplicationService(
             ApplicationApi(self._pod_client),
             AppEntitlementApi(self._pod_client),
+            self._auth_session
+        )
+
+    def get_signal_service(self) -> SignalService:
+        """Returns a fully initialized SignalService
+
+        :return: a new SignalService instance
+        """
+        return SignalService(
+            SignalsApi(self._agent_client),
             self._auth_session
         )
 
@@ -227,5 +238,15 @@ class OboServiceFactory:
         """
         return OboPresenceService(
             PresenceApi(self._pod_client),
+            self._auth_session
+        )
+
+    def get_signal_service(self) -> OboSignalService:
+        """Returns a fully initialized SignalService
+        
+        :return: a new SignalService instance
+        """
+        return OboSignalService(
+            SignalsApi(self._agent_client),
             self._auth_session
         )
