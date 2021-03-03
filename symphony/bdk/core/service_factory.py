@@ -190,9 +190,9 @@ class OboServiceFactory:
         self._config = config
 
     def get_user_service(self) -> OboUserService:
-        """Returns a fully initialized UserService
+        """Returns a fully initialized OboUserService
 
-        :return: a new UserService instance.
+        :return: a new OboUserService instance.
         """
         return OboUserService(
             UserApi(self._pod_client),
@@ -201,9 +201,9 @@ class OboServiceFactory:
         )
 
     def get_message_service(self) -> OboMessageService:
-        """Returns a fully initialized MessageService
+        """Returns a fully initialized OboMessageService
 
-        :return: a new MessageService instance.
+        :return: a new OboMessageService instance.
         """
         return OboMessageService(
             MultiAttachmentsMessagesApi(self._agent_client),
@@ -211,9 +211,9 @@ class OboServiceFactory:
         )
 
     def get_connection_service(self) -> OboConnectionService:
-        """Returns a fully initialized ConnectionService
+        """Returns a fully initialized OboConnectionService
 
-        :return: a new ConnectionService instance.
+        :return: a new OboConnectionService instance.
         """
         return OboConnectionService(
             ConnectionApi(self._pod_client),
@@ -221,9 +221,9 @@ class OboServiceFactory:
         )
 
     def get_stream_service(self) -> OboStreamService:
-        """Returns a fully initialized StreamService
+        """Returns a fully initialized OboStreamService
 
-        :return: a new StreamService instance
+        :return: a new OboStreamService instance
         """
         return OboStreamService(
             StreamsApi(self._pod_client),
@@ -232,9 +232,9 @@ class OboServiceFactory:
             self._auth_session)
 
     def get_presence_service(self) -> OboPresenceService:
-        """Returns a fully initialized PresenceService
+        """Returns a fully initialized OboPresenceService
 
-        :return: a new PresenceService instance
+        :return: a new OboPresenceService instance
         """
         return OboPresenceService(
             PresenceApi(self._pod_client),
@@ -242,9 +242,9 @@ class OboServiceFactory:
         )
 
     def get_signal_service(self) -> OboSignalService:
-        """Returns a fully initialized SignalService
-        
-        :return: a new SignalService instance
+        """Returns a fully initialized OboSignalService
+
+        :return: a new OboSignalService instance
         """
         return OboSignalService(
             SignalsApi(self._agent_client),

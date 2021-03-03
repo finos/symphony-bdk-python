@@ -35,13 +35,10 @@ class OboSignalService:
         :param limit: Maximum number of signals to return. Default is 50, maximum value is 500.
         :return: List of signals found.
         """
-        params = {
-            'skip': skip,
-            'limit': limit,
-            'session_token': await self._auth_session.session_token,
-            'key_manager_token': await self._auth_session.key_manager_token
-        }
-        return await self._signals_api.v1_signals_list_get(**params)
+
+        return await self._signals_api.v1_signals_list_get(
+            skip=skip, limit=limit, session_token=await self._auth_session.session_token,
+            key_manager_token=await self._auth_session.key_manager_token)
 
     async def get_signal(self, signal_id: str) -> Signal:
         """ Gets details about the specified signal.
@@ -51,12 +48,10 @@ class OboSignalService:
         :param signal_id: Id of the signal to display.
         :return: The signal found.
         """
-        params = {
-            'id': signal_id,
-            'session_token': await self._auth_session.session_token,
-            'key_manager_token': await self._auth_session.key_manager_token
-        }
-        return await self._signals_api.v1_signals_id_get_get(**params)
+
+        return await self._signals_api.v1_signals_id_get_get(
+            id=signal_id, session_token=await self._auth_session.session_token,
+            key_manager_token=await self._auth_session.key_manager_token)
 
     async def create_signal(self, signal: BaseSignal) -> Signal:
         """ Creates a new Signal.
@@ -66,12 +61,10 @@ class OboSignalService:
         :param signal: The new Signal object to be created.
         :return: The signal created.
         """
-        params = {
-            'signal': signal,
-            'session_token': await self._auth_session.session_token,
-            'key_manager_token': await self._auth_session.key_manager_token
-        }
-        return await self._signals_api.v1_signals_create_post(**params)
+
+        return await self._signals_api.v1_signals_create_post(
+            signal=signal, session_token=await self._auth_session.session_token,
+            key_manager_token=await self._auth_session.key_manager_token)
 
     async def update_signal(self, signal_id: str, signal: BaseSignal) -> Signal:
         """ Updates an existing Signal.
@@ -82,13 +75,10 @@ class OboSignalService:
         :param signal: The Signal object to be updated.
         :return: The updated signal.
         """
-        params = {
-            'id': signal_id,
-            'signal': signal,
-            'session_token': await self._auth_session.session_token,
-            'key_manager_token': await self._auth_session.key_manager_token
-        }
-        return await self._signals_api.v1_signals_id_update_post(**params)
+
+        return await self._signals_api.v1_signals_id_update_post(
+            id=signal_id, signal=signal, session_token=await self._auth_session.session_token,
+            key_manager_token=await self._auth_session.key_manager_token)
 
     async def delete_signal(self, signal_id: str) -> None:
         """ Deletes an existing Signal.
@@ -96,14 +86,11 @@ class OboSignalService:
         See: 'Delete signal <https://developers.symphony.com/restapi/reference#delete-signal>'_
 
         :param signal_id: The Id of the existing signal to be deleted.
-
         """
-        params = {
-            'id': signal_id,
-            'session_token': await self._auth_session.session_token,
-            'key_manager_token': await self._auth_session.key_manager_token
-        }
-        return await self._signals_api.v1_signals_id_delete_post(**params)
+
+        return await self._signals_api.v1_signals_id_delete_post(
+            id=signal_id, session_token=await self._auth_session.session_token,
+            key_manager_token=await self._auth_session.key_manager_token)
 
     async def subscribe_users_to_signal(self, signal_id: str, pushed: bool,
                                         user_ids: [int]) -> ChannelSubscriptionResponse:
@@ -116,14 +103,10 @@ class OboSignalService:
         :param user_ids: An array of User Ids to subscribe to the Signal
         :return: Result of the bulk subscriptions
         """
-        params = {
-            'id': signal_id,
-            'pushed': pushed,
-            'users': user_ids,
-            'session_token': await self._auth_session.session_token,
-            'key_manager_token': await self._auth_session.key_manager_token
-        }
-        return await self._signals_api.v1_signals_id_subscribe_post(**params)
+
+        return await self._signals_api.v1_signals_id_subscribe_post(
+            id=signal_id, pushed=pushed, users=user_ids, session_token=await self._auth_session.session_token,
+            key_manager_token=await self._auth_session.key_manager_token)
 
     async def unsubscribe_users_to_signal(self, signal_id: str, user_ids: [int]) -> ChannelSubscriptionResponse:
         """ Unsubscribes an array of users from the specified Signal.
@@ -134,13 +117,10 @@ class OboSignalService:
         :param user_ids: An array of User Ids to subscribe to the Signal
         :return: Result of the bulk unsubscriptions
         """
-        params = {
-            'id': signal_id,
-            'users': user_ids,
-            'session_token': await self._auth_session.session_token,
-            'key_manager_token': await self._auth_session.key_manager_token
-        }
-        return await self._signals_api.v1_signals_id_unsubscribe_post(**params)
+
+        return await self._signals_api.v1_signals_id_unsubscribe_post(
+            id=signal_id, users=user_ids, session_token=await self._auth_session.session_token,
+            key_manager_token=await self._auth_session.key_manager_token)
 
     async def list_subscribers(self, signal_id: str, skip: int = 0, limit: int = 50) -> [ChannelSubscriber]:
         """ Gets the subscribers for the specified signal.
@@ -149,18 +129,14 @@ class OboSignalService:
 
         :param signal_id: The Id of the signal.
         :param skip: The number of results to skip.
-        :param limit:The maximum number of subscribers to return. The maximum value accepted for this parameter is
-          100, and the default value is 50.
+        :param limit: The maximum number of subscribers to return. The maximum value accepted for this parameter is 100
+          and the default value is 50.
         :return: The list of users subscribed to the signal.
         """
-        params = {
-            'id': signal_id,
-            'skip': skip,
-            'limit': limit,
-            'session_token': await self._auth_session.session_token,
-            'key_manager_token': await self._auth_session.key_manager_token
-        }
-        return await self._signals_api.v1_signals_id_subscribers_get(**params)
+
+        return await self._signals_api.v1_signals_id_subscribers_get(
+            id=signal_id, skip=skip, limit=limit, session_token=await self._auth_session.session_token,
+            key_manager_token=await self._auth_session.key_manager_token)
 
 
 class SignalService(OboSignalService):
