@@ -22,6 +22,24 @@ class BdkCertificateConfig:
         """certificate password string"""
         return self._password
 
+    @content.setter
+    def content(self, certificate_content):
+        """Sets certificate content and overrides path to None to keep certificate config valid
+
+        :param certificate_content: certificate content
+        """
+        self._content = certificate_content
+        self._path = None
+
+    @path.setter
+    def path(self, certificate_path):
+        """Sets certificate path and overrides content to None to keep certificate config valid
+
+        :param certificate_path: rsa private key path
+        """
+        self._path = certificate_path
+        self._content = None
+
     @password.setter
     def password(self, password):
         """Sets certificate password
@@ -44,19 +62,3 @@ class BdkCertificateConfig:
         :return: true if the certificate configuration is valid.
         """
         return not (self._path is not None and self._content != "")
-
-    def set_content(self, certificate_content):
-        """Sets ceritficate content and overrides path to None to keep certificate config valid
-
-        :param certificate_content: certificate content
-        """
-        self._content = certificate_content
-        self._path = None
-
-    def set_path(self, certificate_path):
-        """Sets certificate path and overrides content to None to keep certificate config valid
-
-        :param certificate_path: rsa private key path
-        """
-        self._path = certificate_path
-        self._content = None

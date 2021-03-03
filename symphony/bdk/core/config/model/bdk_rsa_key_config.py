@@ -15,6 +15,23 @@ class BdkRsaKeyConfig:
         """rsa private key content string"""
         return self._content
 
+    @content.setter
+    def content(self, rsa_key_content):
+        """Sets rsa content and overrides path to None to keep key's config valid
+
+        :param rsa_key_content: rsa private key content
+        """
+        self._content = rsa_key_content
+        self._path = None
+
+    @path.setter
+    def path(self, rsa_key_path):
+        """Sets rsa path and overrides content to None to keep key's config valid
+        :param rsa_key_path: rsa private key path
+        """
+        self._path = rsa_key_path
+        self._content = None
+
     def is_configured(self) -> bool:
         """"Check if the RSA authentication is configured or not
 
@@ -30,21 +47,6 @@ class BdkRsaKeyConfig:
         """
         return not (self._path is not None and self._content != "")
 
-    def set_content(self, rsa_key_content):
-        """Sets rsa content and overrides path to None to keep key's config valid
-
-        :param rsa_key_content: rsa private key content
-        """
-        self._content = rsa_key_content
-        self._path = None
-
-    def set_path(self, rsa_key_path):
-        """Sets rsa path and overrides content to None to keep key's config valid
-        :param rsa_key_path: rsa private key path
-        """
-        self._path = rsa_key_path
-        self._content = None
-
     def get_private_key_content(self):
         """Loads the private key content.
         If the path is set, it loads the file content, otherwise it returns the content.
@@ -59,4 +61,3 @@ class BdkRsaKeyConfig:
             private_key_content = f.readlines()
             key = "".join(private_key_content)
             return key
-        return ""

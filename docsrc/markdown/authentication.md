@@ -55,7 +55,7 @@ async def run():
     config = BdkConfigLoader.load_from_symphony_dir("config.yaml")
     # update private key with content
     private_key_string = '-----BEGIN RSA PRIVATE KEY-----'
-    config.bot.private_key.set_content(rsa_key_content=private_key_string)
+    config.bot.private_key.content = private_key_string
                                       
     async with SymphonyBdk(config) as bdk:
         auth_session = bdk.bot_session()

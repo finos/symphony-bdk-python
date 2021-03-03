@@ -93,7 +93,7 @@ async def test_authenticate_with_private_key_content(config, mocked_api_client):
         private_key_string = get_resource_filepath('key/private_key.pem', as_text=False).read_text()
         assert config.private_key._path is not None
         assert config.private_key._content == ""
-        config.private_key.set_content(rsa_key_content=private_key_string)
+        config.private_key.content = private_key_string
 
         bot_authenticator = BotAuthenticatorRsa(config, login_api_client, relay_api_client)
         auth_session = await bot_authenticator.authenticate_bot()
