@@ -1,7 +1,7 @@
 from typing import AsyncGenerator
 
 from symphony.bdk.core.auth.auth_session import AuthSession
-from symphony.bdk.core.service.pagination import generator
+from symphony.bdk.core.service.pagination import offset_based_pagination
 from symphony.bdk.gen.agent_api.share_api import ShareApi
 from symphony.bdk.gen.agent_model.share_content import ShareContent
 from symphony.bdk.gen.agent_model.v2_message import V2Message
@@ -84,7 +84,7 @@ class OboStreamService:
             result = await self.list_streams(stream_filter, skip, limit)
             return result.value if result else None
 
-        return generator(list_streams_one_page, chunk_size, max_number)
+        return offset_based_pagination(list_streams_one_page, chunk_size, max_number)
 
     async def add_member_to_room(self, user_id: int, room_id: str):
         """Adds a member to an existing room.
@@ -205,7 +205,7 @@ class StreamService(OboStreamService):
             result = await self.search_rooms(query, skip, limit)
             return result.rooms if result.rooms else None
 
-        return generator(search_rooms_one_page, chunk_size, max_number)
+        return offset_based_pagination(search_rooms_one_page, chunk_size, max_number)
 
     async def get_room_info(self, room_id: str) -> V3RoomDetail:
         """Get information about a particular room.
@@ -299,7 +299,7 @@ class StreamService(OboStreamService):
             result = await self.list_streams_admin(stream_filter, skip, limit)
             return result.streams.value if result.streams else None
 
-        return generator(list_streams_admin_one_page, chunk_size, max_number)
+        return offset_based_pagination(list_streams_admin_one_page, chunk_size, max_number)
 
     async def list_stream_members(self, stream_id: str, skip: int = 0, limit: int = 100) -> V2MembershipList:
         """List the current members of an existing stream. The stream can be of type IM, MIM, or ROOM.
@@ -328,7 +328,7 @@ class StreamService(OboStreamService):
             members = await self.list_stream_members(stream_id, skip, limit)
             return members.members.value if members.members else None
 
-        return generator(list_stream_members_one_page, chunk_size, max_number)
+        return offset_based_pagination(list_stream_members_one_page, chunk_size, max_number)
 
     async def list_room_members(self, room_id: str) -> MembershipList:
         """Lists the current members of an existing room.

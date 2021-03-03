@@ -2,7 +2,7 @@ import base64
 from typing import Union, AsyncGenerator
 
 from symphony.bdk.core.auth.auth_session import AuthSession
-from symphony.bdk.core.service.pagination import generator
+from symphony.bdk.core.service.pagination import offset_based_pagination, cursor_based_pagination
 from symphony.bdk.core.service.user.model.delegate_action_enum import DelegateActionEnum
 from symphony.bdk.core.service.user.model.role_id import RoleId
 from symphony.bdk.gen.agent_api.audit_trail_api import AuditTrailApi
@@ -191,7 +191,7 @@ class OboUserService:
             results = await self.search_users(query, local, skip, limit)
             return results.users if results else None
 
-        return generator(search_users_one_page, chunk_size, max_number)
+        return offset_based_pagination(search_users_one_page, chunk_size, max_number)
 
     async def follow_user(
             self,
@@ -303,7 +303,7 @@ class UserService(OboUserService):
         :param max_number: the total maximum number of elements to retrieve
         :return: an asynchronous generator of user details
         """
-        return generator(self.list_user_details, chunk_size, max_number)
+        return offset_based_pagination(self.list_user_details, chunk_size, max_number)
 
     async def list_user_details_by_filter(
             self,
@@ -348,7 +348,7 @@ class UserService(OboUserService):
         async def list_user_details_one_page(skip, limit):
             return await self.list_user_details_by_filter(user_filter, skip, limit)
 
-        return generator(list_user_details_one_page, chunk_size, max_number)
+        return offset_based_pagination(list_user_details_one_page, chunk_size, max_number)
 
     async def add_role(
             self,
@@ -618,6 +618,26 @@ class UserService(OboUserService):
             params['after'] = after
         return await self._user_api.v1_user_uid_followers_get(**params)
 
+    async def list_all_user_followers(
+            self,
+            user_id: int,
+            chunk_size: int = 100,
+            max_number: int = None
+    ) -> AsyncGenerator[int, None]:
+        """Returns an asynchronous generator of the IDs of users who are followers of a specific user.
+        See: `List User Followers <https://developers.symphony.com/restapi/v20.9/reference#list-user-followers>`_
+
+        :param user_id: the id of the user.
+        :param chunk_size: the maximum number of followers to return. Default: 100.
+        :param max_number: the total maximum number of elements to retrieve.
+        :return: an async generator of the user IDs who are followers of a specific user.
+        """
+        async def user_followers_one_page(limit, after=None):
+            result = await self.list_user_followers(user_id, limit, after=after)
+            return result.followers, getattr(result.pagination.cursors, 'after', None)
+
+        return cursor_based_pagination(user_followers_one_page, chunk_size, max_number)
+
     async def list_users_following(
             self,
             user_id: int,
@@ -644,6 +664,26 @@ class UserService(OboUserService):
         if after is not None:
             params['after'] = after
         return await self._user_api.v1_user_uid_following_get(**params)
+
+    async def list_all_users_following(
+            self,
+            user_id: int,
+            chunk_size: int = 100,
+            max_number: int = None
+    ) -> AsyncGenerator[int, None]:
+        """Returns n asynchronous generator of the IDs of users followed by a given user.
+        See: `List Users Followed <https://developers.symphony.com/restapi/v20.9/reference#list-users-followed>`_
+
+        :param user_id: the user ID
+        :param chunk_size: the maximum number of followers to return. Default: 100.
+        :param max_number: the total maximum number of elements to retrieve.
+        :return: an async generator of the IDs of users followed by a given user.
+        """
+        async def user_following_one_page(limit, after=None):
+            result = await self.list_users_following(user_id, limit, after=after)
+            return result.following, getattr(result.pagination.cursors, 'after', None)
+
+        return cursor_based_pagination(user_following_one_page, chunk_size, max_number)
 
     async def create(
             self,
