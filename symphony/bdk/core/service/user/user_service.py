@@ -595,8 +595,8 @@ class UserService(OboUserService):
             self,
             user_id: int,
             limit: int = 100,
-            before: int = None,
-            after: int = None
+            before: str = None,
+            after: str = None
     ) -> FollowersListResponse:
         """Returns the list of followers of a specific user.
         See: `List User Followers <https://developers.symphony.com/restapi/v20.9/reference#list-user-followers>`_
@@ -622,8 +622,8 @@ class UserService(OboUserService):
             self,
             user_id: int,
             limit: int = 100,
-            before: int = None,
-            after: int = None
+            before: str = None,
+            after: str = None
     ) -> FollowingListResponse:
         """Returns the list of users followed by a specific user.
         See: `List Users Followed <https://developers.symphony.com/restapi/v20.9/reference#list-users-followed>`_
