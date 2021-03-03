@@ -7,6 +7,29 @@ class BdkCertificateConfig:
         self._content = content
         self._password = password
 
+    @property
+    def path(self):
+        """path to certificate file"""
+        return self._path
+
+    @property
+    def content(self):
+        """certificate content string"""
+        return self._content
+
+    @property
+    def password(self):
+        """certificate password string"""
+        return self._password
+
+    @password.setter
+    def password(self, password):
+        """Sets certificate password
+
+        :param password: password content
+        """
+        self._password = password
+
     def is_configured(self) -> bool:
         """"Check if the certificate authentication is configured or not
 
@@ -37,15 +60,3 @@ class BdkCertificateConfig:
         """
         self._path = certificate_path
         self._content = None
-
-    def set_password(self, password):
-        """Sets certificate password
-
-        :param password: password content
-        """
-        self._password = password
-
-    path = property(fset=set_path, doc="path to certificate file")
-    content = property(fset=set_content, doc="certificate content as a string")
-    password = property(fset=set_password, doc="certificate password as a string")
-

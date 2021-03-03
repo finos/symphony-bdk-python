@@ -5,6 +5,16 @@ class BdkRsaKeyConfig:
         self._path = path
         self._content = content
 
+    @property
+    def path(self):
+        """Path to rsa private key file."""
+        return self._path
+
+    @property
+    def content(self):
+        """rsa private key content string"""
+        return self._content
+
     def is_configured(self) -> bool:
         """"Check if the RSA authentication is configured or not
 
@@ -35,7 +45,7 @@ class BdkRsaKeyConfig:
         self._path = rsa_key_path
         self._content = None
 
-    def get_private_key_from_config(self):
+    def get_private_key_content(self):
         """Loads the private key content.
         If the path is set, it loads the file content, otherwise it returns the content.
 
@@ -45,12 +55,8 @@ class BdkRsaKeyConfig:
             if self._path is not None else self._content
 
     def _load_key_from_path(self):
-        if self._path is not None:
-            with open(self._path, "r") as f:
-                private_key_content = f.readlines()
-                key = "".join(private_key_content)
-                return key
+        with open(self._path, "r") as f:
+            private_key_content = f.readlines()
+            key = "".join(private_key_content)
+            return key
         return ""
-
-    path = property(fset=set_path, doc="path to rsa private key file")
-    content = property(fset=set_content, doc="rsa private key content as a string")
