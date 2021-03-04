@@ -45,7 +45,7 @@ def test_certificate_configuration():
     assert authentication_config.is_certificate_configuration_valid() is False
 
     # No password with certificate
-    authentication_config.certificate.path =None
+    authentication_config.certificate.path = None
     authentication_config.certificate.content = "not_empty"
     assert authentication_config.is_certificate_authentication_configured() is False
     assert authentication_config.is_certificate_configuration_valid() is False
