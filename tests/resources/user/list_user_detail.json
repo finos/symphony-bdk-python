@@ -1,5 +1,4 @@
-{
-  "value": [
+[
     {
         "userAttributes": {
             "emailAddress": "agentservice@acme.com",
@@ -126,5 +125,4 @@
             "SUPER_ADMINISTRATOR"
         ]
     }
-  ]
-}
+]

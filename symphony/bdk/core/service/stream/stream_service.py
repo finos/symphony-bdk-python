@@ -314,7 +314,7 @@ class StreamService(OboStreamService):
             id=stream_id, skip=skip, limit=limit,
             session_token=await self._auth_session.session_token)
 
-    async def list_all_streams_members(self, stream_id: str, chunk_size: int = None, max_number=None) \
+    async def list_all_stream_members(self, stream_id: str, chunk_size: int = None, max_number=None) \
             -> AsyncGenerator[V2MemberInfo, None]:
         """List the current members of an existing stream. The stream can be of type IM, MIM, or ROOM.
         Wraps the `Stream Members <https://developers.symphony.com/restapi/reference#stream-members>`_ endpoint.
