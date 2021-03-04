@@ -15,6 +15,7 @@ from symphony.bdk.core.service.health.health_service import HealthService
 from symphony.bdk.core.service.message.message_service import MessageService
 from symphony.bdk.core.service.obo_services import OboServices
 from symphony.bdk.core.service.presence.presence_service import PresenceService
+from symphony.bdk.core.service.signal.signal_service import SignalService
 from symphony.bdk.core.service.stream.stream_service import StreamService
 from symphony.bdk.core.service.user.user_service import UserService
 from symphony.bdk.core.service_factory import ServiceFactory
@@ -64,6 +65,7 @@ class SymphonyBdk:
         self._connection_service = None
         self._stream_service = None
         self._application_service = None
+        self._signal_service = None
         self._datafeed_loop = None
         self._health_service = None
         self._presence_service = None
@@ -82,6 +84,7 @@ class SymphonyBdk:
         self._connection_service = self._service_factory.get_connection_service()
         self._stream_service = self._service_factory.get_stream_service()
         self._application_service = self._service_factory.get_application_service()
+        self._signal_service = self._service_factory.get_signal_service()
         self._datafeed_loop = self._service_factory.get_datafeed_loop()
         self._health_service = self._service_factory.get_health_service()
         self._presence_service = self._service_factory.get_presence_service()
@@ -168,6 +171,14 @@ class SymphonyBdk:
 
         """
         return self._application_service
+
+    @bot_service
+    def signals(self) -> SignalService:
+        """Get the SignalService from the BDK entry point.
+
+        :return: The SignalService instance.
+        """
+        return self._signal_service
 
     @bot_service
     def health(self) -> HealthService:

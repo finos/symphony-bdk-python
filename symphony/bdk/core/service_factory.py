@@ -11,6 +11,7 @@ from symphony.bdk.core.service.health.health_service import HealthService
 from symphony.bdk.core.service.message.message_service import MessageService, OboMessageService
 from symphony.bdk.core.service.message.multi_attachments_messages_api import MultiAttachmentsMessagesApi
 from symphony.bdk.core.service.presence.presence_service import PresenceService, OboPresenceService
+from symphony.bdk.core.service.signal.signal_service import SignalService, OboSignalService
 from symphony.bdk.core.service.stream.stream_service import StreamService, OboStreamService
 from symphony.bdk.core.service.user.user_service import UserService, OboUserService
 from symphony.bdk.gen.agent_api.attachments_api import AttachmentsApi
@@ -117,6 +118,16 @@ class ServiceFactory:
             self._auth_session
         )
 
+    def get_signal_service(self) -> SignalService:
+        """Returns a fully initialized SignalService
+
+        :return: a new SignalService instance
+        """
+        return SignalService(
+            SignalsApi(self._agent_client),
+            self._auth_session
+        )
+
     def get_datafeed_loop(self) -> AbstractDatafeedLoop:
         """Returns a fully initialized DatafeedLoop
 
@@ -179,9 +190,9 @@ class OboServiceFactory:
         self._config = config
 
     def get_user_service(self) -> OboUserService:
-        """Returns a fully initialized UserService
+        """Returns a fully initialized OboUserService
 
-        :return: a new UserService instance.
+        :return: a new OboUserService instance.
         """
         return OboUserService(
             UserApi(self._pod_client),
@@ -190,9 +201,9 @@ class OboServiceFactory:
         )
 
     def get_message_service(self) -> OboMessageService:
-        """Returns a fully initialized MessageService
+        """Returns a fully initialized OboMessageService
 
-        :return: a new MessageService instance.
+        :return: a new OboMessageService instance.
         """
         return OboMessageService(
             MultiAttachmentsMessagesApi(self._agent_client),
@@ -200,9 +211,9 @@ class OboServiceFactory:
         )
 
     def get_connection_service(self) -> OboConnectionService:
-        """Returns a fully initialized ConnectionService
+        """Returns a fully initialized OboConnectionService
 
-        :return: a new ConnectionService instance.
+        :return: a new OboConnectionService instance.
         """
         return OboConnectionService(
             ConnectionApi(self._pod_client),
@@ -210,9 +221,9 @@ class OboServiceFactory:
         )
 
     def get_stream_service(self) -> OboStreamService:
-        """Returns a fully initialized StreamService
+        """Returns a fully initialized OboStreamService
 
-        :return: a new StreamService instance
+        :return: a new OboStreamService instance
         """
         return OboStreamService(
             StreamsApi(self._pod_client),
@@ -221,11 +232,21 @@ class OboServiceFactory:
             self._auth_session)
 
     def get_presence_service(self) -> OboPresenceService:
-        """Returns a fully initialized PresenceService
+        """Returns a fully initialized OboPresenceService
 
-        :return: a new PresenceService instance
+        :return: a new OboPresenceService instance
         """
         return OboPresenceService(
             PresenceApi(self._pod_client),
+            self._auth_session
+        )
+
+    def get_signal_service(self) -> OboSignalService:
+        """Returns a fully initialized OboSignalService
+
+        :return: a new OboSignalService instance
+        """
+        return OboSignalService(
+            SignalsApi(self._agent_client),
             self._auth_session
         )

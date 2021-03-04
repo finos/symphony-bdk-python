@@ -1,0 +1,8 @@
+{
+  "name": "hash and cash",
+  "query": "HASHTAG:hash AND CASHTAG:cash",
+  "visibleOnProfile": true,
+  "companyWide": false,
+  "id": "signal_id",
+  "timestamp": 1519233005107
+}

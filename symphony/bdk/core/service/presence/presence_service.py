@@ -53,7 +53,7 @@ class OboPresenceService:
         See: `Get All Presence <https://developers.symphony.com/restapi/reference#get-all-presence>`_.
 
         :param last_user_id: Last user ID retrieved, used for paging. If provided, results skip users with IDs less
-        than this parameter.
+          than this parameter.
         :param limit: Maximum number of records to return. The maximum supported value is 5000.
         :return: Presence info of the looked up user.
         """
@@ -67,8 +67,8 @@ class OboPresenceService:
 
         :param user_id: User Id
         :param local: If true then Perform a local query and set the presence to OFFLINE for  users who are not local to
-        the calling user’s pod. If false or absent then query the presence of all local  and external users who are
-        connected to the calling user.
+          the calling user’s pod. If false or absent then query the presence of all local  and external users who are
+          connected to the calling user.
         :return: Presence info of the looked up user.
         """
         return await self._presence_api.v3_user_uid_presence_get(uid=user_id,
@@ -77,8 +77,8 @@ class OboPresenceService:
 
     async def external_presence_interest(self, user_ids: List[int]):
         """ Register interest in a list of external users to get their presence info.
-        See: `External Presence Interest <https://developers.symphony.com/restapi/reference#register-user-presence
-        -interest>`_.
+        See: `External Presence Interest
+        <https://developers.symphony.com/restapi/reference#register-user-presence-interest>`_.
 
         :param user_ids: List of user ids to be registered.
         """
@@ -90,12 +90,12 @@ class OboPresenceService:
         See: `Set Presence <https://developers.symphony.com/restapi/reference#set-presence>`_.
 
         :param status: The new presence state for the user.
-        Possible values are AVAILABLE, BUSY, AWAY, ON_THE_PHONE, BE_RIGHT_BACK, IN_A_MEETING, OUT_OF_OFFICE, OFF_WORK.
+          Possible values are AVAILABLE, BUSY, AWAY, ON_THE_PHONE, BE_RIGHT_BACK, IN_A_MEETING, OUT_OF_OFFICE, OFF_WORK.
         :param soft: If true, the user's current status is taken into consideration. If the user is currently OFFLINE,
-        the user's presence will still be OFFLINE, but the new presence will take effect when the user comes online. If
-        the user is currently online, the user's activity state will be applied to the presence if applicable. (e.g. if
-        you are setting their presence to AVAILABLE, but the user is currently idle, their status will be represented as
-        AWAY)
+          the user's presence will still be OFFLINE, but the new presence will take effect when the user comes online. If
+          the user is currently online, the user's activity state will be applied to the presence if applicable. (e.g. if
+          you are setting their presence to AVAILABLE, but the user is currently idle, their status will be represented as
+          AWAY)
         :return: Presence info of the calling user.
         """
         presence_status: V2PresenceStatus = V2PresenceStatus(category=status.name)
@@ -121,7 +121,7 @@ class OboPresenceService:
         See: `Read Presence Feed <https://developers.symphony.com/restapi/reference#read-presence-feed>`_.
 
         :param feed_id: The presence feed id to be read.
-        :return:The list of user presences has changed since the last presence read.
+        :return: The list of user presences has changed since the last presence read.
         """
         return await self._presence_api.v1_presence_feed_feed_id_read_get(
             session_token=await self._auth_session.session_token,
@@ -145,12 +145,12 @@ class OboPresenceService:
 
         :param user_id: The id of the specified user.
         :param status: Presence state to set.
-        Possible values are AVAILABLE, BUSY, AWAY, ON_THE_PHONE, BE_RIGHT_BACK, IN_A_MEETING, OUT_OF_OFFICE, OFF_WORK.
+          Possible values are AVAILABLE, BUSY, AWAY, ON_THE_PHONE, BE_RIGHT_BACK, IN_A_MEETING, OUT_OF_OFFICE, OFF_WORK.
         :param soft: If true, the user's current status is taken into consideration. If the user is currently OFFLINE,
-        the user's presence will still be OFFLINE, but the new presence will take effect when the user comes online. If
-        the user is currently online, the user's activity state will be applied to the presence if applicable. (e.g. if
-        you are setting their presence to AVAILABLE, but the user is currently idle, their status will be represented as
-        AWAY)
+          the user's presence will still be OFFLINE, but the new presence will take effect when the user comes online. If
+          the user is currently online, the user's activity state will be applied to the presence if applicable. (e.g. if
+          you are setting their presence to AVAILABLE, but the user is currently idle, their status will be represented as
+          AWAY)
         :return: The presence info of the specified user.
         """
         user_presence: V2UserPresence = V2UserPresence(category=status.name, user_id=user_id)
