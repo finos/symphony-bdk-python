@@ -295,8 +295,8 @@ class UserService(OboUserService):
             max_number: int = None
     ) -> AsyncGenerator[V2UserDetail, None]:
         """Retrieve all users in the company (pod).
-        Same as :func:`~list_user_details` but returns an asynchronous generator which performs the paginated calls with the
-        correct skip and limit values.
+        Same as :func:`~list_user_details` but returns an asynchronous generator which performs the paginated calls with
+        the correct skip and limit values.
         See: 'List Users V2 <https://developers.symphony.com/restapi/reference#list-users-v2>'_
 
         :param chunk_size: the maximum number of elements to retrieve in one underlying HTTP call

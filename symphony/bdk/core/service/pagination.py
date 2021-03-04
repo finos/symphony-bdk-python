@@ -1,3 +1,6 @@
+"""This module takes care of creating generators from paginated endpoints, so that user do not have to care about
+making several calls to the same endpoint with the correct pagination values.
+"""
 from typing import AsyncGenerator, TypeVar, Callable, Awaitable, Tuple
 
 T = TypeVar('T')
