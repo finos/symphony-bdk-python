@@ -10,6 +10,7 @@ from symphony.bdk.core.service.connection.connection_service import ConnectionSe
 from symphony.bdk.core.service.datafeed.datafeed_loop_v1 import DatafeedLoopV1
 from symphony.bdk.core.service.datafeed.datafeed_loop_v2 import DatafeedLoopV2
 from symphony.bdk.core.service.message.message_service import MessageService
+from symphony.bdk.core.service.signal.signal_service import SignalService
 from symphony.bdk.core.service.stream.stream_service import StreamService
 from symphony.bdk.core.service.user.user_service import UserService
 from symphony.bdk.core.service_factory import ServiceFactory
@@ -66,6 +67,12 @@ def test_get_application_service(service_factory):
     application_service = service_factory.get_application_service()
     assert application_service is not None
     assert type(application_service) == ApplicationService
+
+
+def test_get_signal_service(service_factory):
+    signal_service = service_factory.get_signal_service()
+    assert signal_service is not None
+    assert type(signal_service) == SignalService
 
 
 def test_get_datafeed_loop(config, service_factory):
