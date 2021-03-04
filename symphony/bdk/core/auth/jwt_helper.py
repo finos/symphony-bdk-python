@@ -15,8 +15,7 @@ def create_signed_jwt(private_key_config, username, expiration=None):
 
     :return: a signed JWT for a specific user or an extension app.
     """
-    private_key = _get_key(private_key_config.path) \
-        if private_key_config.path is not None else private_key_config.content
+    private_key = private_key_config.get_private_key_content()
     expiration = expiration if expiration is not None else int(
         datetime.datetime.now(datetime.timezone.utc).timestamp() + DEFAULT_EXPIRATION)
     payload = {
@@ -24,10 +23,3 @@ def create_signed_jwt(private_key_config, username, expiration=None):
         "exp": expiration
     }
     return jwt.encode(payload, private_key, algorithm="RS512")
-
-
-def _get_key(private_key_path):
-    with open(private_key_path, "r") as f:
-        content = f.readlines()
-        key = "".join(content)
-        return key
