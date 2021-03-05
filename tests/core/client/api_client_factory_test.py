@@ -1,3 +1,4 @@
+import re
 from unittest.mock import patch
 
 import pytest
@@ -19,11 +20,11 @@ def config():
 async def test_host_configured(config):
     client_factory = ApiClientFactory(config)
 
-    assert_host_configured_only(client_factory.get_pod_client().configuration, "/pod")
-    assert_host_configured_only(client_factory.get_login_client().configuration, "/login")
-    assert_host_configured_only(client_factory.get_agent_client().configuration, "/agent")
-    assert_host_configured_only(client_factory.get_session_auth_client().configuration, "/sessionauth")
-    assert_host_configured_only(client_factory.get_relay_client().configuration, "/relay")
+    assert_host_configured_only(client_factory.get_pod_client(), "/pod")
+    assert_host_configured_only(client_factory.get_login_client(), "/login")
+    assert_host_configured_only(client_factory.get_agent_client(), "/agent")
+    assert_host_configured_only(client_factory.get_session_auth_client(), "/sessionauth")
+    assert_host_configured_only(client_factory.get_relay_client(), "/relay")
 
 
 @pytest.mark.asyncio
@@ -33,12 +34,11 @@ async def test_proxy_configured(config):
     config.proxy = BdkProxyConfig(proxy_host, proxy_port)
     client_factory = ApiClientFactory(config)
 
-    assert_host_and_proxy_configured(client_factory.get_pod_client().configuration, "/pod", proxy_host, proxy_port)
-    assert_host_and_proxy_configured(client_factory.get_login_client().configuration, "/login", proxy_host, proxy_port)
-    assert_host_and_proxy_configured(client_factory.get_agent_client().configuration, "/agent", proxy_host, proxy_port)
-    assert_host_and_proxy_configured(client_factory.get_session_auth_client().configuration, "/sessionauth", proxy_host,
-                                     proxy_port)
-    assert_host_and_proxy_configured(client_factory.get_relay_client().configuration, "/relay", proxy_host, proxy_port)
+    assert_host_and_proxy_configured(client_factory.get_pod_client(), "/pod", proxy_host, proxy_port)
+    assert_host_and_proxy_configured(client_factory.get_login_client(), "/login", proxy_host, proxy_port)
+    assert_host_and_proxy_configured(client_factory.get_agent_client(), "/agent", proxy_host, proxy_port)
+    assert_host_and_proxy_configured(client_factory.get_session_auth_client(), "/sessionauth", proxy_host, proxy_port)
+    assert_host_and_proxy_configured(client_factory.get_relay_client(), "/relay", proxy_host, proxy_port)
 
 
 @pytest.mark.asyncio
@@ -48,17 +48,12 @@ async def test_proxy_credentials_configured(config):
     config.proxy = BdkProxyConfig(proxy_host, proxy_port, "user", "pass")
     client_factory = ApiClientFactory(config)
 
-    assert_host_and_proxy_credentials_configured(client_factory.get_pod_client().configuration, "/pod", proxy_host,
+    assert_host_and_proxy_credentials_configured(client_factory.get_pod_client(), "/pod", proxy_host, proxy_port)
+    assert_host_and_proxy_credentials_configured(client_factory.get_login_client(), "/login", proxy_host, proxy_port)
+    assert_host_and_proxy_credentials_configured(client_factory.get_agent_client(), "/agent", proxy_host, proxy_port)
+    assert_host_and_proxy_credentials_configured(client_factory.get_session_auth_client(), "/sessionauth", proxy_host,
                                                  proxy_port)
-    assert_host_and_proxy_credentials_configured(client_factory.get_login_client().configuration, "/login", proxy_host,
-                                                 proxy_port)
-    assert_host_and_proxy_credentials_configured(client_factory.get_agent_client().configuration, "/agent", proxy_host,
-                                                 proxy_port)
-    assert_host_and_proxy_credentials_configured(client_factory.get_session_auth_client().configuration, "/sessionauth",
-                                                 proxy_host,
-                                                 proxy_port)
-    assert_host_and_proxy_credentials_configured(client_factory.get_relay_client().configuration, "/relay", proxy_host,
-                                                 proxy_port)
+    assert_host_and_proxy_credentials_configured(client_factory.get_relay_client(), "/relay", proxy_host, proxy_port)
 
 
 def test_trust_store_configured(config):
@@ -71,19 +66,39 @@ def test_trust_store_configured(config):
         assert client_factory.get_pod_client().configuration.ssl_ca_cert == truststore_path
 
 
-def assert_host_configured_only(configuration, url_suffix):
+def assert_host_configured_only(client, url_suffix):
+    configuration = client.configuration
+
     assert configuration.host == f"https://{HOST}:443{url_suffix}"
+    assert_user_agent_configured(client.user_agent)
+
     assert configuration.proxy is None
     assert configuration.proxy_headers is None
 
 
-def assert_host_and_proxy_configured(configuration, url_suffix, proxy_host, proxy_port):
+def assert_host_and_proxy_configured(client, url_suffix, proxy_host, proxy_port):
+    configuration = client.configuration
+
     assert configuration.host == f"https://{HOST}:443{url_suffix}"
     assert configuration.proxy == f"http://{proxy_host}:{proxy_port}"
-    assert configuration.proxy_headers is None
+    assert_user_agent_configured(client.user_agent)
+
+    assert "proxy-authorization" not in configuration.proxy_headers
+    assert "user-agent" in configuration.proxy_headers
+    assert_user_agent_configured(configuration.proxy_headers["user-agent"])
 
 
-def assert_host_and_proxy_credentials_configured(configuration, url_suffix, proxy_host, proxy_port):
+def assert_host_and_proxy_credentials_configured(client, url_suffix, proxy_host, proxy_port):
+    configuration = client.configuration
+
     assert configuration.host == f"https://{HOST}:443{url_suffix}"
     assert configuration.proxy == f"http://{proxy_host}:{proxy_port}"
+    assert_user_agent_configured(client.user_agent)
+
     assert "proxy-authorization" in configuration.proxy_headers
+    assert "user-agent" in configuration.proxy_headers
+    assert_user_agent_configured(configuration.proxy_headers["user-agent"])
+
+
+def assert_user_agent_configured(user_agent):
+    assert re.match(r"^Symphony-BDK-Python/\S+ Python/3\.\S+$", user_agent) is not None

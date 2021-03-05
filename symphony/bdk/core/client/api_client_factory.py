@@ -1,9 +1,12 @@
 """Module containing the ApiClientFactory class.
 """
+import sys
+from importlib.metadata import distribution, PackageNotFoundError
+
 import urllib3
 
-from symphony.bdk.gen.configuration import Configuration
 from symphony.bdk.gen.api_client import ApiClient
+from symphony.bdk.gen.configuration import Configuration
 
 
 class ApiClientFactory:
@@ -71,11 +74,34 @@ class ApiClientFactory:
         if server_config.proxy is not None:
             self._configure_proxy(server_config.proxy, configuration)
 
-        return ApiClient(configuration=configuration)
+        client = ApiClient(configuration=configuration)
+        client.user_agent = self._user_agent()
+
+        return client
 
     @staticmethod
     def _configure_proxy(proxy_config, configuration):
         configuration.proxy = proxy_config.get_url()
 
         if proxy_config.are_credentials_defined():
-            configuration.proxy_headers = urllib3.util.make_headers(proxy_basic_auth=proxy_config.get_credentials())
+            configuration.proxy_headers = urllib3.util.make_headers(proxy_basic_auth=proxy_config.get_credentials(),
+                                                                    user_agent=ApiClientFactory._user_agent())
+        else:
+            configuration.proxy_headers = urllib3.util.make_headers(user_agent=ApiClientFactory._user_agent())
+
+    @staticmethod
+    def _user_agent():
+        return f"Symphony-BDK-Python/{ApiClientFactory._bdk_version()} Python/{ApiClientFactory._python_version()}"
+
+    @staticmethod
+    def _bdk_version():
+        try:
+            return distribution('sym_api_client_python').version
+        except PackageNotFoundError:
+            # the above won't work when bdk is not installed as a pypi package,
+            # e.g. for scripts in the examples folder
+            return "2.0"
+
+    @staticmethod
+    def _python_version():
+        return f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"
