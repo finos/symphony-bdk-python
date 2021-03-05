@@ -92,10 +92,10 @@ class OboPresenceService:
         :param status: The new presence state for the user.
           Possible values are AVAILABLE, BUSY, AWAY, ON_THE_PHONE, BE_RIGHT_BACK, IN_A_MEETING, OUT_OF_OFFICE, OFF_WORK.
         :param soft: If true, the user's current status is taken into consideration. If the user is currently OFFLINE,
-          the user's presence will still be OFFLINE, but the new presence will take effect when the user comes online. If
-          the user is currently online, the user's activity state will be applied to the presence if applicable. (e.g. if
-          you are setting their presence to AVAILABLE, but the user is currently idle, their status will be represented as
-          AWAY)
+          the user's presence will still be OFFLINE, but the new presence will take effect when the user comes online.
+          If the user is currently online, the user's activity state will be applied to the presence if applicable.
+          (e.g. if you are setting their presence to AVAILABLE, but the user is currently idle, their status will be
+          represented as AWAY)
         :return: Presence info of the calling user.
         """
         presence_status: V2PresenceStatus = V2PresenceStatus(category=status.name)
@@ -147,10 +147,10 @@ class OboPresenceService:
         :param status: Presence state to set.
           Possible values are AVAILABLE, BUSY, AWAY, ON_THE_PHONE, BE_RIGHT_BACK, IN_A_MEETING, OUT_OF_OFFICE, OFF_WORK.
         :param soft: If true, the user's current status is taken into consideration. If the user is currently OFFLINE,
-          the user's presence will still be OFFLINE, but the new presence will take effect when the user comes online. If
-          the user is currently online, the user's activity state will be applied to the presence if applicable. (e.g. if
-          you are setting their presence to AVAILABLE, but the user is currently idle, their status will be represented as
-          AWAY)
+          the user's presence will still be OFFLINE, but the new presence will take effect when the user comes online.
+          If the user is currently online, the user's activity state will be applied to the presence if applicable.
+          (e.g. if you are setting their presence to AVAILABLE, but the user is currently idle, their status will be
+          represented as AWAY)
         :return: The presence info of the specified user.
         """
         user_presence: V2UserPresence = V2UserPresence(category=status.name, user_id=user_id)

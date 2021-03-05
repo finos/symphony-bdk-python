@@ -1,7 +1,11 @@
+from typing import AsyncGenerator
+
 from symphony.bdk.core.auth.auth_session import AuthSession
+from symphony.bdk.core.service.pagination import offset_based_pagination
 from symphony.bdk.gen.agent_api.signals_api import SignalsApi
 from symphony.bdk.gen.agent_model.base_signal import BaseSignal
 from symphony.bdk.gen.agent_model.channel_subscriber import ChannelSubscriber
+from symphony.bdk.gen.agent_model.channel_subscriber_response import ChannelSubscriberResponse
 from symphony.bdk.gen.agent_model.channel_subscription_response import ChannelSubscriptionResponse
 from symphony.bdk.gen.agent_model.signal import Signal
 from symphony.bdk.gen.agent_model.signal_list import SignalList
@@ -26,7 +30,7 @@ class OboSignalService:
         self._auth_session = auth_session
 
     async def list_signals(self, skip: int = 0, limit: int = 50) -> SignalList:
-        """ Lists signals on behalf of the user. The response includes signals that the user has created and
+        """Lists signals on behalf of the user. The response includes signals that the user has created and
         public signals to which they have subscribed.
 
         See: 'List signals <https://developers.symphony.com/restapi/reference#list-signals>'_
@@ -39,6 +43,22 @@ class OboSignalService:
         return await self._signals_api.v1_signals_list_get(
             skip=skip, limit=limit, session_token=await self._auth_session.session_token,
             key_manager_token=await self._auth_session.key_manager_token)
+
+    async def list_all_signals(self, chunk_size: int = 50, max_number: int = None) -> AsyncGenerator[Signal, None]:
+        """Lists all signals on behalf of the user. The response includes signals that the user has created and
+        public signals to which they have subscribed.
+
+        See: 'List signals <https://developers.symphony.com/restapi/reference#list-signals>'_
+
+        :param chunk_size: the maximum number of elements to retrieve in one underlying HTTP call
+        :param max_number: the total maximum number of elements to retrieve
+        :return: an asynchronous generator of found signals
+        """
+        async def list_signals_one_page(skip, limit):
+            result = await self.list_signals(skip, limit)
+            return result.value if result else None
+
+        return offset_based_pagination(list_signals_one_page, chunk_size, max_number)
 
     async def get_signal(self, signal_id: str) -> Signal:
         """ Gets details about the specified signal.
@@ -122,8 +142,8 @@ class OboSignalService:
             id=signal_id, users=user_ids, session_token=await self._auth_session.session_token,
             key_manager_token=await self._auth_session.key_manager_token)
 
-    async def list_subscribers(self, signal_id: str, skip: int = 0, limit: int = 50) -> [ChannelSubscriber]:
-        """ Gets the subscribers for the specified signal.
+    async def list_subscribers(self, signal_id: str, skip: int = 0, limit: int = 50) -> ChannelSubscriberResponse:
+        """Gets the subscribers for the specified signal.
 
         See: 'Subscribers <https://developers.symphony.com/restapi/reference#subscribers>'_
 
@@ -137,6 +157,23 @@ class OboSignalService:
         return await self._signals_api.v1_signals_id_subscribers_get(
             id=signal_id, skip=skip, limit=limit, session_token=await self._auth_session.session_token,
             key_manager_token=await self._auth_session.key_manager_token)
+
+    async def list_all_subscribers(self, signal_id: str, chunk_size: int = 50, max_number: int = None) \
+            -> AsyncGenerator[ChannelSubscriber, None]:
+        """Gets all the subscribers for the specified signal.
+
+        See: 'Subscribers <https://developers.symphony.com/restapi/reference#subscribers>'_
+
+        :param signal_id: the Id of the signal.
+        :param chunk_size: the maximum number of elements to retrieve in one underlying HTTP call.
+        :param max_number: the total maximum number of elements to retrieve.
+        :return: an asynchronous generator returning all users subscribed to the signal.
+        """
+        async def list_subscribers_one_page(skip, limit):
+            result = await self.list_subscribers(signal_id, skip, limit)
+            return result.data if result else None
+
+        return offset_based_pagination(list_subscribers_one_page, chunk_size, max_number)
 
 
 class SignalService(OboSignalService):

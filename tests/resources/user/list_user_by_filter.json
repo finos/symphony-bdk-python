@@ -1,0 +1,76 @@
+[
+  {
+    "userAttributes": {
+      "emailAddress": "agentservice@nexus1.com",
+      "firstName": "Agent Service",
+      "userName": "agentservice",
+      "displayName": "Agent Service",
+      "accountType": "SYSTEM"
+    },
+    "userSystemInfo": {
+      "id": 9826885173252,
+      "status": "ENABLED",
+      "createdDate": 1498665229000,
+      "lastUpdatedDate": 1498665229886,
+      "lastLoginDate": 1504899004993
+    },
+    "roles": [
+      "USER_PROVISIONING",
+      "CONTENT_MANAGEMENT",
+      "L2_SUPPORT",
+      "INDIVIDUAL",
+      "AGENT",
+      "SUPER_ADMINISTRATOR",
+      "SUPER_COMPLIANCE_OFFICER"
+    ]
+  },
+  {
+    "userAttributes": {
+      "emailAddress": "bot.user1@nexus1-dev.symphony.com",
+      "firstName": "Nexus1",
+      "lastName": "Bot01",
+      "userName": "bot.user1",
+      "displayName": "Nexus1 Bot01",
+      "accountType": "NORMAL",
+      "assetClasses": [],
+      "industries": []
+    },
+    "userSystemInfo": {
+      "id": 9826885173258,
+      "status": "ENABLED",
+      "createdDate": 1499347606000,
+      "createdBy": "9826885173252",
+      "lastUpdatedDate": 1499348554853,
+      "lastLoginDate": 1504839044527
+    },
+    "roles": [
+      "USER_PROVISIONING",
+      "CONTENT_EXPORT_SERVICE",
+      "CONTENT_MANAGEMENT",
+      "L2_SUPPORT",
+      "INDIVIDUAL",
+      "SUPER_ADMINISTRATOR",
+      "SUPER_COMPLIANCE_OFFICER"
+    ]
+  },
+  {
+    "userAttributes": {
+      "emailAddress": "bot.user@email.com",
+      "userName": "bot.user",
+      "displayName": "bot.user",
+      "accountType": "SYSTEM"
+    },
+    "userSystemInfo": {
+      "id": 9826885173289,
+      "status": "ENABLED",
+      "createdDate": 1499373423000,
+      "createdBy": "9826885173255",
+      "lastUpdatedDate": 1499373423803
+    },
+    "roles": [
+      "USER_PROVISIONING",
+      "CONTENT_MANAGEMENT",
+      "INDIVIDUAL"
+    ]
+  }
+]

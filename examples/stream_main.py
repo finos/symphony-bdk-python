@@ -61,6 +61,22 @@ async def run():
         members = await streams.list_stream_members(stream_id)
         members = await streams.list_room_members(stream_id)
 
+        async for m in await streams.list_all_streams_members(stream_id):
+            print(m)
+
+        stream_filter = StreamFilter(
+            stream_types=[StreamType(type="IM"), StreamType(type="MIM"), StreamType(type="ROOM")],
+            include_inactive_streams=False)
+        async for s in await streams.list_all_streams(stream_filter):
+            print(s)
+
+        async for r in await streams.search_all_rooms(
+                V2RoomSearchCriteria(query="try", member=UserId(id=12987981103693))):
+            print(r)
+
+        async for s in await streams.list_all_streams_admin(V2AdminStreamFilter()):
+            print(s.id)
+
 
 logging.basicConfig(level=logging.DEBUG)
 asyncio.run(run())
