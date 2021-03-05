@@ -1,4 +1,7 @@
+from typing import AsyncGenerator
+
 from symphony.bdk.core.auth.auth_session import AuthSession
+from symphony.bdk.core.service.pagination import offset_based_pagination
 from symphony.bdk.gen.agent_api.share_api import ShareApi
 from symphony.bdk.gen.agent_model.share_content import ShareContent
 from symphony.bdk.gen.agent_model.v2_message import V2Message
@@ -7,12 +10,15 @@ from symphony.bdk.gen.pod_api.streams_api import StreamsApi
 from symphony.bdk.gen.pod_model.membership_list import MembershipList
 from symphony.bdk.gen.pod_model.room_detail import RoomDetail
 from symphony.bdk.gen.pod_model.stream import Stream
+from symphony.bdk.gen.pod_model.stream_attributes import StreamAttributes
 from symphony.bdk.gen.pod_model.stream_filter import StreamFilter
 from symphony.bdk.gen.pod_model.stream_list import StreamList
 from symphony.bdk.gen.pod_model.user_id import UserId
 from symphony.bdk.gen.pod_model.user_id_list import UserIdList
 from symphony.bdk.gen.pod_model.v2_admin_stream_filter import V2AdminStreamFilter
+from symphony.bdk.gen.pod_model.v2_admin_stream_info import V2AdminStreamInfo
 from symphony.bdk.gen.pod_model.v2_admin_stream_list import V2AdminStreamList
+from symphony.bdk.gen.pod_model.v2_member_info import V2MemberInfo
 from symphony.bdk.gen.pod_model.v2_membership_list import V2MembershipList
 from symphony.bdk.gen.pod_model.v2_room_search_criteria import V2RoomSearchCriteria
 from symphony.bdk.gen.pod_model.v2_stream_attributes import V2StreamAttributes
@@ -61,6 +67,24 @@ class OboStreamService:
         """
         return await self._streams_api.v1_streams_list_post(filter=stream_filter, skip=skip, limit=limit,
                                                             session_token=await self._auth_session.session_token)
+
+    async def list_all_streams(self, stream_filter: StreamFilter, chunk_size: int = 50, max_number: int = None) \
+            -> AsyncGenerator[StreamAttributes, None]:
+        """Returns an asynchronous of all the streams of which the requesting user is a member,
+        sorted by creation date (ascending - oldest to newest).
+        Wraps the `List User Streams <https://developers.symphony.com/restapi/reference#list-user-streams>`_ endpoint.
+
+        :param stream_filter:  the stream searching criteria.
+        :param chunk_size: the maximum number of elements to retrieve in one underlying HTTP call
+        :param max_number: the total maximum number of elements to retrieve
+        :return: an asynchronous generator of the streams matching the search filter.
+        """
+
+        async def list_streams_one_page(skip, limit):
+            result = await self.list_streams(stream_filter, skip, limit)
+            return result.value if result else None
+
+        return offset_based_pagination(list_streams_one_page, chunk_size, max_number)
 
     async def add_member_to_room(self, user_id: int, room_id: str):
         """Adds a member to an existing room.
@@ -166,6 +190,23 @@ class StreamService(OboStreamService):
         return await self._streams_api.v3_room_search_post(query=query, skip=skip, limit=limit,
                                                            session_token=await self._auth_session.session_token)
 
+    async def search_all_rooms(self, query: V2RoomSearchCriteria, chunk_size: int = 50,
+                               max_number: int = None) -> AsyncGenerator[V3RoomDetail, None]:
+        """Search for rooms according to the specified criteria.
+        Wraps the `Search Rooms V3 <https://developers.symphony.com/restapi/reference#search-rooms-v3>`_ endpoint.
+
+        :param query: the search criteria.
+        :param chunk_size: the maximum number of elements to retrieve in one underlying HTTP call.
+        :param max_number: the total maximum number of elements to retrieve.
+        :return: an asynchronous generator of the rooms matching the search criteria.
+        """
+
+        async def search_rooms_one_page(skip, limit):
+            result = await self.search_rooms(query, skip, limit)
+            return result.rooms if result.rooms else None
+
+        return offset_based_pagination(search_rooms_one_page, chunk_size, max_number)
+
     async def get_room_info(self, room_id: str) -> V3RoomDetail:
         """Get information about a particular room.
         Wraps the `Room Info V3 <https://developers.symphony.com/restapi/reference#room-info-v3>`_ endpoint.
@@ -242,6 +283,24 @@ class StreamService(OboStreamService):
         return await self._streams_api.v2_admin_streams_list_post(filter=stream_filter, skip=skip, limit=limit,
                                                                   session_token=await self._auth_session.session_token)
 
+    async def list_all_streams_admin(self, stream_filter: V2AdminStreamFilter, chunk_size=50, max_number=None) \
+            -> AsyncGenerator[V2AdminStreamInfo, None]:
+        """Retrieves all the streams across the enterprise.
+        Wraps the `List Streams for Enterprise V2
+        <https://developers.symphony.com/restapi/reference#list-streams-for-enterprise-v2>`_ endpoint.
+
+        :param stream_filter: the stream searching filter.
+        :param chunk_size: the maximum number of elements to retrieve in one underlying HTTP call.
+        :param max_number: the total maximum number of elements to retrieve.
+        :return: an asynchronous generator of streams matching the search criteria.
+        """
+
+        async def list_streams_admin_one_page(skip, limit):
+            result = await self.list_streams_admin(stream_filter, skip, limit)
+            return result.streams.value if result.streams else None
+
+        return offset_based_pagination(list_streams_admin_one_page, chunk_size, max_number)
+
     async def list_stream_members(self, stream_id: str, skip: int = 0, limit: int = 100) -> V2MembershipList:
         """List the current members of an existing stream. The stream can be of type IM, MIM, or ROOM.
         Wraps the `Stream Members <https://developers.symphony.com/restapi/reference#stream-members>`_ endpoint.
@@ -254,6 +313,22 @@ class StreamService(OboStreamService):
         return await self._streams_api.v1_admin_stream_id_membership_list_get(
             id=stream_id, skip=skip, limit=limit,
             session_token=await self._auth_session.session_token)
+
+    async def list_all_stream_members(self, stream_id: str, chunk_size: int = None, max_number=None) \
+            -> AsyncGenerator[V2MemberInfo, None]:
+        """List the current members of an existing stream. The stream can be of type IM, MIM, or ROOM.
+        Wraps the `Stream Members <https://developers.symphony.com/restapi/reference#stream-members>`_ endpoint.
+
+        :param stream_id: the ID of the stream.
+        :param chunk_size: the maximum number of elements to retrieve in one underlying HTTP call.
+        :param max_number: the total maximum number of elements to retrieve.
+        :return: an asynchronous generator of the stream members.
+        """
+        async def list_stream_members_one_page(skip, limit):
+            members = await self.list_stream_members(stream_id, skip, limit)
+            return members.members.value if members.members else None
+
+        return offset_based_pagination(list_stream_members_one_page, chunk_size, max_number)
 
     async def list_room_members(self, room_id: str) -> MembershipList:
         """Lists the current members of an existing room.

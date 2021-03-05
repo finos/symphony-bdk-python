@@ -1,6 +1,10 @@
+from collections import namedtuple
 from pathlib import Path
 import json
 from types import SimpleNamespace
+
+from symphony.bdk.gen import ApiClient
+from symphony.bdk.gen.rest import RESTResponse
 
 
 def get_resource_filepath(relative_path, as_text=True):
@@ -22,6 +26,13 @@ def object_from_json(json_content):
 
 def object_from_json_relative_path(relative_path):
     return object_from_json(get_resource_content(relative_path))
+
+
+def get_deserialized_object_from_json(relative_path, return_type):
+    resp = namedtuple('MockResp', ['status', 'reason'])(200, "")
+    rest_resp = RESTResponse(resp, get_resource_content(relative_path))
+
+    return ApiClient().deserialize(rest_resp, (return_type,), True)
 
 
 def get_config_resource_filepath(relative_path):
