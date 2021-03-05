@@ -10,7 +10,7 @@ from [swagger specifications](https://github.com/symphonyoss/symphony-api-spec) 
 * [pod/pod-api-public-deprecated.yaml](https://github.com/symphonyoss/symphony-api-spec/blob/master/pod/pod-api-public-deprecated.yaml)
 
 In order to re-generate these files:
-* download the [openapi-generator-cli jar](https://search.maven.org/artifact/org.openapitools/openapi-generator/5.0.0/jar)
+* download the [openapi-generator-cli jar](https://search.maven.org/artifact/org.openapitools/openapi-generator-cli/5.0.0/jar)
   from Maven Central
 * download the swagger specs from [symphony-api-spec repo](https://github.com/symphonyoss/symphony-api-spec)
 * run ` java -jar openapi-generator-cli-5.0.0.jar generate -g python -i path/to/spec.yaml -t templates --package-name symphony.bdk.gen -o output`

@@ -38,5 +38,14 @@ async def run():
         logging.info(await signal_service.list_subscribers(signal.id))
         logging.info(await signal_service.delete_signal(signal.id))
 
+        logging.info("Listing all signals")
+        async for s in await signal_service.list_all_signals():
+            print(s)
+
+        logging.info("List all subscribers")
+        async for s in await signal_service.list_all_subscribers(signal.id):
+            print(s)
+
+
 logging.basicConfig(level=logging.DEBUG)
 asyncio.run(run())

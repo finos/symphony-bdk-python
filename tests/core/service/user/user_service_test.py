@@ -13,11 +13,15 @@ from symphony.bdk.gen.pod_api.users_api import UsersApi
 from symphony.bdk.gen.pod_model.avatar_update import AvatarUpdate
 from symphony.bdk.gen.pod_model.followers_list import FollowersList
 from symphony.bdk.gen.pod_model.string_id import StringId
+from symphony.bdk.gen.pod_model.user_detail_list import UserDetailList
 from symphony.bdk.gen.pod_model.user_filter import UserFilter
 from symphony.bdk.gen.pod_model.user_id_list import UserIdList
 from symphony.bdk.gen.pod_model.user_search_filter import UserSearchFilter
 from symphony.bdk.gen.pod_model.user_search_query import UserSearchQuery
-from tests.utils.resource_utils import object_from_json_relative_path, object_from_json, get_resource_filepath
+from symphony.bdk.gen.pod_model.user_search_results import UserSearchResults
+from symphony.bdk.gen.pod_model.v2_user_detail_list import V2UserDetailList
+from tests.utils.resource_utils import object_from_json_relative_path, object_from_json, get_resource_filepath, \
+    get_deserialized_object_from_json
 from symphony.bdk.gen.pod_model.delegate_action import DelegateAction
 from symphony.bdk.core.service.user.model.delegate_action_enum import DelegateActionEnum
 from symphony.bdk.gen.pod_model.feature_list import FeatureList
@@ -131,6 +135,7 @@ async def test_search_users(users_api, user_service):
     users_api.v1_user_search_post = AsyncMock()
     users_api.v1_user_search_post.return_value = object_from_json_relative_path("user/search_user.json")
     query = UserSearchQuery(query='jane', filters=UserSearchFilter(title='Sales Manager', company='Symphony'))
+
     result = await user_service.search_users(query)
 
     users_api.v1_user_search_post.assert_called_with(
@@ -143,6 +148,26 @@ async def test_search_users(users_api, user_service):
     assert result.count == 1
     assert len(result.users) == 1
     assert result.users[0].id == 13056700581099
+
+
+@pytest.mark.asyncio
+async def test_search_all_users(users_api, user_service):
+    users_api.v1_user_search_post = AsyncMock()
+    users_api.v1_user_search_post.return_value = object_from_json_relative_path("user/search_user.json")
+    query = UserSearchQuery(query='jane', filters=UserSearchFilter(title='Sales Manager', company='Symphony'))
+
+    gen = await user_service.search_all_users(query)
+    result = [u async for u in gen]
+
+    users_api.v1_user_search_post.assert_called_with(
+        search_request=query,
+        local=False,
+        skip=0,
+        limit=50,
+        session_token='session_token'
+    )
+    assert len(result) == 1
+    assert result[0].id == 13056700581099
 
 
 @pytest.mark.asyncio
@@ -202,8 +227,8 @@ async def test_get_user_detail(user_api, user_service):
 @pytest.mark.asyncio
 async def test_list_user_details(user_api, user_service):
     user_api.v2_admin_user_list_get = AsyncMock()
-    user_api.v2_admin_user_list_get.return_value = \
-        object_from_json_relative_path("user/list_user_detail.json")
+    user_api.v2_admin_user_list_get.return_value = get_deserialized_object_from_json("user/list_user_detail.json",
+                                                                                     V2UserDetailList)
 
     user_detail_list = await user_service.list_user_details()
 
@@ -214,15 +239,35 @@ async def test_list_user_details(user_api, user_service):
     )
 
     assert len(user_detail_list) == 5
-    assert user_detail_list[0].userAttributes.userName == "agentservice"
-    assert user_detail_list[1].userSystemInfo.id == 9826885173258
+    assert user_detail_list[0].user_attributes.user_name == "agentservice"
+    assert user_detail_list[1].user_system_info.id == 9826885173258
+
+
+@pytest.mark.asyncio
+async def test_list_all_user_details(user_api, user_service):
+    user_api.v2_admin_user_list_get = AsyncMock()
+    user_api.v2_admin_user_list_get.return_value = get_deserialized_object_from_json("user/list_user_detail.json",
+                                                                                     V2UserDetailList)
+
+    gen = await user_service.list_all_user_details()
+    user_detail_list = [u async for u in gen]
+
+    user_api.v2_admin_user_list_get.assert_called_with(
+        skip=0,
+        limit=50,
+        session_token="session_token"
+    )
+
+    assert len(user_detail_list) == 5
+    assert user_detail_list[0].user_attributes.user_name == "agentservice"
+    assert user_detail_list[1].user_system_info.id == 9826885173258
 
 
 @pytest.mark.asyncio
 async def test_list_user_details_by_filter(user_api, user_service):
     user_api.v1_admin_user_find_post = AsyncMock()
-    user_api.v1_admin_user_find_post.return_value = \
-        object_from_json_relative_path("user/list_user_detail.json")
+    user_api.v1_admin_user_find_post.return_value = get_deserialized_object_from_json("user/list_user_by_filter.json",
+                                                                                      UserDetailList)
     user_filter = UserFilter(status="ENABLED")
 
     user_detail_list = await user_service.list_user_details_by_filter(user_filter)
@@ -234,9 +279,31 @@ async def test_list_user_details_by_filter(user_api, user_service):
         session_token="session_token"
     )
 
-    assert len(user_detail_list) == 5
-    assert user_detail_list[0].userAttributes.userName == "agentservice"
-    assert user_detail_list[1].userSystemInfo.id == 9826885173258
+    assert len(user_detail_list) == 3
+    assert user_detail_list[0].user_attributes.user_name == "agentservice"
+    assert user_detail_list[1].user_system_info.id == 9826885173258
+
+
+@pytest.mark.asyncio
+async def test_list_all_user_details_by_filter(user_api, user_service):
+    user_api.v1_admin_user_find_post = AsyncMock()
+    user_api.v1_admin_user_find_post.return_value = get_deserialized_object_from_json("user/list_user_by_filter.json",
+                                                                                      UserDetailList)
+    user_filter = UserFilter(status="ENABLED")
+
+    gen = await user_service.list_all_user_details_by_filter(user_filter)
+    user_detail_list = [u async for u in gen]
+
+    user_api.v1_admin_user_find_post.assert_called_with(
+        skip=0,
+        limit=50,
+        payload=user_filter,
+        session_token="session_token"
+    )
+
+    assert len(user_detail_list) == 3
+    assert user_detail_list[0].user_attributes.user_name == "agentservice"
+    assert user_detail_list[1].user_system_info.id == 9826885173258
 
 
 @pytest.mark.asyncio
@@ -532,22 +599,7 @@ async def test_update_status(user_api, user_service):
 @pytest.mark.asyncio
 async def test_list_user_followers(user_api, user_service):
     user_api.v1_user_uid_followers_get = AsyncMock()
-    user_api.v1_user_uid_followers_get.return_value = object_from_json(
-        '{'
-        '   "count": 5,'
-        '   "followers": ['
-        '       13056700579848,'
-        '       13056700580889,'
-        '       13056700580890'
-        '   ],'
-        '   "pagination": {'
-        '       "cursors": {'
-        '           "before": "1",'
-        '           "after": "4"'
-        '       }'
-        '   }'
-        '}'
-    )
+    user_api.v1_user_uid_followers_get.return_value = object_from_json_relative_path("user/list_user_followers.json")
 
     follower_list = await user_service.list_user_followers(1234, before=4, after=1)
 
@@ -565,22 +617,29 @@ async def test_list_user_followers(user_api, user_service):
 
 
 @pytest.mark.asyncio
+async def test_list_user_followers(user_api, user_service):
+    user_api.v1_user_uid_followers_get = AsyncMock()
+    user_api.v1_user_uid_followers_get.return_value = object_from_json_relative_path("user/list_user_followers.json")
+
+    gen = await user_service.list_all_user_followers(1234, max_number=2)
+    follower_list = [uid async for uid in gen]
+
+    user_api.v1_user_uid_followers_get.assert_called_with(
+        uid=1234,
+        limit=100,
+        session_token='session_token'
+    )
+
+    assert len(follower_list) == 2
+    assert follower_list[0] == 13056700579848
+    assert follower_list[1] == 13056700580889
+
+
+@pytest.mark.asyncio
 async def test_list_users_following(user_api, user_service):
     user_api.v1_user_uid_following_get = AsyncMock()
-    user_api.v1_user_uid_following_get.return_value = object_from_json(
-        '{'
-        '   "count": 3,'
-        '   "following": ['
-        '       13056700580888,'
-        '       13056700580889'
-        '   ],'
-        '   "pagination": {'
-        '       "cursors": {'
-        '           "before": "1"'
-        '       }'
-        '   }'
-        '}'
-    )
+    user_api.v1_user_uid_following_get.return_value = object_from_json_relative_path("user/list_users_following.json")
+
     following_user_list = await user_service.list_users_following(1234, before=4, after=1)
 
     user_api.v1_user_uid_following_get.assert_called_with(
@@ -594,6 +653,25 @@ async def test_list_users_following(user_api, user_service):
     assert following_user_list.count == 3
     assert following_user_list.following[0] == 13056700580888
     assert following_user_list.following[1] == 13056700580889
+
+
+@pytest.mark.asyncio
+async def test_list_all_users_following(user_api, user_service):
+    user_api.v1_user_uid_following_get = AsyncMock()
+    user_api.v1_user_uid_following_get.return_value = object_from_json_relative_path("user/list_users_following.json")
+
+    gen = await user_service.list_all_users_following(1234, max_number=2)
+    following_user_list = [uid async for uid in gen]
+
+    user_api.v1_user_uid_following_get.assert_called_with(
+        uid=1234,
+        limit=100,
+        session_token='session_token'
+    )
+
+    assert len(following_user_list) == 2
+    assert following_user_list[0] == 13056700580888
+    assert following_user_list[1] == 13056700580889
 
 
 @pytest.mark.asyncio

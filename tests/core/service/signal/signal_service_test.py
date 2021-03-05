@@ -1,12 +1,17 @@
+from collections import namedtuple
 from unittest.mock import MagicMock, AsyncMock
 
 import pytest
 
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.service.signal.signal_service import SignalService
+from symphony.bdk.gen import ApiClient
 from symphony.bdk.gen.agent_api.signals_api import SignalsApi
 from symphony.bdk.gen.agent_model.base_signal import BaseSignal
-from tests.utils.resource_utils import object_from_json_relative_path, object_from_json
+from symphony.bdk.gen.agent_model.signal_list import SignalList
+from symphony.bdk.gen.rest import RESTResponse
+from tests.utils.resource_utils import object_from_json_relative_path, object_from_json, get_resource_content, \
+    get_deserialized_object_from_json
 
 
 @pytest.fixture()
@@ -31,10 +36,31 @@ def signal_service(signals_api, auth_session):
 @pytest.mark.asyncio
 async def test_list_signals(signals_api, signal_service):
     signals_api.v1_signals_list_get = AsyncMock()
-    signals_api.v1_signals_list_get.return_value = \
-        object_from_json_relative_path('signal/list_signals.json')
+    signals_api.v1_signals_list_get.return_value = get_deserialized_object_from_json('signal/list_signals.json',
+                                                                                     SignalList)
 
-    signal_list = await signal_service.list_signals()
+    signals = await signal_service.list_signals()
+    signal_list = signals.value
+
+    signals_api.v1_signals_list_get.assert_called_with(
+        skip=0,
+        limit=50,
+        session_token='session_token',
+        key_manager_token='km_token'
+    )
+
+    assert len(signal_list) == 2
+    assert signal_list[0].id == 'signal_id1'
+
+
+@pytest.mark.asyncio
+async def test_list_all_signals(signals_api, signal_service):
+    signals_api.v1_signals_list_get = AsyncMock()
+    signals_api.v1_signals_list_get.return_value = get_deserialized_object_from_json('signal/list_signals.json',
+                                                                                     SignalList)
+
+    signal_list_gen = await signal_service.list_all_signals()
+    signal_list = [s async for s in signal_list_gen]
 
     signals_api.v1_signals_list_get.assert_called_with(
         skip=0,
@@ -221,3 +247,22 @@ async def test_list_subscribers_with_skip_and_limit(signals_api, signal_service)
     assert channel_subscribers.total == 150
     assert len(channel_subscribers.data) == 3
 
+
+@pytest.mark.asyncio
+async def test_list_all_subscribers(signals_api, signal_service):
+    signals_api.v1_signals_id_subscribers_get = AsyncMock()
+    signals_api.v1_signals_id_subscribers_get.return_value = \
+        object_from_json_relative_path('signal/list_subscribers.json')
+
+    channel_subscribers_gen = await signal_service.list_all_subscribers('signal_id', chunk_size=10)
+    subscribers = [s async for s in channel_subscribers_gen]
+
+    signals_api.v1_signals_id_subscribers_get.assert_called_with(
+        id='signal_id',
+        skip=0,
+        limit=10,
+        session_token='session_token',
+        key_manager_token='km_token'
+    )
+
+    assert len(subscribers) == 3
