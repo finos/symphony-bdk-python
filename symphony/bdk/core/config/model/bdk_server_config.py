@@ -1,6 +1,3 @@
-from aiohttp.hdrs import USER_AGENT
-
-
 class BdkServerConfig:
     """Base class for server and client configurations"""
     DEFAULT_SCHEME: str = "https"
