@@ -4,6 +4,7 @@ import sys
 from importlib.metadata import distribution, PackageNotFoundError
 
 import urllib3
+from aiohttp.hdrs import USER_AGENT
 
 from symphony.bdk.gen.api_client import ApiClient
 from symphony.bdk.gen.configuration import Configuration
@@ -72,25 +73,52 @@ class ApiClientFactory:
         configuration.ssl_ca_cert = self._config.ssl.trust_store_path
 
         if server_config.proxy is not None:
-            self._configure_proxy(server_config.proxy, configuration)
+            ApiClientFactory._configure_proxy(server_config, configuration)
 
         client = ApiClient(configuration=configuration)
-        client.user_agent = self._user_agent()
+        for header_name, header_value in ApiClientFactory._sanitized_default_headers(server_config).items():
+            client.set_default_header(header_name, header_value)
+        client.user_agent = ApiClientFactory._user_agent(server_config)
 
         return client
 
     @staticmethod
-    def _configure_proxy(proxy_config, configuration):
-        configuration.proxy = proxy_config.get_url()
+    def _configure_proxy(server_config, configuration):
+        proxy_config = server_config.proxy
+        user_agent = ApiClientFactory._user_agent(server_config)
 
+        configuration.proxy = proxy_config.get_url()
         if proxy_config.are_credentials_defined():
             configuration.proxy_headers = urllib3.util.make_headers(proxy_basic_auth=proxy_config.get_credentials(),
-                                                                    user_agent=ApiClientFactory._user_agent())
+                                                                    user_agent=user_agent)
         else:
-            configuration.proxy_headers = urllib3.util.make_headers(user_agent=ApiClientFactory._user_agent())
+            configuration.proxy_headers = urllib3.util.make_headers(user_agent=user_agent)
 
     @staticmethod
-    def _user_agent():
+    def _sanitized_default_headers(server_config):
+        default_headers = server_config.default_headers if server_config.default_headers is not None else {}
+
+        result = {}
+        for header_key, header_value in default_headers.items():
+            if header_key.lower() != USER_AGENT:
+                # we do this because the generated ApiClient checks for "User-Agent" (in a case sensitive manner)
+                # and puts a default one if not specified. So we want to keep the User-Agent header separate.
+                result.put(USER_AGENT, header_value)
+
+        return result
+
+    @staticmethod
+    def _user_agent(server_config):
+        default_headers = server_config.default_headers if server_config.default_headers is not None else {}
+
+        for header_key, header_value in default_headers.items():
+            if header_key.lower() == USER_AGENT:
+                return header_value
+
+        return ApiClientFactory._default_user_agent()
+
+    @staticmethod
+    def _default_user_agent():
         return f"Symphony-BDK-Python/{ApiClientFactory._bdk_version()} Python/{ApiClientFactory._python_version()}"
 
     @staticmethod

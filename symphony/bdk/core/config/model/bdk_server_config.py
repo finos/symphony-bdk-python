@@ -1,14 +1,18 @@
+from aiohttp.hdrs import USER_AGENT
+
+
 class BdkServerConfig:
     """Base class for server and client configurations"""
     DEFAULT_SCHEME: str = "https"
     DEFAULT_HTTPS_PORT: int = 443
 
-    def __init__(self, scheme=None, port=None, context="", host=None, proxy=None):
+    def __init__(self, scheme=None, port=None, context="", host=None, proxy=None, default_headers=None):
         self.scheme = scheme if scheme is not None else self.DEFAULT_SCHEME
         self.port = self.port = port if port is not None else self.DEFAULT_HTTPS_PORT
         self.context = context
         self.host = host
         self.proxy = BdkProxyConfig(**proxy) if proxy is not None else None
+        self.default_headers = default_headers
 
     def get_base_path(self) -> str:
         """Constructs the base path of the current config
