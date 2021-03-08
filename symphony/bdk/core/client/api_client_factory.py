@@ -19,7 +19,7 @@ class ApiClientFactory:
         self._login_client = self._get_api_client(self._config.pod, '/login')
         self._pod_client = self._get_api_client(self._config.pod, '/pod')
         self._relay_client = self._get_api_client(self._config.key_manager, '/relay')
-        self._agent_client = self._get_api_client(self._config.session_auth, '/agent')
+        self._agent_client = self._get_api_client(self._config.agent, '/agent')
         self._session_auth_client = self._get_api_client(self._config.session_auth, '/sessionauth')
 
     def get_login_client(self) -> ApiClient:
@@ -100,10 +100,10 @@ class ApiClientFactory:
 
         result = {}
         for header_key, header_value in default_headers.items():
-            if header_key.lower() != USER_AGENT:
-                # we do this because the generated ApiClient checks for "User-Agent" (in a case sensitive manner)
-                # and puts a default one if not specified. So we want to keep the User-Agent header separate.
-                result.put(USER_AGENT, header_value)
+            # we do this because we want to handle user-agent header separately
+            # for client configuration and proxy header
+            if header_key.lower() != USER_AGENT.lower():
+                result[header_key] = header_value
 
         return result
 
@@ -112,7 +112,7 @@ class ApiClientFactory:
         default_headers = server_config.default_headers if server_config.default_headers is not None else {}
 
         for header_key, header_value in default_headers.items():
-            if header_key.lower() == USER_AGENT:
+            if header_key.lower() == USER_AGENT.lower():
                 return header_value
 
         return ApiClientFactory._default_user_agent()

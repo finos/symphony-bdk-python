@@ -25,7 +25,7 @@ class BdkClientConfig(BdkServerConfig):
         self._host = config.get("host")
         self._context = config.get("context")
         self._proxy = BdkProxyConfig(**config.get("proxy")) if "proxy" in config else None
-        self._default_headers = BdkProxyConfig(**config.get("defaultHeaders")) if "defaultHeaders" in config else None
+        self._default_headers = config.get("defaultHeaders") if "defaultHeaders" in config else None
         self.parent_config = parent_config
 
     @property
