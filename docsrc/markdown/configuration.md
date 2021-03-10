@@ -47,6 +47,9 @@ config_3 = BdkConfigLoader.load_from_symphony_dir("config.yaml")  # 3
 scheme: https
 host: localhost.symphony.com
 port: 8443
+defaultHeaders:
+  Connection: Keep-Alive
+  Keep-Alive: timeout=5, max=1000
 
 proxy:
   host: proxy.symphony.com
@@ -68,6 +71,9 @@ agent:
 keyManager:
   host: dev-key.symphony.com
   port: 8444
+  defaultHeaders:
+    Connection: Keep-Alive
+    Keep-Alive: close
 
 sessionAuth:
   host: dev-session.symphony.com
@@ -100,6 +106,8 @@ user specify the dedicated `host`, `port`, `context`, `scheme` inside the client
 - `proxy` contains proxy related information. This field is optional.
 If set, it will use the provided `host` (mandatory), `port` (mandatory), `username` and `password`.
 It can be overridden in each of the `pod`, `agent`, `keyManager` and `sessionAuth` fields.
+- `defaultHeaders` contains the default headers to be sent along with each request.
+  It can be overridden in each of the `pod`, `agent`, `keyManager` and `sessionAuth` fields.
 - `pod` contains information like host, port, scheme, context, proxy... of the pod on which
 the service account using by the bot is created.
 - `agent` contains information like host, port, scheme, context, proxy... of the agent which

@@ -56,28 +56,42 @@ def test_load_from_symphony_directory(simple_config_path):
 
 
 def test_load_client_global_config(global_config_path):
+    expected_scheme = "https"
+    expected_host = "devx1.symphony.com"
+    expected_default_headers = {"user-agent": "custom-user-agent", "header-key": "header-value"}
+
     config = BdkConfigLoader.load_from_file(global_config_path)
-    assert config.pod.scheme == "https"
+
+    assert config.scheme == expected_scheme
+    assert config.host == expected_host
+    assert config.port == 8443
+    assert config.default_headers == expected_default_headers
+
+    assert config.pod.scheme == expected_scheme
     assert config.pod.host == "diff-pod.symphony.com"
     assert config.pod.port == 8443
     assert config.pod.context == "context"
+    assert config.pod.default_headers == expected_default_headers
 
-    assert config.scheme == "https"
+    assert config.scheme == expected_scheme
 
-    assert config.agent.scheme == "https"
-    assert config.agent.host == "devx1.symphony.com"
+    assert config.agent.scheme == expected_scheme
+    assert config.agent.host == expected_host
     assert config.agent.port == 443
     assert config.agent.get_formatted_context() == "/context"
+    assert config.agent.default_headers == expected_default_headers
 
-    assert config.key_manager.scheme == "https"
-    assert config.key_manager.host == "devx1.symphony.com"
+    assert config.key_manager.scheme == expected_scheme
+    assert config.key_manager.host == expected_host
     assert config.key_manager.port == 8443
     assert config.key_manager.get_formatted_context() == "/diff-context"
+    assert config.key_manager.default_headers == expected_default_headers
 
     assert config.session_auth.scheme == "http"
-    assert config.session_auth.host == "devx1.symphony.com"
+    assert config.session_auth.host == expected_host
     assert config.session_auth.port == 8443
     assert config.session_auth.context == "context"
+    assert config.session_auth.default_headers == expected_default_headers
 
 
 def test_load_proxy_defined_at_global_level():
@@ -124,3 +138,25 @@ def test_load_proxy_defined_at_child_level_only():
     assert config.agent.proxy.port == 5678
     assert config.agent.proxy.username is None
     assert config.agent.proxy.password is None
+
+
+def test_load_default_headers_defined_at_child_level_only():
+    config = BdkConfigLoader.load_from_file(get_config_resource_filepath("config_headers_child_only.yaml"))
+
+    assert config.default_headers is None
+    assert config.pod.default_headers is None
+    assert config.key_manager.default_headers is None
+    assert config.session_auth.default_headers is None
+    assert config.agent.default_headers == {"user-agent": "custom-user-agent", "header-key": "header-value"}
+
+
+def test_load_default_headers_defined_at_global_and_child_level():
+    global_headers = {"user-agent": "global-user-agent", "header-key": "global-header-value"}
+
+    config = BdkConfigLoader.load_from_file(get_config_resource_filepath("config_headers_global_child.yaml"))
+
+    assert config.default_headers == global_headers
+    assert config.pod.default_headers == global_headers
+    assert config.key_manager.default_headers == global_headers
+    assert config.session_auth.default_headers == global_headers
+    assert config.agent.default_headers == {"user-agent": "agent-user-agent", "header-key": "agent-header-value"}
