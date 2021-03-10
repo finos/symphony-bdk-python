@@ -20,11 +20,11 @@ def fixture_config():
 async def test_host_configured(config):
     client_factory = ApiClientFactory(config)
 
-    assert_host_configured_only(client_factory.get_pod_client().configuration, '/pod')
-    assert_host_configured_only(client_factory.get_login_client().configuration, '/login')
-    assert_host_configured_only(client_factory.get_agent_client().configuration, '/agent')
-    assert_host_configured_only(client_factory.get_session_auth_client().configuration, '/sessionauth')
-    assert_host_configured_only(client_factory.get_relay_client().configuration, '/relay')
+    assert_host_configured_only(client_factory.get_pod_client(), '/pod')
+    assert_host_configured_only(client_factory.get_login_client(), '/login')
+    assert_host_configured_only(client_factory.get_agent_client(), '/agent')
+    assert_host_configured_only(client_factory.get_session_auth_client(), '/sessionauth')
+    assert_host_configured_only(client_factory.get_relay_client(), '/relay')
 
 
 @pytest.mark.asyncio
@@ -124,7 +124,7 @@ async def test_user_agent_configured_at_km_level(config):
     assert_default_user_agent_configured(client_factory.get_login_client().user_agent)
     assert_default_user_agent_configured(client_factory.get_agent_client().user_agent)
     assert_default_user_agent_configured(client_factory.get_session_auth_client().user_agent)
-    client_factory.get_relay_client().user_agent == custom_user_agent
+    assert client_factory.get_relay_client().user_agent == custom_user_agent
 
 
 @pytest.mark.asyncio
