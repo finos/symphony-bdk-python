@@ -1,5 +1,5 @@
 import asyncio
-import logging
+import logging.config
 
 from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.symphony_bdk import SymphonyBdk
@@ -16,5 +16,31 @@ async def run():
         logging.info(await obo_auth_session.session_token)
 
 
-logging.basicConfig(level=logging.DEBUG)
+logging.config.dictConfig({
+    "version": 1,
+    "disable_existing_loggers": True,
+    "filters": {"taskfilter": {"()": "symphony.bdk.core.client.api_client_factory.TraceIdFilter"}},
+    "formatters": {
+        "standard": {
+            "format": "%(asctime)s - %(name)s - %(levelname)s - %(trace_id)s - %(message)s"
+        },
+    },
+    "handlers": {
+        "default": {
+            "level": "DEBUG",
+            "formatter": "standard",
+            "class": "logging.StreamHandler",
+            "stream": "ext://sys.stdout",  # Default is stderr
+            "filters": ["taskfilter"]
+        },
+    },
+    "loggers": {
+        "": {  # root logger
+            "handlers": ["default"],
+            "level": "DEBUG",
+            "propagate": False
+        }
+    }
+})
+
 asyncio.run(run())
