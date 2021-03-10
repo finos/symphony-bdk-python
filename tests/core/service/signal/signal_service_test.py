@@ -1,34 +1,31 @@
-from collections import namedtuple
 from unittest.mock import MagicMock, AsyncMock
 
 import pytest
 
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.service.signal.signal_service import SignalService
-from symphony.bdk.gen import ApiClient
 from symphony.bdk.gen.agent_api.signals_api import SignalsApi
 from symphony.bdk.gen.agent_model.base_signal import BaseSignal
 from symphony.bdk.gen.agent_model.signal_list import SignalList
-from symphony.bdk.gen.rest import RESTResponse
-from tests.utils.resource_utils import object_from_json_relative_path, object_from_json, get_resource_content, \
+from tests.utils.resource_utils import object_from_json_relative_path, object_from_json, \
     get_deserialized_object_from_json
 
 
-@pytest.fixture()
-def auth_session():
+@pytest.fixture(name='auth_session')
+def fixture_auth_session():
     bot_session = AuthSession(None)
     bot_session.session_token = 'session_token'
     bot_session.key_manager_token = 'km_token'
     return bot_session
 
 
-@pytest.fixture()
-def signals_api():
+@pytest.fixture(name='signals_api')
+def fixture_signals_api():
     return MagicMock(SignalsApi)
 
 
-@pytest.fixture()
-def signal_service(signals_api, auth_session):
+@pytest.fixture(name='signal_service')
+def fixture_signal_service(signals_api, auth_session):
     service = SignalService(signals_api, auth_session)
     return service
 

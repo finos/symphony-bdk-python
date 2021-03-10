@@ -63,15 +63,14 @@ class BotAuthenticatorRsa(BotAuthenticator):
         return auth_session
 
     async def _authenticate_and_get_token(self, api_client: ApiClient) -> str:
-        unused = True
-        unauthorizedMessage = "Service account is not authorized to authenticate. Check if credentials are valid."
-        foo = create_signed_jwt(self._bot_config.private_key, self._bot_config.username)
-        req = AuthenticateRequest(token=foo)
+        unauthorized_message = "Service account is not authorized to authenticate. Check if credentials are valid."
+        jwt = create_signed_jwt(self._bot_config.private_key, self._bot_config.username)
+        req = AuthenticateRequest(token=jwt)
         try:
             token = await AuthenticationApi(api_client).pubkey_authenticate_post(req)
             return token.token
         except ApiException as e:
-            raise AuthUnauthorizedError(unauthorizedMessage, e)
+            raise AuthUnauthorizedError(unauthorized_message, e)
 
     async def retrieve_session_token(self) -> str:
         """Make the api call to the pod to get the pod's session token.

@@ -19,23 +19,23 @@ from symphony.bdk.gen.agent_model.v4_user import V4User
 from tests.utils.resource_utils import get_config_resource_filepath
 
 
-@pytest.fixture()
-def auth_session():
+@pytest.fixture(name='auth_session')
+def fixture_auth_session():
     auth_session = AuthSession(None)
-    auth_session.session_token = "session_token"
-    auth_session.key_manager_token = "km_token"
+    auth_session.session_token = 'session_token'
+    auth_session.key_manager_token = 'km_token'
     return auth_session
 
 
-@pytest.fixture()
-def config():
-    config = BdkConfigLoader.load_from_file(get_config_resource_filepath("config.yaml"))
-    config.datafeed.version = "v2"
+@pytest.fixture(name='config')
+def fixture_config():
+    config = BdkConfigLoader.load_from_file(get_config_resource_filepath('config.yaml'))
+    config.datafeed.version = 'v2'
     return config
 
 
-@pytest.fixture()
-def datafeed_api():
+@pytest.fixture(name='datafeed_api')
+def fixtrue_datafeed_api():
     datafeed_api = MagicMock(DatafeedApi)
     datafeed_api.api_client = MagicMock(ApiClient)
     datafeed_api.list_datafeed = AsyncMock()
@@ -45,22 +45,22 @@ def datafeed_api():
     return datafeed_api
 
 
-@pytest.fixture()
-def mock_listener():
+@pytest.fixture(name='mock_listener')
+def fixture_mock_listener():
     return AsyncMock(wraps=RealTimeEventListener())
 
 
-@pytest.fixture()
-def initiator():
-    return V4Initiator(user=V4User(username="username"))
+@pytest.fixture(name='initiator')
+def fixture_initiator():
+    return V4Initiator(user=V4User(username='username'))
 
 
-@pytest.fixture()
-def message_sent_event(initiator):
+@pytest.fixture(name='message_sent_event')
+def fixture_message_sent_event(initiator):
     class EventsMock:
         def __init__(self, individual_event):
             self.events = [individual_event]
-            self.ack_id = "ack_id"
+            self.ack_id = 'ack_id'
 
     v4_event = V4Event(type=RealTimeEvent.MESSAGESENT.name,
                        payload=V4Payload(message_sent=V4MessageSent()),
@@ -69,8 +69,8 @@ def message_sent_event(initiator):
     return event
 
 
-@pytest.fixture()
-def datafeed_loop(datafeed_api, auth_session, config):
+@pytest.fixture(name='datafeed_loop')
+def fixture_datafeed_loop(datafeed_api, auth_session, config):
     datafeed_loop = DatafeedLoopV2(datafeed_api, auth_session, config)
 
     class RealTimeEventListenerImpl(RealTimeEventListener):
@@ -85,90 +85,90 @@ def datafeed_loop(datafeed_api, auth_session, config):
 @pytest.mark.asyncio
 async def test_start(datafeed_loop, datafeed_api, message_sent_event):
     datafeed_api.list_datafeed.return_value = []
-    datafeed_api.create_datafeed.return_value = Datafeed(id="test_id")
+    datafeed_api.create_datafeed.return_value = Datafeed(id='test_id')
     datafeed_api.read_datafeed.return_value = message_sent_event
 
     await datafeed_loop.start()
 
     datafeed_api.list_datafeed.assert_called_with(
-        session_token="session_token",
-        key_manager_token="km_token"
+        session_token='session_token',
+        key_manager_token='km_token'
     )
     datafeed_api.create_datafeed.assert_called_with(
-        session_token="session_token",
-        key_manager_token="km_token"
+        session_token='session_token',
+        key_manager_token='km_token'
     )
     datafeed_api.read_datafeed.assert_called_with(
-        session_token="session_token",
-        key_manager_token="km_token",
-        datafeed_id="test_id",
-        ack_id=AckId(ack_id="")
+        session_token='session_token',
+        key_manager_token='km_token',
+        datafeed_id='test_id',
+        ack_id=AckId(ack_id='')
     )
 
-    assert datafeed_loop._datafeed_id == "test_id"
-    assert datafeed_loop._ack_id == "ack_id"
+    assert datafeed_loop._datafeed_id == 'test_id'
+    assert datafeed_loop._ack_id == 'ack_id'
 
 
 @pytest.mark.asyncio
 async def test_start_datafeed_exist(datafeed_loop, datafeed_api, message_sent_event):
-    datafeed_api.list_datafeed.return_value = [Datafeed(id="test_id_exist")]
+    datafeed_api.list_datafeed.return_value = [Datafeed(id='test_id_exist')]
     datafeed_api.read_datafeed.return_value = message_sent_event
 
     await datafeed_loop.start()
 
     datafeed_api.list_datafeed.assert_called_with(
-        session_token="session_token",
-        key_manager_token="km_token"
+        session_token='session_token',
+        key_manager_token='km_token'
     )
     datafeed_api.read_datafeed.assert_called_with(
-        session_token="session_token",
-        key_manager_token="km_token",
-        datafeed_id="test_id_exist",
-        ack_id=AckId(ack_id="")
+        session_token='session_token',
+        key_manager_token='km_token',
+        datafeed_id='test_id_exist',
+        ack_id=AckId(ack_id='')
     )
 
-    assert datafeed_loop._datafeed_id == "test_id_exist"
-    assert datafeed_loop._ack_id == "ack_id"
+    assert datafeed_loop._datafeed_id == 'test_id_exist'
+    assert datafeed_loop._ack_id == 'ack_id'
 
 
 @pytest.mark.asyncio
 async def test_start_datafeed_stale_datafeed(datafeed_loop, datafeed_api, message_sent_event):
-    datafeed_api.list_datafeed.return_value = [Datafeed(id="fault_datafeed_id")]
-    datafeed_api.create_datafeed.return_value = Datafeed(id="test_id")
+    datafeed_api.list_datafeed.return_value = [Datafeed(id='fault_datafeed_id')]
+    datafeed_api.create_datafeed.return_value = Datafeed(id='test_id')
     datafeed_api.read_datafeed.side_effect = [ApiException(400), message_sent_event]
 
     await datafeed_loop.start()
 
     datafeed_api.list_datafeed.assert_called_with(
-        session_token="session_token",
-        key_manager_token="km_token"
+        session_token='session_token',
+        key_manager_token='km_token'
     )
 
     datafeed_api.delete_datafeed.assert_called_with(
-        session_token="session_token",
-        key_manager_token="km_token",
-        datafeed_id="fault_datafeed_id"
+        session_token='session_token',
+        key_manager_token='km_token',
+        datafeed_id='fault_datafeed_id'
     )
 
     datafeed_api.create_datafeed.assert_called_with(
-        session_token="session_token",
-        key_manager_token="km_token"
+        session_token='session_token',
+        key_manager_token='km_token'
     )
 
     datafeed_api.read_datafeed.assert_has_calls([
         call(
-            session_token="session_token",
-            key_manager_token="km_token",
-            datafeed_id="fault_datafeed_id",
-            ack_id=AckId(ack_id="")
+            session_token='session_token',
+            key_manager_token='km_token',
+            datafeed_id='fault_datafeed_id',
+            ack_id=AckId(ack_id='')
         ),
         call(
-            session_token="session_token",
-            key_manager_token="km_token",
-            datafeed_id="test_id",
-            ack_id=AckId(ack_id="")
+            session_token='session_token',
+            key_manager_token='km_token',
+            datafeed_id='test_id',
+            ack_id=AckId(ack_id='')
         )
     ])
 
-    assert datafeed_loop._datafeed_id == "test_id"
-    assert datafeed_loop._ack_id == "ack_id"
+    assert datafeed_loop._datafeed_id == 'test_id'
+    assert datafeed_loop._ack_id == 'ack_id'

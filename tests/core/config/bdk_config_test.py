@@ -1,11 +1,12 @@
+import pytest
+
 from symphony.bdk.core.config.loader import BdkConfigLoader
 
 from tests.utils.resource_utils import get_config_resource_filepath
 from tests.utils.resource_utils import get_resource_filepath
-import pytest
 
 
-@pytest.fixture(params=["config.json", "config.yaml"])
+@pytest.fixture(params=['config.json', 'config.yaml'])
 def simple_config_path(request):
     return get_config_resource_filepath(request.param)
 
@@ -24,4 +25,3 @@ def test_update_certificate(simple_config_path):
     config.bot.certificate.content = certificate
     assert config.bot.certificate._content == certificate
     assert config.bot.certificate._path is None
-

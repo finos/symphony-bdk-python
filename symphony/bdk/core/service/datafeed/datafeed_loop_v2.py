@@ -30,7 +30,7 @@ class DatafeedLoopV2(AbstractDatafeedLoop):
 
     def __init__(self, datafeed_api: DatafeedApi, auth_session: AuthSession, config: BdkConfig):
         super().__init__(datafeed_api, auth_session, config)
-        self._ack_id = ""
+        self._ack_id = ''
         self._started = False
         self._datafeed_id = None
 
@@ -88,5 +88,5 @@ class DatafeedLoopV2(AbstractDatafeedLoop):
 
     async def _recreate_datafeed(self):
         await self._delete_datafeed()
-        self._ack_id = ""
+        self._ack_id = ''
         return await self._create_datafeed()

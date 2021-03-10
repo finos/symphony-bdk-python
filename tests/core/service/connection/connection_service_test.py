@@ -10,21 +10,21 @@ from symphony.bdk.gen.pod_model.user_connection_request import UserConnectionReq
 from tests.utils.resource_utils import object_from_json
 
 
-@pytest.fixture()
-def auth_session():
+@pytest.fixture(name='auth_session')
+def fixture_auth_session():
     bot_session = AuthSession(None)
     bot_session.session_token = 'session_token'
     bot_session.key_manager_token = 'km_token'
     return bot_session
 
 
-@pytest.fixture()
-def connection_api():
+@pytest.fixture(name='connection_api')
+def fixture_connection_api():
     return MagicMock(ConnectionApi)
 
 
-@pytest.fixture()
-def connection_service(connection_api, auth_session):
+@pytest.fixture(name='connection_service')
+def fixture_connection_service(connection_api, auth_session):
     service = ConnectionService(
         connection_api,
         auth_session

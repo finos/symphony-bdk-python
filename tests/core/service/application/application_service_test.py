@@ -14,26 +14,26 @@ from symphony.bdk.gen.pod_model.user_app_entitlement_list import UserAppEntitlem
 from tests.utils.resource_utils import object_from_json_relative_path, object_from_json
 
 
-@pytest.fixture()
-def auth_session():
+@pytest.fixture(name='auth_session')
+def fixture_auth_session():
     bot_session = AuthSession(None)
     bot_session.session_token = 'session_token'
     bot_session.key_manager_token = 'km_token'
     return bot_session
 
 
-@pytest.fixture()
-def application_api():
+@pytest.fixture(name='application_api')
+def fixture_application_api():
     return MagicMock(ApplicationApi)
 
 
-@pytest.fixture()
-def app_entitlement_api():
+@pytest.fixture(name='app_entitlement_api')
+def fixture_app_entitlement_api():
     return MagicMock(AppEntitlementApi)
 
 
-@pytest.fixture()
-def application_service(application_api, app_entitlement_api, auth_session):
+@pytest.fixture(name='application_service')
+def fixture_application_service(application_api, app_entitlement_api, auth_session):
     service = ApplicationService(application_api, app_entitlement_api, auth_session)
     return service
 
@@ -152,7 +152,7 @@ async def test_update_application_entitlements(app_entitlement_api, application_
 async def test_list_user_applications(app_entitlement_api, application_service):
     app_entitlement_api.v1_admin_user_uid_app_entitlement_list_get = AsyncMock()
     app_entitlement_api.v1_admin_user_uid_app_entitlement_list_get.return_value =\
-        object_from_json_relative_path("application/list_user_apps.json")
+        object_from_json_relative_path('application/list_user_apps.json')
 
     user_app_entitlements = await application_service.list_user_applications(1234)
 
@@ -169,7 +169,7 @@ async def test_list_user_applications(app_entitlement_api, application_service):
 async def test_update_user_applications(app_entitlement_api, application_service):
     app_entitlement_api.v1_admin_user_uid_app_entitlement_list_post = AsyncMock()
     app_entitlement_api.v1_admin_user_uid_app_entitlement_list_post.return_value = \
-        object_from_json_relative_path("application/list_user_apps.json")
+        object_from_json_relative_path('application/list_user_apps.json')
 
     user_app_entitlement = UserAppEntitlement(
         app_id='djApp',

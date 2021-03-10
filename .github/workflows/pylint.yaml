@@ -12,14 +12,30 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v2
+
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v2
         with:
-          fetch-depth: 0
+          python-version: 3.8
+
+      - name: Install Pylint
+        run: pip install pylint
+
+      - name: Download previous run results
+        uses: dawidd6/action-download-artifact@v2.12.0
+        continue-on-error: true
+        with:
+          workflow: pylint.yaml
+          workflow_conclusion: success
+          name: .pylint.d
+          path: /home/runner/.pylint.d
 
       - name: Run Pylint
-        uses: github/super-linter@v3
-        env:
-          VALIDATE_ALL_CODEBASE: false
-          VALIDATE_PYTHON_PYLINT: true
-          DEFAULT_BRANCH: "2.0"
-          LINTER_RULES_PATH: /
-          PYTHON_PYLINT_CONFIG_FILE: .pylintrc
+        run: pylint symphony tests
+
+      - name: Upload Pylint results
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v2
+        with:
+          name: .pylint.d
+          path: ~/.pylint.d
