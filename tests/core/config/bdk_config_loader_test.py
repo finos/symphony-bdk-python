@@ -9,49 +9,49 @@ from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.config.exception import BdkConfigError
 
 
-@pytest.fixture(name='simple_config_path', params=['config.json', 'config.yaml'])
+@pytest.fixture(name="simple_config_path", params=["config.json", "config.yaml"])
 def fixture_simple_config_path(request):
     return get_config_resource_filepath(request.param)
 
 
-@pytest.fixture(name='global_config_path', params=['config_global.json', 'config_global.yaml'])
+@pytest.fixture(name="global_config_path", params=["config_global.json", "config_global.yaml"])
 def fixture_global_config_path(request):
     return get_config_resource_filepath(request.param)
 
 
-@pytest.fixture(name='wrong_path', params=['/wrong_path/config.json', '/wrong_path/wrong_extension.something'])
+@pytest.fixture(name="wrong_path", params=["/wrong_path/config.json", "/wrong_path/wrong_extension.something"])
 def fixture_wrong_path(request):
     return request.param
 
 
 def test_load_from_file(simple_config_path):
     config = BdkConfigLoader.load_from_file(simple_config_path)
-    assert config.bot.username == 'youbot'
+    assert config.bot.username == "youbot"
 
 
 def test_load_from_content(simple_config_path):
     config_path = Path(simple_config_path)
     content = config_path.read_text()
     config = BdkConfigLoader.load_from_content(content)
-    assert config.bot.username == 'youbot'
+    assert config.bot.username == "youbot"
 
 
 def test_load_from_file_not_found(wrong_path):
-    fail_error_message = f'Config file has not been found at: {Path(wrong_path).absolute()}'
+    fail_error_message = f"Config file has not been found at: {Path(wrong_path).absolute()}"
     with pytest.raises(BdkConfigError, match=re.escape(fail_error_message)):
         BdkConfigLoader.load_from_file(wrong_path)
 
 
-@pytest.mark.skipif(os.environ.get('CI') == 'true',
-                    reason='GitHub actions does not allow to create file in the home directory')
+@pytest.mark.skipif(os.environ.get("CI") == "true",
+                    reason="GitHub actions does not allow to create file in the home directory")
 def test_load_from_symphony_directory(simple_config_path):
-    tmp_config_filename = str(uuid.uuid4()) + '-config.yaml'
-    tmp_config_path = Path.home() / '.symphony' / tmp_config_filename
+    tmp_config_filename = str(uuid.uuid4()) + "-config.yaml"
+    tmp_config_path = Path.home() / ".symphony" / tmp_config_filename
     tmp_config_path.touch(exist_ok=True)
     resource_config_content = Path(simple_config_path).read_text()
     tmp_config_path.write_text(resource_config_content)
     config = BdkConfigLoader.load_from_symphony_dir(tmp_config_filename)
-    assert config.bot.username == 'youbot'
+    assert config.bot.username == "youbot"
 
 
 def test_load_client_global_config(global_config_path):
@@ -94,12 +94,12 @@ def test_load_client_global_config(global_config_path):
 
 
 def test_load_proxy_defined_at_global_level():
-    config = BdkConfigLoader.load_from_file(get_config_resource_filepath('config_global_proxy.yaml'))
+    config = BdkConfigLoader.load_from_file(get_config_resource_filepath("config_global_proxy.yaml"))
 
-    assert config.proxy.host == 'proxy.symphony.com'
+    assert config.proxy.host == "proxy.symphony.com"
     assert config.proxy.port == 1234
-    assert config.proxy.username == 'proxyuser'
-    assert config.proxy.password == 'proxypass'
+    assert config.proxy.username == "proxyuser"
+    assert config.proxy.password == "proxypass"
 
     assert config.agent.proxy == config.proxy
     assert config.pod.proxy == config.proxy
@@ -108,32 +108,32 @@ def test_load_proxy_defined_at_global_level():
 
 
 def test_load_proxy_defined_at_global_and_child_level():
-    config = BdkConfigLoader.load_from_file(get_config_resource_filepath('config_proxy_global_child.yaml'))
+    config = BdkConfigLoader.load_from_file(get_config_resource_filepath("config_proxy_global_child.yaml"))
 
-    assert config.proxy.host == 'proxy.symphony.com'
+    assert config.proxy.host == "proxy.symphony.com"
     assert config.proxy.port == 1234
-    assert config.proxy.username == 'proxyuser'
-    assert config.proxy.password == 'proxypass'
+    assert config.proxy.username == "proxyuser"
+    assert config.proxy.password == "proxypass"
 
     assert config.pod.proxy == config.proxy
     assert config.key_manager.proxy == config.proxy
     assert config.session_auth.proxy == config.proxy
 
-    assert config.agent.proxy.host == 'agent-proxy.symphony.com'
+    assert config.agent.proxy.host == "agent-proxy.symphony.com"
     assert config.agent.proxy.port == 5678
     assert config.agent.proxy.username is None
     assert config.agent.proxy.password is None
 
 
 def test_load_proxy_defined_at_child_level_only():
-    config = BdkConfigLoader.load_from_file(get_config_resource_filepath('config_proxy_child_only.yaml'))
+    config = BdkConfigLoader.load_from_file(get_config_resource_filepath("config_proxy_child_only.yaml"))
 
     assert config.proxy is None
     assert config.pod.proxy is None
     assert config.key_manager.proxy is None
     assert config.session_auth.proxy is None
 
-    assert config.agent.proxy.host == 'agent-proxy.symphony.com'
+    assert config.agent.proxy.host == "agent-proxy.symphony.com"
     assert config.agent.proxy.port == 5678
     assert config.agent.proxy.username is None
     assert config.agent.proxy.password is None

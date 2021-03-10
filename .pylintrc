@@ -480,8 +480,7 @@ variable-naming-style=snake_case
 # This flag controls whether inconsistent-quotes generates a warning when the
 # character used as a quote delimiter is used inconsistently within a module.
 check-quote-consistency=yes
-string-quote=single
-triple-quote=double
+string-quote=double
 docstring-quote=double
 
 # This flag controls whether the implicit-str-concat should generate a warning

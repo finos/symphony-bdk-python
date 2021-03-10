@@ -26,7 +26,7 @@ On the first time, run `poetry install`. Then run `poetry build` to build the sd
 To run the tests, use `poetry run pytest`.
 
 It is possible to run pylint scan locally (on a specific file or package) executing the following command:
-`poetry run pylint <module_name>`
+`poetry run pylint <module_name>`.
 
 To generate locally the Sphinx documentation, run: `cd docsrc && make html`.
 

@@ -10,20 +10,20 @@ from symphony.bdk.gen.pod_model.user_connection_request import UserConnectionReq
 from tests.utils.resource_utils import object_from_json
 
 
-@pytest.fixture(name='auth_session')
+@pytest.fixture(name="auth_session")
 def fixture_auth_session():
     bot_session = AuthSession(None)
-    bot_session.session_token = 'session_token'
-    bot_session.key_manager_token = 'km_token'
+    bot_session.session_token = "session_token"
+    bot_session.key_manager_token = "km_token"
     return bot_session
 
 
-@pytest.fixture(name='connection_api')
+@pytest.fixture(name="connection_api")
 def fixture_connection_api():
     return MagicMock(ConnectionApi)
 
 
-@pytest.fixture(name='connection_service')
+@pytest.fixture(name="connection_service")
 def fixture_connection_service(connection_api, auth_session):
     service = ConnectionService(
         connection_api,
@@ -45,8 +45,8 @@ async def test_get_connection(connection_api, connection_service):
     user_connection = await connection_service.get_connection(769658112378)
 
     connection_api.v1_connection_user_user_id_info_get.assert_called_with(
-        user_id='769658112378',
-        session_token='session_token'
+        user_id="769658112378",
+        session_token="session_token"
     )
     assert user_connection.userId == 769658112378
     assert user_connection.status == ConnectionStatus.ACCEPTED.value
@@ -75,9 +75,9 @@ async def test_list_connections(connection_api, connection_service):
     user_connections = await connection_service.list_connections(ConnectionStatus.ALL, [7078106126503, 7078106103809])
 
     connection_api.v1_connection_list_get.assert_called_with(
-        user_ids='7078106126503,7078106103809',
+        user_ids="7078106126503,7078106103809",
         status=ConnectionStatus.ALL.value,
-        session_token='session_token'
+        session_token="session_token"
     )
 
     assert len(user_connections) == 2
@@ -102,7 +102,7 @@ async def test_create_connection(connection_api, connection_service):
 
     connection_api.v1_connection_create_post.assert_called_with(
         connection_request=UserConnectionRequest(user_id=7078106126503),
-        session_token='session_token'
+        session_token="session_token"
     )
 
     assert user_connection.userId == 7078106126503
@@ -127,7 +127,7 @@ async def test_accept_connection(connection_api, connection_service):
 
     connection_api.v1_connection_accept_post.assert_called_with(
         connection_request=UserConnectionRequest(user_id=7078106169577),
-        session_token='session_token'
+        session_token="session_token"
     )
 
     assert user_connection.userId == 7078106169577
@@ -152,7 +152,7 @@ async def test_reject_connection(connection_api, connection_service):
 
     connection_api.v1_connection_reject_post.assert_called_with(
         connection_request=UserConnectionRequest(user_id=7215545059385),
-        session_token='session_token'
+        session_token="session_token"
     )
 
     assert user_connection.userId == 7215545059385
@@ -173,5 +173,5 @@ async def test_remove_connection(connection_api, connection_service):
 
     connection_api.v1_connection_user_uid_remove_post.assert_called_with(
         uid=1234,
-        session_token='session_token'
+        session_token="session_token"
     )

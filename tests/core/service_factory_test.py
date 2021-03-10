@@ -19,7 +19,7 @@ from symphony.bdk.gen import ApiClient
 from tests.utils.resource_utils import get_config_resource_filepath
 
 
-@pytest.fixture(name='api_client_factory')
+@pytest.fixture(name="api_client_factory")
 def fixture_api_client_factory():
     factory = MagicMock(ApiClientFactory)
     api_client = MagicMock(ApiClient)
@@ -28,13 +28,13 @@ def fixture_api_client_factory():
     return factory
 
 
-@pytest.fixture(name='config')
+@pytest.fixture(name="config")
 def fixture_config():
-    config = BdkConfigLoader.load_from_file(get_config_resource_filepath('config.yaml'))
+    config = BdkConfigLoader.load_from_file(get_config_resource_filepath("config.yaml"))
     return config
 
 
-@pytest.fixture(name='service_factory')
+@pytest.fixture(name="service_factory")
 def fixture_service_factory(api_client_factory, config):
     factory = ServiceFactory(api_client_factory, AuthSession(None), config)
     return factory
@@ -81,17 +81,17 @@ def test_get_datafeed_loop(config, service_factory):
     assert datafeed_loop is not None
     assert isinstance(datafeed_loop, DatafeedLoopV1)
 
-    config.datafeed.version = 'v1'
+    config.datafeed.version = "v1"
     datafeed_loop = service_factory.get_datafeed_loop()
     assert datafeed_loop is not None
     assert isinstance(datafeed_loop, DatafeedLoopV1)
 
-    config.datafeed.version = 'something'
+    config.datafeed.version = "something"
     datafeed_loop = service_factory.get_datafeed_loop()
     assert datafeed_loop is not None
     assert isinstance(datafeed_loop, DatafeedLoopV1)
 
-    config.datafeed.version = 'v2'
+    config.datafeed.version = "v2"
     datafeed_loop = service_factory.get_datafeed_loop()
     assert datafeed_loop is not None
     assert isinstance(datafeed_loop, DatafeedLoopV2)
