@@ -25,6 +25,7 @@ class BdkClientConfig(BdkServerConfig):
         self._host = config.get("host")
         self._context = config.get("context")
         self._proxy = BdkProxyConfig(**config.get("proxy")) if "proxy" in config else None
+        self._default_headers = config.get("defaultHeaders") if "defaultHeaders" in config else None
         self.parent_config = parent_config
 
     @property
@@ -67,6 +68,15 @@ class BdkClientConfig(BdkServerConfig):
         :return: the applicable proxy information
         """
         return self._self_or_parent(self._proxy, self.parent_config.proxy)
+
+    @property
+    def default_headers(self):
+        """Return the applicable default headers: either the one configured at child level (e.g. 'pod')
+        or at global level.
+
+        :return: the applicable default headers
+        """
+        return self._self_or_parent(self._default_headers, self.parent_config.default_headers)
 
     @staticmethod
     def _self_or_parent(instance_value, parent_value):
