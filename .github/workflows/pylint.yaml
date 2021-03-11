@@ -1,6 +1,8 @@
 name: pylint
 
 on:
+  push:
+    branches: [ "2.0" ]
   pull_request:
     branches: [ "2.0" ]
 
@@ -29,6 +31,7 @@ jobs:
           workflow_conclusion: success
           name: .pylint.d
           path: /home/runner/.pylint.d
+          branch: "2.0"
 
       - name: Run Pylint
         run: pylint symphony tests
