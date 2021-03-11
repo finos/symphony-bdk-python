@@ -19,7 +19,6 @@ async def run():
 logging.config.dictConfig({
     "version": 1,
     "disable_existing_loggers": True,
-    "filters": {"taskfilter": {"()": "symphony.bdk.core.client.api_client_factory.TraceIdFilter"}},
     "formatters": {
         "standard": {
             "format": "%(asctime)s - %(name)s - %(levelname)s - %(trace_id)s - %(message)s"
@@ -31,7 +30,6 @@ logging.config.dictConfig({
             "formatter": "standard",
             "class": "logging.StreamHandler",
             "stream": "ext://sys.stdout",  # Default is stderr
-            "filters": ["taskfilter"]
         },
     },
     "loggers": {

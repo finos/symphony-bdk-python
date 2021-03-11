@@ -1,36 +1,14 @@
 """Module containing the ApiClientFactory class.
 """
-import logging
-import random
-import string
 import sys
-from contextvars import ContextVar
 from importlib.metadata import distribution, PackageNotFoundError
 
 import urllib3
 from aiohttp.hdrs import USER_AGENT
 
+from symphony.bdk.core.client.trace_id import add_x_trace_id
 from symphony.bdk.gen.api_client import ApiClient
 from symphony.bdk.gen.configuration import Configuration
-
-trace_id_context = ContextVar("trace_id_context")
-
-
-def add_x_trace_id(func):
-    async def add_x_trace_id_header(*args, **kwargs):
-        trace_id = "".join(random.choices(string.ascii_letters + string.digits, k=6))
-        trace_id_context.set(trace_id)
-
-        args[4]["X-Trace-Id"] = trace_id
-        return await func(*args, **kwargs)
-
-    return add_x_trace_id_header
-
-
-class TraceIdFilter(logging.Filter):
-    def filter(self, record):
-        record.trace_id = trace_id_context.get("no-trace-id")
-        return True
 
 
 class ApiClientFactory:
