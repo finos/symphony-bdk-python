@@ -1,27 +1,26 @@
 import re
+import os
+import uuid
+import pytest
 
+from pathlib import Path
 from tests.utils.resource_utils import get_config_resource_filepath
 from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.config.exception import BdkConfigError
 
-import os
-import pytest
-from pathlib import Path
-import uuid
 
-
-@pytest.fixture(params=["config.json", "config.yaml"])
-def simple_config_path(request):
+@pytest.fixture(name="simple_config_path", params=["config.json", "config.yaml"])
+def fixture_simple_config_path(request):
     return get_config_resource_filepath(request.param)
 
 
-@pytest.fixture(params=["config_global.json", "config_global.yaml"])
-def global_config_path(request):
+@pytest.fixture(name="global_config_path", params=["config_global.json", "config_global.yaml"])
+def fixture_global_config_path(request):
     return get_config_resource_filepath(request.param)
 
 
-@pytest.fixture(params=["/wrong_path/config.json", "/wrong_path/wrong_extension.something"])
-def wrong_path(request):
+@pytest.fixture(name="wrong_path", params=["/wrong_path/config.json", "/wrong_path/wrong_extension.something"])
+def fixture_wrong_path(request):
     return request.param
 
 

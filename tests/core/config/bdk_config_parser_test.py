@@ -1,12 +1,13 @@
+import pytest
+
 from symphony.bdk.core.config.exception import BdkConfigError
 from symphony.bdk.core.config.loader import BdkConfigParser
 
 from tests.utils.resource_utils import get_config_resource_filepath
-import pytest
 
 
-@pytest.fixture(params=["invalid_config.yaml"])
-def invalid_config_path(request):
+@pytest.fixture(name="invalid_config_path", params=["invalid_config.yaml"])
+def fixture_invalid_config_path(request):
     return get_config_resource_filepath(request.param)
 
 
@@ -29,4 +30,3 @@ def test_parse_config_wrong_format(invalid_config_path):
     with pytest.raises(BdkConfigError, match=fail_error_message):
         with open(invalid_config_path) as invalid_config_file:
             BdkConfigParser.parse(invalid_config_file.read())
-

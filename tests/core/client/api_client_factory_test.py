@@ -11,8 +11,8 @@ from symphony.bdk.core.config.model.bdk_ssl_config import BdkSslConfig
 HOST = "acme.symphony.com"
 
 
-@pytest.fixture()
-def config():
+@pytest.fixture(name="config")
+def fixture_config():
     return BdkConfig(host=HOST)
 
 
@@ -37,7 +37,8 @@ async def test_proxy_configured(config):
     assert_host_and_proxy_configured(client_factory.get_pod_client(), "/pod", proxy_host, proxy_port)
     assert_host_and_proxy_configured(client_factory.get_login_client(), "/login", proxy_host, proxy_port)
     assert_host_and_proxy_configured(client_factory.get_agent_client(), "/agent", proxy_host, proxy_port)
-    assert_host_and_proxy_configured(client_factory.get_session_auth_client(), "/sessionauth", proxy_host, proxy_port)
+    assert_host_and_proxy_configured(client_factory.get_session_auth_client(), "/sessionauth", proxy_host,
+                                     proxy_port)
     assert_host_and_proxy_configured(client_factory.get_relay_client(), "/relay", proxy_host, proxy_port)
 
 
@@ -123,7 +124,7 @@ async def test_user_agent_configured_at_km_level(config):
     assert_default_user_agent_configured(client_factory.get_login_client().user_agent)
     assert_default_user_agent_configured(client_factory.get_agent_client().user_agent)
     assert_default_user_agent_configured(client_factory.get_session_auth_client().user_agent)
-    client_factory.get_relay_client().user_agent == custom_user_agent
+    assert client_factory.get_relay_client().user_agent == custom_user_agent
 
 
 @pytest.mark.asyncio
@@ -214,10 +215,8 @@ def assert_host_configured_only(client, url_suffix):
 
     assert configuration.host == f"https://{HOST}:443{url_suffix}"
     assert_default_user_agent_configured(client.user_agent)
-
     assert configuration.proxy is None
     assert configuration.proxy_headers is None
-
 
 def assert_host_and_proxy_configured(client, url_suffix, proxy_host, proxy_port):
     configuration = client.configuration
