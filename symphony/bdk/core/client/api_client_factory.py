@@ -6,7 +6,7 @@ from importlib.metadata import distribution, PackageNotFoundError
 import urllib3
 from aiohttp.hdrs import USER_AGENT
 
-from symphony.bdk.core.client.trace_id import add_x_trace_id
+from symphony.bdk.core.client.trace_id import add_x_trace_id, X_TRACE_ID
 from symphony.bdk.gen.api_client import ApiClient
 from symphony.bdk.gen.configuration import Configuration
 
@@ -82,12 +82,15 @@ class ApiClientFactory:
         return client
 
     @staticmethod
-    def _add_headers( client, server_config):
-        for header_name, header_value in ApiClientFactory._sanitized_default_headers(server_config).items():
+    def _add_headers(client, server_config):
+        default_headers = ApiClientFactory._sanitized_default_headers(server_config)
+
+        for header_name, header_value in default_headers.items():
             client.set_default_header(header_name, header_value)
         client.user_agent = ApiClientFactory._user_agent(server_config)
 
-        client._ApiClient__call_api = add_x_trace_id(client._ApiClient__call_api)
+        if X_TRACE_ID.lower() not in (header_name.lower() for header_name in default_headers.keys()):
+            client._ApiClient__call_api = add_x_trace_id(client._ApiClient__call_api)
 
     @staticmethod
     def _configure_proxy(server_config, configuration):
@@ -105,14 +108,10 @@ class ApiClientFactory:
     def _sanitized_default_headers(server_config):
         default_headers = server_config.default_headers if server_config.default_headers is not None else {}
 
-        result = {}
-        for header_key, header_value in default_headers.items():
-            # we do this because we want to handle user-agent header separately
-            # for client configuration and proxy header
-            if header_key.lower() != USER_AGENT.lower():
-                result[header_key] = header_value
-
-        return result
+        # we do this because we want to handle user-agent header separately
+        # for client configuration and proxy header
+        return {header_key: default_headers[header_key] for header_key in default_headers
+                if header_key.lower() != USER_AGENT.lower()}
 
     @staticmethod
     def _user_agent(server_config):
