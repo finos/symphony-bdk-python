@@ -14,18 +14,18 @@ from symphony.bdk.core.symphony_bdk import SymphonyBdk
 from tests.utils.resource_utils import get_config_resource_filepath
 
 
-@pytest.fixture()
-def config():
+@pytest.fixture(name="config")
+def fixture_config():
     return BdkConfigLoader.load_from_file(get_config_resource_filepath("config.yaml"))
 
 
-@pytest.fixture()
-def obo_only_config():
+@pytest.fixture(name="obo_only_config")
+def fixture_obo_only_config():
     return BdkConfig(host="acme.symphony.com", app={"appId": "app", "privateKey": {"path": "/path/to/key.pem"}})
 
 
-@pytest.fixture()
-def mock_obo_session():
+@pytest.fixture(name="mock_obo_session")
+def fixture_mock_obo_session():
     obo_session = AsyncMock(OboAuthSession)
     obo_session.session_token.return_value = "session_token"
     obo_session.key_manager_token.return_value = ""

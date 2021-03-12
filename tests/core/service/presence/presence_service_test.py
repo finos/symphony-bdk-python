@@ -1,24 +1,23 @@
 from unittest.mock import MagicMock, AsyncMock
 import pytest
 from symphony.bdk.gen import ApiException
-from tests.utils.resource_utils import object_from_json_relative_path
-
+from symphony.bdk.gen.pod_api.presence_api import PresenceApi
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.service.presence.presence_service import PresenceService, PresenceStatus
 
-from symphony.bdk.gen.pod_api.presence_api import PresenceApi
+from tests.utils.resource_utils import object_from_json_relative_path
 
 
-@pytest.fixture()
-def auth_session():
+@pytest.fixture(name="auth_session")
+def fixture_auth_session():
     bot_session = AuthSession(None)
-    bot_session.session_token = 'session_token'
-    bot_session.key_manager_token = 'km_token'
+    bot_session.session_token = "session_token"
+    bot_session.key_manager_token = "km_token"
     return bot_session
 
 
-@pytest.fixture()
-def mocked_presence_api_client():
+@pytest.fixture(name="mocked_presence_api_client")
+def fixture_mocked_presence_api_client():
     api_client = MagicMock(PresenceApi)
     api_client.v2_user_presence_get = AsyncMock()
     api_client.v2_users_presence_get = AsyncMock()
@@ -32,13 +31,13 @@ def mocked_presence_api_client():
     return api_client
 
 
-@pytest.fixture()
-def presence_service(mocked_presence_api_client, auth_session):
+@pytest.fixture(name="presence_service")
+def fixture_presence_service(mocked_presence_api_client, auth_session):
     return PresenceService(mocked_presence_api_client, auth_session)
 
 
-@pytest.fixture()
-def presence_payload():
+@pytest.fixture(name="presence_payload")
+def fixture_presence_payload():
     return object_from_json_relative_path("presence_response/presence_payload.json")
 
 

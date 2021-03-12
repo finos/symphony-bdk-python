@@ -12,8 +12,7 @@ def get_resource_filepath(relative_path, as_text=True):
     resource_path = resources_path / relative_path
     if as_text:
         return str(resource_path.resolve())
-    else:
-        return resource_path.resolve()
+    return resource_path.resolve()
 
 
 def get_resource_content(relative_path):
@@ -29,7 +28,7 @@ def object_from_json_relative_path(relative_path):
 
 
 def get_deserialized_object_from_json(relative_path, return_type):
-    resp = namedtuple('MockResp', ['status', 'reason'])(200, "")
+    resp = namedtuple("MockResp", ["status", "reason"])(200, "")
     rest_resp = RESTResponse(resp, get_resource_content(relative_path))
 
     return ApiClient().deserialize(rest_resp, (return_type,), True)

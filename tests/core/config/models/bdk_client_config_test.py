@@ -1,10 +1,11 @@
-from symphony.bdk.core.config.model.bdk_server_config import BdkServerConfig
-from symphony.bdk.core.config.model.bdk_client_config import BdkClientConfig
 import pytest
 
+from symphony.bdk.core.config.model.bdk_server_config import BdkServerConfig
+from symphony.bdk.core.config.model.bdk_client_config import BdkClientConfig
 
-@pytest.fixture(scope="module")
-def parent_config():
+
+@pytest.fixture(name="parent_config", scope="module")
+def fixture_parent_config():
     parent_config_dict = {"scheme": "parent_scheme", "host": "parent_host", "port": 0000, "context": "parent_context"}
     return BdkServerConfig(**parent_config_dict)
 
