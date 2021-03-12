@@ -1,7 +1,5 @@
-from unittest.mock import Mock, MagicMock, AsyncMock
+from unittest.mock import MagicMock, AsyncMock
 
-from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import RealTimeEvent
-from tests.utils.resource_utils import get_resource_content
 import pytest
 
 from symphony.bdk.gen.agent_model.v4_connection_accepted import V4ConnectionAccepted
@@ -30,39 +28,40 @@ from symphony.bdk.gen.exceptions import ApiException
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.config.model.bdk_datafeed_config import BdkDatafeedConfig
-
 from symphony.bdk.core.service.datafeed.real_time_event_listener import RealTimeEventListener
+from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import RealTimeEvent
 from symphony.bdk.core.service.datafeed.datafeed_loop_v1 import DatafeedLoopV1
 
 from symphony.bdk.gen.api_client import ApiClient
 from symphony.bdk.gen.agent_api.datafeed_api import DatafeedApi
 
+from tests.utils.resource_utils import get_resource_content
 from tests.core.test.in_memory_datafeed_id_repository import InMemoryDatafeedIdRepository
 from tests.utils.resource_utils import get_config_resource_filepath
 
 DEFAULT_AGENT_BASE_PATH: str = "https://agent:8443/context"
 
 
-@pytest.fixture()
-def auth_session():
+@pytest.fixture(name="auth_session")
+def fixture_auth_session():
     auth_session = AuthSession(None)
     auth_session.session_token = "session_token"
     auth_session.key_manager_token = "km_token"
     return auth_session
 
 
-@pytest.fixture()
-def config():
+@pytest.fixture(name="config")
+def fixture_config():
     return BdkConfigLoader.load_from_file(get_config_resource_filepath("config.yaml"))
 
 
-@pytest.fixture()
-def datafeed_repository():
+@pytest.fixture(name="datafeed_repository")
+def fixture_datafeed_repository():
     return InMemoryDatafeedIdRepository(DEFAULT_AGENT_BASE_PATH)
 
 
-@pytest.fixture()
-def datafeed_api():
+@pytest.fixture(name="datafeed_api")
+def fixture_datafeed_api():
     datafeed_api = MagicMock(DatafeedApi)
     datafeed_api.api_client = MagicMock(ApiClient)
     datafeed_api.v4_datafeed_create_post = AsyncMock()
@@ -70,18 +69,18 @@ def datafeed_api():
     return datafeed_api
 
 
-@pytest.fixture()
-def mock_listener():
+@pytest.fixture(name="mock_listener")
+def fixture_mock_listener():
     return AsyncMock(wraps=RealTimeEventListener())
 
 
-@pytest.fixture()
-def initiator():
+@pytest.fixture(name="initiator")
+def fixture_initiator():
     return V4Initiator(user=V4User(username="username"))
 
 
-@pytest.fixture()
-def message_sent_event(initiator):
+@pytest.fixture(name="message_sent_event")
+def fixture_message_sent_event(initiator):
     class EventsMock:
         def __init__(self, individual_event):
             self.value = [individual_event]
@@ -93,8 +92,8 @@ def message_sent_event(initiator):
     return event
 
 
-@pytest.fixture()
-def datafeed_loop_v1(datafeed_api, auth_session, config, datafeed_repository):
+@pytest.fixture(name="datafeed_loop_v1")
+def fixture_datafeed_loop_v1(datafeed_api, auth_session, config, datafeed_repository):
     return auto_stopping_datafeed_loop_v1(datafeed_api, auth_session, config, datafeed_repository)
 
 
@@ -110,8 +109,8 @@ def auto_stopping_datafeed_loop_v1(datafeed_api, auth_session, config, repositor
     return datafeed_loop
 
 
-@pytest.fixture()
-def datafeed_loop_with_listener(datafeed_api, auth_session, config, mock_listener):
+@pytest.fixture(name="datafeed_loop_with_listener")
+def fixture_datafeed_loop_with_listener(datafeed_api, auth_session, config, mock_listener):
     datafeed_loop = DatafeedLoopV1(datafeed_api, auth_session, config)
     datafeed_loop.subscribe(mock_listener)
     return datafeed_loop
@@ -147,8 +146,7 @@ async def test_datafeed_is_reused(datafeed_repository, datafeed_api, auth_sessio
 
 
 @pytest.mark.asyncio
-async def test_start_recreate_datafeed_error(datafeed_repository, datafeed_api, auth_session, config,
-                                             message_sent_event):
+async def test_start_recreate_datafeed_error(datafeed_repository, datafeed_api, auth_session, config):
     datafeed_repository.write("persisted_id")
     datafeed_loop = auto_stopping_datafeed_loop_v1(datafeed_api, auth_session, config, datafeed_repository)
 
@@ -183,7 +181,8 @@ async def test_retrieve_datafeed_from_datafeed_file(tmpdir, datafeed_api, auth_s
 
 
 @pytest.mark.asyncio
-async def test_retrieve_datafeed_from_invalid_datafeed_dir(tmpdir, datafeed_api, auth_session, config, message_sent_event):
+async def test_retrieve_datafeed_from_invalid_datafeed_dir(tmpdir, datafeed_api, auth_session, config,
+                                                           message_sent_event):
     datafeed_id_file_content = get_resource_content("datafeed/datafeedId")
     datafeed_id_file_path = tmpdir.join("datafeed.id")
     datafeed_id_file_path.write(datafeed_id_file_content)
@@ -393,21 +392,21 @@ async def test_handle_bot_event(datafeed_loop_with_listener, mock_listener, conf
 
 
 @pytest.mark.asyncio
-async def test_handle_empty_event_list(datafeed_loop_with_listener, mock_listener, initiator):
+async def test_handle_empty_event_list(datafeed_loop_with_listener, mock_listener):
     await datafeed_loop_with_listener.handle_v4_event_list([])
 
     mock_listener.assert_not_called()
 
 
 @pytest.mark.asyncio
-async def test_handle_event_list_with_none(datafeed_loop_with_listener, mock_listener, initiator):
+async def test_handle_event_list_with_none(datafeed_loop_with_listener, mock_listener):
     await datafeed_loop_with_listener.handle_v4_event_list([None])
 
     mock_listener.assert_not_called()
 
 
 @pytest.mark.asyncio
-async def test_handle_event_with_unknown_event_type(datafeed_loop_with_listener, mock_listener, initiator):
+async def test_handle_event_with_unknown_event_type(datafeed_loop_with_listener, mock_listener):
     await datafeed_loop_with_listener.handle_v4_event_list([V4Event(type="unknown type")])
 
     mock_listener.assert_not_called()

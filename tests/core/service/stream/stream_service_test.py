@@ -24,39 +24,39 @@ KM_TOKEN = "km_token"
 SESSION_TOKEN = "session_token"
 
 
-@pytest.fixture()
-def auth_session():
+@pytest.fixture(name="auth_session")
+def fixture_auth_session():
     auth_session = AuthSession(None)
     auth_session.session_token = SESSION_TOKEN
     auth_session.key_manager_token = KM_TOKEN
     return auth_session
 
 
-@pytest.fixture()
-def mocked_api_client():
+@pytest.fixture(name="mocked_api_client")
+def fixture_mocked_api_client():
     api_client = MagicMock(ApiClient)
     api_client.call_api = AsyncMock()
     api_client.configuration = Configuration()
     return api_client
 
 
-@pytest.fixture()
-def streams_api(mocked_api_client):
+@pytest.fixture(name="streams_api")
+def fixture_streams_api(mocked_api_client):
     return Mock(wraps=StreamsApi(mocked_api_client))
 
 
-@pytest.fixture()
-def room_membership_api(mocked_api_client):
+@pytest.fixture(name="room_membership_api")
+def fixture_room_membership_api(mocked_api_client):
     return Mock(wraps=RoomMembershipApi(mocked_api_client))
 
 
-@pytest.fixture()
-def share_api(mocked_api_client):
+@pytest.fixture(name="share_api")
+def fixture_share_api(mocked_api_client):
     return Mock(wraps=ShareApi(mocked_api_client))
 
 
-@pytest.fixture()
-def stream_service(streams_api, room_membership_api, share_api, auth_session):
+@pytest.fixture(name="stream_service")
+def fixture_stream_service(streams_api, room_membership_api, share_api, auth_session):
     return StreamService(streams_api, room_membership_api, share_api, auth_session)
 
 
@@ -69,8 +69,8 @@ async def test_get_stream(mocked_api_client, stream_service, streams_api):
 
     streams_api.v2_streams_sid_info_get.assert_called_once_with(sid=stream_id, session_token=SESSION_TOKEN)
     assert stream_attributes.id == "ubaSiuUsc_j-_lVQ8vhAz3___opSJdJZdA"
-    assert stream_attributes.streamType.type == "ROOM"
     assert stream_attributes.roomAttributes.name == "New room name"
+    assert stream_attributes.streamType.type == "ROOM"
 
 
 @pytest.mark.asyncio
@@ -171,19 +171,6 @@ async def test_demote_owner(mocked_api_client, stream_service, room_membership_a
 
     room_membership_api.v1_room_id_membership_demote_owner_post.assert_called_once_with(
         id=room_id, payload=UserId(id=user_id), session_token=SESSION_TOKEN)
-
-
-@pytest.mark.asyncio
-async def test_get_stream(mocked_api_client, stream_service, streams_api):
-    mocked_api_client.call_api.return_value = object_from_json_relative_path("stream/get_stream.json")
-
-    stream_id = "stream_id"
-    stream_attributes = await stream_service.get_stream(stream_id)
-
-    streams_api.v2_streams_sid_info_get.assert_called_once_with(sid=stream_id, session_token=SESSION_TOKEN)
-    assert stream_attributes.id == "ubaSiuUsc_j-_lVQ8vhAz3___opSJdJZdA"
-    assert stream_attributes.roomAttributes.name == "New room name"
-    assert stream_attributes.streamType.type == "ROOM"
 
 
 @pytest.mark.asyncio

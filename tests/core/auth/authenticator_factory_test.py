@@ -9,13 +9,13 @@ from symphony.bdk.core.config.loader import BdkConfigLoader
 from tests.utils.resource_utils import get_config_resource_filepath
 
 
-@pytest.fixture()
-def config():
+@pytest.fixture(name="config")
+def fixture_config():
     return BdkConfigLoader.load_from_file(get_config_resource_filepath("config.yaml"))
 
 
-@pytest.fixture()
-def api_client_factory():
+@pytest.fixture(name="api_client_factory")
+def fixture_api_client_factory():
     factory = MagicMock(ApiClientFactory)
     factory.get_login_client.return_value = Mock()
     factory.get_relay_client.return_value = Mock()
