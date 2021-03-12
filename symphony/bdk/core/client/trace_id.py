@@ -5,6 +5,8 @@ import random
 import string
 from contextvars import ContextVar
 
+TRACE_ID_LENGTH = 6
+
 X_TRACE_ID = "X-Trace-Id"
 
 HEADER_ARG_INDEX = 4
@@ -93,7 +95,7 @@ class DistributedTracingContext:
 
         :return: None
         """
-        trace_id = "".join(random.choices(string.ascii_letters + string.digits, k=6))
+        trace_id = "".join(random.choices(string.ascii_letters + string.digits, k=TRACE_ID_LENGTH))
         cls._trace_id_context.set(trace_id)
 
     @classmethod
