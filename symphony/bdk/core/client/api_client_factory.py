@@ -17,11 +17,11 @@ class ApiClientFactory:
 
     def __init__(self, config):
         self._config = config
-        self._login_client = self._get_api_client(self._config.pod, '/login')
-        self._pod_client = self._get_api_client(self._config.pod, '/pod')
-        self._relay_client = self._get_api_client(self._config.key_manager, '/relay')
-        self._agent_client = self._get_api_client(self._config.agent, '/agent')
-        self._session_auth_client = self._get_api_client(self._config.session_auth, '/sessionauth')
+        self._login_client = self._get_api_client(self._config.pod, "/login")
+        self._pod_client = self._get_api_client(self._config.pod, "/pod")
+        self._relay_client = self._get_api_client(self._config.key_manager, "/relay")
+        self._agent_client = self._get_api_client(self._config.agent, "/agent")
+        self._session_auth_client = self._get_api_client(self._config.session_auth, "/sessionauth")
 
     def get_login_client(self) -> ApiClient:
         """Returns a fully initialized ApiClient for Login API.
@@ -131,7 +131,7 @@ class ApiClientFactory:
     @staticmethod
     def _bdk_version():
         try:
-            return distribution('sym_api_client_python').version
+            return distribution("sym_api_client_python").version
         except PackageNotFoundError:
             # the above won't work when bdk is not installed as a pypi package,
             # e.g. for scripts in the examples folder

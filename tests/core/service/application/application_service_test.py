@@ -77,10 +77,10 @@ async def test_update_application(application_api, application_service):
 async def test_delete_application(application_api, application_service):
     application_api.v1_admin_app_id_delete_post = AsyncMock()
     application_api.v1_admin_app_id_delete_post.return_value = object_from_json(
-        '{'
-        '   "format": "TEXT",'
-        '   "message": "OK"'
-        '}'
+        "{"
+        "   \"format\": \"TEXT\","
+        "   \"message\": \"OK\""
+        "}"
     )
 
     await application_service.delete_application("my-test-app")

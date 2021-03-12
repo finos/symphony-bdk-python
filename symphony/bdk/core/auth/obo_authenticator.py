@@ -105,14 +105,14 @@ class OboAuthenticatorRsa(OboAuthenticator):
     ):
         try:
             params = {
-                'session_token': app_session_token
+                "session_token": app_session_token
             }
             if user_id is not None:
-                params['user_id'] = user_id
+                params["user_id"] = user_id
                 token = await self._authentication_api.pubkey_app_user_user_id_authenticate_post(**params)
                 return token.token
             if username is not None:
-                params['username'] = username
+                params["username"] = username
                 token = await self._authentication_api.pubkey_app_username_username_authenticate_post(**params)
                 return token.token
         except ApiException:
