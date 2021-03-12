@@ -1,32 +1,31 @@
 from unittest.mock import MagicMock, AsyncMock
 import pytest
 
-from symphony.bdk.gen import ApiException
-from tests.utils.resource_utils import object_from_json_relative_path
-
 from symphony.bdk.core.service.health.health_service import HealthService
-
+from symphony.bdk.gen import ApiException
 from symphony.bdk.gen.agent_api.system_api import SystemApi
 from symphony.bdk.gen.agent_api.signals_api import SignalsApi
 
+from tests.utils.resource_utils import object_from_json_relative_path
 
-@pytest.fixture()
-def mocked_system_api_client():
+
+@pytest.fixture(name="mocked_system_api_client")
+def fixture_mocked_system_api_client():
     api_client = MagicMock(SystemApi)
     api_client.v3_health = AsyncMock()
     api_client.v3_extended_health = AsyncMock()
     return api_client
 
 
-@pytest.fixture()
-def mocked_signals_api_client():
+@pytest.fixture(name="mocked_signals_api_client")
+def fixture_mocked_signals_api_client():
     api_client = MagicMock(SignalsApi)
     api_client.v1_info_get = AsyncMock()
     return api_client
 
 
-@pytest.fixture()
-def health_service(mocked_system_api_client, mocked_signals_api_client):
+@pytest.fixture(name="health_service")
+def fixture_health_service(mocked_system_api_client, mocked_signals_api_client):
     return HealthService(mocked_system_api_client, mocked_signals_api_client)
 
 

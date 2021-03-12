@@ -45,9 +45,6 @@ jobs:
       - name: Run tests with coverage
         run: poetry run pytest
 
-      - name: Run pylint
-        run: poetry run pylint symphony tests
-
       - name: Upload test results
         uses: actions/upload-artifact@v2
         with:

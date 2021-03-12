@@ -16,24 +16,24 @@ from symphony.bdk.gen.pod_api.streams_api import StreamsApi
 from tests.utils.resource_utils import object_from_json_relative_path, object_from_json
 
 
-@pytest.fixture()
-def auth_session():
+@pytest.fixture(name="auth_session")
+def fixture_auth_session():
     auth_session = AuthSession(None)
-    auth_session.session_token = 'session_token'
-    auth_session.key_manager_token = 'km_token'
+    auth_session.session_token = "session_token"
+    auth_session.key_manager_token = "km_token"
     return auth_session
 
 
-@pytest.fixture()
-def mocked_api_client():
+@pytest.fixture(name="mocked_api_client")
+def fixture_mocked_api_client():
     api_client = MagicMock(ApiClient)
     api_client.call_api = AsyncMock()
     api_client.configuration = Configuration()
     return api_client
 
 
-@pytest.fixture()
-def message_service(mocked_api_client, auth_session):
+@pytest.fixture(name="message_service")
+def fixture_message_service(mocked_api_client, auth_session):
     service = MessageService(
         MultiAttachmentsMessagesApi(mocked_api_client),
         MessageApi(mocked_api_client),
@@ -116,7 +116,7 @@ async def test_suppress_message(mocked_api_client, message_service):
         '   "suppressed": true,'
         '   "suppressionDate": 1461565603191'
         '}')
-    suppress_response = await message_service.suppress_message('test-message-id')
+    suppress_response = await message_service.suppress_message("test-message-id")
 
     assert suppress_response.messageId == "test-message-id"
     assert suppress_response.suppressionDate == 1461565603191
@@ -127,7 +127,7 @@ async def test_get_message_status(mocked_api_client, message_service):
     mocked_api_client.call_api.return_value = object_from_json_relative_path("message_response/message_status.json")
     message_status = await message_service.get_message_status("test-message-id")
 
-    assert message_status.author.userId == '7078106103901'
+    assert message_status.author.userId == "7078106103901"
     assert len(message_status.read) == 2
     assert len(message_status.sent) == 1
 
@@ -145,7 +145,7 @@ async def test_get_attachment_types(mocked_api_client, message_service):
     attachment_types = await message_service.get_attachment_types()
 
     assert len(attachment_types) == 4
-    assert attachment_types[0] == '.bmp'
+    assert attachment_types[0] == ".bmp"
 
 
 @pytest.mark.asyncio
