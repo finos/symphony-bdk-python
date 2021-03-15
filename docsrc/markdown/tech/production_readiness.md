@@ -19,7 +19,7 @@ to avoid filling the disk.
 ### X-Trace-Id
 The Symphony BDK adds a `trace_id` field to each log record with a value called `X-Trace-Id`
 (random alphanumeric string of 6 characters).
-You are free to print it in your logs using pattern `%(trace-id)s` using a suitable logformat string, for instance like
+You are free to print it in your logs using pattern `%(trace_id)s` using a suitable logformat string, for instance like
 done in the
 [sample logging configuration](https://github.com/SymphonyPlatformSolutions/symphony-api-client-python/blob/2.0/examples/logging.conf).
 
