@@ -69,10 +69,10 @@ class DatafeedLoopV2(AbstractDatafeedLoop):
 
     async def _read_datafeed(self):
         params = {
-            'session_token': await self.auth_session.session_token,
-            'key_manager_token': await self.auth_session.key_manager_token,
-            'datafeed_id': self._datafeed_id,
-            'ack_id': AckId(ack_id=self._ack_id)
+            "session_token": await self.auth_session.session_token,
+            "key_manager_token": await self.auth_session.key_manager_token,
+            "datafeed_id": self._datafeed_id,
+            "ack_id": AckId(ack_id=self._ack_id)
         }
         event_list = await self.datafeed_api.read_datafeed(**params)
         self._ack_id = event_list.ack_id

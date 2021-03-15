@@ -72,11 +72,11 @@ class OboAuthSession(AuthSession):
         """
         super().__init__(authenticator)
         if user_id is not None and username is not None:
-            raise AuthInitializationError('Username and user id for OBO authentication should not be defined at '
-                                              'a same time.')
+            raise AuthInitializationError("Username and user id for OBO authentication should not be defined at "
+                                          "a same time.")
         if user_id is None and username is None:
-            raise AuthInitializationError('At least username or user id should be defined for '
-                                              'OBO authentication.')
+            raise AuthInitializationError("At least username or user id should be defined for "
+                                          "OBO authentication.")
         self.user_id = user_id
         self.username = username
 

@@ -16,6 +16,14 @@ def fixture_config():
     return BdkConfig(host=HOST)
 
 
+@pytest.fixture(name="add_x_trace_id")
+def fixture_add_x_trace_id():
+    def mock_add_x_trace_id(func):
+        return func
+
+    return mock_add_x_trace_id
+
+
 @pytest.mark.asyncio
 async def test_host_configured(config):
     client_factory = ApiClientFactory(config)
@@ -195,6 +203,35 @@ async def test_default_headers_at_km_level(config):
     assert_default_headers(client_factory.get_relay_client().default_headers, default_headers)
 
 
+@pytest.mark.asyncio
+async def test_x_trace_id_not_in_default_headers(config, add_x_trace_id):
+    with patch("symphony.bdk.core.client.api_client_factory.add_x_trace_id", return_value=add_x_trace_id) as mock:
+        client_factory = ApiClientFactory(config)
+
+        assert mock.call_count == 5
+        assert_default_headers(client_factory.get_pod_client().default_headers, {})
+        assert_default_headers(client_factory.get_login_client().default_headers, {})
+        assert_default_headers(client_factory.get_agent_client().default_headers, {})
+        assert_default_headers(client_factory.get_session_auth_client().default_headers, {})
+        assert_default_headers(client_factory.get_relay_client().default_headers, {})
+
+
+@pytest.mark.asyncio
+async def test_x_trace_id_not_in_default_headers(config, add_x_trace_id):
+    default_headers = {"x-trace-id": "trace-id"}
+
+    config.default_headers = default_headers
+    with patch("symphony.bdk.core.client.api_client_factory.add_x_trace_id", return_value=add_x_trace_id) as mock:
+        client_factory = ApiClientFactory(config)
+
+        mock.assert_not_called()
+        assert_default_headers(client_factory.get_pod_client().default_headers, default_headers)
+        assert_default_headers(client_factory.get_login_client().default_headers, default_headers)
+        assert_default_headers(client_factory.get_agent_client().default_headers, default_headers)
+        assert_default_headers(client_factory.get_session_auth_client().default_headers, default_headers)
+        assert_default_headers(client_factory.get_relay_client().default_headers, default_headers)
+
+
 def assert_default_headers(actual, expected):
     actual.pop("User-Agent")  # remove the User-Agent put by default
     assert actual == expected
@@ -217,6 +254,7 @@ def assert_host_configured_only(client, url_suffix):
     assert_default_user_agent_configured(client.user_agent)
     assert configuration.proxy is None
     assert configuration.proxy_headers is None
+
 
 def assert_host_and_proxy_configured(client, url_suffix, proxy_host, proxy_port):
     configuration = client.configuration
