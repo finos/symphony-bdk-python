@@ -38,7 +38,7 @@ jobs:
           path: ${{ matrix.path }}
           key: ${{ runner.os }}-poetry-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('poetry.lock') }}
           restore-keys: |
-            ${{ runner.os }}-poetry-
+            ${{ runner.os }}-poetry-${{ steps.setup-python.outputs.python-version }}
 
       - name: Install dependencies
         run: poetry install
