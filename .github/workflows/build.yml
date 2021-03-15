@@ -29,9 +29,6 @@ jobs:
         with:
           python-version: 3.8
 
-      - name: Print python version
-        run: echo "Python version is ${{ steps.setup-python.outputs.python-version}}"
-
       - name: Install Poetry
         run: pip install poetry
 
@@ -39,7 +36,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ matrix.path }}
-          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
+          key: ${{ runner.os }}-poetry-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('poetry.lock') }}
           restore-keys: |
             ${{ runner.os }}-poetry-
 
