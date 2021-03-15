@@ -78,13 +78,13 @@ async def test_blast_message(mocked_api_client, message_service):
 @pytest.mark.asyncio
 async def test_import_message(mocked_api_client, message_service):
     mocked_api_client.call_api.return_value = object_from_json(
-        '{"value": ['
-        '   {'
-        '       "messageId": "FjSY1y3L",  '
-        '       "originatingSystemId": "AGENT_SDK",'
-        '       "originalMessageId": "M2"'
-        '   }'
-        ']}')
+        "{\"value\": ["
+        "   {"
+        "       \"messageId\": \"FjSY1y3L\",  "
+        "       \"originatingSystemId\": \"AGENT_SDK\","
+        "       \"originalMessageId\": \"M2\""
+        "   }"
+        "]}")
 
     import_response = await message_service.import_messages([V4ImportedMessage(
         message="test_message",
@@ -111,11 +111,11 @@ async def test_get_attachment(mocked_api_client, message_service):
 @pytest.mark.asyncio
 async def test_suppress_message(mocked_api_client, message_service):
     mocked_api_client.call_api.return_value = object_from_json(
-        '{'
-        '   "messageId": "test-message-id",'
-        '   "suppressed": true,'
-        '   "suppressionDate": 1461565603191'
-        '}')
+        "{"
+        "   \"messageId\": \"test-message-id\","
+        "   \"suppressed\": true,"
+        "   \"suppressionDate\": 1461565603191"
+        "}")
     suppress_response = await message_service.suppress_message("test-message-id")
 
     assert suppress_response.messageId == "test-message-id"
@@ -135,12 +135,12 @@ async def test_get_message_status(mocked_api_client, message_service):
 @pytest.mark.asyncio
 async def test_get_attachment_types(mocked_api_client, message_service):
     mocked_api_client.call_api.return_value = object_from_json(
-        '{"value": ['
-        '   ".bmp",'
-        '   ".doc",'
-        '   ".png",'
-        '   ".mpeg"'
-        ']}'
+        "{\"value\": ["
+        "   \".bmp\","
+        "   \".doc\","
+        "   \".png\","
+        "   \".mpeg\""
+        "]}"
     )
     attachment_types = await message_service.get_attachment_types()
 
@@ -181,16 +181,16 @@ async def test_message_receipts(mocked_api_client, message_service):
 @pytest.mark.asyncio
 async def test_get_message_relationships(mocked_api_client, message_service):
     mocked_api_client.call_api.return_value = object_from_json(
-        '{ '
-        '   "messageId": "TYgOZ65dVsu3SeK7u2YdfH///o6fzBu",'
-        '   "parent": {'
-        '       "messageId": "/rbLQW5UHKZffM0FlLO2rn///o6vTck",'
-        '       "relationshipType": "REPLY"    '
-        '   },'
-        '   "replies": [],'
-        '   "forwards": [],'
-        '   "formReplies": []'
-        '}'
+        "{ "
+        "   \"messageId\": \"TYgOZ65dVsu3SeK7u2YdfH///o6fzBu\","
+        "   \"parent\": {"
+        "       \"messageId\": \"/rbLQW5UHKZffM0FlLO2rn///o6vTck\","
+        "       \"relationshipType\": \"REPLY\"    "
+        "   },"
+        "   \"replies\": [],"
+        "   \"forwards\": [],"
+        "   \"formReplies\": []"
+        "}"
     )
     message_relationships = await message_service.get_message_relationships("TYgOZ65dVsu3SeK7u2YdfH///o6fzBu")
 

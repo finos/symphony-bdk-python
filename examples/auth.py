@@ -1,5 +1,6 @@
 import asyncio
-import logging
+import logging.config
+import os
 
 from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.symphony_bdk import SymphonyBdk
@@ -16,5 +17,7 @@ async def run():
         logging.info(await obo_auth_session.session_token)
 
 
-logging.basicConfig(level=logging.DEBUG)
+logging.config.fileConfig(os.path.dirname(os.path.abspath(__file__)) + '/logging.conf',
+                          disable_existing_loggers=False)
+
 asyncio.run(run())

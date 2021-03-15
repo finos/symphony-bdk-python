@@ -173,10 +173,10 @@ async def test_search_all_users(users_api, user_service):
 async def test_follow_user(user_api, user_service):
     user_api.v1_user_uid_follow_post = AsyncMock()
     user_api.v1_user_uid_follow_post.return_value = object_from_json(
-        '{'
-        '   "format": "TEXT",'
-        '   "message": "User(s) successfully added in the list of followers"'
-        '}')
+        "{"
+        "   \"format\": \"TEXT\","
+        "   \"message\": \"User(s) successfully added in the list of followers\""
+        "}")
 
     await user_service.follow_user([1234, 2345], 12345)
 
@@ -191,10 +191,10 @@ async def test_follow_user(user_api, user_service):
 async def test_unfollow_user(user_api, user_service):
     user_api.v1_user_uid_unfollow_post = AsyncMock()
     user_api.v1_user_uid_unfollow_post.return_value = object_from_json(
-        '{'
-        '   "format": "TEXT",'
-        '   "message": "User(s) successfully removed from the list of followers"'
-        '}'
+        "{"
+        "   \"format\": \"TEXT\","
+        "   \"message\": \"User(s) successfully removed from the list of followers\""
+        "}"
     )
 
     await user_service.unfollow_user([1234, 2345], 12345)
@@ -309,10 +309,10 @@ async def test_list_all_user_details_by_filter(user_api, user_service):
 async def test_add_role(user_api, user_service):
     user_api.v1_admin_user_uid_roles_add_post = AsyncMock()
     user_api.v1_admin_user_uid_roles_add_post.return_value = object_from_json(
-        '{'
-        '   "format": "TEXT",'
-        '   "message": "Role added"'
-        '}'
+        "{"
+        "   \"format\": \"TEXT\","
+        "   \"message\": \"Role added\""
+        "}"
     )
 
     await user_service.add_role(1234, RoleId.INDIVIDUAL)
@@ -345,10 +345,10 @@ async def test_list_roles(system_api, user_service):
 async def test_remove_role(user_api, user_service):
     user_api.v1_admin_user_uid_roles_remove_post = AsyncMock()
     user_api.v1_admin_user_uid_roles_remove_post.return_value = object_from_json(
-        '{'
-        '   "format": "TEXT",'
-        '   "message": "Role removed"'
-        '}'
+        "{"
+        "   \"format\": \"TEXT\","
+        "   \"message\": \"Role removed\""
+        "}"
     )
 
     await user_service.remove_role(1234, RoleId.INDIVIDUAL)
@@ -382,10 +382,10 @@ async def test_get_avatar(user_api, user_service):
 async def test_update_avatar(user_api, user_service):
     user_api.v1_admin_user_uid_avatar_update_post = AsyncMock()
     user_api.v1_admin_user_uid_avatar_update_post.return_value = object_from_json(
-        '{'
-        '   "format": "TEXT",'
-        '   "message": "OK"'
-        '}'
+        "{"
+        "   \"format\": \"TEXT\","
+        "   \"message\": \"OK\""
+        "}"
     )
 
     await user_service.update_avatar(1234, "image_string")
@@ -410,16 +410,16 @@ async def test_update_avatar(user_api, user_service):
 async def test_get_disclaimer(user_api, user_service):
     user_api.v1_admin_user_uid_disclaimer_get = AsyncMock()
     user_api.v1_admin_user_uid_disclaimer_get.return_value = object_from_json(
-        '{'
-        '   "id": "571d2052e4b042aaf06d2e7a",'
-        '   "name": "Enterprise Disclaimer",'
-        '   "content": "This is a disclaimer for the enterprise.",'
-        '   "frequencyInHours": 24,'
-        '   "isDefault": false,'
-        '   "isActive": true,'
-        '   "createdDate": 1461526610846,'
-        '   "modifiedDate": 1461526610846'
-        '}'
+        "{"
+        "   \"id\": \"571d2052e4b042aaf06d2e7a\","
+        "   \"name\": \"Enterprise Disclaimer\","
+        "   \"content\": \"This is a disclaimer for the enterprise.\","
+        "   \"frequencyInHours\": 24,"
+        "   \"isDefault\": false,"
+        "   \"isActive\": true,"
+        "   \"createdDate\": 1461526610846,"
+        "   \"modifiedDate\": 1461526610846"
+        "}"
     )
 
     disclaimer = await user_service.get_disclaimer(1234)
@@ -437,10 +437,10 @@ async def test_get_disclaimer(user_api, user_service):
 async def test_remove_disclaimer(user_api, user_service):
     user_api.v1_admin_user_uid_disclaimer_delete = AsyncMock()
     user_api.v1_admin_user_uid_disclaimer_delete.return_value = object_from_json(
-        '{'
-        '   "format": "TEXT",'
-        '   "message": "OK"'
-        '}'
+        "{"
+        "   \"format\": \"TEXT\","
+        "   \"message\": \"OK\""
+        "}"
     )
 
     await user_service.remove_disclaimer(1234)
@@ -455,10 +455,10 @@ async def test_remove_disclaimer(user_api, user_service):
 async def test_add_disclaimer(user_api, user_service):
     user_api.v1_admin_user_uid_disclaimer_update_post = AsyncMock()
     user_api.v1_admin_user_uid_disclaimer_update_post.return_value = object_from_json(
-        '{'
-        '  "format": "TEXT",'
-        '  "message": "OK"'
-        '}'
+        "{"
+        "  \"format\": \"TEXT\","
+        "  \"message\": \"OK\""
+        "}"
     )
 
     await user_service.add_disclaimer(1234, "disclaimer_id")
@@ -474,9 +474,9 @@ async def test_add_disclaimer(user_api, user_service):
 async def test_get_delegates(user_api, user_service):
     user_api.v1_admin_user_uid_delegates_get = AsyncMock()
     user_api.v1_admin_user_uid_delegates_get.return_value = object_from_json(
-        '{'
-        '   "value": [7215545078461]'
-        '}'
+        "{"
+        "   \"value\": [7215545078461]"
+        "}"
     )
 
     delegate_list = await user_service.get_delegates(1234)
@@ -494,10 +494,10 @@ async def test_get_delegates(user_api, user_service):
 async def test_update_delegates(user_api, user_service):
     user_api.v1_admin_user_uid_delegates_update_post = AsyncMock()
     user_api.v1_admin_user_uid_delegates_update_post.return_value = object_from_json(
-        '{'
-        '   "format": "TEXT",'
-        '   "message": "Added delegate [7215545078461] for account [7215545078541]"'
-        '}'
+        "{"
+        "   \"format\": \"TEXT\","
+        "   \"message\": \"Added delegate [7215545078461] for account [7215545078541]\""
+        "}"
     )
 
     await user_service.update_delegates(7215545078541, 7215545078461, DelegateActionEnum.ADD)
@@ -513,17 +513,17 @@ async def test_update_delegates(user_api, user_service):
 async def test_get_feature_entitlements(user_api, user_service):
     user_api.v1_admin_user_uid_features_get = AsyncMock()
     user_api.v1_admin_user_uid_features_get.return_value = object_from_json(
-        '{'
-        '   "value": ['
-        '       {'
-        '           "entitlment": "canCreatePublicRoom",'
-        '           "enabled": true},'
-        '       {   '
-        '           "entitlment": "isExternalRoomEnabled",'
-        '           "enabled": false'
-        '       }'
-        '   ]'
-        '}'
+        "{"
+        "   \"value\": ["
+        "       {"
+        "           \"entitlment\": \"canCreatePublicRoom\","
+        "           \"enabled\": true},"
+        "       {   "
+        "           \"entitlment\": \"isExternalRoomEnabled\","
+        "           \"enabled\": false"
+        "       }"
+        "   ]"
+        "}"
     )
 
     feature_list = await user_service.get_feature_entitlements(1234)
@@ -542,10 +542,10 @@ async def test_get_feature_entitlements(user_api, user_service):
 async def test_update_feature_entitlements(user_api, user_service):
     user_api.v1_admin_user_uid_features_update_post = AsyncMock()
     user_api.v1_admin_user_uid_features_update_post.return_value = object_from_json(
-        '{'
-        '   "format": "TEXT",'
-        '   "message": "OK"'
-        '}'
+        "{"
+        "   \"format\": \"TEXT\","
+        "   \"message\": \"OK\""
+        "}"
     )
     feature = Feature(entitlment="canCreatePublicRoom", enabled=True)
     await user_service.update_feature_entitlements(1234, [feature])
@@ -561,9 +561,9 @@ async def test_update_feature_entitlements(user_api, user_service):
 async def test_get_status(user_api, user_service):
     user_api.v1_admin_user_uid_status_get = AsyncMock()
     user_api.v1_admin_user_uid_status_get.return_value = object_from_json(
-        '{'
-        '   "status": "ENABLED"'
-        '}'
+        "{"
+        "   \"status\": \"ENABLED\""
+        "}"
     )
 
     status = await user_service.get_status(1234)
@@ -580,9 +580,9 @@ async def test_get_status(user_api, user_service):
 async def test_update_status(user_api, user_service):
     user_api.v1_admin_user_uid_status_update_post = AsyncMock()
     user_api.v1_admin_user_uid_status_update_post.return_value = object_from_json(
-        '{'
-        '   "message": "OK"'
-        '}'
+        "{"
+        "   \"message\": \"OK\""
+        "}"
     )
     status = UserStatus(status="ENABLED")
 
@@ -741,10 +741,10 @@ async def test_list_audit_trail(audit_trail_api, user_service):
 async def test_suspend_user(user_api, user_service):
     user_api.v1_admin_user_user_id_suspension_update_put = AsyncMock()
     user_api.v1_admin_user_user_id_suspension_update_put.return_value = object_from_json(
-        '{'
-        '   "format": "TEXT",'
-        '   "message": "User suspended with success"'
-        '}'
+        "{"
+        "   \"format\": \"TEXT\","
+        "   \"message\": \"User suspended with success\""
+        "}"
     )
 
     user_suspension = UserSuspension(suspended=True, suspended_until=1601596799999, suspension_reason="testing")
