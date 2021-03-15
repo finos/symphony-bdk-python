@@ -29,6 +29,17 @@ jobs:
         with:
           python-version: 3.8
 
+      - name: Get pip cache dir
+        id: pip-cache
+        run: |
+          echo "::set-output name=dir::$(pip cache dir)"
+
+      - name: pip cache
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.pip-cache.outputs.dir }}
+          key: ${{ runner.os }}-pip-${{ steps.setup-python.outputs.python-version }}
+
       - name: Install Poetry
         run: pip install poetry
 
@@ -38,7 +49,7 @@ jobs:
           path: ${{ matrix.path }}
           key: ${{ runner.os }}-poetry-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('poetry.lock') }}
           restore-keys: |
-            ${{ runner.os }}-poetry-${{ steps.setup-python.outputs.python-version }}
+            ${{ runner.os }}-poetry-${{ steps.setup-python.outputs.python-version }}-
 
       - name: Install dependencies
         run: poetry install
