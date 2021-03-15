@@ -7,6 +7,7 @@ class AuthInitializationError(Exception):
     """
 
     def __init__(self, message: str):
+        Exception.__init__(self, message)
         self.message = message
 
 
@@ -15,5 +16,6 @@ class AuthUnauthorizedError(Exception):
     """
 
     def __init__(self, message: str, cause: Exception = None):
+        Exception.__init__(self, message, cause)
         self.message = message
         self.cause = cause
