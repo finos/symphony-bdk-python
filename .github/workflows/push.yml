@@ -25,6 +25,7 @@ jobs:
           fetch-depth: 0
 
       - name: Set up Python 3.8
+        id: setup-python
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
@@ -34,6 +35,17 @@ jobs:
           git checkout gh-pages
           git reset --hard 2.0
 
+      - name: Get pip cache dir
+        id: pip-cache
+        run: |
+          echo "::set-output name=dir::$(pip cache dir)"
+
+      - name: Cache pip dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.pip-cache.outputs.dir }}
+          key: ${{ runner.os }}-pip-${{ steps.setup-python.outputs.python-version }}
+
       - name: Install Poetry
         run: pip install poetry
 
@@ -41,9 +53,9 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ~/.cache/pypoetry/virtualenvs
-          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
+          key: ${{ runner.os }}-poetry-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('poetry.lock') }}
           restore-keys: |
-            ${{ runner.os }}-poetry-
+            ${{ runner.os }}-poetry-${{ steps.setup-python.outputs.python-version }}-
 
       - name: Install Poetry deps
         run: poetry install
