@@ -15,3 +15,16 @@ a [rotating file handler](https://docs.python.org/3/library/logging.handlers.htm
 to avoid filling the disk.
 
 **Beware of logging sensitive or personal data such as message content, user details,...**
+
+### X-Trace-Id
+The Symphony BDK adds a `trace_id` field to each log record with a value called `X-Trace-Id`
+(random alphanumeric string of 6 characters).
+You are free to print it in your logs using pattern `%(trace_id)s` using a suitable logformat string, for instance like
+done in the
+[sample logging configuration](https://github.com/SymphonyPlatformSolutions/symphony-api-client-python/blob/2.0/examples/logging.conf).
+
+This value is send as header of every request made to the Symphony API. This is especially useful for cross-applications
+debugging, assuming that the `X-Trace-Id` value is also present in your application logs. A new value is generated for
+each request made to the Symphony API, except if you decide to set a custom value using
+[DistributedTracingContext](../../_autosummary/symphony.bdk.core.client.trace_id.DistributedTracingContext).
+In this case, you will have to manage the `X-Trace-Id` yourself and no new value will be generated.
