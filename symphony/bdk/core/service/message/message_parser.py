@@ -6,6 +6,7 @@ import json
 
 from enum import Enum
 from json import JSONDecodeError
+from typing import Dict
 from xml.etree import ElementTree as ET
 from xml.etree.ElementTree import ElementTree, fromstring, tostring
 
@@ -13,7 +14,7 @@ from symphony.bdk.core.service.exception import MessageParserError
 from symphony.bdk.gen.agent_model.v4_message import V4Message
 
 
-def get_text_content_from_message(message: V4Message):
+def get_text_content_from_message(message: V4Message) -> str:
     """Get text content from PresentationML on incoming messages
 
     :param message: message containing the PresentationML to be parsed
@@ -40,7 +41,7 @@ def get_mentions(message: V4Message) -> [int]:
     return [int(user_id) for user_id in mentions_list]
 
 
-def get_hashtags(message: V4Message):
+def get_hashtags(message: V4Message) -> [str]:
     """ Parse data inside an incoming message and returns a list containing the text of the hashtags found
 
     :param message: message incoming V4 message to be parsed
@@ -49,7 +50,7 @@ def get_hashtags(message: V4Message):
     return _get_tags(message, _EntityTypeEnum.HASHTAG)
 
 
-def get_cashtags(message: V4Message):
+def get_cashtags(message: V4Message) -> [str]:
     """ Parse data inside an incoming message and returns a list containing the text of the cashtags found
 
     :param message: message incoming V4 message to be parsed
@@ -58,7 +59,7 @@ def get_cashtags(message: V4Message):
     return _get_tags(message, _EntityTypeEnum.CASHTAG)
 
 
-def get_emojis(message: V4Message):
+def get_emojis(message: V4Message) -> Dict[str, str]:
     """ Parse data inside an incoming message and returns a map containing the list of emojis found.
     Key of the map are the annotation used to identify the emoji and the values are the their unicode.
 

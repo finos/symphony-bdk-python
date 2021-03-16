@@ -4,7 +4,7 @@ It is possible to make conversion from the original stream id to the URLSafe enc
 import base64
 
 
-def to_url_safe_stream_id(stream_id: str):
+def to_url_safe_stream_id(stream_id: str) -> str:
     """Convert the stream id to the corresponding URLSafe encoded stream id
 
     :param stream_id: stream id of the stream to be parsed
@@ -15,7 +15,7 @@ def to_url_safe_stream_id(stream_id: str):
     return str(url_safe_encoded_str, "utf-8").rstrip("=")
 
 
-def from_url_safe_stream_id(stream_id: str):
+def from_url_safe_stream_id(stream_id: str) -> str:
     """Convert the URLSafe encoded stream id to the corresponding original stream id
 
     :param stream_id: streamId of the stream to be parsed

@@ -3,7 +3,7 @@
 import re
 
 
-def escape_special_chars(raw_text: str):
+def escape_special_chars(raw_text: str) -> str:
     """ Replace all special characters placed within the messageML that must be HTML-escaped
     to have a valid MessageML format.
 
@@ -20,14 +20,14 @@ def escape_special_chars(raw_text: str):
 
 
 def _pattern():
-    return "|".join(_special_chars_dic)
+    return "|".join(_special_chars_dict)
 
 
 def _replacement(match):
-    return _special_chars_dic.get(match, _special_chars_dic.get("\\" + match))
+    return _special_chars_dict.get(match, _special_chars_dict.get("\\" + match))
 
 
-_special_chars_dic = {
+_special_chars_dict = {
     "&": "&amp;",
     "<": "&lt;",
     ">": "&gt;",
