@@ -21,12 +21,11 @@ def get_text_content_from_message(message: V4Message) -> str:
     :return: the message text content extracted from the given PresentationML
     """
 
-    unparsable_presentationml = "Unable to parse the PresentationML, it is not in the correct format."
     presentation_ml = message.message
     try:
         tree = ElementTree(fromstring(presentation_ml))
     except ET.ParseError:
-        raise MessageParserError(unparsable_presentationml)
+        raise MessageParserError("Unable to parse the PresentationML, it is not in the correct format.")
     return tostring(tree.getroot(), method="text").decode().strip()
 
 
@@ -90,11 +89,10 @@ def _get_tags(message, entity_type):
 
 
 def _parse_json_data(json_data):
-    unparsable_json = "Failed to extract payload from message data"
     try:
         return json.loads(json_data)
     except JSONDecodeError:
-        raise MessageParserError(unparsable_json)
+        raise MessageParserError("Failed to extract payload from message data")
 
 
 class _EntityTypeEnum(Enum):
