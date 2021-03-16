@@ -267,7 +267,7 @@ async def test_list_user_details_by_filter(user_api, user_service):
     user_api.v1_admin_user_find_post = AsyncMock()
     user_api.v1_admin_user_find_post.return_value = get_deserialized_object_from_json("user/list_user_by_filter.json",
                                                                                       UserDetailList)
-    user_filter = UserFilter(status="ENABLED")
+    user_filter = UserFilter(status="ENABLED", role="INDIVIDUAL")
 
     user_detail_list = await user_service.list_user_details_by_filter(user_filter)
 
