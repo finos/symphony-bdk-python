@@ -29,7 +29,8 @@ async def run():
         async for i in await user_service.list_all_user_details(max_number=100):
             print(i.user_system_info.id)
 
-        async for i in await user_service.list_all_user_details_by_filter(user_filter=UserFilter(status="ENABLED"),
+        async for i in await user_service.list_all_user_details_by_filter(user_filter=UserFilter(status="ENABLED",
+                                                                                                 role="INDIVIDUAL"),
                                                                           max_number=100):
             print(i.user_attributes.display_name)
 
