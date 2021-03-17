@@ -1,5 +1,7 @@
+"""Module containing session handle classes.
+
+"""
 from symphony.bdk.core.auth.exception import AuthInitializationError
-from symphony.bdk.core.auth.ext_app_authenticator import ExtensionAppAuthenticator
 
 
 class AuthSession:
@@ -10,7 +12,8 @@ class AuthSession:
     def __init__(self, authenticator):
         """
 
-        :param authenticator: the BotAuthenticator instance to retrieve the tokens from.
+        :param authenticator: the :class:`symphony.bdk.core.auth.bot_authenticator.BotAuthenticator` instance to
+          retrieve the tokens from.
         """
         self._session_token = None
         self._key_manager_token = None
@@ -61,13 +64,15 @@ class AuthSession:
 
 class OboAuthSession(AuthSession):
     """RSA OBO Authentication session handle to get the OBO session token from.
-    It uses a OboAuthenticator to actually retrieve the tokens when needed.
+    It uses an :class:`symphony.bdk.core.auth.obo_authenticator.OboAuthenticator` to actually retrieve the tokens when
+    needed.
     """
 
     def __init__(self, authenticator, user_id: int = None, username: str = None):
         """At least user_id or username should be defined.
 
-        :param authenticator: the OboAuthenticator instance to retrieve the tokens from.
+        :param authenticator: the :class:`symphony.bdk.core.auth.obo_authenticator.OboAuthenticator` instance to
+          retrieve the tokens from.
         :param user_id: User Id.
         :param username: Username
         """
@@ -105,13 +110,15 @@ class OboAuthSession(AuthSession):
 
 
 class AppAuthSession:
-    """Extension application RSA authentication handle to store the tokens. It uses an ExtensionAppAuthenticator to
-    actually authenticate and retrieve the tokens.
+    """Extension application RSA authentication handle to store the tokens. It uses a
+    :class:`symphony.bdk.core.auth.ext_app_authenticator.ExtensionAppAuthenticator` to actually authenticate and
+    retrieve the tokens.
     """
-    def __init__(self, authenticator: ExtensionAppAuthenticator, app_token: str):
+    def __init__(self, authenticator, app_token: str):
         """
 
-        :param authenticator: the ExtensionAppAuthenticator which will actually perform the authentication
+        :param authenticator: the :class:`symphony.bdk.core.auth.ext_app_authenticator.ExtensionAppAuthenticator`
+          which will actually perform the authentication
         :param app_token: the application token
         """
         self._authenticator = authenticator

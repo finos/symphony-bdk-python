@@ -59,7 +59,7 @@ class ExtensionAppAuthenticator(ABC):
 
 
 class ExtensionAppAuthenticatorRsa(ExtensionAppAuthenticator):
-    """A subclass of ExtensionAppAuthenticator specific to RSA extension app authentication.
+    """A subclass of :class:`ExtensionAppAuthenticator` specific to RSA extension app authentication.
     """
 
     def __init__(self, login_client: ApiClient, pod_client: ApiClient, app_id: str,

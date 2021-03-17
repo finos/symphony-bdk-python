@@ -1,3 +1,5 @@
+"""Module containing OBO authenticator classes.
+"""
 from abc import ABC, abstractmethod
 
 from symphony.bdk.core.auth.auth_session import OboAuthSession
@@ -36,13 +38,10 @@ class OboAuthenticator(ABC):
             user_id: int
     ):
 
-        """
-        Retrieve the OBO session token by username.
+        """Retrieve the OBO session token by username.
 
         :param user_id: User Id.
-
         :return: The obo session token.
-
         """
 
     @abstractmethod
@@ -50,20 +49,16 @@ class OboAuthenticator(ABC):
             self,
             username: str
     ):
-        """
-        Retrieve the OBO session token by username.
+        """Retrieve the OBO session token by username.
 
         :param username: Username
-
         :return: The obo session token.
-
         """
 
     def authenticate_by_username(self, username: str):
         """Authenticate On-Behalf-Of user by username.
 
         :param username: Username
-
         :return: the OBO authentication session.
         """
         auth_session = OboAuthSession(self, username=username)
@@ -73,7 +68,6 @@ class OboAuthenticator(ABC):
         """Authenticate On-Behalf-Of user by user id.
 
         :param user_id: User Id
-
         :return: the OBO authentication session.
         """
         auth_session = OboAuthSession(self, user_id=user_id)
@@ -94,8 +88,8 @@ class OboAuthenticatorRsa(OboAuthenticator):
         try:
             token = await self._authentication_api.pubkey_app_authenticate_post(req)
             return token.token
-        except ApiException:
-            raise AuthUnauthorizedError(self.unauthorized_message)
+        except ApiException as e:
+            raise AuthUnauthorizedError(self.unauthorized_message) from e
 
     async def _authenticate_and_retrieve_obo_session_token(
             self,
@@ -115,29 +109,23 @@ class OboAuthenticatorRsa(OboAuthenticator):
                 params["username"] = username
                 token = await self._authentication_api.pubkey_app_username_username_authenticate_post(**params)
                 return token.token
-        except ApiException:
-            raise AuthUnauthorizedError(self.unauthorized_message)
+        except ApiException as e:
+            raise AuthUnauthorizedError(self.unauthorized_message) from e
 
     async def retrieve_obo_session_token_by_user_id(self, user_id: int):
-        """
-        Retrieve the OBO session token by user id.
+        """Retrieve the OBO session token by user id.
 
         :param user_id: User Id.
-
         :return: The obo session token.
-
         """
         app_session_token = await self._authenticate_and_retrieve_app_session_token()
         return await self._authenticate_and_retrieve_obo_session_token(app_session_token, user_id=user_id)
 
     async def retrieve_obo_session_token_by_username(self, username: str):
-        """
-        Retrieve the OBO session token by username.
+        """Retrieve the OBO session token by username.
 
         :param username: Username
-
         :return: The obo session token.
-
         """
         app_session_token = await self._authenticate_and_retrieve_app_session_token()
         return await self._authenticate_and_retrieve_obo_session_token(app_session_token, username=username)

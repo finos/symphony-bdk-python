@@ -32,14 +32,14 @@ class BotAuthenticator(ABC):
         """
 
     @abstractmethod
-    async def retrieve_session_token(self):
+    async def retrieve_session_token(self) -> str:
         """Authenticates and retrieves a new session token.
 
         :return: the retrieved session token.
         """
 
     @abstractmethod
-    async def retrieve_key_manager_token(self):
+    async def retrieve_key_manager_token(self) -> str:
         """Authenticated and retrieved a new key manager session.
 
         :return: the retrieved key manager session.
@@ -72,7 +72,7 @@ class BotAuthenticatorRsa(BotAuthenticator):
             token = await AuthenticationApi(api_client).pubkey_authenticate_post(req)
             return token.token
         except ApiException as e:
-            raise AuthUnauthorizedError(unauthorized_message, e)
+            raise AuthUnauthorizedError(unauthorized_message, e) from e
 
     async def retrieve_session_token(self) -> str:
         """Make the api call to the pod to get the pod's session token.

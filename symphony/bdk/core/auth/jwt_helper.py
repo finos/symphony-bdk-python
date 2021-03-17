@@ -1,3 +1,5 @@
+"""Module to help with jwt handling.
+"""
 import datetime
 from cryptography.x509 import load_pem_x509_certificate
 
