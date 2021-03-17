@@ -11,6 +11,7 @@ from symphony.bdk.core.service.health.health_service import HealthService
 from symphony.bdk.core.service.message.message_service import MessageService, OboMessageService
 from symphony.bdk.core.service.message.multi_attachments_messages_api import MultiAttachmentsMessagesApi
 from symphony.bdk.core.service.presence.presence_service import PresenceService, OboPresenceService
+from symphony.bdk.core.service.session.session_service import SessionService
 from symphony.bdk.core.service.signal.signal_service import SignalService, OboSignalService
 from symphony.bdk.core.service.stream.stream_service import StreamService, OboStreamService
 from symphony.bdk.core.service.user.user_service import UserService, OboUserService
@@ -29,6 +30,7 @@ from symphony.bdk.gen.pod_api.message_suppression_api import MessageSuppressionA
 from symphony.bdk.gen.pod_api.pod_api import PodApi
 from symphony.bdk.gen.pod_api.presence_api import PresenceApi
 from symphony.bdk.gen.pod_api.room_membership_api import RoomMembershipApi
+from symphony.bdk.gen.pod_api.session_api import SessionApi
 from symphony.bdk.gen.pod_api.streams_api import StreamsApi
 from symphony.bdk.gen.pod_api.system_api import SystemApi as PodSystemApi
 from symphony.bdk.gen.pod_api.user_api import UserApi
@@ -125,6 +127,16 @@ class ServiceFactory:
         """
         return SignalService(
             SignalsApi(self._agent_client),
+            self._auth_session
+        )
+
+    def get_session_service(self) -> SessionService:
+        """Returns a fully initialized SessionService
+
+        :return: a new SignalService instance
+        """
+        return SessionService(
+            SessionApi(self._pod_client),
             self._auth_session
         )
 
