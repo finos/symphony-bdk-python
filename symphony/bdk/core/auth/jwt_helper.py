@@ -1,16 +1,22 @@
 import datetime
+from cryptography.x509 import load_pem_x509_certificate
+
 from jose import jwt
 
-DEFAULT_EXPIRATION = 5 * 58
+from symphony.bdk.core.config.model.bdk_rsa_key_config import BdkRsaKeyConfig
+
+RS512 = "RS512"
+
+DEFAULT_EXPIRATION = 290
 
 
-def create_signed_jwt(private_key_config, username, expiration=None):
+def create_signed_jwt(private_key_config: BdkRsaKeyConfig, username: str, expiration: int = None) -> str:
     """Creates a JWT with the provided user name and expiration date, signed with the provided private key.
 
     :param private_key_config:  The private key configuration for a service account or an extension app.
     :param username:            The username of the user to authenticate
     :param expiration:          Expiration of the authentication request in seconds.
-                                By default the signed jwt will be valid in maximum 290 seconds
+                                By default the signed jwt will be valid in maximum 290 seconds (4min 50s)
                                 which is the maximum expiration accepted by the Symphony backend.
 
     :return: a signed JWT for a specific user or an extension app.
@@ -22,4 +28,9 @@ def create_signed_jwt(private_key_config, username, expiration=None):
         "sub": username,
         "exp": expiration
     }
-    return jwt.encode(payload, private_key, algorithm="RS512")
+    return jwt.encode(payload, private_key, algorithm=RS512)
+
+
+def validate_jwt(jwt_token: str, certificate: str) -> dict:
+    public_key = load_pem_x509_certificate(certificate).public_key()
+    return jwt.decode(jwt_token, public_key, algorithms=[RS512])

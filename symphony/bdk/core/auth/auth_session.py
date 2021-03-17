@@ -1,4 +1,5 @@
 from symphony.bdk.core.auth.exception import AuthInitializationError
+from symphony.bdk.core.auth.ext_app_authenticator import ExtensionAppAuthenticator
 
 
 class AuthSession:
@@ -97,3 +98,27 @@ class OboAuthSession(AuthSession):
     @property
     async def key_manager_token(self):
         return ""
+
+
+class AppAuthSession:
+
+    def __init__(self, authenticator: ExtensionAppAuthenticator, app_token: str):
+        self._authenticator = authenticator
+        self._app_token = app_token
+        self._expire_at = -1
+        self._symphony_token = ""
+
+    async def refresh(self) -> None:
+        app_tokens = self._authenticator.retrieve_ext_app_session(self._app_token)
+        self._symphony_token = app_tokens.get_symphony_token()
+        self._app_token = app_tokens.get_app_token()
+        self._expire_at = app_tokens.get_expire_at()
+
+    def symphony_token(self) -> str:
+        return self._symphony_token
+
+    def app_token(self) -> str:
+        return self._app_token
+
+    def expire_at(self) -> int:
+        return self._expire_at
