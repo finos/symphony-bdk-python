@@ -57,7 +57,7 @@ class BdkRsaKeyConfig:
             if self._path is not None else self._content
 
     def _load_key_from_path(self):
-        with open(self._path, "r") as f:
-            private_key_content = f.readlines()
+        with open(self._path, "r") as file:
+            private_key_content = file.readlines()
             key = "".join(private_key_content)
             return key

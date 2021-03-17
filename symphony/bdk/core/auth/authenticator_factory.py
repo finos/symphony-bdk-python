@@ -6,6 +6,8 @@ from symphony.bdk.core.auth.ext_app_authenticator import ExtensionAppAuthenticat
 from symphony.bdk.core.auth.obo_authenticator import OboAuthenticator, OboAuthenticatorRsa
 from symphony.bdk.core.client.api_client_factory import ApiClientFactory
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
+from symphony.bdk.gen.login_api.authentication_api import AuthenticationApi
+from symphony.bdk.gen.pod_api.pod_api import PodApi
 
 
 class AuthenticatorFactory:
@@ -63,8 +65,8 @@ class AuthenticatorFactory:
         """
         if self._config.app.is_rsa_configuration_valid():
             return ExtensionAppAuthenticatorRsa(
-                self._api_client_factory.get_login_client(),
-                self._api_client_factory.get_pod_client(),
+                AuthenticationApi(self._api_client_factory.get_login_client()),
+                PodApi(self._api_client_factory.get_pod_client()),
                 self._config.app.app_id,
                 self._config.app.private_key
             )

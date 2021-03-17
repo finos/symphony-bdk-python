@@ -4,8 +4,8 @@ from abc import ABC, abstractmethod
 
 from symphony.bdk.core.auth.auth_session import AppAuthSession
 from symphony.bdk.core.auth.jwt_helper import validate_jwt, create_signed_jwt
+from symphony.bdk.core.auth.tokens_repository import TokensRepository, InMemoryTokensRepository
 from symphony.bdk.core.config.model.bdk_rsa_key_config import BdkRsaKeyConfig
-from symphony.bdk.gen import ApiClient
 from symphony.bdk.gen.login_api.authentication_api import AuthenticationApi
 from symphony.bdk.gen.login_model.authenticate_extension_app_request import AuthenticateExtensionAppRequest
 from symphony.bdk.gen.login_model.extension_app_tokens import ExtensionAppTokens
@@ -39,11 +39,12 @@ class ExtensionAppAuthenticator(ABC):
 
         :param jwt: the jwt to be validated
         :return: the dictionary of jwt claims
+        :raise AuthInitializationError: If the pod certificate or jwt are invalid.
         """
 
     @abstractmethod
     async def is_token_pair_valid(self, app_token: str, symphony_token: str) -> bool:
-        """Checks if the app token and symphony tokens are valid.
+        """Validates if appToken and symphonyToken corresponds to an existing session
 
         :param app_token: the application token
         :param symphony_token: the Symphony token
@@ -62,8 +63,8 @@ class ExtensionAppAuthenticatorRsa(ExtensionAppAuthenticator):
     """A subclass of :class:`ExtensionAppAuthenticator` specific to RSA extension app authentication.
     """
 
-    def __init__(self, login_client: ApiClient, pod_client: ApiClient, app_id: str,
-                 private_key_config: BdkRsaKeyConfig):
+    def __init__(self, authentication_api: AuthenticationApi, pod_api: PodApi, app_id: str,
+                 private_key_config: BdkRsaKeyConfig, tokens_repository: TokensRepository = None):
         """
 
         :param login_client: the login ApiClient
@@ -71,11 +72,11 @@ class ExtensionAppAuthenticatorRsa(ExtensionAppAuthenticator):
         :param app_id: the application ID
         :param private_key_config: the private key configuration of the extension app
         """
-        self._authentication_api = AuthenticationApi(login_client)
-        self._pod_api = PodApi(pod_client)
+        self._authentication_api = authentication_api
+        self._pod_api = pod_api
         self._app_id = app_id
         self._private_key_config = private_key_config
-        self._tokens = {}
+        self._tokens_repository = tokens_repository or InMemoryTokensRepository()
 
     async def authenticate_extension_app(self, app_token: str) -> AppAuthSession:
         auth_session = AppAuthSession(self, app_token)
@@ -86,13 +87,20 @@ class ExtensionAppAuthenticatorRsa(ExtensionAppAuthenticator):
     async def authenticate_and_retrieve_tokens(self, app_token: str) -> ExtensionAppTokens:
         jwt = create_signed_jwt(self._private_key_config, self._app_id)
         authentication_request = AuthenticateExtensionAppRequest(app_token=app_token, auth_token=jwt)
-        return self._authentication_api.v1_pubkey_app_authenticate_extension_app_post(authentication_request)
+
+        ext_app_tokens = await self._authentication_api.v1_pubkey_app_authenticate_extension_app_post(
+            authentication_request)
+        await self._tokens_repository.save(ext_app_tokens.app_token, ext_app_tokens.symphony_token)
+
+        return ext_app_tokens
 
     async def validate_jwt(self, jwt: str) -> dict:
-        return validate_jwt(jwt, self.get_pod_certificate().certificate)
+        pod_certificate = await self.get_pod_certificate()
+        return validate_jwt(jwt, pod_certificate.certificate)
 
     async def is_token_pair_valid(self, app_token: str, symphony_token: str) -> bool:
-        return app_token in self._tokens and self._tokens[app_token] == symphony_token
+        retrieved_sym_token = await self._tokens_repository.get(app_token)
+        return retrieved_sym_token is not None and retrieved_sym_token == symphony_token
 
     async def get_pod_certificate(self) -> PodCertificate:
-        return self._pod_api.v1_podcert_get()
+        return await self._pod_api.v1_podcert_get()

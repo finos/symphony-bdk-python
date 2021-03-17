@@ -71,8 +71,8 @@ class BotAuthenticatorRsa(BotAuthenticator):
         try:
             token = await AuthenticationApi(api_client).pubkey_authenticate_post(req)
             return token.token
-        except ApiException as e:
-            raise AuthUnauthorizedError(unauthorized_message, e) from e
+        except ApiException as exc:
+            raise AuthUnauthorizedError(unauthorized_message, exc) from exc
 
     async def retrieve_session_token(self) -> str:
         """Make the api call to the pod to get the pod's session token.

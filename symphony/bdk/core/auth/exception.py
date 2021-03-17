@@ -3,10 +3,11 @@
 
 
 class AuthInitializationError(Exception):
-    """Thrown when unable to read/parse a RSA Private Key or a certificate (among others).
+    """Thrown when unable to read/parse a RSA Private Key or a certificate.
     """
 
     def __init__(self, message: str):
+        super().__init__()
         self.message = message
 
 
@@ -15,5 +16,6 @@ class AuthUnauthorizedError(Exception):
     """
 
     def __init__(self, message: str, cause: Exception = None):
+        super().__init__()
         self.message = message
         self.cause = cause

@@ -131,7 +131,7 @@ class AppAuthSession:
 
         :return: None
         """
-        app_tokens = self._authenticator.authenticate_and_retrieve_tokens(self._app_token)
+        app_tokens = await self._authenticator.authenticate_and_retrieve_tokens(self._app_token)
         self._symphony_token = app_tokens.symphony_token
         self._app_token = app_tokens.app_token
         self._expire_at = app_tokens.expire_at

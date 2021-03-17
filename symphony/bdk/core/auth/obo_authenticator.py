@@ -88,8 +88,8 @@ class OboAuthenticatorRsa(OboAuthenticator):
         try:
             token = await self._authentication_api.pubkey_app_authenticate_post(req)
             return token.token
-        except ApiException as e:
-            raise AuthUnauthorizedError(self.unauthorized_message) from e
+        except ApiException as exc:
+            raise AuthUnauthorizedError(self.unauthorized_message) from exc
 
     async def _authenticate_and_retrieve_obo_session_token(
             self,
@@ -109,8 +109,8 @@ class OboAuthenticatorRsa(OboAuthenticator):
                 params["username"] = username
                 token = await self._authentication_api.pubkey_app_username_username_authenticate_post(**params)
                 return token.token
-        except ApiException as e:
-            raise AuthUnauthorizedError(self.unauthorized_message) from e
+        except ApiException as exc:
+            raise AuthUnauthorizedError(self.unauthorized_message) from exc
 
     async def retrieve_obo_session_token_by_user_id(self, user_id: int):
         """Retrieve the OBO session token by user id.
