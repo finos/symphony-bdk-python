@@ -97,28 +97,55 @@ class OboAuthSession(AuthSession):
 
     @property
     async def key_manager_token(self):
+        """
+
+        :return: an empty string since there is no key manager token in OBO mode.
+        """
         return ""
 
 
 class AppAuthSession:
-
+    """Extension application RSA authentication handle to store the tokens. It uses an ExtensionAppAuthenticator to
+    actually authenticate and retrieve the tokens.
+    """
     def __init__(self, authenticator: ExtensionAppAuthenticator, app_token: str):
+        """
+
+        :param authenticator: the ExtensionAppAuthenticator which will actually perform the authentication
+        :param app_token: the application token
+        """
         self._authenticator = authenticator
         self._app_token = app_token
         self._expire_at = -1
         self._symphony_token = ""
 
     async def refresh(self) -> None:
-        app_tokens = self._authenticator.retrieve_ext_app_session(self._app_token)
-        self._symphony_token = app_tokens.get_symphony_token()
-        self._app_token = app_tokens.get_app_token()
-        self._expire_at = app_tokens.get_expire_at()
+        """Triggers re-authentication to refresh the tokens.
+
+        :return: None
+        """
+        app_tokens = self._authenticator.authenticate_and_retrieve_tokens(self._app_token)
+        self._symphony_token = app_tokens.symphony_token
+        self._app_token = app_tokens.app_token
+        self._expire_at = app_tokens.expire_at
 
     def symphony_token(self) -> str:
+        """
+
+        :return: the Symphony token
+        """
         return self._symphony_token
 
     def app_token(self) -> str:
+        """
+
+        :return: the application token
+        """
         return self._app_token
 
     def expire_at(self) -> int:
+        """
+
+        :return: the Unix timestamp in milliseconds of the Symphony token expiration
+        """
         return self._expire_at

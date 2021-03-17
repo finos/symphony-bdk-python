@@ -1,3 +1,5 @@
+"""Module containing BotAuthenticator classes.
+"""
 from abc import ABC, abstractmethod
 
 from symphony.bdk.core.auth.auth_session import AuthSession

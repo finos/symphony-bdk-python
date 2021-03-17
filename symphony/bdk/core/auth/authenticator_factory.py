@@ -52,6 +52,10 @@ class AuthenticatorFactory:
                                       "content in order to use OBO authentication.")
 
     def get_extension_app_authenticator(self) -> ExtensionAppAuthenticator:
+        """Creates a new instance of an extension app authenticator service.
+
+        :return: a new ExtensionAppAuthenticator instance.
+        """
         if self._config.app.is_rsa_configuration_valid():
             return ExtensionAppAuthenticatorRsa(
                 self._api_client_factory.get_login_client(),

@@ -32,5 +32,14 @@ def create_signed_jwt(private_key_config: BdkRsaKeyConfig, username: str, expira
 
 
 def validate_jwt(jwt_token: str, certificate: str) -> dict:
+    """Validate a jwt against a X509 certificate in pem format and returns the jwt claims.
+
+    :param jwt_token: the token to be validated
+    :param certificate: the X509 certificate in pem format to be used for jwt validation
+    :return: a dictionary containing the jwt claims
+    :raise JWTError: If the signature is invalid in any way.
+    :raise ExpiredSignatureError: If the signature has expired.
+    :raise JWTClaimsError: If any claim is invalid in any way.
+    """
     public_key = load_pem_x509_certificate(certificate).public_key()
     return jwt.decode(jwt_token, public_key, algorithms=[RS512])
