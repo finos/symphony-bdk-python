@@ -11,12 +11,6 @@ from symphony.bdk.core.symphony_bdk import SymphonyBdk
 async def run():
     async with SymphonyBdk(BdkConfigLoader.load_from_symphony_dir("config.yaml")) as bdk:
         await bdk.activities().register(HelloCommandActivity(bdk.messages()))
-        # FIXME?
-        # def cb(context: CommandContext):
-        #     bdk.messages().send_message(context.stream_id, "hello")
-        #
-        # await bdk.activities().register(slash("/hello", cb))
-
         await bdk.datafeed().start()
 
 

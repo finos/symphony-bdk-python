@@ -51,26 +51,3 @@ class CommandActivity(AbstractActivity[CommandContext]):
 
     def before_matcher(self, context: CommandContext):
         context._text_content = get_text_content_from_message(context.source_event.message)
-
-# FIXME?
-# class SlashCommand(CommandActivity):
-#
-#     def __init__(self, slash_cmd_name: str, func, requires_bot_mention: bool = True):
-#         self._slash_cmd_name = slash_cmd_name
-#         self._requires_bot_mention = requires_bot_mention
-#         self._func = func
-#         super().__init__()
-#
-#     def matches(self, context: CommandContext) -> bool:
-#         cmd_prefix = ""
-#         if self._requires_bot_mention:
-#             cmd_prefix = "@" + context.bot_display_name + " "
-#         return context.text_content.startswith(cmd_prefix + self._slash_cmd_name)
-#
-#     async def on_activity(self, context: CommandContext):
-#         await self._func(context)
-#
-#
-# def slash(cmd_name: str, func):
-#     return SlashCommand(cmd_name, func)
-

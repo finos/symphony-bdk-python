@@ -133,7 +133,7 @@ class ServiceFactory:
     def get_session_service(self) -> SessionService:
         """Returns a fully initialized SessionService
 
-        :return: a new SignalService instance
+        :return: a new SessionService instance
         """
         return SessionService(
             SessionApi(self._pod_client),
