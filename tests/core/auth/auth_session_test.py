@@ -68,6 +68,6 @@ async def test_app_auth_session():
     await session.refresh()
 
     ext_app_authenticator.authenticate_and_retrieve_tokens.assert_called_once_with(input_app_token)
-    assert session.app_token() == retrieved_app_token
-    assert session.symphony_token() == symphony_token
-    assert session.expire_at() == expire_at
+    assert session.app_token == retrieved_app_token
+    assert session.symphony_token == symphony_token
+    assert session.expire_at == expire_at

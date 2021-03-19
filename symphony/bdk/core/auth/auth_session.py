@@ -136,6 +136,7 @@ class AppAuthSession:
         self._app_token = app_tokens.app_token
         self._expire_at = app_tokens.expire_at
 
+    @property
     def symphony_token(self) -> str:
         """
 
@@ -143,6 +144,7 @@ class AppAuthSession:
         """
         return self._symphony_token
 
+    @property
     def app_token(self) -> str:
         """
 
@@ -150,6 +152,7 @@ class AppAuthSession:
         """
         return self._app_token
 
+    @property
     def expire_at(self) -> int:
         """
 
