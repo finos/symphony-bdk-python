@@ -45,11 +45,32 @@ class AbstractActivity(ABC, Generic[C]):
 
     @abstractmethod
     def matches(self, context: C) -> bool:
+        """
+
+        Args:
+            context: an instance of :py:class:`ActivityContext`
+
+        Returns: True if activity has to be triggered, False otherwise.
+
+        """
         pass
 
     @abstractmethod
     def on_activity(self, context: C):
+        """
+        Contains the activity business logic. Executed only if the `matches` method returned a true value.
+
+        Args:
+            context: an instance of :py:class:`ActivityContext`
+        """
         pass
 
     def before_matcher(self, context: C):
+        """
+        This callback can be used to prepare :py:class:`ActivityContext` before actually processing the `matches`
+        method.
+
+        Args:
+            context: an instance of :py:class:`ActivityContext`
+        """
         pass
