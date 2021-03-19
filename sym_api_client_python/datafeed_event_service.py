@@ -378,9 +378,9 @@ class AsyncDataFeedEventService(AbstractDatafeedEventService):
                 try:
                     route = self.routing_dict[event_type]
                 except KeyError:
-                    log.debug('no event detected')
+                    log.debug('Event with unsupported type ' + event_type + ' detected')
                     self.queue.task_done()
-                    return
+                    continue
 
                 future = asyncio.ensure_future(route(event))
                 future.add_done_callback(partial(self._check_result, e_id))
