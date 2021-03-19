@@ -1,6 +1,6 @@
 # Authentication
 The Symphony BDK authentication API allows developers to authenticate their bots and apps using RSA authentication mode.
-Please mind we only support RSA authentication.
+Please mind **only RSA authentication is supported**.
 
 The following sections will explain you:
 - how to authenticate your bot service account
@@ -89,6 +89,27 @@ app:
     appId: app-id
     privateKey:
       path: /path/to/rsa/private-key.pem
+```
+
+### Circle Of Trust
+> Read more about Circle Of Trust
+> [here](https://developers.symphony.com/extension/docs/application-authentication#section-application-authentication-sequence)
+
+```python
+from symphony.bdk.core.config.loader import BdkConfigLoader
+from symphony.bdk.core.symphony_bdk import SymphonyBdk
+
+
+async def run():
+    config = BdkConfigLoader.load_from_symphony_dir("config.yaml")
+    async with SymphonyBdk(config) as bdk:
+        ext_app_authenticator = bdk.app_authenticator()
+
+        app_auth = await ext_app_authenticator.authenticate_extension_app("appToken")
+        ta = app_auth.app_token()
+        ts = app_auth.symphony_token()
+
+        assert await ext_app_authenticator.is_token_pair_valid(ta, ts)
 ```
 
 ### OBO (On Behalf Of) authentication
