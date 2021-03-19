@@ -36,6 +36,24 @@ class TestDataFeedEventService(IsolatedAsyncioTestCase):
 
         self.assertIsNotNone(listener.last_message)
 
+    @mock.patch(
+        'sym_api_client_python.clients.datafeed_client.DataFeedClient',
+        new_callable=AsyncMock)
+    async def test_read_datafeed_event_unknown_type(self, datafeed_client_mock):
+        service = AsyncDataFeedEventService(self.client)
+        self.client.get_bot_user_info = MagicMock(return_value={'id': 456})
+
+        service.datafeed_client = datafeed_client_mock
+        datafeed_client_mock.read_datafeed_async.side_effect = self.return_event_unknown_type_first_time
+
+        listener = IMListenerRecorder(service)
+        service.add_im_listener(listener)
+
+        # Simulate start_datafeed
+        await asyncio.gather(service.read_datafeed(), service.handle_events())
+
+        self.assertIsNotNone(listener.last_message)
+
     async def return_event_no_id_first_time(self, _arg):
         if self.ran:
             # Give control back to handle_event coroutine
@@ -47,6 +65,22 @@ class TestDataFeedEventService(IsolatedAsyncioTestCase):
                  'payload': {'messageSent': {'message': {'stream': {'streamType': 'IM'}}}},
                  'initiator': {'user': {'userId': 123}}}
         return [event]
+
+    async def return_event_unknown_type_first_time(self, _arg):
+        if self.ran:
+            # Give control back to handle_event coroutine
+            await asyncio.sleep(0)
+            return []
+
+        self.ran = True
+        # If not properly handled, first event breaks the handle event loop and fails the test
+        event1 = {'type': 'UNKNOWN', 'timestamp': 0, 'messageId': '123',
+                  'payload': {'messageSent': {'message': {'stream': {'streamType': 'IM'}}}},
+                  'initiator': {'user': {'userId': 123}}}
+        event2 = {'type': 'MESSAGESENT', 'timestamp': 0, 'messageId': '234',
+                  'payload': {'messageSent': {'message': {'stream': {'streamType': 'IM'}}}},
+                  'initiator': {'user': {'userId': 123}}}
+        return [event1, event2]
 
 
 class IMListenerRecorder(IMListener):
