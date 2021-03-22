@@ -24,8 +24,8 @@ def get_text_content_from_message(message: V4Message) -> str:
     presentation_ml = message.message
     try:
         tree = ElementTree(fromstring(presentation_ml))
-    except ET.ParseError:
-        raise MessageParserError("Unable to parse the PresentationML, it is not in the correct format.")
+    except ET.ParseError as exc:
+        raise MessageParserError("Unable to parse the PresentationML, it is not in the correct format.") from exc
     return tostring(tree.getroot(), method="text").decode().strip()
 
 
@@ -91,8 +91,8 @@ def _get_tags(message, entity_type):
 def _parse_json_data(json_data):
     try:
         return json.loads(json_data)
-    except JSONDecodeError:
-        raise MessageParserError("Failed to extract payload from message data")
+    except JSONDecodeError as exc:
+        raise MessageParserError("Failed to extract payload from message data") from exc
 
 
 class _EntityTypeEnum(Enum):

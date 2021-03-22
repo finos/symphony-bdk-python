@@ -1,6 +1,6 @@
 # Authentication
 The Symphony BDK authentication API allows developers to authenticate their bots and apps using RSA authentication mode.
-Please mind we only support RSA authentication.
+Please mind **only RSA authentication is supported**.
 
 The following sections will explain you:
 - how to authenticate your bot service account
@@ -90,6 +90,36 @@ app:
     privateKey:
       path: /path/to/rsa/private-key.pem
 ```
+
+### Circle Of Trust
+> Read more about Circle Of Trust
+> [here](https://docs.developers.symphony.com/building-extension-applications-on-symphony/app-authentication/circle-of-trust-authentication)
+
+```python
+from symphony.bdk.core.config.loader import BdkConfigLoader
+from symphony.bdk.core.symphony_bdk import SymphonyBdk
+
+
+async def run():
+    config = BdkConfigLoader.load_from_symphony_dir("config.yaml")
+    async with SymphonyBdk(config) as bdk:
+        ext_app_authenticator = bdk.app_authenticator()
+
+        app_auth = await ext_app_authenticator.authenticate_extension_app("appToken")
+        ta = app_auth.app_token
+        ts = app_auth.symphony_token
+
+        assert await ext_app_authenticator.is_token_pair_valid(ta, ts)
+```
+
+In order to have a fully working extension app, your extension app backend will have to expose the following endpoints:
+* a POST authentication endpoint (e.g. POST /authenticate) which will we generate an app token, call
+  `await ext_app_authenticator.authenticate_extension_app("appToken")` and return the result.
+* a POST validate tokens endpoint (e.g. POST /tokens) which will validate the `appToken` and `symphonyToken` passed in
+  the body is valid according to the result of
+  `await ext_app_authenticator.is_token_pair_valid(app_token, symphony_token)`.
+* a POST validate jwt endpoint (e.g. POST /jwt) which will validate a jwt passed in the `jwt` field of the body and will
+  return the result of `await ext_app_authenticator.validate_jwt(jwt)`.
 
 ### OBO (On Behalf Of) authentication
 > Read more about OBO authentication [here](https://developers.symphony.com/symphony-developer/docs/obo-overview)
