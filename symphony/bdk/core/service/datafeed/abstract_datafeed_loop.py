@@ -16,7 +16,8 @@ logger = logging.getLogger(__name__)
 
 
 class DatafeedVersion(Enum):
-
+    """Enum of all possible datafeed versions.
+    """
     V1 = "v1"
     V2 = "v2"
 
