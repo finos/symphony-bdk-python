@@ -24,18 +24,18 @@ class DatafeedLoopV1(AbstractDatafeedLoop):
     """
     def __init__(self, datafeed_api, auth_session, config, repository=None):
         super().__init__(datafeed_api, auth_session, config)
-        self.datafeed_repository = OnDiskDatafeedIdRepository(config) if repository is None else repository
-        self.datafeed_id = None
+        self._datafeed_repository = OnDiskDatafeedIdRepository(config) if repository is None else repository
+        self._datafeed_id = None
 
     async def prepare_datafeed(self):
-        self.datafeed_id = self.datafeed_repository.read()
-        if not self.datafeed_id:
+        self._datafeed_id = self._datafeed_repository.read()
+        if not self._datafeed_id:
             await self.recreate_datafeed()
 
     async def read_datafeed(self):
         session_token = await self.auth_session.session_token
         key_manager_token = await self.auth_session.key_manager_token
-        events = await self.datafeed_api.v4_datafeed_id_read_get(id=self.datafeed_id,
+        events = await self.datafeed_api.v4_datafeed_id_read_get(id=self._datafeed_id,
                                                                  session_token=session_token,
                                                                  key_manager_token=key_manager_token)
         if events is not None and events.value:
@@ -47,5 +47,5 @@ class DatafeedLoopV1(AbstractDatafeedLoop):
         response = await self.datafeed_api.v4_datafeed_create_post(session_token=session_token,
                                                                    key_manager_token=key_manager_token)
         datafeed_id = response.id
-        self.datafeed_repository.write(datafeed_id)
-        self.datafeed_id = datafeed_id
+        self._datafeed_repository.write(datafeed_id)
+        self._datafeed_id = datafeed_id

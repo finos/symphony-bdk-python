@@ -143,7 +143,7 @@ class AbstractDatafeedLoop(ABC):
         for event in filter(lambda e: e is not None, events):
             for listener in self.listeners:
                 if await listener.is_accepting_event(event, self.bdk_config.bot.username):
-                    asyncio.create_task(self._dispatch_on_event_type(listener, event))  # TODO error handling
+                    asyncio.create_task(self._dispatch_on_event_type(listener, event))
 
     async def _dispatch_on_event_type(self, listener: RealTimeEventListener, event: V4Event):
         try:

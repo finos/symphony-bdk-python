@@ -1,3 +1,4 @@
+import asyncio
 from unittest.mock import MagicMock, AsyncMock, call
 
 import pytest
@@ -69,6 +70,15 @@ def fixture_message_sent_event(initiator):
     return event
 
 
+@pytest.fixture(name="read_df_side_effect")
+def fixture_read_df_side_effect(message_sent_event):
+    async def read_df(**kwargs):
+        await asyncio.sleep(0.001)  # to force the switching of tasks
+        return message_sent_event
+
+    return read_df
+
+
 @pytest.fixture(name="datafeed_loop")
 def fixture_datafeed_loop(datafeed_api, auth_session, config):
     datafeed_loop = DatafeedLoopV2(datafeed_api, auth_session, config)
@@ -83,10 +93,10 @@ def fixture_datafeed_loop(datafeed_api, auth_session, config):
 
 
 @pytest.mark.asyncio
-async def test_start(datafeed_loop, datafeed_api, message_sent_event):
+async def test_start(datafeed_loop, datafeed_api, read_df_side_effect):
     datafeed_api.list_datafeed.return_value = []
     datafeed_api.create_datafeed.return_value = Datafeed(id="test_id")
-    datafeed_api.read_datafeed.return_value = message_sent_event
+    datafeed_api.read_datafeed.side_effect = read_df_side_effect
 
     await datafeed_loop.start()
 
@@ -98,21 +108,18 @@ async def test_start(datafeed_loop, datafeed_api, message_sent_event):
         session_token="session_token",
         key_manager_token="km_token"
     )
-    datafeed_api.read_datafeed.assert_called_with(
-        session_token="session_token",
-        key_manager_token="km_token",
-        datafeed_id="test_id",
-        ack_id=AckId(ack_id="")
-    )
-
+    assert datafeed_api.read_datafeed.call_args_list[0].kwargs == {"session_token": "session_token",
+                                                                   "key_manager_token": "km_token",
+                                                                   "datafeed_id": "test_id",
+                                                                   "ack_id": AckId(ack_id="")}
     assert datafeed_loop._datafeed_id == "test_id"
     assert datafeed_loop._ack_id == "ack_id"
 
 
 @pytest.mark.asyncio
-async def test_start_datafeed_exist(datafeed_loop, datafeed_api, message_sent_event):
+async def test_start_datafeed_exist(datafeed_loop, datafeed_api, read_df_side_effect):
     datafeed_api.list_datafeed.return_value = [Datafeed(id="test_id_exist")]
-    datafeed_api.read_datafeed.return_value = message_sent_event
+    datafeed_api.read_datafeed.side_effect = read_df_side_effect
 
     await datafeed_loop.start()
 
@@ -120,13 +127,10 @@ async def test_start_datafeed_exist(datafeed_loop, datafeed_api, message_sent_ev
         session_token="session_token",
         key_manager_token="km_token"
     )
-    datafeed_api.read_datafeed.assert_called_with(
-        session_token="session_token",
-        key_manager_token="km_token",
-        datafeed_id="test_id_exist",
-        ack_id=AckId(ack_id="")
-    )
-
+    assert datafeed_api.read_datafeed.call_args_list[0].kwargs == {"session_token": "session_token",
+                                                                   "key_manager_token": "km_token",
+                                                                   "datafeed_id": "test_id_exist",
+                                                                   "ack_id": AckId(ack_id="")}
     assert datafeed_loop._datafeed_id == "test_id_exist"
     assert datafeed_loop._ack_id == "ack_id"
 
@@ -135,7 +139,18 @@ async def test_start_datafeed_exist(datafeed_loop, datafeed_api, message_sent_ev
 async def test_start_datafeed_stale_datafeed(datafeed_loop, datafeed_api, message_sent_event):
     datafeed_api.list_datafeed.return_value = [Datafeed(id="fault_datafeed_id")]
     datafeed_api.create_datafeed.return_value = Datafeed(id="test_id")
-    datafeed_api.read_datafeed.side_effect = [ApiException(400), message_sent_event]
+
+    # This is done this way because side_effect with a list containing coroutines is not behaving as expected
+    async def raise_and_return_event(**kwargs):
+        if raise_and_return_event.first:
+            raise_and_return_event.first = False
+            raise ApiException(400)
+        await asyncio.sleep(0.001)  # to force the switching of tasks
+        return message_sent_event
+
+    raise_and_return_event.first = True
+
+    datafeed_api.read_datafeed.side_effect = raise_and_return_event
 
     await datafeed_loop.start()
 

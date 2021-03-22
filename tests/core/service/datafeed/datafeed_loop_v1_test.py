@@ -141,8 +141,8 @@ async def test_start(datafeed_loop_v1, datafeed_api, read_df_side_effect):
     datafeed_api.v4_datafeed_create_post.assert_called_once()
     assert datafeed_api.v4_datafeed_id_read_get.call_count >= 1
 
-    assert datafeed_loop_v1.datafeed_id == "test_id"
-    assert datafeed_loop_v1.datafeed_repository.read()
+    assert datafeed_loop_v1._datafeed_id == "test_id"
+    assert datafeed_loop_v1._datafeed_repository.read()
 
 
 @pytest.mark.asyncio
@@ -192,7 +192,7 @@ async def test_retrieve_datafeed_from_datafeed_file(tmpdir, datafeed_api, auth_s
     datafeed_api.v4_datafeed_id_read_get.side_effect = read_df_side_effect
     await datafeed_loop.start()
 
-    assert datafeed_loop.datafeed_id == "8e7c8672-220"
+    assert datafeed_loop._datafeed_id == "8e7c8672-220"
 
 
 @pytest.mark.asyncio
@@ -209,7 +209,7 @@ async def test_retrieve_datafeed_from_invalid_datafeed_dir(tmpdir, datafeed_api,
     datafeed_api.v4_datafeed_id_read_get.side_effect = read_df_side_effect
     await datafeed_loop.start()
 
-    assert datafeed_loop.datafeed_id == "8e7c8672-220"
+    assert datafeed_loop._datafeed_id == "8e7c8672-220"
 
 
 @pytest.mark.asyncio
@@ -219,7 +219,7 @@ async def test_retrieve_datafeed_id_from_unknown_path(datafeed_api, auth_session
 
     datafeed_loop = auto_stopping_datafeed_loop_v1(datafeed_api, auth_session, config)
 
-    assert datafeed_loop.datafeed_id is None
+    assert datafeed_loop._datafeed_id is None
 
 
 @pytest.mark.asyncio
@@ -231,7 +231,7 @@ async def test_retrieve_datafeed_id_from_empty_file(tmpdir, datafeed_api, auth_s
 
     datafeed_loop = auto_stopping_datafeed_loop_v1(datafeed_api, auth_session, config)
 
-    assert datafeed_loop.datafeed_id is None
+    assert datafeed_loop._datafeed_id is None
 
 
 @pytest.mark.asyncio
