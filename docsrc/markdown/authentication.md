@@ -93,7 +93,7 @@ app:
 
 ### Circle Of Trust
 > Read more about Circle Of Trust
-> [here](https://developers.symphony.com/extension/docs/application-authentication#section-application-authentication-sequence)
+> [here](https://docs.developers.symphony.com/building-extension-applications-on-symphony/app-authentication/circle-of-trust-authentication)
 
 ```python
 from symphony.bdk.core.config.loader import BdkConfigLoader
@@ -111,6 +111,15 @@ async def run():
 
         assert await ext_app_authenticator.is_token_pair_valid(ta, ts)
 ```
+
+In order to have a fully working extension app, your extension app backend will have to expose the following endpoints:
+* a POST authentication endpoint (e.g. POST /authenticate) which will we generate an app token, call
+  `await ext_app_authenticator.authenticate_extension_app("appToken")` and return the result.
+* a POST validate tokens endpoint (e.g. POST /tokens) which will validate the `appToken` and `symphonyToken` passed in
+  the body is valid according to the result of
+  `await ext_app_authenticator.is_token_pair_valid(app_token, symphony_token)`.
+* a POST validate jwt endpoint (e.g. POST /jwt) which will validate a jwt passed in the `jwt` field of the body and will
+  return the result of `await ext_app_authenticator.validate_jwt(jwt)`.
 
 ### OBO (On Behalf Of) authentication
 > Read more about OBO authentication [here](https://developers.symphony.com/symphony-developer/docs/obo-overview)

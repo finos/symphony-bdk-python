@@ -10,9 +10,9 @@ from jose import jwt, JOSEError
 from symphony.bdk.core.auth.exception import AuthInitializationError
 from symphony.bdk.core.config.model.bdk_rsa_key_config import BdkRsaKeyConfig
 
-RS512 = "RS512"
+JWT_ENCRYPTION_ALGORITHM = "RS512"
 
-DEFAULT_EXPIRATION = 290
+DEFAULT_EXPIRATION_SECONDS = (5 * 50) - 10
 
 
 def create_signed_jwt(private_key_config: BdkRsaKeyConfig, username: str, expiration: int = None) -> str:
@@ -27,7 +27,7 @@ def create_signed_jwt(private_key_config: BdkRsaKeyConfig, username: str, expira
     :return: a signed JWT for a specific user or an extension app.
     """
     expiration = expiration if expiration is not None else int(
-        datetime.datetime.now(datetime.timezone.utc).timestamp() + DEFAULT_EXPIRATION)
+        datetime.datetime.now(datetime.timezone.utc).timestamp() + DEFAULT_EXPIRATION_SECONDS)
     payload = {
         "sub": username,
         "exp": expiration
@@ -43,7 +43,7 @@ def create_signed_jwt_with_claims(private_key: str, payload: dict) -> str:
     :param payload: the payload (aka claims) of the JWT in dict format.
     :return: a signed JWT
     """
-    return jwt.encode(payload, private_key, algorithm=RS512)
+    return jwt.encode(payload, private_key, algorithm=JWT_ENCRYPTION_ALGORITHM)
 
 
 def validate_jwt(jwt_token: str, certificate: str) -> dict:
@@ -55,7 +55,8 @@ def validate_jwt(jwt_token: str, certificate: str) -> dict:
     :raise AuthInitializationError: If the certificate or jwt are invalid.
     """
     try:
-        return jwt.decode(jwt_token, _parse_public_key_from_x509_cert(certificate), algorithms=[RS512])
+        return jwt.decode(jwt_token, _parse_public_key_from_x509_cert(certificate),
+                          algorithms=[JWT_ENCRYPTION_ALGORITHM])
     except JOSEError as exc:
         raise AuthInitializationError("Unable to validate the jwt") from exc
 
