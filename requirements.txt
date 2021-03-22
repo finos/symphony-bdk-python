@@ -3,7 +3,7 @@ requests-toolbelt==0.9.1
 yattag==1.12.2
 python-json-logger==0.1.11
 beautifulsoup4==4.8.0
-Jinja2==2.10.1
+Jinja2==2.11.3
 defusedxml==0.6.0
 
 rsa~=4.7
