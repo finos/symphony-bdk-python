@@ -1,3 +1,4 @@
+import asyncio
 from unittest.mock import MagicMock, AsyncMock
 
 import pytest
@@ -92,6 +93,20 @@ def fixture_message_sent_event(initiator):
     return event
 
 
+@pytest.fixture(name="read_df_side_effect")
+def fixture_read_df_side_effect(message_sent_event):
+    async def read_df(**kwargs):
+        await asyncio.sleep(0.001)  # to force the switching of tasks
+        return message_sent_event
+
+    return read_df
+
+
+async def await_tasks():
+    tasks = [t for t in asyncio.all_tasks() if t is not asyncio.current_task()]
+    await asyncio.gather(*tasks)
+
+
 @pytest.fixture(name="datafeed_loop_v1")
 def fixture_datafeed_loop_v1(datafeed_api, auth_session, config, datafeed_repository):
     return auto_stopping_datafeed_loop_v1(datafeed_api, auth_session, config, datafeed_repository)
@@ -117,32 +132,32 @@ def fixture_datafeed_loop_with_listener(datafeed_api, auth_session, config, mock
 
 
 @pytest.mark.asyncio
-async def test_start(datafeed_loop_v1, datafeed_api, message_sent_event):
+async def test_start(datafeed_loop_v1, datafeed_api, read_df_side_effect):
     datafeed_api.v4_datafeed_create_post.return_value = Datafeed(id="test_id")
-    datafeed_api.v4_datafeed_id_read_get.return_value = message_sent_event
+    datafeed_api.v4_datafeed_id_read_get.side_effect = read_df_side_effect
 
     await datafeed_loop_v1.start()
 
     datafeed_api.v4_datafeed_create_post.assert_called_once()
-    datafeed_api.v4_datafeed_id_read_get.assert_called_once()
+    assert datafeed_api.v4_datafeed_id_read_get.call_count >= 1
 
     assert datafeed_loop_v1.datafeed_id == "test_id"
     assert datafeed_loop_v1.datafeed_repository.read()
 
 
 @pytest.mark.asyncio
-async def test_datafeed_is_reused(datafeed_repository, datafeed_api, auth_session, config, message_sent_event):
+async def test_datafeed_is_reused(datafeed_repository, datafeed_api, auth_session, config, read_df_side_effect):
     datafeed_repository.write("persisted_id")
     datafeed_loop = auto_stopping_datafeed_loop_v1(datafeed_api, auth_session, config, datafeed_repository)
 
-    datafeed_api.v4_datafeed_id_read_get.return_value = message_sent_event
+    datafeed_api.v4_datafeed_id_read_get.side_effect = read_df_side_effect
 
     await datafeed_loop.start()
 
     datafeed_api.v4_datafeed_create_post.assert_not_called()
-    datafeed_api.v4_datafeed_id_read_get.assert_called_once_with(id="persisted_id",
-                                                                 session_token="session_token",
-                                                                 key_manager_token="km_token")
+    datafeed_api.v4_datafeed_id_read_get.assert_called_with(id="persisted_id",
+                                                            session_token="session_token",
+                                                            key_manager_token="km_token")
 
 
 @pytest.mark.asyncio
@@ -165,7 +180,7 @@ async def test_start_recreate_datafeed_error(datafeed_repository, datafeed_api, 
 
 
 @pytest.mark.asyncio
-async def test_retrieve_datafeed_from_datafeed_file(tmpdir, datafeed_api, auth_session, config, message_sent_event):
+async def test_retrieve_datafeed_from_datafeed_file(tmpdir, datafeed_api, auth_session, config, read_df_side_effect):
     datafeed_file_content = get_resource_content("datafeed/datafeedId")
     datafeed_file_path = tmpdir.join("datafeed.id")
     datafeed_file_path.write(datafeed_file_content)
@@ -174,7 +189,7 @@ async def test_retrieve_datafeed_from_datafeed_file(tmpdir, datafeed_api, auth_s
     config.datafeed = datafeed_config
 
     datafeed_loop = auto_stopping_datafeed_loop_v1(datafeed_api, auth_session, config)
-    datafeed_api.v4_datafeed_id_read_get.return_value = message_sent_event
+    datafeed_api.v4_datafeed_id_read_get.side_effect = read_df_side_effect
     await datafeed_loop.start()
 
     assert datafeed_loop.datafeed_id == "8e7c8672-220"
@@ -182,7 +197,7 @@ async def test_retrieve_datafeed_from_datafeed_file(tmpdir, datafeed_api, auth_s
 
 @pytest.mark.asyncio
 async def test_retrieve_datafeed_from_invalid_datafeed_dir(tmpdir, datafeed_api, auth_session, config,
-                                                           message_sent_event):
+                                                           read_df_side_effect):
     datafeed_id_file_content = get_resource_content("datafeed/datafeedId")
     datafeed_id_file_path = tmpdir.join("datafeed.id")
     datafeed_id_file_path.write(datafeed_id_file_content)
@@ -191,7 +206,7 @@ async def test_retrieve_datafeed_from_invalid_datafeed_dir(tmpdir, datafeed_api,
     config.datafeed = datafeed_config
 
     datafeed_loop = auto_stopping_datafeed_loop_v1(datafeed_api, auth_session, config)
-    datafeed_api.v4_datafeed_id_read_get.return_value = message_sent_event
+    datafeed_api.v4_datafeed_id_read_get.side_effect = read_df_side_effect
     await datafeed_loop.start()
 
     assert datafeed_loop.datafeed_id == "8e7c8672-220"
@@ -225,8 +240,9 @@ async def test_handle_message_sent(datafeed_loop_with_listener, mock_listener, i
 
     await datafeed_loop_with_listener.handle_v4_event_list(
         [V4Event(type=RealTimeEvent.MESSAGESENT.name, payload=payload, initiator=initiator)])
+    await await_tasks()
 
-    mock_listener.on_message_sent.assert_called_once_with(initiator, payload.message_sent)
+    mock_listener.on_message_sent.assert_called_with(initiator, payload.message_sent)
 
 
 @pytest.mark.asyncio
@@ -235,8 +251,9 @@ async def test_handle_shared_post(datafeed_loop_with_listener, mock_listener, in
 
     await datafeed_loop_with_listener.handle_v4_event_list(
         [V4Event(type=RealTimeEvent.SHAREDPOST.name, payload=payload, initiator=initiator)])
+    await await_tasks()
 
-    mock_listener.on_shared_post.assert_called_once_with(initiator, payload.shared_post)
+    mock_listener.on_shared_post.assert_called_with(initiator, payload.shared_post)
 
 
 @pytest.mark.asyncio
@@ -245,8 +262,9 @@ async def test_handle_instant_message_created(datafeed_loop_with_listener, mock_
 
     await datafeed_loop_with_listener.handle_v4_event_list(
         [V4Event(type=RealTimeEvent.INSTANTMESSAGECREATED.name, payload=payload, initiator=initiator)])
+    await await_tasks()
 
-    mock_listener.on_instant_message_created.assert_called_once_with(initiator, payload.instant_message_created)
+    mock_listener.on_instant_message_created.assert_called_with(initiator, payload.instant_message_created)
 
 
 @pytest.mark.asyncio
@@ -255,8 +273,9 @@ async def test_handle_room_created(datafeed_loop_with_listener, mock_listener, i
 
     await datafeed_loop_with_listener.handle_v4_event_list(
         [V4Event(type=RealTimeEvent.ROOMCREATED.name, payload=payload, initiator=initiator)])
+    await await_tasks()
 
-    mock_listener.on_room_created.assert_called_once_with(initiator, payload.room_created)
+    mock_listener.on_room_created.assert_called_with(initiator, payload.room_created)
 
 
 @pytest.mark.asyncio
@@ -265,8 +284,9 @@ async def test_handle_room_updated(datafeed_loop_with_listener, mock_listener, i
 
     await datafeed_loop_with_listener.handle_v4_event_list(
         [V4Event(type=RealTimeEvent.ROOMUPDATED.name, payload=payload, initiator=initiator)])
+    await await_tasks()
 
-    mock_listener.on_room_updated.assert_called_once_with(initiator, payload.room_updated)
+    mock_listener.on_room_updated.assert_called_with(initiator, payload.room_updated)
 
 
 @pytest.mark.asyncio
@@ -275,8 +295,9 @@ async def test_handle_room_deactivated(datafeed_loop_with_listener, mock_listene
 
     await datafeed_loop_with_listener.handle_v4_event_list(
         [V4Event(type=RealTimeEvent.ROOMDEACTIVATED.name, payload=payload, initiator=initiator)])
+    await await_tasks()
 
-    mock_listener.on_room_deactivated.assert_called_once_with(initiator, payload.room_deactivated)
+    mock_listener.on_room_deactivated.assert_called_with(initiator, payload.room_deactivated)
 
 
 @pytest.mark.asyncio
@@ -285,8 +306,9 @@ async def test_handle_room_reactivated(datafeed_loop_with_listener, mock_listene
 
     await datafeed_loop_with_listener.handle_v4_event_list(
         [V4Event(type=RealTimeEvent.ROOMREACTIVATED.name, payload=payload, initiator=initiator)])
+    await await_tasks()
 
-    mock_listener.on_room_reactivated.assert_called_once_with(initiator, payload.room_reactivated)
+    mock_listener.on_room_reactivated.assert_called_with(initiator, payload.room_reactivated)
 
 
 @pytest.mark.asyncio
@@ -295,8 +317,9 @@ async def test_handle_user_requested_to_join_room(datafeed_loop_with_listener, m
 
     await datafeed_loop_with_listener.handle_v4_event_list(
         [V4Event(type=RealTimeEvent.USERREQUESTEDTOJOINROOM.name, payload=payload, initiator=initiator)])
+    await await_tasks()
 
-    mock_listener.on_user_requested_to_join_room.assert_called_once_with(initiator, payload.user_requested_to_join_room)
+    mock_listener.on_user_requested_to_join_room.assert_called_with(initiator, payload.user_requested_to_join_room)
 
 
 @pytest.mark.asyncio
@@ -305,8 +328,9 @@ async def test_handle_user_joined_room(datafeed_loop_with_listener, mock_listene
 
     await datafeed_loop_with_listener.handle_v4_event_list(
         [V4Event(type=RealTimeEvent.USERJOINEDROOM.name, payload=payload, initiator=initiator)])
+    await await_tasks()
 
-    mock_listener.on_user_joined_room.assert_called_once_with(initiator, payload.user_joined_room)
+    mock_listener.on_user_joined_room.assert_called_with(initiator, payload.user_joined_room)
 
 
 @pytest.mark.asyncio
@@ -315,8 +339,9 @@ async def test_handle_user_left_room(datafeed_loop_with_listener, mock_listener,
 
     await datafeed_loop_with_listener.handle_v4_event_list(
         [V4Event(type=RealTimeEvent.USERLEFTROOM.name, payload=payload, initiator=initiator)])
+    await await_tasks()
 
-    mock_listener.on_user_left_room.assert_called_once_with(initiator, payload.user_left_room)
+    mock_listener.on_user_left_room.assert_called_with(initiator, payload.user_left_room)
 
 
 @pytest.mark.asyncio
@@ -325,9 +350,10 @@ async def test_handle_room_member_promoted_to_owner(datafeed_loop_with_listener,
 
     await datafeed_loop_with_listener.handle_v4_event_list(
         [V4Event(type=RealTimeEvent.ROOMMEMBERPROMOTEDTOOWNER.name, payload=payload, initiator=initiator)])
+    await await_tasks()
 
-    mock_listener.on_room_member_promoted_to_owner.assert_called_once_with(initiator,
-                                                                           payload.room_member_promoted_to_owner)
+    mock_listener.on_room_member_promoted_to_owner.assert_called_with(initiator,
+                                                                      payload.room_member_promoted_to_owner)
 
 
 @pytest.mark.asyncio
@@ -336,8 +362,9 @@ async def test_handle_room_member_demoted_from_owner(datafeed_loop_with_listener
 
     await datafeed_loop_with_listener.handle_v4_event_list(
         [V4Event(type=RealTimeEvent.ROOMMEMBERDEMOTEDFROMOWNER.name, payload=payload, initiator=initiator)])
+    await await_tasks()
 
-    mock_listener.on_room_demoted_from_owner.assert_called_once_with(initiator, payload.room_member_demoted_from_owner)
+    mock_listener.on_room_demoted_from_owner.assert_called_with(initiator, payload.room_member_demoted_from_owner)
 
 
 @pytest.mark.asyncio
@@ -346,8 +373,9 @@ async def test_handle_connection_requested(datafeed_loop_with_listener, mock_lis
 
     await datafeed_loop_with_listener.handle_v4_event_list(
         [V4Event(type=RealTimeEvent.CONNECTIONREQUESTED.name, payload=payload, initiator=initiator)])
+    await await_tasks()
 
-    mock_listener.on_connection_requested.assert_called_once_with(initiator, payload.connection_requested)
+    mock_listener.on_connection_requested.assert_called_with(initiator, payload.connection_requested)
 
 
 @pytest.mark.asyncio
@@ -356,8 +384,9 @@ async def test_handle_connection_accepted(datafeed_loop_with_listener, mock_list
 
     await datafeed_loop_with_listener.handle_v4_event_list(
         [V4Event(type=RealTimeEvent.CONNECTIONACCEPTED.name, payload=payload, initiator=initiator)])
+    await await_tasks()
 
-    mock_listener.on_connection_accepted.assert_called_once_with(initiator, payload.connection_accepted)
+    mock_listener.on_connection_accepted.assert_called_with(initiator, payload.connection_accepted)
 
 
 @pytest.mark.asyncio
@@ -366,8 +395,9 @@ async def test_handle_message_suppressed(datafeed_loop_with_listener, mock_liste
 
     await datafeed_loop_with_listener.handle_v4_event_list(
         [V4Event(type=RealTimeEvent.MESSAGESUPPRESSED.name, payload=payload, initiator=initiator)])
+    await await_tasks()
 
-    mock_listener.on_message_suppressed.assert_called_once_with(initiator, payload.message_suppressed)
+    mock_listener.on_message_suppressed.assert_called_with(initiator, payload.message_suppressed)
 
 
 @pytest.mark.asyncio
@@ -376,6 +406,7 @@ async def test_handle_symphony_element(datafeed_loop_with_listener, mock_listene
 
     await datafeed_loop_with_listener.handle_v4_event_list(
         [V4Event(type=RealTimeEvent.SYMPHONYELEMENTSACTION.name, payload=payload, initiator=initiator)])
+    await await_tasks()
 
     mock_listener.on_symphony_elements_action.assert_called_once_with(initiator, payload.symphony_elements_action)
 

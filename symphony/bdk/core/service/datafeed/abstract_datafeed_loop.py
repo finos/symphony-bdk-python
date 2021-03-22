@@ -1,6 +1,6 @@
 """This module gathers all base classes related to the datafeed loop and real time events.
 """
-
+import asyncio
 import logging
 from abc import ABC, abstractmethod
 from enum import Enum
@@ -143,7 +143,7 @@ class AbstractDatafeedLoop(ABC):
         for event in filter(lambda e: e is not None, events):
             for listener in self.listeners:
                 if await listener.is_accepting_event(event, self.bdk_config.bot.username):
-                    await self._dispatch_on_event_type(listener, event)
+                    asyncio.create_task(self._dispatch_on_event_type(listener, event))  # TODO error handling
 
     async def _dispatch_on_event_type(self, listener: RealTimeEventListener, event: V4Event):
         try:
