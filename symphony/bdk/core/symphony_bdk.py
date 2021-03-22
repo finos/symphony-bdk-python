@@ -3,6 +3,7 @@
 import functools
 import logging
 
+from symphony.bdk.core.activity.registry import ActivityRegistry
 from symphony.bdk.core.auth.auth_session import AuthSession, OboAuthSession
 from symphony.bdk.core.auth.authenticator_factory import AuthenticatorFactory
 from symphony.bdk.core.auth.exception import AuthInitializationError
@@ -16,6 +17,7 @@ from symphony.bdk.core.service.health.health_service import HealthService
 from symphony.bdk.core.service.message.message_service import MessageService
 from symphony.bdk.core.service.obo_services import OboServices
 from symphony.bdk.core.service.presence.presence_service import PresenceService
+from symphony.bdk.core.service.session.session_service import SessionService
 from symphony.bdk.core.service.signal.signal_service import SignalService
 from symphony.bdk.core.service.stream.stream_service import StreamService
 from symphony.bdk.core.service.user.user_service import UserService
@@ -68,9 +70,11 @@ class SymphonyBdk:
         self._stream_service = None
         self._application_service = None
         self._signal_service = None
+        self._session_service = None
         self._datafeed_loop = None
         self._health_service = None
         self._presence_service = None
+        self._activity_registry = None
 
         if self._config.bot.is_rsa_configuration_valid():
             self._initialize_bot_services()
@@ -87,9 +91,13 @@ class SymphonyBdk:
         self._stream_service = self._service_factory.get_stream_service()
         self._application_service = self._service_factory.get_application_service()
         self._signal_service = self._service_factory.get_signal_service()
+        self._session_service = self._service_factory.get_session_service()
         self._datafeed_loop = self._service_factory.get_datafeed_loop()
         self._health_service = self._service_factory.get_health_service()
         self._presence_service = self._service_factory.get_presence_service()
+        # creates ActivityRegistry that subscribes to DF Loop events
+        self._activity_registry = ActivityRegistry(self._session_service)
+        self._datafeed_loop.subscribe(self._activity_registry)
 
     @bot_service
     def bot_session(self) -> AuthSession:
@@ -186,6 +194,14 @@ class SymphonyBdk:
         return self._signal_service
 
     @bot_service
+    def sessions(self) -> SessionService:
+        """Get the SessionService from the BDK entry point.
+
+        :return: The SessionService instance.
+        """
+        return self._session_service
+
+    @bot_service
     def health(self) -> HealthService:
         """Get the HealthService from the BDK entry point.
 
@@ -200,6 +216,15 @@ class SymphonyBdk:
         :return: The PresenceService instance.
         """
         return self._presence_service
+
+    @bot_service
+    def activities(self) -> ActivityRegistry:
+        """Get the :class:`ActivityRegistry` from the BDK entry point.
+
+        :return: The :class:`ActivityRegistry instance.
+
+        """
+        return self._activity_registry
 
     async def close_clients(self):
         """Close all the existing api clients created by the api client factory.
