@@ -6,6 +6,7 @@ import logging
 from symphony.bdk.core.auth.auth_session import AuthSession, OboAuthSession
 from symphony.bdk.core.auth.authenticator_factory import AuthenticatorFactory
 from symphony.bdk.core.auth.exception import AuthInitializationError
+from symphony.bdk.core.auth.ext_app_authenticator import ExtensionAppAuthenticator
 from symphony.bdk.core.client.api_client_factory import ApiClientFactory
 from symphony.bdk.core.config.exception import BotNotConfiguredError
 from symphony.bdk.core.service.application.application_service import ApplicationService
@@ -30,6 +31,7 @@ def bot_service(func):
     :return: the value returned by the decorated function with the passed arguments.
     :raise: BotNotConfiguredError if the bit service account is not configured.
     """
+
     @functools.wraps(func)
     def check_if_bot_configured_and_call_function(*args):
         symphony_bdk = args[0]
@@ -58,7 +60,7 @@ class SymphonyBdk:
         self._authenticator_factory = AuthenticatorFactory(config, api_client_factory=self._api_client_factory)
 
         self._bot_session = None
-        self._bot_session = None
+        self._ext_app_authenticator = None
         self._service_factory = None
         self._user_service = None
         self._message_service = None
@@ -98,6 +100,15 @@ class SymphonyBdk:
         """
         return self._bot_session
 
+    def app_authenticator(self) -> ExtensionAppAuthenticator:
+        """Get the extension app authenticator.
+
+        :return: a new instance of :class:`symphony.bdk.core.auth.ext_app_authenticator.ExtensionAppAuthenticator`
+        """
+        if self._ext_app_authenticator is None:
+            self._ext_app_authenticator = self._authenticator_factory.get_extension_app_authenticator()
+        return self._ext_app_authenticator
+
     def obo(self, user_id: int = None, username: str = None) -> OboAuthSession:
         """Get the Obo authentication session.
 
@@ -108,7 +119,7 @@ class SymphonyBdk:
         if username is not None:
             return self._authenticator_factory.get_obo_authenticator().authenticate_by_username(username)
         raise AuthInitializationError("At least user_id or username should be given to OBO authenticate the "
-                                          "extension app")
+                                      "extension app")
 
     def obo_services(self, obo_session: OboAuthSession) -> OboServices:
         """Return the entry point of all OBO-enabled services and endpoints.
@@ -123,7 +134,6 @@ class SymphonyBdk:
         """Get the MessageService from the BDK entry point.
 
         :return: The MessageService instance.
-
         """
         return self._message_service
 
@@ -132,7 +142,6 @@ class SymphonyBdk:
         """Get the StreamService from the BDK entry point.
 
         :return: The StreamService instance.
-
         """
         return self._stream_service
 
@@ -141,7 +150,6 @@ class SymphonyBdk:
         """Get the Datafeed loop from the BDK entry point.
 
         :return: The Datafeed Loop instance.
-
         """
         return self._datafeed_loop
 
@@ -150,7 +158,6 @@ class SymphonyBdk:
         """Get the UserService from the BDK entry point.
 
         :return: The UserService instance.
-
         """
         return self._user_service
 
@@ -159,7 +166,6 @@ class SymphonyBdk:
         """Get the ConnectionService from the BDK entry point.
 
         :return: The ConnectionService instance.
-
         """
         return self._connection_service
 
@@ -168,7 +174,6 @@ class SymphonyBdk:
         """Get the ApplicationService from the BDK entry point.
 
         :return: The ApplicationService instance.
-
         """
         return self._application_service
 
@@ -185,7 +190,6 @@ class SymphonyBdk:
         """Get the HealthService from the BDK entry point.
 
         :return: The HealthService instance.
-
         """
         return self._health_service
 
@@ -194,7 +198,6 @@ class SymphonyBdk:
         """Get the PresenceService from the BDK entry point.
 
         :return: The PresenceService instance.
-
         """
         return self._presence_service
 

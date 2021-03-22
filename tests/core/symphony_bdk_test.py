@@ -9,6 +9,7 @@ from symphony.bdk.core.auth.exception import AuthInitializationError
 from symphony.bdk.core.auth.obo_authenticator import OboAuthenticatorRsa
 from symphony.bdk.core.config.exception import BotNotConfiguredError
 from symphony.bdk.core.config.loader import BdkConfigLoader
+from symphony.bdk.core.config.model.bdk_authentication_config import BdkAuthenticationConfig
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
 from symphony.bdk.core.symphony_bdk import SymphonyBdk
 from tests.utils.resource_utils import get_config_resource_filepath
@@ -130,3 +131,19 @@ async def test_non_obo_services_fail_with_obo_only(obo_only_config):
 
         with pytest.raises(BotNotConfiguredError):
             symphony_bdk.connections()
+
+
+@pytest.mark.asyncio
+async def test_ext_app_authenticator(obo_only_config):
+    async with SymphonyBdk(obo_only_config) as symphony_bdk:
+        authenticator = symphony_bdk.app_authenticator()
+        assert authenticator is not None
+        assert symphony_bdk.app_authenticator() == authenticator  # test same instance is always returned
+
+
+@pytest.mark.asyncio
+async def test_ext_app_authenticator_fails(config):
+    config.app = BdkAuthenticationConfig()
+    async with SymphonyBdk(config) as symphony_bdk:
+        with pytest.raises(AuthInitializationError):
+            symphony_bdk.app_authenticator()
