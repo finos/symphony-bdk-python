@@ -9,6 +9,7 @@ from typing import List
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
 from symphony.bdk.core.service.datafeed.real_time_event_listener import RealTimeEventListener
+from symphony.bdk.gen import ApiException
 from symphony.bdk.gen.agent_api.datafeed_api import DatafeedApi
 from symphony.bdk.gen.agent_model.v4_event import V4Event
 
@@ -68,14 +69,53 @@ class AbstractDatafeedLoop(ABC):
         self.auth_session = auth_session
         self.bdk_config = config
         self.api_client = datafeed_api.api_client
+        self.running = False
 
-    @abstractmethod
     async def start(self):
-        """Start the datafeed event service"""
+        """Start the datafeed event service
+
+        :return: None
+        """
+        await self.prepare_datafeed()
+        self.running = True
+        while self.running:
+            try:
+                event_list = await self.read_datafeed()
+                await self.handle_v4_event_list(event_list)
+            except ApiException as exc:
+                if exc.status == 400:
+                    await self.recreate_datafeed()
+                else:
+                    raise exc
+
+    async def stop(self):
+        """Stop the datafeed event service
+
+        :return: None
+        """
+        self.running = False
 
     @abstractmethod
-    async def stop(self):
-        """Stop the datafeed event service"""
+    async def prepare_datafeed(self):
+        """Method called when :py:meth:`start` is called and before datafeed loop is actually running
+
+        :return: None
+        """
+
+    @abstractmethod
+    async def read_datafeed(self) -> List[V4Event]:
+        """Method called inside :py:meth:`start` while datafeed loop is actually running
+
+        :return: the list of V4Event elements received
+        """
+
+    @abstractmethod
+    async def recreate_datafeed(self):
+        """Method called when datafeed is stale and needs to be recreated (i.e. :py:meth:`read_datafeed` raises an
+        ApiException with status 400)
+
+        :return: None
+        """
 
     def subscribe(self, listener: RealTimeEventListener):
         """Subscribes a new listener to the datafeed loop instance.
@@ -97,6 +137,9 @@ class AbstractDatafeedLoop(ABC):
 
         :param events: the list of the received datafeed events.
         """
+        if not events:
+            return
+
         for event in filter(lambda e: e is not None, events):
             for listener in self.listeners:
                 if await listener.is_accepting_event(event, self.bdk_config.bot.username):
