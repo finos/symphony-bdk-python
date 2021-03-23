@@ -83,20 +83,29 @@ def fixture_read_df_side_effect(message_sent_event):
     return read_df
 
 
-@pytest.fixture(name="df_loop")
-def fixture_autoclosing_df_loop():
+@pytest.fixture(name="bare_df_loop")
+def fixture_bare_df_loop():
     # patch.multiple called in order to be able to instantiate AbstractDatafeedLoop
     with patch.multiple(AbstractDatafeedLoop, __abstractmethods__=set()):
         mock_df = AbstractDatafeedLoop(DatafeedApi(AsyncMock()), None, BdkConfig(bot={"username": BOT_USER}))
-
-        listener = AsyncMock(wraps=ClosingListener(mock_df))
-        mock_df.subscribe(listener)
 
         mock_df.read_datafeed = AsyncMock()
         mock_df.prepare_datafeed = AsyncMock()
         mock_df.recreate_datafeed = AsyncMock()
 
         return mock_df
+
+
+@pytest.fixture(name="df_loop")
+def fixture_autoclosing_df_loop(bare_df_loop):
+    listener = AsyncMock(wraps=ClosingListener(bare_df_loop))
+    bare_df_loop.subscribe(listener)
+
+    bare_df_loop.read_datafeed = AsyncMock()
+    bare_df_loop.prepare_datafeed = AsyncMock()
+    bare_df_loop.recreate_datafeed = AsyncMock()
+
+    return bare_df_loop
 
 
 @pytest.fixture(name="listener")
@@ -155,7 +164,7 @@ async def test_error_in_listener(df_loop, listener, read_df_side_effect, message
 
 
 @pytest.mark.asyncio
-async def test_400_should_call_recreate_df(df_loop, listener, read_df_side_effect, message_sent_event):
+async def test_400_should_call_recreate_df(df_loop, listener, message_sent_event):
     async def read_df(**kwargs):
         if read_df.first_time:
             read_df.first_time = False
@@ -177,7 +186,7 @@ async def test_400_should_call_recreate_df(df_loop, listener, read_df_side_effec
 
 
 @pytest.mark.asyncio
-async def test_non_400_error_should_be_propagated(df_loop, listener, read_df_side_effect):
+async def test_non_400_error_should_be_propagated(df_loop, listener):
     exception = ApiException(status=502, reason="")
     df_loop.read_datafeed.side_effect = exception
 
@@ -194,7 +203,7 @@ async def test_non_400_error_should_be_propagated(df_loop, listener, read_df_sid
 
 
 @pytest.mark.asyncio
-async def test_non_api_exception_should_be_propagated(df_loop, listener, read_df_side_effect):
+async def test_non_api_exception_should_be_propagated(df_loop, listener):
     exception = ValueError("An error")
     df_loop.read_datafeed.side_effect = exception
 
@@ -422,3 +431,50 @@ async def test_handle_symphony_element(df_loop, listener, initiator):
 
     listener.is_accepting_event.assert_called_with(event, BOT_USER)
     listener.on_symphony_elements_action.assert_called_once_with(initiator, payload.symphony_elements_action)
+
+
+@pytest.mark.asyncio
+async def test_listener_concurrency(bare_df_loop, read_df_side_effect):
+    class QueueListener(RealTimeEventListener):
+        def __init__(self, queue, other_queue):
+            self.queue = queue
+            self.other_queue = other_queue
+            self.first = True
+
+        async def on_message_sent(self, initiator: V4Initiator, event: V4MessageSent):
+            if self.first:
+                await self.queue.put("message")
+                await self.other_queue.get()
+                await bare_df_loop.stop()
+            self.first = False
+
+    bare_df_loop.read_datafeed.side_effect = read_df_side_effect
+
+    queue_one = asyncio.Queue()
+    queue_two = asyncio.Queue()
+
+    bare_df_loop.subscribe(QueueListener(queue_one, queue_two))
+    bare_df_loop.subscribe(QueueListener(queue_two, queue_one))
+
+    await bare_df_loop.start()  # test it finishes without deadlock
+
+
+@pytest.mark.asyncio
+async def test_events_concurrency(bare_df_loop, read_df_side_effect):
+    class QueueListener(RealTimeEventListener):
+        def __init__(self):
+            self.queue = asyncio.Queue()
+            self.count = 0
+
+        async def on_message_sent(self, initiator: V4Initiator, event: V4MessageSent):
+            self.count += 1
+            if self.count == 1:
+                await self.queue.get()
+                await bare_df_loop.stop()
+            elif self.count == 2:
+                await self.queue.put("message")
+
+    bare_df_loop.read_datafeed.side_effect = read_df_side_effect
+    bare_df_loop.subscribe(QueueListener())
+
+    await bare_df_loop.start()  # test no deadlock
