@@ -1,0 +1,26 @@
+{
+  "id": 7696581394433,
+  "email_address": "admin@symphony.com",
+  "first_name": "Symphony",
+  "last_name": "Admin",
+  "display_name": "Symphony Admin",
+  "title": "Administrator",
+  "company": "Acme",
+  "username": "admin@symphony.com",
+  "location": "California",
+  "avatars": [
+    {
+      "size": "original",
+      "url": "../avatars/static/150/default.png"
+    },
+    {
+      "size": "small",
+      "url": "../avatars/static/50/default.png"
+    }
+  ],
+  "roles": [
+    "CONTENT_MANAGEMENT",
+    "INDIVIDUAL",
+    "USER_PROVISIONING"
+  ]
+}
