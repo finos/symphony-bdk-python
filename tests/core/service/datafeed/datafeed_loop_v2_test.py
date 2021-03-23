@@ -20,6 +20,12 @@ from symphony.bdk.gen.agent_model.v4_user import V4User
 from tests.utils.resource_utils import get_config_resource_filepath
 
 
+class EventsMock:
+    def __init__(self, events):
+        self.events = events
+        self.ack_id = "ack_id"
+
+
 @pytest.fixture(name="auth_session")
 def fixture_auth_session():
     auth_session = AuthSession(None)
@@ -36,7 +42,7 @@ def fixture_config():
 
 
 @pytest.fixture(name="datafeed_api")
-def fixtrue_datafeed_api():
+def fixture_datafeed_api():
     datafeed_api = MagicMock(DatafeedApi)
     datafeed_api.api_client = MagicMock(ApiClient)
     datafeed_api.list_datafeed = AsyncMock()
@@ -56,18 +62,16 @@ def fixture_initiator():
     return V4Initiator(user=V4User(username="username"))
 
 
-@pytest.fixture(name="message_sent_event")
-def fixture_message_sent_event(initiator):
-    class EventsMock:
-        def __init__(self, individual_event):
-            self.events = [individual_event]
-            self.ack_id = "ack_id"
+@pytest.fixture(name="message_sent")
+def fixture_message_sent(initiator):
+    return V4Event(type=RealTimeEvent.MESSAGESENT.name,
+                   payload=V4Payload(message_sent=V4MessageSent()),
+                   initiator=initiator)
 
-    v4_event = V4Event(type=RealTimeEvent.MESSAGESENT.name,
-                       payload=V4Payload(message_sent=V4MessageSent()),
-                       initiator=initiator)
-    event = EventsMock(v4_event)
-    return event
+
+@pytest.fixture(name="message_sent_event")
+def fixture_message_sent_event(message_sent):
+    return EventsMock([message_sent])
 
 
 @pytest.fixture(name="read_df_side_effect")
@@ -187,3 +191,25 @@ async def test_start_datafeed_stale_datafeed(datafeed_loop, datafeed_api, messag
 
     assert datafeed_loop._datafeed_id == "test_id"
     assert datafeed_loop._ack_id == "ack_id"
+
+
+@pytest.mark.asyncio
+async def test_read_datafeed_no_value(datafeed_loop, datafeed_api):
+    datafeed_api.read_datafeed.return_value = EventsMock(None)
+
+    assert await datafeed_loop.read_datafeed() is None
+
+
+@pytest.mark.asyncio
+async def test_read_datafeed_empty_list(datafeed_loop, datafeed_api):
+    datafeed_api.read_datafeed.return_value = EventsMock([])
+
+    assert await datafeed_loop.read_datafeed() is None
+
+
+@pytest.mark.asyncio
+async def test_read_datafeed_non_empty_list(datafeed_loop, datafeed_api, message_sent):
+    events = [message_sent]
+    datafeed_api.read_datafeed.return_value = EventsMock(events)
+
+    assert await datafeed_loop.read_datafeed() == events
