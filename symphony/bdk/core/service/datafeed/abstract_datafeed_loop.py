@@ -91,6 +91,8 @@ class AbstractDatafeedLoop(ABC):
     async def stop(self, hard_kill=False):
         """Stop the datafeed event service
 
+        :param hard_kill: if set to True, tasks running listener methods will be cancelled immediately. Otherwise, tasks
+          will be awaited until completion.
         :return: None
         """
         self.running = False
