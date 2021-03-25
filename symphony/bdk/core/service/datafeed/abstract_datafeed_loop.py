@@ -83,27 +83,10 @@ class AbstractDatafeedLoop(ABC):
         """
         logger.debug("Starting datafeed loop")
         await self.prepare_datafeed()
-
-        self.running = True
-        while self.running:
-            try:
-                event_list = await self.read_datafeed()
-                await self.handle_v4_event_list(event_list)
-            except ApiException as exc:
-                if exc.status == 400:
-                    await self.recreate_datafeed()
-                else:
-                    raise exc
+        await self._run_loop()
 
         logger.debug("Stopping datafeed loop")
-        if self.hard_kill:
-            logger.debug("Cancelling %s listener tasks", len(self.tasks))
-            for task in self.tasks:
-                task.cancel()
-            await asyncio.gather(*self.tasks, return_exceptions=True)
-        else:
-            logger.debug("Waiting for %s listener tasks to finish", len(self.tasks))
-            await asyncio.gather(*self.tasks)
+        await self._stop_listener_tasks()
 
     async def stop(self, hard_kill=False):
         """Stop the datafeed event service
@@ -149,6 +132,31 @@ class AbstractDatafeedLoop(ABC):
         """
         self.listeners.remove(listener)
 
+    async def _run_loop(self):
+        self.running = True
+        while self.running:
+            await self._run_loop_iteration()
+
+    async def _run_loop_iteration(self):
+        try:
+            event_list = await self.read_datafeed()
+            await self.handle_v4_event_list(event_list)
+        except ApiException as exc:
+            if exc.status == 400:
+                await self.recreate_datafeed()
+            else:
+                raise exc
+
+    async def _stop_listener_tasks(self):
+        if self.hard_kill:
+            logger.debug("Cancelling %s listener tasks", len(self.tasks))
+            for task in self.tasks:
+                task.cancel()
+            await asyncio.gather(*self.tasks, return_exceptions=True)
+        else:
+            logger.debug("Waiting for %s listener tasks to finish", len(self.tasks))
+            await asyncio.gather(*self.tasks)
+
     async def handle_v4_event_list(self, events: List[V4Event]):
         """Handles the event list received from the read datafeed endpoint.
         Calls each listeners for each received events.
@@ -161,19 +169,21 @@ class AbstractDatafeedLoop(ABC):
         for event in filter(lambda e: e is not None, events):
             for listener in self.listeners:
                 if await listener.is_accepting_event(event, self.bdk_config.bot.username):
-                    asyncio.create_task(self._dispatch_on_event_type(listener, event))
+                    asyncio.create_task(self._dispatch_to_listener_method(listener, event))
 
-    async def _dispatch_on_event_type(self, listener: RealTimeEventListener, event: V4Event):
+    async def _dispatch_to_listener_method(self, listener: RealTimeEventListener, event: V4Event):
         current_task = asyncio.current_task()
-
-        event_id = getattr(event, "id", "None")
-        event_listener_context.set(f"{current_task.get_name()}/{event_id}/{id(listener)}")
+        self._set_context_var(current_task, event, listener)
 
         self.tasks.append(current_task)
         try:
             await self._run_listener_method(listener, event)
         finally:
             self.tasks.remove(current_task)
+
+    def _set_context_var(self, current_task, event, listener):
+        event_id = getattr(event, "id", "None")
+        event_listener_context.set(f"{current_task.get_name()}/{event_id}/{id(listener)}")
 
     async def _run_listener_method(self, listener: RealTimeEventListener, event: V4Event):
         try:
