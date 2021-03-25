@@ -18,6 +18,7 @@ logger = logging.getLogger(__name__)
 
 event_listener_context = ContextVar("event_listener_context", default="main-task")
 
+
 class DatafeedVersion(Enum):
     """Enum of all possible datafeed versions.
     """
@@ -72,13 +73,17 @@ class AbstractDatafeedLoop(ABC):
         self.bdk_config = config
         self.api_client = datafeed_api.api_client
         self.running = False
+        self.tasks = []
+        self.hard_kill = False
 
     async def start(self):
         """Start the datafeed event service
 
         :return: None
         """
+        logger.debug("Starting datafeed loop")
         await self.prepare_datafeed()
+
         self.running = True
         while self.running:
             try:
@@ -90,12 +95,23 @@ class AbstractDatafeedLoop(ABC):
                 else:
                     raise exc
 
-    async def stop(self):
+        logger.debug("Stopping datafeed loop")
+        if self.hard_kill:
+            logger.debug("Cancelling %s listener tasks", len(self.tasks))
+            for task in self.tasks:
+                task.cancel()
+            await asyncio.gather(*self.tasks, return_exceptions=True)
+        else:
+            logger.debug("Waiting for %s listener tasks to finish", len(self.tasks))
+            await asyncio.gather(*self.tasks)
+
+    async def stop(self, hard_kill=False):
         """Stop the datafeed event service
 
         :return: None
         """
         self.running = False
+        self.hard_kill = hard_kill
 
     @abstractmethod
     async def prepare_datafeed(self):
@@ -148,9 +164,18 @@ class AbstractDatafeedLoop(ABC):
                     asyncio.create_task(self._dispatch_on_event_type(listener, event))
 
     async def _dispatch_on_event_type(self, listener: RealTimeEventListener, event: V4Event):
-        event_id = getattr(event, "id", "None")
-        event_listener_context.set(f"{asyncio.current_task().get_name()}/{event_id}/{id(listener)}")
+        current_task = asyncio.current_task()
 
+        event_id = getattr(event, "id", "None")
+        event_listener_context.set(f"{current_task.get_name()}/{event_id}/{id(listener)}")
+
+        self.tasks.append(current_task)
+        try:
+            await self._run_listener_method(listener, event)
+        finally:
+            self.tasks.remove(current_task)
+
+    async def _run_listener_method(self, listener: RealTimeEventListener, event: V4Event):
         try:
             listener_method_name, payload_field_name = RealTimeEvent[event.type].value
         except KeyError:
