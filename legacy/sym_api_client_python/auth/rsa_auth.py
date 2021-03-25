@@ -4,7 +4,7 @@ import datetime
 import time
 import logging
 from .auth_endpoint_constants import auth_endpoint_constants
-from jose import jwt
+import jwt
 from ..clients.api_client import APIClient
 from ..exceptions.MaxRetryException import MaxRetryException
 
