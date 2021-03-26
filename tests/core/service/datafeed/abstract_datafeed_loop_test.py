@@ -45,9 +45,10 @@ class ClosingListener(RealTimeEventListener):
         return True
 
 
-def assert_prepared_and_read_df_called(df_loop):
+def assert_prepared_read_df_stop_tasks_called(df_loop):
     df_loop.prepare_datafeed.assert_called_once()
     assert df_loop.read_datafeed.call_count >= 1
+    df_loop._stop_listener_tasks.assert_called_once()
 
 
 def assert_is_accepting_event_on_message_sent_called(listener, message_sent_event):
@@ -88,6 +89,7 @@ def fixture_bare_df_loop():
     # patch.multiple called in order to be able to instantiate AbstractDatafeedLoop
     with patch.multiple(AbstractDatafeedLoop, __abstractmethods__=set()):
         mock_df = AbstractDatafeedLoop(DatafeedApi(AsyncMock()), None, BdkConfig(bot={"username": BOT_USER}))
+        mock_df._stop_listener_tasks = AsyncMock(wraps=mock_df._stop_listener_tasks)
         mock_df.read_datafeed = AsyncMock()
         mock_df.prepare_datafeed = AsyncMock()
         mock_df.recreate_datafeed = AsyncMock()
@@ -121,7 +123,7 @@ async def test_start(df_loop, listener, read_df_side_effect, message_sent_event)
 
     await df_loop.start()
 
-    assert_prepared_and_read_df_called(df_loop)
+    assert_prepared_read_df_stop_tasks_called(df_loop)
     assert_is_accepting_event_on_message_sent_called(listener, message_sent_event)
 
 
@@ -135,7 +137,7 @@ async def test_is_accepting_event_false(df_loop, listener, read_df_side_effect, 
     df_loop.subscribe(non_accepting_event_listener)
     await df_loop.start()
 
-    assert_prepared_and_read_df_called(df_loop)
+    assert_prepared_read_df_stop_tasks_called(df_loop)
     assert_is_accepting_event_on_message_sent_called(listener, message_sent_event)
 
     non_accepting_event_listener.is_accepting_event.assert_called_with(message_sent_event, BOT_USER)
@@ -153,7 +155,7 @@ async def test_error_in_listener(df_loop, listener, read_df_side_effect, message
     df_loop.subscribe(error_listener)
     await df_loop.start()  # No error raised
 
-    assert_prepared_and_read_df_called(df_loop)
+    assert_prepared_read_df_stop_tasks_called(df_loop)
     assert_is_accepting_event_on_message_sent_called(listener, message_sent_event)
     assert_is_accepting_event_on_message_sent_called(error_listener, message_sent_event)
 
@@ -183,29 +185,6 @@ async def test_400_should_call_recreate_df(df_loop, listener, message_sent_event
 @pytest.mark.asyncio
 @pytest.mark.parametrize("exception", [ValueError("An error"), ApiException(status=502, reason="")])
 async def test_non_400_error_should_be_propagated_and_call_stop_tasks(df_loop, listener, exception):
-    df_loop._stop_listener_tasks = AsyncMock(wraps=df_loop._stop_listener_tasks)
-    df_loop.read_datafeed.side_effect = exception
-
-    hard_kill = True
-    timeout = 30
-
-    with pytest.raises(type(exception)) as raised_exception:
-        await df_loop.start(hard_kill, timeout)
-        assert raised_exception == exception
-
-    df_loop.prepare_datafeed.assert_called_once()
-    df_loop.read_datafeed.assert_called_once()
-    df_loop.recreate_datafeed.assert_not_called()
-    df_loop._stop_listener_tasks.assert_called_once_with(hard_kill, timeout)
-
-    # assert no interaction with the listener
-    assert len(listener.method_calls) == 0
-
-
-@pytest.mark.asyncio
-@pytest.mark.parametrize("exception", [ValueError("An error"), ApiException(status=502, reason="")])
-async def test_non_400_error_should_be_propagated_and_call_stop_tasks_default_values(df_loop, listener, exception):
-    df_loop._stop_listener_tasks = AsyncMock(wraps=df_loop._stop_listener_tasks)
     df_loop.read_datafeed.side_effect = exception
 
     with pytest.raises(type(exception)) as raised_exception:
@@ -215,7 +194,7 @@ async def test_non_400_error_should_be_propagated_and_call_stop_tasks_default_va
     df_loop.prepare_datafeed.assert_called_once()
     df_loop.read_datafeed.assert_called_once()
     df_loop.recreate_datafeed.assert_not_called()
-    df_loop._stop_listener_tasks.assert_called_once_with(False, None)
+    df_loop._stop_listener_tasks.assert_called_once()
 
     # assert no interaction with the listener
     assert len(listener.method_calls) == 0

@@ -73,15 +73,13 @@ class AbstractDatafeedLoop(ABC):
         self.bdk_config = config
         self.api_client = datafeed_api.api_client
         self.running = False
+        self.hard_kill = False
+        self.timeout = None
         self.tasks = []
 
-    async def start(self, hard_kill: bool = False, timeout: float = None):
+    async def start(self):
         """Start the datafeed event service
 
-        :param hard_kill: if set to True, tasks running listener methods will be cancelled immediately. Otherwise, tasks
-          will be awaited until completion.
-        :param timeout: timeout in seconds to wait for tasks completion when loop stops.
-          None means wait until completion. Ignored if hard_kill set to True.
         :return: None
         """
         logger.debug("Starting datafeed loop")
@@ -91,13 +89,19 @@ class AbstractDatafeedLoop(ABC):
             await self._run_loop()
         finally:
             logger.debug("Stopping datafeed loop")
-            await self._stop_listener_tasks(hard_kill, timeout)
+            await self._stop_listener_tasks()
 
-    async def stop(self):
+    async def stop(self, hard_kill: bool = False, timeout: float = None):
         """Stop the datafeed event service
 
+        :param hard_kill: if set to True, tasks running listener methods will be cancelled immediately. Otherwise, tasks
+          will be awaited until completion.
+        :param timeout: timeout in seconds to wait for tasks completion when loop stops.
+          None means wait until completion. Ignored if hard_kill set to True.
         :return: None
         """
+        self.hard_kill = hard_kill
+        self.timeout = timeout
         self.running = False
 
     @abstractmethod
@@ -151,11 +155,11 @@ class AbstractDatafeedLoop(ABC):
             else:
                 raise exc
 
-    async def _stop_listener_tasks(self, hard_kill, timeout):
-        if hard_kill:
+    async def _stop_listener_tasks(self):
+        if self.hard_kill:
             await self._cancel_tasks()
         else:
-            await self._wait_for_completion_or_timeout(timeout)
+            await self._wait_for_completion_or_timeout()
 
     async def _cancel_tasks(self):
         logger.debug("Cancelling %s listener tasks", len(self.tasks))
@@ -163,10 +167,10 @@ class AbstractDatafeedLoop(ABC):
             task.cancel()
         await asyncio.gather(*self.tasks, return_exceptions=True)
 
-    async def _wait_for_completion_or_timeout(self, timeout):
+    async def _wait_for_completion_or_timeout(self):
         logger.debug("Waiting for %s listener tasks to finish", len(self.tasks))
         try:
-            await asyncio.wait_for(asyncio.gather(*self.tasks), timeout=timeout)
+            await asyncio.wait_for(asyncio.gather(*self.tasks), timeout=self.timeout)
         except asyncio.TimeoutError:
             logger.debug("Task completion timed out")
 
