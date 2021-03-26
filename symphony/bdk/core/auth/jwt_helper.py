@@ -5,8 +5,7 @@ import datetime
 from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
 from cryptography.x509 import load_pem_x509_certificate
 
-from jose import jwt, JOSEError
-
+import jwt
 from symphony.bdk.core.auth.exception import AuthInitializationError
 from symphony.bdk.core.config.model.bdk_rsa_key_config import BdkRsaKeyConfig
 
@@ -57,7 +56,7 @@ def validate_jwt(jwt_token: str, certificate: str) -> dict:
     try:
         return jwt.decode(jwt_token, _parse_public_key_from_x509_cert(certificate),
                           algorithms=[JWT_ENCRYPTION_ALGORITHM])
-    except JOSEError as exc:
+    except (jwt.DecodeError, jwt.ExpiredSignatureError) as exc:
         raise AuthInitializationError("Unable to validate the jwt") from exc
 
 
