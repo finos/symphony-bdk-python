@@ -74,29 +74,31 @@ class AbstractDatafeedLoop(ABC):
         self.api_client = datafeed_api.api_client
         self.running = False
         self.tasks = []
-        self.hard_kill = False
 
-    async def start(self):
+    async def start(self, hard_kill: bool = False, timeout: float = None):
         """Start the datafeed event service
-
-        :return: None
-        """
-        logger.debug("Starting datafeed loop")
-        await self.prepare_datafeed()
-        await self._run_loop()
-
-        logger.debug("Stopping datafeed loop")
-        await self._stop_listener_tasks()
-
-    async def stop(self, hard_kill=False):
-        """Stop the datafeed event service
 
         :param hard_kill: if set to True, tasks running listener methods will be cancelled immediately. Otherwise, tasks
           will be awaited until completion.
+        :param timeout: timeout in seconds to wait for tasks completion when loop stops.
+          None means wait until completion. Ignored if hard_kill set to True.
+        :return: None
+        """
+        logger.debug("Starting datafeed loop")
+
+        await self.prepare_datafeed()
+        try:
+            await self._run_loop()
+        finally:
+            logger.debug("Stopping datafeed loop")
+            await self._stop_listener_tasks(hard_kill, timeout)
+
+    async def stop(self):
+        """Stop the datafeed event service
+
         :return: None
         """
         self.running = False
-        self.hard_kill = hard_kill
 
     @abstractmethod
     async def prepare_datafeed(self):
@@ -149,15 +151,24 @@ class AbstractDatafeedLoop(ABC):
             else:
                 raise exc
 
-    async def _stop_listener_tasks(self):
-        if self.hard_kill:
-            logger.debug("Cancelling %s listener tasks", len(self.tasks))
-            for task in self.tasks:
-                task.cancel()
-            await asyncio.gather(*self.tasks, return_exceptions=True)
+    async def _stop_listener_tasks(self, hard_kill, timeout):
+        if hard_kill:
+            await self._cancel_tasks()
         else:
-            logger.debug("Waiting for %s listener tasks to finish", len(self.tasks))
-            await asyncio.gather(*self.tasks)
+            await self._wait_for_completion_or_timeout(timeout)
+
+    async def _cancel_tasks(self):
+        logger.debug("Cancelling %s listener tasks", len(self.tasks))
+        for task in self.tasks:
+            task.cancel()
+        await asyncio.gather(*self.tasks, return_exceptions=True)
+
+    async def _wait_for_completion_or_timeout(self, timeout):
+        logger.debug("Waiting for %s listener tasks to finish", len(self.tasks))
+        try:
+            await asyncio.wait_for(asyncio.gather(*self.tasks), timeout=timeout)
+        except asyncio.TimeoutError:
+            logger.debug("Task completion timed out")
 
     async def handle_v4_event_list(self, events: List[V4Event]):
         """Handles the event list received from the read datafeed endpoint.

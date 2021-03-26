@@ -1,5 +1,5 @@
 import asyncio
-from unittest.mock import AsyncMock, patch
+from unittest.mock import AsyncMock, patch, Mock
 
 import pytest
 
@@ -88,7 +88,6 @@ def fixture_bare_df_loop():
     # patch.multiple called in order to be able to instantiate AbstractDatafeedLoop
     with patch.multiple(AbstractDatafeedLoop, __abstractmethods__=set()):
         mock_df = AbstractDatafeedLoop(DatafeedApi(AsyncMock()), None, BdkConfig(bot={"username": BOT_USER}))
-
         mock_df.read_datafeed = AsyncMock()
         mock_df.prepare_datafeed = AsyncMock()
         mock_df.recreate_datafeed = AsyncMock()
@@ -100,10 +99,6 @@ def fixture_bare_df_loop():
 def fixture_autoclosing_df_loop(bare_df_loop):
     listener = AsyncMock(wraps=ClosingListener(bare_df_loop))
     bare_df_loop.subscribe(listener)
-
-    bare_df_loop.read_datafeed = AsyncMock()
-    bare_df_loop.prepare_datafeed = AsyncMock()
-    bare_df_loop.recreate_datafeed = AsyncMock()
 
     return bare_df_loop
 
@@ -186,35 +181,61 @@ async def test_400_should_call_recreate_df(df_loop, listener, message_sent_event
 
 
 @pytest.mark.asyncio
-async def test_non_400_error_should_be_propagated(df_loop, listener):
-    exception = ApiException(status=502, reason="")
+@pytest.mark.parametrize("exception", [ValueError("An error"), ApiException(status=502, reason="")])
+async def test_non_400_error_should_be_propagated_and_call_stop_tasks(df_loop, listener, exception):
+    df_loop._stop_listener_tasks = AsyncMock(wraps=df_loop._stop_listener_tasks)
     df_loop.read_datafeed.side_effect = exception
 
-    with pytest.raises(ApiException) as raised_exception:
-        await df_loop.start()
+    hard_kill = True
+    timeout = 30
+
+    with pytest.raises(type(exception)) as raised_exception:
+        await df_loop.start(hard_kill, timeout)
         assert raised_exception == exception
 
     df_loop.prepare_datafeed.assert_called_once()
     df_loop.read_datafeed.assert_called_once()
     df_loop.recreate_datafeed.assert_not_called()
+    df_loop._stop_listener_tasks.assert_called_once_with(hard_kill, timeout)
 
     # assert no interaction with the listener
     assert len(listener.method_calls) == 0
 
 
 @pytest.mark.asyncio
-async def test_non_api_exception_should_be_propagated(df_loop, listener):
-    exception = ValueError("An error")
+@pytest.mark.parametrize("exception", [ValueError("An error"), ApiException(status=502, reason="")])
+async def test_non_400_error_should_be_propagated_and_call_stop_tasks_default_values(df_loop, listener, exception):
+    df_loop._stop_listener_tasks = AsyncMock(wraps=df_loop._stop_listener_tasks)
     df_loop.read_datafeed.side_effect = exception
 
-    with pytest.raises(ValueError) as raised_exception:
+    with pytest.raises(type(exception)) as raised_exception:
         await df_loop.start()
         assert raised_exception == exception
 
     df_loop.prepare_datafeed.assert_called_once()
     df_loop.read_datafeed.assert_called_once()
     df_loop.recreate_datafeed.assert_not_called()
+    df_loop._stop_listener_tasks.assert_called_once_with(False, None)
 
+    # assert no interaction with the listener
+    assert len(listener.method_calls) == 0
+
+
+@pytest.mark.asyncio
+async def test_error_in_prepare_should_be_propagated(df_loop, listener):
+    exception = ValueError("error")
+
+    df_loop.prepare_datafeed.side_effect = exception
+
+    with pytest.raises(ValueError) as raised_exception:
+        await df_loop.start()
+        assert raised_exception == exception
+
+    df_loop.prepare_datafeed.assert_called_once()
+    df_loop.read_datafeed.assert_not_called()
+    df_loop.recreate_datafeed.assert_not_called()
+
+    # assert no interaction with the listener
     assert len(listener.method_calls) == 0
 
 
