@@ -1,6 +1,5 @@
 from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import AbstractDatafeedLoop
 from symphony.bdk.core.service.datafeed.on_disk_datafeed_id_repository import OnDiskDatafeedIdRepository
-from symphony.bdk.gen.exceptions import ApiException
 
 
 class DatafeedLoopV1(AbstractDatafeedLoop):
@@ -23,44 +22,30 @@ class DatafeedLoopV1(AbstractDatafeedLoop):
     If the datafeed service is stopped during a read datafeed call, it has to wait until the last read finish to be
     really stopped
     """
-
     def __init__(self, datafeed_api, auth_session, config, repository=None):
         super().__init__(datafeed_api, auth_session, config)
-        self.datafeed_repository = OnDiskDatafeedIdRepository(config) if repository is None else repository
-        self.datafeed_id = None
-        self.started = False
+        self._datafeed_repository = OnDiskDatafeedIdRepository(config) if repository is None else repository
+        self._datafeed_id = None
 
-    async def start(self):
-        self.datafeed_id = self.datafeed_repository.read()
-        if not self.datafeed_id:
-            self.datafeed_id = await self._create_datafeed_and_persist()
-        self.started = True
-        while self.started:
-            try:
-                await self._read_datafeed()
-            except ApiException as exc:
-                if exc.status == 400:
-                    self.datafeed_id = await self._create_datafeed_and_persist()
-                else:
-                    raise exc
+    async def prepare_datafeed(self):
+        self._datafeed_id = self._datafeed_repository.read()
+        if not self._datafeed_id:
+            await self.recreate_datafeed()
 
-    async def stop(self):
-        self.started = False
-
-    async def _read_datafeed(self):
+    async def read_datafeed(self):
         session_token = await self.auth_session.session_token
         key_manager_token = await self.auth_session.key_manager_token
-        events = await self.datafeed_api.v4_datafeed_id_read_get(id=self.datafeed_id,
+        events = await self.datafeed_api.v4_datafeed_id_read_get(id=self._datafeed_id,
                                                                  session_token=session_token,
                                                                  key_manager_token=key_manager_token)
         if events is not None and events.value:
-            await self.handle_v4_event_list(events.value)
+            return events.value
 
-    async def _create_datafeed_and_persist(self):
+    async def recreate_datafeed(self):
         session_token = await self.auth_session.session_token
         key_manager_token = await self.auth_session.key_manager_token
         response = await self.datafeed_api.v4_datafeed_create_post(session_token=session_token,
                                                                    key_manager_token=key_manager_token)
         datafeed_id = response.id
-        self.datafeed_repository.write(response.id)
-        return datafeed_id
+        self._datafeed_repository.write(datafeed_id)
+        self._datafeed_id = datafeed_id
