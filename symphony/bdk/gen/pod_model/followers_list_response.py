@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -26,9 +27,8 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.pod_model.pagination import Pagination
-    globals()['Pagination'] = Pagination
+from symphony.bdk.gen.pod_model.pagination import Pagination
+globals()['Pagination'] = Pagination
 
 
 class FollowersListResponse(ModelNormal):
@@ -75,11 +75,10 @@ class FollowersListResponse(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'count': (int,),  # noqa: E501
-            'followers': ([int],),  # noqa: E501
-            'pagination': (Pagination,),  # noqa: E501
+            'count': (int, none_type),  # noqa: E501
+            'followers': ([int], none_type),  # noqa: E501
+            'pagination': (Pagination, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -166,7 +165,9 @@ class FollowersListResponse(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.count: int = None
+        self.followers: List[int] = None
+        self.pagination: Pagination = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

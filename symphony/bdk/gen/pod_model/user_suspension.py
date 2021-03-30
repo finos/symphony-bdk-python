@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -72,9 +73,9 @@ class UserSuspension(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'suspended': (bool,),  # noqa: E501
-            'suspended_until': (int,),  # noqa: E501
-            'suspension_reason': (str,),  # noqa: E501
+            'suspended': (bool, none_type),  # noqa: E501
+            'suspended_until': (int, none_type),  # noqa: E501
+            'suspension_reason': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -161,7 +162,9 @@ class UserSuspension(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.suspended: bool = None
+        self.suspended_until: int = None
+        self.suspension_reason: str = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -72,10 +73,10 @@ class RoleDetail(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'id': (str,),  # noqa: E501
-            'name': (str,),  # noqa: E501
-            'user_types': ([str],),  # noqa: E501
-            'optional_actions': ([str],),  # noqa: E501
+            'id': (str, none_type),  # noqa: E501
+            'name': (str, none_type),  # noqa: E501
+            'user_types': ([str], none_type),  # noqa: E501
+            'optional_actions': ([str], none_type),  # noqa: E501
         }
 
     @cached_property
@@ -164,7 +165,10 @@ class RoleDetail(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.id: str = None
+        self.name: str = None
+        self.user_types: List[str] = None
+        self.optional_actions: List[str] = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

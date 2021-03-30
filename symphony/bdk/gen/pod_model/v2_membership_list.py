@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -26,9 +27,8 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.pod_model.v2_member_info_list import V2MemberInfoList
-    globals()['V2MemberInfoList'] = V2MemberInfoList
+from symphony.bdk.gen.pod_model.v2_member_info_list import V2MemberInfoList
+globals()['V2MemberInfoList'] = V2MemberInfoList
 
 
 class V2MembershipList(ModelNormal):
@@ -75,12 +75,11 @@ class V2MembershipList(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'count': (int,),  # noqa: E501
-            'skip': (int,),  # noqa: E501
-            'limit': (int,),  # noqa: E501
-            'members': (V2MemberInfoList,),  # noqa: E501
+            'count': (int, none_type),  # noqa: E501
+            'skip': (int, none_type),  # noqa: E501
+            'limit': (int, none_type),  # noqa: E501
+            'members': (V2MemberInfoList, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -169,7 +168,10 @@ class V2MembershipList(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.count: int = None
+        self.skip: int = None
+        self.limit: int = None
+        self.members: V2MemberInfoList = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

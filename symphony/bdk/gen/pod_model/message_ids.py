@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -26,9 +27,8 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.pod_model.string_list import StringList
-    globals()['StringList'] = StringList
+from symphony.bdk.gen.pod_model.string_list import StringList
+globals()['StringList'] = StringList
 
 
 class MessageIds(ModelNormal):
@@ -75,9 +75,8 @@ class MessageIds(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'message_ids': (StringList,),  # noqa: E501
+            'message_ids': (StringList, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -160,7 +159,7 @@ class MessageIds(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.message_ids: StringList = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

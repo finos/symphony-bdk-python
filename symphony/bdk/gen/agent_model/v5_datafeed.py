@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -74,8 +73,8 @@ class V5Datafeed(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'id': (str,),  # noqa: E501
-            'created_at': (int,),  # noqa: E501
+            'id': (str, none_type),  # noqa: E501
+            'created_at': (int, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -160,7 +159,8 @@ class V5Datafeed(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.id: str = None
+        self.created_at: int = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

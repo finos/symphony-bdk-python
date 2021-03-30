@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -131,6 +132,8 @@ class StringList(ModelSimple):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
         """
+        # required up here when default value is not given
+        _path_to_item = kwargs.pop('_path_to_item', ())
 
         if 'value' in kwargs:
             value = kwargs.pop('value')
@@ -146,7 +149,6 @@ class StringList(ModelSimple):
 
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', False)
-        _path_to_item = kwargs.pop('_path_to_item', ())
         _configuration = kwargs.pop('_configuration', None)
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
@@ -166,7 +168,7 @@ class StringList(ModelSimple):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-        self.value = value
+        self.value: List[str] = value
         if kwargs:
             raise ApiTypeError(
                 "Invalid named arguments=%s passed to %s. Remove those invalid named arguments." % (

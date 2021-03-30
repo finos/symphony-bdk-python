@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -78,15 +77,15 @@ class ShareArticle(ModelNormal):
             'publisher': (str,),  # noqa: E501
             'author': (str,),  # noqa: E501
             'app_id': (str,),  # noqa: E501
-            'article_id': (str,),  # noqa: E501
-            'sub_title': (str,),  # noqa: E501
-            'message': (str,),  # noqa: E501
-            'publish_date': (int,),  # noqa: E501
-            'thumbnail_url': (str,),  # noqa: E501
-            'article_url': (str,),  # noqa: E501
-            'summary': (str,),  # noqa: E501
-            'app_name': (str,),  # noqa: E501
-            'app_icon_url': (str,),  # noqa: E501
+            'article_id': (str, none_type),  # noqa: E501
+            'sub_title': (str, none_type),  # noqa: E501
+            'message': (str, none_type),  # noqa: E501
+            'publish_date': (int, none_type),  # noqa: E501
+            'thumbnail_url': (str, none_type),  # noqa: E501
+            'article_url': (str, none_type),  # noqa: E501
+            'summary': (str, none_type),  # noqa: E501
+            'app_name': (str, none_type),  # noqa: E501
+            'app_icon_url': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -195,11 +194,19 @@ class ShareArticle(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
-        self.title = title
-        self.publisher = publisher
-        self.author = author
-        self.app_id = app_id
+        self.title: str = title
+        self.publisher: str = publisher
+        self.author: str = author
+        self.app_id: str = app_id
+        self.article_id: str = None
+        self.sub_title: str = None
+        self.message: str = None
+        self.publish_date: int = None
+        self.thumbnail_url: str = None
+        self.article_url: str = None
+        self.summary: str = None
+        self.app_name: str = None
+        self.app_icon_url: str = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

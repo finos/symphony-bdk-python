@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -26,9 +27,8 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.pod_model.string_list import StringList
-    globals()['StringList'] = StringList
+from symphony.bdk.gen.pod_model.string_list import StringList
+globals()['StringList'] = StringList
 
 
 class AssigneeCandidate(ModelNormal):
@@ -75,15 +75,14 @@ class AssigneeCandidate(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'user_id': (int,),  # noqa: E501
-            'username': (str,),  # noqa: E501
-            'first_name': (str,),  # noqa: E501
-            'surname': (str,),  # noqa: E501
-            'email_address': (str,),  # noqa: E501
-            'can_be_assigned': (bool,),  # noqa: E501
-            'roles': (StringList,),  # noqa: E501
+            'user_id': (int, none_type),  # noqa: E501
+            'username': (str, none_type),  # noqa: E501
+            'first_name': (str, none_type),  # noqa: E501
+            'surname': (str, none_type),  # noqa: E501
+            'email_address': (str, none_type),  # noqa: E501
+            'can_be_assigned': (bool, none_type),  # noqa: E501
+            'roles': (StringList, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -178,7 +177,13 @@ class AssigneeCandidate(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.user_id: int = None
+        self.username: str = None
+        self.first_name: str = None
+        self.surname: str = None
+        self.email_address: str = None
+        self.can_be_assigned: bool = None
+        self.roles: StringList = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

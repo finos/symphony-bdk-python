@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -26,11 +27,10 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.pod_model.room_system_info import RoomSystemInfo
-    from symphony.bdk.gen.pod_model.v2_room_attributes import V2RoomAttributes
-    globals()['RoomSystemInfo'] = RoomSystemInfo
-    globals()['V2RoomAttributes'] = V2RoomAttributes
+from symphony.bdk.gen.pod_model.room_system_info import RoomSystemInfo
+from symphony.bdk.gen.pod_model.v2_room_attributes import V2RoomAttributes
+globals()['RoomSystemInfo'] = RoomSystemInfo
+globals()['V2RoomAttributes'] = V2RoomAttributes
 
 
 class V2RoomDetail(ModelNormal):
@@ -77,10 +77,9 @@ class V2RoomDetail(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'room_attributes': (V2RoomAttributes,),  # noqa: E501
-            'room_system_info': (RoomSystemInfo,),  # noqa: E501
+            'room_attributes': (V2RoomAttributes, none_type),  # noqa: E501
+            'room_system_info': (RoomSystemInfo, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -165,7 +164,8 @@ class V2RoomDetail(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.room_attributes: V2RoomAttributes = None
+        self.room_system_info: RoomSystemInfo = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

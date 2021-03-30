@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -72,10 +73,10 @@ class MessageIdsFromStream(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'data': ([str],),  # noqa: E501
-            'total_number_found': (int,),  # noqa: E501
-            'number_returned': (int,),  # noqa: E501
-            'next_start_number': (int,),  # noqa: E501
+            'data': ([str], none_type),  # noqa: E501
+            'total_number_found': (int, none_type),  # noqa: E501
+            'number_returned': (int, none_type),  # noqa: E501
+            'next_start_number': (int, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -164,7 +165,10 @@ class MessageIdsFromStream(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.data: List[str] = None
+        self.total_number_found: int = None
+        self.number_returned: int = None
+        self.next_start_number: int = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

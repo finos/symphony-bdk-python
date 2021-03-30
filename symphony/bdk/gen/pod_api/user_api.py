@@ -11,7 +11,7 @@
 import re  # noqa: F401
 import sys  # noqa: F401
 
-from symphony.bdk.gen.api_client import ApiClient, Endpoint
+from symphony.bdk.gen.api_client import ApiClient, Endpoint as _Endpoint
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     check_allowed_values,
     check_validations,
@@ -31,6 +31,7 @@ from symphony.bdk.gen.pod_model.followers_list import FollowersList
 from symphony.bdk.gen.pod_model.followers_list_response import FollowersListResponse
 from symphony.bdk.gen.pod_model.following_list_response import FollowingListResponse
 from symphony.bdk.gen.pod_model.integer_list import IntegerList
+from symphony.bdk.gen.pod_model.role_detail_list import RoleDetailList
 from symphony.bdk.gen.pod_model.string_id import StringId
 from symphony.bdk.gen.pod_model.success_response import SuccessResponse
 from symphony.bdk.gen.pod_model.user_attributes import UserAttributes
@@ -58,6 +59,122 @@ class UserApi(object):
         if api_client is None:
             api_client = ApiClient()
         self.api_client = api_client
+
+        def __v1_admin_system_roles_list_get(
+            self,
+            session_token,
+            **kwargs
+        ):
+            """Get a list of all roles available in the company (pod)  # noqa: E501
+
+            This method makes a synchronous HTTP request by default. To make an
+            asynchronous HTTP request, please pass async_req=True
+
+            >>> thread = pod_api.v1_admin_system_roles_list_get(session_token, async_req=True)
+            >>> result = thread.get()
+
+            Args:
+                session_token (str): Session authentication token.
+
+            Keyword Args:
+                _return_http_data_only (bool): response data without head status
+                    code and headers. Default is True.
+                _preload_content (bool): if False, the urllib3.HTTPResponse object
+                    will be returned without reading/decoding response data.
+                    Default is True.
+                _request_timeout (float/tuple): timeout setting for this request. If one
+                    number provided, it will be total request timeout. It can also
+                    be a pair (tuple) of (connection, read) timeouts.
+                    Default is None.
+                _check_input_type (bool): specifies if type checking
+                    should be done one the data sent to the server.
+                    Default is True.
+                _check_return_type (bool): specifies if type checking
+                    should be done one the data received from the server.
+                    Default is True.
+                _host_index (int/None): specifies the index of the server
+                    that we want to use.
+                    Default is read from the configuration.
+                async_req (bool): execute request asynchronously
+
+            Returns:
+                RoleDetailList
+                    If the method is called asynchronously, returns the request
+                    thread.
+            """
+            kwargs['async_req'] = kwargs.get(
+                'async_req', False
+            )
+            kwargs['_return_http_data_only'] = kwargs.get(
+                '_return_http_data_only', True
+            )
+            kwargs['_preload_content'] = kwargs.get(
+                '_preload_content', True
+            )
+            kwargs['_request_timeout'] = kwargs.get(
+                '_request_timeout', None
+            )
+            kwargs['_check_input_type'] = kwargs.get(
+                '_check_input_type', True
+            )
+            kwargs['_check_return_type'] = kwargs.get(
+                '_check_return_type', True
+            )
+            kwargs['_host_index'] = kwargs.get('_host_index')
+            kwargs['session_token'] = \
+                session_token
+            return self.call_with_http_info(**kwargs)
+
+        self.v1_admin_system_roles_list_get = _Endpoint(
+            settings={
+                'response_type': (RoleDetailList,),
+                'auth': [],
+                'endpoint_path': '/v1/admin/system/roles/list',
+                'operation_id': 'v1_admin_system_roles_list_get',
+                'http_method': 'GET',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'session_token',
+                ],
+                'required': [
+                    'session_token',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'session_token':
+                        (str,),
+                },
+                'attribute_map': {
+                    'session_token': 'sessionToken',
+                },
+                'location_map': {
+                    'session_token': 'header',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client,
+            callable=__v1_admin_system_roles_list_get
+        )
 
         def __v1_admin_user_create_post(
             self,
@@ -128,7 +245,7 @@ class UserApi(object):
                 payload
             return self.call_with_http_info(**kwargs)
 
-        self.v1_admin_user_create_post = Endpoint(
+        self.v1_admin_user_create_post = _Endpoint(
             settings={
                 'response_type': (UserDetail,),
                 'auth': [],
@@ -257,7 +374,7 @@ class UserApi(object):
                 payload
             return self.call_with_http_info(**kwargs)
 
-        self.v1_admin_user_find_post = Endpoint(
+        self.v1_admin_user_find_post = _Endpoint(
             settings={
                 'response_type': (UserDetailList,),
                 'auth': [],
@@ -390,7 +507,7 @@ class UserApi(object):
                 session_token
             return self.call_with_http_info(**kwargs)
 
-        self.v1_admin_user_list_get = Endpoint(
+        self.v1_admin_user_list_get = _Endpoint(
             settings={
                 'response_type': (UserIdList,),
                 'auth': [],
@@ -510,7 +627,7 @@ class UserApi(object):
                 uid
             return self.call_with_http_info(**kwargs)
 
-        self.v1_admin_user_uid_avatar_get = Endpoint(
+        self.v1_admin_user_uid_avatar_get = _Endpoint(
             settings={
                 'response_type': (AvatarList,),
                 'auth': [],
@@ -640,7 +757,7 @@ class UserApi(object):
                 payload
             return self.call_with_http_info(**kwargs)
 
-        self.v1_admin_user_uid_avatar_update_post = Endpoint(
+        self.v1_admin_user_uid_avatar_update_post = _Endpoint(
             settings={
                 'response_type': (SuccessResponse,),
                 'auth': [],
@@ -773,7 +890,7 @@ class UserApi(object):
                 uid
             return self.call_with_http_info(**kwargs)
 
-        self.v1_admin_user_uid_delegates_get = Endpoint(
+        self.v1_admin_user_uid_delegates_get = _Endpoint(
             settings={
                 'response_type': (IntegerList,),
                 'auth': [],
@@ -903,7 +1020,7 @@ class UserApi(object):
                 payload
             return self.call_with_http_info(**kwargs)
 
-        self.v1_admin_user_uid_delegates_update_post = Endpoint(
+        self.v1_admin_user_uid_delegates_update_post = _Endpoint(
             settings={
                 'response_type': (SuccessResponse,),
                 'auth': [],
@@ -1036,7 +1153,7 @@ class UserApi(object):
                 uid
             return self.call_with_http_info(**kwargs)
 
-        self.v1_admin_user_uid_disclaimer_delete = Endpoint(
+        self.v1_admin_user_uid_disclaimer_delete = _Endpoint(
             settings={
                 'response_type': (SuccessResponse,),
                 'auth': [],
@@ -1162,7 +1279,7 @@ class UserApi(object):
                 uid
             return self.call_with_http_info(**kwargs)
 
-        self.v1_admin_user_uid_disclaimer_get = Endpoint(
+        self.v1_admin_user_uid_disclaimer_get = _Endpoint(
             settings={
                 'response_type': (Disclaimer,),
                 'auth': [],
@@ -1292,7 +1409,7 @@ class UserApi(object):
                 payload
             return self.call_with_http_info(**kwargs)
 
-        self.v1_admin_user_uid_disclaimer_update_post = Endpoint(
+        self.v1_admin_user_uid_disclaimer_update_post = _Endpoint(
             settings={
                 'response_type': (SuccessResponse,),
                 'auth': [],
@@ -1425,7 +1542,7 @@ class UserApi(object):
                 uid
             return self.call_with_http_info(**kwargs)
 
-        self.v1_admin_user_uid_features_get = Endpoint(
+        self.v1_admin_user_uid_features_get = _Endpoint(
             settings={
                 'response_type': (FeatureList,),
                 'auth': [],
@@ -1555,7 +1672,7 @@ class UserApi(object):
                 payload
             return self.call_with_http_info(**kwargs)
 
-        self.v1_admin_user_uid_features_update_post = Endpoint(
+        self.v1_admin_user_uid_features_update_post = _Endpoint(
             settings={
                 'response_type': (SuccessResponse,),
                 'auth': [],
@@ -1688,7 +1805,7 @@ class UserApi(object):
                 uid
             return self.call_with_http_info(**kwargs)
 
-        self.v1_admin_user_uid_get = Endpoint(
+        self.v1_admin_user_uid_get = _Endpoint(
             settings={
                 'response_type': (UserDetail,),
                 'auth': [],
@@ -1818,7 +1935,7 @@ class UserApi(object):
                 payload
             return self.call_with_http_info(**kwargs)
 
-        self.v1_admin_user_uid_roles_add_post = Endpoint(
+        self.v1_admin_user_uid_roles_add_post = _Endpoint(
             settings={
                 'response_type': (SuccessResponse,),
                 'auth': [],
@@ -1955,7 +2072,7 @@ class UserApi(object):
                 payload
             return self.call_with_http_info(**kwargs)
 
-        self.v1_admin_user_uid_roles_remove_post = Endpoint(
+        self.v1_admin_user_uid_roles_remove_post = _Endpoint(
             settings={
                 'response_type': (SuccessResponse,),
                 'auth': [],
@@ -2088,7 +2205,7 @@ class UserApi(object):
                 uid
             return self.call_with_http_info(**kwargs)
 
-        self.v1_admin_user_uid_status_get = Endpoint(
+        self.v1_admin_user_uid_status_get = _Endpoint(
             settings={
                 'response_type': (UserStatus,),
                 'auth': [],
@@ -2218,7 +2335,7 @@ class UserApi(object):
                 payload
             return self.call_with_http_info(**kwargs)
 
-        self.v1_admin_user_uid_status_update_post = Endpoint(
+        self.v1_admin_user_uid_status_update_post = _Endpoint(
             settings={
                 'response_type': (SuccessResponse,),
                 'auth': [],
@@ -2355,7 +2472,7 @@ class UserApi(object):
                 payload
             return self.call_with_http_info(**kwargs)
 
-        self.v1_admin_user_uid_update_post = Endpoint(
+        self.v1_admin_user_uid_update_post = _Endpoint(
             settings={
                 'response_type': (UserDetail,),
                 'auth': [],
@@ -2492,7 +2609,7 @@ class UserApi(object):
                 payload
             return self.call_with_http_info(**kwargs)
 
-        self.v1_admin_user_user_id_suspension_update_put = Endpoint(
+        self.v1_admin_user_user_id_suspension_update_put = _Endpoint(
             settings={
                 'response_type': (SuccessResponse,),
                 'auth': [],
@@ -2629,7 +2746,7 @@ class UserApi(object):
                 uid_list
             return self.call_with_http_info(**kwargs)
 
-        self.v1_user_uid_follow_post = Endpoint(
+        self.v1_user_uid_follow_post = _Endpoint(
             settings={
                 'response_type': (SuccessResponse,),
                 'auth': [],
@@ -2765,7 +2882,7 @@ class UserApi(object):
                 uid
             return self.call_with_http_info(**kwargs)
 
-        self.v1_user_uid_followers_get = Endpoint(
+        self.v1_user_uid_followers_get = _Endpoint(
             settings={
                 'response_type': (FollowersListResponse,),
                 'auth': [],
@@ -2909,7 +3026,7 @@ class UserApi(object):
                 uid
             return self.call_with_http_info(**kwargs)
 
-        self.v1_user_uid_following_get = Endpoint(
+        self.v1_user_uid_following_get = _Endpoint(
             settings={
                 'response_type': (FollowingListResponse,),
                 'auth': [],
@@ -3054,7 +3171,7 @@ class UserApi(object):
                 uid_list
             return self.call_with_http_info(**kwargs)
 
-        self.v1_user_uid_unfollow_post = Endpoint(
+        self.v1_user_uid_unfollow_post = _Endpoint(
             settings={
                 'response_type': (SuccessResponse,),
                 'auth': [],
@@ -3187,7 +3304,7 @@ class UserApi(object):
                 payload
             return self.call_with_http_info(**kwargs)
 
-        self.v2_admin_user_create_post = Endpoint(
+        self.v2_admin_user_create_post = _Endpoint(
             settings={
                 'response_type': (V2UserDetail,),
                 'auth': [],
@@ -3312,7 +3429,7 @@ class UserApi(object):
                 session_token
             return self.call_with_http_info(**kwargs)
 
-        self.v2_admin_user_list_get = Endpoint(
+        self.v2_admin_user_list_get = _Endpoint(
             settings={
                 'response_type': (V2UserDetailList,),
                 'auth': [],
@@ -3442,7 +3559,7 @@ class UserApi(object):
                 uid
             return self.call_with_http_info(**kwargs)
 
-        self.v2_admin_user_uid_get = Endpoint(
+        self.v2_admin_user_uid_get = _Endpoint(
             settings={
                 'response_type': (V2UserDetail,),
                 'auth': [],
@@ -3572,7 +3689,7 @@ class UserApi(object):
                 payload
             return self.call_with_http_info(**kwargs)
 
-        self.v2_admin_user_uid_update_post = Endpoint(
+        self.v2_admin_user_uid_update_post = _Endpoint(
             settings={
                 'response_type': (V2UserDetail,),
                 'auth': [],
