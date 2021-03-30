@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -26,9 +27,8 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.pod_model.room_tag import RoomTag
-    globals()['RoomTag'] = RoomTag
+from symphony.bdk.gen.pod_model.room_tag import RoomTag
+globals()['RoomTag'] = RoomTag
 
 
 class V3RoomAttributes(ModelNormal):
@@ -75,21 +75,20 @@ class V3RoomAttributes(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'name': (str,),  # noqa: E501
-            'keywords': ([RoomTag],),  # noqa: E501
-            'description': (str,),  # noqa: E501
-            'members_can_invite': (bool,),  # noqa: E501
-            'discoverable': (bool,),  # noqa: E501
-            'public': (bool,),  # noqa: E501
-            'read_only': (bool,),  # noqa: E501
-            'copy_protected': (bool,),  # noqa: E501
-            'cross_pod': (bool,),  # noqa: E501
-            'view_history': (bool,),  # noqa: E501
-            'multi_lateral_room': (bool,),  # noqa: E501
-            'scheduled_meeting': (bool,),  # noqa: E501
-            'sub_type': (str,),  # noqa: E501
+            'name': (str, none_type),  # noqa: E501
+            'keywords': ([RoomTag], none_type),  # noqa: E501
+            'description': (str, none_type),  # noqa: E501
+            'members_can_invite': (bool, none_type),  # noqa: E501
+            'discoverable': (bool, none_type),  # noqa: E501
+            'public': (bool, none_type),  # noqa: E501
+            'read_only': (bool, none_type),  # noqa: E501
+            'copy_protected': (bool, none_type),  # noqa: E501
+            'cross_pod': (bool, none_type),  # noqa: E501
+            'view_history': (bool, none_type),  # noqa: E501
+            'multi_lateral_room': (bool, none_type),  # noqa: E501
+            'scheduled_meeting': (bool, none_type),  # noqa: E501
+            'sub_type': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -125,7 +124,7 @@ class V3RoomAttributes(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, name: str = None, keywords: List[RoomTag] = None, description: str = None, members_can_invite: bool = None, discoverable: bool = None, public: bool = None, read_only: bool = None, copy_protected: bool = None, cross_pod: bool = None, view_history: bool = None, multi_lateral_room: bool = None, scheduled_meeting: bool = None, sub_type: str = None, *args, **kwargs):  # noqa: E501
         """V3RoomAttributes - a pod_model defined in OpenAPI
 
         Keyword Args:
@@ -196,6 +195,20 @@ class V3RoomAttributes(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.name: str = name
+        self.keywords: List[RoomTag] = keywords
+        self.description: str = description
+        self.members_can_invite: bool = members_can_invite
+        self.discoverable: bool = discoverable
+        self.public: bool = public
+        self.read_only: bool = read_only
+        self.copy_protected: bool = copy_protected
+        self.cross_pod: bool = cross_pod
+        self.view_history: bool = view_history
+        self.multi_lateral_room: bool = multi_lateral_room
+        self.scheduled_meeting: bool = scheduled_meeting
+        self.sub_type: str = sub_type
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

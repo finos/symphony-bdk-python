@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -72,8 +73,8 @@ class User(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'id': (int,),  # noqa: E501
-            'email_address': (str,),  # noqa: E501
+            'id': (int, none_type),  # noqa: E501
+            'email_address': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -98,7 +99,7 @@ class User(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, id: int = None, email_address: str = None, *args, **kwargs):  # noqa: E501
         """User - a pod_model defined in OpenAPI
 
         Keyword Args:
@@ -158,6 +159,9 @@ class User(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.id: int = id
+        self.email_address: str = email_address
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

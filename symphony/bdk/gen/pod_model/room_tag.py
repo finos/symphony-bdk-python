@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -98,7 +99,7 @@ class RoomTag(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, key, value, *args, **kwargs):  # noqa: E501
+    def __init__(self, key: str, value: str, *args, **kwargs):  # noqa: E501
         """RoomTag - a pod_model defined in OpenAPI
 
         Args:
@@ -161,8 +162,9 @@ class RoomTag(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.key = key
-        self.value = value
+        self.key: str = key
+        self.value: str = value
+
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

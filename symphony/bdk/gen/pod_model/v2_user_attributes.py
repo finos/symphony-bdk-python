@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -26,9 +27,8 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.pod_model.v2_user_key_request import V2UserKeyRequest
-    globals()['V2UserKeyRequest'] = V2UserKeyRequest
+from symphony.bdk.gen.pod_model.v2_user_key_request import V2UserKeyRequest
+globals()['V2UserKeyRequest'] = V2UserKeyRequest
 
 
 class V2UserAttributes(ModelNormal):
@@ -79,33 +79,32 @@ class V2UserAttributes(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'email_address': (str,),  # noqa: E501
-            'first_name': (str,),  # noqa: E501
-            'last_name': (str,),  # noqa: E501
-            'user_name': (str,),  # noqa: E501
-            'display_name': (str,),  # noqa: E501
-            'company_name': (str,),  # noqa: E501
-            'department': (str,),  # noqa: E501
-            'division': (str,),  # noqa: E501
-            'title': (str,),  # noqa: E501
-            'work_phone_number': (str,),  # noqa: E501
-            'mobile_phone_number': (str,),  # noqa: E501
-            'two_factor_auth_phone': (str,),  # noqa: E501
-            'sms_number': (str,),  # noqa: E501
-            'account_type': (str,),  # noqa: E501
-            'location': (str,),  # noqa: E501
-            'recommended_language': (str,),  # noqa: E501
-            'job_function': (str,),  # noqa: E501
-            'asset_classes': ([str],),  # noqa: E501
-            'industries': ([str],),  # noqa: E501
-            'market_coverage': ([str],),  # noqa: E501
-            'responsibility': ([str],),  # noqa: E501
-            'function': ([str],),  # noqa: E501
-            'instrument': ([str],),  # noqa: E501
-            'current_key': (V2UserKeyRequest,),  # noqa: E501
-            'previous_key': (V2UserKeyRequest,),  # noqa: E501
+            'email_address': (str, none_type),  # noqa: E501
+            'first_name': (str, none_type),  # noqa: E501
+            'last_name': (str, none_type),  # noqa: E501
+            'user_name': (str, none_type),  # noqa: E501
+            'display_name': (str, none_type),  # noqa: E501
+            'company_name': (str, none_type),  # noqa: E501
+            'department': (str, none_type),  # noqa: E501
+            'division': (str, none_type),  # noqa: E501
+            'title': (str, none_type),  # noqa: E501
+            'work_phone_number': (str, none_type),  # noqa: E501
+            'mobile_phone_number': (str, none_type),  # noqa: E501
+            'two_factor_auth_phone': (str, none_type),  # noqa: E501
+            'sms_number': (str, none_type),  # noqa: E501
+            'account_type': (str, none_type),  # noqa: E501
+            'location': (str, none_type),  # noqa: E501
+            'recommended_language': (str, none_type),  # noqa: E501
+            'job_function': (str, none_type),  # noqa: E501
+            'asset_classes': ([str], none_type),  # noqa: E501
+            'industries': ([str], none_type),  # noqa: E501
+            'market_coverage': ([str], none_type),  # noqa: E501
+            'responsibility': ([str], none_type),  # noqa: E501
+            'function': ([str], none_type),  # noqa: E501
+            'instrument': ([str], none_type),  # noqa: E501
+            'current_key': (V2UserKeyRequest, none_type),  # noqa: E501
+            'previous_key': (V2UserKeyRequest, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -153,7 +152,7 @@ class V2UserAttributes(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, email_address: str = None, first_name: str = None, last_name: str = None, user_name: str = None, display_name: str = None, company_name: str = None, department: str = None, division: str = None, title: str = None, work_phone_number: str = None, mobile_phone_number: str = None, two_factor_auth_phone: str = None, sms_number: str = None, account_type: str = None, location: str = None, recommended_language: str = None, job_function: str = None, asset_classes: List[str] = None, industries: List[str] = None, market_coverage: List[str] = None, responsibility: List[str] = None, function: List[str] = None, instrument: List[str] = None, current_key: V2UserKeyRequest = None, previous_key: V2UserKeyRequest = None, *args, **kwargs):  # noqa: E501
         """V2UserAttributes - a pod_model defined in OpenAPI
 
         Keyword Args:
@@ -236,6 +235,32 @@ class V2UserAttributes(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.email_address: str = email_address
+        self.first_name: str = first_name
+        self.last_name: str = last_name
+        self.user_name: str = user_name
+        self.display_name: str = display_name
+        self.company_name: str = company_name
+        self.department: str = department
+        self.division: str = division
+        self.title: str = title
+        self.work_phone_number: str = work_phone_number
+        self.mobile_phone_number: str = mobile_phone_number
+        self.two_factor_auth_phone: str = two_factor_auth_phone
+        self.sms_number: str = sms_number
+        self.account_type: str = account_type
+        self.location: str = location
+        self.recommended_language: str = recommended_language
+        self.job_function: str = job_function
+        self.asset_classes: List[str] = asset_classes
+        self.industries: List[str] = industries
+        self.market_coverage: List[str] = market_coverage
+        self.responsibility: List[str] = responsibility
+        self.function: List[str] = function
+        self.instrument: List[str] = instrument
+        self.current_key: V2UserKeyRequest = current_key
+        self.previous_key: V2UserKeyRequest = previous_key
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

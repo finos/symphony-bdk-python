@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -26,11 +27,10 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.pod_model.avatar_list import AvatarList
-    from symphony.bdk.gen.pod_model.string_list import StringList
-    globals()['AvatarList'] = AvatarList
-    globals()['StringList'] = StringList
+from symphony.bdk.gen.pod_model.avatar_list import AvatarList
+from symphony.bdk.gen.pod_model.string_list import StringList
+globals()['AvatarList'] = AvatarList
+globals()['StringList'] = StringList
 
 
 class UserV2(ModelNormal):
@@ -81,25 +81,24 @@ class UserV2(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'id': (int,),  # noqa: E501
-            'email_address': (str,),  # noqa: E501
-            'first_name': (str,),  # noqa: E501
-            'last_name': (str,),  # noqa: E501
-            'display_name': (str,),  # noqa: E501
-            'title': (str,),  # noqa: E501
-            'company': (str,),  # noqa: E501
-            'username': (str,),  # noqa: E501
-            'location': (str,),  # noqa: E501
-            'account_type': (str,),  # noqa: E501
-            'avatars': (AvatarList,),  # noqa: E501
-            'work_phone_number': (str,),  # noqa: E501
-            'mobile_phone_number': (str,),  # noqa: E501
-            'job_function': (str,),  # noqa: E501
-            'department': (str,),  # noqa: E501
-            'division': (str,),  # noqa: E501
-            'roles': (StringList,),  # noqa: E501
+            'id': (int, none_type),  # noqa: E501
+            'email_address': (str, none_type),  # noqa: E501
+            'first_name': (str, none_type),  # noqa: E501
+            'last_name': (str, none_type),  # noqa: E501
+            'display_name': (str, none_type),  # noqa: E501
+            'title': (str, none_type),  # noqa: E501
+            'company': (str, none_type),  # noqa: E501
+            'username': (str, none_type),  # noqa: E501
+            'location': (str, none_type),  # noqa: E501
+            'account_type': (str, none_type),  # noqa: E501
+            'avatars': (AvatarList, none_type),  # noqa: E501
+            'work_phone_number': (str, none_type),  # noqa: E501
+            'mobile_phone_number': (str, none_type),  # noqa: E501
+            'job_function': (str, none_type),  # noqa: E501
+            'department': (str, none_type),  # noqa: E501
+            'division': (str, none_type),  # noqa: E501
+            'roles': (StringList, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -139,7 +138,7 @@ class UserV2(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, id: int = None, email_address: str = None, first_name: str = None, last_name: str = None, display_name: str = None, title: str = None, company: str = None, username: str = None, location: str = None, account_type: str = None, avatars: AvatarList = None, work_phone_number: str = None, mobile_phone_number: str = None, job_function: str = None, department: str = None, division: str = None, roles: StringList = None, *args, **kwargs):  # noqa: E501
         """UserV2 - a pod_model defined in OpenAPI
 
         Keyword Args:
@@ -214,6 +213,24 @@ class UserV2(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.id: int = id
+        self.email_address: str = email_address
+        self.first_name: str = first_name
+        self.last_name: str = last_name
+        self.display_name: str = display_name
+        self.title: str = title
+        self.company: str = company
+        self.username: str = username
+        self.location: str = location
+        self.account_type: str = account_type
+        self.avatars: AvatarList = avatars
+        self.work_phone_number: str = work_phone_number
+        self.mobile_phone_number: str = mobile_phone_number
+        self.job_function: str = job_function
+        self.department: str = department
+        self.division: str = division
+        self.roles: StringList = roles
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

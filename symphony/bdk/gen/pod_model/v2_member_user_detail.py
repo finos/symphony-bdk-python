@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -72,14 +73,14 @@ class V2MemberUserDetail(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'user_id': (int,),  # noqa: E501
-            'email': (str,),  # noqa: E501
-            'first_name': (str,),  # noqa: E501
-            'last_name': (str,),  # noqa: E501
-            'display_name': (str,),  # noqa: E501
-            'company': (str,),  # noqa: E501
-            'company_id': (int,),  # noqa: E501
-            'is_external': (bool,),  # noqa: E501
+            'user_id': (int, none_type),  # noqa: E501
+            'email': (str, none_type),  # noqa: E501
+            'first_name': (str, none_type),  # noqa: E501
+            'last_name': (str, none_type),  # noqa: E501
+            'display_name': (str, none_type),  # noqa: E501
+            'company': (str, none_type),  # noqa: E501
+            'company_id': (int, none_type),  # noqa: E501
+            'is_external': (bool, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -110,7 +111,7 @@ class V2MemberUserDetail(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, user_id: int = None, email: str = None, first_name: str = None, last_name: str = None, display_name: str = None, company: str = None, company_id: int = None, is_external: bool = None, *args, **kwargs):  # noqa: E501
         """V2MemberUserDetail - a pod_model defined in OpenAPI
 
         Keyword Args:
@@ -176,6 +177,15 @@ class V2MemberUserDetail(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.user_id: int = user_id
+        self.email: str = email
+        self.first_name: str = first_name
+        self.last_name: str = last_name
+        self.display_name: str = display_name
+        self.company: str = company
+        self.company_id: int = company_id
+        self.is_external: bool = is_external
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

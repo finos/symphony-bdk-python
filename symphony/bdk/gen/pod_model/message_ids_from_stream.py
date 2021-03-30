@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -72,10 +73,10 @@ class MessageIdsFromStream(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'data': ([str],),  # noqa: E501
-            'total_number_found': (int,),  # noqa: E501
-            'number_returned': (int,),  # noqa: E501
-            'next_start_number': (int,),  # noqa: E501
+            'data': ([str], none_type),  # noqa: E501
+            'total_number_found': (int, none_type),  # noqa: E501
+            'number_returned': (int, none_type),  # noqa: E501
+            'next_start_number': (int, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -102,7 +103,7 @@ class MessageIdsFromStream(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, data: List[str] = None, total_number_found: int = None, number_returned: int = None, next_start_number: int = None, *args, **kwargs):  # noqa: E501
         """MessageIdsFromStream - a pod_model defined in OpenAPI
 
         Keyword Args:
@@ -164,6 +165,11 @@ class MessageIdsFromStream(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.data: List[str] = data
+        self.total_number_found: int = total_number_found
+        self.number_returned: int = number_returned
+        self.next_start_number: int = next_start_number
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

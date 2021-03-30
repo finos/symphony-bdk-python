@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -74,8 +75,8 @@ class UserGroupCreate(ModelNormal):
         return {
             'name': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
-            'area': (str,),  # noqa: E501
-            'description': (str,),  # noqa: E501
+            'area': (str, none_type),  # noqa: E501
+            'description': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -102,7 +103,7 @@ class UserGroupCreate(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, name, type, *args, **kwargs):  # noqa: E501
+    def __init__(self, name: str, type: str, area: str = None, description: str = None, *args, **kwargs):  # noqa: E501
         """UserGroupCreate - a pod_model defined in OpenAPI
 
         Args:
@@ -167,8 +168,11 @@ class UserGroupCreate(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.name = name
-        self.type = type
+        self.name: str = name
+        self.type: str = type
+        self.area: str = area
+        self.description: str = description
+
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

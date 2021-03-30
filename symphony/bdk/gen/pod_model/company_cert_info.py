@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -72,13 +73,13 @@ class CompanyCertInfo(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'finger_print': (str,),  # noqa: E501
-            'issuer_finger_print': (str,),  # noqa: E501
-            'last_seen': (int,),  # noqa: E501
-            'updated_at': (int,),  # noqa: E501
-            'updated_by': (int,),  # noqa: E501
-            'common_name': (str,),  # noqa: E501
-            'expiry_date': (int,),  # noqa: E501
+            'finger_print': (str, none_type),  # noqa: E501
+            'issuer_finger_print': (str, none_type),  # noqa: E501
+            'last_seen': (int, none_type),  # noqa: E501
+            'updated_at': (int, none_type),  # noqa: E501
+            'updated_by': (int, none_type),  # noqa: E501
+            'common_name': (str, none_type),  # noqa: E501
+            'expiry_date': (int, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -108,7 +109,7 @@ class CompanyCertInfo(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, finger_print: str = None, issuer_finger_print: str = None, last_seen: int = None, updated_at: int = None, updated_by: int = None, common_name: str = None, expiry_date: int = None, *args, **kwargs):  # noqa: E501
         """CompanyCertInfo - a pod_model defined in OpenAPI
 
         Keyword Args:
@@ -173,6 +174,14 @@ class CompanyCertInfo(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.finger_print: str = finger_print
+        self.issuer_finger_print: str = issuer_finger_print
+        self.last_seen: int = last_seen
+        self.updated_at: int = updated_at
+        self.updated_by: int = updated_by
+        self.common_name: str = common_name
+        self.expiry_date: int = expiry_date
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

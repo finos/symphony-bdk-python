@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -26,9 +27,8 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.pod_model.app_authentication_key import AppAuthenticationKey
-    globals()['AppAuthenticationKey'] = AppAuthenticationKey
+from symphony.bdk.gen.pod_model.app_authentication_key import AppAuthenticationKey
+globals()['AppAuthenticationKey'] = AppAuthenticationKey
 
 
 class AppAuthenticationKeys(ModelNormal):
@@ -75,10 +75,9 @@ class AppAuthenticationKeys(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'current': (AppAuthenticationKey,),  # noqa: E501
-            'previous': (AppAuthenticationKey,),  # noqa: E501
+            'current': (AppAuthenticationKey, none_type),  # noqa: E501
+            'previous': (AppAuthenticationKey, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -103,7 +102,7 @@ class AppAuthenticationKeys(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, current: AppAuthenticationKey = None, previous: AppAuthenticationKey = None, *args, **kwargs):  # noqa: E501
         """AppAuthenticationKeys - a pod_model defined in OpenAPI
 
         Keyword Args:
@@ -163,6 +162,9 @@ class AppAuthenticationKeys(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.current: AppAuthenticationKey = current
+        self.previous: AppAuthenticationKey = previous
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

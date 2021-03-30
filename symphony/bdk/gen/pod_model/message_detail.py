@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -26,13 +27,12 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.pod_model.message_download_receipt_count import MessageDownloadReceiptCount
-    from symphony.bdk.gen.pod_model.message_stream import MessageStream
-    from symphony.bdk.gen.pod_model.message_user import MessageUser
-    globals()['MessageDownloadReceiptCount'] = MessageDownloadReceiptCount
-    globals()['MessageStream'] = MessageStream
-    globals()['MessageUser'] = MessageUser
+from symphony.bdk.gen.pod_model.message_download_receipt_count import MessageDownloadReceiptCount
+from symphony.bdk.gen.pod_model.message_stream import MessageStream
+from symphony.bdk.gen.pod_model.message_user import MessageUser
+globals()['MessageDownloadReceiptCount'] = MessageDownloadReceiptCount
+globals()['MessageStream'] = MessageStream
+globals()['MessageUser'] = MessageUser
 
 
 class MessageDetail(ModelNormal):
@@ -79,17 +79,16 @@ class MessageDetail(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'message_id': (str,),  # noqa: E501
-            'creator': (MessageUser,),  # noqa: E501
-            'on_behalf_of_user': (MessageUser,),  # noqa: E501
-            'stream': (MessageStream,),  # noqa: E501
-            'creation_date': (int,),  # noqa: E501
-            'delivery_receipt_count': (int,),  # noqa: E501
-            'read_receipt_count': (int,),  # noqa: E501
-            'email_notification_count': (int,),  # noqa: E501
-            'download_receipt_counts': ([MessageDownloadReceiptCount],),  # noqa: E501
+            'message_id': (str, none_type),  # noqa: E501
+            'creator': (MessageUser, none_type),  # noqa: E501
+            'on_behalf_of_user': (MessageUser, none_type),  # noqa: E501
+            'stream': (MessageStream, none_type),  # noqa: E501
+            'creation_date': (int, none_type),  # noqa: E501
+            'delivery_receipt_count': (int, none_type),  # noqa: E501
+            'read_receipt_count': (int, none_type),  # noqa: E501
+            'email_notification_count': (int, none_type),  # noqa: E501
+            'download_receipt_counts': ([MessageDownloadReceiptCount], none_type),  # noqa: E501
         }
 
     @cached_property
@@ -121,7 +120,7 @@ class MessageDetail(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, message_id: str = None, creator: MessageUser = None, on_behalf_of_user: MessageUser = None, stream: MessageStream = None, creation_date: int = None, delivery_receipt_count: int = None, read_receipt_count: int = None, email_notification_count: int = None, download_receipt_counts: List[MessageDownloadReceiptCount] = None, *args, **kwargs):  # noqa: E501
         """MessageDetail - a pod_model defined in OpenAPI
 
         Keyword Args:
@@ -188,6 +187,16 @@ class MessageDetail(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.message_id: str = message_id
+        self.creator: MessageUser = creator
+        self.on_behalf_of_user: MessageUser = on_behalf_of_user
+        self.stream: MessageStream = stream
+        self.creation_date: int = creation_date
+        self.delivery_receipt_count: int = delivery_receipt_count
+        self.read_receipt_count: int = read_receipt_count
+        self.email_notification_count: int = email_notification_count
+        self.download_receipt_counts: List[MessageDownloadReceiptCount] = download_receipt_counts
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

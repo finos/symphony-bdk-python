@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -72,16 +73,16 @@ class UserGroupResponse(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'id': (str,),  # noqa: E501
-            'name': (str,),  # noqa: E501
-            'area': (str,),  # noqa: E501
-            'description': (str,),  # noqa: E501
-            'type': (str,),  # noqa: E501
-            'active': (bool,),  # noqa: E501
-            'created_date': (int,),  # noqa: E501
-            'modified_date': (int,),  # noqa: E501
-            'member_count': (int,),  # noqa: E501
-            'assignee_count': (int,),  # noqa: E501
+            'id': (str, none_type),  # noqa: E501
+            'name': (str, none_type),  # noqa: E501
+            'area': (str, none_type),  # noqa: E501
+            'description': (str, none_type),  # noqa: E501
+            'type': (str, none_type),  # noqa: E501
+            'active': (bool, none_type),  # noqa: E501
+            'created_date': (int, none_type),  # noqa: E501
+            'modified_date': (int, none_type),  # noqa: E501
+            'member_count': (int, none_type),  # noqa: E501
+            'assignee_count': (int, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -114,7 +115,7 @@ class UserGroupResponse(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, id: str = None, name: str = None, area: str = None, description: str = None, type: str = None, active: bool = None, created_date: int = None, modified_date: int = None, member_count: int = None, assignee_count: int = None, *args, **kwargs):  # noqa: E501
         """UserGroupResponse - a pod_model defined in OpenAPI
 
         Keyword Args:
@@ -182,6 +183,17 @@ class UserGroupResponse(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.id: str = id
+        self.name: str = name
+        self.area: str = area
+        self.description: str = description
+        self.type: str = type
+        self.active: bool = active
+        self.created_date: int = created_date
+        self.modified_date: int = modified_date
+        self.member_count: int = member_count
+        self.assignee_count: int = assignee_count
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

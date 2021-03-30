@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -72,9 +73,9 @@ class V2UserKeyRequest(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'key': (str,),  # noqa: E501
-            'expiration_date': (int,),  # noqa: E501
-            'action': (str,),  # noqa: E501
+            'key': (str, none_type),  # noqa: E501
+            'expiration_date': (int, none_type),  # noqa: E501
+            'action': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -100,7 +101,7 @@ class V2UserKeyRequest(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, key: str = None, expiration_date: int = None, action: str = None, *args, **kwargs):  # noqa: E501
         """V2UserKeyRequest - a pod_model defined in OpenAPI
 
         Keyword Args:
@@ -161,6 +162,10 @@ class V2UserKeyRequest(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.key: str = key
+        self.expiration_date: int = expiration_date
+        self.action: str = action
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -26,9 +27,8 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.pod_model.attachment_preview import AttachmentPreview
-    globals()['AttachmentPreview'] = AttachmentPreview
+from symphony.bdk.gen.pod_model.attachment_preview import AttachmentPreview
+globals()['AttachmentPreview'] = AttachmentPreview
 
 
 class StreamAttachmentItem(ModelNormal):
@@ -75,16 +75,15 @@ class StreamAttachmentItem(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'message_id': (str,),  # noqa: E501
-            'ingestion_date': (int,),  # noqa: E501
-            'user_id': (int,),  # noqa: E501
-            'file_id': (str,),  # noqa: E501
-            'name': (str,),  # noqa: E501
-            'size': (int,),  # noqa: E501
-            'content_type': (str,),  # noqa: E501
-            'previews': ([AttachmentPreview],),  # noqa: E501
+            'message_id': (str, none_type),  # noqa: E501
+            'ingestion_date': (int, none_type),  # noqa: E501
+            'user_id': (int, none_type),  # noqa: E501
+            'file_id': (str, none_type),  # noqa: E501
+            'name': (str, none_type),  # noqa: E501
+            'size': (int, none_type),  # noqa: E501
+            'content_type': (str, none_type),  # noqa: E501
+            'previews': ([AttachmentPreview], none_type),  # noqa: E501
         }
 
     @cached_property
@@ -115,7 +114,7 @@ class StreamAttachmentItem(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, message_id: str = None, ingestion_date: int = None, user_id: int = None, file_id: str = None, name: str = None, size: int = None, content_type: str = None, previews: List[AttachmentPreview] = None, *args, **kwargs):  # noqa: E501
         """StreamAttachmentItem - a pod_model defined in OpenAPI
 
         Keyword Args:
@@ -181,6 +180,15 @@ class StreamAttachmentItem(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.message_id: str = message_id
+        self.ingestion_date: int = ingestion_date
+        self.user_id: int = user_id
+        self.file_id: str = file_id
+        self.name: str = name
+        self.size: int = size
+        self.content_type: str = content_type
+        self.previews: List[AttachmentPreview] = previews
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -72,10 +73,10 @@ class RoomSystemInfo(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'id': (str,),  # noqa: E501
-            'creation_date': (int,),  # noqa: E501
-            'created_by_user_id': (int,),  # noqa: E501
-            'active': (bool,),  # noqa: E501
+            'id': (str, none_type),  # noqa: E501
+            'creation_date': (int, none_type),  # noqa: E501
+            'created_by_user_id': (int, none_type),  # noqa: E501
+            'active': (bool, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -102,7 +103,7 @@ class RoomSystemInfo(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, id: str = None, creation_date: int = None, created_by_user_id: int = None, active: bool = None, *args, **kwargs):  # noqa: E501
         """RoomSystemInfo - a pod_model defined in OpenAPI
 
         Keyword Args:
@@ -164,6 +165,11 @@ class RoomSystemInfo(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.id: str = id
+        self.creation_date: int = creation_date
+        self.created_by_user_id: int = created_by_user_id
+        self.active: bool = active
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

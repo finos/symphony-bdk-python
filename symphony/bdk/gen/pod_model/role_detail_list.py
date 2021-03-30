@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -26,9 +27,8 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.pod_model.role_detail import RoleDetail
-    globals()['RoleDetail'] = RoleDetail
+from symphony.bdk.gen.pod_model.role_detail import RoleDetail
+globals()['RoleDetail'] = RoleDetail
 
 
 class RoleDetailList(ModelSimple):
@@ -71,7 +71,6 @@ class RoleDetailList(ModelSimple):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
             'value': ([RoleDetail],),
         }
@@ -95,7 +94,7 @@ class RoleDetailList(ModelSimple):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):
+    def __init__(self, value: List[RoleDetail], *args, **kwargs):
         """RoleDetailList - a pod_model defined in OpenAPI
 
         Note that value can be passed either in args or in kwargs, but not in both.
@@ -136,22 +135,11 @@ class RoleDetailList(ModelSimple):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
         """
-
-        if 'value' in kwargs:
-            value = kwargs.pop('value')
-        elif args:
-            args = list(args)
-            value = args.pop(0)
-        else:
-            raise ApiTypeError(
-                "value is required, but not passed in args or kwargs and doesn't have default",
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+        # required up here when default value is not given
+        _path_to_item = kwargs.pop('_path_to_item', ())
 
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', False)
-        _path_to_item = kwargs.pop('_path_to_item', ())
         _configuration = kwargs.pop('_configuration', None)
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
@@ -171,7 +159,7 @@ class RoleDetailList(ModelSimple):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-        self.value = value
+        self.value: List[RoleDetail] = value
         if kwargs:
             raise ApiTypeError(
                 "Invalid named arguments=%s passed to %s. Remove those invalid named arguments." % (

@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -26,9 +27,8 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.pod_model.file_extension import FileExtension
-    globals()['FileExtension'] = FileExtension
+from symphony.bdk.gen.pod_model.file_extension import FileExtension
+globals()['FileExtension'] = FileExtension
 
 
 class FileExtensionsResponse(ModelNormal):
@@ -75,7 +75,6 @@ class FileExtensionsResponse(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
             'data': ([FileExtension],),  # noqa: E501
         }
@@ -101,7 +100,7 @@ class FileExtensionsResponse(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, data, *args, **kwargs):  # noqa: E501
+    def __init__(self, data: List[FileExtension], *args, **kwargs):  # noqa: E501
         """FileExtensionsResponse - a pod_model defined in OpenAPI
 
         Args:
@@ -163,7 +162,8 @@ class FileExtensionsResponse(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.data = data
+        self.data: List[FileExtension] = data
+
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

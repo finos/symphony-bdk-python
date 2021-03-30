@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -26,13 +27,12 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.pod_model.faceted_match_count import FacetedMatchCount
-    from symphony.bdk.gen.pod_model.v2_room_search_criteria import V2RoomSearchCriteria
-    from symphony.bdk.gen.pod_model.v3_room_detail import V3RoomDetail
-    globals()['FacetedMatchCount'] = FacetedMatchCount
-    globals()['V2RoomSearchCriteria'] = V2RoomSearchCriteria
-    globals()['V3RoomDetail'] = V3RoomDetail
+from symphony.bdk.gen.pod_model.faceted_match_count import FacetedMatchCount
+from symphony.bdk.gen.pod_model.v2_room_search_criteria import V2RoomSearchCriteria
+from symphony.bdk.gen.pod_model.v3_room_detail import V3RoomDetail
+globals()['FacetedMatchCount'] = FacetedMatchCount
+globals()['V2RoomSearchCriteria'] = V2RoomSearchCriteria
+globals()['V3RoomDetail'] = V3RoomDetail
 
 
 class V3RoomSearchResults(ModelNormal):
@@ -79,14 +79,13 @@ class V3RoomSearchResults(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'count': (int,),  # noqa: E501
-            'skip': (int,),  # noqa: E501
-            'limit': (int,),  # noqa: E501
-            'query': (V2RoomSearchCriteria,),  # noqa: E501
-            'rooms': ([V3RoomDetail],),  # noqa: E501
-            'faceted_match_count': ([FacetedMatchCount],),  # noqa: E501
+            'count': (int, none_type),  # noqa: E501
+            'skip': (int, none_type),  # noqa: E501
+            'limit': (int, none_type),  # noqa: E501
+            'query': (V2RoomSearchCriteria, none_type),  # noqa: E501
+            'rooms': ([V3RoomDetail], none_type),  # noqa: E501
+            'faceted_match_count': ([FacetedMatchCount], none_type),  # noqa: E501
         }
 
     @cached_property
@@ -115,7 +114,7 @@ class V3RoomSearchResults(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, count: int = None, skip: int = None, limit: int = None, query: V2RoomSearchCriteria = None, rooms: List[V3RoomDetail] = None, faceted_match_count: List[FacetedMatchCount] = None, *args, **kwargs):  # noqa: E501
         """V3RoomSearchResults - a pod_model defined in OpenAPI
 
         Keyword Args:
@@ -179,6 +178,13 @@ class V3RoomSearchResults(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.count: int = count
+        self.skip: int = skip
+        self.limit: int = limit
+        self.query: V2RoomSearchCriteria = query
+        self.rooms: List[V3RoomDetail] = rooms
+        self.faceted_match_count: List[FacetedMatchCount] = faceted_match_count
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

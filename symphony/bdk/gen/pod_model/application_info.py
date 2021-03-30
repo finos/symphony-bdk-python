@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -72,11 +73,11 @@ class ApplicationInfo(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'app_id': (str,),  # noqa: E501
-            'name': (str,),  # noqa: E501
-            'app_url': (str,),  # noqa: E501
-            'domain': (str,),  # noqa: E501
-            'publisher': (str,),  # noqa: E501
+            'app_id': (str, none_type),  # noqa: E501
+            'name': (str, none_type),  # noqa: E501
+            'app_url': (str, none_type),  # noqa: E501
+            'domain': (str, none_type),  # noqa: E501
+            'publisher': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -104,7 +105,7 @@ class ApplicationInfo(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, app_id: str = None, name: str = None, app_url: str = None, domain: str = None, publisher: str = None, *args, **kwargs):  # noqa: E501
         """ApplicationInfo - a pod_model defined in OpenAPI
 
         Keyword Args:
@@ -167,6 +168,12 @@ class ApplicationInfo(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.app_id: str = app_id
+        self.name: str = name
+        self.app_url: str = app_url
+        self.domain: str = domain
+        self.publisher: str = publisher
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

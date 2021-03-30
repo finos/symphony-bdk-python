@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -26,11 +27,10 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.pod_model.user_search_query import UserSearchQuery
-    from symphony.bdk.gen.pod_model.user_v2 import UserV2
-    globals()['UserSearchQuery'] = UserSearchQuery
-    globals()['UserV2'] = UserV2
+from symphony.bdk.gen.pod_model.user_search_query import UserSearchQuery
+from symphony.bdk.gen.pod_model.user_v2 import UserV2
+globals()['UserSearchQuery'] = UserSearchQuery
+globals()['UserV2'] = UserV2
 
 
 class UserSearchResults(ModelNormal):
@@ -77,13 +77,12 @@ class UserSearchResults(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'count': (int,),  # noqa: E501
-            'skip': (int,),  # noqa: E501
-            'limit': (int,),  # noqa: E501
-            'search_query': (UserSearchQuery,),  # noqa: E501
-            'users': ([UserV2],),  # noqa: E501
+            'count': (int, none_type),  # noqa: E501
+            'skip': (int, none_type),  # noqa: E501
+            'limit': (int, none_type),  # noqa: E501
+            'search_query': (UserSearchQuery, none_type),  # noqa: E501
+            'users': ([UserV2], none_type),  # noqa: E501
         }
 
     @cached_property
@@ -111,7 +110,7 @@ class UserSearchResults(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, count: int = None, skip: int = None, limit: int = None, search_query: UserSearchQuery = None, users: List[UserV2] = None, *args, **kwargs):  # noqa: E501
         """UserSearchResults - a pod_model defined in OpenAPI
 
         Keyword Args:
@@ -174,6 +173,12 @@ class UserSearchResults(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.count: int = count
+        self.skip: int = skip
+        self.limit: int = limit
+        self.search_query: UserSearchQuery = search_query
+        self.users: List[UserV2] = users
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

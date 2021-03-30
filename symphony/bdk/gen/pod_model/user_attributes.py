@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -76,23 +77,23 @@ class UserAttributes(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'email_address': (str,),  # noqa: E501
-            'first_name': (str,),  # noqa: E501
-            'last_name': (str,),  # noqa: E501
-            'user_name': (str,),  # noqa: E501
-            'display_name': (str,),  # noqa: E501
-            'company_name': (str,),  # noqa: E501
-            'department': (str,),  # noqa: E501
-            'division': (str,),  # noqa: E501
-            'title': (str,),  # noqa: E501
-            'work_phone_number': (str,),  # noqa: E501
-            'mobile_phone_number': (str,),  # noqa: E501
-            'sms_number': (str,),  # noqa: E501
-            'account_type': (str,),  # noqa: E501
-            'location': (str,),  # noqa: E501
-            'job_function': (str,),  # noqa: E501
-            'asset_classes': ([str],),  # noqa: E501
-            'industries': ([str],),  # noqa: E501
+            'email_address': (str, none_type),  # noqa: E501
+            'first_name': (str, none_type),  # noqa: E501
+            'last_name': (str, none_type),  # noqa: E501
+            'user_name': (str, none_type),  # noqa: E501
+            'display_name': (str, none_type),  # noqa: E501
+            'company_name': (str, none_type),  # noqa: E501
+            'department': (str, none_type),  # noqa: E501
+            'division': (str, none_type),  # noqa: E501
+            'title': (str, none_type),  # noqa: E501
+            'work_phone_number': (str, none_type),  # noqa: E501
+            'mobile_phone_number': (str, none_type),  # noqa: E501
+            'sms_number': (str, none_type),  # noqa: E501
+            'account_type': (str, none_type),  # noqa: E501
+            'location': (str, none_type),  # noqa: E501
+            'job_function': (str, none_type),  # noqa: E501
+            'asset_classes': ([str], none_type),  # noqa: E501
+            'industries': ([str], none_type),  # noqa: E501
         }
 
     @cached_property
@@ -132,7 +133,7 @@ class UserAttributes(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, email_address: str = None, first_name: str = None, last_name: str = None, user_name: str = None, display_name: str = None, company_name: str = None, department: str = None, division: str = None, title: str = None, work_phone_number: str = None, mobile_phone_number: str = None, sms_number: str = None, account_type: str = None, location: str = None, job_function: str = None, asset_classes: List[str] = None, industries: List[str] = None, *args, **kwargs):  # noqa: E501
         """UserAttributes - a pod_model defined in OpenAPI
 
         Keyword Args:
@@ -207,6 +208,24 @@ class UserAttributes(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.email_address: str = email_address
+        self.first_name: str = first_name
+        self.last_name: str = last_name
+        self.user_name: str = user_name
+        self.display_name: str = display_name
+        self.company_name: str = company_name
+        self.department: str = department
+        self.division: str = division
+        self.title: str = title
+        self.work_phone_number: str = work_phone_number
+        self.mobile_phone_number: str = mobile_phone_number
+        self.sms_number: str = sms_number
+        self.account_type: str = account_type
+        self.location: str = location
+        self.job_function: str = job_function
+        self.asset_classes: List[str] = asset_classes
+        self.industries: List[str] = industries
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

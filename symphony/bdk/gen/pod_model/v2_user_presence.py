@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -26,11 +27,10 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.pod_model.v2_presence_status import V2PresenceStatus
-    from symphony.bdk.gen.pod_model.v2_user_presence_all_of import V2UserPresenceAllOf
-    globals()['V2PresenceStatus'] = V2PresenceStatus
-    globals()['V2UserPresenceAllOf'] = V2UserPresenceAllOf
+from symphony.bdk.gen.pod_model.v2_presence_status import V2PresenceStatus
+from symphony.bdk.gen.pod_model.v2_user_presence_all_of import V2UserPresenceAllOf
+globals()['V2PresenceStatus'] = V2PresenceStatus
+globals()['V2UserPresenceAllOf'] = V2UserPresenceAllOf
 
 
 class V2UserPresence(ModelComposed):
@@ -69,7 +69,6 @@ class V2UserPresence(ModelComposed):
         This must be a method because a pod_model may have properties that are
         of type self, this must run after the class is loaded
         """
-        lazy_import()
         return (bool, date, datetime, dict, float, int, list, str, none_type,)  # noqa: E501
 
     _nullable = False
@@ -84,10 +83,9 @@ class V2UserPresence(ModelComposed):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
             'category': (str,),  # noqa: E501
-            'user_id': (int,),  # noqa: E501
+            'user_id': (int, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -113,7 +111,7 @@ class V2UserPresence(ModelComposed):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, category, *args, **kwargs):  # noqa: E501
+    def __init__(self, category: str, user_id: int = None, *args, **kwargs):  # noqa: E501
         """V2UserPresence - a pod_model defined in OpenAPI
 
         Args:
@@ -176,6 +174,10 @@ class V2UserPresence(ModelComposed):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.category: str = category
+        self.user_id: int = user_id
+
+
         constant_args = {
             '_check_type': _check_type,
             '_path_to_item': _path_to_item,
@@ -216,7 +218,6 @@ class V2UserPresence(ModelComposed):
         # code would be run when this module is imported, and these composed
         # classes don't exist yet because their module has not finished
         # loading
-        lazy_import()
         return {
           'anyOf': [
           ],

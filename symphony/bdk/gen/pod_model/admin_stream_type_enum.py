@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -77,7 +78,7 @@ class AdminStreamTypeEnum(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'type': (str,),  # noqa: E501
+            'type': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -101,7 +102,7 @@ class AdminStreamTypeEnum(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, type: str = None, *args, **kwargs):  # noqa: E501
         """AdminStreamTypeEnum - a pod_model defined in OpenAPI
 
         Keyword Args:
@@ -160,6 +161,8 @@ class AdminStreamTypeEnum(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.type: str = type
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

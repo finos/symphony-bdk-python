@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -72,8 +73,8 @@ class AdminJustifiedUserAction(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'user_id': (int,),  # noqa: E501
-            'justification': (str,),  # noqa: E501
+            'user_id': (int, none_type),  # noqa: E501
+            'justification': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -98,7 +99,7 @@ class AdminJustifiedUserAction(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, user_id: int = None, justification: str = None, *args, **kwargs):  # noqa: E501
         """AdminJustifiedUserAction - a pod_model defined in OpenAPI
 
         Keyword Args:
@@ -158,6 +159,9 @@ class AdminJustifiedUserAction(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.user_id: int = user_id
+        self.justification: str = justification
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

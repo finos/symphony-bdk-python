@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -72,13 +73,13 @@ class UserSearchFilter(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'title': (str,),  # noqa: E501
-            'company': (str,),  # noqa: E501
-            'location': (str,),  # noqa: E501
-            'market_coverage': (str,),  # noqa: E501
-            'responsibility': (str,),  # noqa: E501
-            'function': (str,),  # noqa: E501
-            'instrument': (str,),  # noqa: E501
+            'title': (str, none_type),  # noqa: E501
+            'company': (str, none_type),  # noqa: E501
+            'location': (str, none_type),  # noqa: E501
+            'market_coverage': (str, none_type),  # noqa: E501
+            'responsibility': (str, none_type),  # noqa: E501
+            'function': (str, none_type),  # noqa: E501
+            'instrument': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -108,7 +109,7 @@ class UserSearchFilter(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, title: str = None, company: str = None, location: str = None, market_coverage: str = None, responsibility: str = None, function: str = None, instrument: str = None, *args, **kwargs):  # noqa: E501
         """UserSearchFilter - a pod_model defined in OpenAPI
 
         Keyword Args:
@@ -173,6 +174,14 @@ class UserSearchFilter(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.title: str = title
+        self.company: str = company
+        self.location: str = location
+        self.market_coverage: str = market_coverage
+        self.responsibility: str = responsibility
+        self.function: str = function
+        self.instrument: str = instrument
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -26,9 +27,8 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.pod_model.message_metadata_response_parent import MessageMetadataResponseParent
-    globals()['MessageMetadataResponseParent'] = MessageMetadataResponseParent
+from symphony.bdk.gen.pod_model.message_metadata_response_parent import MessageMetadataResponseParent
+globals()['MessageMetadataResponseParent'] = MessageMetadataResponseParent
 
 
 class MessageMetadataResponse(ModelNormal):
@@ -75,13 +75,12 @@ class MessageMetadataResponse(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'message_id': (str,),  # noqa: E501
-            'parent': (MessageMetadataResponseParent,),  # noqa: E501
-            'replies': ([str],),  # noqa: E501
-            'forwards': ([str],),  # noqa: E501
-            'form_replies': ([str],),  # noqa: E501
+            'message_id': (str, none_type),  # noqa: E501
+            'parent': (MessageMetadataResponseParent, none_type),  # noqa: E501
+            'replies': ([str], none_type),  # noqa: E501
+            'forwards': ([str], none_type),  # noqa: E501
+            'form_replies': ([str], none_type),  # noqa: E501
         }
 
     @cached_property
@@ -109,7 +108,7 @@ class MessageMetadataResponse(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, message_id: str = None, parent: MessageMetadataResponseParent = None, replies: List[str] = None, forwards: List[str] = None, form_replies: List[str] = None, *args, **kwargs):  # noqa: E501
         """MessageMetadataResponse - a pod_model defined in OpenAPI
 
         Keyword Args:
@@ -172,6 +171,12 @@ class MessageMetadataResponse(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.message_id: str = message_id
+        self.parent: MessageMetadataResponseParent = parent
+        self.replies: List[str] = replies
+        self.forwards: List[str] = forwards
+        self.form_replies: List[str] = form_replies
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

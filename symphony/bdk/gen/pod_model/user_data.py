@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -72,11 +73,11 @@ class UserData(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'id': (int,),  # noqa: E501
-            'username': (str,),  # noqa: E501
-            'first_name': (str,),  # noqa: E501
-            'last_name': (str,),  # noqa: E501
-            'email_address': (str,),  # noqa: E501
+            'id': (int, none_type),  # noqa: E501
+            'username': (str, none_type),  # noqa: E501
+            'first_name': (str, none_type),  # noqa: E501
+            'last_name': (str, none_type),  # noqa: E501
+            'email_address': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -104,7 +105,7 @@ class UserData(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, id: int = None, username: str = None, first_name: str = None, last_name: str = None, email_address: str = None, *args, **kwargs):  # noqa: E501
         """UserData - a pod_model defined in OpenAPI
 
         Keyword Args:
@@ -167,6 +168,12 @@ class UserData(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.id: int = id
+        self.username: str = username
+        self.first_name: str = first_name
+        self.last_name: str = last_name
+        self.email_address: str = email_address
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

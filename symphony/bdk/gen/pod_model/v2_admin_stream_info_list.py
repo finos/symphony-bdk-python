@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -26,9 +27,8 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.pod_model.v2_admin_stream_info import V2AdminStreamInfo
-    globals()['V2AdminStreamInfo'] = V2AdminStreamInfo
+from symphony.bdk.gen.pod_model.v2_admin_stream_info import V2AdminStreamInfo
+globals()['V2AdminStreamInfo'] = V2AdminStreamInfo
 
 
 class V2AdminStreamInfoList(ModelSimple):
@@ -71,7 +71,6 @@ class V2AdminStreamInfoList(ModelSimple):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
             'value': ([V2AdminStreamInfo],),
         }
@@ -95,7 +94,7 @@ class V2AdminStreamInfoList(ModelSimple):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):
+    def __init__(self, value: List[V2AdminStreamInfo], *args, **kwargs):
         """V2AdminStreamInfoList - a pod_model defined in OpenAPI
 
         Note that value can be passed either in args or in kwargs, but not in both.
@@ -136,22 +135,11 @@ class V2AdminStreamInfoList(ModelSimple):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
         """
-
-        if 'value' in kwargs:
-            value = kwargs.pop('value')
-        elif args:
-            args = list(args)
-            value = args.pop(0)
-        else:
-            raise ApiTypeError(
-                "value is required, but not passed in args or kwargs and doesn't have default",
-                path_to_item=_path_to_item,
-                valid_classes=(self.__class__,),
-            )
+        # required up here when default value is not given
+        _path_to_item = kwargs.pop('_path_to_item', ())
 
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', False)
-        _path_to_item = kwargs.pop('_path_to_item', ())
         _configuration = kwargs.pop('_configuration', None)
         _visited_composed_classes = kwargs.pop('_visited_composed_classes', ())
 
@@ -171,7 +159,7 @@ class V2AdminStreamInfoList(ModelSimple):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-        self.value = value
+        self.value: List[V2AdminStreamInfo] = value
         if kwargs:
             raise ApiTypeError(
                 "Invalid named arguments=%s passed to %s. Remove those invalid named arguments." % (

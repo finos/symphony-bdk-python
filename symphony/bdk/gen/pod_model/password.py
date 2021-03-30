@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -72,10 +73,10 @@ class Password(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'h_salt': (str,),  # noqa: E501
-            'h_password': (str,),  # noqa: E501
-            'kh_salt': (str,),  # noqa: E501
-            'kh_password': (str,),  # noqa: E501
+            'h_salt': (str, none_type),  # noqa: E501
+            'h_password': (str, none_type),  # noqa: E501
+            'kh_salt': (str, none_type),  # noqa: E501
+            'kh_password': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -102,7 +103,7 @@ class Password(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, h_salt: str = None, h_password: str = None, kh_salt: str = None, kh_password: str = None, *args, **kwargs):  # noqa: E501
         """Password - a pod_model defined in OpenAPI
 
         Keyword Args:
@@ -164,6 +165,11 @@ class Password(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.h_salt: str = h_salt
+        self.h_password: str = h_password
+        self.kh_salt: str = kh_salt
+        self.kh_password: str = kh_password
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

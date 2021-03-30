@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -76,14 +77,14 @@ class UserSystemInfo(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'id': (int,),  # noqa: E501
-            'status': (str,),  # noqa: E501
-            'created_date': (int,),  # noqa: E501
-            'created_by': (str,),  # noqa: E501
-            'last_updated_date': (int,),  # noqa: E501
-            'last_login_date': (int,),  # noqa: E501
-            'last_password_reset': (int,),  # noqa: E501
-            'deactivated_date': (int,),  # noqa: E501
+            'id': (int, none_type),  # noqa: E501
+            'status': (str, none_type),  # noqa: E501
+            'created_date': (int, none_type),  # noqa: E501
+            'created_by': (str, none_type),  # noqa: E501
+            'last_updated_date': (int, none_type),  # noqa: E501
+            'last_login_date': (int, none_type),  # noqa: E501
+            'last_password_reset': (int, none_type),  # noqa: E501
+            'deactivated_date': (int, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -114,7 +115,7 @@ class UserSystemInfo(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, id: int = None, status: str = None, created_date: int = None, created_by: str = None, last_updated_date: int = None, last_login_date: int = None, last_password_reset: int = None, deactivated_date: int = None, *args, **kwargs):  # noqa: E501
         """UserSystemInfo - a pod_model defined in OpenAPI
 
         Keyword Args:
@@ -180,6 +181,15 @@ class UserSystemInfo(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.id: int = id
+        self.status: str = status
+        self.created_date: int = created_date
+        self.created_by: str = created_by
+        self.last_updated_date: int = last_updated_date
+        self.last_login_date: int = last_login_date
+        self.last_password_reset: int = last_password_reset
+        self.deactivated_date: int = deactivated_date
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

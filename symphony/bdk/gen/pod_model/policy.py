@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -76,13 +77,13 @@ class Policy(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'id': (str,),  # noqa: E501
-            'policy_type': (str,),  # noqa: E501
-            'active': (bool,),  # noqa: E501
-            'member_count': (int,),  # noqa: E501
-            'groups': ([str],),  # noqa: E501
-            'created_date': (int,),  # noqa: E501
-            'modified_date': (int,),  # noqa: E501
+            'id': (str, none_type),  # noqa: E501
+            'policy_type': (str, none_type),  # noqa: E501
+            'active': (bool, none_type),  # noqa: E501
+            'member_count': (int, none_type),  # noqa: E501
+            'groups': ([str], none_type),  # noqa: E501
+            'created_date': (int, none_type),  # noqa: E501
+            'modified_date': (int, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -112,7 +113,7 @@ class Policy(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, id: str = None, policy_type: str = None, active: bool = None, member_count: int = None, groups: List[str] = None, created_date: int = None, modified_date: int = None, *args, **kwargs):  # noqa: E501
         """Policy - a pod_model defined in OpenAPI
 
         Keyword Args:
@@ -177,6 +178,14 @@ class Policy(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.id: str = id
+        self.policy_type: str = policy_type
+        self.active: bool = active
+        self.member_count: int = member_count
+        self.groups: List[str] = groups
+        self.created_date: int = created_date
+        self.modified_date: int = modified_date
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

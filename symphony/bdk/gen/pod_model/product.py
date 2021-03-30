@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -84,7 +85,7 @@ class Product(ModelNormal):
             'sku': (str,),  # noqa: E501
             'subscribed': (bool,),  # noqa: E501
             'type': (str,),  # noqa: E501
-            'app_id': (str,),  # noqa: E501
+            'app_id': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -112,7 +113,7 @@ class Product(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, name, sku, subscribed, type, *args, **kwargs):  # noqa: E501
+    def __init__(self, name: str, sku: str, subscribed: bool, type: str, app_id: str = None, *args, **kwargs):  # noqa: E501
         """Product - a pod_model defined in OpenAPI
 
         Args:
@@ -178,10 +179,12 @@ class Product(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.name = name
-        self.sku = sku
-        self.subscribed = subscribed
-        self.type = type
+        self.name: str = name
+        self.sku: str = sku
+        self.subscribed: bool = subscribed
+        self.type: str = type
+        self.app_id: str = app_id
+
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

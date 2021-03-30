@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -72,8 +73,8 @@ class AppNotification(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'url': (str,),  # noqa: E501
-            'api_key': (str,),  # noqa: E501
+            'url': (str, none_type),  # noqa: E501
+            'api_key': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -98,7 +99,7 @@ class AppNotification(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, url: str = None, api_key: str = None, *args, **kwargs):  # noqa: E501
         """AppNotification - a pod_model defined in OpenAPI
 
         Keyword Args:
@@ -158,6 +159,9 @@ class AppNotification(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.url: str = url
+        self.api_key: str = api_key
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

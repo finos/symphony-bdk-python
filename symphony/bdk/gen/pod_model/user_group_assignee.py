@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -26,11 +27,10 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.pod_model.group_role_scope import GroupRoleScope
-    from symphony.bdk.gen.pod_model.user_compp import UserCompp
-    globals()['GroupRoleScope'] = GroupRoleScope
-    globals()['UserCompp'] = UserCompp
+from symphony.bdk.gen.pod_model.group_role_scope import GroupRoleScope
+from symphony.bdk.gen.pod_model.user_compp import UserCompp
+globals()['GroupRoleScope'] = GroupRoleScope
+globals()['UserCompp'] = UserCompp
 
 
 class UserGroupAssignee(ModelNormal):
@@ -77,17 +77,16 @@ class UserGroupAssignee(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'id': (str,),  # noqa: E501
-            'group_id': (str,),  # noqa: E501
-            'group': (GroupRoleScope,),  # noqa: E501
-            'user_id': (int,),  # noqa: E501
-            'user': (UserCompp,),  # noqa: E501
-            'user_roles': ([str],),  # noqa: E501
-            'active': (bool,),  # noqa: E501
-            'last_added_date': (int,),  # noqa: E501
-            'last_removed_date': (int,),  # noqa: E501
+            'id': (str, none_type),  # noqa: E501
+            'group_id': (str, none_type),  # noqa: E501
+            'group': (GroupRoleScope, none_type),  # noqa: E501
+            'user_id': (int, none_type),  # noqa: E501
+            'user': (UserCompp, none_type),  # noqa: E501
+            'user_roles': ([str], none_type),  # noqa: E501
+            'active': (bool, none_type),  # noqa: E501
+            'last_added_date': (int, none_type),  # noqa: E501
+            'last_removed_date': (int, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -119,7 +118,7 @@ class UserGroupAssignee(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, id: str = None, group_id: str = None, group: GroupRoleScope = None, user_id: int = None, user: UserCompp = None, user_roles: List[str] = None, active: bool = None, last_added_date: int = None, last_removed_date: int = None, *args, **kwargs):  # noqa: E501
         """UserGroupAssignee - a pod_model defined in OpenAPI
 
         Keyword Args:
@@ -186,6 +185,16 @@ class UserGroupAssignee(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.id: str = id
+        self.group_id: str = group_id
+        self.group: GroupRoleScope = group
+        self.user_id: int = user_id
+        self.user: UserCompp = user
+        self.user_roles: List[str] = user_roles
+        self.active: bool = active
+        self.last_added_date: int = last_added_date
+        self.last_removed_date: int = last_removed_date
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -26,11 +27,10 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.pod_model.user_error import UserError
-    from symphony.bdk.gen.pod_model.user_v2 import UserV2
-    globals()['UserError'] = UserError
-    globals()['UserV2'] = UserV2
+from symphony.bdk.gen.pod_model.user_error import UserError
+from symphony.bdk.gen.pod_model.user_v2 import UserV2
+globals()['UserError'] = UserError
+globals()['UserV2'] = UserV2
 
 
 class V2UserList(ModelNormal):
@@ -77,10 +77,9 @@ class V2UserList(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'users': ([UserV2],),  # noqa: E501
-            'errors': ([UserError],),  # noqa: E501
+            'users': ([UserV2], none_type),  # noqa: E501
+            'errors': ([UserError], none_type),  # noqa: E501
         }
 
     @cached_property
@@ -105,7 +104,7 @@ class V2UserList(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, users: List[UserV2] = None, errors: List[UserError] = None, *args, **kwargs):  # noqa: E501
         """V2UserList - a pod_model defined in OpenAPI
 
         Keyword Args:
@@ -165,6 +164,9 @@ class V2UserList(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.users: List[UserV2] = users
+        self.errors: List[UserError] = errors
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

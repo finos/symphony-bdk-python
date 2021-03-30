@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -26,11 +27,10 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.pod_model.pagination import Pagination
-    from symphony.bdk.gen.pod_model.user_group_membership_response_data import UserGroupMembershipResponseData
-    globals()['Pagination'] = Pagination
-    globals()['UserGroupMembershipResponseData'] = UserGroupMembershipResponseData
+from symphony.bdk.gen.pod_model.pagination import Pagination
+from symphony.bdk.gen.pod_model.user_group_membership_response_data import UserGroupMembershipResponseData
+globals()['Pagination'] = Pagination
+globals()['UserGroupMembershipResponseData'] = UserGroupMembershipResponseData
 
 
 class UserGroupMembershipResponse(ModelNormal):
@@ -77,10 +77,9 @@ class UserGroupMembershipResponse(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'data': ([UserGroupMembershipResponseData],),  # noqa: E501
-            'pagination': (Pagination,),  # noqa: E501
+            'data': ([UserGroupMembershipResponseData], none_type),  # noqa: E501
+            'pagination': (Pagination, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -105,7 +104,7 @@ class UserGroupMembershipResponse(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, data: List[UserGroupMembershipResponseData] = None, pagination: Pagination = None, *args, **kwargs):  # noqa: E501
         """UserGroupMembershipResponse - a pod_model defined in OpenAPI
 
         Keyword Args:
@@ -165,6 +164,9 @@ class UserGroupMembershipResponse(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.data: List[UserGroupMembershipResponseData] = data
+        self.pagination: Pagination = pagination
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

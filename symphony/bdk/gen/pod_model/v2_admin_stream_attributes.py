@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -72,16 +73,16 @@ class V2AdminStreamAttributes(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'room_name': (str,),  # noqa: E501
-            'room_description': (str,),  # noqa: E501
-            'members': ([int],),  # noqa: E501
-            'created_by_user_id': (int,),  # noqa: E501
-            'created_date': (int,),  # noqa: E501
-            'last_modified_date': (int,),  # noqa: E501
-            'origin_company': (str,),  # noqa: E501
-            'origin_company_id': (int,),  # noqa: E501
-            'members_count': (int,),  # noqa: E501
-            'last_message_date': (int,),  # noqa: E501
+            'room_name': (str, none_type),  # noqa: E501
+            'room_description': (str, none_type),  # noqa: E501
+            'members': ([int], none_type),  # noqa: E501
+            'created_by_user_id': (int, none_type),  # noqa: E501
+            'created_date': (int, none_type),  # noqa: E501
+            'last_modified_date': (int, none_type),  # noqa: E501
+            'origin_company': (str, none_type),  # noqa: E501
+            'origin_company_id': (int, none_type),  # noqa: E501
+            'members_count': (int, none_type),  # noqa: E501
+            'last_message_date': (int, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -114,7 +115,7 @@ class V2AdminStreamAttributes(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, room_name: str = None, room_description: str = None, members: List[int] = None, created_by_user_id: int = None, created_date: int = None, last_modified_date: int = None, origin_company: str = None, origin_company_id: int = None, members_count: int = None, last_message_date: int = None, *args, **kwargs):  # noqa: E501
         """V2AdminStreamAttributes - a pod_model defined in OpenAPI
 
         Keyword Args:
@@ -182,6 +183,17 @@ class V2AdminStreamAttributes(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.room_name: str = room_name
+        self.room_description: str = room_description
+        self.members: List[int] = members
+        self.created_by_user_id: int = created_by_user_id
+        self.created_date: int = created_date
+        self.last_modified_date: int = last_modified_date
+        self.origin_company: str = origin_company
+        self.origin_company_id: int = origin_company_id
+        self.members_count: int = members_count
+        self.last_message_date: int = last_message_date
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

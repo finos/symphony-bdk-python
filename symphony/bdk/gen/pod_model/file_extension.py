@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -77,9 +78,9 @@ class FileExtension(ModelNormal):
         """
         return {
             'extension': (str,),  # noqa: E501
-            'scope_internal': (bool,),  # noqa: E501
-            'scope_external': (bool,),  # noqa: E501
-            'source': (str,),  # noqa: E501
+            'scope_internal': (bool, none_type),  # noqa: E501
+            'scope_external': (bool, none_type),  # noqa: E501
+            'source': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -106,7 +107,7 @@ class FileExtension(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, extension, *args, **kwargs):  # noqa: E501
+    def __init__(self, extension: str, scope_internal: bool = None, scope_external: bool = None, source: str = None, *args, **kwargs):  # noqa: E501
         """FileExtension - a pod_model defined in OpenAPI
 
         Args:
@@ -171,7 +172,11 @@ class FileExtension(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.extension = extension
+        self.extension: str = extension
+        self.scope_internal: bool = scope_internal
+        self.scope_external: bool = scope_external
+        self.source: str = source
+
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

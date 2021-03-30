@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -26,17 +27,16 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.pod_model.message_download_receipt_count import MessageDownloadReceiptCount
-    from symphony.bdk.gen.pod_model.message_receipt_detail import MessageReceiptDetail
-    from symphony.bdk.gen.pod_model.message_stream import MessageStream
-    from symphony.bdk.gen.pod_model.message_user import MessageUser
-    from symphony.bdk.gen.pod_model.pagination import Pagination
-    globals()['MessageDownloadReceiptCount'] = MessageDownloadReceiptCount
-    globals()['MessageReceiptDetail'] = MessageReceiptDetail
-    globals()['MessageStream'] = MessageStream
-    globals()['MessageUser'] = MessageUser
-    globals()['Pagination'] = Pagination
+from symphony.bdk.gen.pod_model.message_download_receipt_count import MessageDownloadReceiptCount
+from symphony.bdk.gen.pod_model.message_receipt_detail import MessageReceiptDetail
+from symphony.bdk.gen.pod_model.message_stream import MessageStream
+from symphony.bdk.gen.pod_model.message_user import MessageUser
+from symphony.bdk.gen.pod_model.pagination import Pagination
+globals()['MessageDownloadReceiptCount'] = MessageDownloadReceiptCount
+globals()['MessageReceiptDetail'] = MessageReceiptDetail
+globals()['MessageStream'] = MessageStream
+globals()['MessageUser'] = MessageUser
+globals()['Pagination'] = Pagination
 
 
 class MessageReceiptDetailResponse(ModelNormal):
@@ -83,18 +83,17 @@ class MessageReceiptDetailResponse(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'creator': (MessageUser,),  # noqa: E501
-            'on_behalf_of_user': (MessageUser,),  # noqa: E501
-            'stream': (MessageStream,),  # noqa: E501
-            'creation_date': (int,),  # noqa: E501
-            'delivery_receipt_count': (int,),  # noqa: E501
-            'read_receipt_count': (int,),  # noqa: E501
-            'email_notification_count': (int,),  # noqa: E501
-            'download_receipt_counts': ([MessageDownloadReceiptCount],),  # noqa: E501
-            'message_receipt_detail': ([MessageReceiptDetail],),  # noqa: E501
-            'pagination': (Pagination,),  # noqa: E501
+            'creator': (MessageUser, none_type),  # noqa: E501
+            'on_behalf_of_user': (MessageUser, none_type),  # noqa: E501
+            'stream': (MessageStream, none_type),  # noqa: E501
+            'creation_date': (int, none_type),  # noqa: E501
+            'delivery_receipt_count': (int, none_type),  # noqa: E501
+            'read_receipt_count': (int, none_type),  # noqa: E501
+            'email_notification_count': (int, none_type),  # noqa: E501
+            'download_receipt_counts': ([MessageDownloadReceiptCount], none_type),  # noqa: E501
+            'message_receipt_detail': ([MessageReceiptDetail], none_type),  # noqa: E501
+            'pagination': (Pagination, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -127,7 +126,7 @@ class MessageReceiptDetailResponse(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, creator: MessageUser = None, on_behalf_of_user: MessageUser = None, stream: MessageStream = None, creation_date: int = None, delivery_receipt_count: int = None, read_receipt_count: int = None, email_notification_count: int = None, download_receipt_counts: List[MessageDownloadReceiptCount] = None, message_receipt_detail: List[MessageReceiptDetail] = None, pagination: Pagination = None, *args, **kwargs):  # noqa: E501
         """MessageReceiptDetailResponse - a pod_model defined in OpenAPI
 
         Keyword Args:
@@ -195,6 +194,17 @@ class MessageReceiptDetailResponse(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.creator: MessageUser = creator
+        self.on_behalf_of_user: MessageUser = on_behalf_of_user
+        self.stream: MessageStream = stream
+        self.creation_date: int = creation_date
+        self.delivery_receipt_count: int = delivery_receipt_count
+        self.read_receipt_count: int = read_receipt_count
+        self.email_notification_count: int = email_notification_count
+        self.download_receipt_counts: List[MessageDownloadReceiptCount] = download_receipt_counts
+        self.message_receipt_detail: List[MessageReceiptDetail] = message_receipt_detail
+        self.pagination: Pagination = pagination
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

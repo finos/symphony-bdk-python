@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -26,9 +27,8 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.pod_model.pagination_cursors import PaginationCursors
-    globals()['PaginationCursors'] = PaginationCursors
+from symphony.bdk.gen.pod_model.pagination_cursors import PaginationCursors
+globals()['PaginationCursors'] = PaginationCursors
 
 
 class Pagination(ModelNormal):
@@ -75,11 +75,10 @@ class Pagination(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
             'cursors': (PaginationCursors,),  # noqa: E501
-            'previous': (str,),  # noqa: E501
-            'next': (str,),  # noqa: E501
+            'previous': (str, none_type),  # noqa: E501
+            'next': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -105,7 +104,7 @@ class Pagination(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, cursors, *args, **kwargs):  # noqa: E501
+    def __init__(self, cursors: PaginationCursors, previous: str = None, next: str = None, *args, **kwargs):  # noqa: E501
         """Pagination - a pod_model defined in OpenAPI
 
         Args:
@@ -169,7 +168,10 @@ class Pagination(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.cursors = cursors
+        self.cursors: PaginationCursors = cursors
+        self.previous: str = previous
+        self.next: str = next
+
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

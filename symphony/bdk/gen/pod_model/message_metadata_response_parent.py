@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -77,8 +78,8 @@ class MessageMetadataResponseParent(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'message_id': (str,),  # noqa: E501
-            'relationship_type': (str,),  # noqa: E501
+            'message_id': (str, none_type),  # noqa: E501
+            'relationship_type': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -103,7 +104,7 @@ class MessageMetadataResponseParent(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, message_id: str = None, relationship_type: str = None, *args, **kwargs):  # noqa: E501
         """MessageMetadataResponseParent - a pod_model defined in OpenAPI
 
         Keyword Args:
@@ -163,6 +164,9 @@ class MessageMetadataResponseParent(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.message_id: str = message_id
+        self.relationship_type: str = relationship_type
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

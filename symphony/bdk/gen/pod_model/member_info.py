@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -72,9 +73,9 @@ class MemberInfo(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'id': (int,),  # noqa: E501
-            'owner': (bool,),  # noqa: E501
-            'join_date': (int,),  # noqa: E501
+            'id': (int, none_type),  # noqa: E501
+            'owner': (bool, none_type),  # noqa: E501
+            'join_date': (int, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -100,7 +101,7 @@ class MemberInfo(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, id: int = None, owner: bool = None, join_date: int = None, *args, **kwargs):  # noqa: E501
         """MemberInfo - a pod_model defined in OpenAPI
 
         Keyword Args:
@@ -161,6 +162,10 @@ class MemberInfo(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.id: int = id
+        self.owner: bool = owner
+        self.join_date: int = join_date
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

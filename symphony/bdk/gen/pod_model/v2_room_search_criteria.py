@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -26,13 +27,12 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.pod_model.room_search_criteria import RoomSearchCriteria
-    from symphony.bdk.gen.pod_model.user_id import UserId
-    from symphony.bdk.gen.pod_model.v2_room_search_criteria_all_of import V2RoomSearchCriteriaAllOf
-    globals()['RoomSearchCriteria'] = RoomSearchCriteria
-    globals()['UserId'] = UserId
-    globals()['V2RoomSearchCriteriaAllOf'] = V2RoomSearchCriteriaAllOf
+from symphony.bdk.gen.pod_model.room_search_criteria import RoomSearchCriteria
+from symphony.bdk.gen.pod_model.user_id import UserId
+from symphony.bdk.gen.pod_model.v2_room_search_criteria_all_of import V2RoomSearchCriteriaAllOf
+globals()['RoomSearchCriteria'] = RoomSearchCriteria
+globals()['UserId'] = UserId
+globals()['V2RoomSearchCriteriaAllOf'] = V2RoomSearchCriteriaAllOf
 
 
 class V2RoomSearchCriteria(ModelComposed):
@@ -75,7 +75,6 @@ class V2RoomSearchCriteria(ModelComposed):
         This must be a method because a pod_model may have properties that are
         of type self, this must run after the class is loaded
         """
-        lazy_import()
         return (bool, date, datetime, dict, float, int, list, str, none_type,)  # noqa: E501
 
     _nullable = False
@@ -90,17 +89,16 @@ class V2RoomSearchCriteria(ModelComposed):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
             'query': (str,),  # noqa: E501
-            'labels': ([str],),  # noqa: E501
-            'active': (bool,),  # noqa: E501
-            'private': (bool,),  # noqa: E501
-            'owner': (UserId,),  # noqa: E501
-            'creator': (UserId,),  # noqa: E501
-            'member': (UserId,),  # noqa: E501
-            'sort_order': (str,),  # noqa: E501
-            'sub_type': (str,),  # noqa: E501
+            'labels': ([str], none_type),  # noqa: E501
+            'active': (bool, none_type),  # noqa: E501
+            'private': (bool, none_type),  # noqa: E501
+            'owner': (UserId, none_type),  # noqa: E501
+            'creator': (UserId, none_type),  # noqa: E501
+            'member': (UserId, none_type),  # noqa: E501
+            'sort_order': (str, none_type),  # noqa: E501
+            'sub_type': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -133,7 +131,7 @@ class V2RoomSearchCriteria(ModelComposed):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, query, *args, **kwargs):  # noqa: E501
+    def __init__(self, query: str, labels: List[str] = None, active: bool = None, private: bool = None, owner: UserId = None, creator: UserId = None, member: UserId = None, sort_order: str = None, sub_type: str = None, *args, **kwargs):  # noqa: E501
         """V2RoomSearchCriteria - a pod_model defined in OpenAPI
 
         Args:
@@ -203,6 +201,17 @@ class V2RoomSearchCriteria(ModelComposed):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.query: str = query
+        self.labels: List[str] = labels
+        self.active: bool = active
+        self.private: bool = private
+        self.owner: UserId = owner
+        self.creator: UserId = creator
+        self.member: UserId = member
+        self.sort_order: str = sort_order
+        self.sub_type: str = sub_type
+
+
         constant_args = {
             '_check_type': _check_type,
             '_path_to_item': _path_to_item,
@@ -243,7 +252,6 @@ class V2RoomSearchCriteria(ModelComposed):
         # code would be run when this module is imported, and these composed
         # classes don't exist yet because their module has not finished
         # loading
-        lazy_import()
         return {
           'anyOf': [
           ],
