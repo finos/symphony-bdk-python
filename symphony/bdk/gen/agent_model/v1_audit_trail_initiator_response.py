@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -74,12 +73,12 @@ class V1AuditTrailInitiatorResponse(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'action': (str,),  # noqa: E501
-            'action_name': (str,),  # noqa: E501
-            'timestamp': (str,),  # noqa: E501
-            'initiator_id': (str,),  # noqa: E501
-            'initiator_username': (str,),  # noqa: E501
-            'initiator_email_address': (str,),  # noqa: E501
+            'action': (str, none_type),  # noqa: E501
+            'action_name': (str, none_type),  # noqa: E501
+            'timestamp': (str, none_type),  # noqa: E501
+            'initiator_id': (str, none_type),  # noqa: E501
+            'initiator_username': (str, none_type),  # noqa: E501
+            'initiator_email_address': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -108,7 +107,7 @@ class V1AuditTrailInitiatorResponse(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, action: str = None, action_name: str = None, timestamp: str = None, initiator_id: str = None, initiator_username: str = None, initiator_email_address: str = None, *args, **kwargs):  # noqa: E501
         """V1AuditTrailInitiatorResponse - a agent_model defined in OpenAPI
 
         Keyword Args:
@@ -172,6 +171,13 @@ class V1AuditTrailInitiatorResponse(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.action: str = action
+        self.action_name: str = action_name
+        self.timestamp: str = timestamp
+        self.initiator_id: str = initiator_id
+        self.initiator_username: str = initiator_username
+        self.initiator_email_address: str = initiator_email_address
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

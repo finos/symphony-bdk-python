@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -28,11 +27,10 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.agent_model.user_joined_room_message_all_of import UserJoinedRoomMessageAllOf
-    from symphony.bdk.gen.agent_model.v2_base_message import V2BaseMessage
-    globals()['UserJoinedRoomMessageAllOf'] = UserJoinedRoomMessageAllOf
-    globals()['V2BaseMessage'] = V2BaseMessage
+from symphony.bdk.gen.agent_model.user_joined_room_message_all_of import UserJoinedRoomMessageAllOf
+from symphony.bdk.gen.agent_model.v2_base_message import V2BaseMessage
+globals()['UserJoinedRoomMessageAllOf'] = UserJoinedRoomMessageAllOf
+globals()['V2BaseMessage'] = V2BaseMessage
 
 
 class UserJoinedRoomMessage(ModelComposed):
@@ -71,7 +69,6 @@ class UserJoinedRoomMessage(ModelComposed):
         This must be a method because a agent_model may have properties that are
         of type self, this must run after the class is loaded
         """
-        lazy_import()
         return (bool, date, datetime, dict, float, int, list, str, none_type,)  # noqa: E501
 
     _nullable = False
@@ -86,14 +83,13 @@ class UserJoinedRoomMessage(ModelComposed):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
             'timestamp': (str,),  # noqa: E501
             'v2message_type': (str,),  # noqa: E501
             'stream_id': (str,),  # noqa: E501
-            'added_by_user_id': (int,),  # noqa: E501
-            'member_added_user_id': (int,),  # noqa: E501
-            'id': (str,),  # noqa: E501
+            'added_by_user_id': (int, none_type),  # noqa: E501
+            'member_added_user_id': (int, none_type),  # noqa: E501
+            'id': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -126,7 +122,7 @@ class UserJoinedRoomMessage(ModelComposed):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, timestamp, v2message_type, stream_id, *args, **kwargs):  # noqa: E501
+    def __init__(self, timestamp: str, v2message_type: str, stream_id: str, added_by_user_id: int = None, member_added_user_id: int = None, id: str = None, *args, **kwargs):  # noqa: E501
         """UserJoinedRoomMessage - a agent_model defined in OpenAPI
 
         Args:
@@ -193,6 +189,14 @@ class UserJoinedRoomMessage(ModelComposed):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.timestamp: str = timestamp
+        self.v2message_type: str = v2message_type
+        self.stream_id: str = stream_id
+        self.added_by_user_id: int = added_by_user_id
+        self.member_added_user_id: int = member_added_user_id
+        self.id: str = id
+
+
         constant_args = {
             '_check_type': _check_type,
             '_path_to_item': _path_to_item,
@@ -205,11 +209,6 @@ class UserJoinedRoomMessage(ModelComposed):
             'v2message_type': v2message_type,
             'stream_id': stream_id,
         }
-        # remove args whose value is Null because they are unset
-        required_arg_names = list(required_args.keys())
-        for required_arg_name in required_arg_names:
-            if required_args[required_arg_name] is nulltype.Null:
-                del required_args[required_arg_name]
         model_args = {}
         model_args.update(required_args)
         model_args.update(kwargs)
@@ -240,7 +239,6 @@ class UserJoinedRoomMessage(ModelComposed):
         # code would be run when this module is imported, and these composed
         # classes don't exist yet because their module has not finished
         # loading
-        lazy_import()
         return {
           'anyOf': [
           ],

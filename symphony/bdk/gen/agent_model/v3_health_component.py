@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -28,11 +27,10 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.agent_model.v3_health_auth_type import V3HealthAuthType
-    from symphony.bdk.gen.agent_model.v3_health_status import V3HealthStatus
-    globals()['V3HealthAuthType'] = V3HealthAuthType
-    globals()['V3HealthStatus'] = V3HealthStatus
+from symphony.bdk.gen.agent_model.v3_health_auth_type import V3HealthAuthType
+from symphony.bdk.gen.agent_model.v3_health_status import V3HealthStatus
+globals()['V3HealthAuthType'] = V3HealthAuthType
+globals()['V3HealthStatus'] = V3HealthStatus
 
 
 class V3HealthComponent(ModelNormal):
@@ -79,12 +77,11 @@ class V3HealthComponent(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'auth_type': (V3HealthAuthType,),  # noqa: E501
-            'message': (str,),  # noqa: E501
-            'status': (V3HealthStatus,),  # noqa: E501
-            'version': (str,),  # noqa: E501
+            'auth_type': (V3HealthAuthType, none_type),  # noqa: E501
+            'message': (str, none_type),  # noqa: E501
+            'status': (V3HealthStatus, none_type),  # noqa: E501
+            'version': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -111,7 +108,7 @@ class V3HealthComponent(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, auth_type: V3HealthAuthType = None, message: str = None, status: V3HealthStatus = None, version: str = None, *args, **kwargs):  # noqa: E501
         """V3HealthComponent - a agent_model defined in OpenAPI
 
         Keyword Args:
@@ -173,6 +170,11 @@ class V3HealthComponent(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.auth_type: V3HealthAuthType = auth_type
+        self.message: str = message
+        self.status: V3HealthStatus = status
+        self.version: str = version
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

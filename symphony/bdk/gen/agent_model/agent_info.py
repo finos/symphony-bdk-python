@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -74,13 +73,13 @@ class AgentInfo(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'ip_address': (str,),  # noqa: E501
-            'hostname': (str,),  # noqa: E501
-            'server_fqdn': (str,),  # noqa: E501
-            'version': (str,),  # noqa: E501
-            'url': (str,),  # noqa: E501
-            'on_prem': (bool,),  # noqa: E501
-            'commit_id': (str,),  # noqa: E501
+            'ip_address': (str, none_type),  # noqa: E501
+            'hostname': (str, none_type),  # noqa: E501
+            'server_fqdn': (str, none_type),  # noqa: E501
+            'version': (str, none_type),  # noqa: E501
+            'url': (str, none_type),  # noqa: E501
+            'on_prem': (bool, none_type),  # noqa: E501
+            'commit_id': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -110,7 +109,7 @@ class AgentInfo(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, ip_address: str = None, hostname: str = None, server_fqdn: str = None, version: str = None, url: str = None, on_prem: bool = None, commit_id: str = None, *args, **kwargs):  # noqa: E501
         """AgentInfo - a agent_model defined in OpenAPI
 
         Keyword Args:
@@ -175,6 +174,14 @@ class AgentInfo(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.ip_address: str = ip_address
+        self.hostname: str = hostname
+        self.server_fqdn: str = server_fqdn
+        self.version: str = version
+        self.url: str = url
+        self.on_prem: bool = on_prem
+        self.commit_id: str = commit_id
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

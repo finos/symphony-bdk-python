@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -78,7 +77,7 @@ class V1DLPPolicyRequest(ModelNormal):
             'name': (str,),  # noqa: E501
             'scopes': ([str],),  # noqa: E501
             'type': (str,),  # noqa: E501
-            'dictionary_ids': ([str],),  # noqa: E501
+            'dictionary_ids': ([str], none_type),  # noqa: E501
         }
 
     @cached_property
@@ -106,7 +105,7 @@ class V1DLPPolicyRequest(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, content_types, name, scopes, type, *args, **kwargs):  # noqa: E501
+    def __init__(self, content_types: List[str], name: str, scopes: List[str], type: str, dictionary_ids: List[str] = None, *args, **kwargs):  # noqa: E501
         """V1DLPPolicyRequest - a agent_model defined in OpenAPI
 
         Args:
@@ -172,10 +171,12 @@ class V1DLPPolicyRequest(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.content_types = content_types
-        self.name = name
-        self.scopes = scopes
-        self.type = type
+        self.content_types: List[str] = content_types
+        self.name: str = name
+        self.scopes: List[str] = scopes
+        self.type: str = type
+        self.dictionary_ids: List[str] = dictionary_ids
+
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

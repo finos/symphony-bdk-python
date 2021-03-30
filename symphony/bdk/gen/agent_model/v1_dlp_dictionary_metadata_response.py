@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -28,9 +27,8 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.agent_model.v1_dlp_dictionary_metadata import V1DLPDictionaryMetadata
-    globals()['V1DLPDictionaryMetadata'] = V1DLPDictionaryMetadata
+from symphony.bdk.gen.agent_model.v1_dlp_dictionary_metadata import V1DLPDictionaryMetadata
+globals()['V1DLPDictionaryMetadata'] = V1DLPDictionaryMetadata
 
 
 class V1DLPDictionaryMetadataResponse(ModelNormal):
@@ -77,7 +75,6 @@ class V1DLPDictionaryMetadataResponse(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
             'data': (V1DLPDictionaryMetadata,),  # noqa: E501
         }
@@ -103,7 +100,7 @@ class V1DLPDictionaryMetadataResponse(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, data, *args, **kwargs):  # noqa: E501
+    def __init__(self, data: V1DLPDictionaryMetadata, *args, **kwargs):  # noqa: E501
         """V1DLPDictionaryMetadataResponse - a agent_model defined in OpenAPI
 
         Args:
@@ -165,7 +162,8 @@ class V1DLPDictionaryMetadataResponse(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.data = data
+        self.data: V1DLPDictionaryMetadata = data
+
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

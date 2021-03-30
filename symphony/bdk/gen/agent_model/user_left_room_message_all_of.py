@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -74,9 +73,9 @@ class UserLeftRoomMessageAllOf(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'removed_by_user_id': (int,),  # noqa: E501
-            'member_left_user_id': (int,),  # noqa: E501
-            'information_barrier_remediation': (bool,),  # noqa: E501
+            'removed_by_user_id': (int, none_type),  # noqa: E501
+            'member_left_user_id': (int, none_type),  # noqa: E501
+            'information_barrier_remediation': (bool, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -102,7 +101,7 @@ class UserLeftRoomMessageAllOf(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, removed_by_user_id: int = None, member_left_user_id: int = None, information_barrier_remediation: bool = None, *args, **kwargs):  # noqa: E501
         """UserLeftRoomMessageAllOf - a agent_model defined in OpenAPI
 
         Keyword Args:
@@ -163,6 +162,10 @@ class UserLeftRoomMessageAllOf(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.removed_by_user_id: int = removed_by_user_id
+        self.member_left_user_id: int = member_left_user_id
+        self.information_barrier_remediation: bool = information_barrier_remediation
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -28,9 +27,8 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.agent_model.channel_subscription_error import ChannelSubscriptionError
-    globals()['ChannelSubscriptionError'] = ChannelSubscriptionError
+from symphony.bdk.gen.agent_model.channel_subscription_error import ChannelSubscriptionError
+globals()['ChannelSubscriptionError'] = ChannelSubscriptionError
 
 
 class ChannelSubscriptionResponse(ModelNormal):
@@ -77,12 +75,11 @@ class ChannelSubscriptionResponse(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'requested_subscription': (int,),  # noqa: E501
-            'successful_subscription': (int,),  # noqa: E501
-            'failed_subscription': (int,),  # noqa: E501
-            'subscription_errors': ([ChannelSubscriptionError],),  # noqa: E501
+            'requested_subscription': (int, none_type),  # noqa: E501
+            'successful_subscription': (int, none_type),  # noqa: E501
+            'failed_subscription': (int, none_type),  # noqa: E501
+            'subscription_errors': ([ChannelSubscriptionError], none_type),  # noqa: E501
         }
 
     @cached_property
@@ -109,7 +106,7 @@ class ChannelSubscriptionResponse(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, requested_subscription: int = None, successful_subscription: int = None, failed_subscription: int = None, subscription_errors: List[ChannelSubscriptionError] = None, *args, **kwargs):  # noqa: E501
         """ChannelSubscriptionResponse - a agent_model defined in OpenAPI
 
         Keyword Args:
@@ -171,6 +168,11 @@ class ChannelSubscriptionResponse(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.requested_subscription: int = requested_subscription
+        self.successful_subscription: int = successful_subscription
+        self.failed_subscription: int = failed_subscription
+        self.subscription_errors: List[ChannelSubscriptionError] = subscription_errors
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

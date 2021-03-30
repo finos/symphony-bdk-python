@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -75,7 +74,7 @@ class V3DLPFileExtensionConfig(ModelNormal):
         """
         return {
             'allow_lists': ([str],),  # noqa: E501
-            'block_lists': ([str],),  # noqa: E501
+            'block_lists': ([str], none_type),  # noqa: E501
         }
 
     @cached_property
@@ -100,7 +99,7 @@ class V3DLPFileExtensionConfig(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, allow_lists, *args, **kwargs):  # noqa: E501
+    def __init__(self, allow_lists: List[str], block_lists: List[str] = None, *args, **kwargs):  # noqa: E501
         """V3DLPFileExtensionConfig - a agent_model defined in OpenAPI
 
         Args:
@@ -163,7 +162,9 @@ class V3DLPFileExtensionConfig(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.allow_lists = allow_lists
+        self.allow_lists: List[str] = allow_lists
+        self.block_lists: List[str] = block_lists
+
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

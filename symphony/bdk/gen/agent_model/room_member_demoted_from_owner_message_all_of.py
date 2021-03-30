@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -74,8 +73,8 @@ class RoomMemberDemotedFromOwnerMessageAllOf(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'demoted_by_user_id': (int,),  # noqa: E501
-            'demoted_user_id': (int,),  # noqa: E501
+            'demoted_by_user_id': (int, none_type),  # noqa: E501
+            'demoted_user_id': (int, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -100,7 +99,7 @@ class RoomMemberDemotedFromOwnerMessageAllOf(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, demoted_by_user_id: int = None, demoted_user_id: int = None, *args, **kwargs):  # noqa: E501
         """RoomMemberDemotedFromOwnerMessageAllOf - a agent_model defined in OpenAPI
 
         Keyword Args:
@@ -160,6 +159,9 @@ class RoomMemberDemotedFromOwnerMessageAllOf(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.demoted_by_user_id: int = demoted_by_user_id
+        self.demoted_user_id: int = demoted_user_id
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

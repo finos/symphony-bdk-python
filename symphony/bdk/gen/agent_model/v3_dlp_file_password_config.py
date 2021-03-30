@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -100,7 +99,7 @@ class V3DLPFilePasswordConfig(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, applicable_file_types, match_criteria, *args, **kwargs):  # noqa: E501
+    def __init__(self, applicable_file_types: List[str], match_criteria: str, *args, **kwargs):  # noqa: E501
         """V3DLPFilePasswordConfig - a agent_model defined in OpenAPI
 
         Args:
@@ -163,8 +162,9 @@ class V3DLPFilePasswordConfig(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.applicable_file_types = applicable_file_types
-        self.match_criteria = match_criteria
+        self.applicable_file_types: List[str] = applicable_file_types
+        self.match_criteria: str = match_criteria
+
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -28,9 +27,8 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.agent_model.attachment_info import AttachmentInfo
-    globals()['AttachmentInfo'] = AttachmentInfo
+from symphony.bdk.gen.agent_model.attachment_info import AttachmentInfo
+globals()['AttachmentInfo'] = AttachmentInfo
 
 
 class V2MessageAllOf(ModelNormal):
@@ -77,11 +75,10 @@ class V2MessageAllOf(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
             'message': (str,),  # noqa: E501
             'from_user_id': (int,),  # noqa: E501
-            'attachments': ([AttachmentInfo],),  # noqa: E501
+            'attachments': ([AttachmentInfo], none_type),  # noqa: E501
         }
 
     @cached_property
@@ -107,7 +104,7 @@ class V2MessageAllOf(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, message, from_user_id, *args, **kwargs):  # noqa: E501
+    def __init__(self, message: str, from_user_id: int, attachments: List[AttachmentInfo] = None, *args, **kwargs):  # noqa: E501
         """V2MessageAllOf - a agent_model defined in OpenAPI
 
         Args:
@@ -171,8 +168,10 @@ class V2MessageAllOf(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.message = message
-        self.from_user_id = from_user_id
+        self.message: str = message
+        self.from_user_id: int = from_user_id
+        self.attachments: List[AttachmentInfo] = attachments
+
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

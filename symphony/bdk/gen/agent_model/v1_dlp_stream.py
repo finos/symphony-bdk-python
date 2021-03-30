@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -74,27 +73,27 @@ class V1DLPStream(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'name': (str,),  # noqa: E501
-            'creator_pretty_name': (str,),  # noqa: E501
-            'public_room': (bool,),  # noqa: E501
-            'cross_pod': (bool,),  # noqa: E501
-            'allow_external': (bool,),  # noqa: E501
-            'creator_id': (str,),  # noqa: E501
-            'room_description': (str,),  # noqa: E501
-            'stream_id': (str,),  # noqa: E501
-            'state': (str,),  # noqa: E501
-            'type': (str,),  # noqa: E501
-            'last_disabled': (int,),  # noqa: E501
-            'member_add_user_enabled': (bool,),  # noqa: E501
-            'active': (bool,),  # noqa: E501
-            'discoverable': (bool,),  # noqa: E501
-            'read_only': (bool,),  # noqa: E501
-            'copy_disabled': (bool,),  # noqa: E501
-            'external_owned': (bool,),  # noqa: E501
-            'send_message_disabled': (bool,),  # noqa: E501
-            'moderated': (bool,),  # noqa: E501
-            'share_history_enabled': (bool,),  # noqa: E501
-            'diagnostic': (str,),  # noqa: E501
+            'name': (str, none_type),  # noqa: E501
+            'creator_pretty_name': (str, none_type),  # noqa: E501
+            'public_room': (bool, none_type),  # noqa: E501
+            'cross_pod': (bool, none_type),  # noqa: E501
+            'allow_external': (bool, none_type),  # noqa: E501
+            'creator_id': (str, none_type),  # noqa: E501
+            'room_description': (str, none_type),  # noqa: E501
+            'stream_id': (str, none_type),  # noqa: E501
+            'state': (str, none_type),  # noqa: E501
+            'type': (str, none_type),  # noqa: E501
+            'last_disabled': (int, none_type),  # noqa: E501
+            'member_add_user_enabled': (bool, none_type),  # noqa: E501
+            'active': (bool, none_type),  # noqa: E501
+            'discoverable': (bool, none_type),  # noqa: E501
+            'read_only': (bool, none_type),  # noqa: E501
+            'copy_disabled': (bool, none_type),  # noqa: E501
+            'external_owned': (bool, none_type),  # noqa: E501
+            'send_message_disabled': (bool, none_type),  # noqa: E501
+            'moderated': (bool, none_type),  # noqa: E501
+            'share_history_enabled': (bool, none_type),  # noqa: E501
+            'diagnostic': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -138,7 +137,7 @@ class V1DLPStream(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, name: str = None, creator_pretty_name: str = None, public_room: bool = None, cross_pod: bool = None, allow_external: bool = None, creator_id: str = None, room_description: str = None, stream_id: str = None, state: str = None, type: str = None, last_disabled: int = None, member_add_user_enabled: bool = None, active: bool = None, discoverable: bool = None, read_only: bool = None, copy_disabled: bool = None, external_owned: bool = None, send_message_disabled: bool = None, moderated: bool = None, share_history_enabled: bool = None, diagnostic: str = None, *args, **kwargs):  # noqa: E501
         """V1DLPStream - a agent_model defined in OpenAPI
 
         Keyword Args:
@@ -217,6 +216,28 @@ class V1DLPStream(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.name: str = name
+        self.creator_pretty_name: str = creator_pretty_name
+        self.public_room: bool = public_room
+        self.cross_pod: bool = cross_pod
+        self.allow_external: bool = allow_external
+        self.creator_id: str = creator_id
+        self.room_description: str = room_description
+        self.stream_id: str = stream_id
+        self.state: str = state
+        self.type: str = type
+        self.last_disabled: int = last_disabled
+        self.member_add_user_enabled: bool = member_add_user_enabled
+        self.active: bool = active
+        self.discoverable: bool = discoverable
+        self.read_only: bool = read_only
+        self.copy_disabled: bool = copy_disabled
+        self.external_owned: bool = external_owned
+        self.send_message_disabled: bool = send_message_disabled
+        self.moderated: bool = moderated
+        self.share_history_enabled: bool = share_history_enabled
+        self.diagnostic: str = diagnostic
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -74,12 +73,12 @@ class ConnectionRequestMessageAllOf(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'requesting_user_id': (int,),  # noqa: E501
-            'target_user_id': (int,),  # noqa: E501
-            'first_requested_at': (int,),  # noqa: E501
-            'updated_at': (int,),  # noqa: E501
-            'request_counter': (int,),  # noqa: E501
-            'status': (str,),  # noqa: E501
+            'requesting_user_id': (int, none_type),  # noqa: E501
+            'target_user_id': (int, none_type),  # noqa: E501
+            'first_requested_at': (int, none_type),  # noqa: E501
+            'updated_at': (int, none_type),  # noqa: E501
+            'request_counter': (int, none_type),  # noqa: E501
+            'status': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -108,7 +107,7 @@ class ConnectionRequestMessageAllOf(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, requesting_user_id: int = None, target_user_id: int = None, first_requested_at: int = None, updated_at: int = None, request_counter: int = None, status: str = None, *args, **kwargs):  # noqa: E501
         """ConnectionRequestMessageAllOf - a agent_model defined in OpenAPI
 
         Keyword Args:
@@ -172,6 +171,13 @@ class ConnectionRequestMessageAllOf(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.requesting_user_id: int = requesting_user_id
+        self.target_user_id: int = target_user_id
+        self.first_requested_at: int = first_requested_at
+        self.updated_at: int = updated_at
+        self.request_counter: int = request_counter
+        self.status: str = status
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

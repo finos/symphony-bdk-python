@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -100,7 +99,7 @@ class V1DLPDictionaryMetadataCreateRequest(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, name, type, *args, **kwargs):  # noqa: E501
+    def __init__(self, name: str, type: str, *args, **kwargs):  # noqa: E501
         """V1DLPDictionaryMetadataCreateRequest - a agent_model defined in OpenAPI
 
         Args:
@@ -163,8 +162,9 @@ class V1DLPDictionaryMetadataCreateRequest(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.name = name
-        self.type = type
+        self.name: str = name
+        self.type: str = type
+
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

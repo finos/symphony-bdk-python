@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -28,11 +27,10 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.agent_model.pagination import Pagination
-    from symphony.bdk.gen.agent_model.v1_audit_trail_initiator_response import V1AuditTrailInitiatorResponse
-    globals()['Pagination'] = Pagination
-    globals()['V1AuditTrailInitiatorResponse'] = V1AuditTrailInitiatorResponse
+from symphony.bdk.gen.agent_model.pagination import Pagination
+from symphony.bdk.gen.agent_model.v1_audit_trail_initiator_response import V1AuditTrailInitiatorResponse
+globals()['Pagination'] = Pagination
+globals()['V1AuditTrailInitiatorResponse'] = V1AuditTrailInitiatorResponse
 
 
 class V1AuditTrailInitiatorList(ModelNormal):
@@ -79,10 +77,9 @@ class V1AuditTrailInitiatorList(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'items': ([V1AuditTrailInitiatorResponse],),  # noqa: E501
-            'pagination': (Pagination,),  # noqa: E501
+            'items': ([V1AuditTrailInitiatorResponse], none_type),  # noqa: E501
+            'pagination': (Pagination, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -107,7 +104,7 @@ class V1AuditTrailInitiatorList(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, items: List[V1AuditTrailInitiatorResponse] = None, pagination: Pagination = None, *args, **kwargs):  # noqa: E501
         """V1AuditTrailInitiatorList - a agent_model defined in OpenAPI
 
         Keyword Args:
@@ -167,6 +164,9 @@ class V1AuditTrailInitiatorList(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.items: List[V1AuditTrailInitiatorResponse] = items
+        self.pagination: Pagination = pagination
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

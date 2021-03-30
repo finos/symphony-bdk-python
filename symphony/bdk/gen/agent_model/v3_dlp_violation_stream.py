@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -28,11 +27,10 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.agent_model.v1_dlp_stream import V1DLPStream
-    from symphony.bdk.gen.agent_model.v3_dlp_violation import V3DLPViolation
-    globals()['V1DLPStream'] = V1DLPStream
-    globals()['V3DLPViolation'] = V3DLPViolation
+from symphony.bdk.gen.agent_model.v1_dlp_stream import V1DLPStream
+from symphony.bdk.gen.agent_model.v3_dlp_violation import V3DLPViolation
+globals()['V1DLPStream'] = V1DLPStream
+globals()['V3DLPViolation'] = V3DLPViolation
 
 
 class V3DLPViolationStream(ModelNormal):
@@ -79,10 +77,9 @@ class V3DLPViolationStream(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'violation': (V3DLPViolation,),  # noqa: E501
-            'stream': (V1DLPStream,),  # noqa: E501
+            'violation': (V3DLPViolation, none_type),  # noqa: E501
+            'stream': (V1DLPStream, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -107,7 +104,7 @@ class V3DLPViolationStream(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, violation: V3DLPViolation = None, stream: V1DLPStream = None, *args, **kwargs):  # noqa: E501
         """V3DLPViolationStream - a agent_model defined in OpenAPI
 
         Keyword Args:
@@ -167,6 +164,9 @@ class V3DLPViolationStream(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.violation: V3DLPViolation = violation
+        self.stream: V1DLPStream = stream
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -102,7 +101,7 @@ class AttachmentInfo(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, id, name, size, *args, **kwargs):  # noqa: E501
+    def __init__(self, id: str, name: str, size: int, *args, **kwargs):  # noqa: E501
         """AttachmentInfo - a agent_model defined in OpenAPI
 
         Args:
@@ -166,9 +165,10 @@ class AttachmentInfo(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.id = id
-        self.name = name
-        self.size = size
+        self.id: str = id
+        self.name: str = name
+        self.size: int = size
+
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

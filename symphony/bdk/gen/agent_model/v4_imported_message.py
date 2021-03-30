@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -79,8 +78,8 @@ class V4ImportedMessage(ModelNormal):
             'intended_message_from_user_id': (int,),  # noqa: E501
             'originating_system_id': (str,),  # noqa: E501
             'stream_id': (str,),  # noqa: E501
-            'data': (str,),  # noqa: E501
-            'original_message_id': (str,),  # noqa: E501
+            'data': (str, none_type),  # noqa: E501
+            'original_message_id': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -110,7 +109,7 @@ class V4ImportedMessage(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, message, intended_message_timestamp, intended_message_from_user_id, originating_system_id, stream_id, *args, **kwargs):  # noqa: E501
+    def __init__(self, message: str, intended_message_timestamp: int, intended_message_from_user_id: int, originating_system_id: str, stream_id: str, data: str = None, original_message_id: str = None, *args, **kwargs):  # noqa: E501
         """V4ImportedMessage - a agent_model defined in OpenAPI
 
         Args:
@@ -178,11 +177,14 @@ class V4ImportedMessage(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.message = message
-        self.intended_message_timestamp = intended_message_timestamp
-        self.intended_message_from_user_id = intended_message_from_user_id
-        self.originating_system_id = originating_system_id
-        self.stream_id = stream_id
+        self.message: str = message
+        self.intended_message_timestamp: int = intended_message_timestamp
+        self.intended_message_from_user_id: int = intended_message_from_user_id
+        self.originating_system_id: str = originating_system_id
+        self.stream_id: str = stream_id
+        self.data: str = data
+        self.original_message_id: str = original_message_id
+
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

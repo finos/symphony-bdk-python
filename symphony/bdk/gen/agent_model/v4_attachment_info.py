@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -28,9 +27,8 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.agent_model.v4_thumbnail_info import V4ThumbnailInfo
-    globals()['V4ThumbnailInfo'] = V4ThumbnailInfo
+from symphony.bdk.gen.agent_model.v4_thumbnail_info import V4ThumbnailInfo
+globals()['V4ThumbnailInfo'] = V4ThumbnailInfo
 
 
 class V4AttachmentInfo(ModelNormal):
@@ -77,12 +75,11 @@ class V4AttachmentInfo(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
             'id': (str,),  # noqa: E501
             'name': (str,),  # noqa: E501
             'size': (int,),  # noqa: E501
-            'images': ([V4ThumbnailInfo],),  # noqa: E501
+            'images': ([V4ThumbnailInfo], none_type),  # noqa: E501
         }
 
     @cached_property
@@ -109,7 +106,7 @@ class V4AttachmentInfo(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, id, name, size, *args, **kwargs):  # noqa: E501
+    def __init__(self, id: str, name: str, size: int, images: List[V4ThumbnailInfo] = None, *args, **kwargs):  # noqa: E501
         """V4AttachmentInfo - a agent_model defined in OpenAPI
 
         Args:
@@ -174,9 +171,11 @@ class V4AttachmentInfo(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.id = id
-        self.name = name
-        self.size = size
+        self.id: str = id
+        self.name: str = name
+        self.size: int = size
+        self.images: List[V4ThumbnailInfo] = images
+
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

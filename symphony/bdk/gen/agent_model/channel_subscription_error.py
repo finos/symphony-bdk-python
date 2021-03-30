@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -74,9 +73,9 @@ class ChannelSubscriptionError(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'user_id': (int,),  # noqa: E501
-            'code': (str,),  # noqa: E501
-            'message': (str,),  # noqa: E501
+            'user_id': (int, none_type),  # noqa: E501
+            'code': (str, none_type),  # noqa: E501
+            'message': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -102,7 +101,7 @@ class ChannelSubscriptionError(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, user_id: int = None, code: str = None, message: str = None, *args, **kwargs):  # noqa: E501
         """ChannelSubscriptionError - a agent_model defined in OpenAPI
 
         Keyword Args:
@@ -163,6 +162,10 @@ class ChannelSubscriptionError(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.user_id: int = user_id
+        self.code: str = code
+        self.message: str = message
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

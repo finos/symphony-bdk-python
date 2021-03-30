@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -28,11 +27,10 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.agent_model.connection_request_message_all_of import ConnectionRequestMessageAllOf
-    from symphony.bdk.gen.agent_model.v2_base_message import V2BaseMessage
-    globals()['ConnectionRequestMessageAllOf'] = ConnectionRequestMessageAllOf
-    globals()['V2BaseMessage'] = V2BaseMessage
+from symphony.bdk.gen.agent_model.connection_request_message_all_of import ConnectionRequestMessageAllOf
+from symphony.bdk.gen.agent_model.v2_base_message import V2BaseMessage
+globals()['ConnectionRequestMessageAllOf'] = ConnectionRequestMessageAllOf
+globals()['V2BaseMessage'] = V2BaseMessage
 
 
 class ConnectionRequestMessage(ModelComposed):
@@ -71,7 +69,6 @@ class ConnectionRequestMessage(ModelComposed):
         This must be a method because a agent_model may have properties that are
         of type self, this must run after the class is loaded
         """
-        lazy_import()
         return (bool, date, datetime, dict, float, int, list, str, none_type,)  # noqa: E501
 
     _nullable = False
@@ -86,18 +83,17 @@ class ConnectionRequestMessage(ModelComposed):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
             'timestamp': (str,),  # noqa: E501
             'v2message_type': (str,),  # noqa: E501
             'stream_id': (str,),  # noqa: E501
-            'requesting_user_id': (int,),  # noqa: E501
-            'target_user_id': (int,),  # noqa: E501
-            'first_requested_at': (int,),  # noqa: E501
-            'updated_at': (int,),  # noqa: E501
-            'request_counter': (int,),  # noqa: E501
-            'status': (str,),  # noqa: E501
-            'id': (str,),  # noqa: E501
+            'requesting_user_id': (int, none_type),  # noqa: E501
+            'target_user_id': (int, none_type),  # noqa: E501
+            'first_requested_at': (int, none_type),  # noqa: E501
+            'updated_at': (int, none_type),  # noqa: E501
+            'request_counter': (int, none_type),  # noqa: E501
+            'status': (str, none_type),  # noqa: E501
+            'id': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -134,7 +130,7 @@ class ConnectionRequestMessage(ModelComposed):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, timestamp, v2message_type, stream_id, *args, **kwargs):  # noqa: E501
+    def __init__(self, timestamp: str, v2message_type: str, stream_id: str, requesting_user_id: int = None, target_user_id: int = None, first_requested_at: int = None, updated_at: int = None, request_counter: int = None, status: str = None, id: str = None, *args, **kwargs):  # noqa: E501
         """ConnectionRequestMessage - a agent_model defined in OpenAPI
 
         Args:
@@ -205,6 +201,18 @@ class ConnectionRequestMessage(ModelComposed):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
+        self.timestamp: str = timestamp
+        self.v2message_type: str = v2message_type
+        self.stream_id: str = stream_id
+        self.requesting_user_id: int = requesting_user_id
+        self.target_user_id: int = target_user_id
+        self.first_requested_at: int = first_requested_at
+        self.updated_at: int = updated_at
+        self.request_counter: int = request_counter
+        self.status: str = status
+        self.id: str = id
+
+
         constant_args = {
             '_check_type': _check_type,
             '_path_to_item': _path_to_item,
@@ -217,11 +225,6 @@ class ConnectionRequestMessage(ModelComposed):
             'v2message_type': v2message_type,
             'stream_id': stream_id,
         }
-        # remove args whose value is Null because they are unset
-        required_arg_names = list(required_args.keys())
-        for required_arg_name in required_arg_names:
-            if required_args[required_arg_name] is nulltype.Null:
-                del required_args[required_arg_name]
         model_args = {}
         model_args.update(required_args)
         model_args.update(kwargs)
@@ -252,7 +255,6 @@ class ConnectionRequestMessage(ModelComposed):
         # code would be run when this module is imported, and these composed
         # classes don't exist yet because their module has not finished
         # loading
-        lazy_import()
         return {
           'anyOf': [
           ],

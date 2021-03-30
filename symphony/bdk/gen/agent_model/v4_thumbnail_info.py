@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -74,8 +73,8 @@ class V4ThumbnailInfo(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'id': (str,),  # noqa: E501
-            'dimension': (str,),  # noqa: E501
+            'id': (str, none_type),  # noqa: E501
+            'dimension': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -100,7 +99,7 @@ class V4ThumbnailInfo(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, id: str = None, dimension: str = None, *args, **kwargs):  # noqa: E501
         """V4ThumbnailInfo - a agent_model defined in OpenAPI
 
         Keyword Args:
@@ -160,6 +159,9 @@ class V4ThumbnailInfo(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.id: str = id
+        self.dimension: str = dimension
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

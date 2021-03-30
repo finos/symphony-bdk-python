@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -28,11 +27,10 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.agent_model.v4_initiator import V4Initiator
-    from symphony.bdk.gen.agent_model.v4_payload import V4Payload
-    globals()['V4Initiator'] = V4Initiator
-    globals()['V4Payload'] = V4Payload
+from symphony.bdk.gen.agent_model.v4_initiator import V4Initiator
+from symphony.bdk.gen.agent_model.v4_payload import V4Payload
+globals()['V4Initiator'] = V4Initiator
+globals()['V4Payload'] = V4Payload
 
 
 class V4Event(ModelNormal):
@@ -79,15 +77,14 @@ class V4Event(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'id': (str,),  # noqa: E501
-            'message_id': (str,),  # noqa: E501
-            'timestamp': (int,),  # noqa: E501
-            'type': (str,),  # noqa: E501
-            'diagnostic': (str,),  # noqa: E501
-            'initiator': (V4Initiator,),  # noqa: E501
-            'payload': (V4Payload,),  # noqa: E501
+            'id': (str, none_type),  # noqa: E501
+            'message_id': (str, none_type),  # noqa: E501
+            'timestamp': (int, none_type),  # noqa: E501
+            'type': (str, none_type),  # noqa: E501
+            'diagnostic': (str, none_type),  # noqa: E501
+            'initiator': (V4Initiator, none_type),  # noqa: E501
+            'payload': (V4Payload, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -117,7 +114,7 @@ class V4Event(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, id: str = None, message_id: str = None, timestamp: int = None, type: str = None, diagnostic: str = None, initiator: V4Initiator = None, payload: V4Payload = None, *args, **kwargs):  # noqa: E501
         """V4Event - a agent_model defined in OpenAPI
 
         Keyword Args:
@@ -182,6 +179,14 @@ class V4Event(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.id: str = id
+        self.message_id: str = message_id
+        self.timestamp: int = timestamp
+        self.type: str = type
+        self.diagnostic: str = diagnostic
+        self.initiator: V4Initiator = initiator
+        self.payload: V4Payload = payload
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -74,9 +73,9 @@ class V1DLPSignal(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'name': (str,),  # noqa: E501
-            'rules': (str,),  # noqa: E501
-            'diagnostic': (str,),  # noqa: E501
+            'name': (str, none_type),  # noqa: E501
+            'rules': (str, none_type),  # noqa: E501
+            'diagnostic': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -102,7 +101,7 @@ class V1DLPSignal(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, name: str = None, rules: str = None, diagnostic: str = None, *args, **kwargs):  # noqa: E501
         """V1DLPSignal - a agent_model defined in OpenAPI
 
         Keyword Args:
@@ -163,6 +162,10 @@ class V1DLPSignal(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.name: str = name
+        self.rules: str = rules
+        self.diagnostic: str = diagnostic
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

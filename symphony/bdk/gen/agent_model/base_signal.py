@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -74,10 +73,10 @@ class BaseSignal(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'name': (str,),  # noqa: E501
-            'query': (str,),  # noqa: E501
-            'visible_on_profile': (bool,),  # noqa: E501
-            'company_wide': (bool,),  # noqa: E501
+            'name': (str, none_type),  # noqa: E501
+            'query': (str, none_type),  # noqa: E501
+            'visible_on_profile': (bool, none_type),  # noqa: E501
+            'company_wide': (bool, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -104,7 +103,7 @@ class BaseSignal(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, *args, **kwargs):  # noqa: E501
+    def __init__(self, name: str = None, query: str = None, visible_on_profile: bool = None, company_wide: bool = None, *args, **kwargs):  # noqa: E501
         """BaseSignal - a agent_model defined in OpenAPI
 
         Keyword Args:
@@ -166,6 +165,11 @@ class BaseSignal(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
+
+        self.name: str = name
+        self.query: str = query
+        self.visible_on_profile: bool = visible_on_profile
+        self.company_wide: bool = company_wide
 
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

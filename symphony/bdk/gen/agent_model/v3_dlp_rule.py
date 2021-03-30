@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -28,17 +27,16 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.agent_model.v3_dlp_file_classifier_config import V3DLPFileClassifierConfig
-    from symphony.bdk.gen.agent_model.v3_dlp_file_extension_config import V3DLPFileExtensionConfig
-    from symphony.bdk.gen.agent_model.v3_dlp_file_password_config import V3DLPFilePasswordConfig
-    from symphony.bdk.gen.agent_model.v3_dlp_file_size_config import V3DLPFileSizeConfig
-    from symphony.bdk.gen.agent_model.v3_dlp_text_match_config import V3DLPTextMatchConfig
-    globals()['V3DLPFileClassifierConfig'] = V3DLPFileClassifierConfig
-    globals()['V3DLPFileExtensionConfig'] = V3DLPFileExtensionConfig
-    globals()['V3DLPFilePasswordConfig'] = V3DLPFilePasswordConfig
-    globals()['V3DLPFileSizeConfig'] = V3DLPFileSizeConfig
-    globals()['V3DLPTextMatchConfig'] = V3DLPTextMatchConfig
+from symphony.bdk.gen.agent_model.v3_dlp_file_classifier_config import V3DLPFileClassifierConfig
+from symphony.bdk.gen.agent_model.v3_dlp_file_extension_config import V3DLPFileExtensionConfig
+from symphony.bdk.gen.agent_model.v3_dlp_file_password_config import V3DLPFilePasswordConfig
+from symphony.bdk.gen.agent_model.v3_dlp_file_size_config import V3DLPFileSizeConfig
+from symphony.bdk.gen.agent_model.v3_dlp_text_match_config import V3DLPTextMatchConfig
+globals()['V3DLPFileClassifierConfig'] = V3DLPFileClassifierConfig
+globals()['V3DLPFileExtensionConfig'] = V3DLPFileExtensionConfig
+globals()['V3DLPFilePasswordConfig'] = V3DLPFilePasswordConfig
+globals()['V3DLPFileSizeConfig'] = V3DLPFileSizeConfig
+globals()['V3DLPTextMatchConfig'] = V3DLPTextMatchConfig
 
 
 class V3DLPRule(ModelNormal):
@@ -85,16 +83,15 @@ class V3DLPRule(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
             'type': (str,),  # noqa: E501
             'name': (str,),  # noqa: E501
-            'id': (str,),  # noqa: E501
-            'text_match_config': (V3DLPTextMatchConfig,),  # noqa: E501
-            'file_size_config': (V3DLPFileSizeConfig,),  # noqa: E501
-            'file_extension_config': (V3DLPFileExtensionConfig,),  # noqa: E501
-            'file_password_config': (V3DLPFilePasswordConfig,),  # noqa: E501
-            'file_classifier_config': (V3DLPFileClassifierConfig,),  # noqa: E501
+            'id': (str, none_type),  # noqa: E501
+            'text_match_config': (V3DLPTextMatchConfig, none_type),  # noqa: E501
+            'file_size_config': (V3DLPFileSizeConfig, none_type),  # noqa: E501
+            'file_extension_config': (V3DLPFileExtensionConfig, none_type),  # noqa: E501
+            'file_password_config': (V3DLPFilePasswordConfig, none_type),  # noqa: E501
+            'file_classifier_config': (V3DLPFileClassifierConfig, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -125,7 +122,7 @@ class V3DLPRule(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, type, name, *args, **kwargs):  # noqa: E501
+    def __init__(self, type: str, name: str, id: str = None, text_match_config: V3DLPTextMatchConfig = None, file_size_config: V3DLPFileSizeConfig = None, file_extension_config: V3DLPFileExtensionConfig = None, file_password_config: V3DLPFilePasswordConfig = None, file_classifier_config: V3DLPFileClassifierConfig = None, *args, **kwargs):  # noqa: E501
         """V3DLPRule - a agent_model defined in OpenAPI
 
         Args:
@@ -194,8 +191,15 @@ class V3DLPRule(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.type = type
-        self.name = name
+        self.type: str = type
+        self.name: str = name
+        self.id: str = id
+        self.text_match_config: V3DLPTextMatchConfig = text_match_config
+        self.file_size_config: V3DLPFileSizeConfig = file_size_config
+        self.file_extension_config: V3DLPFileExtensionConfig = file_extension_config
+        self.file_password_config: V3DLPFilePasswordConfig = file_password_config
+        self.file_classifier_config: V3DLPFileClassifierConfig = file_classifier_config
+
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
