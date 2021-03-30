@@ -38,7 +38,7 @@ class CommandContext(ActivityContext[V4MessageSent]):
 
 class CommandActivity(AbstractActivity[CommandContext]):
     """
-    A command activity corresponds to any message send in a chat where the bot is part of.
+    A command activity corresponds to any message sent in a chat where the bot is part of.
     """
     def __init__(self):
         self.bot_display_name = str

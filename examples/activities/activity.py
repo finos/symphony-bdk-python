@@ -1,6 +1,6 @@
 import asyncio
 import logging.config
-import os
+from pathlib import Path
 
 from symphony.bdk.core.activity.command import CommandActivity, CommandContext
 from symphony.bdk.core.config.loader import BdkConfigLoader
@@ -15,7 +15,6 @@ async def run():
 
 
 class HelloCommandActivity(CommandActivity):
-
     def __init__(self, messages: MessageService):
         self._messages = messages
         super().__init__()
@@ -27,8 +26,7 @@ class HelloCommandActivity(CommandActivity):
         await self._messages.send_message(context.stream_id, "<messageML>Hello, World!</messageML>")
 
 
-logging.config.fileConfig(os.path.dirname(os.path.abspath(__file__)) + '/logging.conf',
-                          disable_existing_loggers=False)
+logging.config.fileConfig(Path("../logging.conf"), disable_existing_loggers=False)
 
 try:
     logging.info("Running activity example...")
