@@ -24,12 +24,11 @@ class ActivityRegistry(RealTimeEventListener):
         self._bot_display_name = None
 
     async def register(self, activity: AbstractActivity):
-        """
-        Registers an activity.
+        """Registers an activity.
 
-        Args:
-            activity: any object inheriting from base :class:`AbstractActivity`
+        :param activity: any object inheriting from base :class:`AbstractActivity`
         """
+
         logger.debug('Registering new activity %s', activity)
 
         if self._bot_display_name is None:

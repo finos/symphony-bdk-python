@@ -45,32 +45,26 @@ class AbstractActivity(ABC, Generic[C]):
 
     @abstractmethod
     def matches(self, context: C) -> bool:
-        """
+        """Matches the :py:class:`ActivityContext` to decide whether an :py:class:`AbstractActivity` can be executed
+        or not.
 
-        Args:
-            context: an instance of :py:class:`ActivityContext`
-
-        Returns: True if activity has to be triggered, False otherwise.
-
+        :param context: an instance of :py:class:`ActivityContext`
+        :return: True if activity has to be triggered, False otherwise.
         """
         pass
 
     @abstractmethod
     def on_activity(self, context: C):
-        """
-        Contains the activity business logic. Executed only if the `matches` method returned a true value.
+        """Contains the activity business logic. Executed only if the `matches` method returned a true value.
 
-        Args:
-            context: an instance of :py:class:`ActivityContext`
+        :param context: an instance of :py:class:`ActivityContext`
         """
         pass
 
     def before_matcher(self, context: C):
-        """
-        This callback can be used to prepare :py:class:`ActivityContext` before actually processing the `matches`
+        """ This callback can be used to prepare :py:class:`ActivityContext` before actually processing the `matches`
         method.
 
-        Args:
-            context: an instance of :py:class:`ActivityContext`
+        :param context: an instance of :py:class:`ActivityContext`
         """
         pass
