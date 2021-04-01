@@ -19,7 +19,6 @@ async def run():
 class SlashGifCommandActivity(CommandActivity):
     def __init__(self, messages: MessageService):
         self._messages = messages
-        super().__init__()
 
     def matches(self, context: CommandContext) -> bool:
         return context.text_content.startswith("@" + context.bot_display_name + " /gif")
@@ -44,10 +43,10 @@ class ReplyFormReplyActivity(FormReplyActivity):
 
 
 def load_gif_elements_form():
-    return Path("../resources/gif.mml.xml").read_text(encoding="utf-8")
+    return (Path(__file__).parent / "../resources/gif.mml.xml").read_text(encoding="utf-8")
 
 
-logging.config.fileConfig(Path("../logging.conf"), disable_existing_loggers=False)
+logging.config.fileConfig(Path(__file__).parent / "../logging.conf", disable_existing_loggers=False)
 
 try:
     logging.info("Running activity example...")

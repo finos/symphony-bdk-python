@@ -13,8 +13,8 @@ class FormReplyContext(ActivityContext[V4SymphonyElementsAction]):
     """
 
     def __init__(self, initiator: V4Initiator, source_event: V4SymphonyElementsAction):
-        self._form_id = ""
-        self._form_values = {}
+        self._form_id = source_event.form_id
+        self._form_values = source_event.form_values
         super().__init__(initiator, source_event)
 
     @property
@@ -44,7 +44,3 @@ class FormReplyActivity(AbstractActivity[FormReplyContext]):
 
     def on_activity(self, context: FormReplyContext):
         pass
-
-    def before_matcher(self, context: FormReplyContext):
-        context._form_id = context.source_event.form_id
-        context._form_values = context.source_event.form_values

@@ -77,6 +77,7 @@ except KeyboardInterrupt:
 ```
 1. The `matches()` method allows the activity logic to be triggered when a message starts by a mention to the bot and the text `/hello` separated by a space. Ex: `@bot_name /hello`
 2. The activity logic. Here, we send a message: "Hello, World"
+
 ## Form Activity
 A form activity is triggered when an end-user replies or submits an Elements form.
 
@@ -99,7 +100,7 @@ For this example, we will assume that the following Elements form has been poste
 2. the form has one unique `<text-field>` called "**name**"
 3. the has one action button called "**submit**"
 
-The following example code handle the above form submission:
+The following code example handles the above form submission:
 ```Python
 import asyncio
 import logging.config
@@ -142,3 +143,22 @@ except KeyboardInterrupt:
 1. The `matches()` method allows the activity logic to be triggered when a form with the `id` `"hello-form"` has been submitted from the action button `"submit"`
 2. The activity context allows us to retrieve form values. Here, the content of the `<text-field>` called "**name**"
 3. We send back the message: "Hello, **text_field_content**"
+
+---
+**NOTE - General activities use case**
+
+For you to not overload your matches method, you can pre-process a context before the `matches()` method is called by
+overriding the `before_matcher()` method of any activity.
+```Python
+class DummyActivityExample(CommandActivity):
+    
+    def matches(self, context: CommandContext) -> bool:
+        return context.some_attribute == "some_value"
+    
+    async def on_activity(self, context: CommandContext):
+        # Do stuff
+
+    def before_matcher(self, context: CommandContext):
+        context.some_attribute = some_call_to_another_service()
+```
+---

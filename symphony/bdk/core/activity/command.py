@@ -19,7 +19,10 @@ class CommandContext(ActivityContext[V4MessageSent]):
         self._message_id = source_event.message.message_id
         self._stream_id = source_event.message.stream.stream_id
         self._bot_display_name = bot_display_name
-        self._text_content = ""
+        try:
+            self._text_content = get_text_content_from_message(source_event.message)
+        except MessageParserError as exc:
+            raise FatalActivityExecutionException("Unable to parse presentationML") from exc
         super().__init__(initiator, source_event)
 
     @property
@@ -44,17 +47,8 @@ class CommandActivity(AbstractActivity[CommandContext]):
     A command activity corresponds to any message sent in a chat where the bot is part of.
     """
 
-    def __init__(self):
-        self.bot_display_name = str
-
     def matches(self, context: CommandContext) -> bool:
         pass
 
     def on_activity(self, context: CommandContext):
         pass
-
-    def before_matcher(self, context: CommandContext):
-        try:
-            context._text_content = get_text_content_from_message(context.source_event.message)
-        except MessageParserError as exc:
-            raise FatalActivityExecutionException("Unable to parse presentationML") from exc
