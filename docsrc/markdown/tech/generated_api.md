@@ -9,8 +9,11 @@ from [swagger specifications](https://github.com/symphonyoss/symphony-api-spec) 
 * [login/login-api-public.yaml](https://github.com/symphonyoss/symphony-api-spec/blob/master/login/login-api-public.yaml)
 * [pod/pod-api-public-deprecated.yaml](https://github.com/symphonyoss/symphony-api-spec/blob/master/pod/pod-api-public-deprecated.yaml)
 
-In order to re-generate these files:
-* download the [openapi-generator-cli jar](https://search.maven.org/artifact/org.openapitools/openapi-generator-cli/5.0.0/jar)
-  from Maven Central
-* download the swagger specs from [symphony-api-spec repo](https://github.com/symphonyoss/symphony-api-spec)
-* run ` java -jar openapi-generator-cli-5.0.0.jar generate -g python -i path/to/spec.yaml -t templates --package-name symphony.bdk.gen -o output`
+In order to re-generate model and api files, run
+```shell
+cd project_root/templates
+./generate_client_api.sh
+```
+
+The file templates/open-api-generator-cli.jar used to generated model and api files was created from sources
+[here](https://github.com/symphony-elias/openapi-generator/tree/PLAT-10652) to accommodate for type hinting.
