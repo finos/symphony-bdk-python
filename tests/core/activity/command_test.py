@@ -17,15 +17,13 @@ def fixture_activity():
     return TestCommandActivity()
 
 
-@pytest.fixture(name="context")
-def fixture_context():
-    return CommandContext(V4Initiator(),
-                          V4MessageSent(
-                              message=V4Message(message_id="message_id", stream=V4Stream(stream_id="stream_id"))),
-                          "bot_name")
+def test_matcher(activity):
+    context = CommandContext(V4Initiator(),
+                             V4MessageSent(message=V4Message(message_id="message_id",
+                                                             message="<div><p><span>hello world</span></p></div>",
+                                                             stream=V4Stream(stream_id="stream_id"))),
+                             "bot_name")
 
-
-def test_matcher(activity, context):
     def dummy_matcher(passed_context: CommandContext):
         return passed_context.text_content.startswith("foobar")
 
@@ -38,18 +36,21 @@ def test_matcher(activity, context):
     assert not activity.matches(context)
 
 
-def test_before_matcher(activity, context):
-    context.source_event.message.message = "<div><p><span>hello world</span></p></div>"
-    assert context.text_content == ""
-
-    activity.before_matcher(context)
-
+def test_context_with_valid_message(activity):
+    message = "<div><p><span>hello world</span></p></div>"
+    context = CommandContext(V4Initiator(),
+                             V4MessageSent(message=V4Message(message_id="message_id",
+                                                             message=message,
+                                                             stream=V4Stream(stream_id="stream_id"))),
+                             "bot_name")
     assert context.text_content == "hello world"
 
 
-def test_before_matcher_with_failure(activity, context):
-    context.source_event.message.message = "<div<p><span>hello world<span></p></div>"  # Bad xml format, missing chevron
-    assert context.text_content == ""
-
+def test_context_with_invalid_message(activity):
+    message = "<div<p><span>hello world<span></p></div>"  # Bad xml format, missing chevron
     with pytest.raises(FatalActivityExecutionException):
-        activity.before_matcher(context)
+        CommandContext(V4Initiator(),
+                       V4MessageSent(message=V4Message(message_id="message_id",
+                                                       message=message,
+                                                       stream=V4Stream(stream_id="stream_id"))),
+                       "bot_name")
