@@ -2,10 +2,12 @@ import logging
 
 from symphony.bdk.core.activity.api import AbstractActivity
 from symphony.bdk.core.activity.command import CommandActivity, CommandContext
+from symphony.bdk.core.activity.form import FormReplyContext, FormReplyActivity
 from symphony.bdk.core.service.datafeed.real_time_event_listener import RealTimeEventListener
 from symphony.bdk.core.service.session.session_service import SessionService
 from symphony.bdk.gen.agent_model.v4_initiator import V4Initiator
 from symphony.bdk.gen.agent_model.v4_message_sent import V4MessageSent
+from symphony.bdk.gen.agent_model.v4_symphony_elements_action import V4SymphonyElementsAction
 
 logger = logging.getLogger(__name__)
 
@@ -22,12 +24,11 @@ class ActivityRegistry(RealTimeEventListener):
         self._bot_display_name = None
 
     async def register(self, activity: AbstractActivity):
-        """
-        Registers an activity.
+        """Registers an activity.
 
-        Args:
-            activity: any object inheriting from base :class:`AbstractActivity`
+        :param activity: any object inheriting from base :class:`AbstractActivity`
         """
+
         logger.debug('Registering new activity %s', activity)
 
         if self._bot_display_name is None:
@@ -40,6 +41,15 @@ class ActivityRegistry(RealTimeEventListener):
     async def on_message_sent(self, initiator: V4Initiator, event: V4MessageSent):
         context = CommandContext(initiator, event, self._bot_display_name)
         for act in self._activity_list:
-            act.before_matcher(context)
-            if isinstance(act, CommandActivity) and act.matches(context):
-                await act.on_activity(context)
+            if isinstance(act, CommandActivity):
+                act.before_matcher(context)
+                if act.matches(context):
+                    await act.on_activity(context)
+
+    async def on_symphony_elements_action(self, initiator: V4Initiator, event: V4SymphonyElementsAction):
+        context = FormReplyContext(initiator, event)
+        for act in self._activity_list:
+            if isinstance(act, FormReplyActivity):
+                act.before_matcher(context)
+                if act.matches(context):
+                    await act.on_activity(context)
