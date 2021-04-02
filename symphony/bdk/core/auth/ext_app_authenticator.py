@@ -93,7 +93,7 @@ class ExtensionAppAuthenticatorRsa(ExtensionAppAuthenticator):
 
     async def validate_jwt(self, jwt: str) -> dict:
         pod_certificate = await self.get_pod_certificate()
-        return validate_jwt(jwt, pod_certificate.certificate)
+        return validate_jwt(jwt, pod_certificate.certificate, self._app_id)
 
     async def is_token_pair_valid(self, app_token: str, symphony_token: str) -> bool:
         retrieved_sym_token = await self._tokens_repository.get(app_token)

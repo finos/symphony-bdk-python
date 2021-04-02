@@ -2,10 +2,10 @@
 """
 import datetime
 
+import jwt
 from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
 from cryptography.x509 import load_pem_x509_certificate
 
-import jwt
 from symphony.bdk.core.auth.exception import AuthInitializationError
 from symphony.bdk.core.config.model.bdk_rsa_key_config import BdkRsaKeyConfig
 
@@ -45,7 +45,7 @@ def create_signed_jwt_with_claims(private_key: str, payload: dict) -> str:
     return jwt.encode(payload, private_key, algorithm=JWT_ENCRYPTION_ALGORITHM)
 
 
-def validate_jwt(jwt_token: str, certificate: str) -> dict:
+def validate_jwt(jwt_token: str, certificate: str, allowed_audience: str) -> dict:
     """Validate a jwt against a X509 certificate in pem format and returns the jwt claims.
 
     :param jwt_token: the token to be validated
@@ -55,7 +55,7 @@ def validate_jwt(jwt_token: str, certificate: str) -> dict:
     """
     try:
         return jwt.decode(jwt_token, _parse_public_key_from_x509_cert(certificate),
-                          algorithms=[JWT_ENCRYPTION_ALGORITHM])
+                          algorithms=[JWT_ENCRYPTION_ALGORITHM], audience=allowed_audience)
     except (jwt.DecodeError, jwt.ExpiredSignatureError) as exc:
         raise AuthInitializationError("Unable to validate the jwt") from exc
 
