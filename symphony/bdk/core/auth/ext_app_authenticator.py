@@ -3,9 +3,11 @@
 from abc import ABC, abstractmethod
 
 from symphony.bdk.core.auth.auth_session import AppAuthSession
+from symphony.bdk.core.auth.exception import AuthInitializationError
 from symphony.bdk.core.auth.jwt_helper import validate_jwt, create_signed_jwt
 from symphony.bdk.core.auth.tokens_repository import TokensRepository, InMemoryTokensRepository
 from symphony.bdk.core.config.model.bdk_rsa_key_config import BdkRsaKeyConfig
+from symphony.bdk.gen import ApiException
 from symphony.bdk.gen.login_api.authentication_api import AuthenticationApi
 from symphony.bdk.gen.login_model.authenticate_extension_app_request import AuthenticateExtensionAppRequest
 from symphony.bdk.gen.login_model.extension_app_tokens import ExtensionAppTokens
@@ -92,7 +94,11 @@ class ExtensionAppAuthenticatorRsa(ExtensionAppAuthenticator):
         return ext_app_tokens
 
     async def validate_jwt(self, jwt: str) -> dict:
-        pod_certificate = await self.get_pod_certificate()
+        try:
+            pod_certificate = await self.get_pod_certificate()
+        except ApiException as exc:
+            raise AuthInitializationError(f"Unable to get the pod certificate: {exc.reason}") from exc
+
         return validate_jwt(jwt, pod_certificate.certificate, self._app_id)
 
     async def is_token_pair_valid(self, app_token: str, symphony_token: str) -> bool:
