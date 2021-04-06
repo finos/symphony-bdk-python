@@ -1,8 +1,11 @@
 import logging
 
+from symphony.bdk.gen.agent_model.v4_user_joined_room import V4UserJoinedRoom
+
 from symphony.bdk.core.activity.api import AbstractActivity
 from symphony.bdk.core.activity.command import CommandActivity, CommandContext
 from symphony.bdk.core.activity.form import FormReplyContext, FormReplyActivity
+from symphony.bdk.core.activity.user_joined_room import UserJoinedRoomContext, UserJoinedRoomActivity
 from symphony.bdk.core.service.datafeed.real_time_event_listener import RealTimeEventListener
 from symphony.bdk.core.service.session.session_service import SessionService
 from symphony.bdk.gen.agent_model.v4_initiator import V4Initiator
@@ -50,6 +53,14 @@ class ActivityRegistry(RealTimeEventListener):
         context = FormReplyContext(initiator, event)
         for act in self._activity_list:
             if isinstance(act, FormReplyActivity):
+                act.before_matcher(context)
+                if act.matches(context):
+                    await act.on_activity(context)
+
+    async def on_user_joined_room(self, initiator: V4Initiator, event: V4UserJoinedRoom):
+        context = UserJoinedRoomContext(initiator, event)
+        for act in self._activity_list:
+            if isinstance(act, UserJoinedRoomActivity):
                 act.before_matcher(context)
                 if act.matches(context):
                     await act.on_activity(context)
