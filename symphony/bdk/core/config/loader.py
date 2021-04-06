@@ -20,7 +20,7 @@ class BdkConfigLoader:
         """Load config from an absolute filepath
 
         :param config_path: Configuration file absolute path
-        :return Symphony bot configuration object
+        :return: Symphony bot configuration object
         """
         config_path = Path(config_path)
         if config_path.exists():
@@ -32,8 +32,8 @@ class BdkConfigLoader:
     def load_from_content(cls, content: str) -> BdkConfig:
         """Load config from a string containing all config
 
-        :param content: Content of the config file as one string.
-        :return Symphony bot configuration object
+        :param content: Content of the config file as one string
+        :return: Symphony bot configuration object
         """
         data_dict = BdkConfigParser.parse(content)
         return BdkConfig(**data_dict)

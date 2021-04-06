@@ -11,8 +11,6 @@
 import re  # noqa: F401
 import sys  # noqa: F401
 
-import nulltype  # noqa: F401
-
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
     ModelComposed,
@@ -74,7 +72,7 @@ class RoleDetail(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'id': (int,),  # noqa: E501
+            'id': (str,),  # noqa: E501
             'name': (str,),  # noqa: E501
             'user_types': ([str],),  # noqa: E501
             'optional_actions': ([str],),  # noqa: E501
@@ -138,7 +136,7 @@ class RoleDetail(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            id (int): [optional]  # noqa: E501
+            id (str): [optional]  # noqa: E501
             name (str): [optional]  # noqa: E501
             user_types ([str]): [optional]  # noqa: E501
             optional_actions ([str]): [optional]  # noqa: E501

@@ -1,0 +1,12 @@
+{
+  "count": 3,
+  "following": [
+    13056700580888,
+    13056700580889
+  ],
+  "pagination": {
+    "cursors": {
+      "before": "1"
+    }
+  }
+}

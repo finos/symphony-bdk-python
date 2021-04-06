@@ -1,0 +1,8 @@
+{
+    "ipAddress": "22.222.222.22",
+    "hostname": "agent-75...4b6",
+    "version": "Agent-2.55.0-SNAPSHOT-Linux-4.4.86+",
+    "url": "https://acme.symphony.com:8443/agent",
+    "commitId": "4a3512e70...e46476d",
+    "onPrem": true
+}

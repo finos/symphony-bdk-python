@@ -11,8 +11,6 @@
 import re  # noqa: F401
 import sys  # noqa: F401
 
-import nulltype  # noqa: F401
-
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
     ModelComposed,
@@ -100,12 +98,11 @@ class PaginationCursors(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, before, after, *args, **kwargs):  # noqa: E501
+    def __init__(self, before, *args, **kwargs):  # noqa: E501
         """PaginationCursors - a pod_model defined in OpenAPI
 
         Args:
             before (str): This is the opaque url-safe string that points to the start of the page of data that has been returned. 
-            after (str): This is the opaque url-safe string that points to the end of the page of data that has been returned. 
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -138,6 +135,7 @@ class PaginationCursors(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            after (str): This is the opaque url-safe string that points to the end of the page of data that has been returned. . [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -164,7 +162,6 @@ class PaginationCursors(ModelNormal):
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
         self.before = before
-        self.after = after
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

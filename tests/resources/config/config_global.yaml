@@ -1,6 +1,9 @@
 host: devx1.symphony.com
 context: context
 port: 8443
+defaultHeaders:
+  user-agent: custom-user-agent
+  header-key: header-value
 
 pod:
   host: diff-pod.symphony.com

@@ -2,9 +2,9 @@ name: build
 
 on:
   push:
-    branches: [ "2.0" ]
+    branches: [ "2.0", "2.0-rc" ]
   pull_request:
-    branches: [ "2.0" ]
+    branches: [ "2.0", "2.0-rc" ]
 
 jobs:
   build:
@@ -24,9 +24,21 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Set up Python 3.8
+        id: setup-python
         uses: actions/setup-python@v2
         with:
           python-version: 3.8
+
+      - name: Get pip cache dir
+        id: pip-cache
+        run: |
+          echo "::set-output name=dir::$(pip cache dir)"
+
+      - name: Cache pip dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.pip-cache.outputs.dir }}
+          key: ${{ runner.os }}-pip-${{ steps.setup-python.outputs.python-version }}
 
       - name: Install Poetry
         run: pip install poetry
@@ -35,18 +47,16 @@ jobs:
         uses: actions/cache@v2
         with:
           path: ${{ matrix.path }}
-          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
+          key: ${{ runner.os }}-poetry-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('poetry.lock') }}
           restore-keys: |
-            ${{ runner.os }}-poetry-
+            ${{ runner.os }}-poetry-${{ steps.setup-python.outputs.python-version }}-
 
       - name: Install dependencies
         run: poetry install
 
       - name: Run tests with coverage
         run: poetry run pytest
-
-      - name: Run pylint
-        run: poetry run pylint symphony tests
+        timeout-minutes: 10
 
       - name: Upload test results
         uses: actions/upload-artifact@v2
