@@ -1,0 +1,50 @@
+{
+  "0": {
+    "id": [
+      {
+        "type": "com.symphony.user.userId",
+        "value": "13056700580915"
+      }
+    ],
+    "type": "com.symphony.user.mention"
+  },
+  "1": {
+    "id": [
+      {
+        "type": "org.symphonyoss.taxonomy.hashtag",
+        "value": "bot"
+      }
+    ],
+    "type": "org.symphonyoss.taxonomy",
+    "version": "1.0"
+  },
+  "2": {
+    "id": [
+      {
+        "type": "org.symphonyoss.fin.security.id.ticker",
+        "value": "hello"
+      }
+    ],
+    "type": "org.symphonyoss.fin.security",
+    "version": "1.0"
+  },
+  "3": {
+    "type": "com.symphony.emoji",
+    "version": "1.0",
+    "data": {
+      "annotation": "grinning",
+      "family": "",
+      "size": "normal",
+      "unicode": "\uD83D\uDE00"
+    }
+  },
+  "4" : {
+    "id": [
+      {
+        "type": "com.symphony.user.userId",
+        "value": "1305690252351"
+      }
+    ],
+    "type": "com.symphony.user.mention"
+  }
+}

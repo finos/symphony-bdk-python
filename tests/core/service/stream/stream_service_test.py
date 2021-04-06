@@ -10,50 +10,53 @@ from symphony.bdk.gen.agent_model.share_content import ShareContent
 from symphony.bdk.gen.pod_api.room_membership_api import RoomMembershipApi
 from symphony.bdk.gen.pod_api.streams_api import StreamsApi
 from symphony.bdk.gen.pod_model.stream_filter import StreamFilter
+from symphony.bdk.gen.pod_model.stream_list import StreamList
 from symphony.bdk.gen.pod_model.user_id import UserId
 from symphony.bdk.gen.pod_model.user_id_list import UserIdList
 from symphony.bdk.gen.pod_model.v2_admin_stream_filter import V2AdminStreamFilter
+from symphony.bdk.gen.pod_model.v2_admin_stream_list import V2AdminStreamList
+from symphony.bdk.gen.pod_model.v2_membership_list import V2MembershipList
 from symphony.bdk.gen.pod_model.v2_room_search_criteria import V2RoomSearchCriteria
 from symphony.bdk.gen.pod_model.v3_room_attributes import V3RoomAttributes
-from tests.utils.resource_utils import object_from_json_relative_path
+from tests.utils.resource_utils import object_from_json_relative_path, get_deserialized_object_from_json
 
 KM_TOKEN = "km_token"
 SESSION_TOKEN = "session_token"
 
 
-@pytest.fixture()
-def auth_session():
+@pytest.fixture(name="auth_session")
+def fixture_auth_session():
     auth_session = AuthSession(None)
     auth_session.session_token = SESSION_TOKEN
     auth_session.key_manager_token = KM_TOKEN
     return auth_session
 
 
-@pytest.fixture()
-def mocked_api_client():
+@pytest.fixture(name="mocked_api_client")
+def fixture_mocked_api_client():
     api_client = MagicMock(ApiClient)
     api_client.call_api = AsyncMock()
     api_client.configuration = Configuration()
     return api_client
 
 
-@pytest.fixture()
-def streams_api(mocked_api_client):
+@pytest.fixture(name="streams_api")
+def fixture_streams_api(mocked_api_client):
     return Mock(wraps=StreamsApi(mocked_api_client))
 
 
-@pytest.fixture()
-def room_membership_api(mocked_api_client):
+@pytest.fixture(name="room_membership_api")
+def fixture_room_membership_api(mocked_api_client):
     return Mock(wraps=RoomMembershipApi(mocked_api_client))
 
 
-@pytest.fixture()
-def share_api(mocked_api_client):
+@pytest.fixture(name="share_api")
+def fixture_share_api(mocked_api_client):
     return Mock(wraps=ShareApi(mocked_api_client))
 
 
-@pytest.fixture()
-def stream_service(streams_api, room_membership_api, share_api, auth_session):
+@pytest.fixture(name="stream_service")
+def fixture_stream_service(streams_api, room_membership_api, share_api, auth_session):
     return StreamService(streams_api, room_membership_api, share_api, auth_session)
 
 
@@ -66,26 +69,46 @@ async def test_get_stream(mocked_api_client, stream_service, streams_api):
 
     streams_api.v2_streams_sid_info_get.assert_called_once_with(sid=stream_id, session_token=SESSION_TOKEN)
     assert stream_attributes.id == "ubaSiuUsc_j-_lVQ8vhAz3___opSJdJZdA"
-    assert stream_attributes.streamType.type == "ROOM"
     assert stream_attributes.roomAttributes.name == "New room name"
+    assert stream_attributes.streamType.type == "ROOM"
 
 
 @pytest.mark.asyncio
 async def test_list_streams(mocked_api_client, stream_service, streams_api):
-    mocked_api_client.call_api.return_value = object_from_json_relative_path("stream/list_streams.json")
+    mocked_api_client.call_api.return_value = get_deserialized_object_from_json("stream/list_streams.json", StreamList)
 
     stream_filter = StreamFilter()
     skip = 1
     limit = 2
+
     streams = await stream_service.list_streams(stream_filter, skip, limit)
 
     streams_api.v1_streams_list_post.assert_called_once_with(filter=stream_filter, skip=skip, limit=limit,
                                                              session_token=SESSION_TOKEN)
+    assert len(streams.value) == 2
+    assert streams.value[0].id == "ouAS1QXEHtIhXdZq4NzJBX___oscpQFcdA"
+    assert streams.value[0].room_attributes.name == "Room APP-3033"
+    assert streams.value[1].id == "z22OMRPxSdRFBfH_oojGkn___orihaxrdA"
+    assert streams.value[1].room_attributes.name == "Test BDK"
+
+
+@pytest.mark.asyncio
+async def test_list_all_streams(mocked_api_client, stream_service, streams_api):
+    mocked_api_client.call_api.return_value = get_deserialized_object_from_json("stream/list_streams.json", StreamList)
+
+    stream_filter = StreamFilter()
+    limit = 4
+
+    gen = await stream_service.list_all_streams(stream_filter, limit)
+    streams = [s async for s in gen]
+
+    streams_api.v1_streams_list_post.assert_called_once_with(filter=stream_filter, skip=0, limit=limit,
+                                                             session_token=SESSION_TOKEN)
     assert len(streams) == 2
     assert streams[0].id == "ouAS1QXEHtIhXdZq4NzJBX___oscpQFcdA"
-    assert streams[0].roomAttributes.name == "Room APP-3033"
+    assert streams[0].room_attributes.name == "Room APP-3033"
     assert streams[1].id == "z22OMRPxSdRFBfH_oojGkn___orihaxrdA"
-    assert streams[1].roomAttributes.name == "Test BDK"
+    assert streams[1].room_attributes.name == "Test BDK"
 
 
 @pytest.mark.asyncio
@@ -151,19 +174,6 @@ async def test_demote_owner(mocked_api_client, stream_service, room_membership_a
 
 
 @pytest.mark.asyncio
-async def test_get_stream(mocked_api_client, stream_service, streams_api):
-    mocked_api_client.call_api.return_value = object_from_json_relative_path("stream/get_stream.json")
-
-    stream_id = "stream_id"
-    stream_attributes = await stream_service.get_stream(stream_id)
-
-    streams_api.v2_streams_sid_info_get.assert_called_once_with(sid=stream_id, session_token=SESSION_TOKEN)
-    assert stream_attributes.id == "ubaSiuUsc_j-_lVQ8vhAz3___opSJdJZdA"
-    assert stream_attributes.roomAttributes.name == "New room name"
-    assert stream_attributes.streamType.type == "ROOM"
-
-
-@pytest.mark.asyncio
 async def test_create_im(mocked_api_client, stream_service, streams_api):
     mocked_api_client.call_api.return_value = object_from_json_relative_path("stream/create_im_or_mim.json")
 
@@ -201,6 +211,22 @@ async def test_search_rooms(mocked_api_client, stream_service, streams_api):
     assert search_results.count == 1
     assert len(search_results.rooms) == 1
     assert search_results.rooms[0].roomAttributes.name == "New room name"
+
+
+@pytest.mark.asyncio
+async def test_search_all_rooms(mocked_api_client, stream_service, streams_api):
+    mocked_api_client.call_api.return_value = object_from_json_relative_path("stream/search_rooms.json")
+
+    search_criteria = V2RoomSearchCriteria(query="query")
+    chunk_size = 3
+
+    gen = await stream_service.search_all_rooms(search_criteria, chunk_size=chunk_size)
+    search_results = [r async for r in gen]
+
+    streams_api.v3_room_search_post.assert_called_once_with(query=search_criteria, skip=0, limit=chunk_size,
+                                                            session_token=SESSION_TOKEN)
+    assert len(search_results) == 1
+    assert search_results[0].roomAttributes.name == "New room name"
 
 
 @pytest.mark.asyncio
@@ -269,7 +295,8 @@ async def test_set_room_active_admin(mocked_api_client, stream_service, streams_
 
 @pytest.mark.asyncio
 async def test_list_streams_admin(mocked_api_client, stream_service, streams_api):
-    mocked_api_client.call_api.return_value = object_from_json_relative_path("stream/list_streams_admin.json")
+    mocked_api_client.call_api.return_value = get_deserialized_object_from_json("stream/list_streams_admin.json",
+                                                                                V2AdminStreamList)
 
     stream_filter = V2AdminStreamFilter()
     skip = 1
@@ -279,14 +306,33 @@ async def test_list_streams_admin(mocked_api_client, stream_service, streams_api
     streams_api.v2_admin_streams_list_post.assert_called_once_with(filter=stream_filter, skip=skip, limit=limit,
                                                                    session_token=SESSION_TOKEN)
     assert streams.limit == 2
-    assert len(streams.streams) == 2
-    assert streams.streams[0].id == "hpRd80zAUnLv3NMhLVF3Ln___o3ULKRDdA"
-    assert streams.streams[1].id == "6hEzTqQjVPLLE9KgXLvsKn___o3TtL3ddA"
+    assert len(streams.streams.value) == 2
+    assert streams.streams.value[0].id == "hpRd80zAUnLv3NMhLVF3Ln___o3ULKRDdA"
+    assert streams.streams.value[1].id == "6hEzTqQjVPLLE9KgXLvsKn___o3TtL3ddA"
+
+
+@pytest.mark.asyncio
+async def test_list_all_streams_admin(mocked_api_client, stream_service, streams_api):
+    mocked_api_client.call_api.return_value = get_deserialized_object_from_json("stream/list_streams_admin.json",
+                                                                                V2AdminStreamList)
+
+    stream_filter = V2AdminStreamFilter()
+    limit = 10
+
+    gen = await stream_service.list_all_streams_admin(stream_filter, chunk_size=limit)
+    streams = [s async for s in gen]
+
+    streams_api.v2_admin_streams_list_post.assert_called_once_with(filter=stream_filter, skip=0, limit=limit,
+                                                                   session_token=SESSION_TOKEN)
+    assert len(streams) == 2
+    assert streams[0].id == "hpRd80zAUnLv3NMhLVF3Ln___o3ULKRDdA"
+    assert streams[1].id == "6hEzTqQjVPLLE9KgXLvsKn___o3TtL3ddA"
 
 
 @pytest.mark.asyncio
 async def test_list_stream_members(mocked_api_client, stream_service, streams_api):
-    mocked_api_client.call_api.return_value = object_from_json_relative_path("stream/list_stream_members.json")
+    mocked_api_client.call_api.return_value = get_deserialized_object_from_json("stream/list_stream_members.json",
+                                                                                V2MembershipList)
 
     stream_id = "stream_id"
     skip = 1
@@ -296,9 +342,26 @@ async def test_list_stream_members(mocked_api_client, stream_service, streams_ap
     streams_api.v1_admin_stream_id_membership_list_get.assert_called_once_with(id=stream_id, skip=skip, limit=limit,
                                                                                session_token=SESSION_TOKEN)
     assert members.count == 2
-    assert len(members.members) == 2
-    assert members.members[0].user.userId == 13056700579872
-    assert members.members[1].user.userId == 13056700579891
+    assert len(members.members.value) == 2
+    assert members.members.value[0].user.user_id == 13056700579872
+    assert members.members.value[1].user.user_id == 13056700579891
+
+
+@pytest.mark.asyncio
+async def test_list_all_stream_members(mocked_api_client, stream_service, streams_api):
+    mocked_api_client.call_api.return_value = get_deserialized_object_from_json("stream/list_stream_members.json",
+                                                                                V2MembershipList)
+
+    stream_id = "stream_id"
+    limit = 5
+    gen = await stream_service.list_all_stream_members(stream_id, limit)
+    members = [m async for m in gen]
+
+    streams_api.v1_admin_stream_id_membership_list_get.assert_called_once_with(id=stream_id, skip=0, limit=limit,
+                                                                               session_token=SESSION_TOKEN)
+    assert len(members) == 2
+    assert members[0].user.user_id == 13056700579872
+    assert members[1].user.user_id == 13056700579891
 
 
 @pytest.mark.asyncio

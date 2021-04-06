@@ -1,9 +1,14 @@
 """Module containing the ApiClientFactory class.
 """
-import urllib3
+import sys
+from importlib.metadata import distribution, PackageNotFoundError
 
-from symphony.bdk.gen.configuration import Configuration
+import urllib3
+from aiohttp.hdrs import USER_AGENT
+
+from symphony.bdk.core.client.trace_id import add_x_trace_id, X_TRACE_ID
 from symphony.bdk.gen.api_client import ApiClient
+from symphony.bdk.gen.configuration import Configuration
 
 
 class ApiClientFactory:
@@ -12,11 +17,11 @@ class ApiClientFactory:
 
     def __init__(self, config):
         self._config = config
-        self._login_client = self._get_api_client(self._config.pod, '/login')
-        self._pod_client = self._get_api_client(self._config.pod, '/pod')
-        self._relay_client = self._get_api_client(self._config.key_manager, '/relay')
-        self._agent_client = self._get_api_client(self._config.session_auth, '/agent')
-        self._session_auth_client = self._get_api_client(self._config.session_auth, '/sessionauth')
+        self._login_client = self._get_api_client(self._config.pod, "/login")
+        self._pod_client = self._get_api_client(self._config.pod, "/pod")
+        self._relay_client = self._get_api_client(self._config.key_manager, "/relay")
+        self._agent_client = self._get_api_client(self._config.agent, "/agent")
+        self._session_auth_client = self._get_api_client(self._config.session_auth, "/sessionauth")
 
     def get_login_client(self) -> ApiClient:
         """Returns a fully initialized ApiClient for Login API.
@@ -69,13 +74,68 @@ class ApiClientFactory:
         configuration.ssl_ca_cert = self._config.ssl.trust_store_path
 
         if server_config.proxy is not None:
-            self._configure_proxy(server_config.proxy, configuration)
+            ApiClientFactory._configure_proxy(server_config, configuration)
 
-        return ApiClient(configuration=configuration)
+        client = ApiClient(configuration=configuration)
+        ApiClientFactory._add_headers(client, server_config)
+
+        return client
 
     @staticmethod
-    def _configure_proxy(proxy_config, configuration):
-        configuration.proxy = proxy_config.get_url()
+    def _add_headers(client, server_config):
+        default_headers = ApiClientFactory._sanitized_default_headers(server_config)
 
+        for header_name, header_value in default_headers.items():
+            client.set_default_header(header_name, header_value)
+        client.user_agent = ApiClientFactory._user_agent(server_config)
+
+        if X_TRACE_ID.lower() not in (header_name.lower() for header_name in default_headers.keys()):
+            client._ApiClient__call_api = add_x_trace_id(client._ApiClient__call_api)
+
+    @staticmethod
+    def _configure_proxy(server_config, configuration):
+        proxy_config = server_config.proxy
+        user_agent = ApiClientFactory._user_agent(server_config)
+
+        configuration.proxy = proxy_config.get_url()
         if proxy_config.are_credentials_defined():
-            configuration.proxy_headers = urllib3.util.make_headers(proxy_basic_auth=proxy_config.get_credentials())
+            configuration.proxy_headers = urllib3.util.make_headers(proxy_basic_auth=proxy_config.get_credentials(),
+                                                                    user_agent=user_agent)
+        else:
+            configuration.proxy_headers = urllib3.util.make_headers(user_agent=user_agent)
+
+    @staticmethod
+    def _sanitized_default_headers(server_config):
+        default_headers = server_config.default_headers if server_config.default_headers is not None else {}
+
+        # we do this because we want to handle user-agent header separately
+        # for client configuration and proxy header
+        return {header_key: default_headers[header_key] for header_key in default_headers
+                if header_key.lower() != USER_AGENT.lower()}
+
+    @staticmethod
+    def _user_agent(server_config):
+        default_headers = server_config.default_headers if server_config.default_headers is not None else {}
+
+        for header_key, header_value in default_headers.items():
+            if header_key.lower() == USER_AGENT.lower():
+                return header_value
+
+        return ApiClientFactory._default_user_agent()
+
+    @staticmethod
+    def _default_user_agent():
+        return f"Symphony-BDK-Python/{ApiClientFactory._bdk_version()} Python/{ApiClientFactory._python_version()}"
+
+    @staticmethod
+    def _bdk_version():
+        try:
+            return distribution("sym_api_client_python").version
+        except PackageNotFoundError:
+            # the above won't work when bdk is not installed as a pypi package,
+            # e.g. for scripts in the examples folder
+            return "2.0"
+
+    @staticmethod
+    def _python_version():
+        return f"{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"

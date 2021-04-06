@@ -1,0 +1,18 @@
+[
+  {
+    "name": "Mention and keyword",
+    "query": "HASHTAG:Hello OR POSTEDBY:10854618893681",
+    "visibleOnProfile": false,
+    "companyWide": false,
+    "id": "signal_id1",
+    "timestamp": 1509976116525
+  },
+  {
+    "name": "hash and cash",
+    "query": "HASHTAG:hash AND CASHTAG:cash",
+    "visibleOnProfile": true,
+    "companyWide": false,
+    "id": "signal_id2",
+    "timestamp": 1519233005107
+  }
+]
