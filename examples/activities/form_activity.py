@@ -10,7 +10,7 @@ from symphony.bdk.core.symphony_bdk import SymphonyBdk
 
 
 async def run():
-    async with SymphonyBdk(BdkConfigLoader.load_from_symphony_dir("config.yaml")) as bdk:
+    async with SymphonyBdk(BdkConfigLoader.load_from_symphony_dir("/Users/reed.feldman/devx/test-bot-python/resources/config.yaml")) as bdk:
         await bdk.activities().register(SlashGifCommandActivity(bdk.messages()))
         await bdk.activities().register(ReplyFormReplyActivity(bdk.messages()))
         await bdk.datafeed().start()
