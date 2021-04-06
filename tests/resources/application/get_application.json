@@ -1,0 +1,22 @@
+{
+  "applicationInfo": {
+    "appId": "my-test-app",
+    "name": "my-test-app-get",
+    "appUrl": "https://joe.mydomain.com",
+    "domain": "mydomain.com",
+    "publisher": "Updated Joe Smith"
+  },
+  "description": "get an app",
+  "allowOrigins": "mydomain.com",
+  "iconUrl": "https://symphony.myapplication.com/icon.png",
+  "permissions": [
+    "ACT_AS_USER",
+    "SEND_MESSAGES"
+  ],
+  "cert": "certificate",
+  "authenticationKeys": {
+    "current": {
+      "key": "-----BEGIN PUBLIC KEY-----\nMIICIjANBgkqhkiG9w0....YOUR_NEW_KEY...cCAwEAAQ==\n-----END PUBLIC KEY-----"
+    }
+  }
+}

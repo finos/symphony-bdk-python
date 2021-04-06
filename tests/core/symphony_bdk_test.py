@@ -9,23 +9,24 @@ from symphony.bdk.core.auth.exception import AuthInitializationError
 from symphony.bdk.core.auth.obo_authenticator import OboAuthenticatorRsa
 from symphony.bdk.core.config.exception import BotNotConfiguredError
 from symphony.bdk.core.config.loader import BdkConfigLoader
+from symphony.bdk.core.config.model.bdk_authentication_config import BdkAuthenticationConfig
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
 from symphony.bdk.core.symphony_bdk import SymphonyBdk
 from tests.utils.resource_utils import get_config_resource_filepath
 
 
-@pytest.fixture()
-def config():
+@pytest.fixture(name="config")
+def fixture_config():
     return BdkConfigLoader.load_from_file(get_config_resource_filepath("config.yaml"))
 
 
-@pytest.fixture()
-def obo_only_config():
+@pytest.fixture(name="obo_only_config")
+def fixture_obo_only_config():
     return BdkConfig(host="acme.symphony.com", app={"appId": "app", "privateKey": {"path": "/path/to/key.pem"}})
 
 
-@pytest.fixture()
-def mock_obo_session():
+@pytest.fixture(name="mock_obo_session")
+def fixture_mock_obo_session():
     obo_session = AsyncMock(OboAuthSession)
     obo_session.session_token.return_value = "session_token"
     obo_session.key_manager_token.return_value = ""
@@ -130,3 +131,19 @@ async def test_non_obo_services_fail_with_obo_only(obo_only_config):
 
         with pytest.raises(BotNotConfiguredError):
             symphony_bdk.connections()
+
+
+@pytest.mark.asyncio
+async def test_ext_app_authenticator(obo_only_config):
+    async with SymphonyBdk(obo_only_config) as symphony_bdk:
+        authenticator = symphony_bdk.app_authenticator()
+        assert authenticator is not None
+        assert symphony_bdk.app_authenticator() == authenticator  # test same instance is always returned
+
+
+@pytest.mark.asyncio
+async def test_ext_app_authenticator_fails(config):
+    config.app = BdkAuthenticationConfig()
+    async with SymphonyBdk(config) as symphony_bdk:
+        with pytest.raises(AuthInitializationError):
+            symphony_bdk.app_authenticator()

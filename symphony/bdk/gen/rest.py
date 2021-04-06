@@ -49,6 +49,7 @@ class RESTClientObject(object):
             maxsize = configuration.connection_pool_maxsize
 
         ssl_context = ssl.create_default_context(purpose=ssl.Purpose.CLIENT_AUTH, cafile=configuration.ssl_ca_cert)
+        ssl_context.load_default_certs()
         ssl_context.verify_mode = ssl.CERT_REQUIRED
 
         if configuration.cert_file:

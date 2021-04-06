@@ -1,0 +1,19 @@
+{
+    "applicationInfo": {
+        "appId": "my-test-app",
+        "name": "my-test-app-update",
+        "appUrl": "https://joe.mydomain.com",
+        "domain": "mydomain.com",
+        "publisher": "Updated Joe Smith"
+    },
+    "description": "updating an app",
+    "allowOrigins": "mydomain.com",
+    "permissions": [
+        "ACT_AS_USER",
+        "SEND_MESSAGES"
+    ],
+    "notification": {
+        "url": "https://some.url",
+        "apiKey":"123456"
+  }
+}

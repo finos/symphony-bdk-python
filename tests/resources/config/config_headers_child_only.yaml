@@ -1,0 +1,11 @@
+host: devx1.symphony.com
+
+agent:
+  defaultHeaders:
+    user-agent: custom-user-agent
+    header-key: header-value
+
+bot:
+  username: youbot
+  privateKey:
+    path: /Users/local/conf/agent/privatekey.pem

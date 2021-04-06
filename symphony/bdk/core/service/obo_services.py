@@ -3,6 +3,7 @@ from symphony.bdk.core.client.api_client_factory import ApiClientFactory
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
 from symphony.bdk.core.service.connection.connection_service import OboConnectionService
 from symphony.bdk.core.service.message.message_service import OboMessageService
+from symphony.bdk.core.service.signal.signal_service import OboSignalService
 from symphony.bdk.core.service.stream.stream_service import OboStreamService
 from symphony.bdk.core.service.user.user_service import OboUserService
 from symphony.bdk.core.service_factory import OboServiceFactory
@@ -10,7 +11,7 @@ from symphony.bdk.core.service_factory import OboServiceFactory
 
 class OboServices:
     """Entry point for OBO-enabled services, see
-    `the list of OBO-enabled endpoints <https://developers.symphony.com/restapi/reference#obo-enabled-endpoints`_
+        `the list of OBO-enabled endpoints <https://developers.symphony.com/restapi/reference#obo-enabled-endpoints>`_
     """
 
     async def __aenter__(self):
@@ -34,6 +35,7 @@ class OboServices:
         self._message_service = self._service_factory.get_message_service()
         self._stream_service = self._service_factory.get_stream_service()
         self._user_service = self._service_factory.get_user_service()
+        self._signal_service = self._service_factory.get_signal_service()
 
     def connections(self) -> OboConnectionService:
         """
@@ -62,6 +64,13 @@ class OboServices:
         :return: a fully initialized OboUserService instance.
         """
         return self._user_service
+
+    def signals(self) -> OboSignalService:
+        """
+
+        :return: a fully initialized OboSignalService instance.
+        """
+        return self._signal_service
 
     async def close_clients(self):
         """Close all the existing api clients created by the api client factory.

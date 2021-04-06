@@ -11,8 +11,6 @@
 import re  # noqa: F401
 import sys  # noqa: F401
 
-import nulltype  # noqa: F401
-
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
     ModelComposed,
@@ -78,7 +76,7 @@ class UserFilter(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'role': (int,),  # noqa: E501
+            'role': (str,),  # noqa: E501
             'feature': (str,),  # noqa: E501
             'status': (str,),  # noqa: E501
         }
@@ -140,7 +138,7 @@ class UserFilter(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
-            role (int): [optional]  # noqa: E501
+            role (str): The user role. [optional]  # noqa: E501
             feature (str): [optional]  # noqa: E501
             status (str): [optional]  # noqa: E501
         """
