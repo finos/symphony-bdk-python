@@ -8,7 +8,7 @@ from symphony.bdk.core.service.message.message_service import MessageService
 from symphony.bdk.core.symphony_bdk import SymphonyBdk
 
 async def run():
-    config = BdkConfigLoader.load_from_symphony_dir("/Users/reed.feldman/devx/test-bot-python/resources/config.yaml")
+    config = BdkConfigLoader.load_from_symphony_dir("config.yaml")
     async with SymphonyBdk(config) as bdk:
         await bdk.activities().register(JoinRoomActivity(bdk.messages()))
         await bdk.datafeed().start()
