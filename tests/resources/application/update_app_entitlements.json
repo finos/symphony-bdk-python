@@ -1,11 +1,9 @@
-{
-  "value": [
-    {
-      "appId": "rsa-app-auth-example",
-      "appName": "App Auth RSA Example",
-      "enable": true,
-      "listed": true,
-      "install": false
-    }
-  ]
-}
+[
+  {
+    "appId": "rsa-app-auth-example",
+    "appName": "App Auth RSA Example",
+    "enable": true,
+    "listed": true,
+    "install": false
+  }
+]
