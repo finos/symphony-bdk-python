@@ -12,7 +12,7 @@
   "read": [
     {
       "userId": "7078106103901",
-      "firsName": "Gustav",
+      "firstName": "Gustav",
       "lastName": "Mahler",
       "displayName": "Gustav Mahler",
       "email": "gustav.mahler@music.org",
@@ -21,7 +21,7 @@
     },
     {
       "userId": "7078106103902",
-      "firsName": "Hildegard",
+      "firstName": "Hildegard",
       "lastName": "Bingen",
       "displayName": "Hildegard Bingen",
       "email": "hildegard.bingen@music.org",
@@ -32,7 +32,7 @@
   "delivered": [
     {
       "userId": "7078106103903",
-      "firsName": "Franz",
+      "firstName": "Franz",
       "lastName": "Liszt",
       "displayName": "Franz Liszt",
       "email": "franz.liszt@music.org",
@@ -43,7 +43,7 @@
   "sent": [
     {
       "userId": "7078106103904",
-      "firsName": "Benjamin",
+      "firstName": "Benjamin",
       "lastName": "Britten",
       "displayName": "Benjamin Britten",
       "email": "benjamin.britten@music.org",
