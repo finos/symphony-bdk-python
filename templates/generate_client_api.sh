@@ -10,13 +10,9 @@ generate_files() {
   file_name=${file_url##*/}
   name=$2
 
-  echo $file_url
-  echo $file_name
-  echo $name
-
   # download and generate files
   cd $template_dir
-  wget $file_url
+  curl $file_url -o $file_name
   java -jar openapi-generator-cli.jar generate -g python -i $file_name --package-name symphony.bdk.gen -o output
 
   # update api files
