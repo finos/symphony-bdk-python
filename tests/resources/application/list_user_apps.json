@@ -1,37 +1,35 @@
-{
-  "value": [
-    {
-      "appId": "djApp",
-      "appName": "Dow Jones",
-      "listed": true,
-      "install": false
-    },
-    {
-      "appId": "spcapiq",
-      "appName": "S&P Capital IQ Data",
-      "listed": true,
-      "install": false
-    },
-    {
-      "appId": "selerity",
-      "appName": "Selerity Context",
-      "listed": true,
-      "install": true,
-      "products": [
-        {
-          "appId": "selerity",
-          "name": "Standard",
-          "subscribed": true,
-          "type": "default"
-        },
-        {
-          "appId": "selerity",
-          "name": "Premium",
-          "sku": "AcDccU53SsY",
-          "subscribed": false,
-          "type": "premium"
-        }
-      ]
-    }
-  ]
-}
+[
+  {
+    "appId": "djApp",
+    "appName": "Dow Jones",
+    "listed": true,
+    "install": false
+  },
+  {
+    "appId": "spcapiq",
+    "appName": "S&P Capital IQ Data",
+    "listed": true,
+    "install": false
+  },
+  {
+    "appId": "selerity",
+    "appName": "Selerity Context",
+    "listed": true,
+    "install": true,
+    "products": [
+      {
+        "appId": "selerity",
+        "name": "Standard",
+        "subscribed": true,
+        "type": "default"
+      },
+      {
+        "appId": "selerity",
+        "name": "Premium",
+        "sku": "AcDccU53SsY",
+        "subscribed": false,
+        "type": "premium"
+      }
+    ]
+  }
+]
