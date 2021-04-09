@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -28,11 +27,10 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.agent_model.v4_key_value_pair import V4KeyValuePair
-    from symphony.bdk.gen.agent_model.v4_user import V4User
-    globals()['V4KeyValuePair'] = V4KeyValuePair
-    globals()['V4User'] = V4User
+from symphony.bdk.gen.agent_model.v4_key_value_pair import V4KeyValuePair
+from symphony.bdk.gen.agent_model.v4_user import V4User
+globals()['V4KeyValuePair'] = V4KeyValuePair
+globals()['V4User'] = V4User
 
 
 class V4RoomProperties(ModelNormal):
@@ -79,21 +77,20 @@ class V4RoomProperties(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'name': (str,),  # noqa: E501
-            'description': (str,),  # noqa: E501
-            'creator_user': (V4User,),  # noqa: E501
-            'created_date': (int,),  # noqa: E501
-            'external': (bool,),  # noqa: E501
-            'cross_pod': (bool,),  # noqa: E501
-            'public': (bool,),  # noqa: E501
-            'copy_protected': (bool,),  # noqa: E501
-            'read_only': (bool,),  # noqa: E501
-            'discoverable': (bool,),  # noqa: E501
-            'members_can_invite': (bool,),  # noqa: E501
-            'keywords': ([V4KeyValuePair],),  # noqa: E501
-            'can_view_history': (bool,),  # noqa: E501
+            'name': (str, none_type),  # noqa: E501
+            'description': (str, none_type),  # noqa: E501
+            'creator_user': (V4User, none_type),  # noqa: E501
+            'created_date': (int, none_type),  # noqa: E501
+            'external': (bool, none_type),  # noqa: E501
+            'cross_pod': (bool, none_type),  # noqa: E501
+            'public': (bool, none_type),  # noqa: E501
+            'copy_protected': (bool, none_type),  # noqa: E501
+            'read_only': (bool, none_type),  # noqa: E501
+            'discoverable': (bool, none_type),  # noqa: E501
+            'members_can_invite': (bool, none_type),  # noqa: E501
+            'keywords': ([V4KeyValuePair], none_type),  # noqa: E501
+            'can_view_history': (bool, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -200,7 +197,19 @@ class V4RoomProperties(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.name: str = None
+        self.description: str = None
+        self.creator_user: V4User = None
+        self.created_date: int = None
+        self.external: bool = None
+        self.cross_pod: bool = None
+        self.public: bool = None
+        self.copy_protected: bool = None
+        self.read_only: bool = None
+        self.discoverable: bool = None
+        self.members_can_invite: bool = None
+        self.keywords: List[V4KeyValuePair] = None
+        self.can_view_history: bool = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

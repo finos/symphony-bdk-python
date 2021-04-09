@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -76,9 +77,9 @@ class UserFilter(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'role': (str,),  # noqa: E501
-            'feature': (str,),  # noqa: E501
-            'status': (str,),  # noqa: E501
+            'role': (str, none_type),  # noqa: E501
+            'feature': (str, none_type),  # noqa: E501
+            'status': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -165,7 +166,9 @@ class UserFilter(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.role: str = None
+        self.feature: str = None
+        self.status: str = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -76,7 +75,7 @@ class V2Error(ModelNormal):
         return {
             'code': (int,),  # noqa: E501
             'message': (str,),  # noqa: E501
-            'details': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),  # noqa: E501
+            'details': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -165,9 +164,9 @@ class V2Error(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
-        self.code = code
-        self.message = message
+        self.code: int = code
+        self.message: str = message
+        self.details: {str: (bool, date, datetime, dict, float, int, list, str, none_type)} = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

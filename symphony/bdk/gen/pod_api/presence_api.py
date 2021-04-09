@@ -11,7 +11,7 @@
 import re  # noqa: F401
 import sys  # noqa: F401
 
-from symphony.bdk.gen.api_client import ApiClient, Endpoint
+from symphony.bdk.gen.api_client import ApiClient, Endpoint as _Endpoint
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     check_allowed_values,
     check_validations,
@@ -110,7 +110,7 @@ class PresenceApi(object):
                 session_token
             return self.call_with_http_info(**kwargs)
 
-        self.v1_presence_feed_create_post = Endpoint(
+        self.v1_presence_feed_create_post = _Endpoint(
             settings={
                 'response_type': (StringId,),
                 'auth': [],
@@ -231,7 +231,7 @@ class PresenceApi(object):
                 feed_id
             return self.call_with_http_info(**kwargs)
 
-        self.v1_presence_feed_feed_id_delete_post = Endpoint(
+        self.v1_presence_feed_feed_id_delete_post = _Endpoint(
             settings={
                 'response_type': (StringId,),
                 'auth': [],
@@ -358,7 +358,7 @@ class PresenceApi(object):
                 feed_id
             return self.call_with_http_info(**kwargs)
 
-        self.v1_presence_feed_feed_id_read_get = Endpoint(
+        self.v1_presence_feed_feed_id_read_get = _Endpoint(
             settings={
                 'response_type': (V2PresenceList,),
                 'auth': [],
@@ -480,7 +480,7 @@ class PresenceApi(object):
                 session_token
             return self.call_with_http_info(**kwargs)
 
-        self.v1_user_presence_get = Endpoint(
+        self.v1_user_presence_get = _Endpoint(
             settings={
                 'response_type': (Presence,),
                 'auth': [],
@@ -600,7 +600,7 @@ class PresenceApi(object):
                 presence
             return self.call_with_http_info(**kwargs)
 
-        self.v1_user_presence_post = Endpoint(
+        self.v1_user_presence_post = _Endpoint(
             settings={
                 'response_type': (Presence,),
                 'auth': [],
@@ -725,7 +725,7 @@ class PresenceApi(object):
                 uid_list
             return self.call_with_http_info(**kwargs)
 
-        self.v1_user_presence_register_post = Endpoint(
+        self.v1_user_presence_register_post = _Endpoint(
             settings={
                 'response_type': (SuccessResponse,),
                 'auth': [],
@@ -852,7 +852,7 @@ class PresenceApi(object):
                 session_token
             return self.call_with_http_info(**kwargs)
 
-        self.v1_user_uid_presence_get = Endpoint(
+        self.v1_user_uid_presence_get = _Endpoint(
             settings={
                 'response_type': (Presence,),
                 'auth': [],
@@ -983,7 +983,7 @@ class PresenceApi(object):
                 presence
             return self.call_with_http_info(**kwargs)
 
-        self.v1_user_uid_presence_post = Endpoint(
+        self.v1_user_uid_presence_post = _Endpoint(
             settings={
                 'response_type': (Presence,),
                 'auth': [],
@@ -1112,7 +1112,7 @@ class PresenceApi(object):
                 session_token
             return self.call_with_http_info(**kwargs)
 
-        self.v2_user_presence_get = Endpoint(
+        self.v2_user_presence_get = _Endpoint(
             settings={
                 'response_type': (V2Presence,),
                 'auth': [],
@@ -1233,7 +1233,7 @@ class PresenceApi(object):
                 presence
             return self.call_with_http_info(**kwargs)
 
-        self.v2_user_presence_post = Endpoint(
+        self.v2_user_presence_post = _Endpoint(
             settings={
                 'response_type': (V2Presence,),
                 'auth': [],
@@ -1366,7 +1366,7 @@ class PresenceApi(object):
                 session_token
             return self.call_with_http_info(**kwargs)
 
-        self.v2_user_uid_presence_get = Endpoint(
+        self.v2_user_uid_presence_get = _Endpoint(
             settings={
                 'response_type': (Presence,),
                 'auth': [],
@@ -1496,7 +1496,7 @@ class PresenceApi(object):
                 session_token
             return self.call_with_http_info(**kwargs)
 
-        self.v2_users_presence_get = Endpoint(
+        self.v2_users_presence_get = _Endpoint(
             settings={
                 'response_type': (V2PresenceList,),
                 'auth': [],
@@ -1627,7 +1627,7 @@ class PresenceApi(object):
                 presence
             return self.call_with_http_info(**kwargs)
 
-        self.v3_user_presence_post = Endpoint(
+        self.v3_user_presence_post = _Endpoint(
             settings={
                 'response_type': (V2Presence,),
                 'auth': [],
@@ -1758,7 +1758,7 @@ class PresenceApi(object):
                 session_token
             return self.call_with_http_info(**kwargs)
 
-        self.v3_user_uid_presence_get = Endpoint(
+        self.v3_user_uid_presence_get = _Endpoint(
             settings={
                 'response_type': (V2Presence,),
                 'auth': [],

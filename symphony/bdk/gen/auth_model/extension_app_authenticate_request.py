@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -74,7 +73,7 @@ class ExtensionAppAuthenticateRequest(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'app_token': (str,),  # noqa: E501
+            'app_token': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -157,7 +156,7 @@ class ExtensionAppAuthenticateRequest(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.app_token: str = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

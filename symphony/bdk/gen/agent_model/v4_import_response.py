@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -74,10 +73,10 @@ class V4ImportResponse(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'message_id': (str,),  # noqa: E501
-            'originating_system_id': (str,),  # noqa: E501
-            'original_message_id': (str,),  # noqa: E501
-            'diagnostic': (str,),  # noqa: E501
+            'message_id': (str, none_type),  # noqa: E501
+            'originating_system_id': (str, none_type),  # noqa: E501
+            'original_message_id': (str, none_type),  # noqa: E501
+            'diagnostic': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -166,7 +165,10 @@ class V4ImportResponse(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.message_id: str = None
+        self.originating_system_id: str = None
+        self.original_message_id: str = None
+        self.diagnostic: str = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

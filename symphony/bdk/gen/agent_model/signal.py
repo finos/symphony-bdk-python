@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -28,11 +27,10 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.agent_model.base_signal import BaseSignal
-    from symphony.bdk.gen.agent_model.signal_all_of import SignalAllOf
-    globals()['BaseSignal'] = BaseSignal
-    globals()['SignalAllOf'] = SignalAllOf
+from symphony.bdk.gen.agent_model.base_signal import BaseSignal
+from symphony.bdk.gen.agent_model.signal_all_of import SignalAllOf
+globals()['BaseSignal'] = BaseSignal
+globals()['SignalAllOf'] = SignalAllOf
 
 
 class Signal(ModelComposed):
@@ -71,7 +69,6 @@ class Signal(ModelComposed):
         This must be a method because a agent_model may have properties that are
         of type self, this must run after the class is loaded
         """
-        lazy_import()
         return (bool, date, datetime, dict, float, int, list, str, none_type,)  # noqa: E501
 
     _nullable = False
@@ -86,14 +83,13 @@ class Signal(ModelComposed):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'name': (str,),  # noqa: E501
-            'query': (str,),  # noqa: E501
-            'visible_on_profile': (bool,),  # noqa: E501
-            'company_wide': (bool,),  # noqa: E501
-            'id': (str,),  # noqa: E501
-            'timestamp': (int,),  # noqa: E501
+            'name': (str, none_type),  # noqa: E501
+            'query': (str, none_type),  # noqa: E501
+            'visible_on_profile': (bool, none_type),  # noqa: E501
+            'company_wide': (bool, none_type),  # noqa: E501
+            'id': (str, none_type),  # noqa: E501
+            'timestamp': (int, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -197,11 +193,6 @@ class Signal(ModelComposed):
         }
         required_args = {
         }
-        # remove args whose value is Null because they are unset
-        required_arg_names = list(required_args.keys())
-        for required_arg_name in required_arg_names:
-            if required_args[required_arg_name] is nulltype.Null:
-                del required_args[required_arg_name]
         model_args = {}
         model_args.update(required_args)
         model_args.update(kwargs)
@@ -211,9 +202,12 @@ class Signal(ModelComposed):
         self._var_name_to_model_instances = composed_info[1]
         self._additional_properties_model_instances = composed_info[2]
         unused_args = composed_info[3]
-
-        for var_name, var_value in required_args.items():
-            setattr(self, var_name, var_value)
+        self.name: str = None
+        self.query: str = None
+        self.visible_on_profile: bool = None
+        self.company_wide: bool = None
+        self.id: str = None
+        self.timestamp: int = None
         for var_name, var_value in kwargs.items():
             if var_name in unused_args and \
                         self._configuration is not None and \
@@ -232,7 +226,6 @@ class Signal(ModelComposed):
         # code would be run when this module is imported, and these composed
         # classes don't exist yet because their module has not finished
         # loading
-        lazy_import()
         return {
           'anyOf': [
           ],

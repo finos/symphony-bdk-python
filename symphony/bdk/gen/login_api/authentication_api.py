@@ -11,7 +11,7 @@
 import re  # noqa: F401
 import sys  # noqa: F401
 
-from symphony.bdk.gen.api_client import ApiClient, Endpoint
+from symphony.bdk.gen.api_client import ApiClient, Endpoint as _Endpoint
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     check_allowed_values,
     check_validations,
@@ -106,7 +106,7 @@ class AuthenticationApi(object):
                 authenticate_request
             return self.call_with_http_info(**kwargs)
 
-        self.pubkey_app_authenticate_post = Endpoint(
+        self.pubkey_app_authenticate_post = _Endpoint(
             settings={
                 'response_type': (Token,),
                 'auth': [],
@@ -227,7 +227,7 @@ class AuthenticationApi(object):
                 user_id
             return self.call_with_http_info(**kwargs)
 
-        self.pubkey_app_user_user_id_authenticate_post = Endpoint(
+        self.pubkey_app_user_user_id_authenticate_post = _Endpoint(
             settings={
                 'response_type': (Token,),
                 'auth': [],
@@ -353,7 +353,7 @@ class AuthenticationApi(object):
                 username
             return self.call_with_http_info(**kwargs)
 
-        self.pubkey_app_username_username_authenticate_post = Endpoint(
+        self.pubkey_app_username_username_authenticate_post = _Endpoint(
             settings={
                 'response_type': (Token,),
                 'auth': [],
@@ -476,7 +476,7 @@ class AuthenticationApi(object):
                 authenticate_request
             return self.call_with_http_info(**kwargs)
 
-        self.pubkey_authenticate_post = Endpoint(
+        self.pubkey_authenticate_post = _Endpoint(
             settings={
                 'response_type': (Token,),
                 'auth': [],
@@ -594,7 +594,7 @@ class AuthenticationApi(object):
                 authenticate_request
             return self.call_with_http_info(**kwargs)
 
-        self.v1_pubkey_app_authenticate_extension_app_post = Endpoint(
+        self.v1_pubkey_app_authenticate_extension_app_post = _Endpoint(
             settings={
                 'response_type': (ExtensionAppTokens,),
                 'auth': [],

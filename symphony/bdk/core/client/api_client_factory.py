@@ -69,7 +69,7 @@ class ApiClientFactory:
         await self._session_auth_client.close()
 
     def _get_api_client(self, server_config, context) -> ApiClient:
-        configuration = Configuration(host=(server_config.get_base_path() + context))
+        configuration = Configuration(host=(server_config.get_base_path() + context), discard_unknown_keys=True)
         configuration.verify_ssl = True
         configuration.ssl_ca_cert = self._config.ssl.trust_store_path
 

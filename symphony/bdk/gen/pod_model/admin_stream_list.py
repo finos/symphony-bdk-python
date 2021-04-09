@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -26,11 +27,10 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.pod_model.admin_stream_filter import AdminStreamFilter
-    from symphony.bdk.gen.pod_model.admin_stream_info_list import AdminStreamInfoList
-    globals()['AdminStreamFilter'] = AdminStreamFilter
-    globals()['AdminStreamInfoList'] = AdminStreamInfoList
+from symphony.bdk.gen.pod_model.admin_stream_filter import AdminStreamFilter
+from symphony.bdk.gen.pod_model.admin_stream_info_list import AdminStreamInfoList
+globals()['AdminStreamFilter'] = AdminStreamFilter
+globals()['AdminStreamInfoList'] = AdminStreamInfoList
 
 
 class AdminStreamList(ModelNormal):
@@ -77,13 +77,12 @@ class AdminStreamList(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'count': (int,),  # noqa: E501
-            'skip': (int,),  # noqa: E501
-            'limit': (int,),  # noqa: E501
-            'filter': (AdminStreamFilter,),  # noqa: E501
-            'streams': (AdminStreamInfoList,),  # noqa: E501
+            'count': (int, none_type),  # noqa: E501
+            'skip': (int, none_type),  # noqa: E501
+            'limit': (int, none_type),  # noqa: E501
+            'filter': (AdminStreamFilter, none_type),  # noqa: E501
+            'streams': (AdminStreamInfoList, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -174,7 +173,11 @@ class AdminStreamList(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.count: int = None
+        self.skip: int = None
+        self.limit: int = None
+        self.filter: AdminStreamFilter = None
+        self.streams: AdminStreamInfoList = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

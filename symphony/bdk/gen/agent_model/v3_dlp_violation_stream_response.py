@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -28,9 +27,8 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.agent_model.v3_dlp_violation_stream import V3DLPViolationStream
-    globals()['V3DLPViolationStream'] = V3DLPViolationStream
+from symphony.bdk.gen.agent_model.v3_dlp_violation_stream import V3DLPViolationStream
+globals()['V3DLPViolationStream'] = V3DLPViolationStream
 
 
 class V3DLPViolationStreamResponse(ModelNormal):
@@ -77,10 +75,9 @@ class V3DLPViolationStreamResponse(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'violations': ([V3DLPViolationStream],),  # noqa: E501
-            'next_offset': (str,),  # noqa: E501
+            'violations': ([V3DLPViolationStream], none_type),  # noqa: E501
+            'next_offset': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -165,7 +162,8 @@ class V3DLPViolationStreamResponse(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.violations: List[V3DLPViolationStream] = None
+        self.next_offset: str = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
