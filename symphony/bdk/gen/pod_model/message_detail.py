@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -26,13 +27,12 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.pod_model.message_download_receipt_count import MessageDownloadReceiptCount
-    from symphony.bdk.gen.pod_model.message_stream import MessageStream
-    from symphony.bdk.gen.pod_model.message_user import MessageUser
-    globals()['MessageDownloadReceiptCount'] = MessageDownloadReceiptCount
-    globals()['MessageStream'] = MessageStream
-    globals()['MessageUser'] = MessageUser
+from symphony.bdk.gen.pod_model.message_download_receipt_count import MessageDownloadReceiptCount
+from symphony.bdk.gen.pod_model.message_stream import MessageStream
+from symphony.bdk.gen.pod_model.message_user import MessageUser
+globals()['MessageDownloadReceiptCount'] = MessageDownloadReceiptCount
+globals()['MessageStream'] = MessageStream
+globals()['MessageUser'] = MessageUser
 
 
 class MessageDetail(ModelNormal):
@@ -79,17 +79,16 @@ class MessageDetail(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'message_id': (str,),  # noqa: E501
-            'creator': (MessageUser,),  # noqa: E501
-            'on_behalf_of_user': (MessageUser,),  # noqa: E501
-            'stream': (MessageStream,),  # noqa: E501
-            'creation_date': (int,),  # noqa: E501
-            'delivery_receipt_count': (int,),  # noqa: E501
-            'read_receipt_count': (int,),  # noqa: E501
-            'email_notification_count': (int,),  # noqa: E501
-            'download_receipt_counts': ([MessageDownloadReceiptCount],),  # noqa: E501
+            'message_id': (str, none_type),  # noqa: E501
+            'creator': (MessageUser, none_type),  # noqa: E501
+            'on_behalf_of_user': (MessageUser, none_type),  # noqa: E501
+            'stream': (MessageStream, none_type),  # noqa: E501
+            'creation_date': (int, none_type),  # noqa: E501
+            'delivery_receipt_count': (int, none_type),  # noqa: E501
+            'read_receipt_count': (int, none_type),  # noqa: E501
+            'email_notification_count': (int, none_type),  # noqa: E501
+            'download_receipt_counts': ([MessageDownloadReceiptCount], none_type),  # noqa: E501
         }
 
     @cached_property
@@ -188,7 +187,15 @@ class MessageDetail(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.message_id: str = None
+        self.creator: MessageUser = None
+        self.on_behalf_of_user: MessageUser = None
+        self.stream: MessageStream = None
+        self.creation_date: int = None
+        self.delivery_receipt_count: int = None
+        self.read_receipt_count: int = None
+        self.email_notification_count: int = None
+        self.download_receipt_counts: List[MessageDownloadReceiptCount] = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

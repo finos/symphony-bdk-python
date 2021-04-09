@@ -11,7 +11,7 @@
 import re  # noqa: F401
 import sys  # noqa: F401
 
-from symphony.bdk.gen.api_client import ApiClient, Endpoint
+from symphony.bdk.gen.api_client import ApiClient, Endpoint as _Endpoint
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     check_allowed_values,
     check_validations,
@@ -108,7 +108,7 @@ class SystemApi(object):
             kwargs['_host_index'] = kwargs.get('_host_index')
             return self.call_with_http_info(**kwargs)
 
-        self.v2_health_check_get = Endpoint(
+        self.v2_health_check_get = _Endpoint(
             settings={
                 'response_type': (V2HealthCheckResponse,),
                 'auth': [],
@@ -263,7 +263,7 @@ class SystemApi(object):
             kwargs['_host_index'] = kwargs.get('_host_index')
             return self.call_with_http_info(**kwargs)
 
-        self.v3_extended_health = Endpoint(
+        self.v3_extended_health = _Endpoint(
             settings={
                 'response_type': (V3Health,),
                 'auth': [],
@@ -368,7 +368,7 @@ class SystemApi(object):
             kwargs['_host_index'] = kwargs.get('_host_index')
             return self.call_with_http_info(**kwargs)
 
-        self.v3_health = Endpoint(
+        self.v3_health = _Endpoint(
             settings={
                 'response_type': (V3Health,),
                 'auth': [],

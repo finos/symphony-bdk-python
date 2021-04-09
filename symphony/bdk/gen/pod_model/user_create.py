@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -26,11 +27,10 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.pod_model.password import Password
-    from symphony.bdk.gen.pod_model.user_attributes import UserAttributes
-    globals()['Password'] = Password
-    globals()['UserAttributes'] = UserAttributes
+from symphony.bdk.gen.pod_model.password import Password
+from symphony.bdk.gen.pod_model.user_attributes import UserAttributes
+globals()['Password'] = Password
+globals()['UserAttributes'] = UserAttributes
 
 
 class UserCreate(ModelNormal):
@@ -77,11 +77,10 @@ class UserCreate(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'user_attributes': (UserAttributes,),  # noqa: E501
-            'password': (Password,),  # noqa: E501
-            'roles': ([str],),  # noqa: E501
+            'user_attributes': (UserAttributes, none_type),  # noqa: E501
+            'password': (Password, none_type),  # noqa: E501
+            'roles': ([str], none_type),  # noqa: E501
         }
 
     @cached_property
@@ -168,7 +167,9 @@ class UserCreate(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.user_attributes: UserAttributes = None
+        self.password: Password = None
+        self.roles: List[str] = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

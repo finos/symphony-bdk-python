@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -28,13 +27,12 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.agent_model.room_tag import RoomTag
-    from symphony.bdk.gen.agent_model.room_updated_message_all_of import RoomUpdatedMessageAllOf
-    from symphony.bdk.gen.agent_model.v2_base_message import V2BaseMessage
-    globals()['RoomTag'] = RoomTag
-    globals()['RoomUpdatedMessageAllOf'] = RoomUpdatedMessageAllOf
-    globals()['V2BaseMessage'] = V2BaseMessage
+from symphony.bdk.gen.agent_model.room_tag import RoomTag
+from symphony.bdk.gen.agent_model.room_updated_message_all_of import RoomUpdatedMessageAllOf
+from symphony.bdk.gen.agent_model.v2_base_message import V2BaseMessage
+globals()['RoomTag'] = RoomTag
+globals()['RoomUpdatedMessageAllOf'] = RoomUpdatedMessageAllOf
+globals()['V2BaseMessage'] = V2BaseMessage
 
 
 class RoomUpdatedMessage(ModelComposed):
@@ -73,7 +71,6 @@ class RoomUpdatedMessage(ModelComposed):
         This must be a method because a agent_model may have properties that are
         of type self, this must run after the class is loaded
         """
-        lazy_import()
         return (bool, date, datetime, dict, float, int, list, str, none_type,)  # noqa: E501
 
     _nullable = False
@@ -88,21 +85,20 @@ class RoomUpdatedMessage(ModelComposed):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
             'timestamp': (str,),  # noqa: E501
             'v2message_type': (str,),  # noqa: E501
             'stream_id': (str,),  # noqa: E501
-            'old_name': (str,),  # noqa: E501
-            'new_name': (str,),  # noqa: E501
-            'keywords': ([RoomTag],),  # noqa: E501
-            'old_description': (str,),  # noqa: E501
-            'new_description': (str,),  # noqa: E501
-            'members_can_invite': (bool,),  # noqa: E501
-            'discoverable': (bool,),  # noqa: E501
-            'read_only': (bool,),  # noqa: E501
-            'copy_protected': (bool,),  # noqa: E501
-            'id': (str,),  # noqa: E501
+            'old_name': (str, none_type),  # noqa: E501
+            'new_name': (str, none_type),  # noqa: E501
+            'keywords': ([RoomTag], none_type),  # noqa: E501
+            'old_description': (str, none_type),  # noqa: E501
+            'new_description': (str, none_type),  # noqa: E501
+            'members_can_invite': (bool, none_type),  # noqa: E501
+            'discoverable': (bool, none_type),  # noqa: E501
+            'read_only': (bool, none_type),  # noqa: E501
+            'copy_protected': (bool, none_type),  # noqa: E501
+            'id': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -228,11 +224,6 @@ class RoomUpdatedMessage(ModelComposed):
             'v2message_type': v2message_type,
             'stream_id': stream_id,
         }
-        # remove args whose value is Null because they are unset
-        required_arg_names = list(required_args.keys())
-        for required_arg_name in required_arg_names:
-            if required_args[required_arg_name] is nulltype.Null:
-                del required_args[required_arg_name]
         model_args = {}
         model_args.update(required_args)
         model_args.update(kwargs)
@@ -242,9 +233,19 @@ class RoomUpdatedMessage(ModelComposed):
         self._var_name_to_model_instances = composed_info[1]
         self._additional_properties_model_instances = composed_info[2]
         unused_args = composed_info[3]
-
-        for var_name, var_value in required_args.items():
-            setattr(self, var_name, var_value)
+        self.timestamp: str = timestamp
+        self.v2message_type: str = v2message_type
+        self.stream_id: str = stream_id
+        self.old_name: str = None
+        self.new_name: str = None
+        self.keywords: List[RoomTag] = None
+        self.old_description: str = None
+        self.new_description: str = None
+        self.members_can_invite: bool = None
+        self.discoverable: bool = None
+        self.read_only: bool = None
+        self.copy_protected: bool = None
+        self.id: str = None
         for var_name, var_value in kwargs.items():
             if var_name in unused_args and \
                         self._configuration is not None and \
@@ -263,7 +264,6 @@ class RoomUpdatedMessage(ModelComposed):
         # code would be run when this module is imported, and these composed
         # classes don't exist yet because their module has not finished
         # loading
-        lazy_import()
         return {
           'anyOf': [
           ],

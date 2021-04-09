@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -76,14 +77,14 @@ class UserSystemInfo(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'id': (int,),  # noqa: E501
-            'status': (str,),  # noqa: E501
-            'created_date': (int,),  # noqa: E501
-            'created_by': (str,),  # noqa: E501
-            'last_updated_date': (int,),  # noqa: E501
-            'last_login_date': (int,),  # noqa: E501
-            'last_password_reset': (int,),  # noqa: E501
-            'deactivated_date': (int,),  # noqa: E501
+            'id': (int, none_type),  # noqa: E501
+            'status': (str, none_type),  # noqa: E501
+            'created_date': (int, none_type),  # noqa: E501
+            'created_by': (str, none_type),  # noqa: E501
+            'last_updated_date': (int, none_type),  # noqa: E501
+            'last_login_date': (int, none_type),  # noqa: E501
+            'last_password_reset': (int, none_type),  # noqa: E501
+            'deactivated_date': (int, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -180,7 +181,14 @@ class UserSystemInfo(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.id: int = None
+        self.status: str = None
+        self.created_date: int = None
+        self.created_by: str = None
+        self.last_updated_date: int = None
+        self.last_login_date: int = None
+        self.last_password_reset: int = None
+        self.deactivated_date: int = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

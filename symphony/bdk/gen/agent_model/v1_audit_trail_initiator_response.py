@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -74,12 +73,12 @@ class V1AuditTrailInitiatorResponse(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'action': (str,),  # noqa: E501
-            'action_name': (str,),  # noqa: E501
-            'timestamp': (str,),  # noqa: E501
-            'initiator_id': (str,),  # noqa: E501
-            'initiator_username': (str,),  # noqa: E501
-            'initiator_email_address': (str,),  # noqa: E501
+            'action': (str, none_type),  # noqa: E501
+            'action_name': (str, none_type),  # noqa: E501
+            'timestamp': (str, none_type),  # noqa: E501
+            'initiator_id': (str, none_type),  # noqa: E501
+            'initiator_username': (str, none_type),  # noqa: E501
+            'initiator_email_address': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -172,7 +171,12 @@ class V1AuditTrailInitiatorResponse(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.action: str = None
+        self.action_name: str = None
+        self.timestamp: str = None
+        self.initiator_id: str = None
+        self.initiator_username: str = None
+        self.initiator_email_address: str = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

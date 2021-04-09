@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -26,13 +27,12 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.pod_model.app_authentication_keys import AppAuthenticationKeys
-    from symphony.bdk.gen.pod_model.app_notification import AppNotification
-    from symphony.bdk.gen.pod_model.application_info import ApplicationInfo
-    globals()['AppAuthenticationKeys'] = AppAuthenticationKeys
-    globals()['AppNotification'] = AppNotification
-    globals()['ApplicationInfo'] = ApplicationInfo
+from symphony.bdk.gen.pod_model.app_authentication_keys import AppAuthenticationKeys
+from symphony.bdk.gen.pod_model.app_notification import AppNotification
+from symphony.bdk.gen.pod_model.application_info import ApplicationInfo
+globals()['AppAuthenticationKeys'] = AppAuthenticationKeys
+globals()['AppNotification'] = AppNotification
+globals()['ApplicationInfo'] = ApplicationInfo
 
 
 class ApplicationDetail(ModelNormal):
@@ -79,16 +79,15 @@ class ApplicationDetail(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'application_info': (ApplicationInfo,),  # noqa: E501
-            'icon_url': (str,),  # noqa: E501
-            'description': (str,),  # noqa: E501
-            'allow_origins': (str,),  # noqa: E501
-            'permissions': ([str],),  # noqa: E501
-            'cert': (str,),  # noqa: E501
-            'authentication_keys': (AppAuthenticationKeys,),  # noqa: E501
-            'notification': (AppNotification,),  # noqa: E501
+            'application_info': (ApplicationInfo, none_type),  # noqa: E501
+            'icon_url': (str, none_type),  # noqa: E501
+            'description': (str, none_type),  # noqa: E501
+            'allow_origins': (str, none_type),  # noqa: E501
+            'permissions': ([str], none_type),  # noqa: E501
+            'cert': (str, none_type),  # noqa: E501
+            'authentication_keys': (AppAuthenticationKeys, none_type),  # noqa: E501
+            'notification': (AppNotification, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -185,7 +184,14 @@ class ApplicationDetail(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.application_info: ApplicationInfo = None
+        self.icon_url: str = None
+        self.description: str = None
+        self.allow_origins: str = None
+        self.permissions: List[str] = None
+        self.cert: str = None
+        self.authentication_keys: AppAuthenticationKeys = None
+        self.notification: AppNotification = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

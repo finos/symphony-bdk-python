@@ -11,7 +11,7 @@
 import re  # noqa: F401
 import sys  # noqa: F401
 
-from symphony.bdk.gen.api_client import ApiClient, Endpoint
+from symphony.bdk.gen.api_client import ApiClient, Endpoint as _Endpoint
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     check_allowed_values,
     check_validations,
@@ -103,7 +103,7 @@ class AppEntitlementApi(object):
                 session_token
             return self.call_with_http_info(**kwargs)
 
-        self.v1_admin_app_entitlement_list_get = Endpoint(
+        self.v1_admin_app_entitlement_list_get = _Endpoint(
             settings={
                 'response_type': (PodAppEntitlementList,),
                 'auth': [],
@@ -223,7 +223,7 @@ class AppEntitlementApi(object):
                 payload
             return self.call_with_http_info(**kwargs)
 
-        self.v1_admin_app_entitlement_list_post = Endpoint(
+        self.v1_admin_app_entitlement_list_post = _Endpoint(
             settings={
                 'response_type': (PodAppEntitlementList,),
                 'auth': [],
@@ -350,7 +350,7 @@ class AppEntitlementApi(object):
                 uid
             return self.call_with_http_info(**kwargs)
 
-        self.v1_admin_user_uid_app_entitlement_list_get = Endpoint(
+        self.v1_admin_user_uid_app_entitlement_list_get = _Endpoint(
             settings={
                 'response_type': (UserAppEntitlementList,),
                 'auth': [],
@@ -480,7 +480,7 @@ class AppEntitlementApi(object):
                 payload
             return self.call_with_http_info(**kwargs)
 
-        self.v1_admin_user_uid_app_entitlement_list_post = Endpoint(
+        self.v1_admin_user_uid_app_entitlement_list_post = _Endpoint(
             settings={
                 'response_type': (UserAppEntitlementList,),
                 'auth': [],

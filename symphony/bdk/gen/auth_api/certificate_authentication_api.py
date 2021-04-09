@@ -11,7 +11,7 @@
 import re  # noqa: F401
 import sys  # noqa: F401
 
-from symphony.bdk.gen.api_client import ApiClient, Endpoint
+from symphony.bdk.gen.api_client import ApiClient, Endpoint as _Endpoint
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     check_allowed_values,
     check_validations,
@@ -101,7 +101,7 @@ class CertificateAuthenticationApi(object):
             kwargs['_host_index'] = kwargs.get('_host_index')
             return self.call_with_http_info(**kwargs)
 
-        self.v1_app_authenticate_post = Endpoint(
+        self.v1_app_authenticate_post = _Endpoint(
             settings={
                 'response_type': (Token,),
                 'auth': [],
@@ -214,7 +214,7 @@ class CertificateAuthenticationApi(object):
                 session_token
             return self.call_with_http_info(**kwargs)
 
-        self.v1_app_user_uid_authenticate_post = Endpoint(
+        self.v1_app_user_uid_authenticate_post = _Endpoint(
             settings={
                 'response_type': (OboAuthResponse,),
                 'auth': [],
@@ -269,6 +269,132 @@ class CertificateAuthenticationApi(object):
             },
             api_client=api_client,
             callable=__v1_app_user_uid_authenticate_post
+        )
+
+        def __v1_app_username_username_authenticate_post(
+            self,
+            username,
+            session_token,
+            **kwargs
+        ):
+            """PROVISIONAL - Authenicate an application in a delegated context to act on behalf of a user  # noqa: E501
+
+            This method makes a synchronous HTTP request by default. To make an
+            asynchronous HTTP request, please pass async_req=True
+
+            >>> thread = auth_api.v1_app_username_username_authenticate_post(username, session_token, async_req=True)
+            >>> result = thread.get()
+
+            Args:
+                username (str): username
+                session_token (str): Authorization token obtains from app/authenicate API
+
+            Keyword Args:
+                _return_http_data_only (bool): response data without head status
+                    code and headers. Default is True.
+                _preload_content (bool): if False, the urllib3.HTTPResponse object
+                    will be returned without reading/decoding response data.
+                    Default is True.
+                _request_timeout (float/tuple): timeout setting for this request. If one
+                    number provided, it will be total request timeout. It can also
+                    be a pair (tuple) of (connection, read) timeouts.
+                    Default is None.
+                _check_input_type (bool): specifies if type checking
+                    should be done one the data sent to the server.
+                    Default is True.
+                _check_return_type (bool): specifies if type checking
+                    should be done one the data received from the server.
+                    Default is True.
+                _host_index (int/None): specifies the index of the server
+                    that we want to use.
+                    Default is read from the configuration.
+                async_req (bool): execute request asynchronously
+
+            Returns:
+                OboAuthResponse
+                    If the method is called asynchronously, returns the request
+                    thread.
+            """
+            kwargs['async_req'] = kwargs.get(
+                'async_req', False
+            )
+            kwargs['_return_http_data_only'] = kwargs.get(
+                '_return_http_data_only', True
+            )
+            kwargs['_preload_content'] = kwargs.get(
+                '_preload_content', True
+            )
+            kwargs['_request_timeout'] = kwargs.get(
+                '_request_timeout', None
+            )
+            kwargs['_check_input_type'] = kwargs.get(
+                '_check_input_type', True
+            )
+            kwargs['_check_return_type'] = kwargs.get(
+                '_check_return_type', True
+            )
+            kwargs['_host_index'] = kwargs.get('_host_index')
+            kwargs['username'] = \
+                username
+            kwargs['session_token'] = \
+                session_token
+            return self.call_with_http_info(**kwargs)
+
+        self.v1_app_username_username_authenticate_post = _Endpoint(
+            settings={
+                'response_type': (OboAuthResponse,),
+                'auth': [],
+                'endpoint_path': '/v1/app/username/{username}/authenticate',
+                'operation_id': 'v1_app_username_username_authenticate_post',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'username',
+                    'session_token',
+                ],
+                'required': [
+                    'username',
+                    'session_token',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'username':
+                        (str,),
+                    'session_token':
+                        (str,),
+                },
+                'attribute_map': {
+                    'username': 'username',
+                    'session_token': 'sessionToken',
+                },
+                'location_map': {
+                    'username': 'path',
+                    'session_token': 'header',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [],
+            },
+            api_client=api_client,
+            callable=__v1_app_username_username_authenticate_post
         )
 
         def __v1_authenticate_extension_app_post(
@@ -337,7 +463,7 @@ class CertificateAuthenticationApi(object):
                 auth_request
             return self.call_with_http_info(**kwargs)
 
-        self.v1_authenticate_extension_app_post = Endpoint(
+        self.v1_authenticate_extension_app_post = _Endpoint(
             settings={
                 'response_type': (ExtensionAppTokens,),
                 'auth': [],
@@ -450,7 +576,7 @@ class CertificateAuthenticationApi(object):
             kwargs['_host_index'] = kwargs.get('_host_index')
             return self.call_with_http_info(**kwargs)
 
-        self.v1_authenticate_post = Endpoint(
+        self.v1_authenticate_post = _Endpoint(
             settings={
                 'response_type': (Token,),
                 'auth': [],
@@ -560,7 +686,7 @@ class CertificateAuthenticationApi(object):
                 session_token
             return self.call_with_http_info(**kwargs)
 
-        self.v1_logout_post = Endpoint(
+        self.v1_logout_post = _Endpoint(
             settings={
                 'response_type': (Token,),
                 'auth': [],

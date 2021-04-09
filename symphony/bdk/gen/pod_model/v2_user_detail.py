@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -26,17 +27,16 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.pod_model.avatar import Avatar
-    from symphony.bdk.gen.pod_model.integer_list import IntegerList
-    from symphony.bdk.gen.pod_model.string_list import StringList
-    from symphony.bdk.gen.pod_model.user_system_info import UserSystemInfo
-    from symphony.bdk.gen.pod_model.v2_user_attributes import V2UserAttributes
-    globals()['Avatar'] = Avatar
-    globals()['IntegerList'] = IntegerList
-    globals()['StringList'] = StringList
-    globals()['UserSystemInfo'] = UserSystemInfo
-    globals()['V2UserAttributes'] = V2UserAttributes
+from symphony.bdk.gen.pod_model.avatar import Avatar
+from symphony.bdk.gen.pod_model.integer_list import IntegerList
+from symphony.bdk.gen.pod_model.string_list import StringList
+from symphony.bdk.gen.pod_model.user_system_info import UserSystemInfo
+from symphony.bdk.gen.pod_model.v2_user_attributes import V2UserAttributes
+globals()['Avatar'] = Avatar
+globals()['IntegerList'] = IntegerList
+globals()['StringList'] = StringList
+globals()['UserSystemInfo'] = UserSystemInfo
+globals()['V2UserAttributes'] = V2UserAttributes
 
 
 class V2UserDetail(ModelNormal):
@@ -83,16 +83,15 @@ class V2UserDetail(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'user_attributes': (V2UserAttributes,),  # noqa: E501
-            'user_system_info': (UserSystemInfo,),  # noqa: E501
-            'features': (IntegerList,),  # noqa: E501
-            'apps': (IntegerList,),  # noqa: E501
-            'groups': (IntegerList,),  # noqa: E501
-            'roles': (StringList,),  # noqa: E501
-            'disclaimers': (IntegerList,),  # noqa: E501
-            'avatar': (Avatar,),  # noqa: E501
+            'user_attributes': (V2UserAttributes, none_type),  # noqa: E501
+            'user_system_info': (UserSystemInfo, none_type),  # noqa: E501
+            'features': (IntegerList, none_type),  # noqa: E501
+            'apps': (IntegerList, none_type),  # noqa: E501
+            'groups': (IntegerList, none_type),  # noqa: E501
+            'roles': (StringList, none_type),  # noqa: E501
+            'disclaimers': (IntegerList, none_type),  # noqa: E501
+            'avatar': (Avatar, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -189,7 +188,14 @@ class V2UserDetail(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.user_attributes: V2UserAttributes = None
+        self.user_system_info: UserSystemInfo = None
+        self.features: IntegerList = None
+        self.apps: IntegerList = None
+        self.groups: IntegerList = None
+        self.roles: StringList = None
+        self.disclaimers: IntegerList = None
+        self.avatar: Avatar = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

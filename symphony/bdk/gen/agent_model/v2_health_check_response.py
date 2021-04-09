@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -74,20 +73,20 @@ class V2HealthCheckResponse(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'pod_connectivity': (bool,),  # noqa: E501
-            'pod_connectivity_error': (str,),  # noqa: E501
-            'key_manager_connectivity': (bool,),  # noqa: E501
-            'key_manager_connectivity_error': (str,),  # noqa: E501
-            'firehose_connectivity': (bool,),  # noqa: E501
-            'firehose_connectivity_error': (str,),  # noqa: E501
-            'encrypt_decrypt_success': (bool,),  # noqa: E501
-            'encrypt_decrypt_error': (str,),  # noqa: E501
-            'pod_version': (str,),  # noqa: E501
-            'agent_version': (str,),  # noqa: E501
-            'agent_service_user': (bool,),  # noqa: E501
-            'agent_service_user_error': (str,),  # noqa: E501
-            'ce_service_user': (bool,),  # noqa: E501
-            'ce_service_user_error': (str,),  # noqa: E501
+            'pod_connectivity': (bool, none_type),  # noqa: E501
+            'pod_connectivity_error': (str, none_type),  # noqa: E501
+            'key_manager_connectivity': (bool, none_type),  # noqa: E501
+            'key_manager_connectivity_error': (str, none_type),  # noqa: E501
+            'firehose_connectivity': (bool, none_type),  # noqa: E501
+            'firehose_connectivity_error': (str, none_type),  # noqa: E501
+            'encrypt_decrypt_success': (bool, none_type),  # noqa: E501
+            'encrypt_decrypt_error': (str, none_type),  # noqa: E501
+            'pod_version': (str, none_type),  # noqa: E501
+            'agent_version': (str, none_type),  # noqa: E501
+            'agent_service_user': (bool, none_type),  # noqa: E501
+            'agent_service_user_error': (str, none_type),  # noqa: E501
+            'ce_service_user': (bool, none_type),  # noqa: E501
+            'ce_service_user_error': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -196,7 +195,20 @@ class V2HealthCheckResponse(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.pod_connectivity: bool = None
+        self.pod_connectivity_error: str = None
+        self.key_manager_connectivity: bool = None
+        self.key_manager_connectivity_error: str = None
+        self.firehose_connectivity: bool = None
+        self.firehose_connectivity_error: str = None
+        self.encrypt_decrypt_success: bool = None
+        self.encrypt_decrypt_error: str = None
+        self.pod_version: str = None
+        self.agent_version: str = None
+        self.agent_service_user: bool = None
+        self.agent_service_user_error: str = None
+        self.ce_service_user: bool = None
+        self.ce_service_user_error: str = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -72,9 +73,9 @@ class ImmutableRoomAttributes(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'public': (bool,),  # noqa: E501
-            'read_only': (bool,),  # noqa: E501
-            'copy_protected': (bool,),  # noqa: E501
+            'public': (bool, none_type),  # noqa: E501
+            'read_only': (bool, none_type),  # noqa: E501
+            'copy_protected': (bool, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -161,7 +162,9 @@ class ImmutableRoomAttributes(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.public: bool = None
+        self.read_only: bool = None
+        self.copy_protected: bool = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

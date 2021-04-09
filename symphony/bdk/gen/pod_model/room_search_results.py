@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -26,13 +27,12 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.pod_model.faceted_match_count import FacetedMatchCount
-    from symphony.bdk.gen.pod_model.room_search_criteria import RoomSearchCriteria
-    from symphony.bdk.gen.pod_model.v2_room_detail import V2RoomDetail
-    globals()['FacetedMatchCount'] = FacetedMatchCount
-    globals()['RoomSearchCriteria'] = RoomSearchCriteria
-    globals()['V2RoomDetail'] = V2RoomDetail
+from symphony.bdk.gen.pod_model.faceted_match_count import FacetedMatchCount
+from symphony.bdk.gen.pod_model.room_search_criteria import RoomSearchCriteria
+from symphony.bdk.gen.pod_model.v2_room_detail import V2RoomDetail
+globals()['FacetedMatchCount'] = FacetedMatchCount
+globals()['RoomSearchCriteria'] = RoomSearchCriteria
+globals()['V2RoomDetail'] = V2RoomDetail
 
 
 class RoomSearchResults(ModelNormal):
@@ -79,14 +79,13 @@ class RoomSearchResults(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'count': (int,),  # noqa: E501
-            'skip': (int,),  # noqa: E501
-            'limit': (int,),  # noqa: E501
-            'query': (RoomSearchCriteria,),  # noqa: E501
-            'rooms': ([V2RoomDetail],),  # noqa: E501
-            'faceted_match_count': ([FacetedMatchCount],),  # noqa: E501
+            'count': (int, none_type),  # noqa: E501
+            'skip': (int, none_type),  # noqa: E501
+            'limit': (int, none_type),  # noqa: E501
+            'query': (RoomSearchCriteria, none_type),  # noqa: E501
+            'rooms': ([V2RoomDetail], none_type),  # noqa: E501
+            'faceted_match_count': ([FacetedMatchCount], none_type),  # noqa: E501
         }
 
     @cached_property
@@ -179,7 +178,12 @@ class RoomSearchResults(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.count: int = None
+        self.skip: int = None
+        self.limit: int = None
+        self.query: RoomSearchCriteria = None
+        self.rooms: List[V2RoomDetail] = None
+        self.faceted_match_count: List[FacetedMatchCount] = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

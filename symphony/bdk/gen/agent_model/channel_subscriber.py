@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -74,12 +73,12 @@ class ChannelSubscriber(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'subscription_id': (str,),  # noqa: E501
-            'pushed': (bool,),  # noqa: E501
-            'owner': (bool,),  # noqa: E501
-            'subscriber_name': (str,),  # noqa: E501
-            'user_id': (int,),  # noqa: E501
-            'timestamp': (int,),  # noqa: E501
+            'subscription_id': (str, none_type),  # noqa: E501
+            'pushed': (bool, none_type),  # noqa: E501
+            'owner': (bool, none_type),  # noqa: E501
+            'subscriber_name': (str, none_type),  # noqa: E501
+            'user_id': (int, none_type),  # noqa: E501
+            'timestamp': (int, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -172,7 +171,12 @@ class ChannelSubscriber(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.subscription_id: str = None
+        self.pushed: bool = None
+        self.owner: bool = None
+        self.subscriber_name: str = None
+        self.user_id: int = None
+        self.timestamp: int = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
