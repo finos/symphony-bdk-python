@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -28,39 +27,38 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.agent_model.v4_connection_accepted import V4ConnectionAccepted
-    from symphony.bdk.gen.agent_model.v4_connection_requested import V4ConnectionRequested
-    from symphony.bdk.gen.agent_model.v4_instant_message_created import V4InstantMessageCreated
-    from symphony.bdk.gen.agent_model.v4_message_sent import V4MessageSent
-    from symphony.bdk.gen.agent_model.v4_message_suppressed import V4MessageSuppressed
-    from symphony.bdk.gen.agent_model.v4_room_created import V4RoomCreated
-    from symphony.bdk.gen.agent_model.v4_room_deactivated import V4RoomDeactivated
-    from symphony.bdk.gen.agent_model.v4_room_member_demoted_from_owner import V4RoomMemberDemotedFromOwner
-    from symphony.bdk.gen.agent_model.v4_room_member_promoted_to_owner import V4RoomMemberPromotedToOwner
-    from symphony.bdk.gen.agent_model.v4_room_reactivated import V4RoomReactivated
-    from symphony.bdk.gen.agent_model.v4_room_updated import V4RoomUpdated
-    from symphony.bdk.gen.agent_model.v4_shared_post import V4SharedPost
-    from symphony.bdk.gen.agent_model.v4_symphony_elements_action import V4SymphonyElementsAction
-    from symphony.bdk.gen.agent_model.v4_user_joined_room import V4UserJoinedRoom
-    from symphony.bdk.gen.agent_model.v4_user_left_room import V4UserLeftRoom
-    from symphony.bdk.gen.agent_model.v4_user_requested_to_join_room import V4UserRequestedToJoinRoom
-    globals()['V4ConnectionAccepted'] = V4ConnectionAccepted
-    globals()['V4ConnectionRequested'] = V4ConnectionRequested
-    globals()['V4InstantMessageCreated'] = V4InstantMessageCreated
-    globals()['V4MessageSent'] = V4MessageSent
-    globals()['V4MessageSuppressed'] = V4MessageSuppressed
-    globals()['V4RoomCreated'] = V4RoomCreated
-    globals()['V4RoomDeactivated'] = V4RoomDeactivated
-    globals()['V4RoomMemberDemotedFromOwner'] = V4RoomMemberDemotedFromOwner
-    globals()['V4RoomMemberPromotedToOwner'] = V4RoomMemberPromotedToOwner
-    globals()['V4RoomReactivated'] = V4RoomReactivated
-    globals()['V4RoomUpdated'] = V4RoomUpdated
-    globals()['V4SharedPost'] = V4SharedPost
-    globals()['V4SymphonyElementsAction'] = V4SymphonyElementsAction
-    globals()['V4UserJoinedRoom'] = V4UserJoinedRoom
-    globals()['V4UserLeftRoom'] = V4UserLeftRoom
-    globals()['V4UserRequestedToJoinRoom'] = V4UserRequestedToJoinRoom
+from symphony.bdk.gen.agent_model.v4_connection_accepted import V4ConnectionAccepted
+from symphony.bdk.gen.agent_model.v4_connection_requested import V4ConnectionRequested
+from symphony.bdk.gen.agent_model.v4_instant_message_created import V4InstantMessageCreated
+from symphony.bdk.gen.agent_model.v4_message_sent import V4MessageSent
+from symphony.bdk.gen.agent_model.v4_message_suppressed import V4MessageSuppressed
+from symphony.bdk.gen.agent_model.v4_room_created import V4RoomCreated
+from symphony.bdk.gen.agent_model.v4_room_deactivated import V4RoomDeactivated
+from symphony.bdk.gen.agent_model.v4_room_member_demoted_from_owner import V4RoomMemberDemotedFromOwner
+from symphony.bdk.gen.agent_model.v4_room_member_promoted_to_owner import V4RoomMemberPromotedToOwner
+from symphony.bdk.gen.agent_model.v4_room_reactivated import V4RoomReactivated
+from symphony.bdk.gen.agent_model.v4_room_updated import V4RoomUpdated
+from symphony.bdk.gen.agent_model.v4_shared_post import V4SharedPost
+from symphony.bdk.gen.agent_model.v4_symphony_elements_action import V4SymphonyElementsAction
+from symphony.bdk.gen.agent_model.v4_user_joined_room import V4UserJoinedRoom
+from symphony.bdk.gen.agent_model.v4_user_left_room import V4UserLeftRoom
+from symphony.bdk.gen.agent_model.v4_user_requested_to_join_room import V4UserRequestedToJoinRoom
+globals()['V4ConnectionAccepted'] = V4ConnectionAccepted
+globals()['V4ConnectionRequested'] = V4ConnectionRequested
+globals()['V4InstantMessageCreated'] = V4InstantMessageCreated
+globals()['V4MessageSent'] = V4MessageSent
+globals()['V4MessageSuppressed'] = V4MessageSuppressed
+globals()['V4RoomCreated'] = V4RoomCreated
+globals()['V4RoomDeactivated'] = V4RoomDeactivated
+globals()['V4RoomMemberDemotedFromOwner'] = V4RoomMemberDemotedFromOwner
+globals()['V4RoomMemberPromotedToOwner'] = V4RoomMemberPromotedToOwner
+globals()['V4RoomReactivated'] = V4RoomReactivated
+globals()['V4RoomUpdated'] = V4RoomUpdated
+globals()['V4SharedPost'] = V4SharedPost
+globals()['V4SymphonyElementsAction'] = V4SymphonyElementsAction
+globals()['V4UserJoinedRoom'] = V4UserJoinedRoom
+globals()['V4UserLeftRoom'] = V4UserLeftRoom
+globals()['V4UserRequestedToJoinRoom'] = V4UserRequestedToJoinRoom
 
 
 class V4Payload(ModelNormal):
@@ -107,24 +105,23 @@ class V4Payload(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'message_sent': (V4MessageSent,),  # noqa: E501
-            'shared_post': (V4SharedPost,),  # noqa: E501
-            'instant_message_created': (V4InstantMessageCreated,),  # noqa: E501
-            'room_created': (V4RoomCreated,),  # noqa: E501
-            'room_updated': (V4RoomUpdated,),  # noqa: E501
-            'room_deactivated': (V4RoomDeactivated,),  # noqa: E501
-            'room_reactivated': (V4RoomReactivated,),  # noqa: E501
-            'user_joined_room': (V4UserJoinedRoom,),  # noqa: E501
-            'user_left_room': (V4UserLeftRoom,),  # noqa: E501
-            'room_member_promoted_to_owner': (V4RoomMemberPromotedToOwner,),  # noqa: E501
-            'room_member_demoted_from_owner': (V4RoomMemberDemotedFromOwner,),  # noqa: E501
-            'connection_requested': (V4ConnectionRequested,),  # noqa: E501
-            'connection_accepted': (V4ConnectionAccepted,),  # noqa: E501
-            'message_suppressed': (V4MessageSuppressed,),  # noqa: E501
-            'symphony_elements_action': (V4SymphonyElementsAction,),  # noqa: E501
-            'user_requested_to_join_room': (V4UserRequestedToJoinRoom,),  # noqa: E501
+            'message_sent': (V4MessageSent, none_type),  # noqa: E501
+            'shared_post': (V4SharedPost, none_type),  # noqa: E501
+            'instant_message_created': (V4InstantMessageCreated, none_type),  # noqa: E501
+            'room_created': (V4RoomCreated, none_type),  # noqa: E501
+            'room_updated': (V4RoomUpdated, none_type),  # noqa: E501
+            'room_deactivated': (V4RoomDeactivated, none_type),  # noqa: E501
+            'room_reactivated': (V4RoomReactivated, none_type),  # noqa: E501
+            'user_joined_room': (V4UserJoinedRoom, none_type),  # noqa: E501
+            'user_left_room': (V4UserLeftRoom, none_type),  # noqa: E501
+            'room_member_promoted_to_owner': (V4RoomMemberPromotedToOwner, none_type),  # noqa: E501
+            'room_member_demoted_from_owner': (V4RoomMemberDemotedFromOwner, none_type),  # noqa: E501
+            'connection_requested': (V4ConnectionRequested, none_type),  # noqa: E501
+            'connection_accepted': (V4ConnectionAccepted, none_type),  # noqa: E501
+            'message_suppressed': (V4MessageSuppressed, none_type),  # noqa: E501
+            'symphony_elements_action': (V4SymphonyElementsAction, none_type),  # noqa: E501
+            'user_requested_to_join_room': (V4UserRequestedToJoinRoom, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -237,7 +234,22 @@ class V4Payload(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.message_sent: V4MessageSent = None
+        self.shared_post: V4SharedPost = None
+        self.instant_message_created: V4InstantMessageCreated = None
+        self.room_created: V4RoomCreated = None
+        self.room_updated: V4RoomUpdated = None
+        self.room_deactivated: V4RoomDeactivated = None
+        self.room_reactivated: V4RoomReactivated = None
+        self.user_joined_room: V4UserJoinedRoom = None
+        self.user_left_room: V4UserLeftRoom = None
+        self.room_member_promoted_to_owner: V4RoomMemberPromotedToOwner = None
+        self.room_member_demoted_from_owner: V4RoomMemberDemotedFromOwner = None
+        self.connection_requested: V4ConnectionRequested = None
+        self.connection_accepted: V4ConnectionAccepted = None
+        self.message_suppressed: V4MessageSuppressed = None
+        self.symphony_elements_action: V4SymphonyElementsAction = None
+        self.user_requested_to_join_room: V4UserRequestedToJoinRoom = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

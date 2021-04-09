@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -26,9 +27,8 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.pod_model.admin_stream_type_enum import AdminStreamTypeEnum
-    globals()['AdminStreamTypeEnum'] = AdminStreamTypeEnum
+from symphony.bdk.gen.pod_model.admin_stream_type_enum import AdminStreamTypeEnum
+globals()['AdminStreamTypeEnum'] = AdminStreamTypeEnum
 
 
 class AdminStreamFilter(ModelNormal):
@@ -91,15 +91,14 @@ class AdminStreamFilter(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'stream_types': ([AdminStreamTypeEnum],),  # noqa: E501
-            'scope': (str,),  # noqa: E501
-            'origin': (str,),  # noqa: E501
-            'status': (str,),  # noqa: E501
-            'privacy': (str,),  # noqa: E501
-            'start_date': (int,),  # noqa: E501
-            'end_date': (int,),  # noqa: E501
+            'stream_types': ([AdminStreamTypeEnum], none_type),  # noqa: E501
+            'scope': (str, none_type),  # noqa: E501
+            'origin': (str, none_type),  # noqa: E501
+            'status': (str, none_type),  # noqa: E501
+            'privacy': (str, none_type),  # noqa: E501
+            'start_date': (int, none_type),  # noqa: E501
+            'end_date': (int, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -194,7 +193,13 @@ class AdminStreamFilter(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.stream_types: List[AdminStreamTypeEnum] = None
+        self.scope: str = None
+        self.origin: str = None
+        self.status: str = None
+        self.privacy: str = None
+        self.start_date: int = None
+        self.end_date: int = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

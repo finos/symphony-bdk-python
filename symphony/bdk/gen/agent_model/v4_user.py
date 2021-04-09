@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -74,12 +73,12 @@ class V4User(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'user_id': (int,),  # noqa: E501
-            'first_name': (str,),  # noqa: E501
-            'last_name': (str,),  # noqa: E501
-            'display_name': (str,),  # noqa: E501
-            'email': (str,),  # noqa: E501
-            'username': (str,),  # noqa: E501
+            'user_id': (int, none_type),  # noqa: E501
+            'first_name': (str, none_type),  # noqa: E501
+            'last_name': (str, none_type),  # noqa: E501
+            'display_name': (str, none_type),  # noqa: E501
+            'email': (str, none_type),  # noqa: E501
+            'username': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -172,7 +171,12 @@ class V4User(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.user_id: int = None
+        self.first_name: str = None
+        self.last_name: str = None
+        self.display_name: str = None
+        self.email: str = None
+        self.username: str = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

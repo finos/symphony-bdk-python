@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -28,9 +27,8 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.agent_model.v3_dlp_rule import V3DLPRule
-    globals()['V3DLPRule'] = V3DLPRule
+from symphony.bdk.gen.agent_model.v3_dlp_rule import V3DLPRule
+globals()['V3DLPRule'] = V3DLPRule
 
 
 class V3DLPPolicyAppliesTo(ModelNormal):
@@ -77,7 +75,6 @@ class V3DLPPolicyAppliesTo(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
             'data_type': (str,),  # noqa: E501
             'action': (str,),  # noqa: E501
@@ -170,10 +167,9 @@ class V3DLPPolicyAppliesTo(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
-        self.data_type = data_type
-        self.action = action
-        self.rules = rules
+        self.data_type: str = data_type
+        self.action: str = action
+        self.rules: List[V3DLPRule] = rules
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -72,11 +73,11 @@ class ApplicationInfo(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'app_id': (str,),  # noqa: E501
-            'name': (str,),  # noqa: E501
-            'app_url': (str,),  # noqa: E501
-            'domain': (str,),  # noqa: E501
-            'publisher': (str,),  # noqa: E501
+            'app_id': (str, none_type),  # noqa: E501
+            'name': (str, none_type),  # noqa: E501
+            'app_url': (str, none_type),  # noqa: E501
+            'domain': (str, none_type),  # noqa: E501
+            'publisher': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -167,7 +168,11 @@ class ApplicationInfo(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.app_id: str = None
+        self.name: str = None
+        self.app_url: str = None
+        self.domain: str = None
+        self.publisher: str = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

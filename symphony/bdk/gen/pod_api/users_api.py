@@ -11,7 +11,7 @@
 import re  # noqa: F401
 import sys  # noqa: F401
 
-from symphony.bdk.gen.api_client import ApiClient, Endpoint
+from symphony.bdk.gen.api_client import ApiClient, Endpoint as _Endpoint
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     check_allowed_values,
     check_validations,
@@ -111,7 +111,7 @@ class UsersApi(object):
                 session_token
             return self.call_with_http_info(**kwargs)
 
-        self.v1_user_get = Endpoint(
+        self.v1_user_get = _Endpoint(
             settings={
                 'response_type': (User,),
                 'auth': [],
@@ -243,7 +243,7 @@ class UsersApi(object):
                 session_token
             return self.call_with_http_info(**kwargs)
 
-        self.v1_user_name_user_name_get_get = Endpoint(
+        self.v1_user_name_user_name_get_get = _Endpoint(
             settings={
                 'response_type': (User,),
                 'auth': [],
@@ -372,7 +372,7 @@ class UsersApi(object):
                 search_request
             return self.call_with_http_info(**kwargs)
 
-        self.v1_user_search_post = Endpoint(
+        self.v1_user_search_post = _Endpoint(
             settings={
                 'response_type': (UserSearchResults,),
                 'auth': [],
@@ -514,7 +514,7 @@ class UsersApi(object):
                 session_token
             return self.call_with_http_info(**kwargs)
 
-        self.v2_user_get = Endpoint(
+        self.v2_user_get = _Endpoint(
             settings={
                 'response_type': (UserV2,),
                 'auth': [],
@@ -655,7 +655,7 @@ class UsersApi(object):
                 session_token
             return self.call_with_http_info(**kwargs)
 
-        self.v3_users_get = Endpoint(
+        self.v3_users_get = _Endpoint(
             settings={
                 'response_type': (V2UserList,),
                 'auth': [],

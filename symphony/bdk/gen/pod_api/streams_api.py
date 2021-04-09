@@ -11,7 +11,7 @@
 import re  # noqa: F401
 import sys  # noqa: F401
 
-from symphony.bdk.gen.api_client import ApiClient, Endpoint
+from symphony.bdk.gen.api_client import ApiClient, Endpoint as _Endpoint
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     check_allowed_values,
     check_validations,
@@ -129,7 +129,7 @@ class StreamsApi(object):
                 uid_list
             return self.call_with_http_info(**kwargs)
 
-        self.v1_admin_im_create_post = Endpoint(
+        self.v1_admin_im_create_post = _Endpoint(
             settings={
                 'response_type': (Stream,),
                 'auth': [],
@@ -260,7 +260,7 @@ class StreamsApi(object):
                 session_token
             return self.call_with_http_info(**kwargs)
 
-        self.v1_admin_room_id_set_active_post = Endpoint(
+        self.v1_admin_room_id_set_active_post = _Endpoint(
             settings={
                 'response_type': (RoomDetail,),
                 'auth': [],
@@ -394,7 +394,7 @@ class StreamsApi(object):
                 session_token
             return self.call_with_http_info(**kwargs)
 
-        self.v1_admin_stream_id_membership_list_get = Endpoint(
+        self.v1_admin_stream_id_membership_list_get = _Endpoint(
             settings={
                 'response_type': (V2MembershipList,),
                 'auth': [],
@@ -529,7 +529,7 @@ class StreamsApi(object):
                 session_token
             return self.call_with_http_info(**kwargs)
 
-        self.v1_admin_streams_list_post = Endpoint(
+        self.v1_admin_streams_list_post = _Endpoint(
             settings={
                 'response_type': (AdminStreamList,),
                 'auth': [],
@@ -666,7 +666,7 @@ class StreamsApi(object):
                 uid_list
             return self.call_with_http_info(**kwargs)
 
-        self.v1_im_create_post = Endpoint(
+        self.v1_im_create_post = _Endpoint(
             settings={
                 'response_type': (Stream,),
                 'auth': [],
@@ -794,7 +794,7 @@ class StreamsApi(object):
                 payload
             return self.call_with_http_info(**kwargs)
 
-        self.v1_room_create_post = Endpoint(
+        self.v1_room_create_post = _Endpoint(
             settings={
                 'response_type': (RoomDetail,),
                 'auth': [],
@@ -921,7 +921,7 @@ class StreamsApi(object):
                 session_token
             return self.call_with_http_info(**kwargs)
 
-        self.v1_room_id_info_get = Endpoint(
+        self.v1_room_id_info_get = _Endpoint(
             settings={
                 'response_type': (RoomDetail,),
                 'auth': [],
@@ -1051,7 +1051,7 @@ class StreamsApi(object):
                 session_token
             return self.call_with_http_info(**kwargs)
 
-        self.v1_room_id_set_active_post = Endpoint(
+        self.v1_room_id_set_active_post = _Endpoint(
             settings={
                 'response_type': (RoomDetail,),
                 'auth': [],
@@ -1187,7 +1187,7 @@ class StreamsApi(object):
                 payload
             return self.call_with_http_info(**kwargs)
 
-        self.v1_room_id_update_post = Endpoint(
+        self.v1_room_id_update_post = _Endpoint(
             settings={
                 'response_type': (RoomDetail,),
                 'auth': [],
@@ -1319,7 +1319,7 @@ class StreamsApi(object):
                 session_token
             return self.call_with_http_info(**kwargs)
 
-        self.v1_streams_list_post = Endpoint(
+        self.v1_streams_list_post = _Endpoint(
             settings={
                 'response_type': (StreamList,),
                 'auth': [],
@@ -1459,7 +1459,7 @@ class StreamsApi(object):
                 session_token
             return self.call_with_http_info(**kwargs)
 
-        self.v1_streams_sid_attachments_get = Endpoint(
+        self.v1_streams_sid_attachments_get = _Endpoint(
             settings={
                 'response_type': (StreamAttachmentResponse,),
                 'auth': [],
@@ -1605,7 +1605,7 @@ class StreamsApi(object):
                 session_token
             return self.call_with_http_info(**kwargs)
 
-        self.v1_streams_sid_info_get = Endpoint(
+        self.v1_streams_sid_info_get = _Endpoint(
             settings={
                 'response_type': (StreamAttributes,),
                 'auth': [],
@@ -1730,7 +1730,7 @@ class StreamsApi(object):
                 session_token
             return self.call_with_http_info(**kwargs)
 
-        self.v2_admin_streams_list_post = Endpoint(
+        self.v2_admin_streams_list_post = _Endpoint(
             settings={
                 'response_type': (V2AdminStreamList,),
                 'auth': [],
@@ -1867,7 +1867,7 @@ class StreamsApi(object):
                 payload
             return self.call_with_http_info(**kwargs)
 
-        self.v2_room_create_post = Endpoint(
+        self.v2_room_create_post = _Endpoint(
             settings={
                 'response_type': (V2RoomDetail,),
                 'auth': [],
@@ -1994,7 +1994,7 @@ class StreamsApi(object):
                 session_token
             return self.call_with_http_info(**kwargs)
 
-        self.v2_room_id_info_get = Endpoint(
+        self.v2_room_id_info_get = _Endpoint(
             settings={
                 'response_type': (V2RoomDetail,),
                 'auth': [],
@@ -2124,7 +2124,7 @@ class StreamsApi(object):
                 payload
             return self.call_with_http_info(**kwargs)
 
-        self.v2_room_id_update_post = Endpoint(
+        self.v2_room_id_update_post = _Endpoint(
             settings={
                 'response_type': (V2RoomDetail,),
                 'auth': [],
@@ -2259,7 +2259,7 @@ class StreamsApi(object):
                 query
             return self.call_with_http_info(**kwargs)
 
-        self.v2_room_search_post = Endpoint(
+        self.v2_room_search_post = _Endpoint(
             settings={
                 'response_type': (RoomSearchResults,),
                 'auth': [],
@@ -2396,7 +2396,7 @@ class StreamsApi(object):
                 session_token
             return self.call_with_http_info(**kwargs)
 
-        self.v2_streams_sid_info_get = Endpoint(
+        self.v2_streams_sid_info_get = _Endpoint(
             settings={
                 'response_type': (V2StreamAttributes,),
                 'auth': [],
@@ -2523,7 +2523,7 @@ class StreamsApi(object):
                 payload
             return self.call_with_http_info(**kwargs)
 
-        self.v3_room_create_post = Endpoint(
+        self.v3_room_create_post = _Endpoint(
             settings={
                 'response_type': (V3RoomDetail,),
                 'auth': [],
@@ -2650,7 +2650,7 @@ class StreamsApi(object):
                 session_token
             return self.call_with_http_info(**kwargs)
 
-        self.v3_room_id_info_get = Endpoint(
+        self.v3_room_id_info_get = _Endpoint(
             settings={
                 'response_type': (V3RoomDetail,),
                 'auth': [],
@@ -2780,7 +2780,7 @@ class StreamsApi(object):
                 payload
             return self.call_with_http_info(**kwargs)
 
-        self.v3_room_id_update_post = Endpoint(
+        self.v3_room_id_update_post = _Endpoint(
             settings={
                 'response_type': (V3RoomDetail,),
                 'auth': [],
@@ -2915,7 +2915,7 @@ class StreamsApi(object):
                 query
             return self.call_with_http_info(**kwargs)
 
-        self.v3_room_search_post = Endpoint(
+        self.v3_room_search_post = _Endpoint(
             settings={
                 'response_type': (V3RoomSearchResults,),
                 'auth': [],

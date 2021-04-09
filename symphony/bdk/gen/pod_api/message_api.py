@@ -11,7 +11,7 @@
 import re  # noqa: F401
 import sys  # noqa: F401
 
-from symphony.bdk.gen.api_client import ApiClient, Endpoint
+from symphony.bdk.gen.api_client import ApiClient, Endpoint as _Endpoint
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     check_allowed_values,
     check_validations,
@@ -106,7 +106,7 @@ class MessageApi(object):
                 session_token
             return self.call_with_http_info(**kwargs)
 
-        self.v1_message_mid_status_get = Endpoint(
+        self.v1_message_mid_status_get = _Endpoint(
             settings={
                 'response_type': (MessageStatus,),
                 'auth': [],

@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -28,11 +27,10 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.agent_model.v3_health_component import V3HealthComponent
-    from symphony.bdk.gen.agent_model.v3_health_status import V3HealthStatus
-    globals()['V3HealthComponent'] = V3HealthComponent
-    globals()['V3HealthStatus'] = V3HealthStatus
+from symphony.bdk.gen.agent_model.v3_health_component import V3HealthComponent
+from symphony.bdk.gen.agent_model.v3_health_status import V3HealthStatus
+globals()['V3HealthComponent'] = V3HealthComponent
+globals()['V3HealthStatus'] = V3HealthStatus
 
 
 class V3Health(ModelNormal):
@@ -79,12 +77,11 @@ class V3Health(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'services': ({str: (V3HealthComponent,)},),  # noqa: E501
-            'status': (V3HealthStatus,),  # noqa: E501
-            'users': ({str: (V3HealthComponent,)},),  # noqa: E501
-            'version': (str,),  # noqa: E501
+            'services': ({str: (V3HealthComponent,)}, none_type),  # noqa: E501
+            'status': (V3HealthStatus, none_type),  # noqa: E501
+            'users': ({str: (V3HealthComponent,)}, none_type),  # noqa: E501
+            'version': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -173,7 +170,10 @@ class V3Health(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.services: {str: (V3HealthComponent,)} = None
+        self.status: V3HealthStatus = None
+        self.users: {str: (V3HealthComponent,)} = None
+        self.version: str = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

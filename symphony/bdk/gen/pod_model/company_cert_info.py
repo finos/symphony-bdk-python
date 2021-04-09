@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -72,13 +73,13 @@ class CompanyCertInfo(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'finger_print': (str,),  # noqa: E501
-            'issuer_finger_print': (str,),  # noqa: E501
-            'last_seen': (int,),  # noqa: E501
-            'updated_at': (int,),  # noqa: E501
-            'updated_by': (int,),  # noqa: E501
-            'common_name': (str,),  # noqa: E501
-            'expiry_date': (int,),  # noqa: E501
+            'finger_print': (str, none_type),  # noqa: E501
+            'issuer_finger_print': (str, none_type),  # noqa: E501
+            'last_seen': (int, none_type),  # noqa: E501
+            'updated_at': (int, none_type),  # noqa: E501
+            'updated_by': (int, none_type),  # noqa: E501
+            'common_name': (str, none_type),  # noqa: E501
+            'expiry_date': (int, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -173,7 +174,13 @@ class CompanyCertInfo(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.finger_print: str = None
+        self.issuer_finger_print: str = None
+        self.last_seen: int = None
+        self.updated_at: int = None
+        self.updated_by: int = None
+        self.common_name: str = None
+        self.expiry_date: int = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
