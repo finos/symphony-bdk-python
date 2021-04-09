@@ -11,7 +11,7 @@
 import re  # noqa: F401
 import sys  # noqa: F401
 
-from symphony.bdk.gen.api_client import ApiClient, Endpoint
+from symphony.bdk.gen.api_client import ApiClient, Endpoint as _Endpoint
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     check_allowed_values,
     check_validations,
@@ -119,7 +119,7 @@ class ViolationsApi(object):
                 key_manager_token
             return self.call_with_http_info(**kwargs)
 
-        self.v1_dlp_violations_message_get = Endpoint(
+        self.v1_dlp_violations_message_get = _Endpoint(
             settings={
                 'response_type': (V1DLPViolationMessageResponse,),
                 'auth': [],
@@ -274,7 +274,7 @@ class ViolationsApi(object):
                 key_manager_token
             return self.call_with_http_info(**kwargs)
 
-        self.v1_dlp_violations_signal_get = Endpoint(
+        self.v1_dlp_violations_signal_get = _Endpoint(
             settings={
                 'response_type': (V1DLPViolationSignalResponse,),
                 'auth': [],
@@ -429,7 +429,7 @@ class ViolationsApi(object):
                 key_manager_token
             return self.call_with_http_info(**kwargs)
 
-        self.v1_dlp_violations_stream_get = Endpoint(
+        self.v1_dlp_violations_stream_get = _Endpoint(
             settings={
                 'response_type': (V1DLPViolationStreamResponse,),
                 'auth': [],
@@ -585,7 +585,7 @@ class ViolationsApi(object):
                 key_manager_token
             return self.call_with_http_info(**kwargs)
 
-        self.v3_dlp_violation_attachment_get = Endpoint(
+        self.v3_dlp_violation_attachment_get = _Endpoint(
             settings={
                 'response_type': (str,),
                 'auth': [],
@@ -731,7 +731,7 @@ class ViolationsApi(object):
                 key_manager_token
             return self.call_with_http_info(**kwargs)
 
-        self.v3_dlp_violations_message_get = Endpoint(
+        self.v3_dlp_violations_message_get = _Endpoint(
             settings={
                 'response_type': (V3DLPViolationMessageResponse,),
                 'auth': [],
@@ -886,7 +886,7 @@ class ViolationsApi(object):
                 key_manager_token
             return self.call_with_http_info(**kwargs)
 
-        self.v3_dlp_violations_signal_get = Endpoint(
+        self.v3_dlp_violations_signal_get = _Endpoint(
             settings={
                 'response_type': (V3DLPViolationSignalResponse,),
                 'auth': [],
@@ -1041,7 +1041,7 @@ class ViolationsApi(object):
                 key_manager_token
             return self.call_with_http_info(**kwargs)
 
-        self.v3_dlp_violations_stream_get = Endpoint(
+        self.v3_dlp_violations_stream_get = _Endpoint(
             settings={
                 'response_type': (V3DLPViolationStreamResponse,),
                 'auth': [],

@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -28,11 +27,10 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.agent_model.v4_initiator import V4Initiator
-    from symphony.bdk.gen.agent_model.v4_payload import V4Payload
-    globals()['V4Initiator'] = V4Initiator
-    globals()['V4Payload'] = V4Payload
+from symphony.bdk.gen.agent_model.v4_initiator import V4Initiator
+from symphony.bdk.gen.agent_model.v4_payload import V4Payload
+globals()['V4Initiator'] = V4Initiator
+globals()['V4Payload'] = V4Payload
 
 
 class V4Event(ModelNormal):
@@ -79,15 +77,14 @@ class V4Event(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'id': (str,),  # noqa: E501
-            'message_id': (str,),  # noqa: E501
-            'timestamp': (int,),  # noqa: E501
-            'type': (str,),  # noqa: E501
-            'diagnostic': (str,),  # noqa: E501
-            'initiator': (V4Initiator,),  # noqa: E501
-            'payload': (V4Payload,),  # noqa: E501
+            'id': (str, none_type),  # noqa: E501
+            'message_id': (str, none_type),  # noqa: E501
+            'timestamp': (int, none_type),  # noqa: E501
+            'type': (str, none_type),  # noqa: E501
+            'diagnostic': (str, none_type),  # noqa: E501
+            'initiator': (V4Initiator, none_type),  # noqa: E501
+            'payload': (V4Payload, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -182,7 +179,13 @@ class V4Event(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.id: str = None
+        self.message_id: str = None
+        self.timestamp: int = None
+        self.type: str = None
+        self.diagnostic: str = None
+        self.initiator: V4Initiator = None
+        self.payload: V4Payload = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

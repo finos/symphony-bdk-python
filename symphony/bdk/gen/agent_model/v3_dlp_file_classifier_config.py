@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -162,9 +161,8 @@ class V3DLPFileClassifierConfig(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
-        self.classifiers = classifiers
-        self.applicable_file_types = applicable_file_types
+        self.classifiers: {str: (str,)} = classifiers
+        self.applicable_file_types: List[str] = applicable_file_types
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -28,9 +27,8 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.agent_model.v4_user import V4User
-    globals()['V4User'] = V4User
+from symphony.bdk.gen.agent_model.v4_user import V4User
+globals()['V4User'] = V4User
 
 
 class V4Stream(ModelNormal):
@@ -77,14 +75,13 @@ class V4Stream(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'stream_id': (str,),  # noqa: E501
-            'stream_type': (str,),  # noqa: E501
-            'room_name': (str,),  # noqa: E501
-            'members': ([V4User],),  # noqa: E501
-            'external': (bool,),  # noqa: E501
-            'cross_pod': (bool,),  # noqa: E501
+            'stream_id': (str, none_type),  # noqa: E501
+            'stream_type': (str, none_type),  # noqa: E501
+            'room_name': (str, none_type),  # noqa: E501
+            'members': ([V4User], none_type),  # noqa: E501
+            'external': (bool, none_type),  # noqa: E501
+            'cross_pod': (bool, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -177,7 +174,12 @@ class V4Stream(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.stream_id: str = None
+        self.stream_type: str = None
+        self.room_name: str = None
+        self.members: List[V4User] = None
+        self.external: bool = None
+        self.cross_pod: bool = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

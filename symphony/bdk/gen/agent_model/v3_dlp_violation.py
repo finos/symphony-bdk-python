@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -28,9 +27,8 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.agent_model.v1_dlp_outcome import V1DLPOutcome
-    globals()['V1DLPOutcome'] = V1DLPOutcome
+from symphony.bdk.gen.agent_model.v1_dlp_outcome import V1DLPOutcome
+globals()['V1DLPOutcome'] = V1DLPOutcome
 
 
 class V3DLPViolation(ModelNormal):
@@ -77,18 +75,17 @@ class V3DLPViolation(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'enforcement_event_id': (str,),  # noqa: E501
-            'entity_id': (str,),  # noqa: E501
-            'create_time': (int,),  # noqa: E501
-            'last_modified': (int,),  # noqa: E501
-            'requester_id': (int,),  # noqa: E501
-            'details': ([{str: (bool, date, datetime, dict, float, int, list, str, none_type)}],),  # noqa: E501
-            'action': (str,),  # noqa: E501
-            'outcome': (V1DLPOutcome,),  # noqa: E501
-            'version': (str,),  # noqa: E501
-            'ignore_dl_pwarning': (bool,),  # noqa: E501
+            'enforcement_event_id': (str, none_type),  # noqa: E501
+            'entity_id': (str, none_type),  # noqa: E501
+            'create_time': (int, none_type),  # noqa: E501
+            'last_modified': (int, none_type),  # noqa: E501
+            'requester_id': (int, none_type),  # noqa: E501
+            'details': ([{str: (bool, date, datetime, dict, float, int, list, str, none_type)}], none_type),  # noqa: E501
+            'action': (str, none_type),  # noqa: E501
+            'outcome': (V1DLPOutcome, none_type),  # noqa: E501
+            'version': (str, none_type),  # noqa: E501
+            'ignore_dl_pwarning': (bool, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -189,7 +186,16 @@ class V3DLPViolation(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.enforcement_event_id: str = None
+        self.entity_id: str = None
+        self.create_time: int = None
+        self.last_modified: int = None
+        self.requester_id: int = None
+        self.details: List[{str: (bool, date, datetime, dict, float, int, list, str, none_type)}] = None
+        self.action: str = None
+        self.outcome: V1DLPOutcome = None
+        self.version: str = None
+        self.ignore_dl_pwarning: bool = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

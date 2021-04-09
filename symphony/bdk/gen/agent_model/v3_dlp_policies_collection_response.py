@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -28,9 +27,8 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.agent_model.v3_dlp_policy import V3DLPPolicy
-    globals()['V3DLPPolicy'] = V3DLPPolicy
+from symphony.bdk.gen.agent_model.v3_dlp_policy import V3DLPPolicy
+globals()['V3DLPPolicy'] = V3DLPPolicy
 
 
 class V3DLPPoliciesCollectionResponse(ModelNormal):
@@ -77,12 +75,11 @@ class V3DLPPoliciesCollectionResponse(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'policies': ([V3DLPPolicy],),  # noqa: E501
-            'page': (int,),  # noqa: E501
-            'size': (int,),  # noqa: E501
-            'page_count': (int,),  # noqa: E501
+            'policies': ([V3DLPPolicy], none_type),  # noqa: E501
+            'page': (int, none_type),  # noqa: E501
+            'size': (int, none_type),  # noqa: E501
+            'page_count': (int, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -171,7 +168,10 @@ class V3DLPPoliciesCollectionResponse(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.policies: List[V3DLPPolicy] = None
+        self.page: int = None
+        self.size: int = None
+        self.page_count: int = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

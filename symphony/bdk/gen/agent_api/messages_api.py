@@ -11,7 +11,7 @@
 import re  # noqa: F401
 import sys  # noqa: F401
 
-from symphony.bdk.gen.api_client import ApiClient, Endpoint
+from symphony.bdk.gen.api_client import ApiClient, Endpoint as _Endpoint
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     check_allowed_values,
     check_validations,
@@ -115,7 +115,7 @@ class MessagesApi(object):
                 id
             return self.call_with_http_info(**kwargs)
 
-        self.v1_message_id_get = Endpoint(
+        self.v1_message_id_get = _Endpoint(
             settings={
                 'response_type': (V4Message,),
                 'auth': [],
@@ -256,7 +256,7 @@ class MessagesApi(object):
                 key_manager_token
             return self.call_with_http_info(**kwargs)
 
-        self.v1_message_search_get = Endpoint(
+        self.v1_message_search_get = _Endpoint(
             settings={
                 'response_type': (V4MessageList,),
                 'auth': [],
@@ -417,7 +417,7 @@ class MessagesApi(object):
                 query
             return self.call_with_http_info(**kwargs)
 
-        self.v1_message_search_post = Endpoint(
+        self.v1_message_search_post = _Endpoint(
             settings={
                 'response_type': (V4MessageList,),
                 'auth': [],
@@ -577,7 +577,7 @@ class MessagesApi(object):
                 sids
             return self.call_with_http_info(**kwargs)
 
-        self.v4_message_blast_post = Endpoint(
+        self.v4_message_blast_post = _Endpoint(
             settings={
                 'response_type': (V4MessageBlastResponse,),
                 'auth': [],
@@ -741,7 +741,7 @@ class MessagesApi(object):
                 message_list
             return self.call_with_http_info(**kwargs)
 
-        self.v4_message_import_post = Endpoint(
+        self.v4_message_import_post = _Endpoint(
             settings={
                 'response_type': (V4ImportResponseList,),
                 'auth': [],
@@ -881,7 +881,7 @@ class MessagesApi(object):
                 session_token
             return self.call_with_http_info(**kwargs)
 
-        self.v4_stream_sid_message_create_post = Endpoint(
+        self.v4_stream_sid_message_create_post = _Endpoint(
             settings={
                 'response_type': (V4Message,),
                 'auth': [],
@@ -1050,7 +1050,7 @@ class MessagesApi(object):
                 key_manager_token
             return self.call_with_http_info(**kwargs)
 
-        self.v4_stream_sid_message_get = Endpoint(
+        self.v4_stream_sid_message_get = _Endpoint(
             settings={
                 'response_type': (V4MessageList,),
                 'auth': [],

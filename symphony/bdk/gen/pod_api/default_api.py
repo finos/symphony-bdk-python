@@ -11,7 +11,7 @@
 import re  # noqa: F401
 import sys  # noqa: F401
 
-from symphony.bdk.gen.api_client import ApiClient, Endpoint
+from symphony.bdk.gen.api_client import ApiClient, Endpoint as _Endpoint
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     check_allowed_values,
     check_validations,
@@ -113,7 +113,7 @@ class DefaultApi(object):
                 extension
             return self.call_with_http_info(**kwargs)
 
-        self.delete_allowed_file_extension = Endpoint(
+        self.delete_allowed_file_extension = _Endpoint(
             settings={
                 'response_type': None,
                 'auth': [],
@@ -234,7 +234,7 @@ class DefaultApi(object):
             kwargs['_host_index'] = kwargs.get('_host_index')
             return self.call_with_http_info(**kwargs)
 
-        self.list_allowed_file_extensions = Endpoint(
+        self.list_allowed_file_extensions = _Endpoint(
             settings={
                 'response_type': (FileExtensionsResponse,),
                 'auth': [],
@@ -367,7 +367,7 @@ class DefaultApi(object):
                 v3_file_extension
             return self.call_with_http_info(**kwargs)
 
-        self.put_allowed_file_extension = Endpoint(
+        self.put_allowed_file_extension = _Endpoint(
             settings={
                 'response_type': (FileExtension,),
                 'auth': [],
@@ -504,7 +504,7 @@ class DefaultApi(object):
                 message_id
             return self.call_with_http_info(**kwargs)
 
-        self.v1_admin_messages_message_id_metadata_relationships_get = Endpoint(
+        self.v1_admin_messages_message_id_metadata_relationships_get = _Endpoint(
             settings={
                 'response_type': (MessageMetadataResponse,),
                 'auth': [],
@@ -638,7 +638,7 @@ class DefaultApi(object):
                 message_id
             return self.call_with_http_info(**kwargs)
 
-        self.v1_admin_messages_message_id_receipts_get = Endpoint(
+        self.v1_admin_messages_message_id_receipts_get = _Endpoint(
             settings={
                 'response_type': (MessageReceiptDetailResponse,),
                 'auth': [],
@@ -774,7 +774,7 @@ class DefaultApi(object):
                 message_ids
             return self.call_with_http_info(**kwargs)
 
-        self.v1_admin_messages_post = Endpoint(
+        self.v1_admin_messages_post = _Endpoint(
             settings={
                 'response_type': (MessageDetails,),
                 'auth': [],
@@ -906,7 +906,7 @@ class DefaultApi(object):
                 stream_id
             return self.call_with_http_info(**kwargs)
 
-        self.v2_admin_streams_stream_id_message_ids_get = Endpoint(
+        self.v2_admin_streams_stream_id_message_ids_get = _Endpoint(
             settings={
                 'response_type': (MessageIdsFromStream,),
                 'auth': [],

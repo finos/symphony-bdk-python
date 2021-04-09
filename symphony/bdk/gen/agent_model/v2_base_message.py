@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -27,28 +26,6 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     none_type,
     validate_get_composed_info,
 )
-
-def lazy_import():
-    from symphony.bdk.gen.agent_model.connection_request_message import ConnectionRequestMessage
-    from symphony.bdk.gen.agent_model.room_created_message import RoomCreatedMessage
-    from symphony.bdk.gen.agent_model.room_deactivated_message import RoomDeactivatedMessage
-    from symphony.bdk.gen.agent_model.room_member_demoted_from_owner_message import RoomMemberDemotedFromOwnerMessage
-    from symphony.bdk.gen.agent_model.room_member_promoted_to_owner_message import RoomMemberPromotedToOwnerMessage
-    from symphony.bdk.gen.agent_model.room_reactivated_message import RoomReactivatedMessage
-    from symphony.bdk.gen.agent_model.room_updated_message import RoomUpdatedMessage
-    from symphony.bdk.gen.agent_model.user_joined_room_message import UserJoinedRoomMessage
-    from symphony.bdk.gen.agent_model.user_left_room_message import UserLeftRoomMessage
-    from symphony.bdk.gen.agent_model.v2_message import V2Message
-    globals()['ConnectionRequestMessage'] = ConnectionRequestMessage
-    globals()['RoomCreatedMessage'] = RoomCreatedMessage
-    globals()['RoomDeactivatedMessage'] = RoomDeactivatedMessage
-    globals()['RoomMemberDemotedFromOwnerMessage'] = RoomMemberDemotedFromOwnerMessage
-    globals()['RoomMemberPromotedToOwnerMessage'] = RoomMemberPromotedToOwnerMessage
-    globals()['RoomReactivatedMessage'] = RoomReactivatedMessage
-    globals()['RoomUpdatedMessage'] = RoomUpdatedMessage
-    globals()['UserJoinedRoomMessage'] = UserJoinedRoomMessage
-    globals()['UserLeftRoomMessage'] = UserLeftRoomMessage
-    globals()['V2Message'] = V2Message
 
 
 class V2BaseMessage(ModelNormal):
@@ -95,17 +72,35 @@ class V2BaseMessage(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
             'timestamp': (str,),  # noqa: E501
             'v2message_type': (str,),  # noqa: E501
             'stream_id': (str,),  # noqa: E501
-            'id': (str,),  # noqa: E501
+            'id': (str, none_type),  # noqa: E501
         }
 
     @cached_property
     def discriminator():
-        lazy_import()
+        from symphony.bdk.gen.agent_model.connection_request_message import ConnectionRequestMessage
+        from symphony.bdk.gen.agent_model.room_created_message import RoomCreatedMessage
+        from symphony.bdk.gen.agent_model.room_deactivated_message import RoomDeactivatedMessage
+        from symphony.bdk.gen.agent_model.room_member_demoted_from_owner_message import RoomMemberDemotedFromOwnerMessage
+        from symphony.bdk.gen.agent_model.room_member_promoted_to_owner_message import RoomMemberPromotedToOwnerMessage
+        from symphony.bdk.gen.agent_model.room_reactivated_message import RoomReactivatedMessage
+        from symphony.bdk.gen.agent_model.room_updated_message import RoomUpdatedMessage
+        from symphony.bdk.gen.agent_model.user_joined_room_message import UserJoinedRoomMessage
+        from symphony.bdk.gen.agent_model.user_left_room_message import UserLeftRoomMessage
+        from symphony.bdk.gen.agent_model.v2_message import V2Message
+        globals()['ConnectionRequestMessage'] = ConnectionRequestMessage
+        globals()['RoomCreatedMessage'] = RoomCreatedMessage
+        globals()['RoomDeactivatedMessage'] = RoomDeactivatedMessage
+        globals()['RoomMemberDemotedFromOwnerMessage'] = RoomMemberDemotedFromOwnerMessage
+        globals()['RoomMemberPromotedToOwnerMessage'] = RoomMemberPromotedToOwnerMessage
+        globals()['RoomReactivatedMessage'] = RoomReactivatedMessage
+        globals()['RoomUpdatedMessage'] = RoomUpdatedMessage
+        globals()['UserJoinedRoomMessage'] = UserJoinedRoomMessage
+        globals()['UserLeftRoomMessage'] = UserLeftRoomMessage
+        globals()['V2Message'] = V2Message
         val = {
             'ConnectionRequestMessage': ConnectionRequestMessage,
             'RoomCreatedMessage': RoomCreatedMessage,
@@ -205,10 +200,10 @@ class V2BaseMessage(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
-        self.timestamp = timestamp
-        self.v2message_type = v2message_type
-        self.stream_id = stream_id
+        self.timestamp: str = timestamp
+        self.v2message_type: str = v2message_type
+        self.stream_id: str = stream_id
+        self.id: str = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
