@@ -54,7 +54,7 @@
         },
         {
             "error": "invalid.format",
-            "id": 654321
+            "id": "654321"
         }
     ]
 }
