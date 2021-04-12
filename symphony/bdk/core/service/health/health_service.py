@@ -1,5 +1,6 @@
 from symphony.bdk.gen.agent_api.system_api import SystemApi
 from symphony.bdk.gen.agent_api.signals_api import SignalsApi
+from symphony.bdk.gen.agent_model.agent_info import AgentInfo
 
 from symphony.bdk.gen.agent_model.v3_health import V3Health
 
@@ -30,7 +31,7 @@ class HealthService:
         """
         return await self._system_api.v3_extended_health()
 
-    async def get_agent_info(self):
+    async def get_agent_info(self) -> AgentInfo:
         """Gets information about the Agent.
         Wraps the `Agent Info v1 <https://developers.symphony.com/restapi/reference#agent-info-v1>`_ endpoint.
         Available on Agent 2.53.0 and above.

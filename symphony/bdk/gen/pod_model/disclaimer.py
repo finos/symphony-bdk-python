@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -76,15 +77,15 @@ class Disclaimer(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'id': (str,),  # noqa: E501
-            'name': (str,),  # noqa: E501
-            'content': (str,),  # noqa: E501
-            'frequency_in_hours': (int,),  # noqa: E501
-            'is_default': (bool,),  # noqa: E501
-            'is_active': (bool,),  # noqa: E501
-            'created_date': (int,),  # noqa: E501
-            'modified_date': (int,),  # noqa: E501
-            'format': (str,),  # noqa: E501
+            'id': (str, none_type),  # noqa: E501
+            'name': (str, none_type),  # noqa: E501
+            'content': (str, none_type),  # noqa: E501
+            'frequency_in_hours': (int, none_type),  # noqa: E501
+            'is_default': (bool, none_type),  # noqa: E501
+            'is_active': (bool, none_type),  # noqa: E501
+            'created_date': (int, none_type),  # noqa: E501
+            'modified_date': (int, none_type),  # noqa: E501
+            'format': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -183,7 +184,15 @@ class Disclaimer(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.id: str = None
+        self.name: str = None
+        self.content: str = None
+        self.frequency_in_hours: int = None
+        self.is_default: bool = None
+        self.is_active: bool = None
+        self.created_date: int = None
+        self.modified_date: int = None
+        self.format: str = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

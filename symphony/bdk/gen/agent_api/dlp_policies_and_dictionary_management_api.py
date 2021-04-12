@@ -11,7 +11,7 @@
 import re  # noqa: F401
 import sys  # noqa: F401
 
-from symphony.bdk.gen.api_client import ApiClient, Endpoint
+from symphony.bdk.gen.api_client import ApiClient, Endpoint as _Endpoint
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     check_allowed_values,
     check_validations,
@@ -121,7 +121,7 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                 dict_id
             return self.call_with_http_info(**kwargs)
 
-        self.v1_dlp_dictionaries_dict_id_data_download_get = Endpoint(
+        self.v1_dlp_dictionaries_dict_id_data_download_get = _Endpoint(
             settings={
                 'response_type': (str,),
                 'auth': [],
@@ -267,7 +267,7 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                 data
             return self.call_with_http_info(**kwargs)
 
-        self.v1_dlp_dictionaries_dict_id_data_upload_post = Endpoint(
+        self.v1_dlp_dictionaries_dict_id_data_upload_post = _Endpoint(
             settings={
                 'response_type': (V1DLPDictionaryMetadataResponse,),
                 'auth': [],
@@ -412,7 +412,7 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                 dict_id
             return self.call_with_http_info(**kwargs)
 
-        self.v1_dlp_dictionaries_dict_id_delete = Endpoint(
+        self.v1_dlp_dictionaries_dict_id_delete = _Endpoint(
             settings={
                 'response_type': (V1DLPDictionaryMetadataResponse,),
                 'auth': [],
@@ -550,7 +550,7 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                 dict_id
             return self.call_with_http_info(**kwargs)
 
-        self.v1_dlp_dictionaries_dict_id_get = Endpoint(
+        self.v1_dlp_dictionaries_dict_id_get = _Endpoint(
             settings={
                 'response_type': (V1DLPDictionaryMetadataResponse,),
                 'auth': [],
@@ -696,7 +696,7 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                 body
             return self.call_with_http_info(**kwargs)
 
-        self.v1_dlp_dictionaries_dict_id_put = Endpoint(
+        self.v1_dlp_dictionaries_dict_id_put = _Endpoint(
             settings={
                 'response_type': (V1DLPDictionaryMetadataResponse,),
                 'auth': [],
@@ -838,7 +838,7 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                 key_manager_token
             return self.call_with_http_info(**kwargs)
 
-        self.v1_dlp_dictionaries_get = Endpoint(
+        self.v1_dlp_dictionaries_get = _Endpoint(
             settings={
                 'response_type': (V1DLPDictionaryMetadataCollectionResponse,),
                 'auth': [],
@@ -979,7 +979,7 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                 body
             return self.call_with_http_info(**kwargs)
 
-        self.v1_dlp_dictionaries_post = Endpoint(
+        self.v1_dlp_dictionaries_post = _Endpoint(
             settings={
                 'response_type': (V1DLPDictionaryMetadataResponse,),
                 'auth': [],
@@ -1115,7 +1115,7 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                 key_manager_token
             return self.call_with_http_info(**kwargs)
 
-        self.v1_dlp_policies_get = Endpoint(
+        self.v1_dlp_policies_get = _Endpoint(
             settings={
                 'response_type': (V1DLPPoliciesCollectionResponse,),
                 'auth': [],
@@ -1256,7 +1256,7 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                 policy_id
             return self.call_with_http_info(**kwargs)
 
-        self.v1_dlp_policies_policy_id_delete = Endpoint(
+        self.v1_dlp_policies_policy_id_delete = _Endpoint(
             settings={
                 'response_type': (V1DLPPolicyResponse,),
                 'auth': [],
@@ -1393,7 +1393,7 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                 policy_id
             return self.call_with_http_info(**kwargs)
 
-        self.v1_dlp_policies_policy_id_disable_post = Endpoint(
+        self.v1_dlp_policies_policy_id_disable_post = _Endpoint(
             settings={
                 'response_type': (V1DLPPolicyResponse,),
                 'auth': [],
@@ -1530,7 +1530,7 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                 policy_id
             return self.call_with_http_info(**kwargs)
 
-        self.v1_dlp_policies_policy_id_enable_post = Endpoint(
+        self.v1_dlp_policies_policy_id_enable_post = _Endpoint(
             settings={
                 'response_type': (V1DLPPolicyResponse,),
                 'auth': [],
@@ -1668,7 +1668,7 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                 policy_id
             return self.call_with_http_info(**kwargs)
 
-        self.v1_dlp_policies_policy_id_get = Endpoint(
+        self.v1_dlp_policies_policy_id_get = _Endpoint(
             settings={
                 'response_type': (V1DLPPolicyResponse,),
                 'auth': [],
@@ -1814,7 +1814,7 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                 body
             return self.call_with_http_info(**kwargs)
 
-        self.v1_dlp_policies_policy_id_put = Endpoint(
+        self.v1_dlp_policies_policy_id_put = _Endpoint(
             settings={
                 'response_type': (V1DLPPolicyResponse,),
                 'auth': [],
@@ -1958,7 +1958,7 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                 body
             return self.call_with_http_info(**kwargs)
 
-        self.v1_dlp_policies_post = Endpoint(
+        self.v1_dlp_policies_post = _Endpoint(
             settings={
                 'response_type': (V1DLPPolicyResponse,),
                 'auth': [],
@@ -2094,7 +2094,7 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                 key_manager_token
             return self.call_with_http_info(**kwargs)
 
-        self.v3_dlp_policies_get = Endpoint(
+        self.v3_dlp_policies_get = _Endpoint(
             settings={
                 'response_type': (V3DLPPoliciesCollectionResponse,),
                 'auth': [],
@@ -2235,7 +2235,7 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                 policy_id
             return self.call_with_http_info(**kwargs)
 
-        self.v3_dlp_policies_policy_id_delete_post = Endpoint(
+        self.v3_dlp_policies_policy_id_delete_post = _Endpoint(
             settings={
                 'response_type': (V3DLPPolicyResponse,),
                 'auth': [],
@@ -2372,7 +2372,7 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                 policy_id
             return self.call_with_http_info(**kwargs)
 
-        self.v3_dlp_policies_policy_id_disable_post = Endpoint(
+        self.v3_dlp_policies_policy_id_disable_post = _Endpoint(
             settings={
                 'response_type': (V3DLPPolicyResponse,),
                 'auth': [],
@@ -2509,7 +2509,7 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                 policy_id
             return self.call_with_http_info(**kwargs)
 
-        self.v3_dlp_policies_policy_id_enable_post = Endpoint(
+        self.v3_dlp_policies_policy_id_enable_post = _Endpoint(
             settings={
                 'response_type': (V3DLPPolicyResponse,),
                 'auth': [],
@@ -2647,7 +2647,7 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                 policy_id
             return self.call_with_http_info(**kwargs)
 
-        self.v3_dlp_policies_policy_id_get = Endpoint(
+        self.v3_dlp_policies_policy_id_get = _Endpoint(
             settings={
                 'response_type': (V3DLPPolicyResponse,),
                 'auth': [],
@@ -2793,7 +2793,7 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                 body
             return self.call_with_http_info(**kwargs)
 
-        self.v3_dlp_policies_policy_id_update_post = Endpoint(
+        self.v3_dlp_policies_policy_id_update_post = _Endpoint(
             settings={
                 'response_type': (V3DLPPolicyResponse,),
                 'auth': [],
@@ -2937,7 +2937,7 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                 body
             return self.call_with_http_info(**kwargs)
 
-        self.v3_dlp_policies_post = Endpoint(
+        self.v3_dlp_policies_post = _Endpoint(
             settings={
                 'response_type': (V3DLPPolicyResponse,),
                 'auth': [],

@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -28,9 +27,8 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.agent_model.v1_dlp_dictionary_ref import V1DLPDictionaryRef
-    globals()['V1DLPDictionaryRef'] = V1DLPDictionaryRef
+from symphony.bdk.gen.agent_model.v1_dlp_dictionary_ref import V1DLPDictionaryRef
+globals()['V1DLPDictionaryRef'] = V1DLPDictionaryRef
 
 
 class V1DLPPolicy(ModelNormal):
@@ -77,20 +75,19 @@ class V1DLPPolicy(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
             'content_types': ([str],),  # noqa: E501
             'name': (str,),  # noqa: E501
             'scopes': ([str],),  # noqa: E501
             'type': (str,),  # noqa: E501
-            'active': (bool,),  # noqa: E501
-            'creation_date': (int,),  # noqa: E501
-            'creator_id': (str,),  # noqa: E501
-            'dictionary_refs': ([V1DLPDictionaryRef],),  # noqa: E501
-            'last_disabled_date': (int,),  # noqa: E501
-            'last_updated_date': (int,),  # noqa: E501
-            'policy_id': (str,),  # noqa: E501
-            'version': (str,),  # noqa: E501
+            'active': (bool, none_type),  # noqa: E501
+            'creation_date': (int, none_type),  # noqa: E501
+            'creator_id': (str, none_type),  # noqa: E501
+            'dictionary_refs': ([V1DLPDictionaryRef], none_type),  # noqa: E501
+            'last_disabled_date': (int, none_type),  # noqa: E501
+            'last_updated_date': (int, none_type),  # noqa: E501
+            'policy_id': (str, none_type),  # noqa: E501
+            'version': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -197,11 +194,18 @@ class V1DLPPolicy(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
-        self.content_types = content_types
-        self.name = name
-        self.scopes = scopes
-        self.type = type
+        self.content_types: List[str] = content_types
+        self.name: str = name
+        self.scopes: List[str] = scopes
+        self.type: str = type
+        self.active: bool = None
+        self.creation_date: int = None
+        self.creator_id: str = None
+        self.dictionary_refs: List[V1DLPDictionaryRef] = None
+        self.last_disabled_date: int = None
+        self.last_updated_date: int = None
+        self.policy_id: str = None
+        self.version: str = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

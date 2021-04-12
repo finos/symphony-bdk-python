@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -28,13 +27,12 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.agent_model.v4_attachment_info import V4AttachmentInfo
-    from symphony.bdk.gen.agent_model.v4_stream import V4Stream
-    from symphony.bdk.gen.agent_model.v4_user import V4User
-    globals()['V4AttachmentInfo'] = V4AttachmentInfo
-    globals()['V4Stream'] = V4Stream
-    globals()['V4User'] = V4User
+from symphony.bdk.gen.agent_model.v4_attachment_info import V4AttachmentInfo
+from symphony.bdk.gen.agent_model.v4_stream import V4Stream
+from symphony.bdk.gen.agent_model.v4_user import V4User
+globals()['V4AttachmentInfo'] = V4AttachmentInfo
+globals()['V4Stream'] = V4Stream
+globals()['V4User'] = V4User
 
 
 class V4Message(ModelNormal):
@@ -81,22 +79,21 @@ class V4Message(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'message_id': (str,),  # noqa: E501
-            'timestamp': (int,),  # noqa: E501
-            'message': (str,),  # noqa: E501
-            'shared_message': (V4Message,),  # noqa: E501
-            'data': (str,),  # noqa: E501
-            'attachments': ([V4AttachmentInfo],),  # noqa: E501
-            'user': (V4User,),  # noqa: E501
-            'stream': (V4Stream,),  # noqa: E501
-            'external_recipients': (bool,),  # noqa: E501
-            'diagnostic': (str,),  # noqa: E501
-            'user_agent': (str,),  # noqa: E501
-            'original_format': (str,),  # noqa: E501
-            'disclaimer': (str,),  # noqa: E501
-            'sid': (str,),  # noqa: E501
+            'message_id': (str, none_type),  # noqa: E501
+            'timestamp': (int, none_type),  # noqa: E501
+            'message': (str, none_type),  # noqa: E501
+            'shared_message': (V4Message, none_type),  # noqa: E501
+            'data': (str, none_type),  # noqa: E501
+            'attachments': ([V4AttachmentInfo], none_type),  # noqa: E501
+            'user': (V4User, none_type),  # noqa: E501
+            'stream': (V4Stream, none_type),  # noqa: E501
+            'external_recipients': (bool, none_type),  # noqa: E501
+            'diagnostic': (str, none_type),  # noqa: E501
+            'user_agent': (str, none_type),  # noqa: E501
+            'original_format': (str, none_type),  # noqa: E501
+            'disclaimer': (str, none_type),  # noqa: E501
+            'sid': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -205,7 +202,20 @@ class V4Message(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.message_id: str = None
+        self.timestamp: int = None
+        self.message: str = None
+        self.shared_message: V4Message = None
+        self.data: str = None
+        self.attachments: List[V4AttachmentInfo] = None
+        self.user: V4User = None
+        self.stream: V4Stream = None
+        self.external_recipients: bool = None
+        self.diagnostic: str = None
+        self.user_agent: str = None
+        self.original_format: str = None
+        self.disclaimer: str = None
+        self.sid: str = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

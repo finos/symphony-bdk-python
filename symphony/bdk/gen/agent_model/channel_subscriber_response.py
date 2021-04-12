@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -28,9 +27,8 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.agent_model.channel_subscriber import ChannelSubscriber
-    globals()['ChannelSubscriber'] = ChannelSubscriber
+from symphony.bdk.gen.agent_model.channel_subscriber import ChannelSubscriber
+globals()['ChannelSubscriber'] = ChannelSubscriber
 
 
 class ChannelSubscriberResponse(ModelNormal):
@@ -77,12 +75,11 @@ class ChannelSubscriberResponse(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'offset': (int,),  # noqa: E501
-            'has_more': (bool,),  # noqa: E501
-            'total': (int,),  # noqa: E501
-            'data': ([ChannelSubscriber],),  # noqa: E501
+            'offset': (int, none_type),  # noqa: E501
+            'has_more': (bool, none_type),  # noqa: E501
+            'total': (int, none_type),  # noqa: E501
+            'data': ([ChannelSubscriber], none_type),  # noqa: E501
         }
 
     @cached_property
@@ -171,7 +168,10 @@ class ChannelSubscriberResponse(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.offset: int = None
+        self.has_more: bool = None
+        self.total: int = None
+        self.data: List[ChannelSubscriber] = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

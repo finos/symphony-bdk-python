@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -28,9 +27,8 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.agent_model.v3_dlp_policy_applies_to import V3DLPPolicyAppliesTo
-    globals()['V3DLPPolicyAppliesTo'] = V3DLPPolicyAppliesTo
+from symphony.bdk.gen.agent_model.v3_dlp_policy_applies_to import V3DLPPolicyAppliesTo
+globals()['V3DLPPolicyAppliesTo'] = V3DLPPolicyAppliesTo
 
 
 class V3DLPPolicyRequest(ModelNormal):
@@ -77,7 +75,6 @@ class V3DLPPolicyRequest(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
             'name': (str,),  # noqa: E501
             'scopes': ([str],),  # noqa: E501
@@ -170,10 +167,9 @@ class V3DLPPolicyRequest(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
-        self.name = name
-        self.scopes = scopes
-        self.applies_to = applies_to
+        self.name: str = name
+        self.scopes: List[str] = scopes
+        self.applies_to: List[V3DLPPolicyAppliesTo] = applies_to
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

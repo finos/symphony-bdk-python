@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -26,11 +27,10 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.pod_model.company_cert_status import CompanyCertStatus
-    from symphony.bdk.gen.pod_model.company_cert_type import CompanyCertType
-    globals()['CompanyCertStatus'] = CompanyCertStatus
-    globals()['CompanyCertType'] = CompanyCertType
+from symphony.bdk.gen.pod_model.company_cert_status import CompanyCertStatus
+from symphony.bdk.gen.pod_model.company_cert_type import CompanyCertType
+globals()['CompanyCertStatus'] = CompanyCertStatus
+globals()['CompanyCertType'] = CompanyCertType
 
 
 class CompanyCertAttributes(ModelNormal):
@@ -77,11 +77,10 @@ class CompanyCertAttributes(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'name': (str,),  # noqa: E501
-            'type': (CompanyCertType,),  # noqa: E501
-            'status': (CompanyCertStatus,),  # noqa: E501
+            'name': (str, none_type),  # noqa: E501
+            'type': (CompanyCertType, none_type),  # noqa: E501
+            'status': (CompanyCertStatus, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -168,7 +167,9 @@ class CompanyCertAttributes(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.name: str = None
+        self.type: CompanyCertType = None
+        self.status: CompanyCertStatus = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

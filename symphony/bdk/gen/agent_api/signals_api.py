@@ -11,7 +11,7 @@
 import re  # noqa: F401
 import sys  # noqa: F401
 
-from symphony.bdk.gen.api_client import ApiClient, Endpoint
+from symphony.bdk.gen.api_client import ApiClient, Endpoint as _Endpoint
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     check_allowed_values,
     check_validations,
@@ -103,7 +103,7 @@ class SignalsApi(object):
             kwargs['_host_index'] = kwargs.get('_host_index')
             return self.call_with_http_info(**kwargs)
 
-        self.v1_info_get = Endpoint(
+        self.v1_info_get = _Endpoint(
             settings={
                 'response_type': (AgentInfo,),
                 'auth': [],
@@ -217,7 +217,7 @@ class SignalsApi(object):
                 signal
             return self.call_with_http_info(**kwargs)
 
-        self.v1_signals_create_post = Endpoint(
+        self.v1_signals_create_post = _Endpoint(
             settings={
                 'response_type': (Signal,),
                 'auth': [],
@@ -350,7 +350,7 @@ class SignalsApi(object):
                 id
             return self.call_with_http_info(**kwargs)
 
-        self.v1_signals_id_delete_post = Endpoint(
+        self.v1_signals_id_delete_post = _Endpoint(
             settings={
                 'response_type': (SuccessResponse,),
                 'auth': [],
@@ -482,7 +482,7 @@ class SignalsApi(object):
                 id
             return self.call_with_http_info(**kwargs)
 
-        self.v1_signals_id_get_get = Endpoint(
+        self.v1_signals_id_get_get = _Endpoint(
             settings={
                 'response_type': (Signal,),
                 'auth': [],
@@ -616,7 +616,7 @@ class SignalsApi(object):
                 id
             return self.call_with_http_info(**kwargs)
 
-        self.v1_signals_id_subscribe_post = Endpoint(
+        self.v1_signals_id_subscribe_post = _Endpoint(
             settings={
                 'response_type': (ChannelSubscriptionResponse,),
                 'auth': [],
@@ -761,7 +761,7 @@ class SignalsApi(object):
                 id
             return self.call_with_http_info(**kwargs)
 
-        self.v1_signals_id_subscribers_get = Endpoint(
+        self.v1_signals_id_subscribers_get = _Endpoint(
             settings={
                 'response_type': (ChannelSubscriberResponse,),
                 'auth': [],
@@ -904,7 +904,7 @@ class SignalsApi(object):
                 id
             return self.call_with_http_info(**kwargs)
 
-        self.v1_signals_id_unsubscribe_post = Endpoint(
+        self.v1_signals_id_unsubscribe_post = _Endpoint(
             settings={
                 'response_type': (ChannelSubscriptionResponse,),
                 'auth': [],
@@ -1046,7 +1046,7 @@ class SignalsApi(object):
                 signal
             return self.call_with_http_info(**kwargs)
 
-        self.v1_signals_id_update_post = Endpoint(
+        self.v1_signals_id_update_post = _Endpoint(
             settings={
                 'response_type': (Signal,),
                 'auth': [],
@@ -1183,7 +1183,7 @@ class SignalsApi(object):
                 session_token
             return self.call_with_http_info(**kwargs)
 
-        self.v1_signals_list_get = Endpoint(
+        self.v1_signals_list_get = _Endpoint(
             settings={
                 'response_type': (SignalList,),
                 'auth': [],

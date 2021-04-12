@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -74,27 +73,27 @@ class V1DLPStream(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'name': (str,),  # noqa: E501
-            'creator_pretty_name': (str,),  # noqa: E501
-            'public_room': (bool,),  # noqa: E501
-            'cross_pod': (bool,),  # noqa: E501
-            'allow_external': (bool,),  # noqa: E501
-            'creator_id': (str,),  # noqa: E501
-            'room_description': (str,),  # noqa: E501
-            'stream_id': (str,),  # noqa: E501
-            'state': (str,),  # noqa: E501
-            'type': (str,),  # noqa: E501
-            'last_disabled': (int,),  # noqa: E501
-            'member_add_user_enabled': (bool,),  # noqa: E501
-            'active': (bool,),  # noqa: E501
-            'discoverable': (bool,),  # noqa: E501
-            'read_only': (bool,),  # noqa: E501
-            'copy_disabled': (bool,),  # noqa: E501
-            'external_owned': (bool,),  # noqa: E501
-            'send_message_disabled': (bool,),  # noqa: E501
-            'moderated': (bool,),  # noqa: E501
-            'share_history_enabled': (bool,),  # noqa: E501
-            'diagnostic': (str,),  # noqa: E501
+            'name': (str, none_type),  # noqa: E501
+            'creator_pretty_name': (str, none_type),  # noqa: E501
+            'public_room': (bool, none_type),  # noqa: E501
+            'cross_pod': (bool, none_type),  # noqa: E501
+            'allow_external': (bool, none_type),  # noqa: E501
+            'creator_id': (str, none_type),  # noqa: E501
+            'room_description': (str, none_type),  # noqa: E501
+            'stream_id': (str, none_type),  # noqa: E501
+            'state': (str, none_type),  # noqa: E501
+            'type': (str, none_type),  # noqa: E501
+            'last_disabled': (int, none_type),  # noqa: E501
+            'member_add_user_enabled': (bool, none_type),  # noqa: E501
+            'active': (bool, none_type),  # noqa: E501
+            'discoverable': (bool, none_type),  # noqa: E501
+            'read_only': (bool, none_type),  # noqa: E501
+            'copy_disabled': (bool, none_type),  # noqa: E501
+            'external_owned': (bool, none_type),  # noqa: E501
+            'send_message_disabled': (bool, none_type),  # noqa: E501
+            'moderated': (bool, none_type),  # noqa: E501
+            'share_history_enabled': (bool, none_type),  # noqa: E501
+            'diagnostic': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -217,7 +216,27 @@ class V1DLPStream(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.name: str = None
+        self.creator_pretty_name: str = None
+        self.public_room: bool = None
+        self.cross_pod: bool = None
+        self.allow_external: bool = None
+        self.creator_id: str = None
+        self.room_description: str = None
+        self.stream_id: str = None
+        self.state: str = None
+        self.type: str = None
+        self.last_disabled: int = None
+        self.member_add_user_enabled: bool = None
+        self.active: bool = None
+        self.discoverable: bool = None
+        self.read_only: bool = None
+        self.copy_disabled: bool = None
+        self.external_owned: bool = None
+        self.send_message_disabled: bool = None
+        self.moderated: bool = None
+        self.share_history_enabled: bool = None
+        self.diagnostic: str = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

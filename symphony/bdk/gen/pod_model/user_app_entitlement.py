@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -26,9 +27,8 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.pod_model.product_list import ProductList
-    globals()['ProductList'] = ProductList
+from symphony.bdk.gen.pod_model.product_list import ProductList
+globals()['ProductList'] = ProductList
 
 
 class UserAppEntitlement(ModelNormal):
@@ -83,13 +83,12 @@ class UserAppEntitlement(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
             'app_id': (str,),  # noqa: E501
             'listed': (bool,),  # noqa: E501
             'install': (bool,),  # noqa: E501
-            'app_name': (str,),  # noqa: E501
-            'products': (ProductList,),  # noqa: E501
+            'app_name': (str, none_type),  # noqa: E501
+            'products': (ProductList, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -182,10 +181,11 @@ class UserAppEntitlement(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
-        self.app_id = app_id
-        self.listed = listed
-        self.install = install
+        self.app_id: str = app_id
+        self.listed: bool = listed
+        self.install: bool = install
+        self.app_name: str = None
+        self.products: ProductList = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
