@@ -11,7 +11,7 @@
 import re  # noqa: F401
 import sys  # noqa: F401
 
-from symphony.bdk.gen.api_client import ApiClient, Endpoint
+from symphony.bdk.gen.api_client import ApiClient, Endpoint as _Endpoint
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     check_allowed_values,
     check_validations,
@@ -111,7 +111,7 @@ class DatafeedApi(object):
                 key_manager_token
             return self.call_with_http_info(**kwargs)
 
-        self.create_datafeed = Endpoint(
+        self.create_datafeed = _Endpoint(
             settings={
                 'response_type': (V5Datafeed,),
                 'auth': [],
@@ -242,7 +242,7 @@ class DatafeedApi(object):
                 key_manager_token
             return self.call_with_http_info(**kwargs)
 
-        self.delete_datafeed = Endpoint(
+        self.delete_datafeed = _Endpoint(
             settings={
                 'response_type': (V2Error,),
                 'auth': [],
@@ -375,7 +375,7 @@ class DatafeedApi(object):
                 key_manager_token
             return self.call_with_http_info(**kwargs)
 
-        self.list_datafeed = Endpoint(
+        self.list_datafeed = _Endpoint(
             settings={
                 'response_type': ([V5Datafeed],),
                 'auth': [],
@@ -508,7 +508,7 @@ class DatafeedApi(object):
                 key_manager_token
             return self.call_with_http_info(**kwargs)
 
-        self.read_datafeed = Endpoint(
+        self.read_datafeed = _Endpoint(
             settings={
                 'response_type': (V5EventList,),
                 'auth': [],
@@ -647,7 +647,7 @@ class DatafeedApi(object):
                 key_manager_token
             return self.call_with_http_info(**kwargs)
 
-        self.v4_datafeed_create_post = Endpoint(
+        self.v4_datafeed_create_post = _Endpoint(
             settings={
                 'response_type': (Datafeed,),
                 'auth': [],
@@ -779,7 +779,7 @@ class DatafeedApi(object):
                 key_manager_token
             return self.call_with_http_info(**kwargs)
 
-        self.v4_datafeed_id_read_get = Endpoint(
+        self.v4_datafeed_id_read_get = _Endpoint(
             settings={
                 'response_type': (V4EventList,),
                 'auth': [],

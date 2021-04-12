@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -74,13 +73,13 @@ class AgentInfo(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'ip_address': (str,),  # noqa: E501
-            'hostname': (str,),  # noqa: E501
-            'server_fqdn': (str,),  # noqa: E501
-            'version': (str,),  # noqa: E501
-            'url': (str,),  # noqa: E501
-            'on_prem': (bool,),  # noqa: E501
-            'commit_id': (str,),  # noqa: E501
+            'ip_address': (str, none_type),  # noqa: E501
+            'hostname': (str, none_type),  # noqa: E501
+            'server_fqdn': (str, none_type),  # noqa: E501
+            'version': (str, none_type),  # noqa: E501
+            'url': (str, none_type),  # noqa: E501
+            'on_prem': (bool, none_type),  # noqa: E501
+            'commit_id': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -175,7 +174,13 @@ class AgentInfo(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.ip_address: str = None
+        self.hostname: str = None
+        self.server_fqdn: str = None
+        self.version: str = None
+        self.url: str = None
+        self.on_prem: bool = None
+        self.commit_id: str = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

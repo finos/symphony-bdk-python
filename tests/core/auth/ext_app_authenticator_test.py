@@ -3,9 +3,11 @@ from unittest.mock import AsyncMock, patch
 import pytest
 
 from symphony.bdk.core.auth.auth_session import AppAuthSession
+from symphony.bdk.core.auth.exception import AuthInitializationError
 from symphony.bdk.core.auth.ext_app_authenticator import ExtensionAppAuthenticatorRsa
 from symphony.bdk.core.auth.tokens_repository import InMemoryTokensRepository
 from symphony.bdk.core.config.model.bdk_rsa_key_config import BdkRsaKeyConfig
+from symphony.bdk.gen import ApiException
 from symphony.bdk.gen.login_model.extension_app_tokens import ExtensionAppTokens
 from symphony.bdk.gen.pod_model.pod_certificate import PodCertificate
 
@@ -98,16 +100,31 @@ async def test_authenticate_and_retrieve_tokens_failure():
 
 
 @pytest.mark.asyncio
+async def test_validate_jwt_get_pod_certificate_failure():
+    with patch("symphony.bdk.core.auth.ext_app_authenticator.validate_jwt") as mock_validate:
+        mock_pod_api = AsyncMock()
+        mock_pod_api.v1_podcert_get = AsyncMock(side_effect=ApiException(status=501))
+
+        with pytest.raises(AuthInitializationError):
+            ext_app_authenticator = ExtensionAppAuthenticatorRsa(None, mock_pod_api, "app-id", None)
+            await ext_app_authenticator.validate_jwt("my-jwt")
+
+        mock_pod_api.v1_podcert_get.assert_called_once()
+        mock_validate.assert_not_called()
+
+
+@pytest.mark.asyncio
 async def test_validate_jwt():
     with patch("symphony.bdk.core.auth.ext_app_authenticator.validate_jwt") as mock_validate:
         certificate_content = "certificate content"
         jwt = "my-jwt"
+        app_id = "app-id"
 
         mock_pod_api = AsyncMock()
         mock_pod_api.v1_podcert_get = AsyncMock(return_value=PodCertificate(certificate=certificate_content))
 
-        ext_app_authenticator = ExtensionAppAuthenticatorRsa(None, mock_pod_api, None, None)
+        ext_app_authenticator = ExtensionAppAuthenticatorRsa(None, mock_pod_api, app_id, None)
 
         await ext_app_authenticator.validate_jwt(jwt)
         mock_pod_api.v1_podcert_get.assert_called_once()
-        mock_validate.assert_called_once_with(jwt, certificate_content)
+        mock_validate.assert_called_once_with(jwt, certificate_content, app_id)

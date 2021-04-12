@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -28,9 +27,8 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.agent_model.v4_stream import V4Stream
-    globals()['V4Stream'] = V4Stream
+from symphony.bdk.gen.agent_model.v4_stream import V4Stream
+globals()['V4Stream'] = V4Stream
 
 
 class V4SymphonyElementsAction(ModelNormal):
@@ -77,12 +75,11 @@ class V4SymphonyElementsAction(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'stream': (V4Stream,),  # noqa: E501
-            'form_message_id': (str,),  # noqa: E501
-            'form_id': (str,),  # noqa: E501
-            'form_values': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)},),  # noqa: E501
+            'stream': (V4Stream, none_type),  # noqa: E501
+            'form_message_id': (str, none_type),  # noqa: E501
+            'form_id': (str, none_type),  # noqa: E501
+            'form_values': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -171,7 +168,10 @@ class V4SymphonyElementsAction(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.stream: V4Stream = None
+        self.form_message_id: str = None
+        self.form_id: str = None
+        self.form_values: {str: (bool, date, datetime, dict, float, int, list, str, none_type)} = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

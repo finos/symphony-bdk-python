@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -72,16 +73,16 @@ class V2AdminStreamAttributes(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'room_name': (str,),  # noqa: E501
-            'room_description': (str,),  # noqa: E501
-            'members': ([int],),  # noqa: E501
-            'created_by_user_id': (int,),  # noqa: E501
-            'created_date': (int,),  # noqa: E501
-            'last_modified_date': (int,),  # noqa: E501
-            'origin_company': (str,),  # noqa: E501
-            'origin_company_id': (int,),  # noqa: E501
-            'members_count': (int,),  # noqa: E501
-            'last_message_date': (int,),  # noqa: E501
+            'room_name': (str, none_type),  # noqa: E501
+            'room_description': (str, none_type),  # noqa: E501
+            'members': ([int], none_type),  # noqa: E501
+            'created_by_user_id': (int, none_type),  # noqa: E501
+            'created_date': (int, none_type),  # noqa: E501
+            'last_modified_date': (int, none_type),  # noqa: E501
+            'origin_company': (str, none_type),  # noqa: E501
+            'origin_company_id': (int, none_type),  # noqa: E501
+            'members_count': (int, none_type),  # noqa: E501
+            'last_message_date': (int, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -182,7 +183,16 @@ class V2AdminStreamAttributes(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.room_name: str = None
+        self.room_description: str = None
+        self.members: List[int] = None
+        self.created_by_user_id: int = None
+        self.created_date: int = None
+        self.last_modified_date: int = None
+        self.origin_company: str = None
+        self.origin_company_id: int = None
+        self.members_count: int = None
+        self.last_message_date: int = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

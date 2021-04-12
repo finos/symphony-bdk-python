@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -84,7 +85,7 @@ class Product(ModelNormal):
             'sku': (str,),  # noqa: E501
             'subscribed': (bool,),  # noqa: E501
             'type': (str,),  # noqa: E501
-            'app_id': (str,),  # noqa: E501
+            'app_id': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -177,11 +178,11 @@ class Product(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
-        self.name = name
-        self.sku = sku
-        self.subscribed = subscribed
-        self.type = type
+        self.name: str = name
+        self.sku: str = sku
+        self.subscribed: bool = subscribed
+        self.type: str = type
+        self.app_id: str = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

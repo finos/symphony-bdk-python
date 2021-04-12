@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -26,13 +27,12 @@ from symphony.bdk.gen.model_utils import (  # noqa: F401
     validate_get_composed_info,
 )
 
-def lazy_import():
-    from symphony.bdk.gen.pod_model.conversation_specific_stream_attributes import ConversationSpecificStreamAttributes
-    from symphony.bdk.gen.pod_model.room_specific_stream_attributes import RoomSpecificStreamAttributes
-    from symphony.bdk.gen.pod_model.stream_type import StreamType
-    globals()['ConversationSpecificStreamAttributes'] = ConversationSpecificStreamAttributes
-    globals()['RoomSpecificStreamAttributes'] = RoomSpecificStreamAttributes
-    globals()['StreamType'] = StreamType
+from symphony.bdk.gen.pod_model.conversation_specific_stream_attributes import ConversationSpecificStreamAttributes
+from symphony.bdk.gen.pod_model.room_specific_stream_attributes import RoomSpecificStreamAttributes
+from symphony.bdk.gen.pod_model.stream_type import StreamType
+globals()['ConversationSpecificStreamAttributes'] = ConversationSpecificStreamAttributes
+globals()['RoomSpecificStreamAttributes'] = RoomSpecificStreamAttributes
+globals()['StreamType'] = StreamType
 
 
 class StreamAttributes(ModelNormal):
@@ -79,14 +79,13 @@ class StreamAttributes(ModelNormal):
             openapi_types (dict): The key is attribute name
                 and the value is attribute type.
         """
-        lazy_import()
         return {
-            'id': (str,),  # noqa: E501
-            'cross_pod': (bool,),  # noqa: E501
-            'active': (bool,),  # noqa: E501
-            'stream_type': (StreamType,),  # noqa: E501
-            'stream_attributes': (ConversationSpecificStreamAttributes,),  # noqa: E501
-            'room_attributes': (RoomSpecificStreamAttributes,),  # noqa: E501
+            'id': (str, none_type),  # noqa: E501
+            'cross_pod': (bool, none_type),  # noqa: E501
+            'active': (bool, none_type),  # noqa: E501
+            'stream_type': (StreamType, none_type),  # noqa: E501
+            'stream_attributes': (ConversationSpecificStreamAttributes, none_type),  # noqa: E501
+            'room_attributes': (RoomSpecificStreamAttributes, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -179,7 +178,12 @@ class StreamAttributes(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.id: str = None
+        self.cross_pod: bool = None
+        self.active: bool = None
+        self.stream_type: StreamType = None
+        self.stream_attributes: ConversationSpecificStreamAttributes = None
+        self.room_attributes: RoomSpecificStreamAttributes = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

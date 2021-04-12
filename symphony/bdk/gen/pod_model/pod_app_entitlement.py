@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -177,12 +178,11 @@ class PodAppEntitlement(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
-        self.app_id = app_id
-        self.app_name = app_name
-        self.enable = enable
-        self.listed = listed
-        self.install = install
+        self.app_id: str = app_id
+        self.app_name: str = app_name
+        self.enable: bool = enable
+        self.listed: bool = listed
+        self.install: bool = install
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

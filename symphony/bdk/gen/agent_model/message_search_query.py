@@ -10,8 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
-
-import nulltype  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -74,16 +73,16 @@ class MessageSearchQuery(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'text': (str,),  # noqa: E501
-            'stream_id': (str,),  # noqa: E501
-            'stream_type': (str,),  # noqa: E501
-            'author': (int,),  # noqa: E501
-            'hashtag': (str,),  # noqa: E501
-            'cashtag': (str,),  # noqa: E501
-            'mention': (int,),  # noqa: E501
-            'signal': (str,),  # noqa: E501
-            'from_date': (int,),  # noqa: E501
-            'to_date': (int,),  # noqa: E501
+            'text': (str, none_type),  # noqa: E501
+            'stream_id': (str, none_type),  # noqa: E501
+            'stream_type': (str, none_type),  # noqa: E501
+            'author': (int, none_type),  # noqa: E501
+            'hashtag': (str, none_type),  # noqa: E501
+            'cashtag': (str, none_type),  # noqa: E501
+            'mention': (int, none_type),  # noqa: E501
+            'signal': (str, none_type),  # noqa: E501
+            'from_date': (int, none_type),  # noqa: E501
+            'to_date': (int, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -184,7 +183,16 @@ class MessageSearchQuery(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.text: str = None
+        self.stream_id: str = None
+        self.stream_type: str = None
+        self.author: int = None
+        self.hashtag: str = None
+        self.cashtag: str = None
+        self.mention: int = None
+        self.signal: str = None
+        self.from_date: int = None
+        self.to_date: int = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

@@ -11,7 +11,7 @@
 import re  # noqa: F401
 import sys  # noqa: F401
 
-from symphony.bdk.gen.api_client import ApiClient, Endpoint
+from symphony.bdk.gen.api_client import ApiClient, Endpoint as _Endpoint
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     check_allowed_values,
     check_validations,
@@ -112,7 +112,7 @@ class RoomMembershipApi(object):
                 payload
             return self.call_with_http_info(**kwargs)
 
-        self.v1_admin_room_id_membership_add_post = Endpoint(
+        self.v1_admin_room_id_membership_add_post = _Endpoint(
             settings={
                 'response_type': (SuccessResponse,),
                 'auth': [],
@@ -246,7 +246,7 @@ class RoomMembershipApi(object):
                 session_token
             return self.call_with_http_info(**kwargs)
 
-        self.v1_admin_room_id_membership_list_get = Endpoint(
+        self.v1_admin_room_id_membership_list_get = _Endpoint(
             settings={
                 'response_type': (MembershipList,),
                 'auth': [],
@@ -381,7 +381,7 @@ class RoomMembershipApi(object):
                 payload
             return self.call_with_http_info(**kwargs)
 
-        self.v1_admin_room_id_membership_remove_post = Endpoint(
+        self.v1_admin_room_id_membership_remove_post = _Endpoint(
             settings={
                 'response_type': (SuccessResponse,),
                 'auth': [],
@@ -518,7 +518,7 @@ class RoomMembershipApi(object):
                 payload
             return self.call_with_http_info(**kwargs)
 
-        self.v1_room_id_membership_add_post = Endpoint(
+        self.v1_room_id_membership_add_post = _Endpoint(
             settings={
                 'response_type': (SuccessResponse,),
                 'auth': [],
@@ -655,7 +655,7 @@ class RoomMembershipApi(object):
                 payload
             return self.call_with_http_info(**kwargs)
 
-        self.v1_room_id_membership_demote_owner_post = Endpoint(
+        self.v1_room_id_membership_demote_owner_post = _Endpoint(
             settings={
                 'response_type': (SuccessResponse,),
                 'auth': [],
@@ -789,7 +789,7 @@ class RoomMembershipApi(object):
                 session_token
             return self.call_with_http_info(**kwargs)
 
-        self.v1_room_id_membership_list_get = Endpoint(
+        self.v1_room_id_membership_list_get = _Endpoint(
             settings={
                 'response_type': (MembershipList,),
                 'auth': [],
@@ -919,7 +919,7 @@ class RoomMembershipApi(object):
                 payload
             return self.call_with_http_info(**kwargs)
 
-        self.v1_room_id_membership_promote_owner_post = Endpoint(
+        self.v1_room_id_membership_promote_owner_post = _Endpoint(
             settings={
                 'response_type': (SuccessResponse,),
                 'auth': [],
@@ -1056,7 +1056,7 @@ class RoomMembershipApi(object):
                 payload
             return self.call_with_http_info(**kwargs)
 
-        self.v1_room_id_membership_remove_post = Endpoint(
+        self.v1_room_id_membership_remove_post = _Endpoint(
             settings={
                 'response_type': (SuccessResponse,),
                 'auth': [],
@@ -1189,7 +1189,7 @@ class RoomMembershipApi(object):
                 session_token
             return self.call_with_http_info(**kwargs)
 
-        self.v2_room_id_membership_list_get = Endpoint(
+        self.v2_room_id_membership_list_get = _Endpoint(
             settings={
                 'response_type': (MembershipList,),
                 'auth': [],

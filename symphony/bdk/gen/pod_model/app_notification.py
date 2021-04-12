@@ -10,6 +10,7 @@
 
 import re  # noqa: F401
 import sys  # noqa: F401
+from typing import List
 
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     ApiTypeError,
@@ -72,8 +73,8 @@ class AppNotification(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'url': (str,),  # noqa: E501
-            'api_key': (str,),  # noqa: E501
+            'url': (str, none_type),  # noqa: E501
+            'api_key': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -158,7 +159,8 @@ class AppNotification(ModelNormal):
         self._path_to_item = _path_to_item
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
-
+        self.url: str = None
+        self.api_key: str = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

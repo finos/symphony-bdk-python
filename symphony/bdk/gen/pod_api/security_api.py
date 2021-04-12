@@ -11,7 +11,7 @@
 import re  # noqa: F401
 import sys  # noqa: F401
 
-from symphony.bdk.gen.api_client import ApiClient, Endpoint
+from symphony.bdk.gen.api_client import ApiClient, Endpoint as _Endpoint
 from symphony.bdk.gen.model_utils import (  # noqa: F401
     check_allowed_values,
     check_validations,
@@ -112,7 +112,7 @@ class SecurityApi(object):
                 cert
             return self.call_with_http_info(**kwargs)
 
-        self.v1_companycert_create_post = Endpoint(
+        self.v1_companycert_create_post = _Endpoint(
             settings={
                 'response_type': (SuccessResponse,),
                 'auth': [],
@@ -239,7 +239,7 @@ class SecurityApi(object):
                 finger_print
             return self.call_with_http_info(**kwargs)
 
-        self.v1_companycert_delete_post = Endpoint(
+        self.v1_companycert_delete_post = _Endpoint(
             settings={
                 'response_type': (SuccessResponse,),
                 'auth': [],
@@ -366,7 +366,7 @@ class SecurityApi(object):
                 session_token
             return self.call_with_http_info(**kwargs)
 
-        self.v1_companycert_finger_print_get_get = Endpoint(
+        self.v1_companycert_finger_print_get_get = _Endpoint(
             settings={
                 'response_type': (CompanyCertDetail,),
                 'auth': [],
@@ -492,7 +492,7 @@ class SecurityApi(object):
                 session_token
             return self.call_with_http_info(**kwargs)
 
-        self.v1_companycert_finger_print_issued_by_get = Endpoint(
+        self.v1_companycert_finger_print_issued_by_get = _Endpoint(
             settings={
                 'response_type': (CompanyCertInfoList,),
                 'auth': [],
@@ -622,7 +622,7 @@ class SecurityApi(object):
                 cert_attributes
             return self.call_with_http_info(**kwargs)
 
-        self.v1_companycert_finger_print_update_post = Endpoint(
+        self.v1_companycert_finger_print_update_post = _Endpoint(
             settings={
                 'response_type': (SuccessResponse,),
                 'auth': [],
@@ -753,7 +753,7 @@ class SecurityApi(object):
                 session_token
             return self.call_with_http_info(**kwargs)
 
-        self.v1_companycert_list_get = Endpoint(
+        self.v1_companycert_list_get = _Endpoint(
             settings={
                 'response_type': (CompanyCertInfoList,),
                 'auth': [],
@@ -881,7 +881,7 @@ class SecurityApi(object):
                 session_token
             return self.call_with_http_info(**kwargs)
 
-        self.v1_companycert_podmanaged_list_get = Endpoint(
+        self.v1_companycert_podmanaged_list_get = _Endpoint(
             settings={
                 'response_type': (CompanyCertInfoList,),
                 'auth': [],
@@ -1013,7 +1013,7 @@ class SecurityApi(object):
                 type_id_list
             return self.call_with_http_info(**kwargs)
 
-        self.v1_companycert_type_list_post = Endpoint(
+        self.v1_companycert_type_list_post = _Endpoint(
             settings={
                 'response_type': (CompanyCertInfoList,),
                 'auth': [],
@@ -1150,7 +1150,7 @@ class SecurityApi(object):
                 cert
             return self.call_with_http_info(**kwargs)
 
-        self.v2_companycert_create_post = Endpoint(
+        self.v2_companycert_create_post = _Endpoint(
             settings={
                 'response_type': (CompanyCertDetail,),
                 'auth': [],
