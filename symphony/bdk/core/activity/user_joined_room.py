@@ -14,11 +14,16 @@ class UserJoinedRoomContext(ActivityContext[V4UserJoinedRoom]):
 
     def __init__(self, initiator: V4Initiator, source_event: V4UserJoinedRoom):
         self._stream_id = source_event.stream.stream_id
+        self._affected_user_id = source_event.affected_user.user_id
         super().__init__(initiator, source_event)
 
     @property
     def stream_id(self) -> str:
         return self._stream_id
+
+    @property
+    def affected_user_id(self) -> int:
+        return self._affected_user_id
 
 
 class UserJoinedRoomActivity(AbstractActivity[UserJoinedRoomContext]):

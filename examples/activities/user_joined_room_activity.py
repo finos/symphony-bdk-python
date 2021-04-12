@@ -8,21 +8,21 @@ from symphony.bdk.core.service.message.message_service import MessageService
 from symphony.bdk.core.symphony_bdk import SymphonyBdk
 
 async def run():
-    config = BdkConfigLoader.load_from_symphony_dir("config.yaml")
-    async with SymphonyBdk(config) as bdk:
+    async with SymphonyBdk(BdkConfigLoader.load_from_symphony_dir("config.yaml")) as bdk:
         await bdk.activities().register(JoinRoomActivity(bdk.messages()))
         await bdk.datafeed().start()
 
 
 class JoinRoomActivity(UserJoinedRoomActivity):
     def __init__(self, messages: MessageService):
-        self.messages = messages
+        self._messages = messages
+        super().__init__()
 
     def matches(self, context: UserJoinedRoomContext) -> bool:
         return True
 
     async def on_activity(self, context: UserJoinedRoomContext):
-        await self.messages.send_message(context.source_event.stream.stream_id,
+        await self._messages.send_message(context.stream_id,
                                          "<messageML>Welcome to the room</messageML>")
 
 
