@@ -148,8 +148,6 @@ async def test_update_application_entitlements(app_entitlement_api, application_
     assert pod_app_entitlements[0].app_id == "rsa-app-auth-example"
 
 
-@pytest.mark.skip(
-    reason="Failing because the documentation payload doesn't have the SKU attribute (not optional in the model)")
 @pytest.mark.asyncio
 async def test_list_user_applications(app_entitlement_api, application_service):
     app_entitlement_api.v1_admin_user_uid_app_entitlement_list_get = AsyncMock()
@@ -167,8 +165,6 @@ async def test_list_user_applications(app_entitlement_api, application_service):
     assert user_app_entitlements[0].app_id == "djApp"
 
 
-@pytest.mark.skip(
-    reason="Failing because the documentation payload doesn't have the SKU attribute (not optional in the model)")
 @pytest.mark.asyncio
 async def test_update_user_applications(app_entitlement_api, application_service):
     app_entitlement_api.v1_admin_user_uid_app_entitlement_list_post = AsyncMock()
