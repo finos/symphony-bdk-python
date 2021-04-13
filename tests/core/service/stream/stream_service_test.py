@@ -25,7 +25,7 @@ from symphony.bdk.gen.pod_model.v2_stream_attributes import V2StreamAttributes
 from symphony.bdk.gen.pod_model.v3_room_attributes import V3RoomAttributes
 from symphony.bdk.gen.pod_model.v3_room_detail import V3RoomDetail
 from symphony.bdk.gen.pod_model.v3_room_search_results import V3RoomSearchResults
-from tests.utils.resource_utils import object_from_json_relative_path, get_deserialized_object_from_resource
+from tests.utils.resource_utils import get_deserialized_object_from_resource
 
 KM_TOKEN = "km_token"
 SESSION_TOKEN = "session_token"
@@ -122,8 +122,7 @@ async def test_list_all_streams(mocked_api_client, stream_service, streams_api):
 
 
 @pytest.mark.asyncio
-async def test_add_member_to_room(mocked_api_client, stream_service, room_membership_api):
-    mocked_api_client.call_api.return_value = object_from_json_relative_path("stream/add_member.json")
+async def test_add_member_to_room(stream_service, room_membership_api):
 
     user_id = 1234456
     room_id = "room_id"
@@ -134,8 +133,7 @@ async def test_add_member_to_room(mocked_api_client, stream_service, room_member
 
 
 @pytest.mark.asyncio
-async def test_remove_member_from_room(mocked_api_client, stream_service, room_membership_api):
-    mocked_api_client.call_api.return_value = object_from_json_relative_path("stream/remove_member.json")
+async def test_remove_member_from_room(stream_service, room_membership_api):
 
     user_id = 1234456
     room_id = "room_id"
@@ -161,8 +159,7 @@ async def test_share(mocked_api_client, stream_service, share_api):
 
 
 @pytest.mark.asyncio
-async def test_promote_user(mocked_api_client, stream_service, room_membership_api):
-    mocked_api_client.call_api.return_value = object_from_json_relative_path("stream/member_promoted.json")
+async def test_promote_user(stream_service, room_membership_api):
 
     user_id = 12345
     room_id = "room_id"
@@ -173,8 +170,7 @@ async def test_promote_user(mocked_api_client, stream_service, room_membership_a
 
 
 @pytest.mark.asyncio
-async def test_demote_owner(mocked_api_client, stream_service, room_membership_api):
-    mocked_api_client.call_api.return_value = object_from_json_relative_path("stream/member_demoted.json")
+async def test_demote_owner(stream_service, room_membership_api):
 
     user_id = 12345
     room_id = "room_id"

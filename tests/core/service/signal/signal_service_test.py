@@ -10,8 +10,7 @@ from symphony.bdk.gen.agent_model.channel_subscriber_response import ChannelSubs
 from symphony.bdk.gen.agent_model.channel_subscription_response import ChannelSubscriptionResponse
 from symphony.bdk.gen.agent_model.signal import Signal
 from symphony.bdk.gen.agent_model.signal_list import SignalList
-from tests.utils.resource_utils import object_from_json, \
-    get_deserialized_object_from_resource
+from tests.utils.resource_utils import get_deserialized_object_from_resource
 
 
 @pytest.fixture(name="auth_session")
@@ -151,19 +150,15 @@ async def test_update_signal(signals_api, signal_service):
 
 @pytest.mark.asyncio
 async def test_delete_signal(signals_api, signal_service):
-    return_value = '{ "format": "TEXT", "message": "Signal signal_id deleted"}'
     signals_api.v1_signals_id_delete_post = AsyncMock()
-    signals_api.v1_signals_id_delete_post.return_value = object_from_json(return_value)
 
-    response = await signal_service.delete_signal("signal_id")
+    await signal_service.delete_signal("signal_id")
 
     signals_api.v1_signals_id_delete_post.assert_called_with(
         id="signal_id",
         session_token="session_token",
         key_manager_token="km_token"
     )
-
-    assert response.message == "Signal signal_id deleted"
 
 
 @pytest.mark.asyncio

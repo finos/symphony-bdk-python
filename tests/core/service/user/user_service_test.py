@@ -37,7 +37,7 @@ from symphony.bdk.gen.pod_model.v2_user_create import V2UserCreate
 from symphony.bdk.gen.pod_model.v2_user_attributes import V2UserAttributes
 from symphony.bdk.gen.pod_model.user_suspension import UserSuspension
 from symphony.bdk.gen.pod_model.v2_user_list import V2UserList
-from tests.utils.resource_utils import object_from_json, get_resource_filepath, get_deserialized_object_from_resource, \
+from tests.utils.resource_utils import get_resource_filepath, get_deserialized_object_from_resource, \
     deserialize_object
 
 
@@ -184,11 +184,6 @@ async def test_search_all_users(users_api, user_service):
 @pytest.mark.asyncio
 async def test_follow_user(user_api, user_service):
     user_api.v1_user_uid_follow_post = AsyncMock()
-    user_api.v1_user_uid_follow_post.return_value = object_from_json(
-        "{"
-        "   \"format\": \"TEXT\","
-        "   \"message\": \"User(s) successfully added in the list of followers\""
-        "}")
 
     await user_service.follow_user([1234, 2345], 12345)
 
@@ -202,12 +197,6 @@ async def test_follow_user(user_api, user_service):
 @pytest.mark.asyncio
 async def test_unfollow_user(user_api, user_service):
     user_api.v1_user_uid_unfollow_post = AsyncMock()
-    user_api.v1_user_uid_unfollow_post.return_value = object_from_json(
-        "{"
-        "   \"format\": \"TEXT\","
-        "   \"message\": \"User(s) successfully removed from the list of followers\""
-        "}"
-    )
 
     await user_service.unfollow_user([1234, 2345], 12345)
 
@@ -382,12 +371,6 @@ async def test_get_avatar(user_api, user_service):
 @pytest.mark.asyncio
 async def test_update_avatar(user_api, user_service):
     user_api.v1_admin_user_uid_avatar_update_post = AsyncMock()
-    user_api.v1_admin_user_uid_avatar_update_post.return_value = object_from_json(
-        "{"
-        "   \"format\": \"TEXT\","
-        "   \"message\": \"OK\""
-        "}"
-    )
 
     await user_service.update_avatar(1234, "image_string")
     user_api.v1_admin_user_uid_avatar_update_post.assert_called_with(
@@ -427,12 +410,6 @@ async def test_get_disclaimer(user_api, user_service):
 @pytest.mark.asyncio
 async def test_remove_disclaimer(user_api, user_service):
     user_api.v1_admin_user_uid_disclaimer_delete = AsyncMock()
-    user_api.v1_admin_user_uid_disclaimer_delete.return_value = object_from_json(
-        "{"
-        "   \"format\": \"TEXT\","
-        "   \"message\": \"OK\""
-        "}"
-    )
 
     await user_service.remove_disclaimer(1234)
 
@@ -445,12 +422,6 @@ async def test_remove_disclaimer(user_api, user_service):
 @pytest.mark.asyncio
 async def test_add_disclaimer(user_api, user_service):
     user_api.v1_admin_user_uid_disclaimer_update_post = AsyncMock()
-    user_api.v1_admin_user_uid_disclaimer_update_post.return_value = object_from_json(
-        "{"
-        "  \"format\": \"TEXT\","
-        "  \"message\": \"OK\""
-        "}"
-    )
 
     await user_service.add_disclaimer(1234, "disclaimer_id")
 
@@ -480,12 +451,6 @@ async def test_get_delegates(user_api, user_service):
 @pytest.mark.asyncio
 async def test_update_delegates(user_api, user_service):
     user_api.v1_admin_user_uid_delegates_update_post = AsyncMock()
-    user_api.v1_admin_user_uid_delegates_update_post.return_value = object_from_json(
-        "{"
-        "   \"format\": \"TEXT\","
-        "   \"message\": \"Added delegate [7215545078461] for account [7215545078541]\""
-        "}"
-    )
 
     await user_service.update_delegates(7215545078541, 7215545078461, DelegateActionEnum.ADD)
 
@@ -525,13 +490,8 @@ async def test_get_feature_entitlements(user_api, user_service):
 @pytest.mark.asyncio
 async def test_update_feature_entitlements(user_api, user_service):
     user_api.v1_admin_user_uid_features_update_post = AsyncMock()
-    user_api.v1_admin_user_uid_features_update_post.return_value = object_from_json(
-        "{"
-        "   \"format\": \"TEXT\","
-        "   \"message\": \"OK\""
-        "}"
-    )
     feature = Feature(entitlment="canCreatePublicRoom", enabled=True)
+
     await user_service.update_feature_entitlements(1234, [feature])
 
     user_api.v1_admin_user_uid_features_update_post.assert_called_with(
@@ -559,11 +519,6 @@ async def test_get_status(user_api, user_service):
 @pytest.mark.asyncio
 async def test_update_status(user_api, user_service):
     user_api.v1_admin_user_uid_status_update_post = AsyncMock()
-    user_api.v1_admin_user_uid_status_update_post.return_value = object_from_json(
-        "{"
-        "   \"message\": \"OK\""
-        "}"
-    )
     status = UserStatus(status="ENABLED")
 
     await user_service.update_status(1234, status)
@@ -725,13 +680,6 @@ async def test_list_audit_trail(audit_trail_api, user_service):
 @pytest.mark.asyncio
 async def test_suspend_user(user_api, user_service):
     user_api.v1_admin_user_user_id_suspension_update_put = AsyncMock()
-    user_api.v1_admin_user_user_id_suspension_update_put.return_value = object_from_json(
-        "{"
-        "   \"format\": \"TEXT\","
-        "   \"message\": \"User suspended with success\""
-        "}"
-    )
-
     user_suspension = UserSuspension(suspended=True, suspended_until=1601596799999, suspension_reason="testing")
 
     await user_service.suspend_user(1234, user_suspension)
