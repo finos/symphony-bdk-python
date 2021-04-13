@@ -1,6 +1,5 @@
 from pathlib import Path
 import json
-from types import SimpleNamespace
 
 from symphony.bdk.gen.api_client import validate_and_convert_types
 from symphony.bdk.gen.configuration import Configuration
@@ -16,14 +15,6 @@ def get_resource_filepath(relative_path, as_text=True):
 
 def get_resource_content(relative_path):
     return get_resource_filepath(relative_path, as_text=False).read_text()
-
-
-def object_from_json(json_content):
-    return json.loads(json_content, object_hook=lambda d: SimpleNamespace(**d))
-
-
-def object_from_json_relative_path(relative_path):
-    return object_from_json(get_resource_content(relative_path))
 
 
 def get_deserialized_object_from_resource(return_type, resource_path):
