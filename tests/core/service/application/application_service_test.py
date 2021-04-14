@@ -11,7 +11,7 @@ from symphony.bdk.gen.pod_model.pod_app_entitlement import PodAppEntitlement
 from symphony.bdk.gen.pod_model.pod_app_entitlement_list import PodAppEntitlementList
 from symphony.bdk.gen.pod_model.user_app_entitlement import UserAppEntitlement
 from symphony.bdk.gen.pod_model.user_app_entitlement_list import UserAppEntitlementList
-from tests.utils.resource_utils import object_from_json, get_deserialized_object_from_resource
+from tests.utils.resource_utils import get_deserialized_object_from_resource
 
 
 @pytest.fixture(name="auth_session")
@@ -76,12 +76,6 @@ async def test_update_application(application_api, application_service):
 @pytest.mark.asyncio
 async def test_delete_application(application_api, application_service):
     application_api.v1_admin_app_id_delete_post = AsyncMock()
-    application_api.v1_admin_app_id_delete_post.return_value = object_from_json(
-        "{"
-        "   \"format\": \"TEXT\","
-        "   \"message\": \"OK\""
-        "}"
-    )
 
     await application_service.delete_application("my-test-app")
 
@@ -148,8 +142,6 @@ async def test_update_application_entitlements(app_entitlement_api, application_
     assert pod_app_entitlements[0].app_id == "rsa-app-auth-example"
 
 
-@pytest.mark.skip(
-    reason="Failing because the documentation payload doesn't have the SKU attribute (not optional in the model)")
 @pytest.mark.asyncio
 async def test_list_user_applications(app_entitlement_api, application_service):
     app_entitlement_api.v1_admin_user_uid_app_entitlement_list_get = AsyncMock()
@@ -167,8 +159,6 @@ async def test_list_user_applications(app_entitlement_api, application_service):
     assert user_app_entitlements[0].app_id == "djApp"
 
 
-@pytest.mark.skip(
-    reason="Failing because the documentation payload doesn't have the SKU attribute (not optional in the model)")
 @pytest.mark.asyncio
 async def test_update_user_applications(app_entitlement_api, application_service):
     app_entitlement_api.v1_admin_user_uid_app_entitlement_list_post = AsyncMock()
