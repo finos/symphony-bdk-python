@@ -5,6 +5,7 @@ import pytest
 from symphony.bdk.core.auth.authenticator_factory import AuthenticatorFactory
 from symphony.bdk.core.auth.exception import AuthInitializationError
 from symphony.bdk.core.auth.ext_app_authenticator import ExtensionAppAuthenticatorRsa
+from symphony.bdk.core.auth.obo_authenticator import OboAuthenticatorRsa, OboAuthenticatorCert
 from symphony.bdk.core.client.api_client_factory import ApiClientFactory
 from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.config.model.bdk_authentication_config import BdkAuthenticationConfig
@@ -14,6 +15,11 @@ from tests.utils.resource_utils import get_config_resource_filepath
 @pytest.fixture(name="config")
 def fixture_config():
     return BdkConfigLoader.load_from_file(get_config_resource_filepath("config.yaml"))
+
+
+@pytest.fixture(name="obo_cert_config")
+def fixture_obo_cert_config():
+    return BdkConfigLoader.load_from_file(get_config_resource_filepath("config_obo_cert.yaml"))
 
 
 @pytest.fixture(name="api_client_factory")
@@ -39,14 +45,26 @@ def test_get_bot_authenticator_failed(config, api_client_factory):
         authenticator_factory.get_bot_authenticator()
 
 
-def test_get_obo_authenticator(config, api_client_factory):
+def test_get_obo_rsa_authenticator(config, api_client_factory):
     authenticator_factory = AuthenticatorFactory(config, api_client_factory)
-    assert authenticator_factory.get_obo_authenticator() is not None
+    obo_authenticator = authenticator_factory.get_obo_authenticator()
+
+    assert obo_authenticator is not None
+    assert isinstance(obo_authenticator, OboAuthenticatorRsa)
+
+
+def test_get_obo_cert_authenticator(obo_cert_config, api_client_factory):
+    authenticator_factory = AuthenticatorFactory(obo_cert_config, api_client_factory)
+    obo_authenticator = authenticator_factory.get_obo_authenticator()
+
+    assert obo_authenticator is not None
+    assert isinstance(obo_authenticator, OboAuthenticatorCert)
 
 
 def test_get_obo_authenticator_failed(config, api_client_factory):
     app_config = MagicMock()
     app_config.is_rsa_configuration_valid.return_value = False
+    app_config.is_certificate_configuration_valid.return_value = False
     config.app = app_config
     authenticator_factory = AuthenticatorFactory(config, api_client_factory)
     with pytest.raises(AuthInitializationError):

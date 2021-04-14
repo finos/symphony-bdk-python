@@ -1,6 +1,5 @@
 # Authentication
 The Symphony BDK authentication API allows developers to authenticate their bots and apps using RSA authentication mode.
-Please mind **only RSA authentication is supported**.
 
 The following sections will explain you:
 - how to authenticate your bot service account
@@ -82,6 +81,7 @@ async def run():
 ## App authentication
 Application authentication is completely optional but remains required if you want to use OBO.
 
+### Using RSA
 Required `config.yaml` setup:
 ```yaml
 host: acme.symphony.com
@@ -90,6 +90,22 @@ app:
     privateKey:
       path: /path/to/rsa/private-key.pem
 ```
+
+### Using Client Certificate
+> Read more about certificate authentication [here](https://docs.developers.symphony.com/building-bots-on-symphony/authentication/certificate-authentication)
+
+Required `config.yaml` setup: 
+```yaml
+host: acme.symphony.com
+app:
+    appId: app-id
+    certificate:
+      path: /path/to/certificate.pem
+```
+
+To know more about the format of the certificate file, check [SSLContext.load_cert_chain](https://docs.python.org/3/library/ssl.html#ssl.SSLContext.load_cert_chain).
+The certificate path will be passed to the `certfile` parameter of the `load_cert_chain_method`. We do not pass anything
+to `keyfile` and `password` parameters, which means certificate and decrypted private key should be put in same file.
 
 ### Circle Of Trust
 > Read more about Circle Of Trust

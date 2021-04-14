@@ -21,7 +21,6 @@ def test_update_private_key(simple_config_path):
 
 def test_update_certificate(simple_config_path):
     config = BdkConfigLoader.load_from_file(simple_config_path)
-    certificate = get_resource_filepath("cert/certificate.cert", as_text=False).read_text()
-    config.bot.certificate.content = certificate
-    assert config.bot.certificate._content == certificate
-    assert config.bot.certificate._path is None
+    certificate_path = get_resource_filepath("cert/certificate.cert", as_text=True)
+    config.bot.certificate.path = certificate_path
+    assert config.bot.certificate._path == certificate_path
