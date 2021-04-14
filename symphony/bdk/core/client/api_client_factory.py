@@ -21,7 +21,8 @@ class ApiClientFactory:
         self._pod_client = self._get_api_client(self._config.pod, "/pod")
         self._relay_client = self._get_api_client(self._config.key_manager, "/relay")
         self._agent_client = self._get_api_client(self._config.agent, "/agent")
-        self._session_auth_client = self._get_api_client(self._config.session_auth, "/sessionauth")
+        self._session_auth_client = self._get_api_client_with_client_cert(self._config.session_auth, "/sessionauth",
+                                                                          self._config.app.certificate.path)
 
     def get_login_client(self) -> ApiClient:
         """Returns a fully initialized ApiClient for Login API.
@@ -45,7 +46,7 @@ class ApiClientFactory:
         return self._relay_client
 
     def get_session_auth_client(self) -> ApiClient:
-        """Returns a fully initialized ApiClient for Session Auth API.
+        """Returns a fully initialized ApiClient for Session Auth API for certificate OBO authentication.
 
         :return: a ApiClient instance for Session Auth API.
         """
@@ -69,16 +70,27 @@ class ApiClientFactory:
         await self._session_auth_client.close()
 
     def _get_api_client(self, server_config, context) -> ApiClient:
+        configuration = self._get_client_config(context, server_config)
+        return ApiClientFactory._get_api_client_from_config(configuration, server_config)
+
+    def _get_api_client_with_client_cert(self, server_config, context, certificate_path) -> ApiClient:
+        configuration = self._get_client_config(context, server_config)
+        configuration.cert_file = certificate_path
+
+        return ApiClientFactory._get_api_client_from_config(configuration, server_config)
+
+    def _get_client_config(self, context, server_config):
         configuration = Configuration(host=(server_config.get_base_path() + context), discard_unknown_keys=True)
         configuration.verify_ssl = True
         configuration.ssl_ca_cert = self._config.ssl.trust_store_path
-
         if server_config.proxy is not None:
             ApiClientFactory._configure_proxy(server_config, configuration)
+        return configuration
 
-        client = ApiClient(configuration=configuration)
+    @staticmethod
+    def _get_api_client_from_config(client_config, server_config):
+        client = ApiClient(configuration=client_config)
         ApiClientFactory._add_headers(client, server_config)
-
         return client
 
     @staticmethod
