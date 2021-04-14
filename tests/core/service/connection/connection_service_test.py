@@ -9,7 +9,7 @@ from symphony.bdk.gen.pod_api.connection_api import ConnectionApi
 from symphony.bdk.gen.pod_model.user_connection import UserConnection
 from symphony.bdk.gen.pod_model.user_connection_list import UserConnectionList
 from symphony.bdk.gen.pod_model.user_connection_request import UserConnectionRequest
-from tests.utils.resource_utils import object_from_json, deserialize_object
+from tests.utils.resource_utils import deserialize_object
 
 
 @pytest.fixture(name="auth_session")
@@ -157,12 +157,6 @@ async def test_reject_connection(connection_api, connection_service):
 @pytest.mark.asyncio
 async def test_remove_connection(connection_api, connection_service):
     connection_api.v1_connection_user_uid_remove_post = AsyncMock()
-    connection_api.v1_connection_user_uid_remove_post.return_value = object_from_json(
-        "{"
-        "   \"format\": \"TEXT\","
-        "   \"message\": \"Connection Removed.\""
-        "}"
-    )
 
     await connection_service.remove_connection(1234)
 

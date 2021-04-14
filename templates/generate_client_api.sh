@@ -37,4 +37,4 @@ generate_files() {
 generate_files https://raw.githubusercontent.com/symphonyoss/symphony-api-spec/master/agent/agent-api-public.yaml agent
 generate_files https://raw.githubusercontent.com/symphonyoss/symphony-api-spec/master/authenticator/authenticator-api-public.yaml auth
 generate_files https://raw.githubusercontent.com/symphonyoss/symphony-api-spec/master/login/login-api-public.yaml login
-generate_files https://raw.githubusercontent.com/symphonyoss/symphony-api-spec/master/pod/pod-api-public-deprecated.yaml pod
+generate_files https://raw.githubusercontent.com/symphonyoss/symphony-api-spec/master/pod/pod-api-public.yaml pod

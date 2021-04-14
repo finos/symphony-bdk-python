@@ -54,6 +54,7 @@ class OboSignalService:
         :param max_number: the total maximum number of elements to retrieve
         :return: an asynchronous generator of found signals
         """
+
         async def list_signals_one_page(skip, limit):
             result = await self.list_signals(skip, limit)
             return result.value if result else None
@@ -108,9 +109,9 @@ class OboSignalService:
         :param signal_id: The Id of the existing signal to be deleted.
         """
 
-        return await self._signals_api.v1_signals_id_delete_post(
-            id=signal_id, session_token=await self._auth_session.session_token,
-            key_manager_token=await self._auth_session.key_manager_token)
+        await self._signals_api.v1_signals_id_delete_post(id=signal_id,
+                                                          session_token=await self._auth_session.session_token,
+                                                          key_manager_token=await self._auth_session.key_manager_token)
 
     async def subscribe_users_to_signal(self, signal_id: str, pushed: bool,
                                         user_ids: [int]) -> ChannelSubscriptionResponse:
@@ -169,6 +170,7 @@ class OboSignalService:
         :param max_number: the total maximum number of elements to retrieve.
         :return: an asynchronous generator returning all users subscribed to the signal.
         """
+
         async def list_subscribers_one_page(skip, limit):
             result = await self.list_subscribers(signal_id, skip, limit)
             return result.data if result else None
