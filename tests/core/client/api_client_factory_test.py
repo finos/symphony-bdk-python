@@ -7,6 +7,7 @@ from symphony.bdk.core.client.api_client_factory import ApiClientFactory
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
 from symphony.bdk.core.config.model.bdk_server_config import BdkProxyConfig
 from symphony.bdk.core.config.model.bdk_ssl_config import BdkSslConfig
+from tests.utils.resource_utils import get_resource_filepath
 
 HOST = "acme.symphony.com"
 
@@ -33,6 +34,25 @@ async def test_host_configured(config):
     assert_host_configured_only(client_factory.get_agent_client(), "/agent")
     assert_host_configured_only(client_factory.get_session_auth_client(), "/sessionauth")
     assert_host_configured_only(client_factory.get_relay_client(), "/relay")
+
+
+@pytest.mark.asyncio
+async def test_client_cert_configured(config):
+    client_cert_path = get_resource_filepath("cert/megabot.pem", as_text=True)
+
+    config.app.certificate.path = client_cert_path
+    client_factory = ApiClientFactory(config)
+    session_auth_client = client_factory.get_session_auth_client()
+
+    assert session_auth_client.configuration.cert_file == client_cert_path
+
+
+@pytest.mark.asyncio
+async def test_client_cert_not_configured(config):
+    client_factory = ApiClientFactory(config)
+    session_auth_client = client_factory.get_session_auth_client()
+
+    assert session_auth_client.configuration.cert_file is None
 
 
 @pytest.mark.asyncio
