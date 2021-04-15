@@ -50,6 +50,7 @@ def validate_jwt(jwt_token: str, certificate: str, allowed_audience: str) -> dic
 
     :param jwt_token: the token to be validated
     :param certificate: the X509 certificate in pem format to be used for jwt validation
+    :param allowed_audience: the expected value in "aud" claim. If it doesn't match jwt will be rejected
     :return: a dictionary containing the jwt claims
     :raise AuthInitializationError: If the certificate or jwt are invalid.
     """

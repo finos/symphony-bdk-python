@@ -105,7 +105,7 @@ app:
 
 To know more about the format of the certificate file, check [SSLContext.load_cert_chain](https://docs.python.org/3/library/ssl.html#ssl.SSLContext.load_cert_chain).
 The certificate path will be passed to the `certfile` parameter of the `load_cert_chain_method`. We do not pass anything
-to `keyfile` and `password` parameters, which means certificate and decrypted private key should be put in same file.
+to `keyfile` and `password` parameters, which means certificate and decrypted private key should be put in the same file.
 
 ### Circle Of Trust
 > Read more about Circle Of Trust
