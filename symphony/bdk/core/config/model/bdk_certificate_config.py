@@ -34,4 +34,4 @@ class BdkCertificateConfig:
 
         :return: true if the path to the client certificate is not empty
         """
-        return self._path != ""
+        return self._path is not None and self._path != ""

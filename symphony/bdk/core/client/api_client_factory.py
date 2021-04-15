@@ -21,8 +21,8 @@ class ApiClientFactory:
         self._pod_client = self._get_api_client(self._config.pod, "/pod")
         self._relay_client = self._get_api_client(self._config.key_manager, "/relay")
         self._agent_client = self._get_api_client(self._config.agent, "/agent")
-        self._session_auth_client = self._get_api_client_with_client_cert(self._config.session_auth, "/sessionauth",
-                                                                          self._config.app.certificate.path)
+        self._app_session_auth_client = self._get_api_client_with_client_cert(self._config.session_auth, "/sessionauth",
+                                                                              self._config.app.certificate.path)
 
     def get_login_client(self) -> ApiClient:
         """Returns a fully initialized ApiClient for Login API.
@@ -45,12 +45,12 @@ class ApiClientFactory:
         """
         return self._relay_client
 
-    def get_session_auth_client(self) -> ApiClient:
+    def get_app_session_auth_client(self) -> ApiClient:
         """Returns a fully initialized ApiClient for Session Auth API for certificate OBO authentication.
 
         :return: a ApiClient instance for Session Auth API.
         """
-        return self._session_auth_client
+        return self._app_session_auth_client
 
     def get_agent_client(self) -> ApiClient:
         """Returns a fully initialized ApiClient for Agent API.
@@ -67,7 +67,7 @@ class ApiClientFactory:
         await self._relay_client.close()
         await self._pod_client.close()
         await self._agent_client.close()
-        await self._session_auth_client.close()
+        await self._app_session_auth_client.close()
 
     def _get_api_client(self, server_config, context) -> ApiClient:
         configuration = self._get_client_config(context, server_config)
