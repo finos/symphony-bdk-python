@@ -1,4 +1,5 @@
 import logging
+import re
 
 from symphony.bdk.core.activity.api import AbstractActivity, ActivityContext
 from symphony.bdk.core.activity.exception import FatalActivityExecutionException
@@ -11,8 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 class CommandContext(ActivityContext[V4MessageSent]):
-    """
-    Default implementation of the :py:class:`ActivityContext` handled by the :py:class:`CommandActivity`.
+    """Default implementation of the :py:class:`ActivityContext` handled by the :py:class:`CommandActivity`.
     """
 
     def __init__(self, initiator: V4Initiator, source_event: V4MessageSent, bot_display_name: str):
@@ -43,12 +43,41 @@ class CommandContext(ActivityContext[V4MessageSent]):
 
 
 class CommandActivity(AbstractActivity[CommandContext]):
-    """
-    A command activity corresponds to any message sent in a chat where the bot is part of.
+    """A command activity corresponds to any message sent in a chat where the bot is part of.
     """
 
     def matches(self, context: CommandContext) -> bool:
         pass
 
-    def on_activity(self, context: CommandContext):
+    async def on_activity(self, context: CommandContext):
         pass
+
+
+class SlashCommandActivity(CommandActivity):
+    """A slash command is a particular CommandActivity with three parameters:
+      - the command name
+      - if we should mention the bot
+      - the callback function
+
+    The Slash command is triggered if we receive a MESSAGESENT event with message text:
+      - "@{bot_display name} {name}" if ``requires_mention_bot`` is True
+      - "{name}" otherwise
+    """
+
+    def __init__(self, name, requires_mention_bot, callback):
+        """
+
+        :param name: the command name
+        :param requires_mention_bot: if the command requires the bot mention to trigger the slash command
+        :param callback: the coroutine to be executed if message text matches
+        """
+        self._name = name
+        self._requires_mention_bot = requires_mention_bot
+        self._callback = callback
+
+    def matches(self, context: CommandContext) -> bool:
+        pattern = rf"@{context.bot_display_name} {self._name}" if self._requires_mention_bot else rf"{self._name}"
+        return pattern == context.text_content
+
+    async def on_activity(self, context: CommandContext):
+        await self._callback(context)

@@ -221,7 +221,7 @@ class SymphonyBdk:
     def activities(self) -> ActivityRegistry:
         """Get the :class:`ActivityRegistry` from the BDK entry point.
 
-        :return: The :class:`ActivityRegistry instance.
+        :return: The :class:`ActivityRegistry` instance.
 
         """
         return self._activity_registry
