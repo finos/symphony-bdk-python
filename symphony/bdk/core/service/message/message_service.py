@@ -100,7 +100,6 @@ class MessageService(OboMessageService):
                  auth_session: AuthSession):
         super().__init__(messages_api, auth_session, message_suppression_api)
         self._message_api = message_api
-        self._message_suppression_api = message_suppression_api
         self._streams_api = streams_api
         self._pod_api = pod_api
         self._attachment_api = attachment_api
