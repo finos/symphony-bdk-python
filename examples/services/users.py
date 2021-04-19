@@ -14,21 +14,12 @@ async def run():
 
     async with SymphonyBdk(config) as bdk:
         user_service = bdk.users()
-        details = await user_service.list_users_by_ids([12987981103610])
-        logging.info(details)
 
-        async for uid in await user_service.list_all_users_following(12987981103233):
-            print(uid)
-
-        async for i in await user_service.list_all_user_followers(12987981103233):
-            print(i)
+        logging.info(await user_service.list_users_by_ids([12987981103610]))
 
         query = UserSearchQuery(query='bot', filters=UserSearchFilter(company='Symphony'))
         async for uid in await user_service.search_all_users(query, local=False):
             print(uid)
-
-        async for i in await user_service.list_all_user_details(max_number=100):
-            print(i.user_system_info.id)
 
         async for i in await user_service.list_all_user_details_by_filter(user_filter=UserFilter(status="ENABLED",
                                                                                                  role="INDIVIDUAL"),

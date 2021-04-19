@@ -14,6 +14,9 @@ async def run():
 
     async with SymphonyBdk(config) as bdk:
         message_service = bdk.messages()
+
+        await message_service.send_message(stream_id_1, "<messageML>Hello, World!</messageML>")
+
         with open("/path/to/attachment1", "rb") as file1, \
                 open("/path/to/attachment2", "rb") as file2:
             await message_service.blast_message(
