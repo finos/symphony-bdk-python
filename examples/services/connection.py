@@ -1,5 +1,6 @@
 import asyncio
 import logging
+from pathlib import Path
 
 from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.service.connection.model.connection_status import ConnectionStatus
@@ -15,5 +16,6 @@ async def run():
         logging.info(user_connection)
 
 
-logging.basicConfig(level=logging.DEBUG)
+logging.config.fileConfig(Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False)
+
 asyncio.run(run())

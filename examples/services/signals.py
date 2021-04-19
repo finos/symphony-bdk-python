@@ -1,5 +1,6 @@
 import asyncio
 import logging
+from pathlib import Path
 
 from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.symphony_bdk import SymphonyBdk
@@ -47,5 +48,6 @@ async def run():
             print(s)
 
 
-logging.basicConfig(level=logging.DEBUG)
+logging.config.fileConfig(Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False)
+
 asyncio.run(run())
