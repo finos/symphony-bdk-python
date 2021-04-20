@@ -219,7 +219,8 @@ class OboServiceFactory:
         """
         return OboMessageService(
             MultiAttachmentsMessagesApi(self._agent_client),
-            self._auth_session
+            self._auth_session,
+            MessageSuppressionApi(self._pod_client)
         )
 
     def get_connection_service(self) -> OboConnectionService:

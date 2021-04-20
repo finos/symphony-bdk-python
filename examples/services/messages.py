@@ -25,6 +25,11 @@ async def run():
                 attachment=[file1, file2]
             )
 
+        logging.info("Obo example:")
+        obo_auth_session = bdk.obo(username="username")
+        async with bdk.obo_services(obo_auth_session) as obo_services:
+            await obo_services.messages().suppress_message("URL-Safe MessageID")
+
 
 logging.config.fileConfig(Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False)
 
