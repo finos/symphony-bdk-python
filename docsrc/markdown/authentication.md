@@ -6,9 +6,17 @@ The following sections will explain you:
 - how to authenticate your app to use OBO (On Behalf Of) authentication
 
 ## Bot authentication
+
+In this section we will see how to authenticate a bot service account. You will notice that everything has to be done
+through your BDK `config.yaml`, making your code completely agnostic to authentication modes (RSA or certificate).
+
+Only one of certificate or RSA authentication should be configured in one BDK `config.yaml`. If both of them are
+provided, an `AuthInitializationError` will be thrown when you try to authenticate to the bot service account.
+
+### Bot authentication using RSA
 In this section we will see how to authenticate a bot service account using RSA authentication.
 
-> Read more about RSA authentication [here](https://developers.symphony.com/symphony-developer/docs/rsa-bot-authentication-workflow)
+> Read more about RSA authentication [here](https://docs.developers.symphony.com/building-bots-on-symphony/authentication/rsa-authentication)
 
 Required `config.yaml` setup:
 ```yaml
@@ -18,6 +26,23 @@ bot:
     privateKey:
       path: /path/to/rsa/private-key.pem
 ```
+
+### Bot authentication using Client Certificate
+> Read more about Client Certificate authentication [here](https://docs.developers.symphony.com/building-bots-on-symphony/authentication/certificate-authentication)
+
+Required `config.yaml` setup:
+```yaml
+host: acme.symphony.com
+bot:
+    username: bot-username
+    certificate:
+      path: /path/to/certificate.pem
+```
+
+To know more about the format of the certificate file, check [SSLContext.load_cert_chain](https://docs.python.org/3/library/ssl.html#ssl.SSLContext.load_cert_chain).
+The certificate path will be passed to the `certfile` parameter of the `load_cert_chain_method`. We do not pass anything
+to `keyfile` and `password` parameters, which means certificate and decrypted private key should be put in the same file.
+
 
 ### Bot authentication deep-dive
 The code snippet below explains how to manually retrieve your bot authentication session. However, note that by default
