@@ -1,7 +1,7 @@
 # Getting started with Symphony BDK for Python
 
 This guide provides detailed information for beginners who want to bootstrap their first Symphony BDK project
-in Python.
+in Python. The Symphony BDK requires **Python 3.8 or higher**.
 
 ## Starting with Symphony Generator
 > This section requires `npm` ([Node Package Manager](https://www.npmjs.com/)) to be installed on your local machine as a prerequisite
@@ -32,7 +32,7 @@ setup(
     author='jane.doe',
     author_email='jane.doe@acme.com',
     description='My Python bot',
-    python_requires='>=3',
+    python_requires='>=3.8',
     install_requires=['sym-api-client-python>=2.0b0']
 )
 
