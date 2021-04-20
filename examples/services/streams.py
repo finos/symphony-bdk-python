@@ -10,6 +10,8 @@ from symphony.bdk.gen.pod_model.v3_room_attributes import V3RoomAttributes
 
 
 async def run():
+    # One can retrieve the stream id (aka conversation id) following the guide here:
+    # https://docs.developers.symphony.com/building-bots-on-symphony/datafeed/overview-of-streams
     stream_id = "ubaSiuUsc_j-_lVQ8vhAz3___opSJdJZdA"
 
     config = BdkConfigLoader.load_from_symphony_dir("config.yaml")
