@@ -11,8 +11,8 @@ from symphony.bdk.core.symphony_bdk import SymphonyBdk
 
 async def run():
     async with SymphonyBdk(BdkConfigLoader.load_from_symphony_dir("config.yaml")) as bdk:
-        await bdk.activities().register(SlashGifCommandActivity(bdk.messages()))
-        await bdk.activities().register(ReplyFormReplyActivity(bdk.messages()))
+        bdk.activities().register(SlashGifCommandActivity(bdk.messages()))
+        bdk.activities().register(ReplyFormReplyActivity(bdk.messages()))
         await bdk.datafeed().start()
 
 
@@ -43,10 +43,10 @@ class ReplyFormReplyActivity(FormReplyActivity):
 
 
 def load_gif_elements_form():
-    return (Path(__file__).parent / "../resources/gif.mml.xml").read_text(encoding="utf-8")
+    return (Path(__file__).parent.parent / "resources/gif.mml.xml").read_text(encoding="utf-8")
 
 
-logging.config.fileConfig(Path(__file__).parent / "../logging.conf", disable_existing_loggers=False)
+logging.config.fileConfig(Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False)
 
 try:
     logging.info("Running activity example...")

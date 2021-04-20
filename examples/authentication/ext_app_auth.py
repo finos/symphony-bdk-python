@@ -1,6 +1,6 @@
 import asyncio
 import logging.config
-import os
+from pathlib import Path
 
 from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.symphony_bdk import SymphonyBdk
@@ -19,7 +19,6 @@ async def run():
         logging.debug("Is token pair valid: %s", await ext_app_authenticator.is_token_pair_valid(ta, ts))
 
 
-logging.config.fileConfig(os.path.dirname(os.path.abspath(__file__)) + '/logging.conf',
-                          disable_existing_loggers=False)
+logging.config.fileConfig(Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False)
 
 asyncio.run(run())
