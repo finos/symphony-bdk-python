@@ -3,6 +3,7 @@ from unittest.mock import MagicMock, Mock
 import pytest
 
 from symphony.bdk.core.auth.authenticator_factory import AuthenticatorFactory
+from symphony.bdk.core.auth.bot_authenticator import BotAuthenticatorRsa, BotAuthenticatorCert
 from symphony.bdk.core.auth.exception import AuthInitializationError
 from symphony.bdk.core.auth.ext_app_authenticator import ExtensionAppAuthenticatorRsa, ExtensionAppAuthenticatorCert
 from symphony.bdk.core.auth.obo_authenticator import OboAuthenticatorRsa, OboAuthenticatorCert
@@ -15,6 +16,11 @@ from tests.utils.resource_utils import get_config_resource_filepath
 @pytest.fixture(name="config")
 def fixture_config():
     return BdkConfigLoader.load_from_file(get_config_resource_filepath("config.yaml"))
+
+
+@pytest.fixture(name="bot_cert_config")
+def fixture_bot_cert_config():
+    return BdkConfigLoader.load_from_file(get_config_resource_filepath("config_bot_cert.yaml"))
 
 
 @pytest.fixture(name="app_cert_config")
@@ -32,13 +38,24 @@ def fixture_api_client_factory():
 
 def test_get_bot_authenticator(config, api_client_factory):
     authenticator_factory = AuthenticatorFactory(config, api_client_factory)
-    assert authenticator_factory.get_bot_authenticator() is not None
+    bot_authenticator = authenticator_factory.get_bot_authenticator()
+
+    assert bot_authenticator is not None
+    assert isinstance(bot_authenticator, BotAuthenticatorRsa)
+
+
+def test_get_bot_cert_authenticator(bot_cert_config, api_client_factory):
+    authenticator_factory = AuthenticatorFactory(bot_cert_config, api_client_factory)
+    bot_authenticator = authenticator_factory.get_bot_authenticator()
+
+    assert bot_authenticator is not None
+    assert isinstance(bot_authenticator, BotAuthenticatorCert)
 
 
 def test_get_bot_authenticator_failed(config, api_client_factory):
     bot_config = MagicMock()
-    bot_config.is_rsa_authentication_configured.return_value = True
     bot_config.is_rsa_configuration_valid.return_value = False
+    bot_config.is_certificate_configuration_valid.return_value = False
     config.bot = bot_config
     authenticator_factory = AuthenticatorFactory(config, api_client_factory)
     with pytest.raises(AuthInitializationError):
