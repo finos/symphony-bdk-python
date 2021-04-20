@@ -1,7 +1,7 @@
 import asyncio
 import logging
 import logging.config
-import os
+from pathlib import Path
 
 from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.service.datafeed.real_time_event_listener import RealTimeEventListener
@@ -26,8 +26,8 @@ class RealTimeEventListenerImpl(RealTimeEventListener):
         logging.debug("Received event: %s", event)
 
 
-logging.config.fileConfig(os.path.dirname(os.path.abspath(__file__)) + '/logging.conf',
-                          disable_existing_loggers=False)
+logging.config.fileConfig(Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False)
+
 
 try:
     logging.info("Running datafeed example...")
