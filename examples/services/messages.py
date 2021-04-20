@@ -28,6 +28,8 @@ async def run():
         logging.info("Obo example:")
         obo_auth_session = bdk.obo(username="username")
         async with bdk.obo_services(obo_auth_session) as obo_services:
+            # Message ID can be retrieved by following guide here:
+            # https://docs.developers.symphony.com/building-bots-on-symphony/datafeed/overview-of-streams
             await obo_services.messages().suppress_message("URL-Safe MessageID")
 
 
