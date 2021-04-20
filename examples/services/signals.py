@@ -28,11 +28,11 @@ async def run():
 
         logging.info("Listing all signals")
         async for s in await signal_service.list_all_signals():
-            print(s)
+            logging.debug(s)
 
         logging.info("List all subscribers")
         async for s in await signal_service.list_all_subscribers(signal.id):
-            print(s)
+            logging.debug(s)
 
         logging.info(await signal_service.delete_signal(signal.id))
 

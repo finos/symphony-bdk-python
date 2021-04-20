@@ -25,13 +25,13 @@ async def run():
         await streams.remove_member_from_room(13056700579859, stream_id)
 
         async for m in await streams.list_all_streams_members(stream_id):
-            print(m)
+            logging.debug(m)
 
         stream_filter = StreamFilter(
             stream_types=[StreamType(type="IM"), StreamType(type="MIM"), StreamType(type="ROOM")],
             include_inactive_streams=False)
         async for s in await streams.list_all_streams(stream_filter):
-            print(s)
+            logging.debug(s)
 
 
 logging.config.fileConfig(Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False)
