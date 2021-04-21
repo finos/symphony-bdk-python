@@ -1,5 +1,4 @@
 import asyncio
-import logging
 import logging.config
 
 from symphony.bdk.core.config.loader import BdkConfigLoader
