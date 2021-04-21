@@ -3,7 +3,8 @@ from unittest.mock import patch
 
 import pytest
 
-from symphony.bdk.core.client.api_client_factory import ApiClientFactory
+from symphony.bdk.core.client.api_client_factory import ApiClientFactory, POD, LOGIN, AGENT, SESSION_AUTH, RELAY, \
+    KEY_AUTH
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
 from symphony.bdk.core.config.model.bdk_server_config import BdkProxyConfig
 from symphony.bdk.core.config.model.bdk_ssl_config import BdkSslConfig
@@ -29,30 +30,42 @@ def fixture_add_x_trace_id():
 async def test_host_configured(config):
     client_factory = ApiClientFactory(config)
 
-    assert_host_configured_only(client_factory.get_pod_client(), "/pod")
-    assert_host_configured_only(client_factory.get_login_client(), "/login")
-    assert_host_configured_only(client_factory.get_agent_client(), "/agent")
-    assert_host_configured_only(client_factory.get_app_session_auth_client(), "/sessionauth")
-    assert_host_configured_only(client_factory.get_relay_client(), "/relay")
+    assert_host_configured_only(client_factory.get_pod_client(), POD)
+    assert_host_configured_only(client_factory.get_login_client(), LOGIN)
+    assert_host_configured_only(client_factory.get_agent_client(), AGENT)
+    assert_host_configured_only(client_factory.get_session_auth_client(), SESSION_AUTH)
+    assert_host_configured_only(client_factory.get_key_auth_client(), KEY_AUTH)
+    assert_host_configured_only(client_factory.get_app_session_auth_client(), SESSION_AUTH)
+    assert_host_configured_only(client_factory.get_relay_client(), RELAY)
 
 
 @pytest.mark.asyncio
-async def test_client_cert_configured(config):
+async def test_client_cert_configured_for_app(config):
     client_cert_path = get_resource_filepath("cert/megabot.pem", as_text=True)
 
     config.app.certificate.path = client_cert_path
     client_factory = ApiClientFactory(config)
-    session_auth_client = client_factory.get_app_session_auth_client()
 
-    assert session_auth_client.configuration.cert_file == client_cert_path
+    assert client_factory.get_app_session_auth_client().configuration.cert_file == client_cert_path
+
+
+@pytest.mark.asyncio
+async def test_client_cert_configured_for_bot(config):
+    client_cert_path = get_resource_filepath("cert/megabot.pem", as_text=True)
+
+    config.bot.certificate.path = client_cert_path
+    client_factory = ApiClientFactory(config)
+
+    assert client_factory.get_session_auth_client().configuration.cert_file == client_cert_path
+    assert client_factory.get_key_auth_client().configuration.cert_file == client_cert_path
 
 
 @pytest.mark.asyncio
 async def test_client_cert_not_configured(config):
     client_factory = ApiClientFactory(config)
-    session_auth_client = client_factory.get_app_session_auth_client()
-
-    assert session_auth_client.configuration.cert_file is None
+    assert client_factory.get_session_auth_client().configuration.cert_file is None
+    assert client_factory.get_key_auth_client().configuration.cert_file is None
+    assert client_factory.get_app_session_auth_client().configuration.cert_file is None
 
 
 @pytest.mark.asyncio
@@ -62,12 +75,14 @@ async def test_proxy_configured(config):
     config.proxy = BdkProxyConfig(proxy_host, proxy_port)
     client_factory = ApiClientFactory(config)
 
-    assert_host_and_proxy_configured(client_factory.get_pod_client(), "/pod", proxy_host, proxy_port)
-    assert_host_and_proxy_configured(client_factory.get_login_client(), "/login", proxy_host, proxy_port)
-    assert_host_and_proxy_configured(client_factory.get_agent_client(), "/agent", proxy_host, proxy_port)
-    assert_host_and_proxy_configured(client_factory.get_app_session_auth_client(), "/sessionauth", proxy_host,
+    assert_host_and_proxy_configured(client_factory.get_pod_client(), POD, proxy_host, proxy_port)
+    assert_host_and_proxy_configured(client_factory.get_login_client(), LOGIN, proxy_host, proxy_port)
+    assert_host_and_proxy_configured(client_factory.get_agent_client(), AGENT, proxy_host, proxy_port)
+    assert_host_and_proxy_configured(client_factory.get_session_auth_client(), SESSION_AUTH, proxy_host, proxy_port)
+    assert_host_and_proxy_configured(client_factory.get_key_auth_client(), KEY_AUTH, proxy_host, proxy_port)
+    assert_host_and_proxy_configured(client_factory.get_app_session_auth_client(), SESSION_AUTH, proxy_host,
                                      proxy_port)
-    assert_host_and_proxy_configured(client_factory.get_relay_client(), "/relay", proxy_host, proxy_port)
+    assert_host_and_proxy_configured(client_factory.get_relay_client(), RELAY, proxy_host, proxy_port)
 
 
 @pytest.mark.asyncio
@@ -77,12 +92,15 @@ async def test_proxy_credentials_configured(config):
     config.proxy = BdkProxyConfig(proxy_host, proxy_port, "user", "pass")
     client_factory = ApiClientFactory(config)
 
-    assert_host_and_proxy_credentials_configured(client_factory.get_pod_client(), "/pod", proxy_host, proxy_port)
-    assert_host_and_proxy_credentials_configured(client_factory.get_login_client(), "/login", proxy_host, proxy_port)
-    assert_host_and_proxy_credentials_configured(client_factory.get_agent_client(), "/agent", proxy_host, proxy_port)
-    assert_host_and_proxy_credentials_configured(client_factory.get_app_session_auth_client(), "/sessionauth", proxy_host,
+    assert_host_and_proxy_credentials_configured(client_factory.get_pod_client(), POD, proxy_host, proxy_port)
+    assert_host_and_proxy_credentials_configured(client_factory.get_login_client(), LOGIN, proxy_host, proxy_port)
+    assert_host_and_proxy_credentials_configured(client_factory.get_agent_client(), AGENT, proxy_host, proxy_port)
+    assert_host_and_proxy_credentials_configured(client_factory.get_session_auth_client(), SESSION_AUTH, proxy_host,
                                                  proxy_port)
-    assert_host_and_proxy_credentials_configured(client_factory.get_relay_client(), "/relay", proxy_host, proxy_port)
+    assert_host_and_proxy_credentials_configured(client_factory.get_key_auth_client(), KEY_AUTH, proxy_host, proxy_port)
+    assert_host_and_proxy_credentials_configured(client_factory.get_app_session_auth_client(), SESSION_AUTH, proxy_host,
+                                                 proxy_port)
+    assert_host_and_proxy_credentials_configured(client_factory.get_relay_client(), RELAY, proxy_host, proxy_port)
 
 
 @pytest.mark.asyncio
@@ -95,6 +113,8 @@ async def test_global_user_agent_configured(config):
     assert client_factory.get_pod_client().user_agent == custom_user_agent
     assert client_factory.get_login_client().user_agent == custom_user_agent
     assert client_factory.get_agent_client().user_agent == custom_user_agent
+    assert client_factory.get_session_auth_client().user_agent == custom_user_agent
+    assert client_factory.get_key_auth_client().user_agent == custom_user_agent
     assert client_factory.get_app_session_auth_client().user_agent == custom_user_agent
     assert client_factory.get_relay_client().user_agent == custom_user_agent
 
@@ -109,6 +129,8 @@ async def test_user_agent_configured_at_pod_level(config):
     assert client_factory.get_pod_client().user_agent == custom_user_agent
     assert client_factory.get_login_client().user_agent == custom_user_agent
     assert_default_user_agent_configured(client_factory.get_agent_client().user_agent)
+    assert_default_user_agent_configured(client_factory.get_session_auth_client().user_agent)
+    assert_default_user_agent_configured(client_factory.get_key_auth_client().user_agent)
     assert_default_user_agent_configured(client_factory.get_app_session_auth_client().user_agent)
     assert_default_user_agent_configured(client_factory.get_relay_client().user_agent)
 
@@ -123,6 +145,8 @@ async def test_user_agent_configured_at_agent_level(config):
     assert_default_user_agent_configured(client_factory.get_pod_client().user_agent)
     assert_default_user_agent_configured(client_factory.get_login_client().user_agent)
     assert client_factory.get_agent_client().user_agent == custom_user_agent
+    assert_default_user_agent_configured(client_factory.get_session_auth_client().user_agent)
+    assert_default_user_agent_configured(client_factory.get_key_auth_client().user_agent)
     assert_default_user_agent_configured(client_factory.get_app_session_auth_client().user_agent)
     assert_default_user_agent_configured(client_factory.get_relay_client().user_agent)
 
@@ -137,6 +161,8 @@ async def test_user_agent_configured_at_session_auth_level(config):
     assert_default_user_agent_configured(client_factory.get_pod_client().user_agent)
     assert_default_user_agent_configured(client_factory.get_login_client().user_agent)
     assert_default_user_agent_configured(client_factory.get_agent_client().user_agent)
+    assert client_factory.get_session_auth_client().user_agent == custom_user_agent
+    assert_default_user_agent_configured(client_factory.get_key_auth_client().user_agent)
     assert client_factory.get_app_session_auth_client().user_agent == custom_user_agent
     assert_default_user_agent_configured(client_factory.get_relay_client().user_agent)
 
@@ -151,6 +177,8 @@ async def test_user_agent_configured_at_km_level(config):
     assert_default_user_agent_configured(client_factory.get_pod_client().user_agent)
     assert_default_user_agent_configured(client_factory.get_login_client().user_agent)
     assert_default_user_agent_configured(client_factory.get_agent_client().user_agent)
+    assert_default_user_agent_configured(client_factory.get_session_auth_client().user_agent)
+    assert client_factory.get_key_auth_client().user_agent == custom_user_agent
     assert_default_user_agent_configured(client_factory.get_app_session_auth_client().user_agent)
     assert client_factory.get_relay_client().user_agent == custom_user_agent
 
@@ -163,6 +191,8 @@ async def test_global_default_headers(config):
     assert_default_headers(client_factory.get_pod_client().default_headers, config.default_headers)
     assert_default_headers(client_factory.get_login_client().default_headers, config.default_headers)
     assert_default_headers(client_factory.get_agent_client().default_headers, config.default_headers)
+    assert_default_headers(client_factory.get_session_auth_client().default_headers, config.default_headers)
+    assert_default_headers(client_factory.get_key_auth_client().default_headers, config.default_headers)
     assert_default_headers(client_factory.get_app_session_auth_client().default_headers, config.default_headers)
     assert_default_headers(client_factory.get_relay_client().default_headers, config.default_headers)
 
@@ -177,6 +207,8 @@ async def test_default_headers_at_pod_level(config):
     assert_default_headers(client_factory.get_pod_client().default_headers, default_headers)
     assert_default_headers(client_factory.get_login_client().default_headers, default_headers)
     assert_default_headers(client_factory.get_agent_client().default_headers, {})
+    assert_default_headers(client_factory.get_session_auth_client().default_headers, {})
+    assert_default_headers(client_factory.get_key_auth_client().default_headers, {})
     assert_default_headers(client_factory.get_app_session_auth_client().default_headers, {})
     assert_default_headers(client_factory.get_relay_client().default_headers, {})
 
@@ -191,6 +223,8 @@ async def test_default_headers_at_agent_level(config):
     assert_default_headers(client_factory.get_pod_client().default_headers, {})
     assert_default_headers(client_factory.get_login_client().default_headers, {})
     assert_default_headers(client_factory.get_agent_client().default_headers, default_headers)
+    assert_default_headers(client_factory.get_session_auth_client().default_headers, {})
+    assert_default_headers(client_factory.get_key_auth_client().default_headers, {})
     assert_default_headers(client_factory.get_app_session_auth_client().default_headers, {})
     assert_default_headers(client_factory.get_relay_client().default_headers, {})
 
@@ -205,6 +239,8 @@ async def test_default_headers_at_session_auth_level(config):
     assert_default_headers(client_factory.get_pod_client().default_headers, {})
     assert_default_headers(client_factory.get_login_client().default_headers, {})
     assert_default_headers(client_factory.get_agent_client().default_headers, {})
+    assert_default_headers(client_factory.get_session_auth_client().default_headers, default_headers)
+    assert_default_headers(client_factory.get_key_auth_client().default_headers, {})
     assert_default_headers(client_factory.get_app_session_auth_client().default_headers, default_headers)
     assert_default_headers(client_factory.get_relay_client().default_headers, {})
 
@@ -219,6 +255,8 @@ async def test_default_headers_at_km_level(config):
     assert_default_headers(client_factory.get_pod_client().default_headers, {})
     assert_default_headers(client_factory.get_login_client().default_headers, {})
     assert_default_headers(client_factory.get_agent_client().default_headers, {})
+    assert_default_headers(client_factory.get_session_auth_client().default_headers, {})
+    assert_default_headers(client_factory.get_key_auth_client().default_headers, default_headers)
     assert_default_headers(client_factory.get_app_session_auth_client().default_headers, {})
     assert_default_headers(client_factory.get_relay_client().default_headers, default_headers)
 
@@ -232,6 +270,8 @@ async def test_x_trace_id_not_in_default_headers(config, add_x_trace_id):
         assert_default_headers(client_factory.get_pod_client().default_headers, {})
         assert_default_headers(client_factory.get_login_client().default_headers, {})
         assert_default_headers(client_factory.get_agent_client().default_headers, {})
+        assert_default_headers(client_factory.get_session_auth_client().default_headers, {})
+        assert_default_headers(client_factory.get_key_auth_client().default_headers, {})
         assert_default_headers(client_factory.get_app_session_auth_client().default_headers, {})
         assert_default_headers(client_factory.get_relay_client().default_headers, {})
 
@@ -248,6 +288,8 @@ async def test_x_trace_id_not_in_default_headers(config, add_x_trace_id):
         assert_default_headers(client_factory.get_pod_client().default_headers, default_headers)
         assert_default_headers(client_factory.get_login_client().default_headers, default_headers)
         assert_default_headers(client_factory.get_agent_client().default_headers, default_headers)
+        assert_default_headers(client_factory.get_session_auth_client().default_headers, default_headers)
+        assert_default_headers(client_factory.get_key_auth_client().default_headers, default_headers)
         assert_default_headers(client_factory.get_app_session_auth_client().default_headers, default_headers)
         assert_default_headers(client_factory.get_relay_client().default_headers, default_headers)
 
