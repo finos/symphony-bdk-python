@@ -1,7 +1,9 @@
 """Module containing the ApiClientFactory class.
 """
+import logging
 import sys
 from importlib.metadata import distribution, PackageNotFoundError
+from ssl import SSLError
 
 import urllib3
 from aiohttp.hdrs import USER_AGENT
@@ -16,6 +18,8 @@ AGENT = "/agent"
 RELAY = "/relay"
 POD = "/pod"
 LOGIN = "/login"
+
+logger = logging.getLogger(__name__)
 
 
 class ApiClientFactory:
@@ -116,9 +120,13 @@ class ApiClientFactory:
 
     @staticmethod
     def _get_api_client_from_config(client_config, server_config):
-        client = ApiClient(configuration=client_config)
-        ApiClientFactory._add_headers(client, server_config)
-        return client
+        try:
+            client = ApiClient(configuration=client_config)
+            ApiClientFactory._add_headers(client, server_config)
+            return client
+        except SSLError as exc:
+            logger.exception("SSL error when instantiating clients, please check certificates are valid")
+            raise exc
 
     @staticmethod
     def _add_headers(client, server_config):
