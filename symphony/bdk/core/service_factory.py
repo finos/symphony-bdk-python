@@ -69,7 +69,8 @@ class ServiceFactory:
             UsersApi(self._pod_client),
             AuditTrailApi(self._agent_client),
             PodSystemApi(self._pod_client),
-            self._auth_session
+            self._auth_session,
+            self._config.retry
         )
 
     def get_message_service(self) -> MessageService:
@@ -85,7 +86,8 @@ class ServiceFactory:
             PodApi(self._pod_client),
             AttachmentsApi(self._agent_client),
             DefaultApi(self._pod_client),
-            self._auth_session
+            self._auth_session,
+            self._config.retry
         )
 
     def get_connection_service(self) -> ConnectionService:
@@ -209,7 +211,8 @@ class OboServiceFactory:
         return OboUserService(
             UserApi(self._pod_client),
             UsersApi(self._pod_client),
-            self._auth_session
+            self._auth_session,
+            self._config.retry
         )
 
     def get_message_service(self) -> OboMessageService:
@@ -219,7 +222,8 @@ class OboServiceFactory:
         """
         return OboMessageService(
             MultiAttachmentsMessagesApi(self._agent_client),
-            self._auth_session
+            self._auth_session,
+            self._config.retry,
         )
 
     def get_connection_service(self) -> OboConnectionService:
