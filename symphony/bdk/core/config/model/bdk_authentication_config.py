@@ -16,10 +16,17 @@ class BdkAuthenticationConfig:
         self.certificate = BdkCertificateConfig(
             **certificate_config) if certificate_config is not None else BdkCertificateConfig()
 
+    def is_authentication_configured(self) -> bool:
+        """Check if either RSA or certificate authentication is configured
+
+        :return: True if RSA or certificate authentication is configured
+        """
+        return self.is_rsa_configuration_valid() or self.is_certificate_configuration_valid()
+
     def is_rsa_authentication_configured(self) -> bool:
         """Check if the RSA authentication is configured
 
-        :return true if the RSA authentication is configured
+        :return True if the RSA authentication is configured
         """
         return self.private_key.is_configured()
 

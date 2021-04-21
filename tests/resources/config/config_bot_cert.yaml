@@ -1,0 +1,8 @@
+_version: '2.0'
+
+host: devx1.symphony.com
+
+bot:
+  username: youbot
+  certificate:
+    path: /Users/local/conf/agent/cert.pem
