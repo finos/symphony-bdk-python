@@ -3,6 +3,7 @@ from unittest.mock import MagicMock, AsyncMock
 import pytest
 
 from symphony.bdk.core.auth.auth_session import AuthSession
+from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.core.service.application.application_service import ApplicationService
 from symphony.bdk.gen.pod_api.app_entitlement_api import AppEntitlementApi
 from symphony.bdk.gen.pod_api.application_api import ApplicationApi
@@ -34,7 +35,7 @@ def fixture_app_entitlement_api():
 
 @pytest.fixture(name="application_service")
 def fixture_application_service(application_api, app_entitlement_api, auth_session):
-    service = ApplicationService(application_api, app_entitlement_api, auth_session)
+    service = ApplicationService(application_api, app_entitlement_api, auth_session, BdkRetryConfig())
     return service
 
 

@@ -1,3 +1,5 @@
+from ..auth.exception import AuthUnauthorizedError
+
 try:
     from inspect import iscoroutinefunction
 except ImportError:
@@ -7,7 +9,7 @@ from typing import Callable
 from functools import wraps
 
 from tenacity.retry import retry_if_exception
-from tenacity import stop_after_attempt, wait_exponential
+from tenacity import stop_after_attempt, wait_exponential, RetryCallState
 
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.gen import ApiException
@@ -59,3 +61,11 @@ def is_network_or_minor_error(exception: Exception) -> bool:
         if exception.status == 500 or exception.status == 401 or exception.status == 429:
             return True
     return isinstance(exception, ConnectionError)
+
+def authentication_retry(retry_state: RetryCallState):
+    unauthorized_message = "Service account is not authorized to authenticate. Check if credentials are valid."
+    if retry_state.outcome.failed:
+        exception = retry_state.outcome.exception()
+        if isinstance(exception, ApiException):
+            if exception.status == 401:
+                raise AuthUnauthorizedError(unauthorized_message, exception) from exception

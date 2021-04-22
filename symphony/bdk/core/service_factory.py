@@ -97,7 +97,8 @@ class ServiceFactory:
         """
         return ConnectionService(
             ConnectionApi(self._pod_client),
-            self._auth_session
+            self._auth_session,
+            self._config.retry
         )
 
     def get_stream_service(self) -> StreamService:
@@ -109,7 +110,8 @@ class ServiceFactory:
             StreamsApi(self._pod_client),
             RoomMembershipApi(self._pod_client),
             ShareApi(self._agent_client),
-            self._auth_session)
+            self._auth_session,
+            self._config.retry)
 
     def get_application_service(self) -> ApplicationService:
         """Returns a fully initialized ApplicationService
@@ -119,7 +121,8 @@ class ServiceFactory:
         return ApplicationService(
             ApplicationApi(self._pod_client),
             AppEntitlementApi(self._pod_client),
-            self._auth_session
+            self._auth_session,
+            self._config.retry
         )
 
     def get_signal_service(self) -> SignalService:
@@ -233,7 +236,8 @@ class OboServiceFactory:
         """
         return OboConnectionService(
             ConnectionApi(self._pod_client),
-            self._auth_session
+            self._auth_session,
+            self._config.retry
         )
 
     def get_stream_service(self) -> OboStreamService:
@@ -245,7 +249,8 @@ class OboServiceFactory:
             StreamsApi(self._pod_client),
             RoomMembershipApi(self._pod_client),
             ShareApi(self._agent_client),
-            self._auth_session)
+            self._auth_session,
+            self._config.retry)
 
     def get_presence_service(self) -> OboPresenceService:
         """Returns a fully initialized OboPresenceService

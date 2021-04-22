@@ -2,6 +2,7 @@ import base64
 from typing import Union, AsyncGenerator
 
 from symphony.bdk.core.auth.auth_session import AuthSession
+from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.core.service.pagination import offset_based_pagination, cursor_based_pagination
 from symphony.bdk.core.service.user.model.delegate_action_enum import DelegateActionEnum
 from symphony.bdk.core.service.user.model.role_id import RoleId
@@ -33,6 +34,8 @@ from symphony.bdk.gen.pod_model.v2_user_detail import V2UserDetail
 from symphony.bdk.gen.pod_model.v2_user_list import V2UserList
 from symphony.bdk.gen.pod_model.user_suspension import UserSuspension
 
+from symphony.bdk.core.retry import retry
+
 
 class OboUserService:
     """Class exposing OBO-enabled endpoints for user management.
@@ -46,11 +49,14 @@ class OboUserService:
 
     def __init__(self, user_api: UserApi,
                  users_api: UsersApi,
-                 auth_session: AuthSession):
+                 auth_session: AuthSession,
+                 retry_config: BdkRetryConfig):
         self._user_api = user_api
         self._users_api = users_api
         self._auth_session = auth_session
+        self._retry_config = retry_config
 
+    @retry
     async def list_users_by_ids(
             self,
             user_ids: [int],
@@ -80,6 +86,7 @@ class OboUserService:
             params['active'] = active
         return await self._users_api.v3_users_get(**params)
 
+    @retry
     async def list_users_by_emails(
             self,
             emails: [str],
@@ -109,6 +116,7 @@ class OboUserService:
             params['active'] = active
         return await self._users_api.v3_users_get(**params)
 
+    @retry
     async def list_users_by_usernames(
             self,
             usernames: [str],
@@ -134,6 +142,7 @@ class OboUserService:
             params['active'] = active
         return await self._users_api.v3_users_get(**params)
 
+    @retry
     async def search_users(
             self,
             query: UserSearchQuery,
@@ -193,6 +202,7 @@ class OboUserService:
 
         return offset_based_pagination(search_users_one_page, chunk_size, max_number)
 
+    @retry
     async def follow_user(
             self,
             follower_ids: [int],
@@ -211,6 +221,7 @@ class OboUserService:
         }
         await self._user_api.v1_user_uid_follow_post(**params)
 
+    @retry
     async def unfollow_user(
             self,
             follower_ids: [int],
@@ -248,11 +259,13 @@ class UserService(OboUserService):
                  users_api: UsersApi,
                  audit_trail_api: AuditTrailApi,
                  system_api: SystemApi,
-                 auth_session: AuthSession):
-        super().__init__(user_api, users_api, auth_session)
+                 auth_session: AuthSession,
+                 retry_config: BdkRetryConfig):
+        super().__init__(user_api, users_api, auth_session, retry_config)
         self._audit_trail_api = audit_trail_api
         self._system_api = system_api
 
+    @retry
     async def get_user_detail(
             self,
             user_id: int
@@ -269,6 +282,7 @@ class UserService(OboUserService):
         }
         return await self._user_api.v2_admin_user_uid_get(**params)
 
+    @retry
     async def list_user_details(
             self,
             skip: int = 0,
@@ -305,6 +319,7 @@ class UserService(OboUserService):
         """
         return offset_based_pagination(self.list_user_details, chunk_size, max_number)
 
+    @retry
     async def list_user_details_by_filter(
             self,
             user_filter: UserFilter,
@@ -350,6 +365,7 @@ class UserService(OboUserService):
 
         return offset_based_pagination(list_user_details_one_page, chunk_size, max_number)
 
+    @retry
     async def add_role(
             self,
             user_id: int,
@@ -368,6 +384,7 @@ class UserService(OboUserService):
         }
         await self._user_api.v1_admin_user_uid_roles_add_post(**params)
 
+    @retry
     async def list_roles(self) -> [RoleDetail]:
         """List all roles in the pod.
         See: `List Roles <https://developers.symphony.com/restapi/reference#list-roles>`_
@@ -380,6 +397,7 @@ class UserService(OboUserService):
         role_list = await self._system_api.v1_admin_system_roles_list_get(**params)
         return role_list.value
 
+    @retry
     async def remove_role(
             self,
             user_id: int,
@@ -398,6 +416,7 @@ class UserService(OboUserService):
         }
         await self._user_api.v1_admin_user_uid_roles_remove_post(**params)
 
+    @retry
     async def get_avatar(
             self,
             user_id: int
@@ -415,6 +434,7 @@ class UserService(OboUserService):
         avatar_list = await self._user_api.v1_admin_user_uid_avatar_get(**params)
         return avatar_list.value
 
+    @retry
     async def update_avatar(
             self,
             user_id: int,
@@ -436,6 +456,7 @@ class UserService(OboUserService):
         }
         await self._user_api.v1_admin_user_uid_avatar_update_post(**params)
 
+    @retry
     async def get_disclaimer(
             self,
             user_id: int
@@ -452,6 +473,7 @@ class UserService(OboUserService):
         }
         return await self._user_api.v1_admin_user_uid_disclaimer_get(**params)
 
+    @retry
     async def remove_disclaimer(
             self,
             user_id: int
@@ -467,6 +489,7 @@ class UserService(OboUserService):
         }
         await self._user_api.v1_admin_user_uid_disclaimer_delete(**params)
 
+    @retry
     async def add_disclaimer(
             self,
             user_id: int,
@@ -485,6 +508,7 @@ class UserService(OboUserService):
         }
         await self._user_api.v1_admin_user_uid_disclaimer_update_post(**params)
 
+    @retry
     async def get_delegates(
             self,
             user_id: int
@@ -502,6 +526,7 @@ class UserService(OboUserService):
         delegates_list = await self._user_api.v1_admin_user_uid_delegates_get(**params)
         return delegates_list.value
 
+    @retry
     async def update_delegates(
             self,
             user_id: int,
@@ -522,6 +547,7 @@ class UserService(OboUserService):
         }
         await self._user_api.v1_admin_user_uid_delegates_update_post(**params)
 
+    @retry
     async def get_feature_entitlements(
             self,
             user_id: int
@@ -539,6 +565,7 @@ class UserService(OboUserService):
         feature_list = await self._user_api.v1_admin_user_uid_features_get(**params)
         return feature_list.value
 
+    @retry
     async def update_feature_entitlements(
             self,
             user_id: int,
@@ -557,6 +584,7 @@ class UserService(OboUserService):
         }
         await self._user_api.v1_admin_user_uid_features_update_post(**params)
 
+    @retry
     async def get_status(
             self,
             user_id: int
@@ -573,6 +601,7 @@ class UserService(OboUserService):
         }
         return await self._user_api.v1_admin_user_uid_status_get(**params)
 
+    @retry
     async def update_status(
             self,
             user_id: int,
@@ -591,6 +620,7 @@ class UserService(OboUserService):
         }
         await self._user_api.v1_admin_user_uid_status_update_post(**params)
 
+    @retry
     async def list_user_followers(
             self,
             user_id: int,
@@ -632,12 +662,14 @@ class UserService(OboUserService):
         :param max_number: the total maximum number of elements to retrieve.
         :return: an async generator of the user IDs who are followers of a specific user.
         """
+
         async def user_followers_one_page(limit, after=None):
             result = await self.list_user_followers(user_id, limit, after=after)
             return result.followers, getattr(result.pagination.cursors, 'after', None)
 
         return cursor_based_pagination(user_followers_one_page, chunk_size, max_number)
 
+    @retry
     async def list_users_following(
             self,
             user_id: int,
@@ -679,12 +711,14 @@ class UserService(OboUserService):
         :param max_number: the total maximum number of elements to retrieve.
         :return: an async generator of the IDs of users followed by a given user.
         """
+
         async def user_following_one_page(limit, after=None):
             result = await self.list_users_following(user_id, limit, after=after)
             return result.following, getattr(result.pagination.cursors, 'after', None)
 
         return cursor_based_pagination(user_following_one_page, chunk_size, max_number)
 
+    @retry
     async def create(
             self,
             payload: V2UserCreate
@@ -701,6 +735,7 @@ class UserService(OboUserService):
         }
         return await self._user_api.v2_admin_user_create_post(**params)
 
+    @retry
     async def update(
             self,
             user_id: int,
@@ -720,6 +755,7 @@ class UserService(OboUserService):
         }
         return await self._user_api.v2_admin_user_uid_update_post(**params)
 
+    @retry
     async def list_audit_trail(
             self,
             start_timestamp: int,
@@ -760,6 +796,7 @@ class UserService(OboUserService):
             params['after'] = after
         return await self._audit_trail_api.v1_audittrail_privilegeduser_get(**params)
 
+    @retry
     async def suspend_user(
             self,
             user_id: int,

@@ -3,6 +3,7 @@ from unittest.mock import MagicMock, AsyncMock, Mock
 import pytest
 
 from symphony.bdk.core.auth.auth_session import AuthSession
+from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.core.service.stream.stream_service import StreamService
 from symphony.bdk.gen import ApiClient, Configuration
 from symphony.bdk.gen.agent_api.share_api import ShareApi
@@ -64,7 +65,7 @@ def fixture_share_api(mocked_api_client):
 
 @pytest.fixture(name="stream_service")
 def fixture_stream_service(streams_api, room_membership_api, share_api, auth_session):
-    return StreamService(streams_api, room_membership_api, share_api, auth_session)
+    return StreamService(streams_api, room_membership_api, share_api, auth_session, BdkRetryConfig())
 
 
 @pytest.mark.asyncio

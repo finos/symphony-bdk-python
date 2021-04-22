@@ -3,6 +3,7 @@ from unittest.mock import MagicMock, AsyncMock
 import pytest
 
 from symphony.bdk.core.auth.auth_session import AuthSession
+from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.core.service.connection.connection_service import ConnectionService
 from symphony.bdk.core.service.connection.model.connection_status import ConnectionStatus
 from symphony.bdk.gen.pod_api.connection_api import ConnectionApi
@@ -29,7 +30,8 @@ def fixture_connection_api():
 def fixture_connection_service(connection_api, auth_session):
     service = ConnectionService(
         connection_api,
-        auth_session
+        auth_session,
+        BdkRetryConfig()
     )
     return service
 

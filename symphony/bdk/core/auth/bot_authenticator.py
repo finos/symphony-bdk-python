@@ -6,6 +6,9 @@ from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.auth.exception import AuthUnauthorizedError
 from symphony.bdk.core.auth.jwt_helper import create_signed_jwt
 from symphony.bdk.core.config.model.bdk_bot_config import BdkBotConfig
+from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
+from symphony.bdk.core.retry import retry
+from symphony.bdk.core.retry.strategy import authentication_retry_if_not_401
 from symphony.bdk.gen.api_client import ApiClient
 from symphony.bdk.gen.exceptions import ApiException
 from symphony.bdk.gen.login_api.authentication_api import AuthenticationApi
@@ -50,10 +53,12 @@ class BotAuthenticatorRsa(BotAuthenticator):
     """Bot authenticator RSA implementation.
     """
 
-    def __init__(self, bot_config: BdkBotConfig, login_api_client: ApiClient, relay_api_client: ApiClient):
+    def __init__(self, bot_config: BdkBotConfig, login_api_client: ApiClient, relay_api_client: ApiClient,
+                 retry_config: BdkRetryConfig):
         self._bot_config = bot_config
         self._login_api_client = login_api_client
         self._relay_api_client = relay_api_client
+        self._retry_config = retry_config
 
     async def authenticate_bot(self) -> AuthSession:
         """Authenticate a Bot's service account.
@@ -64,14 +69,17 @@ class BotAuthenticatorRsa(BotAuthenticator):
         await auth_session.refresh()
         return auth_session
 
+    @retry(retry=authentication_retry_if_not_401)
     async def _authenticate_and_get_token(self, api_client: ApiClient) -> str:
-        unauthorized_message = "Service account is not authorized to authenticate. Check if credentials are valid."
+
         jwt = create_signed_jwt(self._bot_config.private_key, self._bot_config.username)
         req = AuthenticateRequest(token=jwt)
         try:
             token = await AuthenticationApi(api_client).pubkey_authenticate_post(req)
             return token.token
         except ApiException as exc:
+            if exc.status != 401:
+                raise Exception(networkIssueMessageError())
             raise AuthUnauthorizedError(unauthorized_message, exc) from exc
 
     async def retrieve_session_token(self) -> str:

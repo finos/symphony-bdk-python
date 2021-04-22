@@ -125,7 +125,6 @@ class TestDecoratorWrapper:
 
         assert thing.counter == 1
 
-    @staticmethod
     async def async_return_text(retry_state):
         await asyncio.sleep(0.00001)
 
