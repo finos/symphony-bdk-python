@@ -1,6 +1,7 @@
 from typing import AsyncGenerator
 
 from symphony.bdk.core.auth.auth_session import AuthSession
+from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.core.service.pagination import offset_based_pagination
 from symphony.bdk.gen.agent_api.signals_api import SignalsApi
 from symphony.bdk.gen.agent_model.base_signal import BaseSignal
@@ -25,9 +26,10 @@ class OboSignalService:
     * Subscribe or unsubscribe a signal
     """
 
-    def __init__(self, signals_api: SignalsApi, auth_session: AuthSession):
+    def __init__(self, signals_api: SignalsApi, auth_session: AuthSession, retry_config: BdkRetryConfig):
         self._signals_api = signals_api
         self._auth_session = auth_session
+        self._retry_config = retry_config
 
     async def list_signals(self, skip: int = 0, limit: int = 50) -> SignalList:
         """Lists signals on behalf of the user. The response includes signals that the user has created and

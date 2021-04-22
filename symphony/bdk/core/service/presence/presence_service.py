@@ -2,6 +2,7 @@ from typing import List
 from enum import Enum, auto
 
 from symphony.bdk.core.auth.auth_session import AuthSession
+from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.gen.pod_api.presence_api import PresenceApi
 from symphony.bdk.gen.pod_model.v2_presence import V2Presence
 from symphony.bdk.gen.pod_model.v2_presence_status import V2PresenceStatus
@@ -36,9 +37,10 @@ class OboPresenceService:
     * Delete a created presence feed
     """
 
-    def __init__(self, presence_api: PresenceApi, auth_session: AuthSession):
+    def __init__(self, presence_api: PresenceApi, auth_session: AuthSession, retry_config: BdkRetryConfig):
         self._presence_api = presence_api
         self._auth_session = auth_session
+        self._retry_config = retry_config
 
     async def get_presence(self) -> V2Presence:
         """ Get the online status (presence info) of the calling user.

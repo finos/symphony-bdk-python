@@ -3,6 +3,7 @@ from unittest.mock import MagicMock, AsyncMock
 import pytest
 
 from symphony.bdk.core.auth.auth_session import AuthSession
+from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.core.service.signal.signal_service import SignalService
 from symphony.bdk.gen.agent_api.signals_api import SignalsApi
 from symphony.bdk.gen.agent_model.base_signal import BaseSignal
@@ -28,7 +29,7 @@ def fixture_signals_api():
 
 @pytest.fixture(name="signal_service")
 def fixture_signal_service(signals_api, auth_session):
-    service = SignalService(signals_api, auth_session)
+    service = SignalService(signals_api, auth_session, BdkRetryConfig())
     return service
 
 

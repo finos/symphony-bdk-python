@@ -37,7 +37,7 @@ def bot_service(func):
     @functools.wraps(func)
     def check_if_bot_configured_and_call_function(*args):
         symphony_bdk = args[0]
-        if not symphony_bdk._config.bot.is_rsa_configuration_valid():
+        if not symphony_bdk._config.bot.is_authentication_configured():
             raise BotNotConfiguredError("Error calling bot service ")
         return func(*args)
 
@@ -76,7 +76,7 @@ class SymphonyBdk:
         self._presence_service = None
         self._activity_registry = None
 
-        if self._config.bot.is_rsa_configuration_valid():
+        if self._config.bot.is_authentication_configured():
             self._initialize_bot_services()
         else:
             logging.info("Bot (service account) credentials have not been configured."
@@ -221,7 +221,7 @@ class SymphonyBdk:
     def activities(self) -> ActivityRegistry:
         """Get the :class:`ActivityRegistry` from the BDK entry point.
 
-        :return: The :class:`ActivityRegistry instance.
+        :return: The :class:`ActivityRegistry` instance.
 
         """
         return self._activity_registry

@@ -25,9 +25,11 @@ from symphony.bdk.core.retry import retry
 class OboMessageService:
     """Class exposing OBO enabled endpoints for message management, e.g. send a message."""
 
-    def __init__(self, messages_api: MultiAttachmentsMessagesApi, auth_session: AuthSession,
+    def __init__(self, messages_api: MultiAttachmentsMessagesApi, message_suppression_api: MessageSuppressionApi,
+                 auth_session: AuthSession,
                  retry_config: BdkRetryConfig):
         self._messages_api = messages_api
+        self._message_suppression_api = message_suppression_api
         self._auth_session = auth_session
         self._retry_config = retry_config
 
@@ -71,6 +73,25 @@ class OboMessageService:
 
         return await self._messages_api.v4_stream_sid_multi_attachment_message_create_post(**params)
 
+    @retry
+    async def suppress_message(
+            self,
+            message_id: str
+    ) -> MessageSuppressionResponse:
+        """Suppresses a message, preventing its contents from being displayed to users.
+        See: `Suppress Message <https://developers.symphony.com/restapi/reference#suppress-message>`_
+
+        :param message_id: Message ID of the message to be suppressed.
+
+        :return: a MessageSuppressionResponse instance containing information about the message suppression.
+
+        """
+        params = {
+            'id': message_id,
+            'session_token': await self._auth_session.session_token
+        }
+        return await self._message_suppression_api.v1_admin_messagesuppression_id_suppress_post(**params)
+
 
 class MessageService(OboMessageService):
     """Service class for managing messages.
@@ -85,7 +106,7 @@ class MessageService(OboMessageService):
                  default_api: DefaultApi,
                  auth_session: AuthSession,
                  retry_config: BdkRetryConfig):
-        super().__init__(messages_api, auth_session, retry_config)
+        super().__init__(messages_api, message_suppression_api, auth_session, retry_config)
         self._message_api = message_api
         self._message_suppression_api = message_suppression_api
         self._streams_api = streams_api
@@ -184,7 +205,6 @@ class MessageService(OboMessageService):
         import_response_list = await self._messages_api.v4_message_import_post(**params)
         return import_response_list.value
 
-    @retry
     async def get_attachment(
             self,
             stream_id: str,
@@ -210,26 +230,6 @@ class MessageService(OboMessageService):
         }
         return await self._attachment_api.v1_stream_sid_attachment_get(**params)
 
-    @retry
-    async def suppress_message(
-            self,
-            message_id: str
-    ) -> MessageSuppressionResponse:
-        """Suppresses a message, preventing its contents from being displayed to users.
-        See: `Suppress Message <https://developers.symphony.com/restapi/reference#suppress-message>`_
-
-        :param message_id: Message ID of the message to be suppressed.
-
-        :return: a MessageSuppressionResponse instance containing information about the message suppression.
-
-        """
-        params = {
-            'id': message_id,
-            'session_token': await self._auth_session.session_token
-        }
-        return await self._message_suppression_api.v1_admin_messagesuppression_id_suppress_post(**params)
-
-    @retry
     async def get_message_status(
             self,
             message_id: str

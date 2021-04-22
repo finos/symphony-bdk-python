@@ -33,9 +33,9 @@ def test_retry_configuration():
     config = BdkConfigLoader.load_from_file(config_path)
 
     assert config.retry.max_attempts == 2
-    assert config.retry.initial_interval == 1000
+    assert config.retry.initial_interval == 1.0
     assert config.retry.multiplier == 3
-    assert config.retry.max_interval == 2000
+    assert config.retry.max_interval == 2.0
 
 
 def test_default_retry_configuration():
@@ -59,6 +59,6 @@ def test_datafeed_retry_configuration():
     config = BdkConfigLoader.load_from_file(config_path)
 
     assert config.datafeed.retry.max_attempts == 2
-    assert config.datafeed.retry.initial_interval == 1000
+    assert config.datafeed.retry.initial_interval == 1.0
     assert config.datafeed.retry.multiplier == 3
-    assert config.datafeed.retry.max_interval == 2000
+    assert config.datafeed.retry.max_interval == 2.0

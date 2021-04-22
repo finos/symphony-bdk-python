@@ -1,7 +1,7 @@
 """Module for instantiating various authenticator objects.
 """
 
-from symphony.bdk.core.auth.bot_authenticator import BotAuthenticator, BotAuthenticatorRsa
+from symphony.bdk.core.auth.bot_authenticator import BotAuthenticator, BotAuthenticatorRsa, BotAuthenticatorCert
 from symphony.bdk.core.auth.exception import AuthInitializationError
 from symphony.bdk.core.auth.ext_app_authenticator import ExtensionAppAuthenticator, ExtensionAppAuthenticatorRsa, \
     ExtensionAppAuthenticatorCert
@@ -44,10 +44,19 @@ class AuthenticatorFactory:
             return BotAuthenticatorRsa(
                 bot_config=self._config.bot,
                 login_api_client=self._api_client_factory.get_login_client(),
-                relay_api_client=self._api_client_factory.get_relay_client()
+                relay_api_client=self._api_client_factory.get_relay_client(),
+                retry_config=self._config.retry
             )
-        raise AuthInitializationError("RSA authentication should be configured. Only one field among private key "
-                                      "path or content should be configured for bot authentication.")
+        elif self._config.bot.is_certificate_configuration_valid():
+            return BotAuthenticatorCert(
+                session_auth_client=self._api_client_factory.get_session_auth_client(),
+                key_auth_client=self._api_client_factory.get_key_auth_client(),
+                retry_config=self._config.retry
+            )
+        raise AuthInitializationError("RSA or certificate authentication should be configured. "
+                                      "Only one field among private key path or content should be configured "
+                                      "for bot RSA authentication. "
+                                      "The path field should be specified for bot certificate authentication.")
 
     def get_obo_authenticator(self) -> OboAuthenticator:
         """Creates a new instance of a Obo Authenticator service.

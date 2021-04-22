@@ -3,7 +3,6 @@ from unittest.mock import MagicMock, AsyncMock
 import pytest
 
 from symphony.bdk.core.auth.auth_session import AuthSession
-from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.core.service.message.message_service import MessageService
 from symphony.bdk.core.service.message.multi_attachments_messages_api import MultiAttachmentsMessagesApi
 from symphony.bdk.gen.agent_api.attachments_api import AttachmentsApi
@@ -24,6 +23,7 @@ from symphony.bdk.gen.pod_model.message_status import MessageStatus
 from symphony.bdk.gen.pod_model.message_suppression_response import MessageSuppressionResponse
 from symphony.bdk.gen.pod_model.stream_attachment_response import StreamAttachmentResponse
 from symphony.bdk.gen.pod_model.string_list import StringList
+from tests.core.retry import minimal_retry_config
 from tests.utils.resource_utils import get_deserialized_object_from_resource, deserialize_object
 
 
@@ -54,7 +54,7 @@ def fixture_message_service(mocked_api_client, auth_session):
         AttachmentsApi(mocked_api_client),
         DefaultApi(mocked_api_client),
         auth_session,
-        BdkRetryConfig()
+        minimal_retry_config()
     )
     return service
 

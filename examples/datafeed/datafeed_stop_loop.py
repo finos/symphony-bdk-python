@@ -1,5 +1,4 @@
 import asyncio
-import logging
 import logging.config
 
 from symphony.bdk.core.config.loader import BdkConfigLoader
@@ -35,6 +34,7 @@ class RealTimeEventListenerImpl(RealTimeEventListener):
         logging.debug("After event: %s", event.message.message_id)
 
 
+# This is to show how to log the event_listener_context in each log line
 class EventListenerLoggingFilter(logging.Filter):
     def filter(self, record):
         record.context_id = event_listener_context.get("")

@@ -1,13 +1,11 @@
-import urllib
-
-from tenacity import retry_if_exception
+from tenacity import retry_if_exception, retry_base, RetryCallState
 
 from symphony.bdk.core.auth.exception import AuthUnauthorizedError
 from symphony.bdk.gen import ApiException
 
 
-class authentication_retry_if_not_401(retry_if_exception):
-    """Retry strategy that retries if the exception is an ApiException error with a 401 status code.
+class authentication_retry(retry_base):
+    """Retry strategy that retries if the exception is not an ApiException error with a 401 status code.
     """
 
     def __init__(self):
@@ -19,14 +17,14 @@ class authentication_retry_if_not_401(retry_if_exception):
                         cause.status == 401
                 )
 
-        def should_retry(exception):
-            unauthorized_message = "Service account is not authorized to authenticate. Check if credentials are valid."
-            if is_unauthorized(exception):
-                return False
-            else:
-                AuthUnauthorizedError(unauthorized_message, exc) from exc
+        self.predicate = is_unauthorized
 
-        super().__init__(predicate=(not is_unauthorized))
+    def __call__(self, retry_state: RetryCallState):
+        if retry_state.outcome.failed:
+            return not self.predicate(retry_state.outcome.exception())
+        else:
+            return False
 
-    def networkIssueMessageError(self, exception, address):
-        pass
+
+def networkIssueMessageError(exception, address):
+    pass

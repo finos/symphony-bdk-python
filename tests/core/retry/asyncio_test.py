@@ -3,9 +3,10 @@ import asyncio
 import pytest
 import tenacity
 
-from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.core.retry import retry
 from symphony.bdk.gen import ApiException
+
+from . import minimal_retry_config_with_attempts
 
 
 class NoApiExceptionAfterCount(object):
@@ -43,15 +44,6 @@ class NoIOErrorAfterCount(object):
             self.counter += 1
             raise IOError("Hi there, I'm an IOError")
         return True
-
-
-def minimal_retry_config_with_attempts(max_attempts: int):
-    retry_config = BdkRetryConfig()
-    retry_config.multiplier = 1
-    retry_config.initial_interval = 10
-    retry_config.max_interval = 10
-    retry_config.max_attempts = max_attempts
-    return retry_config
 
 
 @retry

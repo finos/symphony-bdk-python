@@ -4,7 +4,6 @@ import base64
 import pytest
 
 from symphony.bdk.core.auth.auth_session import AuthSession
-from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.core.service.user.model.delegate_action_enum import DelegateActionEnum
 from symphony.bdk.core.service.user.model.role_id import RoleId
 from symphony.bdk.core.service.user.user_service import UserService
@@ -38,6 +37,7 @@ from symphony.bdk.gen.pod_model.v2_user_create import V2UserCreate
 from symphony.bdk.gen.pod_model.v2_user_attributes import V2UserAttributes
 from symphony.bdk.gen.pod_model.user_suspension import UserSuspension
 from symphony.bdk.gen.pod_model.v2_user_list import V2UserList
+from tests.core.retry import minimal_retry_config
 from tests.utils.resource_utils import get_resource_filepath, get_deserialized_object_from_resource, \
     deserialize_object
 
@@ -78,7 +78,7 @@ def fixture_user_service(user_api, users_api, audit_trail_api, system_api, auth_
         audit_trail_api,
         system_api,
         auth_session,
-        BdkRetryConfig()
+        minimal_retry_config()
     )
     return service
 

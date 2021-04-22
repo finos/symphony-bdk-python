@@ -132,7 +132,8 @@ class ServiceFactory:
         """
         return SignalService(
             SignalsApi(self._agent_client),
-            self._auth_session
+            self._auth_session,
+            self._config.retry
         )
 
     def get_session_service(self) -> SessionService:
@@ -142,7 +143,8 @@ class ServiceFactory:
         """
         return SessionService(
             SessionApi(self._pod_client),
-            self._auth_session
+            self._auth_session,
+            self._config.retry
         )
 
     def get_datafeed_loop(self) -> AbstractDatafeedLoop:
@@ -170,7 +172,8 @@ class ServiceFactory:
         """
         return HealthService(
             AgentSystemApi(self._agent_client),
-            SignalsApi(self._agent_client)
+            SignalsApi(self._agent_client),
+            self._config.retry
         )
 
     def get_presence_service(self) -> PresenceService:
@@ -180,7 +183,8 @@ class ServiceFactory:
         """
         return PresenceService(
             PresenceApi(self._pod_client),
-            self._auth_session
+            self._auth_session,
+            self._config.retry
         )
 
 
@@ -225,8 +229,9 @@ class OboServiceFactory:
         """
         return OboMessageService(
             MultiAttachmentsMessagesApi(self._agent_client),
+            MessageSuppressionApi(self._pod_client),
             self._auth_session,
-            self._config.retry,
+            self._config.retry
         )
 
     def get_connection_service(self) -> OboConnectionService:
@@ -259,7 +264,8 @@ class OboServiceFactory:
         """
         return OboPresenceService(
             PresenceApi(self._pod_client),
-            self._auth_session
+            self._auth_session,
+            self._config.retry
         )
 
     def get_signal_service(self) -> OboSignalService:
@@ -269,5 +275,6 @@ class OboServiceFactory:
         """
         return OboSignalService(
             SignalsApi(self._agent_client),
-            self._auth_session
+            self._auth_session,
+            self._config.retry
         )

@@ -1,4 +1,5 @@
 from symphony.bdk.core.auth.auth_session import AuthSession
+from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.gen.pod_api.session_api import SessionApi
 from symphony.bdk.gen.pod_model.user_v2 import UserV2
 
@@ -8,9 +9,11 @@ class OboSessionService:
     """
 
     def __init__(self, session_api: SessionApi,
-                 auth_session: AuthSession):
+                 auth_session: AuthSession,
+                 retry_config: BdkRetryConfig):
         self._session_api = session_api
         self._auth_session = auth_session
+        self._retry_config = retry_config
 
     async def get_session(
             self
@@ -31,6 +34,7 @@ class SessionService(OboSessionService):
     """
 
     def __init__(self, session_api: SessionApi,
-                 auth_session: AuthSession):
-        super().__init__(session_api, auth_session)
+                 auth_session: AuthSession,
+                 retry_config: BdkRetryConfig):
+        super().__init__(session_api, auth_session, retry_config)
 

@@ -3,13 +3,13 @@ from unittest.mock import MagicMock, AsyncMock
 import pytest
 
 from symphony.bdk.core.auth.auth_session import AuthSession
-from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.core.service.connection.connection_service import ConnectionService
 from symphony.bdk.core.service.connection.model.connection_status import ConnectionStatus
 from symphony.bdk.gen.pod_api.connection_api import ConnectionApi
 from symphony.bdk.gen.pod_model.user_connection import UserConnection
 from symphony.bdk.gen.pod_model.user_connection_list import UserConnectionList
 from symphony.bdk.gen.pod_model.user_connection_request import UserConnectionRequest
+from tests.core.retry import minimal_retry_config
 from tests.utils.resource_utils import deserialize_object
 
 
@@ -31,7 +31,7 @@ def fixture_connection_service(connection_api, auth_session):
     service = ConnectionService(
         connection_api,
         auth_session,
-        BdkRetryConfig()
+        minimal_retry_config()
     )
     return service
 
