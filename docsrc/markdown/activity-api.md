@@ -1,12 +1,15 @@
 # Activity API
 
-The Activity API is an abstraction built on top of the Datafeed's [_Real Time Events_](https://developers.symphony.com/restapi/docs/real-time-events). An Activity is basically a user interaction triggered from the chat.
+The Activity API is an abstraction built on top of the Datafeed's [_Real Time Events_](https://developers.symphony.com/restapi/docs/real-time-events).
+An Activity is basically a user interaction triggered from the chat.
 Two different kinds of activities are supported by the BDK:
 - **Command Activity**: triggered when a message is sent in an `IM`, `MIM` or `Chatroom`
-- **Form Activity**: triggered when a user replies to an [_Elements_](https://developers.symphony.com/symphony-developer/docs/overview-of-symphony-elements) form message
+- **Form Activity**: triggered when a user replies to an [_Elements_](https://developers.symphony.com/symphony-developer/docs/overview-of-symphony-elements)
+  form message
 
 ## Activity Registry
-The central component for activities is the [`ActivityRegistry`](../../symphony/bdk/core/activity/registry.py).
+The central component for activities is the
+[`ActivityRegistry`](../_autosummary/symphony.bdk.core.activity.registry.ActivityRegistry.html).
 This component is used to either add or retrieve activities. It is accessible from the `SymphonyBdk` object.
 
 ```python
@@ -77,6 +80,45 @@ except KeyboardInterrupt:
 ```
 1. The `matches()` method allows the activity logic to be triggered when a message starts by a mention to the bot and the text `/hello` separated by a space. Ex: `@bot_name /hello`
 2. The activity logic. Here, we send a message: "Hello, World"
+
+### Slash Command
+A _Slash_ command can be used to directly define a very simple bot command such as: 
+```
+$ @BotMention /command
+$ /command
+```
+
+> Note: a Slash cannot have parameters
+
+One can define a slash command by decorating a callback function which must take one parameter of type
+[`CommandContext`](../_autosummary/symphony.bdk.core.activity.command.CommandContext.html)
+such as below:
+
+```python
+import logging
+
+from symphony.bdk.core.activity.command import CommandContext
+from symphony.bdk.core.config.loader import BdkConfigLoader
+from symphony.bdk.core.symphony_bdk import SymphonyBdk
+
+async def run():
+    config = BdkConfigLoader.load_from_symphony_dir("config.yaml")
+
+    async with SymphonyBdk(config) as bdk:
+        activities = bdk.activities()
+
+        @activities.slash("/hello",  # (1)
+                          True)      # (2)
+        async def callback(context: CommandContext):
+            logging.debug("Hello slash command triggered by user %s", context.initiator.user.display_name)
+
+        await bdk.datafeed().start()
+```
+1. `/hello` is the command name 
+2. `True` means that the bot has to be mentioned
+
+The decorated function will then be called if a message is sent in an `IM`, `MIM` or `Chatroom` with a matching text message.
+
 
 ## Form Activity
 A form activity is triggered when an end-user replies or submits an Elements form.
@@ -161,4 +203,3 @@ class DummyActivityExample(CommandActivity):
     def before_matcher(self, context: CommandContext):
         context.some_attribute = some_call_to_another_service()
 ```
----

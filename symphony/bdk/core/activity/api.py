@@ -51,7 +51,6 @@ class AbstractActivity(ABC, Generic[C]):
         :param context: an instance of :py:class:`ActivityContext`
         :return: True if activity has to be triggered, False otherwise.
         """
-        pass
 
     @abstractmethod
     def on_activity(self, context: C):
@@ -59,7 +58,6 @@ class AbstractActivity(ABC, Generic[C]):
 
         :param context: an instance of :py:class:`ActivityContext`
         """
-        pass
 
     def before_matcher(self, context: C):
         """ This callback can be used to prepare :py:class:`ActivityContext` before actually processing the `matches`
@@ -67,4 +65,3 @@ class AbstractActivity(ABC, Generic[C]):
 
         :param context: an instance of :py:class:`ActivityContext`
         """
-        pass

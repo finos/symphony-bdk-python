@@ -1,25 +1,23 @@
-{
-  "value": [
-    {
-      "appId": "djApp",
-      "appName": "Dow Jones",
-      "enable": true,
-      "listed": true,
-      "install": false
-    },
-    {
-      "appId": "spcapiq",
-      "appName": "S&P Capital IQ Data",
-      "enable": true,
-      "listed": true,
-      "install": false
-    },
-    {
-      "appId": "selerity",
-      "appName": "Selerity Context",
-      "enable": false,
-      "listed": true,
-      "install": true
-    }
-  ]
-}
+[
+  {
+    "appId": "djApp",
+    "appName": "Dow Jones",
+    "enable": true,
+    "listed": true,
+    "install": false
+  },
+  {
+    "appId": "spcapiq",
+    "appName": "S&P Capital IQ Data",
+    "enable": true,
+    "listed": true,
+    "install": false
+  },
+  {
+    "appId": "selerity",
+    "appName": "Selerity Context",
+    "enable": false,
+    "listed": true,
+    "install": true
+  }
+]
