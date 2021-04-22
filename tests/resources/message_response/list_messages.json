@@ -1,31 +1,29 @@
-{
-  "value": [
-    {
-      "messageId": "test-message1",
-      "timestamp": 1534891105293,
-      "message": "<div data-format=\"PresentationML\" data-version=\"2.0\">Hello World</div>",
-      "data": "{\"entityIdentifier\":{\"type\":\"org.symphonyoss.fin.security\",\"version\":\"0.1\",\"id\":[{\"type\":\"org.symphonyoss.fin.security.id.isin\",\"value\":\"US0378\"},{\"type\":\"org.symphonyoss.fin.security.id.cusip\",\"value\":\"037\"},{\"type\":\"org.symphonyoss.fin.security.id.openfigi\",\"value\":\"BBG000\"}]}}",
-      "attachments": [
-        {
-          "id": "internal_14568529...",
-          "name": "Test2.bmp",
-          "size": 66,
-          "images": []
-        }
-      ],
-      "user": {
-        "userId": 14568529068038,
-        "displayName": "Local Bot01",
-        "email": "bot.user1@test3.symphony.com",
-        "username": "bot.user1"
-      },
-      "stream": {
-        "streamId": "-aSoi...",
-        "streamType": "POST"
-      },
-      "userAgent": "Agent-2.2.5-Linux-4.9.77-31.58.amzn1.x86_64",
-      "originalFormat": "com.symphony.messageml.v2",
-      "sid": "a4d08d18-0729-4b54-9c4568da"
-    }
-  ]
-}
+[
+  {
+    "messageId": "test-message1",
+    "timestamp": 1534891105293,
+    "message": "<div data-format=\"PresentationML\" data-version=\"2.0\">Hello World</div>",
+    "data": "{\"entityIdentifier\":{\"type\":\"org.symphonyoss.fin.security\",\"version\":\"0.1\",\"id\":[{\"type\":\"org.symphonyoss.fin.security.id.isin\",\"value\":\"US0378\"},{\"type\":\"org.symphonyoss.fin.security.id.cusip\",\"value\":\"037\"},{\"type\":\"org.symphonyoss.fin.security.id.openfigi\",\"value\":\"BBG000\"}]}}",
+    "attachments": [
+      {
+        "id": "internal_14568529...",
+        "name": "Test2.bmp",
+        "size": 66,
+        "images": []
+      }
+    ],
+    "user": {
+      "userId": 14568529068038,
+      "displayName": "Local Bot01",
+      "email": "bot.user1@test3.symphony.com",
+      "username": "bot.user1"
+    },
+    "stream": {
+      "streamId": "-aSoi...",
+      "streamType": "POST"
+    },
+    "userAgent": "Agent-2.2.5-Linux-4.9.77-31.58.amzn1.x86_64",
+    "originalFormat": "com.symphony.messageml.v2",
+    "sid": "a4d08d18-0729-4b54-9c4568da"
+  }
+]

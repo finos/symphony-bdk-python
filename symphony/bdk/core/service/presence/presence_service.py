@@ -57,9 +57,11 @@ class OboPresenceService:
         :param limit: Maximum number of records to return. The maximum supported value is 5000.
         :return: Presence info of the looked up user.
         """
-        return await self._presence_api.v2_users_presence_get(session_token=await self._auth_session.session_token,
-                                                              last_user_id=last_user_id,
-                                                              limit=limit)
+        presence_list = await self._presence_api.v2_users_presence_get(
+            session_token=await self._auth_session.session_token,
+            last_user_id=last_user_id,
+            limit=limit)
+        return presence_list.value
 
     async def get_user_presence(self, user_id: int, local: bool) -> V2Presence:
         """ Get the presence info of a specified user.
@@ -123,9 +125,10 @@ class OboPresenceService:
         :param feed_id: The presence feed id to be read.
         :return: The list of user presences has changed since the last presence read.
         """
-        return await self._presence_api.v1_presence_feed_feed_id_read_get(
+        presence_list = await self._presence_api.v1_presence_feed_feed_id_read_get(
             session_token=await self._auth_session.session_token,
             feed_id=feed_id)
+        return presence_list.value
 
     async def delete_presence_feed(self, feed_id: str) -> str:
         """ Delete the specified presence feed that was created.

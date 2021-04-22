@@ -1,10 +1,8 @@
-from collections import namedtuple
 from pathlib import Path
 import json
-from types import SimpleNamespace
 
-from symphony.bdk.gen import ApiClient
-from symphony.bdk.gen.rest import RESTResponse
+from symphony.bdk.gen.api_client import validate_and_convert_types
+from symphony.bdk.gen.configuration import Configuration
 
 
 def get_resource_filepath(relative_path, as_text=True):
@@ -19,19 +17,29 @@ def get_resource_content(relative_path):
     return get_resource_filepath(relative_path, as_text=False).read_text()
 
 
-def object_from_json(json_content):
-    return json.loads(json_content, object_hook=lambda d: SimpleNamespace(**d))
+def get_deserialized_object_from_resource(return_type, resource_path):
+    payload = get_resource_content(resource_path)
+    return deserialize_object(return_type, payload)
 
 
-def object_from_json_relative_path(relative_path):
-    return object_from_json(get_resource_content(relative_path))
+def deserialize_object(model, payload):
+    """Deserializes the passed payload to an instance of the specified model
+    Disregards unknown fields is
 
-
-def get_deserialized_object_from_json(relative_path, return_type):
-    resp = namedtuple("MockResp", ["status", "reason"])(200, "")
-    rest_resp = RESTResponse(resp, get_resource_content(relative_path))
-
-    return ApiClient().deserialize(rest_resp, (return_type,), True)
+    :param model: OpenApi generated model
+    :param payload: json payload to be deserialized
+    :return: Instance of the model
+    """
+    try:
+        test_data = json.loads(payload)
+    except json.JSONDecodeError:
+        test_data = payload
+    return validate_and_convert_types(input_value=test_data,
+                                      required_types_mixed=(model,),
+                                      path_to_item=["test_data"],
+                                      spec_property_naming=True,
+                                      _check_type=True,
+                                      configuration=Configuration(discard_unknown_keys=True))
 
 
 def get_config_resource_filepath(relative_path):
