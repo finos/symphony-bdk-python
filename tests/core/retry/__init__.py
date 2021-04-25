@@ -1,19 +1,38 @@
-from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
+from symphony.bdk.gen import ApiException
 
 
-def minimal_retry_config_with_attempts(max_attempts: int):
-    retry_config = BdkRetryConfig()
-    retry_config.multiplier = 1
-    retry_config.initial_interval = 10
-    retry_config.max_interval = 10
-    retry_config.max_attempts = max_attempts
-    return retry_config
+class NoApiExceptionAfterCount(object):
+    """Holds counter state for invoking a method several times in a row."""
+
+    def __init__(self, count, status=400):
+        self.counter = 0
+        self.count = count
+        self.status = status
+
+    def go(self):
+        """Raise an ApiException until after count threshold has been crossed.
+
+        Then return True.
+        """
+        if self.counter < self.count:
+            self.counter += 1
+            raise ApiException(status=self.status, reason="Hi there, I'm an ApiException")
+        return True
 
 
-def minimal_retry_config():
-    retry_config = BdkRetryConfig()
-    retry_config.multiplier = 1
-    retry_config.initial_interval = 10
-    retry_config.max_interval = 10
-    retry_config.max_attempts = 1
-    return retry_config
+class NoIOErrorAfterCount(object):
+    """Holds counter state for invoking a method several times in a row."""
+
+    def __init__(self, count):
+        self.counter = 0
+        self.count = count
+
+    def go(self):
+        """Raise an IOError until after count threshold has been crossed.
+
+        Then return True.
+        """
+        if self.counter < self.count:
+            self.counter += 1
+            raise IOError("Hi there, I'm an IOError")
+        return True

@@ -3,6 +3,8 @@ from enum import Enum, auto
 
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
+from symphony.bdk.core.retry import retry
+from symphony.bdk.core.retry.startegy import refresh_session_if_unauthorized
 from symphony.bdk.gen.pod_api.presence_api import PresenceApi
 from symphony.bdk.gen.pod_model.v2_presence import V2Presence
 from symphony.bdk.gen.pod_model.v2_presence_status import V2PresenceStatus
@@ -42,6 +44,7 @@ class OboPresenceService:
         self._auth_session = auth_session
         self._retry_config = retry_config
 
+    @retry(retry=refresh_session_if_unauthorized)
     async def get_presence(self) -> V2Presence:
         """ Get the online status (presence info) of the calling user.
         See: `Get Presence <https://developers.symphony.com/restapi/reference#get-presence>`_.
@@ -65,6 +68,7 @@ class OboPresenceService:
             limit=limit)
         return presence_list.value
 
+    @retry(retry=refresh_session_if_unauthorized)
     async def get_user_presence(self, user_id: int, local: bool) -> V2Presence:
         """ Get the presence info of a specified user.
         See: `Get User Presence <https://developers.symphony.com/restapi/reference#user-presence-v3>`_.
@@ -79,6 +83,7 @@ class OboPresenceService:
                                                                  session_token=await self._auth_session.session_token,
                                                                  local=local)
 
+    @retry(retry=refresh_session_if_unauthorized)
     async def external_presence_interest(self, user_ids: List[int]):
         """ Register interest in a list of external users to get their presence info.
         See: `External Presence Interest
@@ -89,6 +94,7 @@ class OboPresenceService:
         await self._presence_api.v1_user_presence_register_post(session_token=await self._auth_session.session_token,
                                                                 uid_list=user_ids)
 
+    @retry(retry=refresh_session_if_unauthorized)
     async def set_presence(self, status: PresenceStatus, soft: bool) -> V2Presence:
         """ Set the presence info of the calling user.
         See: `Set Presence <https://developers.symphony.com/restapi/reference#set-presence>`_.
@@ -107,6 +113,7 @@ class OboPresenceService:
                                                               presence=presence_status,
                                                               soft=soft)
 
+    @retry(retry=refresh_session_if_unauthorized)
     async def create_presence_feed(self) -> str:
         """ Creates a new stream capturing online status changes ("presence feed") for the company (pod) and returns
         the ID of the new feed. The feed will return the presence of users whose presence status has changed since it
@@ -119,6 +126,7 @@ class OboPresenceService:
             session_token=await self._auth_session.session_token)
         return string_id.id
 
+    @retry(retry=refresh_session_if_unauthorized)
     async def read_presence_feed(self, feed_id: str) -> List[V2Presence]:
         """ Reads the specified presence feed that was created.
         The feed returned includes the user presence statuses that have changed since they were last read.
@@ -132,6 +140,7 @@ class OboPresenceService:
             feed_id=feed_id)
         return presence_list.value
 
+    @retry(retry=refresh_session_if_unauthorized)
     async def delete_presence_feed(self, feed_id: str) -> str:
         """ Delete the specified presence feed that was created.
         See: `Delete Presence Feed <https://developers.symphony.com/restapi/reference#delete-presence-feed>`_.
@@ -143,6 +152,7 @@ class OboPresenceService:
             session_token=await self._auth_session.session_token, feed_id=feed_id)
         return string_id.id
 
+    @retry(retry=refresh_session_if_unauthorized)
     async def set_user_presence(self, user_id: int, status: PresenceStatus, soft: bool) -> V2Presence:
         """ Set the presence state of a another user.
         See: `Set Other User's Presence - Admin V3

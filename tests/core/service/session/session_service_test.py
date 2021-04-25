@@ -7,7 +7,7 @@ from symphony.bdk.core.service.session.session_service import SessionService
 from symphony.bdk.gen.pod_api.session_api import SessionApi
 from symphony.bdk.gen.pod_model.user_v2 import UserV2
 from tests.utils.resource_utils import get_deserialized_object_from_resource
-from tests.core.retry import minimal_retry_config
+from tests.core.config import minimal_retry_config
 
 
 @pytest.fixture(name="auth_session")

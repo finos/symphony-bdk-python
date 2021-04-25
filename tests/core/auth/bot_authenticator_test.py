@@ -1,157 +1,82 @@
-from unittest.mock import patch, MagicMock, AsyncMock
-
+from unittest.mock import MagicMock, AsyncMock, Mock
 import pytest
 
-from symphony.bdk.core.auth.bot_authenticator import BotAuthenticatorRsa, BotAuthenticatorCert
+from symphony.bdk.core.auth.bot_authenticator import BotAuthenticator
 from symphony.bdk.core.auth.exception import AuthUnauthorizedError
-from symphony.bdk.core.config.model.bdk_bot_config import BdkBotConfig
-from symphony.bdk.gen.api_client import ApiClient
-from symphony.bdk.gen.configuration import Configuration
-from symphony.bdk.gen.exceptions import ApiException
-from symphony.bdk.gen.login_model.token import Token
-from tests.utils.resource_utils import get_resource_filepath
-from tests.core.retry import minimal_retry_config
+from symphony.bdk.gen import ApiClient, ApiException
+from tests.core.config import minimal_retry_config_with_attempts
 
 
-@pytest.fixture(name="config")
-def fixture_config():
-    bot_config = {
-        "username": "test_bot",
-        "privateKey": {
-            "path": "path/to/private_key"
-        }
-    }
-    return BdkBotConfig(bot_config)
+class DummyBotAuthenticator(BotAuthenticator):
 
-
-@pytest.fixture(name="mocked_api_client")
-def fixture_mocked_api_client():
-    def __loader():
-        api_client = MagicMock(ApiClient)
-        api_client.call_api = AsyncMock()
-        api_client.configuration = Configuration()
-        return api_client
-
-    return __loader
+    async def _authenticate_and_get_token(self, api_client: ApiClient) -> str:
+        pass
 
 
 @pytest.mark.asyncio
-async def test_bot_session_rsa(config, mocked_api_client):
-    with patch("symphony.bdk.core.auth.bot_authenticator.create_signed_jwt", return_value="privateKey"):
-        login_api_client = mocked_api_client()
-        relay_api_client = mocked_api_client()
+async def test_success():
+    api_client = Mock()
+    bot_authenticator = DummyBotAuthenticator(api_client, api_client, minimal_retry_config_with_attempts(1))
+    bot_authenticator._authenticate_and_get_token = AsyncMock()
+    bot_authenticator._authenticate_and_get_token.return_value = "1234"
 
-        login_api_client.call_api.return_value = Token(token="session_token")
-        relay_api_client.call_api.return_value = Token(token="km_token")
+    value = await bot_authenticator._try_authenticate_and_get_token(api_client)
 
-        bot_authenticator = BotAuthenticatorRsa(config, login_api_client, relay_api_client, minimal_retry_config())
-        session_token = await bot_authenticator.retrieve_session_token()
-        km_token = await bot_authenticator.retrieve_key_manager_token()
-
-        assert session_token == "session_token"
-        assert km_token == "km_token"
+    assert value == "1234"
+    bot_authenticator._authenticate_and_get_token.assert_called_once()
 
 
 @pytest.mark.asyncio
-async def test_api_exception_rsa(config, mocked_api_client):
-    with patch("symphony.bdk.core.auth.bot_authenticator.create_signed_jwt", return_value="privateKey"):
-        login_api_client = mocked_api_client()
-        relay_api_client = mocked_api_client()
-
-        login_api_client.call_api.side_effect = ApiException()
-        relay_api_client.call_api.side_effect = ApiException()
-
-        bot_authenticator = BotAuthenticatorRsa(config, login_api_client, relay_api_client, minimal_retry_config())
-
-        with pytest.raises(AuthUnauthorizedError):
-            await bot_authenticator.retrieve_session_token()
-
-        with pytest.raises(AuthUnauthorizedError):
-            await bot_authenticator.retrieve_key_manager_token()
-
-
-@pytest.mark.asyncio
-async def test_authenticate_bot_rsa(config, mocked_api_client):
-    with patch("symphony.bdk.core.auth.bot_authenticator.create_signed_jwt", return_value="privateKey"):
-        login_api_client = mocked_api_client()
-        relay_api_client = mocked_api_client()
-
-        login_api_client.call_api.return_value = Token(token="session_token")
-        relay_api_client.call_api.return_value = Token(token="km_token")
-
-        bot_authenticator = BotAuthenticatorRsa(config, login_api_client, relay_api_client, minimal_retry_config())
-        auth_session = await bot_authenticator.authenticate_bot()
-
-        assert await auth_session.session_token == "session_token"
-        assert await auth_session.key_manager_token == "km_token"
-
-
-@pytest.mark.asyncio
-async def test_authenticate_with_private_key_content(config, mocked_api_client):
-    with patch("symphony.bdk.core.auth.bot_authenticator.create_signed_jwt", return_value="privateKey"):
-        login_api_client = mocked_api_client()
-        relay_api_client = mocked_api_client()
-
-        login_api_client.call_api.return_value = Token(token="session_token")
-        relay_api_client.call_api.return_value = Token(token="km_token")
-
-        private_key_string = get_resource_filepath("key/private_key.pem", as_text=False).read_text()
-        assert config.private_key._path is not None
-        assert config.private_key._content == ""
-        config.private_key.content = private_key_string
-
-        bot_authenticator = BotAuthenticatorRsa(config, login_api_client, relay_api_client, minimal_retry_config())
-        auth_session = await bot_authenticator.authenticate_bot()
-
-        assert config.private_key._path is None
-        assert config.private_key._content == private_key_string
-        assert await auth_session.session_token == "session_token"
-        assert await auth_session.key_manager_token == "km_token"
-
-
-@pytest.mark.asyncio
-async def test_bot_session_cert(mocked_api_client):
-    session_auth_client = mocked_api_client()
-    key_auth_client = mocked_api_client()
-
-    session_auth_client.call_api.return_value = Token(token="session_token")
-    key_auth_client.call_api.return_value = Token(token="km_token")
-
-    bot_authenticator = BotAuthenticatorCert(session_auth_client, key_auth_client, minimal_retry_config())
-    session_token = await bot_authenticator.retrieve_session_token()
-    km_token = await bot_authenticator.retrieve_key_manager_token()
-
-    assert session_token == "session_token"
-    assert km_token == "km_token"
-
-
-@pytest.mark.asyncio
-async def test_api_exception_cert(mocked_api_client):
-    session_auth_client = mocked_api_client()
-    key_auth_client = mocked_api_client()
-
-    session_auth_client.call_api.side_effect = ApiException()
-    key_auth_client.call_api.side_effect = ApiException()
-
-    bot_authenticator = BotAuthenticatorCert(session_auth_client, key_auth_client, minimal_retry_config())
+async def test_unauthorized():
+    api_client = MagicMock(ApiClient)
+    bot_authenticator = DummyBotAuthenticator(api_client, api_client, minimal_retry_config_with_attempts(1))
+    bot_authenticator._authenticate_and_get_token = AsyncMock()
+    bot_authenticator._authenticate_and_get_token.side_effect = ApiException(401)
 
     with pytest.raises(AuthUnauthorizedError):
-        await bot_authenticator.retrieve_session_token()
+        await bot_authenticator._try_authenticate_and_get_token(api_client)
 
-    with pytest.raises(AuthUnauthorizedError):
-        await bot_authenticator.retrieve_key_manager_token()
+    bot_authenticator._authenticate_and_get_token.assert_called_once()
 
 
 @pytest.mark.asyncio
-async def test_authenticate_bot_cert(mocked_api_client):
-    session_auth_client = mocked_api_client()
-    key_auth_client = mocked_api_client()
+async def test_unexpected_api_exception():
+    api_client = MagicMock(ApiClient)
+    bot_authenticator = DummyBotAuthenticator(api_client, api_client, minimal_retry_config_with_attempts(1))
+    bot_authenticator._authenticate_and_get_token = AsyncMock()
+    bot_authenticator._authenticate_and_get_token.side_effect = ApiException(404)
 
-    session_auth_client.call_api.return_value = Token(token="session_token")
-    key_auth_client.call_api.return_value = Token(token="km_token")
+    with pytest.raises(ApiException):
+        await bot_authenticator._try_authenticate_and_get_token(api_client)
 
-    bot_authenticator = BotAuthenticatorCert(session_auth_client, key_auth_client, minimal_retry_config())
-    auth_session = await bot_authenticator.authenticate_bot()
+    bot_authenticator._authenticate_and_get_token.assert_called_once()
 
-    assert await auth_session.session_token == "session_token"
-    assert await auth_session.key_manager_token == "km_token"
+
+@pytest.mark.asyncio
+async def test_should_retry():
+    api_client = MagicMock(ApiClient)
+    bot_authenticator = DummyBotAuthenticator(api_client, api_client, minimal_retry_config_with_attempts(4))
+    bot_authenticator._authenticate_and_get_token = AsyncMock()
+    exception_from_a_timeout = Exception()
+    exception_from_a_timeout.__cause__ = TimeoutError()
+    bot_authenticator._authenticate_and_get_token.side_effect = [ApiException(429),
+                                                                 ApiException(500),
+                                                                 exception_from_a_timeout,
+                                                                 "1234"]
+
+    value = await bot_authenticator._try_authenticate_and_get_token(api_client)
+
+    assert value == "1234"
+    assert bot_authenticator._authenticate_and_get_token.call_count == 4
+
+@pytest.mark.asyncio
+async def test_retries_exhausted():
+    api_client = MagicMock(ApiClient)
+    bot_authenticator = DummyBotAuthenticator(api_client, api_client, minimal_retry_config_with_attempts(3))
+    bot_authenticator._authenticate_and_get_token = AsyncMock()
+    bot_authenticator._authenticate_and_get_token.side_effect = ApiException(429)
+
+    with pytest.raises(ApiException):
+        await bot_authenticator._try_authenticate_and_get_token(api_client)
+
+    assert bot_authenticator._authenticate_and_get_token.call_count == 3

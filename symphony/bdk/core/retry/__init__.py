@@ -1,18 +1,11 @@
-from ..auth.exception import AuthUnauthorizedError
-
-try:
-    from inspect import iscoroutinefunction
-except ImportError:
-    iscoroutinefunction = None
-
 from typing import Callable
 from functools import wraps
 
 from tenacity.retry import retry_if_exception
-from tenacity import stop_after_attempt, wait_exponential, RetryCallState
+from tenacity import stop_after_attempt, wait_exponential
 
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
-from symphony.bdk.gen import ApiException
+from symphony.bdk.core.retry.startegy import is_network_or_minor_error
 
 from ._asyncio import AsyncRetrying
 
@@ -51,21 +44,3 @@ def retry(*dargs, **dkw):  # noqa
             return decorator_f
 
         return retry_decorator
-
-
-def is_network_or_minor_error(exception: Exception) -> bool:
-    """Checks if the exception is a network issue or an :py:class:`ApiException` minor error
-    This is the default function used to check if a given exception should lead to a retry
-    """
-    if isinstance(exception, ApiException):
-        if exception.status == 500 or exception.status == 401 or exception.status == 429:
-            return True
-    return isinstance(exception, ConnectionError)
-
-def authentication_retry(retry_state: RetryCallState):
-    unauthorized_message = "Service account is not authorized to authenticate. Check if credentials are valid."
-    if retry_state.outcome.failed:
-        exception = retry_state.outcome.exception()
-        if isinstance(exception, ApiException):
-            if exception.status == 401:
-                raise AuthUnauthorizedError(unauthorized_message, exception) from exception

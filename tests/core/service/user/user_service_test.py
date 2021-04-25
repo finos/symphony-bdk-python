@@ -37,7 +37,7 @@ from symphony.bdk.gen.pod_model.v2_user_create import V2UserCreate
 from symphony.bdk.gen.pod_model.v2_user_attributes import V2UserAttributes
 from symphony.bdk.gen.pod_model.user_suspension import UserSuspension
 from symphony.bdk.gen.pod_model.v2_user_list import V2UserList
-from tests.core.retry import minimal_retry_config
+from tests.core.config import minimal_retry_config
 from tests.utils.resource_utils import get_resource_filepath, get_deserialized_object_from_resource, \
     deserialize_object
 

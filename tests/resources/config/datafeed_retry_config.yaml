@@ -6,5 +6,3 @@ datafeed:
     initialIntervalMillis: 1000
     multiplier: 3.0
     maxIntervalMillis: 2000
-
-# here we don't want to configure datafeed retry, to ensure that it has an infinite number of retries by default

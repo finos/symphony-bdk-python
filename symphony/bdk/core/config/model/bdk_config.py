@@ -35,3 +35,10 @@ class BdkConfig(BdkServerConfig):
         :return: true if bot service account is specified in the configuration.
         """
         return self.bot.username is not None
+
+    def get_datafeed_retry_config(self) -> dict:
+        """
+
+        :return: Datafeed retry config if present, Bdk retry config otherwise
+        """
+        return self.retry if self.datafeed.retry is None else self.datafeed.retry

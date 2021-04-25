@@ -1,6 +1,7 @@
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.retry import retry
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
+from symphony.bdk.core.retry.startegy import refresh_session_if_unauthorized
 from symphony.bdk.gen.pod_api.app_entitlement_api import AppEntitlementApi
 from symphony.bdk.gen.pod_api.application_api import ApplicationApi
 from symphony.bdk.gen.pod_model.application_detail import ApplicationDetail
@@ -31,7 +32,7 @@ class ApplicationService:
         self._auth_session = auth_session
         self._retry_config = retry_config
 
-    @retry
+    @retry(retry=refresh_session_if_unauthorized)
     async def create_application(self, application_detail: ApplicationDetail) -> ApplicationDetail:
         """
         Create a new application.
@@ -53,7 +54,7 @@ class ApplicationService:
         }
         return await self._application_api.v1_admin_app_create_post(**params)
 
-    @retry
+    @retry(retry=refresh_session_if_unauthorized)
     async def update_application(self, app_id: str, application_detail: ApplicationDetail) -> ApplicationDetail:
         """
         Update an existing application.
@@ -77,7 +78,7 @@ class ApplicationService:
         }
         return await self._application_api.v1_admin_app_id_update_post(**params)
 
-    @retry
+    @retry(retry=refresh_session_if_unauthorized)
     async def delete_application(self, app_id: str) -> None:
         """
         Delete an existing application.
@@ -93,7 +94,7 @@ class ApplicationService:
         }
         await self._application_api.v1_admin_app_id_delete_post(**params)
 
-    @retry
+    @retry(retry=refresh_session_if_unauthorized)
     async def get_application(self, app_id: str) -> ApplicationDetail:
         """
         Get an existing application.
@@ -111,7 +112,7 @@ class ApplicationService:
         }
         return await self._application_api.v1_admin_app_id_get_get(**params)
 
-    @retry
+    @retry(retry=refresh_session_if_unauthorized)
     async def list_application_entitlements(self) -> [PodAppEntitlement]:
         """
         Get the list of application entitlements for the company.
@@ -127,7 +128,7 @@ class ApplicationService:
         pod_app_entitlement_list = await self._app_entitlement_api.v1_admin_app_entitlement_list_get(**params)
         return pod_app_entitlement_list.value
 
-    @retry
+    @retry(retry=refresh_session_if_unauthorized)
     async def update_application_entitlements(self, entitlements: [PodAppEntitlement]) -> [PodAppEntitlement]:
         """
         Update the list of application entitlements for the company.
@@ -146,7 +147,7 @@ class ApplicationService:
         pod_app_entitlement_list = await self._app_entitlement_api.v1_admin_app_entitlement_list_post(**params)
         return pod_app_entitlement_list.value
 
-    @retry
+    @retry(retry=refresh_session_if_unauthorized)
     async def list_user_applications(self, user_id: int) -> [UserAppEntitlement]:
         """
         Get the list of Symphony application entitlements for a particular user.
@@ -165,7 +166,7 @@ class ApplicationService:
         user_app_entitlement_list = await self._app_entitlement_api.v1_admin_user_uid_app_entitlement_list_get(**params)
         return user_app_entitlement_list.value
 
-    @retry
+    @retry(retry=refresh_session_if_unauthorized)
     async def update_user_applications(self, user_id: int, user_app_entitlements: [UserAppEntitlement]):
         """
         Update the application entitlements for a particular user.

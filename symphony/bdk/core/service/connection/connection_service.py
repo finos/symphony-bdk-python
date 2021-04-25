@@ -1,6 +1,7 @@
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.core.retry import retry
+from symphony.bdk.core.retry.startegy import refresh_session_if_unauthorized
 from symphony.bdk.core.service.connection.model.connection_status import ConnectionStatus
 from symphony.bdk.gen.pod_api.connection_api import ConnectionApi
 from symphony.bdk.gen.pod_model.user_connection import UserConnection
@@ -24,7 +25,7 @@ class OboConnectionService:
         self._auth_session = auth_session
         self._retry_config = retry_config
 
-    @retry
+    @retry(retry=refresh_session_if_unauthorized)
     async def get_connection(self, user_id: int) -> UserConnection:
         """
         Get connection status, i.e. check if the calling user is connected to the specified user.
@@ -41,7 +42,7 @@ class OboConnectionService:
         }
         return await self._connection_api.v1_connection_user_user_id_info_get(**params)
 
-    @retry
+    @retry(retry=refresh_session_if_unauthorized)
     async def list_connections(
             self,
             status: ConnectionStatus = ConnectionStatus.ALL,
@@ -72,7 +73,7 @@ class OboConnectionService:
         user_connection_list = await self._connection_api.v1_connection_list_get(**params)
         return user_connection_list.value
 
-    @retry
+    @retry(retry=refresh_session_if_unauthorized)
     async def create_connection(self, user_id: int) -> UserConnection:
         """
         Sends a connection request to another user.
@@ -90,7 +91,7 @@ class OboConnectionService:
         }
         return await self._connection_api.v1_connection_create_post(**params)
 
-    @retry
+    @retry(retry=refresh_session_if_unauthorized)
     async def accept_connection(self, user_id: int) -> UserConnection:
         """
         Accept the connection request from a requesting user.
@@ -108,7 +109,7 @@ class OboConnectionService:
         }
         return await self._connection_api.v1_connection_accept_post(**params)
 
-    @retry
+    @retry(retry=refresh_session_if_unauthorized)
     async def reject_connection(self, user_id: int) -> UserConnection:
         """
         Reject the connection request from a requesting user.
@@ -126,7 +127,7 @@ class OboConnectionService:
         }
         return await self._connection_api.v1_connection_reject_post(**params)
 
-    @retry
+    @retry(retry=refresh_session_if_unauthorized)
     async def remove_connection(self, user_id: int) -> None:
         """
         Removes a connection with a user.

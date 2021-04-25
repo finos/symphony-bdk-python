@@ -9,7 +9,8 @@ from symphony.bdk.gen.agent_model.agent_info import AgentInfo
 from symphony.bdk.gen.agent_model.v3_health import V3Health
 
 from tests.utils.resource_utils import get_deserialized_object_from_resource
-from tests.core.retry import minimal_retry_config
+from tests.core.config import minimal_retry_config
+
 
 @pytest.fixture(name="mocked_system_api_client")
 def fixture_mocked_system_api_client():

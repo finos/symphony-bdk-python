@@ -3,7 +3,6 @@
 from abc import ABC, abstractmethod
 
 from symphony.bdk.core.auth.auth_session import AuthSession
-from symphony.bdk.core.auth.exception import AuthUnauthorizedError
 from symphony.bdk.core.auth.jwt_helper import create_signed_jwt
 from symphony.bdk.core.config.model.bdk_bot_config import BdkBotConfig
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
@@ -11,7 +10,6 @@ from symphony.bdk.core.retry import retry
 from symphony.bdk.core.retry.startegy import authentication_retry
 from symphony.bdk.gen.api_client import ApiClient
 from symphony.bdk.gen.auth_api.certificate_authentication_api import CertificateAuthenticationApi
-from symphony.bdk.gen.exceptions import ApiException
 from symphony.bdk.gen.login_api.authentication_api import AuthenticationApi
 from symphony.bdk.gen.login_model.authenticate_request import AuthenticateRequest
 
@@ -50,13 +48,9 @@ class BotAuthenticator(ABC):
         """
         return await self._try_authenticate_and_get_token(self._key_manager_auth_client)
 
-    @retry(retry=authentication_retry())
+    @retry(retry=authentication_retry)
     async def _try_authenticate_and_get_token(self, api_client: ApiClient) -> str:
-        try:
-            return await self._authenticate_and_get_token(api_client)
-        except ApiException as exc:
-            unauthorized_message = "Service account is not authorized to authenticate. Check if credentials are valid."
-            raise AuthUnauthorizedError(unauthorized_message, exc) from exc
+        return await self._authenticate_and_get_token(api_client)
 
     @abstractmethod
     async def _authenticate_and_get_token(self, api_client: ApiClient) -> str:

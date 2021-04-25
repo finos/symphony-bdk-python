@@ -23,7 +23,7 @@ from symphony.bdk.gen.pod_model.message_status import MessageStatus
 from symphony.bdk.gen.pod_model.message_suppression_response import MessageSuppressionResponse
 from symphony.bdk.gen.pod_model.stream_attachment_response import StreamAttachmentResponse
 from symphony.bdk.gen.pod_model.string_list import StringList
-from tests.core.retry import minimal_retry_config
+from tests.core.config import minimal_retry_config
 from tests.utils.resource_utils import get_deserialized_object_from_resource, deserialize_object
 
 

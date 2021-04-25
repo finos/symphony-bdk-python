@@ -25,7 +25,7 @@ from symphony.bdk.gen.pod_model.v2_stream_attributes import V2StreamAttributes
 from symphony.bdk.gen.pod_model.v3_room_attributes import V3RoomAttributes
 from symphony.bdk.gen.pod_model.v3_room_detail import V3RoomDetail
 from symphony.bdk.gen.pod_model.v3_room_search_results import V3RoomSearchResults
-from tests.core.retry import minimal_retry_config
+from tests.core.config import minimal_retry_config
 from tests.utils.resource_utils import get_deserialized_object_from_resource
 
 KM_TOKEN = "km_token"
