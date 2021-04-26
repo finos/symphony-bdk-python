@@ -16,6 +16,11 @@ from tenacity import RetryCallState
 
 
 class AsyncRetrying(BaseRetrying):
+    """This is a modified version of the tenacity.AsyncRetrying class that handles asynchronously defined retry or
+    retry_error_callback parameters.
+
+    There is an open PR for this change on the tenacity repository: https://github.com/jd/tenacity/pull/289
+    """
     def __init__(self, sleep=sleep, **kwargs):
         super(AsyncRetrying, self).__init__(**kwargs)
         self.sleep = sleep

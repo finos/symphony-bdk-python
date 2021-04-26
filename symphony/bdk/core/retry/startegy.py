@@ -22,18 +22,6 @@ def is_network_or_minor_error(exception: Exception) -> bool:
     return isinstance(exception.__cause__, TimeoutError)
 
 
-def is_network_or_minor_or_client_error(exception: Exception) -> bool:
-    """Checks if the exception is a network issue or an :py:class:`ApiException` minor error or a client error
-
-    :param exception: The exception to be checked
-    :return:
-    """
-    if isinstance(exception, ApiException):
-        if exception.status >= 500 or exception.status == 401 or exception.status == 429 or exception.status == 400:
-            return True
-    return isinstance(exception.__cause__, TimeoutError)
-
-
 def can_authentication_be_retried(exception: ApiException) -> bool:
     """Predicate to check if authentication call be retried,
     i.e. is an :py:class:`ApiException` with status code 429 or greater or equal to 500.

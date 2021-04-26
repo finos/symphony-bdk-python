@@ -11,7 +11,7 @@ from ._asyncio import AsyncRetrying
 
 
 def retry(*dargs, **dkw):  # noqa
-    """A decorator that provides a mechanism to repeat requests
+    """A decorator that provides a mechanism to to retry failed requests
 
     :param dargs: positional arguments passed to be added or to override the default configuration
     :param dkw: keyword arguments passed to be added or to override the default configuration
