@@ -7,7 +7,7 @@ from symphony.bdk.core.symphony_bdk import SymphonyBdk
 
 
 async def run():
-    config = BdkConfigLoader.load_from_symphony_dir("bot_config/devx3.yaml")
+    config = BdkConfigLoader.load_from_symphony_dir("config.yaml")
     async with SymphonyBdk(config) as bdk:
         auth_session = bdk.bot_session()
         logging.info(await auth_session.key_manager_token)
