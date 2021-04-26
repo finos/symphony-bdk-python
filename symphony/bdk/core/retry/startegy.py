@@ -78,7 +78,7 @@ async def refresh_session_if_unauthorized(retry_state: RetryCallState):
     if retry_state.outcome.failed:
         exception = retry_state.outcome.exception()
         if isinstance(exception, ApiException) and is_unauthorized(exception):
-            service_auth_session: AuthSession = retry_state.args[0]
+            service_auth_session: AuthSession = retry_state.args[0]._auth_session
             await service_auth_session.refresh()
             return True
     else:
