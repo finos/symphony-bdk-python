@@ -53,7 +53,7 @@ from symphony.bdk.core.symphony_bdk import SymphonyBdk
 
 async def run():
   async with SymphonyBdk(BdkConfigLoader.load_from_symphony_dir("config.yaml")) as bdk:
-    await bdk.activities().register(HelloCommandActivity(bdk.messages()))
+    bdk.activities().register(HelloCommandActivity(bdk.messages()))
     await bdk.datafeed().start()
 
 
@@ -90,6 +90,7 @@ $ /command
 
 > Note: a Slash cannot have parameters
 
+#### With the @slash decorator
 One can define a slash command by decorating a callback function which must take one parameter of type
 [`CommandContext`](../_autosummary/symphony.bdk.core.activity.command.CommandContext.html)
 such as below:
@@ -118,7 +119,40 @@ async def run():
 2. `True` means that the bot has to be mentioned
 
 The decorated function will then be called if a message is sent in an `IM`, `MIM` or `Chatroom` with a matching text message.
+Please mind that, due to the mechanism inherent to decorators, the `@activities.slash` cannot be used when `activities`
+is a class instance field. In this case, you can use slash commands as done below by subclassing `SlashCommandActivity`.
 
+#### By subclassing SlashCommandActivity
+One can also define a slash command by hand like the following:
+```python
+from symphony.bdk.core.activity.command import CommandContext, SlashCommandActivity
+from symphony.bdk.core.activity.registry import ActivityRegistry
+from symphony.bdk.core.config.loader import BdkConfigLoader
+from symphony.bdk.core.service.message.message_service import MessageService
+from symphony.bdk.core.symphony_bdk import SymphonyBdk
+
+async def run():
+    config = BdkConfigLoader.load_from_symphony_dir("config.yaml")
+
+    async with SymphonyBdk(config) as bdk:
+        activities = bdk.activities()
+        messages = bdk.messages()
+
+        activities.register(HelpCommandActivity(messages, activities))
+
+        await bdk.datafeed().start()
+
+
+class HelpCommandActivity(SlashCommandActivity):
+
+    def __init__(self, messages: MessageService, activities: ActivityRegistry):
+        self._messages = messages
+        self._activities = activities
+        super().__init__("/help", True, self.help_command)
+
+    async def help_command(self, context: CommandContext):
+        return await self._messages.send_message(context.stream_id, "<messageML>Help command triggered</messageML>")
+```
 
 ## Form Activity
 A form activity is triggered when an end-user replies or submits an Elements form.
@@ -156,7 +190,7 @@ from symphony.bdk.core.symphony_bdk import SymphonyBdk
 
 async def run():
     async with SymphonyBdk(BdkConfigLoader.load_from_symphony_dir("config.yaml")) as bdk:
-        await bdk.activities().register(ReplyFormReplyActivity(bdk.messages()))
+        bdk.activities().register(ReplyFormReplyActivity(bdk.messages()))
         await bdk.datafeed().start()
 
 
