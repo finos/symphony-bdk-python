@@ -39,18 +39,14 @@ class BotAuthenticator(ABC):
 
         :return: the retrieved session token.
         """
-        return await self._try_authenticate_and_get_token(self._session_auth_client)
+        return await self._authenticate_and_get_token(self._session_auth_client)
 
     async def retrieve_key_manager_token(self) -> str:
         """Authenticated and retrieved a new key manager session.
 
         :return: the retrieved key manager session.
         """
-        return await self._try_authenticate_and_get_token(self._key_manager_auth_client)
-
-    @retry(retry=authentication_retry)
-    async def _try_authenticate_and_get_token(self, api_client: ApiClient) -> str:
-        return await self._authenticate_and_get_token(api_client)
+        return await self._authenticate_and_get_token(self._key_manager_auth_client)
 
     @abstractmethod
     async def _authenticate_and_get_token(self, api_client: ApiClient) -> str:
@@ -71,6 +67,7 @@ class BotAuthenticatorRsa(BotAuthenticator):
         self._bot_config = bot_config
         super().__init__(login_api_client, relay_api_client, retry_config)
 
+    @retry(retry=authentication_retry)
     async def _authenticate_and_get_token(self, api_client: ApiClient) -> str:
         jwt = create_signed_jwt(self._bot_config.private_key, self._bot_config.username)
         req = AuthenticateRequest(token=jwt)
@@ -86,6 +83,7 @@ class BotAuthenticatorCert(BotAuthenticator):
     def __init__(self, session_auth_client: ApiClient, key_auth_client: ApiClient, retry_config: BdkRetryConfig):
         super().__init__(session_auth_client, key_auth_client, retry_config)
 
+    @retry(retry=authentication_retry)
     async def _authenticate_and_get_token(self, api_client: ApiClient) -> str:
         token = await CertificateAuthenticationApi(api_client).v1_authenticate_post()
         return token.token

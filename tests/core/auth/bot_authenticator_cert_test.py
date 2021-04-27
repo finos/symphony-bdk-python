@@ -1,4 +1,4 @@
-from unittest.mock import patch, MagicMock, AsyncMock
+from unittest.mock import MagicMock, AsyncMock
 import pytest
 
 from symphony.bdk.core.auth.bot_authenticator import BotAuthenticatorCert

@@ -1,8 +1,9 @@
+import logging
 from typing import Callable
 from functools import wraps
 
 from tenacity.retry import retry_if_exception
-from tenacity import stop_after_attempt, wait_exponential
+from tenacity import stop_after_attempt, wait_exponential, before_sleep_log
 
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.core.retry.startegy import is_network_or_minor_error
@@ -29,6 +30,9 @@ def retry(*dargs, **dkw):  # noqa
                 Passed retry configuration arguments override the default configuration"""
                 default_kwargs = {}
                 retry_config: BdkRetryConfig = getattr(self, '_retry_config', None)
+                logger = logging.getLogger(self.__module__)
+                _before_sleep = before_sleep_log(logger, logging.INFO)
+                default_kwargs.update(dict(before_sleep=_before_sleep))
                 if retry_config is not None:
                     config_kwargs = dict(retry=retry_if_exception(is_network_or_minor_error),
                                          wait=wait_exponential(multiplier=retry_config.multiplier,
