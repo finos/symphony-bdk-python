@@ -2,7 +2,6 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from symphony.bdk.core.auth.exception import AuthUnauthorizedError
 from symphony.bdk.core.auth.obo_authenticator import OboAuthenticatorRsa, OboAuthenticatorCert
 from symphony.bdk.core.config.model.bdk_app_config import BdkAppConfig
 from symphony.bdk.gen.auth_model.obo_auth_response import OboAuthResponse

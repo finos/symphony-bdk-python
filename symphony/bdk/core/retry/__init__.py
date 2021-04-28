@@ -6,7 +6,7 @@ from tenacity.retry import retry_if_exception
 from tenacity import stop_after_attempt, wait_exponential, before_sleep_log
 
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
-from symphony.bdk.core.retry.startegy import is_network_or_minor_error
+from symphony.bdk.core.retry.strategy import is_network_or_minor_error
 
 from ._asyncio import AsyncRetrying
 
@@ -36,8 +36,8 @@ def retry(*dargs, **dkw):  # noqa
                 if retry_config is not None:
                     config_kwargs = dict(retry=retry_if_exception(is_network_or_minor_error),
                                          wait=wait_exponential(multiplier=retry_config.multiplier,
-                                                               min=retry_config.initial_interval,
-                                                               max=retry_config.max_interval),
+                                                               min=retry_config.initial_interval.total_seconds(),
+                                                               max=retry_config.max_interval.total_seconds()),
                                          stop=stop_after_attempt(retry_config.max_attempts),
                                          reraise=True)
                     default_kwargs.update(config_kwargs)

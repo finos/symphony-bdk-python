@@ -7,7 +7,7 @@ from symphony.bdk.core.auth.jwt_helper import create_signed_jwt
 from symphony.bdk.core.config.model.bdk_app_config import BdkAppConfig
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.core.retry import retry
-from symphony.bdk.core.retry.startegy import authentication_retry
+from symphony.bdk.core.retry.strategy import authentication_retry
 from symphony.bdk.gen.auth_api.certificate_authentication_api import CertificateAuthenticationApi
 from symphony.bdk.gen.login_api.authentication_api import AuthenticationApi
 from symphony.bdk.gen.login_model.authenticate_request import AuthenticateRequest
@@ -113,6 +113,7 @@ class OboAuthenticatorCert(OboAuthenticator):
         self._authentication_api = certificate_authenticator_api
         self._retry_config = retry_config
 
+    @retry(retry=authentication_retry)
     async def retrieve_obo_session_token_by_user_id(self, user_id: int) -> str:
         """Retrieve the OBO session token by username.
 
@@ -125,6 +126,7 @@ class OboAuthenticatorCert(OboAuthenticator):
                                                                                     uid=user_id)
         return obo_auth.session_token
 
+    @retry(retry=authentication_retry)
     async def retrieve_obo_session_token_by_username(self, username: str) -> str:
         """Retrieve the OBO session token by username.
 

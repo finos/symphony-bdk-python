@@ -7,7 +7,7 @@ from symphony.bdk.core.auth.jwt_helper import create_signed_jwt
 from symphony.bdk.core.config.model.bdk_bot_config import BdkBotConfig
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.core.retry import retry
-from symphony.bdk.core.retry.startegy import authentication_retry
+from symphony.bdk.core.retry.strategy import authentication_retry
 from symphony.bdk.gen.api_client import ApiClient
 from symphony.bdk.gen.auth_api.certificate_authentication_api import CertificateAuthenticationApi
 from symphony.bdk.gen.login_api.authentication_api import AuthenticationApi

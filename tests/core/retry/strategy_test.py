@@ -2,10 +2,11 @@ import asyncio
 from unittest.mock import Mock, AsyncMock
 
 import pytest
+from aiohttp import ClientConnectorError
 
 from symphony.bdk.core.auth.exception import AuthUnauthorizedError
 from symphony.bdk.core.retry import retry
-from symphony.bdk.core.retry.startegy import authentication_retry, refresh_session_if_unauthorized
+from symphony.bdk.core.retry.strategy import authentication_retry, refresh_session_if_unauthorized
 from symphony.bdk.gen import ApiException
 from tests.core.config import minimal_retry_config_with_attempts
 from tests.core.retry import NoApiExceptionAfterCount, FixedChainedExceptions
@@ -38,7 +39,9 @@ class TestAuthenticationStrategy:
 
     @pytest.mark.asyncio
     async def test_should_retry(self):
-        exception_from_a_timeout = Exception()
+        connection_key = Mock()
+        connection_key.ssl = "ssl"
+        exception_from_a_timeout = ClientConnectorError(connection_key, TimeoutError())
         exception_from_a_timeout.__cause__ = TimeoutError()
         thing = FixedChainedExceptions([ApiException(429), ApiException(500), exception_from_a_timeout])
         value = await self._retryable_coroutine(thing)

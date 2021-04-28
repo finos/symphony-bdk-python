@@ -1,5 +1,6 @@
 import sys
 import pytest
+from datetime import timedelta
 
 from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
@@ -33,9 +34,9 @@ def test_retry_configuration():
     config = BdkConfigLoader.load_from_file(config_path)
 
     assert config.retry.max_attempts == 2
-    assert config.retry.initial_interval == 1.0
+    assert config.retry.initial_interval.total_seconds() == 1.0
     assert config.retry.multiplier == 3
-    assert config.retry.max_interval == 2.0
+    assert config.retry.max_interval.total_seconds() == 2.0
 
 
 def test_default_retry_configuration():
@@ -43,15 +44,19 @@ def test_default_retry_configuration():
     config = BdkConfigLoader.load_from_file(config_path)
 
     assert config.retry.max_attempts == BdkRetryConfig.DEFAULT_MAX_ATTEMPTS
-    assert config.retry.initial_interval == BdkRetryConfig.DEFAULT_INITIAL_INTERVAL
+    assert config.retry.initial_interval.total_seconds() == timedelta(
+        milliseconds=BdkRetryConfig.DEFAULT_INITIAL_INTERVAL).total_seconds()
     assert config.retry.multiplier == BdkRetryConfig.DEFAULT_MULTIPLIER
-    assert config.retry.max_interval == BdkRetryConfig.DEFAULT_MAX_INTERVAL
+    assert config.retry.max_interval.total_seconds() == timedelta(
+        milliseconds=BdkRetryConfig.DEFAULT_MAX_INTERVAL).total_seconds()
 
     # Datafeed default retry
     assert config.datafeed.retry.max_attempts == sys.maxsize
-    assert config.datafeed.retry.initial_interval == BdkRetryConfig.DEFAULT_INITIAL_INTERVAL
+    assert config.datafeed.retry.initial_interval.total_seconds() == timedelta(
+        milliseconds=BdkRetryConfig.DEFAULT_INITIAL_INTERVAL).total_seconds()
     assert config.datafeed.retry.multiplier == BdkRetryConfig.DEFAULT_MULTIPLIER
-    assert config.datafeed.retry.max_interval == BdkRetryConfig.DEFAULT_MAX_INTERVAL
+    assert config.datafeed.retry.max_interval.total_seconds() == timedelta(
+        milliseconds=BdkRetryConfig.DEFAULT_MAX_INTERVAL).total_seconds()
 
 
 def test_datafeed_retry_configuration():
@@ -59,6 +64,6 @@ def test_datafeed_retry_configuration():
     config = BdkConfigLoader.load_from_file(config_path)
 
     assert config.datafeed.retry.max_attempts == 2
-    assert config.datafeed.retry.initial_interval == 1.0
+    assert config.datafeed.retry.initial_interval.total_seconds() == 1.0
     assert config.datafeed.retry.multiplier == 3
-    assert config.datafeed.retry.max_interval == 2.0
+    assert config.datafeed.retry.max_interval.total_seconds() == 2.0

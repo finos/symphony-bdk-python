@@ -4,7 +4,7 @@ from enum import Enum, auto
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.core.retry import retry
-from symphony.bdk.core.retry.startegy import refresh_session_if_unauthorized
+from symphony.bdk.core.retry.strategy import refresh_session_if_unauthorized
 from symphony.bdk.gen.pod_api.presence_api import PresenceApi
 from symphony.bdk.gen.pod_model.v2_presence import V2Presence
 from symphony.bdk.gen.pod_model.v2_presence_status import V2PresenceStatus

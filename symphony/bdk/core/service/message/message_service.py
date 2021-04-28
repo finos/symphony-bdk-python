@@ -1,7 +1,6 @@
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.core.service.message.multi_attachments_messages_api import MultiAttachmentsMessagesApi
-from symphony.bdk.gen import ApiException
 from symphony.bdk.gen.agent_api.attachments_api import AttachmentsApi
 from symphony.bdk.gen.agent_model.v4_import_response import V4ImportResponse
 from symphony.bdk.gen.agent_model.v4_imported_message import V4ImportedMessage
@@ -21,7 +20,8 @@ from symphony.bdk.gen.pod_model.message_suppression_response import MessageSuppr
 from symphony.bdk.gen.pod_model.stream_attachment_item import StreamAttachmentItem
 
 from symphony.bdk.core.retry import retry
-from symphony.bdk.core.retry.startegy import refresh_session_if_unauthorized
+from symphony.bdk.core.retry.strategy import refresh_session_if_unauthorized
+
 
 class OboMessageService:
     """Class exposing OBO enabled endpoints for message management, e.g. send a message."""
@@ -73,18 +73,6 @@ class OboMessageService:
             params['preview'] = preview if isinstance(preview, list) else [preview]
 
         return await self._messages_api.v4_stream_sid_multi_attachment_message_create_post(**params)
-
-    @retry(retry=refresh_session_if_unauthorized)
-    async def execute_and_retry(self, method, *args):
-        try:
-            return await self.method(*args)
-        except Exception as exc:
-            # handle recovery
-            raise exc
-
-
-
-
 
     @retry(retry=refresh_session_if_unauthorized)
     async def suppress_message(

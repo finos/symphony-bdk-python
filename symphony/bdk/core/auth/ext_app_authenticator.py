@@ -8,7 +8,7 @@ from symphony.bdk.core.auth.tokens_repository import TokensRepository, InMemoryT
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.core.config.model.bdk_rsa_key_config import BdkRsaKeyConfig
 from symphony.bdk.core.retry import retry
-from symphony.bdk.core.retry.startegy import authentication_retry
+from symphony.bdk.core.retry.strategy import authentication_retry
 from symphony.bdk.gen.auth_api.certificate_authentication_api import CertificateAuthenticationApi
 from symphony.bdk.gen.auth_api.certificate_pod_api import CertificatePodApi
 from symphony.bdk.gen.auth_model.extension_app_authenticate_request import ExtensionAppAuthenticateRequest

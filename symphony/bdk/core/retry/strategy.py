@@ -1,3 +1,4 @@
+from aiohttp import ClientConnectorError
 from tenacity import RetryCallState
 
 from symphony.bdk.core.auth.auth_session import AuthSession
@@ -7,6 +8,10 @@ from symphony.bdk.gen import ApiException
 
 def is_unauthorized(exception: ApiException) -> bool:
     return exception.status == 401
+
+
+def is_client_error(exception: ApiException) -> bool:
+    return exception.status == 400
 
 
 def is_network_or_minor_error(exception: Exception) -> bool:
@@ -19,7 +24,7 @@ def is_network_or_minor_error(exception: Exception) -> bool:
     if isinstance(exception, ApiException):
         if exception.status >= 500 or exception.status == 401 or exception.status == 429:
             return True
-    return isinstance(exception.__cause__, TimeoutError)
+    return isinstance(exception, ClientConnectorError) and isinstance(exception.__cause__, TimeoutError)
 
 
 def can_authentication_be_retried(exception: ApiException) -> bool:
@@ -32,7 +37,7 @@ def can_authentication_be_retried(exception: ApiException) -> bool:
     """
     if isinstance(exception, ApiException):
         return exception.status >= 500 or exception.status == 429
-    return isinstance(exception.__cause__, TimeoutError)
+    return isinstance(exception, ClientConnectorError) and isinstance(exception.__cause__, TimeoutError)
 
 
 def authentication_retry(retry_state: RetryCallState):
@@ -46,14 +51,11 @@ def authentication_retry(retry_state: RetryCallState):
         exception = retry_state.outcome.exception()
         if can_authentication_be_retried(exception):
             return True
-        if isinstance(exception, ApiException):
-            if is_unauthorized(exception):
-                unauthorized_message = "Service account is not authorized to authenticate. Check if credentials are " \
-                                       "valid. "
-                raise AuthUnauthorizedError(unauthorized_message, exception) from exception
+        if isinstance(exception, ApiException) and is_unauthorized(exception):
+            unauthorized_message = "Service account is not authorized to authenticate. Check if credentials are valid. "
+            raise AuthUnauthorizedError(unauthorized_message, exception) from exception
         raise exception
-    else:
-        return False
+    return False
 
 
 async def refresh_session_if_unauthorized(retry_state: RetryCallState):
@@ -69,5 +71,4 @@ async def refresh_session_if_unauthorized(retry_state: RetryCallState):
             service_auth_session: AuthSession = retry_state.args[0]._auth_session
             await service_auth_session.refresh()
             return True
-    else:
-        return False
+    return False
