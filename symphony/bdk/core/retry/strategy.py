@@ -8,15 +8,11 @@ from symphony.bdk.gen import ApiException
 
 
 def is_unauthorized(exception: Exception) -> bool:
-    if isinstance(exception, ApiException):
-        return exception.status == 401
-    return False
+    return isinstance(exception, ApiException) and exception.status == 401
 
 
 def is_client_error(exception: Exception) -> bool:
-    if isinstance(exception, ApiException):
-        return exception.status == 400
-    return False
+    return isinstance(exception, ApiException) and exception.status == 400
 
 
 def is_client_timeout_error(exception: Exception):
@@ -34,8 +30,8 @@ def can_authentication_be_retried(exception: Exception) -> bool:
     or the exception is either a :py:cass:`TimeoutError`  (e.g. network issues)
 
     :param exception: The exception to be checked
-    :return: True if the exception is an :py:class:`ApiException` with status 500, 429 or or is client timeout error
-    False otherwise
+    :return: True if the exception is an :py:class:`ApiException` with status 500, 429 or or is a client timeout error
+             False otherwise
     """
     if isinstance(exception, ApiException):
         return exception.status >= 500 or exception.status == 429
@@ -48,7 +44,7 @@ def is_network_or_minor_error(exception: Exception) -> bool:
 
     :param exception: The exception to be checked
     :return: True if the exception is an :py:class:`ApiException` with status 500, 401, 429 or is a client timeout error
-    False otherwise
+             False otherwise
     """
     if isinstance(exception, ApiException):
         if exception.status >= 500 or exception.status == 401 or exception.status == 429:
@@ -61,7 +57,7 @@ def is_network_or_minor_error_or_client(exception: Exception) -> bool:
 
     :param exception: The exception to be checked
     :return: True if the exception is an :py:class:`ApiException` with status 500, 401, 429, 400
-    or is a client timeout error False otherwise
+             or is a client timeout error False otherwise
     """
     if isinstance(exception, ApiException):
         if exception.status >= 500 or exception.status == 401 or exception.status == 429 or exception.status == 400:
@@ -90,9 +86,8 @@ def authentication_retry(retry_state: RetryCallState):
 async def refresh_session_if_unauthorized(retry_state: RetryCallState):
     """Refreshing AuthSession tokens retry strategy
 
-
-    If the call throws an :py:class`ApiException` with 401 unauthorized, we refresh the current AuthSession tokens
-    and retry
+    Retry if the raised exception verifies the is_network_or_minor_error predicate
+    If this exception is a 401 unauthorized error, we refresh the current AuthSession tokens
     """
     if retry_state.outcome.failed:
         exception = retry_state.outcome.exception()
@@ -105,7 +100,12 @@ async def refresh_session_if_unauthorized(retry_state: RetryCallState):
 
 
 async def read_datafeed_retry(retry_state: RetryCallState):
-    """Read datafeed retry strategy"""
+    """Read datafeed retry strategy
+
+    Retry if the raised exception verifies the is_network_or_minor_error_or_client predicate
+    If this exception is a 400 client error, we recreate the datafeed
+    If this exception is a 401 unauthorized error, we refresh the current AuthSession tokens
+    """
     if retry_state.outcome.failed:
         exception = retry_state.outcome.exception()
         if is_network_or_minor_error_or_client(exception):

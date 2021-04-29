@@ -10,7 +10,6 @@ from typing import List
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
 from symphony.bdk.core.service.datafeed.real_time_event_listener import RealTimeEventListener
-from symphony.bdk.gen import ApiException
 from symphony.bdk.gen.agent_api.datafeed_api import DatafeedApi
 from symphony.bdk.gen.agent_model.v4_event import V4Event
 
@@ -75,7 +74,7 @@ class AbstractDatafeedLoop(ABC):
         self._running = False
         self._hard_kill = False
         self._timeout = None
-        self.tasks = []
+        self._tasks = []
         self._retry_config = config.get_datafeed_retry_config()
 
     async def start(self):
@@ -157,15 +156,15 @@ class AbstractDatafeedLoop(ABC):
             await self._wait_for_completion_or_timeout()
 
     async def _cancel_tasks(self):
-        logger.debug("Cancelling %s listener tasks", len(self.tasks))
-        for task in self.tasks:
+        logger.debug("Cancelling %s listener tasks", len(self._tasks))
+        for task in self._tasks:
             task.cancel()
-        await asyncio.gather(*self.tasks, return_exceptions=True)
+        await asyncio.gather(*self._tasks, return_exceptions=True)
 
     async def _wait_for_completion_or_timeout(self):
-        logger.debug("Waiting for %s listener tasks to finish", len(self.tasks))
+        logger.debug("Waiting for %s listener tasks to finish", len(self._tasks))
         try:
-            await asyncio.wait_for(asyncio.gather(*self.tasks), timeout=self._timeout)
+            await asyncio.wait_for(asyncio.gather(*self._tasks), timeout=self._timeout)
         except asyncio.TimeoutError:
             logger.debug("Task completion timed out")
 
@@ -187,11 +186,11 @@ class AbstractDatafeedLoop(ABC):
         current_task = asyncio.current_task()
         self._set_context_var(current_task, event, listener)
 
-        self.tasks.append(current_task)
+        self._tasks.append(current_task)
         try:
             await self._run_listener_method(listener, event)
         finally:
-            self.tasks.remove(current_task)
+            self._tasks.remove(current_task)
 
     def _set_context_var(self, current_task, event, listener):
         event_id = getattr(event, "id", "None")
