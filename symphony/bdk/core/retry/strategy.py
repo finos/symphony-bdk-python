@@ -3,41 +3,70 @@ from tenacity import RetryCallState
 
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.auth.exception import AuthUnauthorizedError
+from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import AbstractDatafeedLoop
 from symphony.bdk.gen import ApiException
 
 
-def is_unauthorized(exception: ApiException) -> bool:
-    return exception.status == 401
+def is_unauthorized(exception: Exception) -> bool:
+    if isinstance(exception, ApiException):
+        return exception.status == 401
+    return False
 
 
-def is_client_error(exception: ApiException) -> bool:
-    return exception.status == 400
+def is_client_error(exception: Exception) -> bool:
+    if isinstance(exception, ApiException):
+        return exception.status == 400
+    return False
 
 
-def is_network_or_minor_error(exception: Exception) -> bool:
-    """Checks if the exception is a network issue or an :py:class:`ApiException` minor error
-    This is the default function used to check if a given exception should lead to a retry
+def is_client_timeout_error(exception: Exception):
+    """Checks if the exception is a :py:class:`ClientConnectorError` with a :py:class:`TimeoutError` as cause
 
     :param exception: The exception to be checked
-    :return:
+    :return: True if checks the predicate, False otherwise
     """
-    if isinstance(exception, ApiException):
-        if exception.status >= 500 or exception.status == 401 or exception.status == 429:
-            return True
     return isinstance(exception, ClientConnectorError) and isinstance(exception.__cause__, TimeoutError)
 
 
-def can_authentication_be_retried(exception: ApiException) -> bool:
-    """Predicate to check if authentication call be retried,
+def can_authentication_be_retried(exception: Exception) -> bool:
+    """Checks if the exception is a network issue or internal or retry error
     i.e. is an :py:class:`ApiException` with status code 429 or greater or equal to 500.
     or the exception is either a :py:cass:`TimeoutError`  (e.g. network issues)
 
     :param exception: The exception to be checked
-    :return:
+    :return: True if the exception is an :py:class:`ApiException` with status 500, 429 or or is client timeout error
+    False otherwise
     """
     if isinstance(exception, ApiException):
         return exception.status >= 500 or exception.status == 429
-    return isinstance(exception, ClientConnectorError) and isinstance(exception.__cause__, TimeoutError)
+    return is_client_timeout_error(exception)
+
+
+def is_network_or_minor_error(exception: Exception) -> bool:
+    """Checks if the exception is a network issue or an :py:class:`ApiException` minor error (internal + unauthorized + retry)
+    This is the default function used to check if a given exception should lead to a retry
+
+    :param exception: The exception to be checked
+    :return: True if the exception is an :py:class:`ApiException` with status 500, 401, 429 or is a client timeout error
+    False otherwise
+    """
+    if isinstance(exception, ApiException):
+        if exception.status >= 500 or exception.status == 401 or exception.status == 429:
+            return True
+    return is_client_timeout_error(exception)
+
+
+def is_network_or_minor_error_or_client(exception: Exception) -> bool:
+    """Checks if the exception is a network issue or an :py:class:`ApiException` minor error or a client error
+
+    :param exception: The exception to be checked
+    :return: True if the exception is an :py:class:`ApiException` with status 500, 401, 429, 400
+    or is a client timeout error False otherwise
+    """
+    if isinstance(exception, ApiException):
+        if exception.status >= 500 or exception.status == 401 or exception.status == 429 or exception.status == 400:
+            return True
+    return is_client_timeout_error(exception)
 
 
 def authentication_retry(retry_state: RetryCallState):
@@ -51,7 +80,7 @@ def authentication_retry(retry_state: RetryCallState):
         exception = retry_state.outcome.exception()
         if can_authentication_be_retried(exception):
             return True
-        if isinstance(exception, ApiException) and is_unauthorized(exception):
+        if is_unauthorized(exception):
             unauthorized_message = "Service account is not authorized to authenticate. Check if credentials are valid. "
             raise AuthUnauthorizedError(unauthorized_message, exception) from exception
         raise exception
@@ -67,8 +96,25 @@ async def refresh_session_if_unauthorized(retry_state: RetryCallState):
     """
     if retry_state.outcome.failed:
         exception = retry_state.outcome.exception()
-        if isinstance(exception, ApiException) and is_unauthorized(exception):
-            service_auth_session: AuthSession = retry_state.args[0]._auth_session
-            await service_auth_session.refresh()
+        if is_network_or_minor_error(exception):
+            if is_unauthorized(exception):
+                service_auth_session: AuthSession = retry_state.args[0]._auth_session
+                await service_auth_session.refresh()
             return True
+    return False
+
+
+async def read_datafeed_retry(retry_state: RetryCallState):
+    """Read datafeed retry strategy"""
+    if retry_state.outcome.failed:
+        exception = retry_state.outcome.exception()
+        if is_network_or_minor_error_or_client(exception):
+            if is_client_error(exception):
+                datafeed_service: AbstractDatafeedLoop = retry_state.args[0]
+                await datafeed_service.recreate_datafeed()
+            elif is_unauthorized(exception):
+                service_auth_session: AuthSession = retry_state.args[0]._auth_session
+                await service_auth_session.refresh()
+            return True
+        raise exception
     return False

@@ -34,7 +34,7 @@ class OboMessageService:
         self._auth_session = auth_session
         self._retry_config = retry_config
 
-    @retry(retry=refresh_session_if_unauthorized)
+    @retry
     async def send_message(
             self,
             stream_id: str,
@@ -74,7 +74,7 @@ class OboMessageService:
 
         return await self._messages_api.v4_stream_sid_multi_attachment_message_create_post(**params)
 
-    @retry(retry=refresh_session_if_unauthorized)
+    @retry
     async def suppress_message(
             self,
             message_id: str
@@ -115,7 +115,7 @@ class MessageService(OboMessageService):
         self._attachment_api = attachment_api
         self._default_api = default_api
 
-    @retry(retry=refresh_session_if_unauthorized)
+    @retry
     async def list_messages(
             self,
             stream_id: str,
@@ -145,7 +145,7 @@ class MessageService(OboMessageService):
         message_list = await self._messages_api.v4_stream_sid_message_get(**params)
         return message_list.value
 
-    @retry(retry=refresh_session_if_unauthorized)
+    @retry
     async def blast_message(
             self,
             stream_ids: [str],
@@ -185,7 +185,7 @@ class MessageService(OboMessageService):
 
         return await self._messages_api.v4_multi_attachment_message_blast_post(**params)
 
-    @retry(retry=refresh_session_if_unauthorized)
+    @retry
     async def import_messages(
             self,
             messages: [V4ImportedMessage]
@@ -250,7 +250,7 @@ class MessageService(OboMessageService):
         }
         return await self._message_api.v1_message_mid_status_get(**params)
 
-    @retry(retry=refresh_session_if_unauthorized)
+    @retry
     async def get_attachment_types(self) -> [str]:
         """Retrieves a list of supported file extensions for attachments.
         See: `Attachment Types <https://developers.symphony.com/restapi/reference#attachment-types>`_
@@ -264,7 +264,7 @@ class MessageService(OboMessageService):
         type_list = await self._pod_api.v1_files_allowed_types_get(**params)
         return type_list.value
 
-    @retry(retry=refresh_session_if_unauthorized)
+    @retry
     async def get_message(
             self,
             message_id: str
@@ -284,7 +284,7 @@ class MessageService(OboMessageService):
         }
         return await self._messages_api.v1_message_id_get(**params)
 
-    @retry(retry=refresh_session_if_unauthorized)
+    @retry
     async def list_attachments(
             self,
             stream_id: str,
@@ -319,7 +319,7 @@ class MessageService(OboMessageService):
         attachment_list = await self._streams_api.v1_streams_sid_attachments_get(**params)
         return attachment_list.value
 
-    @retry(retry=refresh_session_if_unauthorized)
+    @retry
     async def list_message_receipts(
             self,
             message_id: str
@@ -338,7 +338,7 @@ class MessageService(OboMessageService):
         }
         return await self._default_api.v1_admin_messages_message_id_receipts_get(**params)
 
-    @retry(retry=refresh_session_if_unauthorized)
+    @retry
     async def get_message_relationships(
             self,
             message_id: str

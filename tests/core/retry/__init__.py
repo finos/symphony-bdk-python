@@ -23,6 +23,14 @@ class FixedChainedExceptions(object):
             raise self.exception_list[self.counter - 1]
         return True
 
+    def reset(self):
+        """Resets counter for FixedChainedExceptions instance
+
+        :return:
+        """
+        self.call_count = 0
+        self.counter = 0
+
 
 class NoApiExceptionAfterCount(object):
     """Holds counter state for invoking a method several times in a row."""

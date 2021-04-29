@@ -87,7 +87,7 @@ class TestDecoratorWrapper:
 
     @pytest.mark.asyncio
     async def test_max_attempts_reached_should_fail(self):
-        thing = NoApiExceptionAfterCount(11, status=401)
+        thing = NoApiExceptionAfterCount(11, status=500)
 
         with pytest.raises(ApiException):
             await self._retryable_coroutine(thing)
