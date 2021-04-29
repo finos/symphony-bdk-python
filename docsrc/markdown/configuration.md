@@ -95,6 +95,17 @@ app:
 
 datafeed:
   version: v2
+  retry:
+    maxAttempts: 6
+    initialIntervalMillis: 2000
+    multiplier: 1.5
+    maxIntervalMillis: 10000
+
+retry:
+  maxAttempts: 6 # set '-1' for an infinite number of attempts, default value is '10'
+  initialIntervalMillis: 2000
+  multiplier: 1.5
+  maxIntervalMillis: 10000
 ```
 
 ### Configuration structure
@@ -126,3 +137,21 @@ the appId, the private key or certificate for authenticating the extension app.
 - `datafeed` contains information about the datafeed service that the bot will use for the `DatafeedLoop` service.
 If the version field is configured to `v2`, the datafeed service v2 will be used. Otherwise, the datafeed service v1 
 will be used by default.
+- `retry` contains information for retry mechanism to be used by the bot.
+
+#### Retry Configuration
+The retry mechanism used by the bot will be configured by these following properties:
+- `maxAttempts`: maximum number of retry attempts that the bot will make.
+- `multiplier`: after each attempt, the interval between two attempts will be multiplied by 
+this factor. (Exponential backoff strategy)
+- `initialIntervalMillis`: the interval between the initial two attempts in milliseconds.
+- `maxIntervalMillis`: the limit of the interval between two attempts. For example: if the 
+current interval is 1000 millis, multiplier is 2.0 and the maxIntervalMillis is 1500 millis,
+then the interval for next retry will be 1500 millis.
+
+Each bot will have a global retry configuration to be used in every service with the following
+default value:
+- `maxAttempts`: 10
+- `initialIntervalMillis`: 500
+- `multiplier`: 2
+- `maxIntervalMillis`: 300000 (5 mins)
