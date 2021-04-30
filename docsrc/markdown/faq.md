@@ -26,10 +26,17 @@ self._sslobj.do_handshake()
 ssl.SSLCertVerificationError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self signed certificate in certificate chain (_ssl.c:1123)
 ```
 
-means your pod uses a self-signed certificate or the root certificate is not in your OS keychain.
+means the server (e.g. pod or agent) certificate is not recognized as a valid one.
 
-To solve the issue, fetch the pod certificate:
+1. If you are running MacOS X, the cause may be due to a bug when installing python on mac as documented in this
+   [stackoverflow issue](https://stackoverflow.com/questions/42098126/mac-osx-python-ssl-sslerror-ssl-certificate-verify-failed-certificate-verify).
+   If so, try to run `bash /Applications/Python*/Install\ Certificates.command` and rerun your bot.
 
+2. If issue persists or if you are not running MacOS X, the certificate is probably self-signed or not present in your
+   OS keychain. If so, the recommended way to solve this is to use valid certificates signed with a trusted CA.
+   Otherwise, you will have to add the certificates in your OS keychain or add it to the bot configuration.
+
+To do so, fetch the server certificate by running:
 ```
 openssl s_client -connect <pod host>:<pod port> -showcerts > cert.pem
 ```
@@ -44,6 +51,3 @@ ssl:
   trustStore:
     path: /path/to/cert.pem
 ```
-
-However, in case you use a self-signed certificate, the recommended way to solve this is to use valid certificates
-signed with a trusted CA.
