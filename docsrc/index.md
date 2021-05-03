@@ -12,6 +12,7 @@ Contents
 * [Application service](markdown/application_service.md)
 * [Signal service](markdown/signal_service.md)
 * [Presence service](markdown/presence_service.md)
+* [FAQ](markdown/faq.md)
 
 ```eval_rst
 .. autosummary::
