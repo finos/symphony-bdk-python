@@ -1,6 +1,6 @@
 # Datafeed
 
-The datafeed service is a service used for handling the [_Real Time Events_](https://developers.symphony.com/restapi/docs/real-time-events). 
+The datafeed service is a service used for handling the [_Real Time Events_](https://docs.developers.symphony.com/building-bots-on-symphony/datafeed/real-time-events).q
 
 When a user makes an interaction within the IM, MIM or Room chat like sending a message, joining or leaving a room chat,
 when a connection request is sent, when a wall post is published or when a user replies to a Symphony element, an event
