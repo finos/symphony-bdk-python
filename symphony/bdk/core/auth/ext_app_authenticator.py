@@ -3,11 +3,12 @@
 from abc import ABC, abstractmethod
 
 from symphony.bdk.core.auth.auth_session import AppAuthSession
-from symphony.bdk.core.auth.exception import AuthInitializationError
 from symphony.bdk.core.auth.jwt_helper import validate_jwt, create_signed_jwt
 from symphony.bdk.core.auth.tokens_repository import TokensRepository, InMemoryTokensRepository
+from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.core.config.model.bdk_rsa_key_config import BdkRsaKeyConfig
-from symphony.bdk.gen import ApiException
+from symphony.bdk.core.retry import retry
+from symphony.bdk.core.retry.strategy import authentication_retry
 from symphony.bdk.gen.auth_api.certificate_authentication_api import CertificateAuthenticationApi
 from symphony.bdk.gen.auth_api.certificate_pod_api import CertificatePodApi
 from symphony.bdk.gen.auth_model.extension_app_authenticate_request import ExtensionAppAuthenticateRequest
@@ -50,11 +51,7 @@ class ExtensionAppAuthenticator(ABC):
         :return: the dictionary of jwt claims
         :raise AuthInitializationError: If the pod certificate or jwt are invalid.
         """
-        try:
-            pod_certificate = await self._get_pod_certificate()
-        except ApiException as exc:
-            raise AuthInitializationError(f"Unable to get the pod certificate: {exc.reason}") from exc
-
+        pod_certificate = await self._get_pod_certificate()
         return validate_jwt(jwt, pod_certificate.certificate, self._app_id)
 
     async def authenticate_and_retrieve_tokens(self, app_token: str) -> ExtensionAppTokens:
@@ -99,14 +96,20 @@ class ExtensionAppAuthenticatorRsa(ExtensionAppAuthenticator):
     """A subclass of :class:`ExtensionAppAuthenticator` specific to extension app RSA authentication.
     """
 
-    def __init__(self, authentication_api: AuthenticationApi, pod_api: PodApi, app_id: str,
-                 private_key_config: BdkRsaKeyConfig, tokens_repository: TokensRepository = None):
+    def __init__(self,
+                 authentication_api: AuthenticationApi,
+                 pod_api: PodApi,
+                 app_id: str,
+                 private_key_config: BdkRsaKeyConfig,
+                 retry_config: BdkRetryConfig,
+                 tokens_repository: TokensRepository = None):
         """
 
         :param authentication_api: the AuthenticationApi instance
         :param pod_api: the PodApi instance
         :param app_id: the application ID
         :param private_key_config: the private key configuration of the extension app
+        :param retry_config: retry configuration
         :param tokens_repository: the tokens repository to store existing valid sessions.
           Defaults to InMemoryTokensRepository
         """
@@ -114,13 +117,16 @@ class ExtensionAppAuthenticatorRsa(ExtensionAppAuthenticator):
         self._authentication_api = authentication_api
         self._pod_api = pod_api
         self._private_key_config = private_key_config
+        self._retry_config = retry_config
 
+    @retry(retry=authentication_retry)
     async def _retrieve_tokens(self, app_token: str) -> ExtensionAppTokens:
         jwt = create_signed_jwt(self._private_key_config, self._app_id)
         authentication_request = AuthenticateExtensionAppRequest(app_token=app_token, auth_token=jwt)
 
         return await self._authentication_api.v1_pubkey_app_authenticate_extension_app_post(authentication_request)
 
+    @retry(retry=authentication_retry)
     async def _get_pod_certificate(self) -> PodCertificate:
         return await self._pod_api.v1_podcert_get()
 
@@ -129,24 +135,32 @@ class ExtensionAppAuthenticatorCert(ExtensionAppAuthenticator):
     """A subclass of :class:`ExtensionAppAuthenticator` specific to extension app certificate authentication.
     """
 
-    def __init__(self, certificate_authentication_api: CertificateAuthenticationApi,
-                 certificate_pod_api: CertificatePodApi, app_id: str, tokens_repository: TokensRepository = None):
+    def __init__(self,
+                 certificate_authentication_api: CertificateAuthenticationApi,
+                 certificate_pod_api: CertificatePodApi,
+                 app_id: str,
+                 retry_config: BdkRetryConfig,
+                 tokens_repository: TokensRepository = None):
         """
 
         :param certificate_authentication_api: the CertificateAuthenticationApi instance
         :param certificate_pod_api: the CertificatePodApi instance
         :param app_id: the application ID
+        :param retry_config: Retry configuration
         :param tokens_repository: the tokens repository to store existing valid sessions.
           Defaults to InMemoryTokensRepository
         """
         super().__init__(app_id, tokens_repository)
         self._certificate_authentication_api = certificate_authentication_api
         self._certificate_pod_api = certificate_pod_api
+        self._retry_config = retry_config
 
+    @retry(retry=authentication_retry)
     async def _retrieve_tokens(self, app_token: str) -> ExtensionAppTokens:
         authentication_request = ExtensionAppAuthenticateRequest(app_token=app_token)
         return await self._certificate_authentication_api.v1_authenticate_extension_app_post(
             auth_request=authentication_request)
 
+    @retry(retry=authentication_retry)
     async def _get_pod_certificate(self) -> PodCertificate:
         return await self._certificate_pod_api.v1_app_pod_certificate_get()

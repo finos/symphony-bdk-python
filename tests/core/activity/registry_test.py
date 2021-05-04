@@ -18,7 +18,9 @@ from symphony.bdk.gen.agent_model.v4_symphony_elements_action import V4SymphonyE
 
 @pytest.fixture(name="session_service")
 def fixture_session_service():
-    return MagicMock(SessionService)
+    session_service = MagicMock(SessionService)
+    session_service.get_session = AsyncMock()
+    return session_service
 
 
 @pytest.fixture(name="command")

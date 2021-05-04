@@ -9,6 +9,7 @@ from symphony.bdk.gen.agent_model.agent_info import AgentInfo
 from symphony.bdk.gen.agent_model.v3_health import V3Health
 
 from tests.utils.resource_utils import get_deserialized_object_from_resource
+from tests.core.config import minimal_retry_config
 
 
 @pytest.fixture(name="mocked_system_api_client")
@@ -28,7 +29,7 @@ def fixture_mocked_signals_api_client():
 
 @pytest.fixture(name="health_service")
 def fixture_health_service(mocked_system_api_client, mocked_signals_api_client):
-    return HealthService(mocked_system_api_client, mocked_signals_api_client)
+    return HealthService(mocked_system_api_client, mocked_signals_api_client, minimal_retry_config)
 
 
 @pytest.mark.asyncio
