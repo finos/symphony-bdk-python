@@ -12,6 +12,7 @@ Contents
 * [Application service](markdown/application_service.md)
 * [Signal service](markdown/signal_service.md)
 * [Presence service](markdown/presence_service.md)
+* [FAQ](markdown/faq.md)
 
 ```eval_rst
 .. autosummary::
@@ -24,8 +25,10 @@ Contents
 
 # Symphony BDK Reference Documentation
 
-This reference guide provides detailed information about the Symphony BDK. It provides a comprehensive documentation
-for all features and abstractions made on top of the [Symphony REST API](https://developers.symphony.com/restapi/reference).
+This reference guide provides detailed information about the
+[Symphony BDK](https://github.com/SymphonyPlatformSolutions/symphony-api-client-python/tree/2.0).
+It provides a comprehensive documentation for all features and abstractions made on top of the
+[Symphony REST API](https://developers.symphony.com/restapi/reference).
 
 If you are just getting started with Symphony Bot developments, you may want to begin reading the
 [Getting Started](markdown/getting_started.md) guide.
