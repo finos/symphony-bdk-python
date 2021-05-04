@@ -1,3 +1,4 @@
+from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.gen.agent_api.system_api import SystemApi
 from symphony.bdk.gen.agent_api.signals_api import SignalsApi
 from symphony.bdk.gen.agent_model.agent_info import AgentInfo
@@ -8,9 +9,10 @@ from symphony.bdk.gen.agent_model.v3_health import V3Health
 class HealthService:
     """Service class for checking health of the Agent server."""
 
-    def __init__(self, system_api: SystemApi, signals_api: SignalsApi):
+    def __init__(self, system_api: SystemApi, signals_api: SignalsApi, retry_config: BdkRetryConfig):
         self._system_api = system_api
         self._signals_api = signals_api
+        self._retry_config = retry_config
 
     async def health_check(self) -> V3Health:
         """ Returns the connectivity status of your Agent server.
