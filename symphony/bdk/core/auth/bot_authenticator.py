@@ -24,16 +24,6 @@ class BotAuthenticator(ABC):
         self._key_manager_auth_client = key_manager_auth_client
         self._retry_config = retry_config
 
-    async def authenticate_bot(self) -> AuthSession:
-        """Authenticate a Bot's service account.
-
-        :return: the authentication session.
-        :rtype: AuthSession
-        """
-        auth_session = AuthSession(self)
-        await auth_session.refresh()
-        return auth_session
-
     async def retrieve_session_token(self) -> str:
         """Authenticates and retrieves a new session token.
 

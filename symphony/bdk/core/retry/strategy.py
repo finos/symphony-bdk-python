@@ -1,9 +1,7 @@
 from aiohttp import ClientConnectorError
 from tenacity import RetryCallState
 
-from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.auth.exception import AuthUnauthorizedError
-from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import AbstractDatafeedLoop
 from symphony.bdk.gen import ApiException
 
 
@@ -38,6 +36,10 @@ def can_authentication_be_retried(exception: Exception) -> bool:
     return is_client_timeout_error(exception)
 
 
+def _is_minor_error(exception: ApiException):
+    return exception.status >= 500 or exception.status == 401 or exception.status == 429
+
+
 def is_network_or_minor_error(exception: Exception) -> bool:
     """Checks if the exception is a network issue or an :py:class:`ApiException` minor error (internal + unauthorized + retry)
     This is the default function used to check if a given exception should lead to a retry
@@ -47,7 +49,7 @@ def is_network_or_minor_error(exception: Exception) -> bool:
              False otherwise
     """
     if isinstance(exception, ApiException):
-        return exception.status >= 500 or exception.status == 401 or exception.status == 429
+        return _is_minor_error(exception)
     return is_client_timeout_error(exception)
 
 
@@ -59,7 +61,7 @@ def is_network_or_minor_error_or_client(exception: Exception) -> bool:
              or is a client timeout error False otherwise
     """
     if isinstance(exception, ApiException):
-        return exception.status >= 500 or exception.status == 401 or exception.status == 429 or exception.status == 400
+        return _is_minor_error(exception) or exception.status == 400
     return is_client_timeout_error(exception)
 
 
@@ -91,7 +93,7 @@ async def refresh_session_if_unauthorized(retry_state: RetryCallState):
         exception = retry_state.outcome.exception()
         if is_network_or_minor_error(exception):
             if is_unauthorized(exception):
-                service_auth_session: AuthSession = retry_state.args[0]._auth_session
+                service_auth_session = retry_state.args[0]._auth_session
                 await service_auth_session.refresh()
             return True
     return False
@@ -108,10 +110,10 @@ async def read_datafeed_retry(retry_state: RetryCallState):
         exception = retry_state.outcome.exception()
         if is_network_or_minor_error_or_client(exception):
             if is_client_error(exception):
-                datafeed_service: AbstractDatafeedLoop = retry_state.args[0]
+                datafeed_service = retry_state.args[0]  # datafeed_service is an AbstractDataFeedLoop instance
                 await datafeed_service.recreate_datafeed()
             elif is_unauthorized(exception):
-                service_auth_session: AuthSession = retry_state.args[0]._auth_session
+                service_auth_session = retry_state.args[0]._auth_session
                 await service_auth_session.refresh()
             return True
         raise exception

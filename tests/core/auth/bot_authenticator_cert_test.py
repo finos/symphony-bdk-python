@@ -64,18 +64,3 @@ async def test_api_exception_cert(mocked_api_client):
 
     with pytest.raises(AuthUnauthorizedError):
         await bot_authenticator.retrieve_key_manager_token()
-
-
-@pytest.mark.asyncio
-async def test_authenticate_bot_cert(mocked_api_client):
-    session_auth_client = mocked_api_client()
-    key_auth_client = mocked_api_client()
-
-    session_auth_client.call_api.return_value = Token(token="session_token")
-    key_auth_client.call_api.return_value = Token(token="km_token")
-
-    bot_authenticator = BotAuthenticatorCert(session_auth_client, key_auth_client, minimal_retry_config())
-    auth_session = await bot_authenticator.authenticate_bot()
-
-    assert await auth_session.session_token == "session_token"
-    assert await auth_session.key_manager_token == "km_token"
