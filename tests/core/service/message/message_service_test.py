@@ -23,6 +23,7 @@ from symphony.bdk.gen.pod_model.message_status import MessageStatus
 from symphony.bdk.gen.pod_model.message_suppression_response import MessageSuppressionResponse
 from symphony.bdk.gen.pod_model.stream_attachment_response import StreamAttachmentResponse
 from symphony.bdk.gen.pod_model.string_list import StringList
+from tests.core.config import minimal_retry_config
 from tests.utils.resource_utils import get_deserialized_object_from_resource, deserialize_object
 
 
@@ -52,7 +53,8 @@ def fixture_message_service(mocked_api_client, auth_session):
         PodApi(mocked_api_client),
         AttachmentsApi(mocked_api_client),
         DefaultApi(mocked_api_client),
-        auth_session
+        auth_session,
+        minimal_retry_config()
     )
     return service
 

@@ -69,7 +69,8 @@ class ServiceFactory:
             UsersApi(self._pod_client),
             AuditTrailApi(self._agent_client),
             PodSystemApi(self._pod_client),
-            self._auth_session
+            self._auth_session,
+            self._config.retry
         )
 
     def get_message_service(self) -> MessageService:
@@ -85,7 +86,8 @@ class ServiceFactory:
             PodApi(self._pod_client),
             AttachmentsApi(self._agent_client),
             DefaultApi(self._pod_client),
-            self._auth_session
+            self._auth_session,
+            self._config.retry
         )
 
     def get_connection_service(self) -> ConnectionService:
@@ -95,7 +97,8 @@ class ServiceFactory:
         """
         return ConnectionService(
             ConnectionApi(self._pod_client),
-            self._auth_session
+            self._auth_session,
+            self._config.retry
         )
 
     def get_stream_service(self) -> StreamService:
@@ -107,7 +110,8 @@ class ServiceFactory:
             StreamsApi(self._pod_client),
             RoomMembershipApi(self._pod_client),
             ShareApi(self._agent_client),
-            self._auth_session)
+            self._auth_session,
+            self._config.retry)
 
     def get_application_service(self) -> ApplicationService:
         """Returns a fully initialized ApplicationService
@@ -117,7 +121,8 @@ class ServiceFactory:
         return ApplicationService(
             ApplicationApi(self._pod_client),
             AppEntitlementApi(self._pod_client),
-            self._auth_session
+            self._auth_session,
+            self._config.retry
         )
 
     def get_signal_service(self) -> SignalService:
@@ -127,7 +132,8 @@ class ServiceFactory:
         """
         return SignalService(
             SignalsApi(self._agent_client),
-            self._auth_session
+            self._auth_session,
+            self._config.retry
         )
 
     def get_session_service(self) -> SessionService:
@@ -137,7 +143,8 @@ class ServiceFactory:
         """
         return SessionService(
             SessionApi(self._pod_client),
-            self._auth_session
+            self._auth_session,
+            self._config.retry
         )
 
     def get_datafeed_loop(self) -> AbstractDatafeedLoop:
@@ -165,7 +172,8 @@ class ServiceFactory:
         """
         return HealthService(
             AgentSystemApi(self._agent_client),
-            SignalsApi(self._agent_client)
+            SignalsApi(self._agent_client),
+            self._config.retry
         )
 
     def get_presence_service(self) -> PresenceService:
@@ -175,7 +183,8 @@ class ServiceFactory:
         """
         return PresenceService(
             PresenceApi(self._pod_client),
-            self._auth_session
+            self._auth_session,
+            self._config.retry
         )
 
 
@@ -209,7 +218,8 @@ class OboServiceFactory:
         return OboUserService(
             UserApi(self._pod_client),
             UsersApi(self._pod_client),
-            self._auth_session
+            self._auth_session,
+            self._config.retry
         )
 
     def get_message_service(self) -> OboMessageService:
@@ -219,8 +229,9 @@ class OboServiceFactory:
         """
         return OboMessageService(
             MultiAttachmentsMessagesApi(self._agent_client),
+            MessageSuppressionApi(self._pod_client),
             self._auth_session,
-            MessageSuppressionApi(self._pod_client)
+            self._config.retry
         )
 
     def get_connection_service(self) -> OboConnectionService:
@@ -230,7 +241,8 @@ class OboServiceFactory:
         """
         return OboConnectionService(
             ConnectionApi(self._pod_client),
-            self._auth_session
+            self._auth_session,
+            self._config.retry
         )
 
     def get_stream_service(self) -> OboStreamService:
@@ -242,7 +254,8 @@ class OboServiceFactory:
             StreamsApi(self._pod_client),
             RoomMembershipApi(self._pod_client),
             ShareApi(self._agent_client),
-            self._auth_session)
+            self._auth_session,
+            self._config.retry)
 
     def get_presence_service(self) -> OboPresenceService:
         """Returns a fully initialized OboPresenceService
@@ -251,7 +264,8 @@ class OboServiceFactory:
         """
         return OboPresenceService(
             PresenceApi(self._pod_client),
-            self._auth_session
+            self._auth_session,
+            self._config.retry
         )
 
     def get_signal_service(self) -> OboSignalService:
@@ -261,5 +275,6 @@ class OboServiceFactory:
         """
         return OboSignalService(
             SignalsApi(self._agent_client),
-            self._auth_session
+            self._auth_session,
+            self._config.retry
         )

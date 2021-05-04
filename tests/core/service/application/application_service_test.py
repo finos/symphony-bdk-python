@@ -11,6 +11,7 @@ from symphony.bdk.gen.pod_model.pod_app_entitlement import PodAppEntitlement
 from symphony.bdk.gen.pod_model.pod_app_entitlement_list import PodAppEntitlementList
 from symphony.bdk.gen.pod_model.user_app_entitlement import UserAppEntitlement
 from symphony.bdk.gen.pod_model.user_app_entitlement_list import UserAppEntitlementList
+from tests.core.config import minimal_retry_config
 from tests.utils.resource_utils import get_deserialized_object_from_resource
 
 
@@ -34,7 +35,7 @@ def fixture_app_entitlement_api():
 
 @pytest.fixture(name="application_service")
 def fixture_application_service(application_api, app_entitlement_api, auth_session):
-    service = ApplicationService(application_api, app_entitlement_api, auth_session)
+    service = ApplicationService(application_api, app_entitlement_api, auth_session, minimal_retry_config())
     return service
 
 

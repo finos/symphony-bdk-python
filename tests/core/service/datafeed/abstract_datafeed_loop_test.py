@@ -1,12 +1,11 @@
 import asyncio
-from unittest.mock import AsyncMock, patch, Mock
+from unittest.mock import AsyncMock, patch
 
 import pytest
 
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
 from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import AbstractDatafeedLoop, RealTimeEvent
 from symphony.bdk.core.service.datafeed.real_time_event_listener import RealTimeEventListener
-from symphony.bdk.gen import ApiException
 from symphony.bdk.gen.agent_api.datafeed_api import DatafeedApi
 from symphony.bdk.gen.agent_model.v4_connection_accepted import V4ConnectionAccepted
 from symphony.bdk.gen.agent_model.v4_connection_requested import V4ConnectionRequested
@@ -107,14 +106,14 @@ def fixture_autoclosing_df_loop(bare_df_loop):
 
 @pytest.fixture(name="listener")
 def fixture_listener(df_loop):
-    return df_loop.listeners[0]
+    return df_loop._listeners[0]
 
 
 @pytest.mark.asyncio
 async def test_remove_listener(df_loop, listener):
-    assert len(df_loop.listeners) == 1
+    assert len(df_loop._listeners) == 1
     df_loop.unsubscribe(listener)
-    assert len(df_loop.listeners) == 0
+    assert len(df_loop._listeners) == 0
 
 
 @pytest.mark.asyncio
@@ -161,33 +160,11 @@ async def test_error_in_listener(df_loop, listener, read_df_side_effect, message
 
 
 @pytest.mark.asyncio
-async def test_400_should_call_recreate_df(df_loop, listener, message_sent_event):
-    async def read_df(**kwargs):
-        if read_df.first_time:
-            read_df.first_time = False
-            raise ApiException(status=400, reason="")
-        await asyncio.sleep(0.001)
-        return [message_sent_event]
-
-    read_df.first_time = True
-
-    df_loop.read_datafeed.side_effect = read_df
-
-    await df_loop.start()
-
-    df_loop.prepare_datafeed.assert_called_once()
-    assert df_loop.read_datafeed.call_count >= 2
-    df_loop.recreate_datafeed.assert_called_once()
-
-    assert_is_accepting_event_on_message_sent_called(listener, message_sent_event)
-
-
-@pytest.mark.asyncio
-@pytest.mark.parametrize("exception", [ValueError("An error"), ApiException(status=502, reason="")])
-async def test_non_400_error_should_be_propagated_and_call_stop_tasks(df_loop, listener, exception):
+async def test_unexpected_error_should_be_propagated_and_call_stop_tasks(df_loop, listener):
+    exception = ValueError("An error")
     df_loop.read_datafeed.side_effect = exception
 
-    with pytest.raises(type(exception)) as raised_exception:
+    with pytest.raises(ValueError) as raised_exception:
         await df_loop.start()
         assert raised_exception == exception
 

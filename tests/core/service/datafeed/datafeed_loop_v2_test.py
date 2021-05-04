@@ -17,6 +17,7 @@ from symphony.bdk.gen.agent_model.v4_initiator import V4Initiator
 from symphony.bdk.gen.agent_model.v4_message_sent import V4MessageSent
 from symphony.bdk.gen.agent_model.v4_payload import V4Payload
 from symphony.bdk.gen.agent_model.v4_user import V4User
+from tests.core.config import minimal_retry_config, minimal_retry_config_with_attempts
 from tests.utils.resource_utils import get_config_resource_filepath
 
 
@@ -37,6 +38,7 @@ def fixture_auth_session():
 @pytest.fixture(name="config")
 def fixture_config():
     config = BdkConfigLoader.load_from_file(get_config_resource_filepath("config.yaml"))
+    config.datafeed.retry = minimal_retry_config()
     config.datafeed.version = "v2"
     return config
 
@@ -141,6 +143,7 @@ async def test_start_datafeed_exist(datafeed_loop, datafeed_api, read_df_side_ef
 
 @pytest.mark.asyncio
 async def test_start_datafeed_stale_datafeed(datafeed_loop, datafeed_api, message_sent_event):
+    datafeed_loop._retry_config = minimal_retry_config_with_attempts(2)
     datafeed_api.list_datafeed.return_value = [Datafeed(id="fault_datafeed_id")]
     datafeed_api.create_datafeed.return_value = Datafeed(id="test_id")
 
@@ -149,7 +152,7 @@ async def test_start_datafeed_stale_datafeed(datafeed_loop, datafeed_api, messag
         if raise_and_return_event.first:
             raise_and_return_event.first = False
             raise ApiException(400)
-        await asyncio.sleep(0.001)  # to force the switching of tasks
+        await asyncio.sleep(0.00001)  # to force the switching of tasks
         return message_sent_event
 
     raise_and_return_event.first = True
@@ -213,3 +216,58 @@ async def test_read_datafeed_non_empty_list(datafeed_loop, datafeed_api, message
     datafeed_api.read_datafeed.return_value = EventsMock(events)
 
     assert await datafeed_loop.read_datafeed() == events
+
+
+@pytest.mark.asyncio
+async def test_400_should_call_recreate_df_and_retry(datafeed_loop, datafeed_api):
+    datafeed_loop._retry_config = minimal_retry_config_with_attempts(2)
+    datafeed_loop.recreate_datafeed = AsyncMock()
+    datafeed_api.read_datafeed.side_effect = [ApiException(status=400), ApiException(status=500)]
+
+    with pytest.raises(ApiException) as exception:
+        await datafeed_loop.start()
+        assert exception.value.status == 500
+
+    datafeed_loop.recreate_datafeed.assert_called_once()
+    assert datafeed_api.read_datafeed.call_count == 2
+
+
+@pytest.mark.asyncio
+async def test_400_should_call_recreate_df_return_and_retry(datafeed_loop, datafeed_api, message_sent_event):
+    async def read_df(**kwargs):
+        if read_df.first_time:
+            read_df.first_time = False
+            raise ApiException(status=400, reason="")
+        await asyncio.sleep(0.00001)  # to force the switching of tasks
+        return message_sent_event
+
+    read_df.first_time = True
+
+    datafeed_api.read_datafeed.side_effect = read_df
+    datafeed_loop._retry_config = minimal_retry_config_with_attempts(2)
+    datafeed_loop.prepare_datafeed = AsyncMock()
+    datafeed_loop.recreate_datafeed = AsyncMock()
+
+    await datafeed_loop.start()
+
+    datafeed_loop.recreate_datafeed.assert_called_once()
+    assert datafeed_api.read_datafeed.call_count >= 2
+
+
+@pytest.mark.asyncio
+async def test_unexpected_error_should_be_propagated_and_call_stop_tasks(datafeed_loop, datafeed_api):
+    exception = ValueError("An error")
+    datafeed_api.read_datafeed.side_effect = exception
+
+    datafeed_loop.prepare_datafeed = AsyncMock()
+    datafeed_loop.recreate_datafeed = AsyncMock()
+    datafeed_loop._stop_listener_tasks = AsyncMock()
+
+    with pytest.raises(ValueError) as raised_exception:
+        await datafeed_loop.start()
+        assert raised_exception == exception
+
+    datafeed_loop.prepare_datafeed.assert_called_once()
+    datafeed_api.read_datafeed.assert_called_once()
+    datafeed_loop.recreate_datafeed.assert_not_called()
+    datafeed_loop._stop_listener_tasks.assert_called_once()

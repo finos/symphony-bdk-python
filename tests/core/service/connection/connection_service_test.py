@@ -9,6 +9,7 @@ from symphony.bdk.gen.pod_api.connection_api import ConnectionApi
 from symphony.bdk.gen.pod_model.user_connection import UserConnection
 from symphony.bdk.gen.pod_model.user_connection_list import UserConnectionList
 from symphony.bdk.gen.pod_model.user_connection_request import UserConnectionRequest
+from tests.core.config import minimal_retry_config
 from tests.utils.resource_utils import deserialize_object
 
 
@@ -29,7 +30,8 @@ def fixture_connection_api():
 def fixture_connection_service(connection_api, auth_session):
     service = ConnectionService(
         connection_api,
-        auth_session
+        auth_session,
+        minimal_retry_config()
     )
     return service
 

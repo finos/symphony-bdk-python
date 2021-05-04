@@ -1,3 +1,5 @@
+from symphony.bdk.core.retry import retry
+from symphony.bdk.core.retry.strategy import read_datafeed_retry
 from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import AbstractDatafeedLoop
 from symphony.bdk.core.service.datafeed.on_disk_datafeed_id_repository import OnDiskDatafeedIdRepository
 
@@ -32,20 +34,22 @@ class DatafeedLoopV1(AbstractDatafeedLoop):
         if not self._datafeed_id:
             await self.recreate_datafeed()
 
+    @retry(retry=read_datafeed_retry)
     async def read_datafeed(self):
-        session_token = await self.auth_session.session_token
-        key_manager_token = await self.auth_session.key_manager_token
-        events = await self.datafeed_api.v4_datafeed_id_read_get(id=self._datafeed_id,
-                                                                 session_token=session_token,
-                                                                 key_manager_token=key_manager_token)
+        session_token = await self._auth_session.session_token
+        key_manager_token = await self._auth_session.key_manager_token
+        events = await self._datafeed_api.v4_datafeed_id_read_get(id=self._datafeed_id,
+                                                                  session_token=session_token,
+                                                                  key_manager_token=key_manager_token)
         if events is not None and events.value:
             return events.value
 
+    @retry
     async def recreate_datafeed(self):
-        session_token = await self.auth_session.session_token
-        key_manager_token = await self.auth_session.key_manager_token
-        response = await self.datafeed_api.v4_datafeed_create_post(session_token=session_token,
-                                                                   key_manager_token=key_manager_token)
+        session_token = await self._auth_session.session_token
+        key_manager_token = await self._auth_session.key_manager_token
+        response = await self._datafeed_api.v4_datafeed_create_post(session_token=session_token,
+                                                                    key_manager_token=key_manager_token)
         datafeed_id = response.id
         self._datafeed_repository.write(datafeed_id)
         self._datafeed_id = datafeed_id
