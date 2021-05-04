@@ -1,6 +1,6 @@
 # Activity API
 
-The Activity API is an abstraction built on top of the Datafeed's [_Real Time Events_](https://developers.symphony.com/restapi/docs/real-time-events).
+The Activity API is an abstraction built on top of the Datafeed's [_Real Time Events_](https://docs.developers.symphony.com/building-bots-on-symphony/datafeed/real-time-events).
 An Activity is basically a user interaction triggered from the chat.
 Two different kinds of activities are supported by the BDK:
 - **Command Activity**: triggered when a message is sent in an `IM`, `MIM` or `Chatroom`
@@ -219,6 +219,38 @@ except KeyboardInterrupt:
 1. The `matches()` method allows the activity logic to be triggered when a form with the `id` `"hello-form"` has been submitted from the action button `"submit"`
 2. The activity context allows us to retrieve form values. Here, the content of the `<text-field>` called "**name**"
 3. We send back the message: "Hello, **text_field_content**"
+
+## User Joined Room Activity
+
+A User Joined Room activity is triggered when a new user joins or is added to a room in which the bot service account is
+a member, including when the bot service account joins or is added to a room.
+
+The code sample below shows how to create such an activity:
+```python
+from symphony.bdk.core.activity.user_joined_room import UserJoinedRoomActivity, UserJoinedRoomContext
+from symphony.bdk.core.config.loader import BdkConfigLoader
+from symphony.bdk.core.service.message.message_service import MessageService
+from symphony.bdk.core.symphony_bdk import SymphonyBdk
+
+
+async def run():
+    async with SymphonyBdk(BdkConfigLoader.load_from_symphony_dir("config.yaml")) as bdk:
+        bdk.activities().register(JoinRoomActivity(bdk.messages()))
+        await bdk.datafeed().start()
+
+
+class JoinRoomActivity(UserJoinedRoomActivity):
+    def __init__(self, messages: MessageService):
+        self._messages = messages
+        super().__init__()
+
+    def matches(self, context: UserJoinedRoomContext) -> bool:
+        return True
+
+    async def on_activity(self, context: UserJoinedRoomContext):
+        await self._messages.send_message(context.stream_id,
+                                          f"<messageML>Welcome to the room {context.affected_user_id}!</messageML>")
+```
 
 ---
 **NOTE - General activities use case**
