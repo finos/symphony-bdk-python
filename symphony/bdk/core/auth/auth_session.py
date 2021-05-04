@@ -1,7 +1,11 @@
 """Module containing session handle classes.
 
 """
+import logging
+
 from symphony.bdk.core.auth.exception import AuthInitializationError
+
+logger = logging.getLogger(__name__)
 
 
 class AuthSession:
@@ -22,6 +26,7 @@ class AuthSession:
     async def refresh(self):
         """Trigger re-authentication to refresh the tokens.
         """
+        logger.debug("Authenticate")
         self._session_token = await self._authenticator.retrieve_session_token()
         self._key_manager_token = await self._authenticator.retrieve_key_manager_token()
 
@@ -114,6 +119,7 @@ class AppAuthSession:
     :class:`symphony.bdk.core.auth.ext_app_authenticator.ExtensionAppAuthenticator` to actually authenticate and
     retrieve the tokens.
     """
+
     def __init__(self, authenticator, app_token: str):
         """
 

@@ -16,6 +16,7 @@ async def run():
         obo_auth_session = bdk.obo(username="username")
         logging.info(await obo_auth_session.session_token)
 
+
 logging.config.fileConfig(Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False)
 
 asyncio.run(run())

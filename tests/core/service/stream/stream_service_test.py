@@ -25,6 +25,7 @@ from symphony.bdk.gen.pod_model.v2_stream_attributes import V2StreamAttributes
 from symphony.bdk.gen.pod_model.v3_room_attributes import V3RoomAttributes
 from symphony.bdk.gen.pod_model.v3_room_detail import V3RoomDetail
 from symphony.bdk.gen.pod_model.v3_room_search_results import V3RoomSearchResults
+from tests.core.config import minimal_retry_config
 from tests.utils.resource_utils import get_deserialized_object_from_resource
 
 KM_TOKEN = "km_token"
@@ -64,7 +65,7 @@ def fixture_share_api(mocked_api_client):
 
 @pytest.fixture(name="stream_service")
 def fixture_stream_service(streams_api, room_membership_api, share_api, auth_session):
-    return StreamService(streams_api, room_membership_api, share_api, auth_session)
+    return StreamService(streams_api, room_membership_api, share_api, auth_session, minimal_retry_config())
 
 
 @pytest.mark.asyncio

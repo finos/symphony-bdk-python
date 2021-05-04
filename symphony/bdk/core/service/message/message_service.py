@@ -1,4 +1,5 @@
 from symphony.bdk.core.auth.auth_session import AuthSession
+from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.core.service.message.multi_attachments_messages_api import MultiAttachmentsMessagesApi
 from symphony.bdk.gen.agent_api.attachments_api import AttachmentsApi
 from symphony.bdk.gen.agent_model.v4_import_response import V4ImportResponse
@@ -18,16 +19,22 @@ from symphony.bdk.gen.pod_model.message_status import MessageStatus
 from symphony.bdk.gen.pod_model.message_suppression_response import MessageSuppressionResponse
 from symphony.bdk.gen.pod_model.stream_attachment_item import StreamAttachmentItem
 
+from symphony.bdk.core.retry import retry
+from symphony.bdk.core.retry.strategy import refresh_session_if_unauthorized
+
 
 class OboMessageService:
     """Class exposing OBO enabled endpoints for message management, e.g. send a message."""
 
-    def __init__(self, messages_api: MultiAttachmentsMessagesApi, auth_session: AuthSession,
-                 message_suppression_api: MessageSuppressionApi):
+    def __init__(self, messages_api: MultiAttachmentsMessagesApi, message_suppression_api: MessageSuppressionApi,
+                 auth_session: AuthSession,
+                 retry_config: BdkRetryConfig):
         self._messages_api = messages_api
-        self._auth_session = auth_session
         self._message_suppression_api = message_suppression_api
+        self._auth_session = auth_session
+        self._retry_config = retry_config
 
+    @retry
     async def send_message(
             self,
             stream_id: str,
@@ -67,6 +74,7 @@ class OboMessageService:
 
         return await self._messages_api.v4_stream_sid_multi_attachment_message_create_post(**params)
 
+    @retry
     async def suppress_message(
             self,
             message_id: str
@@ -97,14 +105,17 @@ class MessageService(OboMessageService):
                  pod_api: PodApi,
                  attachment_api: AttachmentsApi,
                  default_api: DefaultApi,
-                 auth_session: AuthSession):
-        super().__init__(messages_api, auth_session, message_suppression_api)
+                 auth_session: AuthSession,
+                 retry_config: BdkRetryConfig):
+        super().__init__(messages_api, message_suppression_api, auth_session, retry_config)
         self._message_api = message_api
+        self._message_suppression_api = message_suppression_api
         self._streams_api = streams_api
         self._pod_api = pod_api
         self._attachment_api = attachment_api
         self._default_api = default_api
 
+    @retry
     async def list_messages(
             self,
             stream_id: str,
@@ -134,6 +145,7 @@ class MessageService(OboMessageService):
         message_list = await self._messages_api.v4_stream_sid_message_get(**params)
         return message_list.value
 
+    @retry
     async def blast_message(
             self,
             stream_ids: [str],
@@ -173,6 +185,7 @@ class MessageService(OboMessageService):
 
         return await self._messages_api.v4_multi_attachment_message_blast_post(**params)
 
+    @retry
     async def import_messages(
             self,
             messages: [V4ImportedMessage]
@@ -237,6 +250,7 @@ class MessageService(OboMessageService):
         }
         return await self._message_api.v1_message_mid_status_get(**params)
 
+    @retry
     async def get_attachment_types(self) -> [str]:
         """Retrieves a list of supported file extensions for attachments.
         See: `Attachment Types <https://developers.symphony.com/restapi/reference#attachment-types>`_
@@ -250,6 +264,7 @@ class MessageService(OboMessageService):
         type_list = await self._pod_api.v1_files_allowed_types_get(**params)
         return type_list.value
 
+    @retry
     async def get_message(
             self,
             message_id: str
@@ -269,6 +284,7 @@ class MessageService(OboMessageService):
         }
         return await self._messages_api.v1_message_id_get(**params)
 
+    @retry
     async def list_attachments(
             self,
             stream_id: str,
@@ -303,6 +319,7 @@ class MessageService(OboMessageService):
         attachment_list = await self._streams_api.v1_streams_sid_attachments_get(**params)
         return attachment_list.value
 
+    @retry
     async def list_message_receipts(
             self,
             message_id: str
@@ -321,6 +338,7 @@ class MessageService(OboMessageService):
         }
         return await self._default_api.v1_admin_messages_message_id_receipts_get(**params)
 
+    @retry
     async def get_message_relationships(
             self,
             message_id: str

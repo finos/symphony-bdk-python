@@ -1,5 +1,6 @@
 from unittest.mock import MagicMock, AsyncMock
 import pytest
+
 from symphony.bdk.gen import ApiException
 from symphony.bdk.gen.pod_api.presence_api import PresenceApi
 from symphony.bdk.core.auth.auth_session import AuthSession
@@ -11,6 +12,7 @@ from symphony.bdk.gen.pod_model.v2_presence_status import V2PresenceStatus
 from symphony.bdk.gen.pod_model.v2_user_presence import V2UserPresence
 
 from tests.utils.resource_utils import deserialize_object
+from tests.core.config import minimal_retry_config
 
 
 @pytest.fixture(name="auth_session")
@@ -38,9 +40,7 @@ def fixture_mocked_presence_api_client():
 
 @pytest.fixture(name="presence_service")
 def fixture_presence_service(mocked_presence_api_client, auth_session):
-    return PresenceService(mocked_presence_api_client, auth_session)
-
-
+    return PresenceService(mocked_presence_api_client, auth_session, minimal_retry_config())
 
 
 @pytest.mark.asyncio

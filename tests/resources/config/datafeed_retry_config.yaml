@@ -1,0 +1,8 @@
+host: acme.symphony.com
+
+datafeed:
+  retry:
+    maxAttempts: 2
+    initialIntervalMillis: 1000
+    multiplier: 3.0
+    maxIntervalMillis: 2000
