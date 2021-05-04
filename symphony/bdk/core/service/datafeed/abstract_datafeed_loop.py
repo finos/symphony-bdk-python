@@ -75,7 +75,7 @@ class AbstractDatafeedLoop(ABC):
         self._hard_kill = False
         self._timeout = None
         self._tasks = []
-        self._retry_config = config.get_datafeed_retry_config()
+        self._retry_config = config.datafeed.retry
 
     async def start(self):
         """Start the datafeed event service
