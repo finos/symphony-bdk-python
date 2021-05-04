@@ -141,7 +141,7 @@ will be used by default.
 
 #### Retry Configuration
 The retry mechanism used by the bot will be configured by these following properties:
-- `maxAttempts`: maximum number of retry attempts that the bot will make.
+- `maxAttempts`: maximum number of retry attempts that the bot will make. Setting it to `-1` is equivalent to an infinite number of attempts
 - `multiplier`: after each attempt, the interval between two attempts will be multiplied by 
 this factor. (Exponential backoff strategy)
 - `initialIntervalMillis`: the interval between the initial two attempts in milliseconds.
@@ -155,3 +155,4 @@ default value:
 - `initialIntervalMillis`: 500
 - `multiplier`: 2
 - `maxIntervalMillis`: 300000 (5 mins)
+```

@@ -47,8 +47,7 @@ def is_network_or_minor_error(exception: Exception) -> bool:
              False otherwise
     """
     if isinstance(exception, ApiException):
-        if exception.status >= 500 or exception.status == 401 or exception.status == 429:
-            return True
+        return exception.status >= 500 or exception.status == 401 or exception.status == 429
     return is_client_timeout_error(exception)
 
 
@@ -60,8 +59,7 @@ def is_network_or_minor_error_or_client(exception: Exception) -> bool:
              or is a client timeout error False otherwise
     """
     if isinstance(exception, ApiException):
-        if exception.status >= 500 or exception.status == 401 or exception.status == 429 or exception.status == 400:
-            return True
+        return exception.status >= 500 or exception.status == 401 or exception.status == 429 or exception.status == 400
     return is_client_timeout_error(exception)
 
 

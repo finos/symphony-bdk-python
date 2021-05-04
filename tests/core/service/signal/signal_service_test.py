@@ -12,7 +12,7 @@ from symphony.bdk.gen.agent_model.channel_subscription_response import ChannelSu
 from symphony.bdk.gen.agent_model.signal import Signal
 from symphony.bdk.gen.agent_model.signal_list import SignalList
 from tests.utils.resource_utils import get_deserialized_object_from_resource
-
+from tests.core.config import minimal_retry_config
 
 @pytest.fixture(name="auth_session")
 def fixture_auth_session():
@@ -29,7 +29,7 @@ def fixture_signals_api():
 
 @pytest.fixture(name="signal_service")
 def fixture_signal_service(signals_api, auth_session):
-    service = SignalService(signals_api, auth_session, BdkRetryConfig())
+    service = SignalService(signals_api, auth_session, minimal_retry_config())
     return service
 
 

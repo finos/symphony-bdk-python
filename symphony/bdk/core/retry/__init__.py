@@ -2,7 +2,6 @@ import logging
 from typing import Callable
 from functools import wraps
 
-from tenacity.retry import retry_if_exception
 from tenacity import stop_after_attempt, wait_exponential, before_sleep_log
 
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
@@ -11,8 +10,10 @@ from symphony.bdk.core.retry.strategy import refresh_session_if_unauthorized
 from ._asyncio import AsyncRetrying
 
 
-def retry(*dargs, **dkw):  # noqa
+def retry(*dargs, **dkw):
     """A decorator that provides a mechanism to to retry failed requests
+    Passed retry configuration arguments will override the default configuration defined in :py:meth:`decorator_f`
+    If no _retry_config attribute is present in the decorated function instance, an AttributeError is raised.
 
     :param dargs: positional arguments passed to be added or to override the default configuration
     :param dkw: keyword arguments passed to be added or to override the default configuration
@@ -24,12 +25,11 @@ def retry(*dargs, **dkw):  # noqa
         def retry_decorator(fun: Callable):
             @wraps(fun)
             def decorator_f(self, *args, **kwargs):
-                """Fetches a BdkRetryConfiguration object from the instance of the called function
-
-                If no _retry_config attribute is present, use a default AsyncRetrying configuration
-                Passed retry configuration arguments override the default configuration"""
+                """Fetches a BdkRetryConfiguration object from the instance of the called function and constructs the
+                arguments for the AsyncRetrying object.
+                """
                 default_kwargs = {}
-                retry_config: BdkRetryConfig = getattr(self, '_retry_config', None)
+                retry_config: BdkRetryConfig = getattr(self, '_retry_config')
                 logger = logging.getLogger(self.__module__)
                 _before_sleep = before_sleep_log(logger, logging.INFO)
                 default_kwargs.update(dict(before_sleep=_before_sleep))

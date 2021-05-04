@@ -84,7 +84,7 @@ logging.config.dictConfig({
 
 ## Datafeed Configuration
 
-Datafeed Service can be configured by the datafeed field in the configuration file:
+The Datafeed Service can be configured by the datafeed field in the configuration file:
 
 ```yaml
 datafeed:
@@ -102,3 +102,14 @@ the `version` parameter as `v2` as shown above.
 Otherwise, the datafeed version 1 will be used by default.
 
 Bot developers can also configure a dedicated retry configuration which will be used only by the datafeed service as shown above.
+
+### Infinite retries
+By default, Datafeed retry is configured to have an infinite number of attempts. This is equivalent to: 
+```yaml
+datafeed:
+  retry:
+    maxAttempts: -1 # infinite number of attemps
+    initialIntervalMillis: 2000
+    multiplier: 1.5
+    maxIntervalMillis: 10000
+```

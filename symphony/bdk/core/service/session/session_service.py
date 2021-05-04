@@ -1,5 +1,6 @@
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
+from symphony.bdk.core.retry import retry
 from symphony.bdk.gen.pod_api.session_api import SessionApi
 from symphony.bdk.gen.pod_model.user_v2 import UserV2
 
@@ -15,6 +16,7 @@ class OboSessionService:
         self._auth_session = auth_session
         self._retry_config = retry_config
 
+    @retry
     async def get_session(
             self
     ) -> UserV2:

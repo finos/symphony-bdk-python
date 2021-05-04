@@ -26,7 +26,7 @@ class AuthSession:
     async def refresh(self):
         """Trigger re-authentication to refresh the tokens.
         """
-        logger.debug("Re-authenticate and try again")
+        logger.debug("Authenticate")
         self._session_token = await self._authenticator.retrieve_session_token()
         self._key_manager_token = await self._authenticator.retrieve_key_manager_token()
 

@@ -44,19 +44,15 @@ def test_default_retry_configuration():
     config = BdkConfigLoader.load_from_file(config_path)
 
     assert config.retry.max_attempts == BdkRetryConfig.DEFAULT_MAX_ATTEMPTS
-    assert config.retry.initial_interval.total_seconds() == timedelta(
-        milliseconds=BdkRetryConfig.DEFAULT_INITIAL_INTERVAL).total_seconds()
+    assert config.retry.initial_interval == timedelta(milliseconds=BdkRetryConfig.DEFAULT_INITIAL_INTERVAL)
     assert config.retry.multiplier == BdkRetryConfig.DEFAULT_MULTIPLIER
-    assert config.retry.max_interval.total_seconds() == timedelta(
-        milliseconds=BdkRetryConfig.DEFAULT_MAX_INTERVAL).total_seconds()
+    assert config.retry.max_interval == timedelta(milliseconds=BdkRetryConfig.DEFAULT_MAX_INTERVAL)
 
     # Datafeed default retry
     assert config.datafeed.retry.max_attempts == sys.maxsize
-    assert config.datafeed.retry.initial_interval.total_seconds() == timedelta(
-        milliseconds=BdkRetryConfig.DEFAULT_INITIAL_INTERVAL).total_seconds()
+    assert config.datafeed.retry.initial_interval == timedelta(milliseconds=BdkRetryConfig.DEFAULT_INITIAL_INTERVAL)
     assert config.datafeed.retry.multiplier == BdkRetryConfig.DEFAULT_MULTIPLIER
-    assert config.datafeed.retry.max_interval.total_seconds() == timedelta(
-        milliseconds=BdkRetryConfig.DEFAULT_MAX_INTERVAL).total_seconds()
+    assert config.datafeed.retry.max_interval == timedelta(milliseconds=BdkRetryConfig.DEFAULT_MAX_INTERVAL)
 
 
 def test_datafeed_retry_configuration():

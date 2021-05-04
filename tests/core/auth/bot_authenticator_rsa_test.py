@@ -15,13 +15,13 @@ from tests.utils.resource_utils import get_resource_filepath
 
 @pytest.fixture(name="mocked_api_client")
 def fixture_mocked_api_client():
-    def __loader():
+    def _create_api_client():  # We do this to have a new instance for each call
         api_client = MagicMock(ApiClient)
         api_client.call_api = AsyncMock()
         api_client.configuration = Configuration()
         return api_client
 
-    return __loader
+    return _create_api_client
 
 
 @pytest.fixture(name="config")
