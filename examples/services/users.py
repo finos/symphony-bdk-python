@@ -11,6 +11,8 @@ from symphony.bdk.gen.pod_model.user_search_query import UserSearchQuery
 
 
 async def run():
+    config = BdkConfigLoader.load_from_symphony_dir("config.yaml")
+
     async with SymphonyBdk(config) as bdk:
         user_service = bdk.users()
 
@@ -25,9 +27,8 @@ async def run():
                                                                           max_number=100):
             logging.debug(i.user_attributes.display_name)
 
-config = BdkConfigLoader.load_from_symphony_dir("config.yaml")
 logging.config.fileConfig(Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False)
 
-if os.name == "nt" and config.proxy is not None:
+if os.name == "nt":
     asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 asyncio.run(run())
