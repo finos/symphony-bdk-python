@@ -1,5 +1,6 @@
 import asyncio
 import logging.config
+import os
 from pathlib import Path
 
 from symphony.bdk.core.activity.command import CommandActivity, CommandContext
@@ -9,7 +10,7 @@ from symphony.bdk.core.symphony_bdk import SymphonyBdk
 
 
 async def run():
-    async with SymphonyBdk(BdkConfigLoader.load_from_symphony_dir("config.yaml")) as bdk:
+    async with SymphonyBdk(config) as bdk:
         bdk.activities().register(HelloCommandActivity(bdk.messages()))
         await bdk.datafeed().start()
 
@@ -26,10 +27,13 @@ class HelloCommandActivity(CommandActivity):
         await self._messages.send_message(context.stream_id, "<messageML>Hello, World!</messageML>")
 
 
+config = BdkConfigLoader.load_from_symphony_dir("config.yaml")
 logging.config.fileConfig(Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False)
 
 try:
     logging.info("Running activity example...")
+    if os.name == "nt" and config.proxy is not None:
+        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     asyncio.run(run())
 except KeyboardInterrupt:
     logging.info("Ending activity example")

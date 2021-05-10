@@ -1,5 +1,6 @@
 import asyncio
 import logging.config
+import os
 
 from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import event_listener_context
@@ -10,8 +11,6 @@ from symphony.bdk.gen.agent_model.v4_message_sent import V4MessageSent
 
 
 async def run():
-    config = BdkConfigLoader.load_from_symphony_dir("config.yaml")
-
     async with SymphonyBdk(config) as bdk:
         datafeed_loop = bdk.datafeed()
         datafeed_loop.subscribe(RealTimeEventListenerImpl())
@@ -41,6 +40,7 @@ class EventListenerLoggingFilter(logging.Filter):
         return True
 
 
+config = BdkConfigLoader.load_from_symphony_dir("config.yaml")
 logging.config.dictConfig({
     "version": 1,
     "disable_existing_loggers": False,
@@ -70,6 +70,8 @@ logging.config.dictConfig({
 
 try:
     logging.info("Running datafeed example...")
+    if os.name == "nt" and config.proxy is not None:
+        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     asyncio.run(run())
 except KeyboardInterrupt:
     logging.info("Ending datafeed example")

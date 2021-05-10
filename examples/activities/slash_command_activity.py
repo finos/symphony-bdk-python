@@ -1,5 +1,6 @@
 import asyncio
 import logging.config
+import os
 from pathlib import Path
 
 from symphony.bdk.core.activity.command import CommandContext
@@ -19,10 +20,13 @@ async def run():
         await bdk.datafeed().start()
 
 
+config = BdkConfigLoader.load_from_symphony_dir("config.yaml")
 logging.config.fileConfig(Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False)
 
 try:
     logging.info("Running activity example...")
+    if os.name == "nt" and config.proxy is not None:
+        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     asyncio.run(run())
 except KeyboardInterrupt:
     logging.info("Ending activity example")
