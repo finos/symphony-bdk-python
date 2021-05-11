@@ -52,24 +52,3 @@ ssl:
   trustStore:
     path: /path/to/cert.pem
 ```
-
-## How do I solve aiohttp problem while using proxy on Windows?
-There is an outstanding issue with aiohttp and Python 3.8+ on Windows. This affects our client when you specify a proxy 
-on Windows using Python 3.8+.
-
-Under these specific conditions, the following error might appear while trying to start an async loop:
-```
-Exception: ClientConnectorError
-Cannot connect to host localhost.symphony.com:443 ssl:default [wrong parameter]
-  File "D:\local_d\repodata\testingBot\bot\python\main.py", line 27, in run
-    await datafeed_loop.start()
-  File "D:\local_d\repodata\testingBot\bot\python\main.py", line 49, in <module>
-    asyncio.run(run())
-```
-
-If you are using a proxy, make sure to implement the following workaround before you start the async datafeed or 
-make any async calls with aiohttp:
-```
-policy = asyncio.WindowsSelectorEventLoopPolicy()
-asyncio.set_event_loop_policy(policy)
-```
