@@ -1,6 +1,5 @@
 import asyncio
 import logging.config
-import os
 
 from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import event_listener_context
@@ -70,8 +69,6 @@ logging.config.dictConfig({
 
 try:
     logging.info("Running datafeed example...")
-    if os.name == "nt":
-        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     asyncio.run(run())
 except KeyboardInterrupt:
     logging.info("Ending datafeed example")

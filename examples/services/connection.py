@@ -1,6 +1,5 @@
 import asyncio
 import logging.config
-import os
 from pathlib import Path
 
 from symphony.bdk.core.config.loader import BdkConfigLoader
@@ -18,6 +17,4 @@ async def run():
 
 logging.config.fileConfig(Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False)
 
-if os.name == "nt":
-    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
 asyncio.run(run())

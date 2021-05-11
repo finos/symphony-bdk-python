@@ -1,6 +1,5 @@
 import asyncio
 import logging.config
-import os
 from pathlib import Path
 
 from symphony.bdk.core.activity.command import CommandActivity, CommandContext
@@ -31,8 +30,6 @@ logging.config.fileConfig(Path(__file__).parent.parent / "logging.conf", disable
 
 try:
     logging.info("Running activity example...")
-    if os.name == "nt":
-        asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
     asyncio.run(run())
 except KeyboardInterrupt:
     logging.info("Ending activity example")
