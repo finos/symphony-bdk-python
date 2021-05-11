@@ -15,6 +15,7 @@ async def run():
         user_connection = await connection_service.list_connections(status=ConnectionStatus.ALL)
         logging.info(user_connection)
 
+
 logging.config.fileConfig(Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False)
 
 asyncio.run(run())

@@ -36,6 +36,7 @@ async def run():
 
         logging.info(await signal_service.delete_signal(signal.id))
 
+
 logging.config.fileConfig(Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False)
 
 asyncio.run(run())

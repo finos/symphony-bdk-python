@@ -35,6 +35,7 @@ async def run():
         async for s in await streams.list_all_streams(stream_filter):
             logging.debug(s)
 
+
 logging.config.fileConfig(Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False)
 
 asyncio.run(run())

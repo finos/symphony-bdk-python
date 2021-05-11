@@ -26,6 +26,7 @@ async def run():
                                                                           max_number=100):
             logging.debug(i.user_attributes.display_name)
 
+
 logging.config.fileConfig(Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False)
 
 asyncio.run(run())

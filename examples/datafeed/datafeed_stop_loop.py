@@ -11,6 +11,7 @@ from symphony.bdk.gen.agent_model.v4_message_sent import V4MessageSent
 
 async def run():
     config = BdkConfigLoader.load_from_symphony_dir("config.yaml")
+
     async with SymphonyBdk(config) as bdk:
         datafeed_loop = bdk.datafeed()
         datafeed_loop.subscribe(RealTimeEventListenerImpl())

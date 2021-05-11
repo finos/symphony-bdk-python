@@ -27,6 +27,7 @@ class RealTimeEventListenerImpl(RealTimeEventListener):
 
 logging.config.fileConfig(Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False)
 
+
 try:
     logging.info("Running datafeed example...")
     asyncio.run(run())

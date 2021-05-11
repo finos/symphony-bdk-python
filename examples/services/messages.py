@@ -32,6 +32,7 @@ async def run():
             # https://docs.developers.symphony.com/building-bots-on-symphony/datafeed/overview-of-streams
             await obo_services.messages().suppress_message("URL-Safe MessageID")
 
+
 logging.config.fileConfig(Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False)
 
 asyncio.run(run())
