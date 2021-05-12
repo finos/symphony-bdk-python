@@ -30,7 +30,7 @@ class JoinRoomActivity(UserJoinedRoomActivity):
 logging.config.fileConfig(Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False)
 
 try:
-    logging.info("Running datafeed example...")
+    logging.info("Running activity example...")
     asyncio.run(run())
 except KeyboardInterrupt:
-    logging.info("Ending datafeed example")
+    logging.info("Ending activity example")
