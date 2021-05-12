@@ -10,7 +10,6 @@
 
 import io
 import json
-import logging
 import re
 import ssl
 from urllib.parse import urlencode
@@ -18,9 +17,6 @@ from urllib.parse import urlencode
 import aiohttp
 
 from symphony.bdk.gen.exceptions import ApiException, UnauthorizedException, ForbiddenException, NotFoundException, ServiceException, ApiValueError
-
-
-logger = logging.getLogger(__name__)
 
 
 class RESTResponse(io.IOBase):
