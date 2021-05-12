@@ -5,7 +5,7 @@ class BdkServerConfig:
 
     def __init__(self, scheme=None, port=None, context="", host=None, proxy=None, default_headers=None):
         self.scheme = scheme if scheme is not None else self.DEFAULT_SCHEME
-        self.port = self.port = port if port is not None else self.DEFAULT_HTTPS_PORT
+        self.port = port if port is not None else self.DEFAULT_HTTPS_PORT
         self.context = context
         self.host = host
         self.proxy = BdkProxyConfig(**proxy) if proxy is not None else None
