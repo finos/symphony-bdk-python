@@ -1,5 +1,9 @@
+from io import IOBase
+from typing import Union, List, Tuple
+
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
+from symphony.bdk.core.service.message.model import Message
 from symphony.bdk.core.service.message.multi_attachments_messages_api import MultiAttachmentsMessagesApi
 from symphony.bdk.gen.agent_api.attachments_api import AttachmentsApi
 from symphony.bdk.gen.agent_model.v4_import_response import V4ImportResponse
@@ -7,7 +11,6 @@ from symphony.bdk.gen.agent_model.v4_imported_message import V4ImportedMessage
 from symphony.bdk.gen.agent_model.v4_message import V4Message
 from symphony.bdk.gen.agent_model.v4_message_blast_response import V4MessageBlastResponse
 from symphony.bdk.gen.agent_model.v4_message_import_list import V4MessageImportList
-from symphony.bdk.gen.model_utils import file_type
 from symphony.bdk.gen.pod_api.default_api import DefaultApi
 from symphony.bdk.gen.pod_api.message_api import MessageApi
 from symphony.bdk.gen.pod_api.message_suppression_api import MessageSuppressionApi
@@ -20,7 +23,6 @@ from symphony.bdk.gen.pod_model.message_suppression_response import MessageSuppr
 from symphony.bdk.gen.pod_model.stream_attachment_item import StreamAttachmentItem
 
 from symphony.bdk.core.retry import retry
-from symphony.bdk.core.retry.strategy import refresh_session_if_unauthorized
 
 
 class OboMessageService:
@@ -34,15 +36,45 @@ class OboMessageService:
         self._auth_session = auth_session
         self._retry_config = retry_config
 
-    @retry
     async def send_message(
             self,
             stream_id: str,
+            message: Union[str, Message],
+            data: str = "",
+            version: str = "",
+            attachment: List[Union[IOBase, Tuple[IOBase, IOBase]]] = None
+    ) -> V4Message:
+        """Send a message to an existing stream.
+        See: `Create Message <https://developers.symphony.com/restapi/reference#create-message-v4>`_
+
+        :param stream_id: The ID of the stream to send the message to.
+        :param message: a :py:class:`Message` instance or a string containing the MessageML content to be sent.
+          If it is a :py:class:`Message` instance, other parameters will be ignored.
+          If it is a string, ``<messageML>`` tags can be omitted.
+        :param data: JSON data representing the objects contained in the message.
+        :param version: Optional message version in the format "major.minor".
+          If empty, defaults to the latest supported version.
+        :param attachment: One or more files (opened in binary or text mode) to be sent along with the message.
+          Elements of the list can be attachment files or tuples of ``(attachment, preview)``.
+          If one attachment has a preview, then all attachments must have a preview.
+          The limit is set to 30Mb total size; also, it is recommended not to exceed 25 files.
+
+        :return: a V4Message object containing the details of the sent message.
+        """
+        message_object = message if isinstance(message, Message) else Message(content=message, data=data,
+                                                                              version=version, attachments=attachment)
+        return await self._send_message(stream_id, message_object.content, message_object.data, message_object.version,
+                                        message_object.attachments, message_object.previews)
+
+    @retry
+    async def _send_message(
+            self,
+            stream_id: str,
             message: str,
-            data: str = '',
-            version: str = '',
-            attachment: [file_type] = None,
-            preview: [file_type] = None
+            data: str = "",
+            version: str = "",
+            attachment: List[IOBase] = None,
+            preview: List[IOBase] = None
     ) -> V4Message:
         """Send a message to an existing stream.
         See: `Create Message <https://developers.symphony.com/restapi/reference#create-message-v4>`_
@@ -60,17 +92,17 @@ class OboMessageService:
 
         """
         params = {
-            'sid': stream_id,
-            'session_token': await self._auth_session.session_token,
-            'key_manager_token': await self._auth_session.key_manager_token,
-            'message': message,
-            'data': data,
-            'version': version
+            "sid": stream_id,
+            "session_token": await self._auth_session.session_token,
+            "key_manager_token": await self._auth_session.key_manager_token,
+            "message": message,
+            "data": data,
+            "version": version
         }
         if attachment is not None:
-            params['attachment'] = attachment if isinstance(attachment, list) else [attachment]
+            params["attachment"] = attachment if isinstance(attachment, list) else [attachment]
         if preview is not None:
-            params['preview'] = preview if isinstance(preview, list) else [preview]
+            params["preview"] = preview if isinstance(preview, list) else [preview]
 
         return await self._messages_api.v4_stream_sid_multi_attachment_message_create_post(**params)
 
@@ -88,8 +120,8 @@ class OboMessageService:
 
         """
         params = {
-            'id': message_id,
-            'session_token': await self._auth_session.session_token
+            "id": message_id,
+            "session_token": await self._auth_session.session_token
         }
         return await self._message_suppression_api.v1_admin_messagesuppression_id_suppress_post(**params)
 
@@ -135,25 +167,54 @@ class MessageService(OboMessageService):
 
         """
         params = {
-            'sid': stream_id,
-            'since': since,
-            'session_token': await self._auth_session.session_token,
-            'key_manager_token': await self._auth_session.key_manager_token,
-            'skip': skip,
-            'limit': limit
+            "sid": stream_id,
+            "since": since,
+            "session_token": await self._auth_session.session_token,
+            "key_manager_token": await self._auth_session.key_manager_token,
+            "skip": skip,
+            "limit": limit
         }
         message_list = await self._messages_api.v4_stream_sid_message_get(**params)
         return message_list.value
 
-    @retry
     async def blast_message(
+            self,
+            stream_ids: List[str],
+            message: Union[str, Message],
+            data: str = "",
+            version: str = "",
+            attachment: List[Union[IOBase, Tuple[IOBase, IOBase]]] = None
+    ) -> V4MessageBlastResponse:
+        """Send a message to multiple existing streams.
+        See: `Blast Message <https://developers.symphony.com/restapi/reference#blast-message>`_
+
+        :param stream_ids: The list of stream IDs to send the message to
+        :param message: a :py:class:`Message` instance or a string containing the MessageML content to be sent.
+          If it is a :py:class:`Message` instance, other parameters will be ignored.
+          If it is a string, ``<messageML>`` tags can be omitted.
+        :param data: JSON data representing the objects contained in the message.
+        :param version: Optional message version in the format "major.minor".
+          If empty, defaults to the latest supported version.
+        :param attachment: One or more files (opened in binary or text mode) to be sent along with the message.
+          Elements of the list can be attachment files or tuples of ``(attachment, preview)``.
+          If one attachment has a preview, then all attachments must have a preview.
+          The limit is set to 30Mb total size; also, it is recommended not to exceed 25 files.
+        :return:
+        """
+        message_object = message if isinstance(message, Message) else Message(content=message, data=data,
+                                                                              version=version, attachments=attachment)
+        return await self._blast_message(stream_ids, message_object.content, message_object.data,
+                                         message_object.version, message_object.attachments, message_object.previews)
+
+    @retry
+    async def _blast_message(
             self,
             stream_ids: [str],
             message: str,
-            data: str = '',
-            version: str = '',
-            attachment: [file_type] = None,
-            preview: [file_type] = None
+            data: str = "",
+            version: str = "",
+            attachment: List[IOBase] = None,
+            preview: List[IOBase] = None
     ) -> V4MessageBlastResponse:
         """Send a message to multiple existing streams.
         See: `Blast Message <https://developers.symphony.com/restapi/reference#blast-message>`_
@@ -171,24 +232,24 @@ class MessageService(OboMessageService):
 
         """
         params = {
-            'sids': stream_ids,
-            'session_token': await self._auth_session.session_token,
-            'key_manager_token': await self._auth_session.key_manager_token,
-            'message': message,
-            'data': data,
-            'version': version
+            "sids": stream_ids,
+            "session_token": await self._auth_session.session_token,
+            "key_manager_token": await self._auth_session.key_manager_token,
+            "message": message,
+            "data": data,
+            "version": version
         }
         if attachment is not None:
-            params['attachment'] = attachment if isinstance(attachment, list) else [attachment]
+            params["attachment"] = attachment if isinstance(attachment, list) else [attachment]
         if preview is not None:
-            params['preview'] = preview if isinstance(preview, list) else [preview]
+            params["preview"] = preview if isinstance(preview, list) else [preview]
 
         return await self._messages_api.v4_multi_attachment_message_blast_post(**params)
 
     @retry
     async def import_messages(
             self,
-            messages: [V4ImportedMessage]
+            messages: List[V4ImportedMessage]
     ) -> [V4ImportResponse]:
         """Imports a list of messages to Symphony.
         See: `Import Message <https://developers.symphony.com/restapi/reference#import-message-v4>`_
@@ -199,9 +260,9 @@ class MessageService(OboMessageService):
 
         """
         params = {
-            'message_list': V4MessageImportList(value=messages),
-            'session_token': await self._auth_session.session_token,
-            'key_manager_token': await self._auth_session.key_manager_token
+            "message_list": V4MessageImportList(value=messages),
+            "session_token": await self._auth_session.session_token,
+            "key_manager_token": await self._auth_session.key_manager_token
         }
         import_response_list = await self._messages_api.v4_message_import_post(**params)
         return import_response_list.value
@@ -223,11 +284,11 @@ class MessageService(OboMessageService):
 
         """
         params = {
-            'sid': stream_id,
-            'file_id': attachment_id,
-            'message_id': message_id,
-            'session_token': await self._auth_session.session_token,
-            'key_manager_token': await self._auth_session.key_manager_token
+            "sid": stream_id,
+            "file_id": attachment_id,
+            "message_id": message_id,
+            "session_token": await self._auth_session.session_token,
+            "key_manager_token": await self._auth_session.key_manager_token
         }
         return await self._attachment_api.v1_stream_sid_attachment_get(**params)
 
@@ -245,13 +306,13 @@ class MessageService(OboMessageService):
 
         """
         params = {
-            'mid': message_id,
-            'session_token': await self._auth_session.session_token
+            "mid": message_id,
+            "session_token": await self._auth_session.session_token
         }
         return await self._message_api.v1_message_mid_status_get(**params)
 
     @retry
-    async def get_attachment_types(self) -> [str]:
+    async def get_attachment_types(self) -> List[str]:
         """Retrieves a list of supported file extensions for attachments.
         See: `Attachment Types <https://developers.symphony.com/restapi/reference#attachment-types>`_
 
@@ -259,7 +320,7 @@ class MessageService(OboMessageService):
 
         """
         params = {
-            'session_token': await self._auth_session.session_token
+            "session_token": await self._auth_session.session_token
         }
         type_list = await self._pod_api.v1_files_allowed_types_get(**params)
         return type_list.value
@@ -278,9 +339,9 @@ class MessageService(OboMessageService):
 
         """
         params = {
-            'id': message_id,
-            'session_token': await self._auth_session.session_token,
-            'key_manager_token': await self._auth_session.key_manager_token
+            "id": message_id,
+            "session_token": await self._auth_session.session_token,
+            "key_manager_token": await self._auth_session.key_manager_token
         }
         return await self._messages_api.v1_message_id_get(**params)
 
@@ -291,8 +352,8 @@ class MessageService(OboMessageService):
             since: int = None,
             to: int = None,
             limit: int = 50,
-            sort_dir: str = 'ASC'
-    ) -> [StreamAttachmentItem]:
+            sort_dir: str = "ASC"
+    ) -> List[StreamAttachmentItem]:
         """List attachments in a particular stream.
         See: `List Attachments <https://developers.symphony.com/restapi/reference#list-attachments>`_
 
@@ -307,15 +368,15 @@ class MessageService(OboMessageService):
 
         """
         params = {
-            'sid': stream_id,
-            'session_token': await self._auth_session.session_token,
-            'limit': limit,
-            'sort_dir': sort_dir
+            "sid": stream_id,
+            "session_token": await self._auth_session.session_token,
+            "limit": limit,
+            "sort_dir": sort_dir
         }
         if since is not None:
-            params['since'] = since
+            params["since"] = since
         if to is not None:
-            params['to'] = to
+            params["to"] = to
         attachment_list = await self._streams_api.v1_streams_sid_attachments_get(**params)
         return attachment_list.value
 
@@ -333,8 +394,8 @@ class MessageService(OboMessageService):
 
         """
         params = {
-            'message_id': message_id,
-            'session_token': await self._auth_session.session_token
+            "message_id": message_id,
+            "session_token": await self._auth_session.session_token
         }
         return await self._default_api.v1_admin_messages_message_id_receipts_get(**params)
 
@@ -354,8 +415,8 @@ class MessageService(OboMessageService):
             replies, forwards and form replies).
         """
         params = {
-            'message_id': message_id,
-            'session_token': await self._auth_session.session_token,
-            'user_agent': ''
+            "message_id": message_id,
+            "session_token": await self._auth_session.session_token,
+            "user_agent": ""
         }
         return await self._default_api.v1_admin_messages_message_id_metadata_relationships_get(**params)
