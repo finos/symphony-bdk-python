@@ -40,7 +40,7 @@ class OboMessageService:
             self,
             stream_id: str,
             message: Union[str, Message],
-            data: str = "",
+            data=None,
             version: str = "",
             attachment: List[Union[IOBase, Tuple[IOBase, IOBase]]] = None
     ) -> V4Message:
@@ -51,7 +51,7 @@ class OboMessageService:
         :param message: a :py:class:`Message` instance or a string containing the MessageML content to be sent.
           If it is a :py:class:`Message` instance, other parameters will be ignored.
           If it is a string, ``<messageML>`` tags can be omitted.
-        :param data: JSON data representing the objects contained in the message.
+        :param data: an object (e.g. dict) that will be serialized into JSON using ``json.dumps``.
         :param version: Optional message version in the format "major.minor".
           If empty, defaults to the latest supported version.
         :param attachment: One or more files (opened in binary or text mode) to be sent along with the message.
@@ -181,7 +181,7 @@ class MessageService(OboMessageService):
             self,
             stream_ids: List[str],
             message: Union[str, Message],
-            data: str = "",
+            data=None,
             version: str = "",
             attachment: List[Union[IOBase, Tuple[IOBase, IOBase]]] = None
     ) -> V4MessageBlastResponse:
@@ -192,7 +192,7 @@ class MessageService(OboMessageService):
         :param message: a :py:class:`Message` instance or a string containing the MessageML content to be sent.
           If it is a :py:class:`Message` instance, other parameters will be ignored.
           If it is a string, ``<messageML>`` tags can be omitted.
-        :param data: JSON data representing the objects contained in the message.
+        :param data: an object (e.g. dict) that will be serialized into JSON using ``json.dumps``.
         :param version: Optional message version in the format "major.minor".
           If empty, defaults to the latest supported version.
         :param attachment: One or more files (opened in binary or text mode) to be sent along with the message.

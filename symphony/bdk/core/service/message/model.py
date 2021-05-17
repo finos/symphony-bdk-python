@@ -1,3 +1,4 @@
+import json
 from io import IOBase
 from typing import List, Tuple, Union
 
@@ -14,13 +15,13 @@ class Message:
     `Create Message <https://developers.symphony.com/restapi/reference#create-message-v4>`_.
     """
 
-    def __init__(self, content: str, data: str = "",
+    def __init__(self, content: str, data=None,
                  attachments: List[Union[IOBase, Tuple[IOBase, IOBase]]] = None, version: str = ""):
         """Builds a message.
 
         :param content: the MessageML content to be sent. This is mandatory
           If there is no <messageML> tags, they will be added to the content.
-        :param data: JSON string representing the objects contained in the message.
+        :param data: an object (e.g. dict) that will be serialized into JSON using ``json.dumps``
         :param attachments: list of attachments or list of (attachment, previews).
           These must be opened files either in binary or text mode.
           Previews are optional but if present, all attachments must have a preview.
@@ -30,7 +31,7 @@ class Message:
           or if number of previews different than the number of attachments (in case there is at least one preview).
         """
         self._content = self._get_content(content)
-        self._data = data
+        self._data = "" if data is None else json.dumps(data)
         self._version = version
         self._attachments, self._previews = self._get_attachments_and_previews(attachments)
 

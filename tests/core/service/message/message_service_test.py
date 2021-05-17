@@ -1,3 +1,4 @@
+import json
 from unittest.mock import MagicMock, AsyncMock
 
 import pytest
@@ -104,12 +105,27 @@ async def test_send_simple_message_without_mml_tags(message_service):
 
 
 @pytest.mark.asyncio
+async def test_send_message_with_data(message_service):
+    message_service._send_message = AsyncMock(
+        return_value=get_deserialized_object_from_resource(V4Message, "message_response/message.json"))
+    message = "<messageML>Hello</messageML>"
+    stream_id = "stream_id"
+    data = ['foo', {'bar': ('baz', 1.0, 2)}]
+    json_data = json.dumps(data)
+
+    await message_service.send_message(stream_id, message, data)
+
+    message_service._send_message.assert_called_once_with(stream_id, message, json_data, "", [], [])
+
+
+@pytest.mark.asyncio
 async def test_send_complex_message(message_service):
     message_service._send_message = AsyncMock(
         return_value=get_deserialized_object_from_resource(V4Message, "message_response/message.json"))
     stream_id = "stream_id"
     content = "<messageML>Hello</messageML>"
-    data = """{"some": "data"}"""
+    data = ['foo', {'bar': ('baz', 1.0, 2)}]
+    json_data = json.dumps(data)
     version = "2.0"
     attachment = "attachment"
     preview = "preview"
@@ -117,7 +133,7 @@ async def test_send_complex_message(message_service):
 
     await message_service.send_message(stream_id, message)
 
-    message_service._send_message.assert_called_once_with(stream_id, content, data, version, [attachment], [preview])
+    message_service._send_message.assert_called_once_with(stream_id, content, json_data, version, [attachment], [preview])
 
 
 @pytest.mark.asyncio
@@ -156,21 +172,39 @@ async def test_blast_simple_message_without_mml_tags(message_service):
 
 
 @pytest.mark.asyncio
+async def test_blast_message_with_data(message_service):
+    blast_message_response = get_deserialized_object_from_resource(V4MessageBlastResponse,
+                                                                   "message_response/blast_message.json")
+    message_service._blast_message = AsyncMock(return_value=blast_message_response)
+    stream_ids = ["sid1", "sid2"]
+    message = "<messageML>Hello</messageML>"
+    data = ['foo', {'bar': ('baz', 1.0, 2)}]
+    json_data = json.dumps(data)
+
+    await message_service.blast_message(stream_ids, message, data)
+
+    message_service._blast_message.assert_called_once_with(stream_ids, message, json_data, "", [], [])
+
+
+@pytest.mark.asyncio
 async def test_blast_complex_message(message_service):
     blast_message_response = get_deserialized_object_from_resource(V4MessageBlastResponse,
                                                                    "message_response/blast_message.json")
     message_service._blast_message = AsyncMock(return_value=blast_message_response)
     stream_ids = ["sid1", "sid2"]
     content = "<messageML>Hello</messageML>"
-    data = """{"some": "data"}"""
+    data = ['foo', {'bar': ('baz', 1.0, 2)}]
     version = "2.0"
     attachment = "attachment"
     preview = "preview"
+    json_data = json.dumps(data)
+
     message = Message(content=content, data=data, attachments=[(attachment, preview)], version=version)
 
     await message_service.blast_message(stream_ids, message)
 
-    message_service._blast_message.assert_called_once_with(stream_ids, content, data, version, [attachment], [preview])
+    message_service._blast_message.assert_called_once_with(stream_ids, content, json_data, version, [attachment],
+                                                           [preview])
 
 
 @pytest.mark.asyncio

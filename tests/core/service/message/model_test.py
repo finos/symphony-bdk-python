@@ -1,3 +1,5 @@
+import json
+
 import pytest
 
 from symphony.bdk.core.service.exception import MessageCreationError
@@ -28,6 +30,15 @@ def test_create_message_content_only():
 
     assert_message_properties_equal(Message(content=content),
                                     content, "", "", [], [])
+
+
+def test_create_message_with_data():
+    content = "<messageML>Hello world!</messageML>"
+    data = ['foo', {'bar': ('baz', 1.0, 2)}]
+    json_data = json.dumps(data)
+
+    assert_message_properties_equal(Message(content=content, data=data),
+                                    content, json_data, "", [], [])
 
 
 def test_create_message_content_data_version():
