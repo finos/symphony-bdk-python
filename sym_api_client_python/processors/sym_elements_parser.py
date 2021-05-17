@@ -69,8 +69,8 @@ class SymElementsParser:
         actionStream is where the formMessage is sent, this is a hidden stream
         so that the encryption context is between user and bot only and not everyone else on the room
         """
-        if elements_action_data['payload']['symphonyElementsAction']['actionStream'] != None and \
-                elements_action_data['payload']['symphonyElementsAction']['actionStream']['streamId'] != None:
+        if elements_action_data['payload']['symphonyElementsAction']['actionStream'] is not None and \
+                elements_action_data['payload']['symphonyElementsAction']['actionStream']['streamId'] is not None:
             return elements_action_data['payload']['symphonyElementsAction']['actionStream']['streamId']
 
     def get_form_message_id(self, elements_action_data):
