@@ -80,7 +80,6 @@ class SymBotRSAAuth(APIClient):
                 'exp': expiration_date
             }
             encoded = jwt.encode(payload, private_key, algorithm='RS512')
-            f.close()
             return encoded
 
     def session_authenticate(self):
