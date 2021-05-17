@@ -20,6 +20,11 @@ def fixture_config():
     return BdkConfigLoader.load_from_file(get_config_resource_filepath("config.yaml"))
 
 
+@pytest.fixture(name="invalid_config")
+def fixture_invalid_config():
+    return BdkConfigLoader.load_from_file(get_config_resource_filepath("config_without_username.yaml"))
+
+
 @pytest.fixture(name="obo_only_config")
 def fixture_obo_only_config():
     return BdkConfig(host="acme.symphony.com", app={"appId": "app", "privateKey": {"path": "/path/to/key.pem"}})
@@ -30,7 +35,6 @@ def fixture_mock_obo_session():
     obo_session = AsyncMock(OboAuthSession)
     obo_session.session_token.return_value = "session_token"
     obo_session.key_manager_token.return_value = ""
-
     return obo_session
 
 
@@ -48,6 +52,13 @@ async def test_bot_session(config):
             assert await auth_session.session_token == "session_token"
             assert await auth_session.key_manager_token == "km_token"
 
+
+@pytest.mark.asyncio
+async def test_bot_invalid_config_session(invalid_config):
+    with patch("symphony.bdk.core.auth.bot_authenticator.create_signed_jwt", return_value="privateKey"):
+        async with SymphonyBdk(invalid_config) as symphony_bdk:
+            assert symphony_bdk._bot_session is None
+            assert symphony_bdk._service_factory is None
 
 @pytest.mark.asyncio
 async def test_obo_with_user_id(config):

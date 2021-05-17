@@ -76,7 +76,7 @@ class SymphonyBdk:
         self._presence_service = None
         self._activity_registry = None
 
-        if self._config.bot.is_authentication_configured():
+        if self._config.bot.is_authentication_configured() and self._config.is_bot_configured():
             self._initialize_bot_services()
         else:
             logging.info("Bot (service account) credentials have not been configured."
