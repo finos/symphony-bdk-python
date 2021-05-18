@@ -20,6 +20,12 @@ The central component for the Message Service is the `MessageService` class.
 This class exposes the user-friendly service APIs which serve all the services mentioned above 
 and is accessible from the `SymphonyBdk` object by calling the `messages()` method:
 ```python
+import asyncio
+
+from symphony.bdk.core.config.loader import BdkConfigLoader
+from symphony.bdk.core.service.message.model import Message
+from symphony.bdk.core.symphony_bdk import SymphonyBdk
+
 class MessageMain:
 
     @staticmethod
@@ -34,8 +40,7 @@ class MessageMain:
                     open("/path/to/attachment2", "rb") as file2:
                 await message_service.send_message(
                     stream_id_1,
-                    "<messageML>Hello, World!</messageML>",
-                    attachment=[file1, file2]
+                    Message(content="<messageML>Hello, World!</messageML>", attachments=[file1, file2])
                 )
 
 
