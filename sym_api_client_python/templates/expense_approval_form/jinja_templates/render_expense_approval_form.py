@@ -1,4 +1,3 @@
-import jinja2
 from jinja2 import Template
 
 expense_data = {
@@ -27,20 +26,23 @@ expense_data = {
     }
 }
 
-def upload_expense(self, expense):
+
+def upload_expense(expenses):
     for name, date, price, in expenses:
         expense_data.ExpenseApprovalForm['report_total'] += price
-        expense_data.ExpenseApprovalForm['expenses'].append(dict(expense_name = name,
-                                                                 expense_date = date,
-                                                                 expense_price = price))
-def remove_item(self, expense_index):
+        expense_data.ExpenseApprovalForm['expenses'].append(dict(expense_name=name,
+                                                                 expense_date=date,
+                                                                 expense_price=price))
+
+
+def remove_item(expense_index):
     item_price = float(expense_data.ExpenseApprovalForm['expenses'][expense_index]['expense_price'])
     expense_data.ExpenseApprovalForm['report_total'] -= item_price
     del expense_data.ExpenseApprovalForm['expenses'][expense_index]
 
+
 def render_expense_approval_form(path_to_html_form):
     with open(path_to_html_form) as file:
-        template = Template(file.read(), trim_blocks=True, lstrip_blocks=True)
+        template = Template(file.read(), trim_blocks=True, lstrip_blocks=True, autoescape=True)
     html = template.render(expense_data)
     return html
-
