@@ -7,8 +7,8 @@ import json
 from enum import Enum
 from json import JSONDecodeError
 from typing import Dict
-from xml.etree import ElementTree as ET
-from xml.etree.ElementTree import ElementTree, fromstring, tostring
+
+from defusedxml.ElementTree import fromstring, tostring, ParseError
 
 from symphony.bdk.core.service.exception import MessageParserError
 from symphony.bdk.gen.agent_model.v4_message import V4Message
@@ -21,12 +21,11 @@ def get_text_content_from_message(message: V4Message) -> str:
     :return: the message text content extracted from the given PresentationML
     """
 
-    presentation_ml = message.message
     try:
-        tree = ElementTree(fromstring(presentation_ml))
-    except ET.ParseError as exc:
+        presentation_ml = message.message
+        return tostring(fromstring(presentation_ml), method="text").decode().strip()
+    except ParseError as exc:
         raise MessageParserError("Unable to parse the PresentationML, it is not in the correct format.") from exc
-    return tostring(tree.getroot(), method="text").decode().strip()
 
 
 def get_mentions(message: V4Message) -> [int]:
