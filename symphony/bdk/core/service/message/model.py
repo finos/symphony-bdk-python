@@ -1,6 +1,5 @@
 import json
-from io import IOBase
-from typing import List, Tuple, Union
+from typing import List, Tuple, Union, IO
 
 from symphony.bdk.core.service.exception import MessageCreationError
 
@@ -16,7 +15,7 @@ class Message:
     """
 
     def __init__(self, content: str, data=None,
-                 attachments: List[Union[IOBase, Tuple[IOBase, IOBase]]] = None, version: str = ""):
+                 attachments: List[Union[IO, Tuple[IO, IO]]] = None, version: str = ""):
         """Builds a message.
 
         :param content: the MessageML content to be sent. This is mandatory
@@ -60,7 +59,7 @@ class Message:
         return self._version
 
     @property
-    def attachments(self) -> List[IOBase]:
+    def attachments(self) -> List[IO]:
         """List of attachments
 
         :return: the list of attachments
@@ -68,7 +67,7 @@ class Message:
         return self._attachments
 
     @property
-    def previews(self) -> List[IOBase]:
+    def previews(self) -> List[IO]:
         """List of previews
 
         :return: the list of previews

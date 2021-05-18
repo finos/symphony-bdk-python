@@ -1,5 +1,4 @@
-from io import IOBase
-from typing import Union, List, Tuple
+from typing import Union, List, Tuple, IO
 
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
@@ -42,7 +41,7 @@ class OboMessageService:
             message: Union[str, Message],
             data=None,
             version: str = "",
-            attachment: List[Union[IOBase, Tuple[IOBase, IOBase]]] = None
+            attachment: List[Union[IO, Tuple[IO, IO]]] = None
     ) -> V4Message:
         """Send a message to an existing stream.
         See: `Create Message <https://developers.symphony.com/restapi/reference#create-message-v4>`_
@@ -73,8 +72,8 @@ class OboMessageService:
             message: str,
             data: str = "",
             version: str = "",
-            attachment: List[IOBase] = None,
-            preview: List[IOBase] = None
+            attachment: List[IO] = None,
+            preview: List[IO] = None
     ) -> V4Message:
         """Send a message to an existing stream.
         See: `Create Message <https://developers.symphony.com/restapi/reference#create-message-v4>`_
@@ -183,7 +182,7 @@ class MessageService(OboMessageService):
             message: Union[str, Message],
             data=None,
             version: str = "",
-            attachment: List[Union[IOBase, Tuple[IOBase, IOBase]]] = None
+            attachment: List[Union[IO, Tuple[IO, IO]]] = None
     ) -> V4MessageBlastResponse:
         """Send a message to multiple existing streams.
         See: `Blast Message <https://developers.symphony.com/restapi/reference#blast-message>`_
@@ -213,8 +212,8 @@ class MessageService(OboMessageService):
             message: str,
             data: str = "",
             version: str = "",
-            attachment: List[IOBase] = None,
-            preview: List[IOBase] = None
+            attachment: List[IO] = None,
+            preview: List[IO] = None
     ) -> V4MessageBlastResponse:
         """Send a message to multiple existing streams.
         See: `Blast Message <https://developers.symphony.com/restapi/reference#blast-message>`_
