@@ -25,7 +25,7 @@ def is_client_timeout_error(exception: Exception):
 def can_authentication_be_retried(exception: Exception) -> bool:
     """Checks if the exception is a network issue or internal or retry error
     i.e. is an :py:class:`ApiException` with status code 429 or greater or equal to 500.
-    or the exception is either a :py:cass:`TimeoutError`  (e.g. network issues)
+    or the exception is either a :py:class:`TimeoutError`  (e.g. network issues)
 
     :param exception: The exception to be checked
     :return: True if the exception is an :py:class:`ApiException` with status 500, 429 or or is a client timeout error
