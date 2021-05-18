@@ -35,3 +35,10 @@ class BdkConfig(BdkServerConfig):
         :return: true if bot service account is specified in the configuration.
         """
         return self.bot.username is not None
+
+    def is_app_configured(self) -> bool:
+        """
+
+        :return: true if app id is specified in the configuration.
+        """
+        return self.app.app_id is not None
