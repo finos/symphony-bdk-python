@@ -7,9 +7,8 @@ from symphony.bdk.core.auth.auth_session import AuthSession, OboAuthSession
 from symphony.bdk.core.auth.bot_authenticator import BotAuthenticatorRsa
 from symphony.bdk.core.auth.exception import AuthInitializationError
 from symphony.bdk.core.auth.obo_authenticator import OboAuthenticatorRsa
-from symphony.bdk.core.config.exception import BotNotConfiguredError
+from symphony.bdk.core.config.exception import BotNotConfiguredError, BdkConfigError
 from symphony.bdk.core.config.loader import BdkConfigLoader
-from symphony.bdk.core.config.model.bdk_authentication_config import BdkAuthenticationConfig
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
 from symphony.bdk.core.symphony_bdk import SymphonyBdk
 from tests.utils.resource_utils import get_config_resource_filepath
@@ -18,6 +17,16 @@ from tests.utils.resource_utils import get_config_resource_filepath
 @pytest.fixture(name="config")
 def fixture_config():
     return BdkConfigLoader.load_from_file(get_config_resource_filepath("config.yaml"))
+
+
+@pytest.fixture(name="invalid_username_config")
+def fixture_invalid_username_config():
+    return BdkConfig(host="acme.symphony.com", bot={"privateKey": {"path": "/path/to/key.pem"}})
+
+
+@pytest.fixture(name="invalid_app_id_config")
+def fixture_invalid_app_id_config():
+    return BdkConfig(host="acme.symphony.com", app={"privateKey": {"path": "/path/to/key.pem"}})
 
 
 @pytest.fixture(name="obo_only_config")
@@ -30,7 +39,6 @@ def fixture_mock_obo_session():
     obo_session = AsyncMock(OboAuthSession)
     obo_session.session_token.return_value = "session_token"
     obo_session.key_manager_token.return_value = ""
-
     return obo_session
 
 
@@ -47,6 +55,28 @@ async def test_bot_session(config):
             assert auth_session is not None
             assert await auth_session.session_token == "session_token"
             assert await auth_session.key_manager_token == "km_token"
+
+
+@pytest.mark.asyncio
+async def test_bot_invalid_config_session(invalid_username_config):
+    async with SymphonyBdk(invalid_username_config) as symphony_bdk:
+        with pytest.raises(BotNotConfiguredError):
+            symphony_bdk.bot_session()
+
+        with pytest.raises(BotNotConfiguredError):
+            symphony_bdk.messages()
+
+        with pytest.raises(BotNotConfiguredError):
+            symphony_bdk.streams()
+
+        with pytest.raises(BotNotConfiguredError):
+            symphony_bdk.datafeed()
+
+        with pytest.raises(BotNotConfiguredError):
+            symphony_bdk.users()
+
+        with pytest.raises(BotNotConfiguredError):
+            symphony_bdk.connections()
 
 
 @pytest.mark.asyncio
@@ -142,8 +172,15 @@ async def test_ext_app_authenticator(obo_only_config):
 
 
 @pytest.mark.asyncio
-async def test_ext_app_authenticator_fails(config):
-    config.app = BdkAuthenticationConfig()
-    async with SymphonyBdk(config) as symphony_bdk:
-        with pytest.raises(AuthInitializationError):
+async def test_invalid_app_config(invalid_app_id_config, mock_obo_session):
+    async with SymphonyBdk(invalid_app_id_config) as symphony_bdk:
+        with pytest.raises(BdkConfigError):
             symphony_bdk.app_authenticator()
+        with pytest.raises(BdkConfigError):
+            symphony_bdk.obo(username="username")
+        with pytest.raises(BdkConfigError):
+            symphony_bdk.obo(user_id=1234)
+        with pytest.raises(BdkConfigError):
+            symphony_bdk.obo_services(mock_obo_session)
+
+
