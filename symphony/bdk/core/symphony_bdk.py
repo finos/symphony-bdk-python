@@ -9,7 +9,7 @@ from symphony.bdk.core.auth.authenticator_factory import AuthenticatorFactory
 from symphony.bdk.core.auth.exception import AuthInitializationError
 from symphony.bdk.core.auth.ext_app_authenticator import ExtensionAppAuthenticator
 from symphony.bdk.core.client.api_client_factory import ApiClientFactory
-from symphony.bdk.core.config.exception import BotNotConfiguredError
+from symphony.bdk.core.config.exception import BotNotConfiguredError, BdkConfigError
 from symphony.bdk.core.service.application.application_service import ApplicationService
 from symphony.bdk.core.service.connection.connection_service import ConnectionService
 from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import AbstractDatafeedLoop
@@ -31,7 +31,7 @@ def bot_service(func):
 
     :param func: the decorated function.
     :return: the value returned by the decorated function with the passed arguments.
-    :raise: BotNotConfiguredError if the bit service account is not configured.
+    :raise: BotNotConfiguredError if the bot service account is not configured.
     """
 
     @functools.wraps(func)
@@ -39,9 +39,28 @@ def bot_service(func):
         symphony_bdk = args[0]
         if not symphony_bdk._config.bot.is_authentication_configured():
             raise BotNotConfiguredError("Error calling bot service ")
+        if not symphony_bdk._config.is_bot_configured():
+            raise BotNotConfiguredError("Bot username field is not configured correctly.")
         return func(*args)
 
     return check_if_bot_configured_and_call_function
+
+
+def app_service(func):
+    """Decorator to check if an app is configured before making the actual function call.
+
+    :param func: the decorated function.
+    :return: the value returned by the decorated function with the passed arguments.
+    :raise: BdkConfigError if the app is not configured.
+    """
+    @functools.wraps(func)
+    def check_if_app_configured_and_call_function(*args, **kwds):
+        symphony_bdk = args[0]
+        if not symphony_bdk._config.is_app_configured():
+            raise BdkConfigError("App appId field is not configured correctly.")
+        return func(*args, **kwds)
+
+    return check_if_app_configured_and_call_function
 
 
 class SymphonyBdk:
@@ -108,6 +127,7 @@ class SymphonyBdk:
         """
         return self._bot_session
 
+    @app_service
     def app_authenticator(self) -> ExtensionAppAuthenticator:
         """Get the extension app authenticator.
 
@@ -117,6 +137,7 @@ class SymphonyBdk:
             self._ext_app_authenticator = self._authenticator_factory.get_extension_app_authenticator()
         return self._ext_app_authenticator
 
+    @app_service
     def obo(self, user_id: int = None, username: str = None) -> OboAuthSession:
         """Get the Obo authentication session.
 
@@ -129,6 +150,7 @@ class SymphonyBdk:
         raise AuthInitializationError("At least user_id or username should be given to OBO authenticate the "
                                       "extension app")
 
+    @app_service
     def obo_services(self, obo_session: OboAuthSession) -> OboServices:
         """Return the entry point of all OBO-enabled services and endpoints.
 
