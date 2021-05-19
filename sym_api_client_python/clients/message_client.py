@@ -1,5 +1,6 @@
 import io
 import logging
+from contextlib import contextmanager
 from typing import Union
 
 from .api_client import APIClient
@@ -10,6 +11,19 @@ from .api_client import APIClient
 
 MESSAGE_STREAM_API = '/agent/v4/stream/{stream_id}/message'
 MESSAGE_CREATE = MESSAGE_STREAM_API + '/create'
+
+
+@contextmanager
+def open_file(file):
+    if isinstance(file, io.IOBase):
+        # already opened file
+        yield file
+    else:
+        try:
+            file_object = open(file, mode='rb')
+            yield file_object
+        finally:
+            file_object.close()
 
 
 class MessageClient(APIClient):
@@ -45,21 +59,14 @@ class MessageClient(APIClient):
         url = MESSAGE_CREATE.format(stream_id=stream_id)
         return await self.bot_client.execute_rest_call_async('POST', url, files=outbound_msg)
 
-    def _data_and_headers_for_attachment(self, stream_id, msg, filename, attachment, aio=False):
+    def _data_and_headers_for_attachment(self, stream_id, msg, filename, attachment_file, aio=False):
         """Build an attachment out of either a path or a stream"""
         url = MESSAGE_CREATE.format(stream_id=stream_id)
-
-        try:
-            attachment_file_object = open(attachment, 'rb')
-        except TypeError:
-            # If it doesn't support open treat it as a stream already
-            attachment_file_object = attachment
 
         # The below states that Content-Type for attachments should be 'file' which is almost
         # certainly wrong - it's not a valid MIME-type. text/plain seems right
         fields = {'message': msg,
-                  'attachment': (
-                      filename, attachment_file_object, "file")}
+                  'attachment': (filename, attachment_file, "file")}
 
         parts = self.make_mulitpart_form(fields, aio=aio)
 
@@ -76,8 +83,9 @@ class MessageClient(APIClient):
             A path to a file or a stream of bytes.
         """
         logging.debug('MessageClient/send_msg_with_attachment()')
-        parts = self._data_and_headers_for_attachment(stream_id, msg, filename, attachment)
-        return self.bot_client.execute_rest_call("POST", **parts)
+        with open_file(attachment) as attachment_file:
+            parts = self._data_and_headers_for_attachment(stream_id, msg, filename, attachment_file)
+            return self.bot_client.execute_rest_call("POST", **parts)
 
     async def send_msg_with_attachment_async(self, stream_id, msg,
                                              filename, attachment: Union[str, io.BytesIO]):
@@ -86,9 +94,9 @@ class MessageClient(APIClient):
             A path to a file or a stream of bytes.
         """
         logging.debug('MessageClient/send_msg_with_attachment()')
-
-        parts = self._data_and_headers_for_attachment(stream_id, msg, filename, attachment, aio=True)
-        return await self.bot_client.execute_rest_call_async('POST', **parts)
+        with open_file(attachment) as attachment_file:
+            parts = self._data_and_headers_for_attachment(stream_id, msg, filename, attachment_file, aio=True)
+            return await self.bot_client.execute_rest_call_async('POST', **parts)
 
     def get_msg_attachment(self, stream_id, msg_id, file_id):
         logging.debug('MessageClient/get_msg_attachment()')
