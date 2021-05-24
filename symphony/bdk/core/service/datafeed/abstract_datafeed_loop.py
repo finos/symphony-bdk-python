@@ -3,6 +3,7 @@
 import asyncio
 import logging
 from abc import ABC, abstractmethod
+from asyncio import Task
 from contextvars import ContextVar
 from enum import Enum
 from typing import List
@@ -84,7 +85,7 @@ class AbstractDatafeedLoop(ABC):
         """
         logger.debug("Starting datafeed loop")
 
-        await self.prepare_datafeed()
+        await self._prepare_datafeed()
         try:
             await self._run_loop()
         finally:
@@ -104,28 +105,6 @@ class AbstractDatafeedLoop(ABC):
         self._timeout = timeout
         self._running = False
 
-    @abstractmethod
-    async def prepare_datafeed(self):
-        """Method called when :py:meth:`start` is called and before datafeed loop is actually running
-
-        :return: None
-        """
-
-    @abstractmethod
-    async def read_datafeed(self) -> List[V4Event]:
-        """Method called inside :py:meth:`start` while datafeed loop is actually running
-
-        :return: the list of V4Event elements received
-        """
-
-    @abstractmethod
-    async def recreate_datafeed(self):
-        """Method called when datafeed is stale and needs to be recreated (i.e. :py:meth:`read_datafeed` raises an
-        ApiException with status 400)
-
-        :return: None
-        """
-
     def subscribe(self, listener: RealTimeEventListener):
         """Subscribes a new listener to the datafeed loop instance.
 
@@ -140,14 +119,34 @@ class AbstractDatafeedLoop(ABC):
         """
         self._listeners.remove(listener)
 
+    @abstractmethod
+    async def recreate_datafeed(self):
+        """Method called when datafeed is stale and needs to be recreated (i.e. :py:meth:`read_datafeed` raises an
+        ApiException with status 400)
+
+        :return: None
+        """
+
+    @abstractmethod
+    async def _prepare_datafeed(self):
+        """Method called when :py:meth:`start` is called and before datafeed loop is actually running
+
+        :return: None
+        """
+
     async def _run_loop(self):
         self._running = True
         while self._running:
             await self._run_loop_iteration()
 
+    @abstractmethod
     async def _run_loop_iteration(self):
-        event_list = await self.read_datafeed()
-        await self.handle_v4_event_list(event_list)
+        """Method called while the datafeed loop is running (.i.e stop() is called).
+        This should include the logic to read events from the datafeed and dispatch them to the listeners.
+
+        :return: None
+        """
+        pass
 
     async def _stop_listener_tasks(self):
         if self._hard_kill:
@@ -168,19 +167,24 @@ class AbstractDatafeedLoop(ABC):
         except asyncio.TimeoutError:
             logger.debug("Task completion timed out")
 
-    async def handle_v4_event_list(self, events: List[V4Event]):
-        """Handles the event list received from the read datafeed endpoint.
-        Calls each listeners for each received events.
+    async def _run_listener_tasks(self, events: List[V4Event]) -> List[Task]:
+        tasks = await self._create_listener_tasks(events)
+        if tasks:
+            done, _ = await asyncio.wait(tasks)
+            return done
+        return []
 
-        :param events: the list of the received datafeed events.
-        """
-        if not events:
-            return
+    async def _create_listener_tasks(self, events: List[V4Event]) -> List[Task]:
+        tasks = []
+        sanitized_events = filter(lambda e: e is not None, events) if events else []
 
-        for event in filter(lambda e: e is not None, events):
+        for event in sanitized_events:
             for listener in self._listeners:
                 if await listener.is_accepting_event(event, self._bdk_config.bot.username):
-                    asyncio.create_task(self._dispatch_to_listener_method(listener, event))
+                    task = asyncio.create_task(self._dispatch_to_listener_method(listener, event))
+                    tasks.append(task)
+
+        return tasks
 
     async def _dispatch_to_listener_method(self, listener: RealTimeEventListener, event: V4Event):
         current_task = asyncio.current_task()

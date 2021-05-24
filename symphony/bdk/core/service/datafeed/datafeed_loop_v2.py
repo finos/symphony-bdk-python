@@ -1,13 +1,25 @@
+import logging
+import time
 from typing import Optional
 
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
-from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import AbstractDatafeedLoop
 from symphony.bdk.core.retry import retry
 from symphony.bdk.core.retry.strategy import read_datafeed_retry
+from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import AbstractDatafeedLoop
+from symphony.bdk.core.service.datafeed.exception import EventError
 from symphony.bdk.gen.agent_api.datafeed_api import DatafeedApi
 from symphony.bdk.gen.agent_model.ack_id import AckId
 from symphony.bdk.gen.agent_model.v5_datafeed import V5Datafeed
+from symphony.bdk.gen.agent_model.v5_datafeed_create_body import V5DatafeedCreateBody
+
+# Based on the DFv2 default visibility timeout, after which an event is re-queued
+EVENT_PROCESSING_MAX_DURATION_SECONDS = 30
+
+# DFv2 API authorizes a maximum length for the tag parameter
+DATAFEED_TAG_MAX_LENGTH = 100
+
+logger = logging.getLogger(__name__)
 
 
 class DatafeedLoopV2(AbstractDatafeedLoop):
@@ -33,25 +45,60 @@ class DatafeedLoopV2(AbstractDatafeedLoop):
         super().__init__(datafeed_api, auth_session, config)
         self._ack_id = ""
         self._datafeed_id = None
+        self._tag = config.bot.username[0:DATAFEED_TAG_MAX_LENGTH]
 
-    async def prepare_datafeed(self):
+    async def _prepare_datafeed(self):
         datafeed = await self._retrieve_datafeed()
         if not datafeed:
             datafeed = await self._create_datafeed()
         self._datafeed_id = datafeed.id
 
+    async def _run_loop_iteration(self):
+        event_list = await self._read_datafeed()
+
+        is_run_successful = await self._run_all_listener_tasks(event_list.events)
+        if is_run_successful:
+            # updates ack id so that on next call DFv2 knows that events have been processed
+            # if not updated, events will be requeued after some time, typically 30s
+            self._ack_id = event_list.ack_id
+
+    async def _run_all_listener_tasks(self, events):
+        start = time.time()
+        done = await self._run_listener_tasks(events)
+        elapsed = time.time() - start
+
+        if elapsed > EVENT_PROCESSING_MAX_DURATION_SECONDS:
+            logging.warning("Events processing took longer than %s seconds, "
+                            "this might lead to events being re-queued in datafeed and re-dispatched. "
+                            "You might want to consider processing the event in a separated asyncio task if needed.",
+                            EVENT_PROCESSING_MAX_DURATION_SECONDS)
+
+        return await self._are_tasks_successful(done)
+
+    async def _are_tasks_successful(self, done):
+        success = True
+        for future in done:
+            exception = future.exception()
+            if exception:
+                if isinstance(exception, EventError):
+                    logger.warning("Failed to process events inside %s, "
+                                   "will not update ack id, events will be re-queued",
+                                   future.get_name(),
+                                   exc_info=exception)
+                    success = False
+                else:
+                    logging.debug("Exception occurred inside %s", future.get_name(), exc_info=exception)
+        return success
+
     @retry(retry=read_datafeed_retry)
-    async def read_datafeed(self):
+    async def _read_datafeed(self):
         params = {
             "session_token": await self._auth_session.session_token,
             "key_manager_token": await self._auth_session.key_manager_token,
             "datafeed_id": self._datafeed_id,
             "ack_id": AckId(ack_id=self._ack_id)
         }
-        event_list = await self._datafeed_api.read_datafeed(**params)
-        self._ack_id = event_list.ack_id
-        if event_list.events:
-            return event_list.events
+        return await self._datafeed_api.read_datafeed(**params)
 
     async def recreate_datafeed(self):
         await self._delete_datafeed()
@@ -65,7 +112,8 @@ class DatafeedLoopV2(AbstractDatafeedLoop):
         session_token = await self._auth_session.session_token
         key_manager_token = await self._auth_session.key_manager_token
         datafeeds = await self._datafeed_api.list_datafeed(session_token=session_token,
-                                                           key_manager_token=key_manager_token)
+                                                           key_manager_token=key_manager_token,
+                                                           tag=self._tag)
         if datafeeds:
             return datafeeds[0]
         return None
@@ -75,7 +123,9 @@ class DatafeedLoopV2(AbstractDatafeedLoop):
         session_token = await self._auth_session.session_token
         key_manager_token = await self._auth_session.key_manager_token
 
-        return await self._datafeed_api.create_datafeed(session_token=session_token, key_manager_token=key_manager_token)
+        return await self._datafeed_api.create_datafeed(session_token=session_token,
+                                                        key_manager_token=key_manager_token,
+                                                        body=V5DatafeedCreateBody(tag=self._tag))
 
     @retry
     async def _delete_datafeed(self) -> None:
