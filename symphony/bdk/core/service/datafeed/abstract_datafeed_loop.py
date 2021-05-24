@@ -10,7 +10,6 @@ from typing import List
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
 from symphony.bdk.core.service.datafeed.real_time_event_listener import RealTimeEventListener
-from symphony.bdk.gen import ApiException
 from symphony.bdk.gen.agent_api.datafeed_api import DatafeedApi
 from symphony.bdk.gen.agent_model.v4_event import V4Event
 
@@ -67,15 +66,16 @@ class AbstractDatafeedLoop(ABC):
         :type auth_session: the AuthSession instance used to get session and key manager tokens
         :param config: the bot configuration
         """
-        self.datafeed_api = datafeed_api
-        self.listeners = []
-        self.auth_session = auth_session
-        self.bdk_config = config
-        self.api_client = datafeed_api.api_client
-        self.running = False
-        self.hard_kill = False
-        self.timeout = None
-        self.tasks = []
+        self._datafeed_api = datafeed_api
+        self._listeners = []
+        self._auth_session = auth_session
+        self._bdk_config = config
+        self._api_client = datafeed_api.api_client
+        self._running = False
+        self._hard_kill = False
+        self._timeout = None
+        self._tasks = []
+        self._retry_config = config.datafeed.retry
 
     async def start(self):
         """Start the datafeed event service
@@ -100,9 +100,9 @@ class AbstractDatafeedLoop(ABC):
           None means wait until completion. Ignored if hard_kill set to True.
         :return: None
         """
-        self.hard_kill = hard_kill
-        self.timeout = timeout
-        self.running = False
+        self._hard_kill = hard_kill
+        self._timeout = timeout
+        self._running = False
 
     @abstractmethod
     async def prepare_datafeed(self):
@@ -131,46 +131,40 @@ class AbstractDatafeedLoop(ABC):
 
         :param listener: the RealTimeEventListener to be added.
         """
-        self.listeners.append(listener)
+        self._listeners.append(listener)
 
     def unsubscribe(self, listener: RealTimeEventListener):
         """Removes a given listener from the datafeed loop instance.
 
         :param listener: the RealTimeEventListener to be removed.
         """
-        self.listeners.remove(listener)
+        self._listeners.remove(listener)
 
     async def _run_loop(self):
-        self.running = True
-        while self.running:
+        self._running = True
+        while self._running:
             await self._run_loop_iteration()
 
     async def _run_loop_iteration(self):
-        try:
-            event_list = await self.read_datafeed()
-            await self.handle_v4_event_list(event_list)
-        except ApiException as exc:
-            if exc.status == 400:
-                await self.recreate_datafeed()
-            else:
-                raise exc
+        event_list = await self.read_datafeed()
+        await self.handle_v4_event_list(event_list)
 
     async def _stop_listener_tasks(self):
-        if self.hard_kill:
+        if self._hard_kill:
             await self._cancel_tasks()
         else:
             await self._wait_for_completion_or_timeout()
 
     async def _cancel_tasks(self):
-        logger.debug("Cancelling %s listener tasks", len(self.tasks))
-        for task in self.tasks:
+        logger.debug("Cancelling %s listener tasks", len(self._tasks))
+        for task in self._tasks:
             task.cancel()
-        await asyncio.gather(*self.tasks, return_exceptions=True)
+        await asyncio.gather(*self._tasks, return_exceptions=True)
 
     async def _wait_for_completion_or_timeout(self):
-        logger.debug("Waiting for %s listener tasks to finish", len(self.tasks))
+        logger.debug("Waiting for %s listener tasks to finish", len(self._tasks))
         try:
-            await asyncio.wait_for(asyncio.gather(*self.tasks), timeout=self.timeout)
+            await asyncio.wait_for(asyncio.gather(*self._tasks), timeout=self._timeout)
         except asyncio.TimeoutError:
             logger.debug("Task completion timed out")
 
@@ -184,19 +178,19 @@ class AbstractDatafeedLoop(ABC):
             return
 
         for event in filter(lambda e: e is not None, events):
-            for listener in self.listeners:
-                if await listener.is_accepting_event(event, self.bdk_config.bot.username):
+            for listener in self._listeners:
+                if await listener.is_accepting_event(event, self._bdk_config.bot.username):
                     asyncio.create_task(self._dispatch_to_listener_method(listener, event))
 
     async def _dispatch_to_listener_method(self, listener: RealTimeEventListener, event: V4Event):
         current_task = asyncio.current_task()
         self._set_context_var(current_task, event, listener)
 
-        self.tasks.append(current_task)
+        self._tasks.append(current_task)
         try:
             await self._run_listener_method(listener, event)
         finally:
-            self.tasks.remove(current_task)
+            self._tasks.remove(current_task)
 
     def _set_context_var(self, current_task, event, listener):
         event_id = getattr(event, "id", "None")

@@ -1,6 +1,6 @@
 # Datafeed
 
-The datafeed service is a service used for handling the [_Real Time Events_](https://developers.symphony.com/restapi/docs/real-time-events). 
+The datafeed service is a service used for handling the [_Real Time Events_](https://docs.developers.symphony.com/building-bots-on-symphony/datafeed/real-time-events).
 
 When a user makes an interaction within the IM, MIM or Room chat like sending a message, joining or leaving a room chat,
 when a connection request is sent, when a wall post is published or when a user replies to a Symphony element, an event
@@ -80,4 +80,37 @@ logging.config.dictConfig({
         }
     }
 })
+```
+
+## Datafeed Configuration
+
+The Datafeed Service can be configured by the datafeed field in the configuration file:
+
+```yaml
+datafeed:
+  version: 'v2' # specify datafeed version 'v1' or 'v2'
+  retry:
+    maxAttempts: 6 # maximum number of retry attempts
+    initialIntervalMillis: 2000 # initial interval between two attempts
+    multiplier: 1.5 # interval multiplier after each attempt
+    maxIntervalMillis: 10000 # limit of the interval between two attempts
+```
+
+For now, not all the customers have the datafeed version 2 available on their systems, that's why bot developers are able to
+choose the datafeed version that they wish to use on their bot. If you want to use datafeed version 2 in your bot,  you need to set
+the `version` parameter as `v2` as shown above.
+Otherwise, the datafeed version 1 will be used by default.
+
+Bot developers can also configure a dedicated retry configuration which will be used only by the datafeed service as shown above.
+
+### Default retry configuration
+By default, the Datafeed retry is configured to have an infinite number of attempts.
+If no configuration is provided for Datafeed, it is equivalent to use: 
+```yaml
+datafeed:
+  retry:
+    maxAttempts: -1 # infinite number of attemps
+    initialIntervalMillis: 500
+    multiplier: 2
+    maxIntervalMillis: 300000
 ```

@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "sym_api_client_python"
-version = "2.0b2"
+version = "2.0b3"
 description = "Symphony Bot Development Kit for Python"
 readme = "README.md"
 authors = ["Symphony Platform Solutions <platformsolutions@symphony.com>"]
@@ -17,6 +17,8 @@ aiohttp = "^3.7.3"
 pyyaml = "^5.3.1"
 PyJWT= "^2.0.1"
 cryptography = "^3.4.6"
+tenacity = "^7.0.0"
+defusedxml = "^0.7.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2"

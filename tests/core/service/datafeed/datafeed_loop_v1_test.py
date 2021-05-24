@@ -18,6 +18,7 @@ from symphony.bdk.gen.agent_model.v4_payload import V4Payload
 from symphony.bdk.gen.agent_model.v4_user import V4User
 from symphony.bdk.gen.api_client import ApiClient
 from symphony.bdk.gen.exceptions import ApiException
+from tests.core.config import minimal_retry_config_with_attempts
 from tests.core.test.in_memory_datafeed_id_repository import InMemoryDatafeedIdRepository
 from tests.utils.resource_utils import get_config_resource_filepath
 from tests.utils.resource_utils import get_resource_content
@@ -88,7 +89,9 @@ def fixture_read_df_side_effect(message_sent_event):
 
 @pytest.fixture(name="datafeed_loop_v1")
 def fixture_datafeed_loop_v1(datafeed_api, auth_session, config, datafeed_repository):
-    return auto_stopping_datafeed_loop_v1(datafeed_api, auth_session, config, datafeed_repository)
+    df_loop = auto_stopping_datafeed_loop_v1(datafeed_api, auth_session, config, datafeed_repository)
+    df_loop._retry_config = minimal_retry_config_with_attempts(1)
+    return df_loop
 
 
 def auto_stopping_datafeed_loop_v1(datafeed_api, auth_session, config, repository=None):
@@ -174,7 +177,7 @@ async def test_start_recreate_datafeed_error(datafeed_repository, datafeed_api, 
     datafeed_loop = auto_stopping_datafeed_loop_v1(datafeed_api, auth_session, config, datafeed_repository)
 
     datafeed_api.v4_datafeed_id_read_get.side_effect = ApiException(400, "Expired Datafeed id")
-    datafeed_api.v4_datafeed_create_post.side_effect = ApiException(500, "Unhandled exception")
+    datafeed_api.v4_datafeed_create_post.side_effect = ApiException(400, "Unhandled exception")
 
     with pytest.raises(ApiException):
         await datafeed_loop.start()

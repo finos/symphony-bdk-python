@@ -44,12 +44,14 @@ class AuthenticatorFactory:
             return BotAuthenticatorRsa(
                 bot_config=self._config.bot,
                 login_api_client=self._api_client_factory.get_login_client(),
-                relay_api_client=self._api_client_factory.get_relay_client()
+                relay_api_client=self._api_client_factory.get_relay_client(),
+                retry_config=self._config.retry
             )
         elif self._config.bot.is_certificate_configuration_valid():
             return BotAuthenticatorCert(
                 session_auth_client=self._api_client_factory.get_session_auth_client(),
-                key_auth_client=self._api_client_factory.get_key_auth_client()
+                key_auth_client=self._api_client_factory.get_key_auth_client(),
+                retry_config=self._config.retry
             )
         raise AuthInitializationError("RSA or certificate authentication should be configured. "
                                       "Only one field among private key path or content should be configured "
@@ -65,11 +67,14 @@ class AuthenticatorFactory:
         if app_config.is_rsa_configuration_valid():
             return OboAuthenticatorRsa(
                 app_config=app_config,
-                authentication_api=AuthenticationApi(self._api_client_factory.get_login_client())
+                authentication_api=AuthenticationApi(self._api_client_factory.get_login_client()),
+                retry_config=self._config.retry
             )
         elif app_config.is_certificate_configuration_valid():
             authentication_api = CertificateAuthenticationApi(self._api_client_factory.get_app_session_auth_client())
-            return OboAuthenticatorCert(certificate_authenticator_api=authentication_api)
+            return OboAuthenticatorCert(
+                certificate_authenticator_api=authentication_api,
+                retry_config=self._config.retry)
         raise AuthInitializationError("Application under 'app' field should be configured with a private key or "
                                       "a certificate in order to use OBO authentication.")
 
@@ -84,13 +89,15 @@ class AuthenticatorFactory:
                 AuthenticationApi(self._api_client_factory.get_login_client()),
                 PodApi(self._api_client_factory.get_pod_client()),
                 app_config.app_id,
-                app_config.private_key
+                app_config.private_key,
+                self._config.retry
             )
         elif app_config.is_certificate_configuration_valid():
             return ExtensionAppAuthenticatorCert(
                 CertificateAuthenticationApi(self._api_client_factory.get_app_session_auth_client()),
                 CertificatePodApi(self._api_client_factory.get_app_session_auth_client()),
-                app_config.app_id
+                app_config.app_id,
+                self._config.retry
             )
         raise AuthInitializationError("Application under 'app' field should be configured with a private key path or "
                                       "content in order to authenticate extension app.")
