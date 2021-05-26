@@ -53,6 +53,11 @@ class RealTimeEvent(Enum):
     MESSAGESUPPRESSED = ("on_message_suppressed", "message_suppressed")
 
 
+def _set_context_var(current_task, event, listener):
+    event_id = getattr(event, "id", "None")
+    event_listener_context.set(f"{current_task.get_name()}/{event_id}/{id(listener)}")
+
+
 class AbstractDatafeedLoop(ABC):
     """Base class for implementing the datafeed services.
 
@@ -146,7 +151,6 @@ class AbstractDatafeedLoop(ABC):
 
         :return: None
         """
-        pass
 
     async def _stop_listener_tasks(self):
         if self._hard_kill:
@@ -188,7 +192,7 @@ class AbstractDatafeedLoop(ABC):
 
     async def _dispatch_to_listener_method(self, listener: RealTimeEventListener, event: V4Event):
         current_task = asyncio.current_task()
-        self._set_context_var(current_task, event, listener)
+        _set_context_var(current_task, event, listener)
 
         self._tasks.append(current_task)
         try:
@@ -196,11 +200,8 @@ class AbstractDatafeedLoop(ABC):
         finally:
             self._tasks.remove(current_task)
 
-    def _set_context_var(self, current_task, event, listener):
-        event_id = getattr(event, "id", "None")
-        event_listener_context.set(f"{current_task.get_name()}/{event_id}/{id(listener)}")
-
-    async def _run_listener_method(self, listener: RealTimeEventListener, event: V4Event):
+    @staticmethod
+    async def _run_listener_method(listener: RealTimeEventListener, event: V4Event):
         try:
             listener_method_name, payload_field_name = RealTimeEvent[event.type].value
         except KeyError:

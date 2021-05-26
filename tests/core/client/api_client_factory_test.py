@@ -266,7 +266,7 @@ async def test_x_trace_id_not_in_default_headers(config, add_x_trace_id):
     with patch("symphony.bdk.core.client.api_client_factory.add_x_trace_id", return_value=add_x_trace_id) as mock:
         client_factory = ApiClientFactory(config)
 
-        assert mock.call_count == 5
+        assert mock.call_count == 7
         assert_default_headers(client_factory.get_pod_client().default_headers, {})
         assert_default_headers(client_factory.get_login_client().default_headers, {})
         assert_default_headers(client_factory.get_agent_client().default_headers, {})
@@ -277,7 +277,7 @@ async def test_x_trace_id_not_in_default_headers(config, add_x_trace_id):
 
 
 @pytest.mark.asyncio
-async def test_x_trace_id_not_in_default_headers(config, add_x_trace_id):
+async def test_x_trace_id_in_default_headers(config, add_x_trace_id):
     default_headers = {"x-trace-id": "trace-id"}
 
     config.default_headers = default_headers

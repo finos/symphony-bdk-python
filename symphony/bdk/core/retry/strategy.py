@@ -41,8 +41,8 @@ def _is_minor_error(exception: ApiException):
 
 
 def is_network_or_minor_error(exception: Exception) -> bool:
-    """Checks if the exception is a network issue or an :py:class:`ApiException` minor error (internal + unauthorized + retry)
-    This is the default function used to check if a given exception should lead to a retry
+    """Checks if the exception is a network issue or an :py:class:`ApiException` minor error (internal +
+    unauthorized + retry). This is the default function used to check if a given exception should lead to a retry.
 
     :param exception: The exception to be checked
     :return: True if the exception is an :py:class:`ApiException` with status 500, 401, 429 or is a client timeout error

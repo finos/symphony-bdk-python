@@ -35,7 +35,7 @@ def test_create_message_content_only():
 def test_create_message_content_data_version():
     content = "<messageML>Hello world!</messageML>"
     version = "2.0"
-    data = ['foo', {'bar': ('baz', 1.0, 2)}]
+    data = ["foo", {"bar": ("baz", 1.0, 2)}]
     json_data = json.dumps(data)
 
     assert_message_properties_equal(Message(content=content, version=version, data=data),

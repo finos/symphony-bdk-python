@@ -276,7 +276,7 @@ async def test_no_listener_task(mock_datafeed_loop_v1):
 async def test_listener_called(mock_datafeed_loop_v1, message_sent, initiator):
     class RealTimeEventListenerImpl(RealTimeEventListener):
 
-        async def on_message_sent(self, initiator_obj: V4Initiator, event: V4MessageSent):
+        async def on_message_sent(self, initiator: V4Initiator, event: V4MessageSent):
             await mock_datafeed_loop_v1.stop()
 
     listener = AsyncMock(wraps=RealTimeEventListenerImpl())
@@ -292,7 +292,7 @@ async def test_exception_in_listener_ignored(mock_datafeed_loop_v1, message_sent
     class RealTimeEventListenerImpl(RealTimeEventListener):
         count = 0
 
-        async def on_message_sent(self, initiator_obj: V4Initiator, event: V4MessageSent):
+        async def on_message_sent(self, initiator: V4Initiator, event: V4MessageSent):
             self.count += 1
             if self.count == 1:
                 raise ValueError()
@@ -312,7 +312,7 @@ async def test_event_error_in_listener_ignored(mock_datafeed_loop_v1, message_se
     class RealTimeEventListenerImpl(RealTimeEventListener):
         count = 0
 
-        async def on_message_sent(self, initiator_obj: V4Initiator, event: V4MessageSent):
+        async def on_message_sent(self, initiator: V4Initiator, event: V4MessageSent):
             self.count += 1
             if self.count == 1:
                 raise EventError()

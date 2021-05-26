@@ -3,7 +3,6 @@ from unittest.mock import MagicMock, AsyncMock
 import pytest
 
 from symphony.bdk.core.auth.auth_session import AuthSession
-from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.core.service.signal.signal_service import SignalService
 from symphony.bdk.gen.agent_api.signals_api import SignalsApi
 from symphony.bdk.gen.agent_model.base_signal import BaseSignal
@@ -11,8 +10,9 @@ from symphony.bdk.gen.agent_model.channel_subscriber_response import ChannelSubs
 from symphony.bdk.gen.agent_model.channel_subscription_response import ChannelSubscriptionResponse
 from symphony.bdk.gen.agent_model.signal import Signal
 from symphony.bdk.gen.agent_model.signal_list import SignalList
-from tests.utils.resource_utils import get_deserialized_object_from_resource
 from tests.core.config import minimal_retry_config
+from tests.utils.resource_utils import get_deserialized_object_from_resource
+
 
 @pytest.fixture(name="auth_session")
 def fixture_auth_session():

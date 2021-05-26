@@ -2,7 +2,6 @@
 """
 from abc import ABC, abstractmethod
 
-from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.auth.jwt_helper import create_signed_jwt
 from symphony.bdk.core.config.model.bdk_bot_config import BdkBotConfig
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
@@ -69,9 +68,6 @@ class BotAuthenticatorRsa(BotAuthenticator):
 class BotAuthenticatorCert(BotAuthenticator):
     """Bot authenticator certificate implementation.
     """
-
-    def __init__(self, session_auth_client: ApiClient, key_auth_client: ApiClient, retry_config: BdkRetryConfig):
-        super().__init__(session_auth_client, key_auth_client, retry_config)
 
     @retry(retry=authentication_retry)
     async def _authenticate_and_get_token(self, api_client: ApiClient) -> str:

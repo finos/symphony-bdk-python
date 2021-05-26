@@ -9,7 +9,6 @@ from symphony.bdk.gen.agent_model.v4_symphony_elements_action import V4SymphonyE
 def fixture_activity():
     class TestFormReplyActivity(FormReplyActivity):
         """Dummy test form reply activity"""
-        pass
 
     return TestFormReplyActivity()
 

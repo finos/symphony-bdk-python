@@ -1,10 +1,10 @@
 import sys
-import pytest
 from datetime import timedelta
+
+import pytest
 
 from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
-
 from tests.utils.resource_utils import get_config_resource_filepath
 from tests.utils.resource_utils import get_resource_filepath
 
