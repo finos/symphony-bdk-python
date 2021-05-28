@@ -51,9 +51,9 @@ class DatafeedLoopV1(AbstractDatafeedLoop):
         self._datafeed_id = datafeed_id
 
     async def _run_loop_iteration(self):
-        event_list = await self._read_datafeed()
-        done = await self._run_listener_tasks(event_list)
-        for future in done:
+        events = await self._read_datafeed()
+        done_tasks = await self._run_listener_tasks(events)
+        for future in done_tasks:
             await self._log_listener_exception(future)
 
     @retry(retry=read_datafeed_retry)
@@ -65,12 +65,12 @@ class DatafeedLoopV1(AbstractDatafeedLoop):
                                                                   key_manager_token=key_manager_token)
         return events.value if events is not None and events.value else []
 
-    async def _log_listener_exception(self, future):
-        exception = future.exception()
+    async def _log_listener_exception(self, task):
+        exception = task.exception()
         if exception:
             if isinstance(exception, EventError):
                 logger.warning("EventError occurred inside %s. "
                                "EventError is not supported for DFv1, events will not get re-queued",
-                               future.get_name(), exc_info=exception)
+                               task.get_name(), exc_info=exception)
             else:
-                logging.debug("Exception occurred inside %s", future.get_name(), exc_info=exception)
+                logging.debug("Exception occurred inside %s", task.get_name(), exc_info=exception)

@@ -54,17 +54,17 @@ class DatafeedLoopV2(AbstractDatafeedLoop):
         self._datafeed_id = datafeed.id
 
     async def _run_loop_iteration(self):
-        event_list = await self._read_datafeed()
+        events = await self._read_datafeed()
 
-        is_run_successful = await self._run_all_listener_tasks(event_list.events)
+        is_run_successful = await self._run_all_listener_tasks(events.events)
         if is_run_successful:
             # updates ack id so that on next call DFv2 knows that events have been processed
             # if not updated, events will be requeued after some time, typically 30s
-            self._ack_id = event_list.ack_id
+            self._ack_id = events.ack_id
 
     async def _run_all_listener_tasks(self, events):
         start = time.time()
-        done = await self._run_listener_tasks(events)
+        done_tasks = await self._run_listener_tasks(events)
         elapsed = time.time() - start
 
         if elapsed > EVENT_PROCESSING_MAX_DURATION_SECONDS:
@@ -73,21 +73,21 @@ class DatafeedLoopV2(AbstractDatafeedLoop):
                             "You might want to consider processing the event in a separated asyncio task if needed.",
                             EVENT_PROCESSING_MAX_DURATION_SECONDS)
 
-        return await self._are_tasks_successful(done)
+        return await self._are_tasks_successful(done_tasks)
 
-    async def _are_tasks_successful(self, done):
+    async def _are_tasks_successful(self, tasks):
         success = True
-        for future in done:
-            exception = future.exception()
+        for task in tasks:
+            exception = task.exception()
             if exception:
                 if isinstance(exception, EventError):
                     logger.warning("Failed to process events inside %s, "
                                    "will not update ack id, events will be re-queued",
-                                   future.get_name(),
+                                   task.get_name(),
                                    exc_info=exception)
                     success = False
                 else:
-                    logging.debug("Exception occurred inside %s", future.get_name(), exc_info=exception)
+                    logging.debug("Exception occurred inside %s", task.get_name(), exc_info=exception)
         return success
 
     @retry(retry=read_datafeed_retry)
