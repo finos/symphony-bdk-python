@@ -162,3 +162,14 @@ delays receive non-processed events (30s by default).
 This feature is only available for datafeed v2. When the datafeed loop executes it can receive several events at once
 and will dispatch them to all the subscribed listeners. Therefore, you should be careful about no processing an event
 twice. This can be achieved by maintaining a short time lived cache of the already processed events.
+
+### Running multiple instances of a bot (DF v2 only)
+
+An example is provided in [bdk-multi-instances-example](../examples/multiples-instances) folder.
+
+With datafeed v2 it is possible to run multiple instances of a bot. Each instance will receive events in turn. The
+examples also makes use of Hazelcast to keep a distributed cache of already processed events and avoid replying to a
+message twice.
+
+The logic to avoid handling an event twice is tied to the bot and its logic so the BDK makes no assumption about it and
+lets you manage it freely.
