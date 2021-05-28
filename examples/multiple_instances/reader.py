@@ -39,7 +39,7 @@ class EventListener(RealTimeEventListener):
         message = event.message
         text_message = get_text_content_from_message(message)
         message_number = text_message.split(" ")[0]
-        logging.debug("received message number %s", message_number)
+        logging.debug("Received message number %s", message_number)
 
         processed_events = self._client.get_map("processed_events").blocking()
 
@@ -60,7 +60,7 @@ async def run(hz_client):
     async with SymphonyBdk(BdkConfigLoader.load_from_symphony_dir("config_reader.yaml")) as bdk:
         datafeed = bdk.datafeed()
         datafeed.subscribe(EventListener(bdk.messages(), hz_client))
-        logging.debug("starting datafeed")
+        logging.debug("Starting datafeed")
         await datafeed.start()
 
 
@@ -70,5 +70,7 @@ if __name__ == "__main__":
     client = hazelcast.HazelcastClient()
     try:
         asyncio.run(run(client))
+    except KeyboardInterrupt:
+        logging.debug("Stopping bot")
     finally:
         client.shutdown()
