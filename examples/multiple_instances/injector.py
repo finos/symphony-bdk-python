@@ -1,3 +1,5 @@
+"""A bot (named benchmark-injector) sending messages to a room and checking that all messages have been replied to.
+"""
 import asyncio
 import logging.config
 from datetime import datetime
@@ -20,7 +22,7 @@ NUMBER_OF_MESSAGES = 10
 
 
 async def run():
-    config = BdkConfigLoader.load_from_symphony_dir("config.yaml")
+    config = BdkConfigLoader.load_from_symphony_dir("config_injector.yaml")
     async with SymphonyBdk(config) as bdk:
         stream_id = await create_test_room(bdk.streams())
 
