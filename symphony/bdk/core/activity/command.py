@@ -66,7 +66,6 @@ class SlashCommandActivity(CommandActivity):
 
     def __init__(self, name, requires_mention_bot, callback):
         """
-
         :param name: the command name
         :param requires_mention_bot: if the command requires the bot mention to trigger the slash command
         :param callback: the coroutine to be executed if message text matches
@@ -81,3 +80,12 @@ class SlashCommandActivity(CommandActivity):
 
     async def on_activity(self, context: CommandContext):
         await self._callback(context)
+
+    def __eq__(self, o: object) -> bool:
+        if isinstance(o, SlashCommandActivity):
+            return self._name == o._name and self._requires_mention_bot == o._requires_mention_bot
+        return False
+
+    def __hash__(self) -> int:
+        return super().__hash__()
+

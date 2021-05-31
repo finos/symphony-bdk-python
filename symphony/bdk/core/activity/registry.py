@@ -47,10 +47,18 @@ class ActivityRegistry(RealTimeEventListener):
         :param activity: any object inheriting from base :class:`AbstractActivity`
         """
         logger.debug('Registering new activity %s', activity)
+        self._pre_process_activity(activity)
         self._activity_list.append(activity)
 
+    def _pre_process_activity(self, activity: AbstractActivity):
+        if isinstance(activity, SlashCommandActivity):
+            for act in self._activity_list:
+                if act.__eq__(activity):
+                    self._activity_list.remove(act)
+                    logger.debug("Activity '%s' has been removed/unsubscribed in order to be replaced", act)
+
     def slash(self, command: str, mention_bot: bool = True):
-        """Decorator around a listener callback coroutine wich takes a
+        """Decorator around a listener callback coroutine which takes a
         :py:class:`~symphony.bdk.core.activity.command.CommandContext` as single parameter and returns nothing.
         This registers a new :py:class:`~symphony.bdk.core.activity.command.SlashCommandActivity`
         which executes the decorated coroutine if a message is matching.
@@ -101,4 +109,5 @@ class ActivityRegistry(RealTimeEventListener):
         if self._bot_display_name is None:
             session = await self._session_service.get_session()
             self._bot_display_name = session.display_name
-            logger.debug('Bot display name is : %s', self._bot_display_name)
+            logger.debug("Bot display name is : %s", self._bot_display_name)
+
