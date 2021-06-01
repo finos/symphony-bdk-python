@@ -63,7 +63,7 @@ class SlashCommandActivity(CommandActivity):
       - "{name}" otherwise
     """
 
-    def __init__(self, name, requires_mention_bot, callback):
+    def __init__(self, name, requires_mention_bot, callback, description=""):
         """
         :param name: the command name
         :param requires_mention_bot: if the command requires the bot mention to trigger the slash command
@@ -72,6 +72,16 @@ class SlashCommandActivity(CommandActivity):
         self._name = name
         self._requires_mention_bot = requires_mention_bot
         self._callback = callback
+        self._description = description
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    def build_command_description(self) -> str:
+        if self._requires_mention_bot:
+            return self._description + " (mention required)"
+        return self._description + " (mention not required)"
 
     def matches(self, context: CommandContext) -> bool:
         pattern = rf"@{context.bot_display_name} {self._name}" if self._requires_mention_bot else rf"{self._name}"

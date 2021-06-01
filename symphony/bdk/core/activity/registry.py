@@ -41,6 +41,10 @@ class ActivityRegistry(RealTimeEventListener):
         self._session_service = session_service
         self._bot_display_name = None
 
+    @property
+    def activity_list(self):
+        return self._activity_list
+
     def register(self, activity: AbstractActivity):
         """Registers an activity.
 
@@ -56,7 +60,7 @@ class ActivityRegistry(RealTimeEventListener):
                 self._activity_list.remove(act)
                 logger.debug("Activity '%s' has been removed/unsubscribed in order to be replaced", act)
 
-    def slash(self, command: str, mention_bot: bool = True):
+    def slash(self, command: str, mention_bot: bool = True, description: str = ""):
         """Decorator around a listener callback coroutine which takes a
         :py:class:`~symphony.bdk.core.activity.command.CommandContext` as single parameter and returns nothing.
         This registers a new :py:class:`~symphony.bdk.core.activity.command.SlashCommandActivity`
@@ -64,11 +68,12 @@ class ActivityRegistry(RealTimeEventListener):
 
         :param command: the command name e.g. "/hello"
         :param mention_bot: if user should mention the bot to trigger the slash command
+        :param description: command description
         :return: None
         """
         def decorator(func):
             logger.debug("Registering slash command with command=%s, mention_bot=%s", command, mention_bot)
-            self.register(SlashCommandActivity(command, mention_bot, func))
+            self.register(SlashCommandActivity(command, mention_bot, func, description))
             return func
 
         return decorator
