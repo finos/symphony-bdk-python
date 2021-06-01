@@ -46,7 +46,7 @@ class ActivityRegistry(RealTimeEventListener):
 
         :param activity: any object inheriting from base :class:`AbstractActivity`
         """
-        logger.debug('Registering new activity %s', activity)
+        logger.debug("Registering new activity %s", activity)
         self._pre_process_activity(activity)
         self._activity_list.append(activity)
 
