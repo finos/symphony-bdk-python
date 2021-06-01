@@ -26,6 +26,7 @@ from symphony.bdk.gen.agent_model.datafeed import Datafeed
 from symphony.bdk.gen.agent_model.v2_error import V2Error
 from symphony.bdk.gen.agent_model.v4_event_list import V4EventList
 from symphony.bdk.gen.agent_model.v5_datafeed import V5Datafeed
+from symphony.bdk.gen.agent_model.v5_datafeed_create_body import V5DatafeedCreateBody
 from symphony.bdk.gen.agent_model.v5_event_list import V5EventList
 
 
@@ -61,6 +62,7 @@ class DatafeedApi(object):
                 key_manager_token (str): Key Manager authentication token.
 
             Keyword Args:
+                body (V5DatafeedCreateBody): [optional]
                 _return_http_data_only (bool): response data without head status
                     code and headers. Default is True.
                 _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -124,6 +126,7 @@ class DatafeedApi(object):
                 'all': [
                     'session_token',
                     'key_manager_token',
+                    'body',
                 ],
                 'required': [
                     'session_token',
@@ -146,6 +149,8 @@ class DatafeedApi(object):
                         (str,),
                     'key_manager_token':
                         (str,),
+                    'body':
+                        (V5DatafeedCreateBody,),
                 },
                 'attribute_map': {
                     'session_token': 'sessionToken',
@@ -154,6 +159,7 @@ class DatafeedApi(object):
                 'location_map': {
                     'session_token': 'header',
                     'key_manager_token': 'header',
+                    'body': 'body',
                 },
                 'collection_format_map': {
                 }
@@ -325,6 +331,7 @@ class DatafeedApi(object):
                 key_manager_token (str): Key Manager authentication token.
 
             Keyword Args:
+                tag (str): A unique identifier to ensure uniqueness of the datafeed. Used to restrict search.. [optional]
                 _return_http_data_only (bool): response data without head status
                     code and headers. Default is True.
                 _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -388,6 +395,7 @@ class DatafeedApi(object):
                 'all': [
                     'session_token',
                     'key_manager_token',
+                    'tag',
                 ],
                 'required': [
                     'session_token',
@@ -398,10 +406,14 @@ class DatafeedApi(object):
                 'enum': [
                 ],
                 'validation': [
+                    'tag',
                 ]
             },
             root_map={
                 'validations': {
+                    ('tag',): {
+                        'max_length': 100,
+                    },
                 },
                 'allowed_values': {
                 },
@@ -410,14 +422,18 @@ class DatafeedApi(object):
                         (str,),
                     'key_manager_token':
                         (str,),
+                    'tag':
+                        (str,),
                 },
                 'attribute_map': {
                     'session_token': 'sessionToken',
                     'key_manager_token': 'keyManagerToken',
+                    'tag': 'tag',
                 },
                 'location_map': {
                     'session_token': 'header',
                     'key_manager_token': 'header',
+                    'tag': 'query',
                 },
                 'collection_format_map': {
                 }

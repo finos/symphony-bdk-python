@@ -1,12 +1,13 @@
-import re
 import os
+import re
 import uuid
+from pathlib import Path
+
 import pytest
 
-from pathlib import Path
-from tests.utils.resource_utils import get_config_resource_filepath
-from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.config.exception import BdkConfigError
+from symphony.bdk.core.config.loader import BdkConfigLoader
+from tests.utils.resource_utils import get_config_resource_filepath
 
 
 @pytest.fixture(name="simple_config_path", params=["config.json", "config.yaml"])

@@ -34,9 +34,3 @@ class OboSessionService:
 class SessionService(OboSessionService):
     """Service class for exposing endpoints to get user session information.
     """
-
-    def __init__(self, session_api: SessionApi,
-                 auth_session: AuthSession,
-                 retry_config: BdkRetryConfig):
-        super().__init__(session_api, auth_session, retry_config)
-
