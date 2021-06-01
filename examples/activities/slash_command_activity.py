@@ -17,7 +17,7 @@ async def run():
         async def on_hello(context: CommandContext):
             await messages.send_message(context.stream_id, "<messageML>Hello, World!</messageML>")
 
-        bdk.activities().register(HelpCommand(activities, messages))
+        bdk.activities().register(HelpCommand(bdk))
 
         await bdk.datafeed().start()
 

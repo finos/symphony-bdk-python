@@ -162,8 +162,7 @@ It can be triggered by using:
 ```
 $ @BotMention /help
 ```
-The help command can be instantiated by passing an `ActivityRegistry` and `MessageService` instances to the constructor,
-then added manually to the BDK activity registry
+The help command can be instantiated by passing a `SymphonyBdk` instance to the constructor and then added manually to the BDK activity registry
 ```python
 import logging
 from symphony.bdk.core.activity.command import CommandContext
@@ -175,13 +174,12 @@ async def run():
     
     async with SymphonyBdk(config) as bdk:
         activities = bdk.activities()
-        messages = bdk.messages()
         
         @activities.slash("/hello", True, "Command to say hello")
         async def callback(context: CommandContext):
             logging.debug("Hello slash command triggered by user %s", context.initiator.user.display_name)
         
-        bdk.activities().register(HelpCommand(activities, messages))
+        bdk.activities().register(HelpCommand(bdk))
         
         await bdk.datafeed().start()
 ```
