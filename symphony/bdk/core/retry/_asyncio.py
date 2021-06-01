@@ -1,10 +1,12 @@
+import asyncio
+
 try:
     from inspect import iscoroutinefunction
 except ImportError:
     iscoroutinefunction = None
 
 import sys
-from asyncio import sleep
+
 
 import six
 
@@ -21,11 +23,11 @@ class AsyncRetrying(BaseRetrying):
 
     There is an open PR for this change on the tenacity repository: https://github.com/jd/tenacity/pull/289
     """
-    def __init__(self, sleep=sleep, **kwargs):
-        super(AsyncRetrying, self).__init__(**kwargs)
+    def __init__(self, sleep=asyncio.sleep, **kwargs):
+        super().__init__(**kwargs)
         self.sleep = sleep
 
-    async def iter(self, retry_state):  # noqa
+    async def iter(self, retry_state):
         fut = retry_state.outcome
         if fut is None:
             if self.before is not None:
@@ -50,8 +52,7 @@ class AsyncRetrying(BaseRetrying):
             if self.retry_error_callback:
                 if iscoroutinefunction(self.retry_error_callback):
                     return await self.retry_error_callback(retry_state=retry_state)
-                else:
-                    return self.retry_error_callback(retry_state=retry_state)
+                return self.retry_error_callback(retry_state=retry_state)
             retry_exc = self.retry_error_cls(fut)
             if self.reraise:
                 raise retry_exc.reraise()
@@ -80,7 +81,7 @@ class AsyncRetrying(BaseRetrying):
             if isinstance(do, DoAttempt):
                 try:
                     result = await fn(*args, **kwargs)
-                except BaseException:  # noqa: B902
+                except BaseException:
                     retry_state.set_exception(sys.exc_info())
                 else:
                     retry_state.set_result(result)
@@ -100,9 +101,9 @@ class AsyncRetrying(BaseRetrying):
             do = await self.iter(retry_state=self._retry_state)
             if do is None:
                 raise StopAsyncIteration
-            elif isinstance(do, DoAttempt):
+            if isinstance(do, DoAttempt):
                 return AttemptManager(retry_state=self._retry_state)
-            elif isinstance(do, DoSleep):
+            if isinstance(do, DoSleep):
                 self._retry_state.prepare_for_next_attempt()
                 await self.sleep(do)
             else:

@@ -1,10 +1,12 @@
-from symphony.bdk.core.config.model.bdk_datafeed_config import BdkDatafeedConfig, DF_V1
 from pathlib import Path
+
 import pytest
 
+from symphony.bdk.core.config.model.bdk_datafeed_config import BdkDatafeedConfig, DF_V1
 
-@pytest.fixture(params=["v1"])
-def datafeed_version(request):
+
+@pytest.fixture(name="datafeed_version", params=["v1"])
+def fixture_datafeed_version(request):
     return request.param
 
 
