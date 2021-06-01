@@ -226,12 +226,13 @@ async def test_slash_command(activity_registry, message_sent):
 
 @pytest.mark.asyncio
 async def test_slash_same_command_name_and_mention(activity_registry, message_sent):
-    listener = AsyncMock()
+    listener1 = AsyncMock()
+    listener2 = AsyncMock()
     mention_bot = True
     command_name = "/command"
 
-    activity_registry.slash(command_name, mention_bot)(listener)
-    activity_registry.slash(command_name, mention_bot)(listener)
+    activity_registry.slash(command_name, mention_bot)(listener1)
+    activity_registry.slash(command_name, mention_bot)(listener2)
 
     assert len(activity_registry._activity_list) == 1
 
@@ -239,23 +240,27 @@ async def test_slash_same_command_name_and_mention(activity_registry, message_se
     assert isinstance(slash_activity, SlashCommandActivity)
     assert slash_activity._name == command_name
     assert slash_activity._requires_mention_bot
-    assert slash_activity._callback == listener
+    assert slash_activity._callback == listener2
 
 
 @pytest.mark.asyncio
 async def test_slash_same_command_name_different_mention(activity_registry, message_sent):
-    listener = AsyncMock()
+    listener1 = AsyncMock()
+    listener2 = AsyncMock()
     command_name = "/command"
 
-    activity_registry.slash(command_name, True)(listener)
-    activity_registry.slash(command_name, False)(listener)
+    activity_registry.slash(command_name, True)(listener1)
+    activity_registry.slash(command_name, False)(listener2)
 
     assert len(activity_registry._activity_list) == 2
     slash_activity1 = activity_registry._activity_list[0]
     assert isinstance(slash_activity1, SlashCommandActivity)
     assert slash_activity1._name == command_name
     assert slash_activity1._requires_mention_bot
+    assert slash_activity1._callback == listener1
     slash_activity2 = activity_registry._activity_list[1]
     assert isinstance(slash_activity2, SlashCommandActivity)
     assert slash_activity2._name == command_name
     assert not slash_activity2._requires_mention_bot
+    assert slash_activity2._callback == listener2
+
