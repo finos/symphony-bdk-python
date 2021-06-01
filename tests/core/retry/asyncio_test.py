@@ -30,15 +30,15 @@ async def test_async_retry():
         if retry_state.outcome.failed:
             attempts.append((retry_state.outcome, retry_state.attempt_number))
             return True
-        else:
-            attempts.append((retry_state.outcome, retry_state.attempt_number))
-            return False
+
+        attempts.append((retry_state.outcome, retry_state.attempt_number))
+        return False
 
     thing = NoIOErrorAfterCount(2)
 
     await _retryable_coroutine.retry_with(retry=async_retry)(thing)
 
-    things, attempt_numbers = zip(*attempts)
+    things, _ = zip(*attempts)
     assert len(attempts) == 3
 
     for thing in things[:-1]:

@@ -1,5 +1,4 @@
 import logging
-import re
 
 from symphony.bdk.core.activity.api import AbstractActivity, ActivityContext
 from symphony.bdk.core.activity.exception import FatalActivityExecutionException

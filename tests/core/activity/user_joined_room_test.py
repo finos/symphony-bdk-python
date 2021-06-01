@@ -12,7 +12,6 @@ from symphony.bdk.core.activity.user_joined_room import UserJoinedRoomActivity, 
 def fixture_activty():
     class TestUserJoinedRoomActivity(UserJoinedRoomActivity):
         """Dummy test User Joined Room Activty"""
-        pass
 
     return TestUserJoinedRoomActivity()
 

@@ -1,7 +1,6 @@
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.core.retry import retry
-from symphony.bdk.core.retry.strategy import refresh_session_if_unauthorized
 from symphony.bdk.core.service.connection.model.connection_status import ConnectionStatus
 from symphony.bdk.gen.pod_api.connection_api import ConnectionApi
 from symphony.bdk.gen.pod_model.user_connection import UserConnection

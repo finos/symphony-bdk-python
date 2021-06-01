@@ -63,7 +63,7 @@ class ActivityRegistry(RealTimeEventListener):
         This registers a new :py:class:`~symphony.bdk.core.activity.command.SlashCommandActivity`
         which executes the decorated coroutine if a message is matching.
 
-        :param command: the command name e.g. '/hello'
+        :param command: the command name e.g. "/hello"
         :param mention_bot: if user should mention the bot to trigger the slash command
         :return: None
         """
@@ -110,4 +110,3 @@ class ActivityRegistry(RealTimeEventListener):
             session = await self._session_service.get_session()
             self._bot_display_name = session.display_name
             logger.debug("Bot display name is : %s", self._bot_display_name)
-

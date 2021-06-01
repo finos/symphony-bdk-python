@@ -182,5 +182,3 @@ async def test_invalid_app_config(invalid_app_id_config, mock_obo_session):
             symphony_bdk.obo(user_id=1234)
         with pytest.raises(BdkConfigError):
             symphony_bdk.obo_services(mock_obo_session)
-
-
