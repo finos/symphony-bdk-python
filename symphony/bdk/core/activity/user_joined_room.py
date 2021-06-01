@@ -34,5 +34,5 @@ class UserJoinedRoomActivity(AbstractActivity[UserJoinedRoomContext]):
     def matches(self, context: UserJoinedRoomContext) -> bool:
         pass
 
-    def on_activity(self, context: UserJoinedRoomContext):
+    async def on_activity(self, context: UserJoinedRoomContext):
         pass

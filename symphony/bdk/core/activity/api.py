@@ -53,7 +53,7 @@ class AbstractActivity(ABC, Generic[C]):
         """
 
     @abstractmethod
-    def on_activity(self, context: C):
+    async def on_activity(self, context: C):
         """Contains the activity business logic. Executed only if the `matches` method returned a true value.
 
         :param context: an instance of :py:class:`ActivityContext`

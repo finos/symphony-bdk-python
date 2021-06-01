@@ -20,7 +20,6 @@ HELLO_WORLD_MESSAGE = "hello world"
 def fixture_activity():
     class TestCommandActivity(CommandActivity):
         """Dummy test command activity"""
-        pass
 
     return TestCommandActivity()
 
@@ -102,7 +101,7 @@ def test_slash_command_matches_without_bot_mention():
     context = create_command_context(create_message_sent(f"<div><p><span>@{BOT_NAME}</span> {command}</p></div>"))
     assert not slash_command.matches(context)
 
-    context = create_command_context(create_message_sent(f"<div><p>/other_command</p></div>"))
+    context = create_command_context(create_message_sent("<div><p>/other_command</p></div>"))
     assert not slash_command.matches(context)
 
 

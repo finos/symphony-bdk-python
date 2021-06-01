@@ -26,7 +26,9 @@ class HealthService:
 
     async def health_check_extended(self) -> V3Health:
         """Returns the connectivity status of the Agent services as well as users connectivity.
-        Wraps the `Healt Check Extended v3 <https://developers.symphony.com/restapi/reference#health-check-extended-v3>`_ endpoint.
+        Wraps the
+        `Health Check Extended v3 <https://developers.symphony.com/restapi/reference#health-check-extended-v3>`_
+        endpoint.
         Available on Agent 2.57.0 and above.
 
         :return: V3Health: the connectivity status of the Agent services as well as users connectivity.

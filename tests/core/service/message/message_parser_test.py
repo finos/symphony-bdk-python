@@ -3,8 +3,8 @@ from unittest.mock import MagicMock
 import pytest
 
 from symphony.bdk.core.service.exception import MessageParserError
-from symphony.bdk.core.service.message.message_parser import get_text_content_from_message, get_mentions, get_hashtags, \
-    get_cashtags, get_emojis
+from symphony.bdk.core.service.message.message_parser import get_text_content_from_message, get_mentions, \
+    get_hashtags, get_cashtags, get_emojis
 from symphony.bdk.gen.agent_model.v4_message import V4Message
 from tests.utils.resource_utils import get_resource_content
 
