@@ -25,6 +25,8 @@ class ApplicationMain:
             signal_service = bdk.signals()
             signal_list = await signal_service.list_signals()
             print(signal_list)
+
+
 if __name__ == "__main__":
     asyncio.run(ApplicationMain.run())
 ```
