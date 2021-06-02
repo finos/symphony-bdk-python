@@ -105,7 +105,7 @@ except KeyboardInterrupt:
 ```
 1. The `SymphonyBdk` class acts as an entry point into the library and provides an API to access
 to the main BDK features such as [Datafeed](./datafeed.md) or [message service](./message_service.md).
-2. Subscribe to the [`on_message_sent`](https://developers.symphony.com/restapi/docs/real-time-events#section-message-sent)
-[Real Time Event](https://developers.symphony.com/restapi/docs/real-time-events)
+2. Subscribe to the [`on_message_sent`](https://docs.developers.symphony.com/building-bots-on-symphony/datafeed/real-time-events#message-sent)
+[Real Time Event](https://docs.developers.symphony.com/building-bots-on-symphony/datafeed/real-time-events)
 3. When any message is sent into a stream where your bot is a member, it will reply with a hello message.
 4. Start the Datafeed read loop

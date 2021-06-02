@@ -4,8 +4,9 @@ The Activity API is an abstraction built on top of the Datafeed's [_Real Time Ev
 An Activity is basically a user interaction triggered from the chat.
 Two different kinds of activities are supported by the BDK:
 - **Command Activity**: triggered when a message is sent in an `IM`, `MIM` or `Chatroom`
-- **Form Activity**: triggered when a user replies to an [_Elements_](https://developers.symphony.com/symphony-developer/docs/overview-of-symphony-elements)
+- **Form Activity**: triggered when a user replies to an [_Elements_](https://docs.developers.symphony.com/building-bots-on-symphony/symphony-elements)
   form message
+- **User Joined Room Activity**: triggered when a user joins a room in which the bot is a member
 
 ## Activity Registry
 The central component for activities is the

@@ -155,4 +155,3 @@ default value:
 - `initialIntervalMillis`: 500
 - `multiplier`: 2
 - `maxIntervalMillis`: 300000 (5 mins)
-```
