@@ -94,7 +94,3 @@ class SlashCommandActivity(CommandActivity):
         if isinstance(o, SlashCommandActivity):
             return self._name == o._name and self._requires_mention_bot == o._requires_mention_bot
         return False
-
-    def __hash__(self) -> int:
-        return super().__hash__()
-
