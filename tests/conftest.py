@@ -1,3 +1,7 @@
+"""
+Fixtures defined here will be shared among all tests in the test suite.
+"""
+
 import datetime
 
 import pytest
@@ -9,7 +13,7 @@ from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.x509 import NameOID
 
 
-@pytest.fixture(name="root_key", scope="session")
+@pytest.fixture(name="root_key", scope="session")  # the fixture will be created only once for entire test session.
 def fixture_root_key():
     return rsa.generate_private_key(
         public_exponent=65537,
