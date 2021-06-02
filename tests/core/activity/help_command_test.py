@@ -13,6 +13,8 @@ from symphony.bdk.gen.agent_model.v4_message import V4Message
 from symphony.bdk.gen.agent_model.v4_message_sent import V4MessageSent
 from symphony.bdk.gen.agent_model.v4_stream import V4Stream
 
+STREAM_ID = "stream_id"
+
 
 @pytest.fixture(name="session_service")
 def fixture_session_service():
@@ -40,7 +42,7 @@ def fixture_command_context():
     message_content = "<messageML>@bot_name /help</messageML>"
     message_sent = V4MessageSent(message=V4Message(message_id="message_id",
                                                    message=message_content,
-                                                   stream=V4Stream(stream_id="stream_id")))
+                                                   stream=V4Stream(stream_id=STREAM_ID)))
     return CommandContext(V4Initiator(), message_sent, "bot_name")
 
 
@@ -56,7 +58,9 @@ async def test_help_command(bdk, activity_registry, command_context):
     assert isinstance(help_activity, HelpCommand)
     assert help_activity.matches(command_context)
     await help_activity.on_activity(command_context)
-    help_activity._callback.send_message.assert_called_once()
+    message = "<messageML><ul><li>/hello -  (mention required)</li>" \
+              "<li>/help - List available commands (mention required)</li></ul></messageML>"
+    bdk.messages().send_message.assert_called_once_with(STREAM_ID, message)
 
 
 @pytest.mark.asyncio
@@ -68,7 +72,8 @@ async def test_help_command_no_other_commands_found(bdk, activity_registry, comm
     assert isinstance(help_activity, HelpCommand)
     assert help_activity.matches(command_context)
     await help_activity.on_activity(command_context)
-    help_activity._callback.send_message.assert_called_once()
+    message = "<messageML><ul><li>/help - List available commands (mention required)</li></ul></messageML>"
+    bdk.messages().send_message.assert_called_once_with(STREAM_ID, message)
 
 
 @pytest.mark.asyncio
@@ -83,7 +88,8 @@ async def test_override_help_command_with_slash_help(bdk, activity_registry, com
     assert isinstance(help_activity, HelpCommand)
     assert help_activity.matches(command_context)
     await help_activity.on_activity(command_context)
-    help_activity._callback.send_message.assert_called_once()
+    message = "<messageML><ul><li>/help - List available commands (mention required)</li></ul></messageML>"
+    bdk.messages().send_message.assert_called_once_with(STREAM_ID, message)
 
 
 @pytest.mark.asyncio
@@ -98,4 +104,5 @@ async def test_override_slash_help_with_help_command(bdk, activity_registry, com
     assert isinstance(help_activity, SlashCommandActivity)
     assert help_activity.matches(command_context)
     await help_activity.on_activity(command_context)
+    bdk.messages.send_message.assert_not_called()
     help_activity._callback.assert_called_once_with(command_context)

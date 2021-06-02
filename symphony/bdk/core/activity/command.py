@@ -79,9 +79,8 @@ class SlashCommandActivity(CommandActivity):
         return self._name
 
     def build_command_description(self) -> str:
-        if self._requires_mention_bot:
-            return self._description + " (mention required)"
-        return self._description + " (mention not required)"
+        return self._description + " (mention required)" if self._requires_mention_bot \
+            else self._description + " (mention not required)"
 
     def matches(self, context: CommandContext) -> bool:
         pattern = rf"@{context.bot_display_name} {self._name}" if self._requires_mention_bot else rf"{self._name}"

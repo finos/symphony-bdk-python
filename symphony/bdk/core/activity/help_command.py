@@ -1,5 +1,4 @@
 from symphony.bdk.core.activity.command import CommandContext, SlashCommandActivity
-from symphony.bdk.core.service.message.model import Message
 from symphony.bdk.core.symphony_bdk import SymphonyBdk
 
 
@@ -11,7 +10,7 @@ class HelpCommand(SlashCommandActivity):
     """
 
     def __init__(self, bdk: SymphonyBdk):
-        super().__init__("/help", True, bdk.messages(), "List available commands")
+        super().__init__("/help", True, None, "List available commands")
         self._bdk = bdk
 
     async def on_activity(self, context: CommandContext):
@@ -19,4 +18,5 @@ class HelpCommand(SlashCommandActivity):
         help_message = ""
         for act in activity_list:
             help_message += "<li>" + act.name + " - " + act.build_command_description() + "</li>"
-        await self._callback.send_message(context.stream_id, Message("<ul>" + help_message + "</ul>"))
+        await self._bdk.messages().send_message(context.stream_id,
+                                                "<messageML><ul>" + help_message + "</ul></messageML>")
