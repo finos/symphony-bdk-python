@@ -19,12 +19,15 @@ from symphony.bdk.gen.agent_model.v4_payload import V4Payload
 from symphony.bdk.gen.agent_model.v4_user import V4User
 from symphony.bdk.gen.agent_model.v5_datafeed import V5Datafeed
 from symphony.bdk.gen.agent_model.v5_datafeed_create_body import V5DatafeedCreateBody
+from symphony.bdk.gen.pod_model.user_v2 import UserV2
 from tests.core.config import minimal_retry_config, minimal_retry_config_with_attempts
 from tests.utils.resource_utils import get_config_resource_filepath
 
 ACK_ID = "ack_id"
 BOT_USER = "youbot"
+
 SLEEP_SECONDS = 0.0001
+
 
 class EventsMock:
     def __init__(self, events, ack_id=ACK_ID):
@@ -101,9 +104,16 @@ def fixture_read_df_side_effect(message_sent_event):
     return read_df_function(message_sent_event)
 
 
+@pytest.fixture(name="session_service")
+def fixture_session_service():
+    session_service = AsyncMock()
+    session_service.get_session.return_value = UserV2(id=12345)
+    return session_service
+
+
 @pytest.fixture(name="datafeed_loop")
-def fixture_datafeed_loop(datafeed_api, auth_session, config):
-    datafeed_loop = DatafeedLoopV2(datafeed_api, auth_session, config)
+def fixture_datafeed_loop(datafeed_api, session_service, auth_session, config):
+    datafeed_loop = DatafeedLoopV2(datafeed_api, session_service, auth_session, config)
 
     class RealTimeEventListenerImpl(RealTimeEventListener):
 
@@ -115,8 +125,8 @@ def fixture_datafeed_loop(datafeed_api, auth_session, config):
 
 
 @pytest.fixture(name="mock_datafeed_loop")
-def fixture_mock_datafeed_loop(datafeed_api, auth_session, config):
-    datafeed_loop = DatafeedLoopV2(datafeed_api, auth_session, config)
+def fixture_mock_datafeed_loop(datafeed_api, session_service, auth_session, config):
+    datafeed_loop = DatafeedLoopV2(datafeed_api, session_service, auth_session, config)
     datafeed_loop._prepare_datafeed = AsyncMock()
     datafeed_loop._read_datafeed = AsyncMock()
     datafeed_loop._retrieve_datafeed = AsyncMock(V5Datafeed(id="test_id"))

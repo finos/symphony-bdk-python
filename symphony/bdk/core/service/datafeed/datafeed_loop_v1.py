@@ -30,8 +30,8 @@ class DatafeedLoopV1(AbstractDatafeedLoop):
     really stopped
     """
 
-    def __init__(self, datafeed_api, auth_session, config, repository=None):
-        super().__init__(datafeed_api, auth_session, config)
+    def __init__(self, datafeed_api, session_service, auth_session, config, repository=None):
+        super().__init__(datafeed_api, session_service, auth_session, config)
         self._datafeed_repository = OnDiskDatafeedIdRepository(config) if repository is None else repository
         self._datafeed_id = None
 

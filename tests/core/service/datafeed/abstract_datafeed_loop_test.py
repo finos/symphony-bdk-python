@@ -28,8 +28,10 @@ from symphony.bdk.gen.agent_model.v4_user import V4User
 from symphony.bdk.gen.agent_model.v4_user_joined_room import V4UserJoinedRoom
 from symphony.bdk.gen.agent_model.v4_user_left_room import V4UserLeftRoom
 from symphony.bdk.gen.agent_model.v4_user_requested_to_join_room import V4UserRequestedToJoinRoom
+from symphony.bdk.gen.pod_model.user_v2 import UserV2
 
-BOT_USER = "bot-user"
+BOT_USER_ID = 12345
+BOT_INFO = UserV2(id=BOT_USER_ID)
 
 
 async def create_and_await_tasks(datafeed_loop, events):
@@ -39,7 +41,7 @@ async def create_and_await_tasks(datafeed_loop, events):
 
 @pytest.fixture(name="initiator")
 def fixture_initiator():
-    return V4Initiator(user=V4User(username="username"))
+    return V4Initiator(user=V4User(user_id=67890))
 
 
 @pytest.fixture(name="message_sent_event")
@@ -50,7 +52,7 @@ def fixture_message_sent_event(initiator):
 
 @pytest.fixture(name="bot_message_sent_event")
 def fixture_bot_message_sent_event():
-    initiator = V4Initiator(user=V4User(username=BOT_USER))
+    initiator = V4Initiator(user=V4User(user_id=BOT_USER_ID))
     payload = V4Payload(message_sent=V4MessageSent(message=V4Message(message="message")))
     return V4Event(type=RealTimeEvent.MESSAGESENT.name, payload=payload, initiator=initiator)
 
@@ -68,28 +70,28 @@ def fixture_run_iteration_side_effect():
     return run_iteration
 
 
+@pytest.fixture(name="session_service")
+def fixture_session_service():
+    session_service = AsyncMock()
+    session_service.get_session.return_value = BOT_INFO
+    return session_service
+
+
 @pytest.fixture(name="bare_df_loop")
-def fixture_bare_df_loop():
+def fixture_bare_df_loop(session_service):
     # patch.multiple called in order to be able to instantiate AbstractDatafeedLoop
     with patch.multiple(AbstractDatafeedLoop, __abstractmethods__=set()):
-        mock_df = AbstractDatafeedLoop(DatafeedApi(AsyncMock()), None, BdkConfig(bot={"username": BOT_USER}))
+        mock_df = AbstractDatafeedLoop(DatafeedApi(AsyncMock()), session_service, None, BdkConfig())
         mock_df._stop_listener_tasks = AsyncMock()
         mock_df._prepare_datafeed = AsyncMock()
         mock_df._run_loop_iteration = AsyncMock()
-
-        bdk_config = BdkConfig()
-        bdk_config.bot.username = BOT_USER
-        mock_df._bdk_config = bdk_config
 
         return mock_df
 
 
 @pytest.fixture(name="df_loop")
 def fixture_df_loop(bare_df_loop, listener):
-    bdk_config = BdkConfig()
-    bdk_config.bot.username = BOT_USER
-    bare_df_loop._bdk_config = bdk_config
-
+    bare_df_loop._bot_info = BOT_INFO
     bare_df_loop.subscribe(listener)
 
     return bare_df_loop
@@ -109,7 +111,7 @@ async def test_remove_listener(bare_df_loop):
 
 
 @pytest.mark.asyncio
-async def test_start(bare_df_loop, run_iteration_side_effect):
+async def test_start(bare_df_loop, session_service, run_iteration_side_effect):
     bare_df_loop._run_loop_iteration.side_effect = run_iteration_side_effect
 
     t = asyncio.create_task(bare_df_loop.start())
@@ -117,6 +119,8 @@ async def test_start(bare_df_loop, run_iteration_side_effect):
     await bare_df_loop.stop()
     await t
 
+    session_service.get_session.assert_called_once()
+    assert bare_df_loop._bot_info == BOT_INFO
     bare_df_loop._prepare_datafeed.assert_called_once()
     assert bare_df_loop._run_loop_iteration.call_count >= 1
     bare_df_loop._stop_listener_tasks.assert_called_once()
@@ -180,7 +184,7 @@ async def test_create_listener_tasks_list_with_element(df_loop, listener, messag
     tasks = await df_loop._create_listener_tasks([message_sent_event])
 
     assert len(tasks) == 1
-    listener.is_accepting_event.assert_called_once_with(message_sent_event, BOT_USER)
+    listener.is_accepting_event.assert_called_once_with(message_sent_event, BOT_INFO)
 
 
 @pytest.mark.asyncio
@@ -188,7 +192,7 @@ async def test_create_listener_tasks_list_with_element_and_none(df_loop, listene
     tasks = await df_loop._create_listener_tasks([message_sent_event, None])
 
     assert len(tasks) == 1
-    listener.is_accepting_event.assert_called_once_with(message_sent_event, BOT_USER)
+    listener.is_accepting_event.assert_called_once_with(message_sent_event, BOT_INFO)
 
 
 @pytest.mark.asyncio
@@ -198,7 +202,7 @@ async def test_create_listener_tasks_list_with_two_elements(df_loop, listener, m
     assert len(tasks) == 2
 
     listener.is_accepting_event.assert_has_awaits(
-        [call(message_sent_event, BOT_USER), call(message_sent_event, BOT_USER)])
+        [call(message_sent_event, BOT_INFO), call(message_sent_event, BOT_INFO)])
 
 
 @pytest.mark.asyncio
@@ -206,7 +210,7 @@ async def test_create_listener_tasks_list_not_accepting_events(df_loop, listener
     tasks = await df_loop._create_listener_tasks([bot_message_sent_event])
 
     assert len(tasks) == 0
-    listener.is_accepting_event.assert_called_once_with(bot_message_sent_event, BOT_USER)
+    listener.is_accepting_event.assert_called_once_with(bot_message_sent_event, BOT_INFO)
 
 
 @pytest.mark.asyncio
@@ -215,7 +219,7 @@ async def test_create_listener_tasks_list(df_loop, listener, message_sent_event,
 
     assert len(tasks) == 1
     listener.is_accepting_event.assert_has_awaits(
-        [call(message_sent_event, BOT_USER), call(bot_message_sent_event, BOT_USER)])
+        [call(message_sent_event, BOT_INFO), call(bot_message_sent_event, BOT_INFO)])
 
 
 @pytest.mark.asyncio
@@ -295,7 +299,7 @@ async def test_handle_room_reactivated(df_loop, listener, initiator):
 
     await create_and_await_tasks(df_loop, [event])
 
-    listener.is_accepting_event.assert_called_with(event, BOT_USER)
+    listener.is_accepting_event.assert_called_with(event, BOT_INFO)
     listener.on_room_reactivated.assert_called_with(initiator, payload.room_reactivated)
 
 

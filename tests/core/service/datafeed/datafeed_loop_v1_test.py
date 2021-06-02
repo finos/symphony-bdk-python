@@ -19,10 +19,14 @@ from symphony.bdk.gen.agent_model.v4_payload import V4Payload
 from symphony.bdk.gen.agent_model.v4_user import V4User
 from symphony.bdk.gen.api_client import ApiClient
 from symphony.bdk.gen.exceptions import ApiException
+from symphony.bdk.gen.pod_model.user_v2 import UserV2
 from tests.core.config import minimal_retry_config_with_attempts
 from tests.core.test.in_memory_datafeed_id_repository import InMemoryDatafeedIdRepository
 from tests.utils.resource_utils import get_config_resource_filepath
 from tests.utils.resource_utils import get_resource_content
+
+BOT_USER_ID = 12345
+BOT_INFO = UserV2(id=BOT_USER_ID)
 
 SLEEP_SECONDS = 0.0001
 
@@ -94,16 +98,24 @@ def fixture_read_df_loop_side_effect(message_sent):
     return read_df
 
 
+@pytest.fixture(name="session_service")
+def fixture_session_service():
+    session_service = AsyncMock()
+    session_service.get_session.return_value = BOT_INFO
+    return session_service
+
+
 @pytest.fixture(name="datafeed_loop_v1")
-def fixture_datafeed_loop_v1(datafeed_api, auth_session, config, datafeed_repository):
-    df_loop = auto_stopping_datafeed_loop_v1(datafeed_api, auth_session, config, datafeed_repository)
+def fixture_datafeed_loop_v1(datafeed_api, session_service, auth_session, config, datafeed_repository):
+    df_loop = auto_stopping_datafeed_loop_v1(datafeed_api, session_service, auth_session, config, datafeed_repository)
     df_loop._retry_config = minimal_retry_config_with_attempts(1)
     return df_loop
 
 
 @pytest.fixture(name="mock_datafeed_loop_v1")
-def fixture_mock_datafeed_loop_v1_(datafeed_api, auth_session, config, datafeed_repository, read_df_loop_side_effect):
-    datafeed_loop = DatafeedLoopV1(datafeed_api, None, config, repository=datafeed_repository)
+def fixture_mock_datafeed_loop_v1_(datafeed_api, session_service, config, datafeed_repository,
+                                   read_df_loop_side_effect):
+    datafeed_loop = DatafeedLoopV1(datafeed_api, session_service, None, config, repository=datafeed_repository)
     datafeed_loop._prepare_datafeed = AsyncMock()
     datafeed_loop.recreate_datafeed = AsyncMock()
     datafeed_loop._read_datafeed = AsyncMock(side_effect=read_df_loop_side_effect)
@@ -111,8 +123,8 @@ def fixture_mock_datafeed_loop_v1_(datafeed_api, auth_session, config, datafeed_
     return datafeed_loop
 
 
-def auto_stopping_datafeed_loop_v1(datafeed_api, auth_session, config, repository=None):
-    datafeed_loop = DatafeedLoopV1(datafeed_api, auth_session, config, repository=repository)
+def auto_stopping_datafeed_loop_v1(datafeed_api, session_service, auth_session, config, repository=None):
+    datafeed_loop = DatafeedLoopV1(datafeed_api, session_service, auth_session, config, repository)
 
     class RealTimeEventListenerImpl(RealTimeEventListener):
 
@@ -167,9 +179,11 @@ async def test_read_datafeed_non_empty_list(datafeed_loop_v1, datafeed_api, mess
 
 
 @pytest.mark.asyncio
-async def test_datafeed_is_reused(datafeed_repository, datafeed_api, auth_session, config, read_df_side_effect):
+async def test_datafeed_is_reused(datafeed_repository, datafeed_api, session_service, auth_session, config,
+                                  read_df_side_effect):
     datafeed_repository.write("persisted_id")
-    datafeed_loop = auto_stopping_datafeed_loop_v1(datafeed_api, auth_session, config, datafeed_repository)
+    datafeed_loop = auto_stopping_datafeed_loop_v1(datafeed_api, session_service, auth_session, config,
+                                                   datafeed_repository)
 
     datafeed_api.v4_datafeed_id_read_get.side_effect = read_df_side_effect
 
@@ -182,9 +196,10 @@ async def test_datafeed_is_reused(datafeed_repository, datafeed_api, auth_sessio
 
 
 @pytest.mark.asyncio
-async def test_start_recreate_datafeed_error(datafeed_repository, datafeed_api, auth_session, config):
+async def test_start_recreate_datafeed_error(datafeed_repository, datafeed_api, session_service, auth_session, config):
     datafeed_repository.write("persisted_id")
-    datafeed_loop = auto_stopping_datafeed_loop_v1(datafeed_api, auth_session, config, datafeed_repository)
+    datafeed_loop = auto_stopping_datafeed_loop_v1(datafeed_api, session_service, auth_session, config,
+                                                   datafeed_repository)
 
     datafeed_api.v4_datafeed_id_read_get.side_effect = ApiException(400, "Expired Datafeed id")
     datafeed_api.v4_datafeed_create_post.side_effect = ApiException(400, "Unhandled exception")
@@ -201,7 +216,8 @@ async def test_start_recreate_datafeed_error(datafeed_repository, datafeed_api, 
 
 
 @pytest.mark.asyncio
-async def test_retrieve_datafeed_from_datafeed_file(tmpdir, datafeed_api, auth_session, config, read_df_side_effect):
+async def test_retrieve_datafeed_from_datafeed_file(tmpdir, datafeed_api, session_service, auth_session, config,
+                                                    read_df_side_effect):
     datafeed_file_content = get_resource_content("datafeed/datafeedId")
     datafeed_file_path = tmpdir.join("datafeed.id")
     datafeed_file_path.write(datafeed_file_content)
@@ -209,7 +225,7 @@ async def test_retrieve_datafeed_from_datafeed_file(tmpdir, datafeed_api, auth_s
     datafeed_config = BdkDatafeedConfig({"idFilePath": str(datafeed_file_path)})
     config.datafeed = datafeed_config
 
-    datafeed_loop = auto_stopping_datafeed_loop_v1(datafeed_api, auth_session, config)
+    datafeed_loop = auto_stopping_datafeed_loop_v1(datafeed_api, session_service, auth_session, config)
     datafeed_api.v4_datafeed_id_read_get.side_effect = read_df_side_effect
     await datafeed_loop.start()
 
@@ -217,7 +233,7 @@ async def test_retrieve_datafeed_from_datafeed_file(tmpdir, datafeed_api, auth_s
 
 
 @pytest.mark.asyncio
-async def test_retrieve_datafeed_from_invalid_datafeed_dir(tmpdir, datafeed_api, auth_session, config,
+async def test_retrieve_datafeed_from_invalid_datafeed_dir(tmpdir, datafeed_api, session_service, auth_session, config,
                                                            read_df_side_effect):
     datafeed_id_file_content = get_resource_content("datafeed/datafeedId")
     datafeed_id_file_path = tmpdir.join("datafeed.id")
@@ -226,7 +242,7 @@ async def test_retrieve_datafeed_from_invalid_datafeed_dir(tmpdir, datafeed_api,
     datafeed_config = BdkDatafeedConfig({"idFilePath": str(tmpdir)})
     config.datafeed = datafeed_config
 
-    datafeed_loop = auto_stopping_datafeed_loop_v1(datafeed_api, auth_session, config)
+    datafeed_loop = auto_stopping_datafeed_loop_v1(datafeed_api, session_service, auth_session, config)
     datafeed_api.v4_datafeed_id_read_get.side_effect = read_df_side_effect
     await datafeed_loop.start()
 
@@ -234,23 +250,23 @@ async def test_retrieve_datafeed_from_invalid_datafeed_dir(tmpdir, datafeed_api,
 
 
 @pytest.mark.asyncio
-async def test_retrieve_datafeed_id_from_unknown_path(datafeed_api, auth_session, config):
+async def test_retrieve_datafeed_id_from_unknown_path(datafeed_api, session_service, auth_session, config):
     datafeed_config = BdkDatafeedConfig({"idFilePath": "unknown_path"})
     config.datafeed = datafeed_config
 
-    datafeed_loop = auto_stopping_datafeed_loop_v1(datafeed_api, auth_session, config)
+    datafeed_loop = auto_stopping_datafeed_loop_v1(datafeed_api, session_service, auth_session, config)
 
     assert datafeed_loop._datafeed_id is None
 
 
 @pytest.mark.asyncio
-async def test_retrieve_datafeed_id_from_empty_file(tmpdir, datafeed_api, auth_session, config):
+async def test_retrieve_datafeed_id_from_empty_file(tmpdir, datafeed_api, session_service, auth_session, config):
     datafeed_file_path = tmpdir.join("datafeed.id")
 
     datafeed_config = BdkDatafeedConfig({"idFilePath": str(datafeed_file_path)})
     config.datafeed = datafeed_config
 
-    datafeed_loop = auto_stopping_datafeed_loop_v1(datafeed_api, auth_session, config)
+    datafeed_loop = auto_stopping_datafeed_loop_v1(datafeed_api, auth_session, session_service, config)
 
     assert datafeed_loop._datafeed_id is None
 
