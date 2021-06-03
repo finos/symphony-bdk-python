@@ -109,8 +109,9 @@ async def run():
     async with SymphonyBdk(config) as bdk:
         activities = bdk.activities()
 
-        @activities.slash("/hello",  # (1)
-                          True)      # (2)
+        @activities.slash("/hello",                     # (1)
+                          True,                         # (2)
+                          "This command says hello")    # (3)
         async def callback(context: CommandContext):
             logging.debug("Hello slash command triggered by user %s", context.initiator.user.display_name)
 
@@ -118,6 +119,7 @@ async def run():
 ```
 1. `/hello` is the command name 
 2. `True` means that the bot has to be mentioned
+3. `This command says hello` is the command description (optional)
 
 The decorated function will then be called if a message is sent in an `IM`, `MIM` or `Chatroom` with a matching text message.
 Please mind that, due to the mechanism inherent to decorators, the `@activities.slash` cannot be used when `activities`
@@ -154,6 +156,35 @@ class HelpCommandActivity(SlashCommandActivity):
     async def help_command(self, context: CommandContext):
         return await self._messages.send_message(context.stream_id, "<messageML>Help command triggered</messageML>")
 ```
+
+### Help Command
+The _help_ command is a BDK build-in command which lists all the commands registered in the ActivityRegistry of the BDK. 
+It can be triggered by using:
+```
+$ @BotMention /help
+```
+The help command can be instantiated by passing a `SymphonyBdk` instance to the constructor and then added manually to the BDK activity registry
+```python
+import logging
+from symphony.bdk.core.activity.command import CommandContext
+from symphony.bdk.core.activity.help_command import HelpCommand
+from symphony.bdk.core.config.loader import BdkConfigLoader
+from symphony.bdk.core.symphony_bdk import SymphonyBdk
+async def run():
+    config = BdkConfigLoader.load_from_symphony_dir("config.yaml")
+    
+    async with SymphonyBdk(config) as bdk:
+        activities = bdk.activities()
+        
+        @activities.slash("/hello", True, "Command to say hello")
+        async def callback(context: CommandContext):
+            logging.debug("Hello slash command triggered by user %s", context.initiator.user.display_name)
+        
+        bdk.activities().register(HelpCommand(bdk))
+        
+        await bdk.datafeed().start()
+```
+One can also override the default implementation of the help command by manually defining a new `SlashCommandActivity`.
 
 ## Form Activity
 A form activity is triggered when an end-user replies or submits an Elements form.

@@ -3,6 +3,7 @@ import logging.config
 from pathlib import Path
 
 from symphony.bdk.core.activity.command import CommandContext
+from symphony.bdk.core.activity.help_command import HelpCommand
 from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.symphony_bdk import SymphonyBdk
 
@@ -15,6 +16,8 @@ async def run():
         @activities.slash("/hello")
         async def on_hello(context: CommandContext):
             await messages.send_message(context.stream_id, "<messageML>Hello, World!</messageML>")
+
+        bdk.activities().register(HelpCommand(bdk))
 
         await bdk.datafeed().start()
 
