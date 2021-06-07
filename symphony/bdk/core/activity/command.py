@@ -1,5 +1,4 @@
 import logging
-import re
 
 from symphony.bdk.core.activity.api import AbstractActivity, ActivityContext
 from symphony.bdk.core.activity.exception import FatalActivityExecutionException
@@ -64,9 +63,8 @@ class SlashCommandActivity(CommandActivity):
       - "{name}" otherwise
     """
 
-    def __init__(self, name, requires_mention_bot, callback):
+    def __init__(self, name, requires_mention_bot, callback, description=""):
         """
-
         :param name: the command name
         :param requires_mention_bot: if the command requires the bot mention to trigger the slash command
         :param callback: the coroutine to be executed if message text matches
@@ -74,6 +72,15 @@ class SlashCommandActivity(CommandActivity):
         self._name = name
         self._requires_mention_bot = requires_mention_bot
         self._callback = callback
+        self._description = description
+
+    @property
+    def name(self) -> str:
+        return self._name
+
+    def build_command_description(self) -> str:
+        return self._description + " (mention required)" if self._requires_mention_bot \
+            else self._description + " (mention not required)"
 
     def matches(self, context: CommandContext) -> bool:
         pattern = rf"@{context.bot_display_name} {self._name}" if self._requires_mention_bot else rf"{self._name}"
@@ -81,3 +88,8 @@ class SlashCommandActivity(CommandActivity):
 
     async def on_activity(self, context: CommandContext):
         await self._callback(context)
+
+    def __eq__(self, o: object) -> bool:
+        if isinstance(o, SlashCommandActivity):
+            return self._name == o._name and self._requires_mention_bot == o._requires_mention_bot
+        return False

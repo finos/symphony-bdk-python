@@ -3,7 +3,7 @@ from symphony.bdk.core.retry import AsyncRetrying
 from symphony.bdk.gen import ApiException
 
 
-class FixedChainedExceptions(object):
+class FixedChainedExceptions:
     """Holds counter state and exceptions to throw for invoking a method several times in a row."""
 
     def __init__(self, exception_list):
@@ -32,7 +32,7 @@ class FixedChainedExceptions(object):
         self.counter = 0
 
 
-class NoApiExceptionAfterCount(object):
+class NoApiExceptionAfterCount:
     """Holds counter state for invoking a method several times in a row."""
 
     def __init__(self, count, status=400):
@@ -53,7 +53,7 @@ class NoApiExceptionAfterCount(object):
         return True
 
 
-class NoIOErrorAfterCount(object):
+class NoIOErrorAfterCount:
     """Holds counter state for invoking a method several times in a row."""
 
     def __init__(self, count):
@@ -80,8 +80,8 @@ def retry_test_decorator(*dargs, **dkw):
     # support both @retry and @retry() as valid syntax
     if len(dargs) == 1 and callable(dargs[0]):
         return retry_test_decorator()(dargs[0])
-    else:
-        def wrap(f):
-            return AsyncRetrying(*dargs, **dkw).wraps(f)
 
-        return wrap
+    def wrap(f):
+        return AsyncRetrying(*dargs, **dkw).wraps(f)
+
+    return wrap

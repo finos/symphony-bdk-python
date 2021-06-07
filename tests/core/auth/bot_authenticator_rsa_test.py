@@ -1,4 +1,5 @@
 from unittest.mock import patch, MagicMock, AsyncMock
+
 import pytest
 
 from symphony.bdk.core.auth.bot_authenticator import BotAuthenticatorRsa
@@ -8,9 +9,7 @@ from symphony.bdk.gen.api_client import ApiClient
 from symphony.bdk.gen.configuration import Configuration
 from symphony.bdk.gen.exceptions import ApiException
 from symphony.bdk.gen.login_model.token import Token
-
 from tests.core.config import minimal_retry_config
-from tests.utils.resource_utils import get_resource_filepath
 
 
 @pytest.fixture(name="mocked_api_client")

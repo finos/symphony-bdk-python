@@ -8,7 +8,6 @@ from symphony.bdk.core.client.api_client_factory import ApiClientFactory, POD, L
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
 from symphony.bdk.core.config.model.bdk_server_config import BdkProxyConfig
 from symphony.bdk.core.config.model.bdk_ssl_config import BdkSslConfig
-from tests.utils.resource_utils import get_resource_filepath
 
 HOST = "acme.symphony.com"
 
@@ -25,6 +24,13 @@ def fixture_add_x_trace_id():
 
     return mock_add_x_trace_id
 
+@pytest.fixture(name="client_certificate_path")
+def fixture_api_client_certificate(tmp_path, certificate, rsa_key):
+    temp_directory = tmp_path / "cert"
+    temp_directory.mkdir()
+    client_cert_path = temp_directory / "megabot.pem"
+    client_cert_path.write_text(certificate + rsa_key)
+    return client_cert_path.resolve()
 
 @pytest.mark.asyncio
 async def test_host_configured(config):
@@ -40,24 +46,22 @@ async def test_host_configured(config):
 
 
 @pytest.mark.asyncio
-async def test_client_cert_configured_for_app(config):
-    client_cert_path = get_resource_filepath("cert/megabot.pem", as_text=True)
+async def test_client_cert_configured_for_app(client_certificate_path, config):
+    config.app.certificate.path = client_certificate_path
 
-    config.app.certificate.path = client_cert_path
     client_factory = ApiClientFactory(config)
 
-    assert client_factory.get_app_session_auth_client().configuration.cert_file == client_cert_path
+    assert client_factory.get_app_session_auth_client().configuration.cert_file == client_certificate_path
 
 
 @pytest.mark.asyncio
-async def test_client_cert_configured_for_bot(config):
-    client_cert_path = get_resource_filepath("cert/megabot.pem", as_text=True)
+async def test_client_cert_configured_for_bot(client_certificate_path, config):
+    config.bot.certificate.path = client_certificate_path
 
-    config.bot.certificate.path = client_cert_path
     client_factory = ApiClientFactory(config)
 
-    assert client_factory.get_session_auth_client().configuration.cert_file == client_cert_path
-    assert client_factory.get_key_auth_client().configuration.cert_file == client_cert_path
+    assert client_factory.get_session_auth_client().configuration.cert_file == client_certificate_path
+    assert client_factory.get_key_auth_client().configuration.cert_file == client_certificate_path
 
 
 @pytest.mark.asyncio
@@ -266,7 +270,7 @@ async def test_x_trace_id_not_in_default_headers(config, add_x_trace_id):
     with patch("symphony.bdk.core.client.api_client_factory.add_x_trace_id", return_value=add_x_trace_id) as mock:
         client_factory = ApiClientFactory(config)
 
-        assert mock.call_count == 5
+        assert mock.call_count == 7
         assert_default_headers(client_factory.get_pod_client().default_headers, {})
         assert_default_headers(client_factory.get_login_client().default_headers, {})
         assert_default_headers(client_factory.get_agent_client().default_headers, {})
@@ -277,7 +281,7 @@ async def test_x_trace_id_not_in_default_headers(config, add_x_trace_id):
 
 
 @pytest.mark.asyncio
-async def test_x_trace_id_not_in_default_headers(config, add_x_trace_id):
+async def test_x_trace_id_in_default_headers(config, add_x_trace_id):
     default_headers = {"x-trace-id": "trace-id"}
 
     config.default_headers = default_headers

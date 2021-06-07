@@ -58,6 +58,7 @@ class ServiceFactory:
         self._agent_client = api_client_factory.get_agent_client()
         self._auth_session = auth_session
         self._config = config
+        self._session_service = SessionService(SessionApi(self._pod_client), self._auth_session, self._config.retry)
 
     def get_user_service(self) -> UserService:
         """Returns a fully initialized UserService
@@ -141,11 +142,7 @@ class ServiceFactory:
 
         :return: a new SessionService instance
         """
-        return SessionService(
-            SessionApi(self._pod_client),
-            self._auth_session,
-            self._config.retry
-        )
+        return self._session_service
 
     def get_datafeed_loop(self) -> AbstractDatafeedLoop:
         """Returns a fully initialized DatafeedLoop
@@ -156,11 +153,13 @@ class ServiceFactory:
         if df_version.lower() == DatafeedVersion.V2.value.lower():
             return DatafeedLoopV2(
                 DatafeedApi(self._agent_client),
+                self._session_service,
                 self._auth_session,
                 self._config
             )
         return DatafeedLoopV1(
             DatafeedApi(self._agent_client),
+            self._session_service,
             self._auth_session,
             self._config
         )

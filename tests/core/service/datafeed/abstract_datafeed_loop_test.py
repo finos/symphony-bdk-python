@@ -1,5 +1,5 @@
 import asyncio
-from unittest.mock import AsyncMock, patch
+from unittest.mock import AsyncMock, patch, call
 
 import pytest
 
@@ -28,44 +28,20 @@ from symphony.bdk.gen.agent_model.v4_user import V4User
 from symphony.bdk.gen.agent_model.v4_user_joined_room import V4UserJoinedRoom
 from symphony.bdk.gen.agent_model.v4_user_left_room import V4UserLeftRoom
 from symphony.bdk.gen.agent_model.v4_user_requested_to_join_room import V4UserRequestedToJoinRoom
+from symphony.bdk.gen.pod_model.user_v2 import UserV2
 
-BOT_USER = "bot-user"
-
-
-class ClosingListener(RealTimeEventListener):
-    def __init__(self, df_loop):
-        self.df_loop = df_loop
-
-    async def on_message_sent(self, initiator, event):
-        await self.df_loop.stop()
-
-    @staticmethod
-    async def is_accepting_event(event, username):
-        return True
+BOT_USER_ID = 12345
+BOT_INFO = UserV2(id=BOT_USER_ID)
 
 
-def assert_prepared_read_df_stop_tasks_called(df_loop):
-    df_loop.prepare_datafeed.assert_called_once()
-    assert df_loop.read_datafeed.call_count >= 1
-    df_loop._stop_listener_tasks.assert_called_once()
-
-
-def assert_is_accepting_event_on_message_sent_called(listener, message_sent_event):
-    listener.is_accepting_event.assert_called_with(message_sent_event, BOT_USER)
-    listener.on_message_sent.assert_called_once_with(message_sent_event.initiator,
-                                                     message_sent_event.payload.message_sent)
-
-
-async def handle_events_and_wait_for_completion(df_loop, events):
-    await df_loop.handle_v4_event_list(events)
-
-    tasks = [t for t in asyncio.all_tasks() if t is not asyncio.current_task()]
+async def create_and_await_tasks(datafeed_loop, events):
+    tasks = await datafeed_loop._create_listener_tasks(events)
     await asyncio.gather(*tasks)
 
 
 @pytest.fixture(name="initiator")
 def fixture_initiator():
-    return V4Initiator(user=V4User(username="username"))
+    return V4Initiator(user=V4User(user_id=67890))
 
 
 @pytest.fixture(name="message_sent_event")
@@ -74,164 +50,185 @@ def fixture_message_sent_event(initiator):
     return V4Event(type=RealTimeEvent.MESSAGESENT.name, payload=payload, initiator=initiator)
 
 
-@pytest.fixture(name="read_df_side_effect")
-def fixture_read_df_side_effect(message_sent_event):
-    async def read_df(**kwargs):
-        await asyncio.sleep(0.001)  # to force the switching of tasks
-        return [message_sent_event]
+@pytest.fixture(name="bot_message_sent_event")
+def fixture_bot_message_sent_event():
+    initiator = V4Initiator(user=V4User(user_id=BOT_USER_ID))
+    payload = V4Payload(message_sent=V4MessageSent(message=V4Message(message="message")))
+    return V4Event(type=RealTimeEvent.MESSAGESENT.name, payload=payload, initiator=initiator)
 
-    return read_df
+
+@pytest.fixture(name="listener")
+def fixture_listener():
+    return AsyncMock(wraps=RealTimeEventListener())
+
+
+@pytest.fixture(name="run_iteration_side_effect")
+def fixture_run_iteration_side_effect():
+    async def run_iteration(**kwargs):
+        await asyncio.sleep(0.001)  # to force the switching of tasks
+
+    return run_iteration
+
+
+@pytest.fixture(name="session_service")
+def fixture_session_service():
+    session_service = AsyncMock()
+    session_service.get_session.return_value = BOT_INFO
+    return session_service
 
 
 @pytest.fixture(name="bare_df_loop")
-def fixture_bare_df_loop():
+def fixture_bare_df_loop(session_service):
     # patch.multiple called in order to be able to instantiate AbstractDatafeedLoop
     with patch.multiple(AbstractDatafeedLoop, __abstractmethods__=set()):
-        mock_df = AbstractDatafeedLoop(DatafeedApi(AsyncMock()), None, BdkConfig(bot={"username": BOT_USER}))
-        mock_df._stop_listener_tasks = AsyncMock(wraps=mock_df._stop_listener_tasks)
-        mock_df.read_datafeed = AsyncMock()
-        mock_df.prepare_datafeed = AsyncMock()
-        mock_df.recreate_datafeed = AsyncMock()
+        mock_df = AbstractDatafeedLoop(DatafeedApi(AsyncMock()), session_service, None, BdkConfig())
+        mock_df._stop_listener_tasks = AsyncMock()
+        mock_df._prepare_datafeed = AsyncMock()
+        mock_df._run_loop_iteration = AsyncMock()
 
         return mock_df
 
 
 @pytest.fixture(name="df_loop")
-def fixture_autoclosing_df_loop(bare_df_loop):
-    listener = AsyncMock(wraps=ClosingListener(bare_df_loop))
+def fixture_df_loop(bare_df_loop, listener):
+    bare_df_loop._bot_info = BOT_INFO
     bare_df_loop.subscribe(listener)
 
     return bare_df_loop
 
 
-@pytest.fixture(name="listener")
-def fixture_listener(df_loop):
-    return df_loop._listeners[0]
+@pytest.mark.asyncio
+async def test_remove_listener(bare_df_loop):
+    listener = RealTimeEventListener()
+
+    assert len(bare_df_loop._listeners) == 0
+
+    bare_df_loop.subscribe(listener)
+    assert len(bare_df_loop._listeners) == 1
+
+    bare_df_loop.unsubscribe(listener)
+    assert len(bare_df_loop._listeners) == 0
 
 
 @pytest.mark.asyncio
-async def test_remove_listener(df_loop, listener):
-    assert len(df_loop._listeners) == 1
-    df_loop.unsubscribe(listener)
-    assert len(df_loop._listeners) == 0
+async def test_start(bare_df_loop, session_service, run_iteration_side_effect):
+    bare_df_loop._run_loop_iteration.side_effect = run_iteration_side_effect
+
+    t = asyncio.create_task(bare_df_loop.start())
+    await asyncio.sleep(0.001)
+    await bare_df_loop.stop()
+    await t
+
+    session_service.get_session.assert_called_once()
+    assert bare_df_loop._bot_info == BOT_INFO
+    bare_df_loop._prepare_datafeed.assert_called_once()
+    assert bare_df_loop._run_loop_iteration.call_count >= 1
+    bare_df_loop._stop_listener_tasks.assert_called_once()
 
 
 @pytest.mark.asyncio
-async def test_start(df_loop, listener, read_df_side_effect, message_sent_event):
-    df_loop.read_datafeed.side_effect = read_df_side_effect
-
-    await df_loop.start()
-
-    assert_prepared_read_df_stop_tasks_called(df_loop)
-    assert_is_accepting_event_on_message_sent_called(listener, message_sent_event)
-
-
-@pytest.mark.asyncio
-async def test_is_accepting_event_false(df_loop, listener, read_df_side_effect, message_sent_event):
-    df_loop.read_datafeed.side_effect = read_df_side_effect
-
-    non_accepting_event_listener = AsyncMock()
-    non_accepting_event_listener.is_accepting_event.return_value = False
-
-    df_loop.subscribe(non_accepting_event_listener)
-    await df_loop.start()
-
-    assert_prepared_read_df_stop_tasks_called(df_loop)
-    assert_is_accepting_event_on_message_sent_called(listener, message_sent_event)
-
-    non_accepting_event_listener.is_accepting_event.assert_called_with(message_sent_event, BOT_USER)
-    non_accepting_event_listener.on_message_sent.assert_not_called()
-
-
-@pytest.mark.asyncio
-async def test_error_in_listener(df_loop, listener, read_df_side_effect, message_sent_event):
-    df_loop.read_datafeed.side_effect = read_df_side_effect
-
-    error_listener = AsyncMock()
-    error_listener.is_accepting_event.return_value = True
-    error_listener.on_message_sent.side_effect = ValueError("Error in listener")
-
-    df_loop.subscribe(error_listener)
-    await df_loop.start()  # No error raised
-
-    assert_prepared_read_df_stop_tasks_called(df_loop)
-    assert_is_accepting_event_on_message_sent_called(listener, message_sent_event)
-    assert_is_accepting_event_on_message_sent_called(error_listener, message_sent_event)
-
-
-@pytest.mark.asyncio
-async def test_unexpected_error_should_be_propagated_and_call_stop_tasks(df_loop, listener):
-    exception = ValueError("An error")
-    df_loop.read_datafeed.side_effect = exception
-
-    with pytest.raises(ValueError) as raised_exception:
-        await df_loop.start()
-        assert raised_exception == exception
-
-    df_loop.prepare_datafeed.assert_called_once()
-    df_loop.read_datafeed.assert_called_once()
-    df_loop.recreate_datafeed.assert_not_called()
-    df_loop._stop_listener_tasks.assert_called_once()
-
-    # assert no interaction with the listener
-    assert len(listener.method_calls) == 0
-
-
-@pytest.mark.asyncio
-async def test_error_in_prepare_should_be_propagated(df_loop, listener):
+async def test_error_in_prepare_should_be_propagated(bare_df_loop):
     exception = ValueError("error")
 
-    df_loop.prepare_datafeed.side_effect = exception
+    bare_df_loop._prepare_datafeed.side_effect = exception
 
     with pytest.raises(ValueError) as raised_exception:
-        await df_loop.start()
+        await bare_df_loop.start()
         assert raised_exception == exception
 
-    df_loop.prepare_datafeed.assert_called_once()
-    df_loop.read_datafeed.assert_not_called()
-    df_loop.recreate_datafeed.assert_not_called()
-
-    # assert no interaction with the listener
-    assert len(listener.method_calls) == 0
+    bare_df_loop._prepare_datafeed.assert_called_once()
+    bare_df_loop._run_loop_iteration.assert_not_called()
+    bare_df_loop._stop_listener_tasks.assert_not_called()
 
 
 @pytest.mark.asyncio
-async def test_none_ignored_in_handle_events(df_loop, listener):
-    await handle_events_and_wait_for_completion(df_loop, None)
+async def test_unexpected_error_should_be_propagated_and_call_stop_tasks(bare_df_loop):
+    exception = ValueError("An error")
+    bare_df_loop._run_loop_iteration.side_effect = exception
 
-    assert len(listener.method_calls) == 0
+    with pytest.raises(ValueError) as raised_exception:
+        await bare_df_loop.start()
+        assert raised_exception == exception
 
-
-@pytest.mark.asyncio
-async def test_empty_list_ignored_in_handle_events(df_loop, listener):
-    await handle_events_and_wait_for_completion(df_loop, [])
-
-    assert len(listener.method_calls) == 0
-
-
-@pytest.mark.asyncio
-async def test_list_with_single_none_ignored_in_handle_events(df_loop, listener):
-    await handle_events_and_wait_for_completion(df_loop, [None])
-
-    assert len(listener.method_calls) == 0
+    bare_df_loop._prepare_datafeed.assert_called_once()
+    bare_df_loop._run_loop_iteration.assert_called()
+    bare_df_loop._stop_listener_tasks.assert_called_once()
 
 
 @pytest.mark.asyncio
-async def test_list_with_none_ignored_in_handle_events(df_loop, listener, message_sent_event, initiator):
-    await handle_events_and_wait_for_completion(df_loop, [None, message_sent_event])
+async def test_create_listener_tasks_none(df_loop, listener):
+    tasks = await df_loop._create_listener_tasks(None)
 
-    listener.is_accepting_event.assert_called_once_with(message_sent_event, BOT_USER)
-    listener.on_message_sent.assert_called_once_with(initiator, message_sent_event.payload.message_sent)
+    assert len(tasks) == 0
+    listener.is_accepting_event.assert_not_called()
 
 
 @pytest.mark.asyncio
-async def test_unknown_event_type_ignored(df_loop, listener):
-    event = V4Event(type="unknown type")
+async def test_create_listener_tasks_empty_list(df_loop, listener):
+    tasks = await df_loop._create_listener_tasks([])
 
-    await handle_events_and_wait_for_completion(df_loop, [event])
+    assert len(tasks) == 0
+    listener.is_accepting_event.assert_not_called()
 
-    assert len(listener.method_calls) == 1
-    listener.is_accepting_event.assert_called_once_with(event, BOT_USER)
+
+@pytest.mark.asyncio
+async def test_create_listener_tasks_list_with_none(df_loop, listener):
+    tasks = await df_loop._create_listener_tasks([None])
+
+    assert len(tasks) == 0
+    listener.is_accepting_event.assert_not_called()
+
+
+@pytest.mark.asyncio
+async def test_create_listener_tasks_list_with_element(df_loop, listener, message_sent_event):
+    tasks = await df_loop._create_listener_tasks([message_sent_event])
+
+    assert len(tasks) == 1
+    listener.is_accepting_event.assert_called_once_with(message_sent_event, BOT_INFO)
+
+
+@pytest.mark.asyncio
+async def test_create_listener_tasks_list_with_element_and_none(df_loop, listener, message_sent_event):
+    tasks = await df_loop._create_listener_tasks([message_sent_event, None])
+
+    assert len(tasks) == 1
+    listener.is_accepting_event.assert_called_once_with(message_sent_event, BOT_INFO)
+
+
+@pytest.mark.asyncio
+async def test_create_listener_tasks_list_with_two_elements(df_loop, listener, message_sent_event):
+    tasks = await df_loop._create_listener_tasks([message_sent_event, message_sent_event])
+
+    assert len(tasks) == 2
+
+    listener.is_accepting_event.assert_has_awaits(
+        [call(message_sent_event, BOT_INFO), call(message_sent_event, BOT_INFO)])
+
+
+@pytest.mark.asyncio
+async def test_create_listener_tasks_list_not_accepting_events(df_loop, listener, bot_message_sent_event):
+    tasks = await df_loop._create_listener_tasks([bot_message_sent_event])
+
+    assert len(tasks) == 0
+    listener.is_accepting_event.assert_called_once_with(bot_message_sent_event, BOT_INFO)
+
+
+@pytest.mark.asyncio
+async def test_create_listener_tasks_list(df_loop, listener, message_sent_event, bot_message_sent_event):
+    tasks = await df_loop._create_listener_tasks([message_sent_event, bot_message_sent_event])
+
+    assert len(tasks) == 1
+    listener.is_accepting_event.assert_has_awaits(
+        [call(message_sent_event, BOT_INFO), call(bot_message_sent_event, BOT_INFO)])
+
+
+@pytest.mark.asyncio
+async def test_create_listener_tasks_list_several_listeners(df_loop, message_sent_event, bot_message_sent_event):
+    df_loop.subscribe(RealTimeEventListener())
+
+    tasks = await df_loop._create_listener_tasks([message_sent_event, bot_message_sent_event])
+
+    assert len(tasks) == 2
 
 
 @pytest.mark.asyncio
@@ -239,9 +236,9 @@ async def test_handle_message_sent(df_loop, listener, initiator):
     payload = V4Payload(message_sent=V4MessageSent())
     event = V4Event(type=RealTimeEvent.MESSAGESENT.name, payload=payload, initiator=initiator)
 
-    await handle_events_and_wait_for_completion(df_loop, [event])
+    tasks = await df_loop._create_listener_tasks([event])
+    await asyncio.gather(*tasks)
 
-    listener.is_accepting_event.assert_called_with(event, BOT_USER)
     listener.on_message_sent.assert_called_once_with(initiator, payload.message_sent)
 
 
@@ -250,9 +247,8 @@ async def test_handle_shared_post(df_loop, listener, initiator):
     payload = V4Payload(shared_post=V4SharedPost())
     event = V4Event(type=RealTimeEvent.SHAREDPOST.name, payload=payload, initiator=initiator)
 
-    await handle_events_and_wait_for_completion(df_loop, [event])
+    await create_and_await_tasks(df_loop, [event])
 
-    listener.is_accepting_event.assert_called_with(event, BOT_USER)
     listener.on_shared_post.assert_called_once_with(initiator, payload.shared_post)
 
 
@@ -261,9 +257,8 @@ async def test_handle_instant_message_created(df_loop, listener, initiator):
     payload = V4Payload(instant_message_created=V4InstantMessageCreated())
     event = V4Event(type=RealTimeEvent.INSTANTMESSAGECREATED.name, payload=payload, initiator=initiator)
 
-    await handle_events_and_wait_for_completion(df_loop, [event])
+    await create_and_await_tasks(df_loop, [event])
 
-    listener.is_accepting_event.assert_called_with(event, BOT_USER)
     listener.on_instant_message_created.assert_called_with(initiator, payload.instant_message_created)
 
 
@@ -272,9 +267,8 @@ async def test_handle_room_created(df_loop, listener, initiator):
     payload = V4Payload(room_created=V4RoomCreated())
     event = V4Event(type=RealTimeEvent.ROOMCREATED.name, payload=payload, initiator=initiator)
 
-    await handle_events_and_wait_for_completion(df_loop, [event])
+    await create_and_await_tasks(df_loop, [event])
 
-    listener.is_accepting_event.assert_called_with(event, BOT_USER)
     listener.on_room_created.assert_called_with(initiator, payload.room_created)
 
 
@@ -283,9 +277,8 @@ async def test_handle_room_updated(df_loop, listener, initiator):
     payload = V4Payload(room_updated=V4RoomUpdated())
     event = V4Event(type=RealTimeEvent.ROOMUPDATED.name, payload=payload, initiator=initiator)
 
-    await handle_events_and_wait_for_completion(df_loop, [event])
+    await create_and_await_tasks(df_loop, [event])
 
-    listener.is_accepting_event.assert_called_with(event, BOT_USER)
     listener.on_room_updated.assert_called_with(initiator, payload.room_updated)
 
 
@@ -294,9 +287,8 @@ async def test_handle_room_deactivated(df_loop, listener, initiator):
     payload = V4Payload(room_deactivated=V4RoomDeactivated())
     event = V4Event(type=RealTimeEvent.ROOMDEACTIVATED.name, payload=payload, initiator=initiator)
 
-    await handle_events_and_wait_for_completion(df_loop, [event])
+    await create_and_await_tasks(df_loop, [event])
 
-    listener.is_accepting_event.assert_called_with(event, BOT_USER)
     listener.on_room_deactivated.assert_called_with(initiator, payload.room_deactivated)
 
 
@@ -305,9 +297,9 @@ async def test_handle_room_reactivated(df_loop, listener, initiator):
     payload = V4Payload(room_reactivated=V4RoomReactivated())
     event = V4Event(type=RealTimeEvent.ROOMREACTIVATED.name, payload=payload, initiator=initiator)
 
-    await handle_events_and_wait_for_completion(df_loop, [event])
+    await create_and_await_tasks(df_loop, [event])
 
-    listener.is_accepting_event.assert_called_with(event, BOT_USER)
+    listener.is_accepting_event.assert_called_with(event, BOT_INFO)
     listener.on_room_reactivated.assert_called_with(initiator, payload.room_reactivated)
 
 
@@ -316,9 +308,8 @@ async def test_handle_user_requested_to_join_room(df_loop, listener, initiator):
     payload = V4Payload(user_requested_to_join_room=V4UserRequestedToJoinRoom())
     event = V4Event(type=RealTimeEvent.USERREQUESTEDTOJOINROOM.name, payload=payload, initiator=initiator)
 
-    await handle_events_and_wait_for_completion(df_loop, [event])
+    await create_and_await_tasks(df_loop, [event])
 
-    listener.is_accepting_event.assert_called_with(event, BOT_USER)
     listener.on_user_requested_to_join_room.assert_called_with(initiator, payload.user_requested_to_join_room)
 
 
@@ -327,9 +318,8 @@ async def test_handle_user_joined_room(df_loop, listener, initiator):
     payload = V4Payload(user_joined_room=V4UserJoinedRoom())
     event = V4Event(type=RealTimeEvent.USERJOINEDROOM.name, payload=payload, initiator=initiator)
 
-    await handle_events_and_wait_for_completion(df_loop, [event])
+    await create_and_await_tasks(df_loop, [event])
 
-    listener.is_accepting_event.assert_called_with(event, BOT_USER)
     listener.on_user_joined_room.assert_called_with(initiator, payload.user_joined_room)
 
 
@@ -338,9 +328,8 @@ async def test_handle_user_left_room(df_loop, listener, initiator):
     payload = V4Payload(user_left_room=V4UserLeftRoom())
     event = V4Event(type=RealTimeEvent.USERLEFTROOM.name, payload=payload, initiator=initiator)
 
-    await handle_events_and_wait_for_completion(df_loop, [event])
+    await create_and_await_tasks(df_loop, [event])
 
-    listener.is_accepting_event.assert_called_with(event, BOT_USER)
     listener.on_user_left_room.assert_called_with(initiator, payload.user_left_room)
 
 
@@ -349,9 +338,8 @@ async def test_handle_room_member_promoted_to_owner(df_loop, listener, initiator
     payload = V4Payload(room_member_promoted_to_owner=V4RoomMemberPromotedToOwner())
     event = V4Event(type=RealTimeEvent.ROOMMEMBERPROMOTEDTOOWNER.name, payload=payload, initiator=initiator)
 
-    await handle_events_and_wait_for_completion(df_loop, [event])
+    await create_and_await_tasks(df_loop, [event])
 
-    listener.is_accepting_event.assert_called_with(event, BOT_USER)
     listener.on_room_member_promoted_to_owner.assert_called_with(initiator, payload.room_member_promoted_to_owner)
 
 
@@ -360,9 +348,8 @@ async def test_handle_room_member_demoted_from_owner(df_loop, listener, initiato
     payload = V4Payload(room_member_demoted_from_owner=V4RoomMemberDemotedFromOwner())
     event = V4Event(type=RealTimeEvent.ROOMMEMBERDEMOTEDFROMOWNER.name, payload=payload, initiator=initiator)
 
-    await handle_events_and_wait_for_completion(df_loop, [event])
+    await create_and_await_tasks(df_loop, [event])
 
-    listener.is_accepting_event.assert_called_with(event, BOT_USER)
     listener.on_room_demoted_from_owner.assert_called_with(initiator, payload.room_member_demoted_from_owner)
 
 
@@ -371,9 +358,8 @@ async def test_handle_connection_requested(df_loop, listener, initiator):
     payload = V4Payload(connection_requested=V4ConnectionRequested())
     event = V4Event(type=RealTimeEvent.CONNECTIONREQUESTED.name, payload=payload, initiator=initiator)
 
-    await handle_events_and_wait_for_completion(df_loop, [event])
+    await create_and_await_tasks(df_loop, [event])
 
-    listener.is_accepting_event.assert_called_with(event, BOT_USER)
     listener.on_connection_requested.assert_called_with(initiator, payload.connection_requested)
 
 
@@ -382,9 +368,8 @@ async def test_handle_connection_accepted(df_loop, listener, initiator):
     payload = V4Payload(connection_accepted=V4ConnectionAccepted())
     event = V4Event(type=RealTimeEvent.CONNECTIONACCEPTED.name, payload=payload, initiator=initiator)
 
-    await handle_events_and_wait_for_completion(df_loop, [event])
+    await create_and_await_tasks(df_loop, [event])
 
-    listener.is_accepting_event.assert_called_with(event, BOT_USER)
     listener.on_connection_accepted.assert_called_with(initiator, payload.connection_accepted)
 
 
@@ -393,9 +378,8 @@ async def test_handle_message_suppressed(df_loop, listener, initiator):
     payload = V4Payload(message_suppressed=V4MessageSuppressed())
     event = V4Event(type=RealTimeEvent.MESSAGESUPPRESSED.name, payload=payload, initiator=initiator)
 
-    await handle_events_and_wait_for_completion(df_loop, [event])
+    await create_and_await_tasks(df_loop, [event])
 
-    listener.is_accepting_event.assert_called_with(event, BOT_USER)
     listener.on_message_suppressed.assert_called_with(initiator, payload.message_suppressed)
 
 
@@ -404,54 +388,16 @@ async def test_handle_symphony_element(df_loop, listener, initiator):
     payload = V4Payload(symphony_elements_action=V4SymphonyElementsAction())
     event = V4Event(type=RealTimeEvent.SYMPHONYELEMENTSACTION.name, payload=payload, initiator=initiator)
 
-    await handle_events_and_wait_for_completion(df_loop, [event])
+    await create_and_await_tasks(df_loop, [event])
 
-    listener.is_accepting_event.assert_called_with(event, BOT_USER)
     listener.on_symphony_elements_action.assert_called_once_with(initiator, payload.symphony_elements_action)
 
 
 @pytest.mark.asyncio
-async def test_listener_concurrency(bare_df_loop, read_df_side_effect):
-    class QueueListener(RealTimeEventListener):
-        def __init__(self, queue, other_queue):
-            self.queue = queue
-            self.other_queue = other_queue
-            self.first = True
+async def test_handle_unknown_type(df_loop, listener, initiator):
+    payload = V4Payload(symphony_elements_action=V4SymphonyElementsAction())
+    event = V4Event(type="unknown", payload=payload, initiator=initiator)
 
-        async def on_message_sent(self, initiator: V4Initiator, event: V4MessageSent):
-            if self.first:
-                await self.queue.put("message")
-                await self.other_queue.get()
-                await bare_df_loop.stop()
-            self.first = False
+    await create_and_await_tasks(df_loop, [event])
 
-    bare_df_loop.read_datafeed.side_effect = read_df_side_effect
-
-    queue_one = asyncio.Queue()
-    queue_two = asyncio.Queue()
-
-    bare_df_loop.subscribe(QueueListener(queue_one, queue_two))
-    bare_df_loop.subscribe(QueueListener(queue_two, queue_one))
-
-    await bare_df_loop.start()  # test it finishes without deadlock
-
-
-@pytest.mark.asyncio
-async def test_events_concurrency(bare_df_loop, read_df_side_effect):
-    class QueueListener(RealTimeEventListener):
-        def __init__(self):
-            self.queue = asyncio.Queue()
-            self.count = 0
-
-        async def on_message_sent(self, initiator: V4Initiator, event: V4MessageSent):
-            self.count += 1
-            if self.count == 1:
-                await self.queue.get()
-                await bare_df_loop.stop()
-            elif self.count == 2:
-                await self.queue.put("message")
-
-    bare_df_loop.read_datafeed.side_effect = read_df_side_effect
-    bare_df_loop.subscribe(QueueListener())
-
-    await bare_df_loop.start()  # test no deadlock
+    listener.assert_not_awaited()

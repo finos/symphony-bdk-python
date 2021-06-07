@@ -1,4 +1,3 @@
-from symphony.bdk.gen import ApiAttributeError
 from symphony.bdk.gen.agent_model.v4_event import V4Event
 from symphony.bdk.gen.agent_model.v4_message_sent import V4MessageSent
 from symphony.bdk.gen.agent_model.v4_initiator import V4Initiator
@@ -17,6 +16,7 @@ from symphony.bdk.gen.agent_model.v4_connection_requested import V4ConnectionReq
 from symphony.bdk.gen.agent_model.v4_connection_accepted import V4ConnectionAccepted
 from symphony.bdk.gen.agent_model.v4_message_suppressed import V4MessageSuppressed
 from symphony.bdk.gen.agent_model.v4_symphony_elements_action import V4SymphonyElementsAction
+from symphony.bdk.gen.pod_model.user_v2 import UserV2
 
 
 class RealTimeEventListener:
@@ -25,20 +25,20 @@ class RealTimeEventListener:
     """
 
     @staticmethod
-    async def is_accepting_event(event: V4Event, username: str) -> bool:
+    async def is_accepting_event(event: V4Event, bot_info: UserV2) -> bool:
         """Checks if the event is accepted to be handled.
 
-        By default, all the events that is created by the bot  itself will not be accepted to be handled by the
+        By default, all the events that is created by the bot itself will not be accepted to be handled by the
         listener. If you want to handle the self-created events or you want to apply your own filters for the events,
         you should override this method.
 
         :param event: Event to be verified.
-        :param username: Username of the initiator.
+        :param bot_info: the UserV2 object containing the bot service account information
         :return: True if the event is accepted, False otherwise
         """
         try:
-            return event.initiator.user.username != username
-        except ApiAttributeError:
+            return event.initiator.user.user_id != bot_info.id
+        except AttributeError:
             return False
 
     async def on_message_sent(self, initiator: V4Initiator, event: V4MessageSent):

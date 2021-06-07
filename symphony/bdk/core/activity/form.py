@@ -42,5 +42,5 @@ class FormReplyActivity(AbstractActivity[FormReplyContext]):
     def matches(self, context: FormReplyContext) -> bool:
         pass
 
-    def on_activity(self, context: FormReplyContext):
+    async def on_activity(self, context: FormReplyContext):
         pass
