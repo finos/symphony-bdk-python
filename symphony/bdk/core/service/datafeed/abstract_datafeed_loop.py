@@ -11,6 +11,7 @@ from typing import List
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
 from symphony.bdk.core.service.datafeed.real_time_event_listener import RealTimeEventListener
+from symphony.bdk.core.service.session.session_service import SessionService
 from symphony.bdk.gen.agent_api.datafeed_api import DatafeedApi
 from symphony.bdk.gen.agent_model.v4_event import V4Event
 
@@ -65,7 +66,8 @@ class AbstractDatafeedLoop(ABC):
     event by the subscribed listeners.
     """
 
-    def __init__(self, datafeed_api: DatafeedApi, auth_session: AuthSession, config: BdkConfig):
+    def __init__(self, datafeed_api: DatafeedApi, session_service: SessionService, auth_session: AuthSession,
+                 config: BdkConfig):
         """
 
         :param datafeed_api: The file location of the spreadsheet
@@ -73,15 +75,16 @@ class AbstractDatafeedLoop(ABC):
         :param config: the bot configuration
         """
         self._datafeed_api = datafeed_api
+        self._session_service = session_service
         self._listeners = []
         self._auth_session = auth_session
-        self._bdk_config = config
         self._api_client = datafeed_api.api_client
         self._running = False
         self._hard_kill = False
         self._timeout = None
         self._tasks = []
         self._retry_config = config.datafeed.retry
+        self._bot_info = None
 
     async def start(self):
         """Start the datafeed event service
@@ -89,6 +92,7 @@ class AbstractDatafeedLoop(ABC):
         :return: None
         """
         logger.debug("Starting datafeed loop")
+        self._bot_info = await self._session_service.get_session()
 
         await self._prepare_datafeed()
         try:
@@ -184,7 +188,7 @@ class AbstractDatafeedLoop(ABC):
 
         for event in sanitized_events:
             for listener in self._listeners:
-                if await listener.is_accepting_event(event, self._bdk_config.bot.username):
+                if await listener.is_accepting_event(event, self._bot_info):
                     task = asyncio.create_task(self._dispatch_to_listener_method(listener, event))
                     tasks.append(task)
 

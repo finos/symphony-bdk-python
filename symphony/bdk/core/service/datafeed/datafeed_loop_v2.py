@@ -8,6 +8,7 @@ from symphony.bdk.core.retry import retry
 from symphony.bdk.core.retry.strategy import read_datafeed_retry
 from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import AbstractDatafeedLoop
 from symphony.bdk.core.service.datafeed.exception import EventError
+from symphony.bdk.core.service.session.session_service import SessionService
 from symphony.bdk.gen.agent_api.datafeed_api import DatafeedApi
 from symphony.bdk.gen.agent_model.ack_id import AckId
 from symphony.bdk.gen.agent_model.v5_datafeed import V5Datafeed
@@ -41,8 +42,9 @@ class DatafeedLoopV2(AbstractDatafeedLoop):
         really stopped
         """
 
-    def __init__(self, datafeed_api: DatafeedApi, auth_session: AuthSession, config: BdkConfig):
-        super().__init__(datafeed_api, auth_session, config)
+    def __init__(self, datafeed_api: DatafeedApi, session_service: SessionService, auth_session: AuthSession,
+                 config: BdkConfig):
+        super().__init__(datafeed_api, session_service, auth_session, config)
         self._ack_id = ""
         self._datafeed_id = None
         self._tag = config.bot.username[0:DATAFEED_TAG_MAX_LENGTH]
