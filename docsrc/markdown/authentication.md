@@ -47,7 +47,7 @@ We do not support password encrypted private keys.
 
 Alternatively, if you have a `.pfx` file, you can use the OpenSSL Command line tool to convert it to `.pem` format:
 ```bash
-openssl pkcs12 -in .\certificate.pfx -out certificate.pem -nodes
+openssl pkcs12 -in certificate.pfx -out certificate.pem -nodes
 ```
 
 
