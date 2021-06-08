@@ -50,7 +50,6 @@ Alternatively, if you have a `.pfx` file, you can use the OpenSSL Command line t
 openssl pkcs12 -in certificate.pfx -out certificate.pem -nodes
 ```
 
-
 ### Bot authentication deep-dive
 The code snippet below explains how to manually retrieve your bot authentication session. However, note that by default
 those operations are done behind the scene through the `SymphonyBdk` entry point.
