@@ -12,7 +12,7 @@ class RoomProcessor:
         self.sym_message_parser = SymMessageParser()
         #hard code to the userId of bot you are using.
         self.bot_id = '349026222344891'
-        self.default_message = self.default_message = self.message_formatter.format_message('type @karlPythonDemo help to view commands')
+        self.default_message = self.message_formatter.format_message('type @karlPythonDemo help to view commands')
 
     def process_room_message(self, msg):
         logging.debug('room_processor/process_room_message()')
