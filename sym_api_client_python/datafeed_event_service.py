@@ -7,7 +7,7 @@ from collections import namedtuple
 
 from asyncio import CancelledError
 
-#TODO: These imports are duplicated over the abstract class to avoid errors in the Async version
+# TODO: These imports are duplicated over the abstract class to avoid errors in the Async version
 from .exceptions.UnauthorizedException import UnauthorizedException
 from .exceptions.APIClientErrorException import APIClientErrorException
 from .exceptions.DatafeedExpiredException import DatafeedExpiredException
@@ -215,13 +215,13 @@ class AsyncDataFeedEventService(AbstractDatafeedEventService):
         log.debug('AsyncDataFeedEventService/deactivate_datafeed()')
         if wait_for_handler_completions:
             log.debug('AsyncDataFeedEventService/deactivate_datafeed() --> '
-                     'Waiting for {} events to finish'.format(self.queue.qsize()))
+                      'Waiting for {} events to finish'.format(self.queue.qsize()))
             await self.queue.join()
             log.debug('AsyncDataFeedEventService/deactivate_datafeed() --> '
-                     'Deactivating')
+                      'Deactivating')
         else:
             log.debug('AsyncDataFeedEventService/deactivate_datafeed() --> '
-                     '{} events still being handled, deactivating anyway'.format(self.queue.qsize()))
+                      '{} events still being handled, deactivating anyway'.format(self.queue.qsize()))
 
         if not self.stop:
             self.stop = True
@@ -314,25 +314,30 @@ class AsyncDataFeedEventService(AbstractDatafeedEventService):
         Use with messagedId if available
         """
 
-        if self.trace_enabled:
-            try:
-                intermediates = self.trace_dict[id]
-                assert len(intermediates) == 4
-                trace = EventTrace(id, intermediates[0], intermediates[1], intermediates[2],
-                                   intermediates[3])
-                total_time = intermediates[3] - intermediates[0]
-                time_in_bot = intermediates[3] - intermediates[1]
+        if not self.trace_enabled:
+            return
 
-                # This just writes out total seconds instead of formatting into minutes and hours
-                # for a typical bot response this seems reasonable
-                log.debug("Responded to message in: {:.4g}s. Including {:.4g}s inside the bot"
-                         .format(total_time.total_seconds(), time_in_bot.total_seconds()))
-                if self.trace_recorder is not None:
-                    self.trace_recorder.append(trace)
-                del self.trace_dict[id]
-            except Exception as exc:
-                log.error("Error while computing trace results for id: " + id)
-                log.exception(exc)
+        try:
+            intermediates = self.trace_dict[id]
+            if len(intermediates) != 4:
+                log.error("Error while computing trace results for id: " + id + ": trace item should have 4 elements")
+                return
+
+            trace = EventTrace(id, intermediates[0], intermediates[1], intermediates[2],
+                               intermediates[3])
+            total_time = intermediates[3] - intermediates[0]
+            time_in_bot = intermediates[3] - intermediates[1]
+
+            # This just writes out total seconds instead of formatting into minutes and hours
+            # for a typical bot response this seems reasonable
+            log.debug("Responded to message in: {:.4g}s. Including {:.4g}s inside the bot"
+                      .format(total_time.total_seconds(), time_in_bot.total_seconds()))
+            if self.trace_recorder is not None:
+                self.trace_recorder.append(trace)
+            del self.trace_dict[id]
+        except Exception as exc:
+            log.error("Error while computing trace results for id: " + id)
+            log.exception(exc)
 
     @staticmethod
     def _get_event_id(event):
@@ -348,16 +353,18 @@ class AsyncDataFeedEventService(AbstractDatafeedEventService):
 
         Use with messageId if available
         """
-        if self.trace_enabled:
-            if first_timestamp is not None:
-                self.trace_dict[e_id] = [make_datetime(first_timestamp)]
-            try:
-                self.trace_dict[e_id].append(datetime.datetime.utcnow())
-            except KeyError:
-                log.error(
-                    'Error making traces for {}. Has the same messageId appeared'
-                    'more than once?'.format(e_id)
-                )
+        if not self.trace_enabled:
+            return
+
+        if first_timestamp is not None:
+            self.trace_dict[e_id] = [make_datetime(first_timestamp)]
+        try:
+            self.trace_dict[e_id].append(datetime.datetime.utcnow())
+        except KeyError:
+            log.error(
+                'Error making traces for {}. Has the same messageId appeared'
+                'more than once?'.format(e_id)
+            )
 
     async def handle_events(self):
         """For each event resolve its handler and add it to the queue to be processed"""

@@ -1,6 +1,4 @@
 import logging
-from .api_client import APIClient
-import logging
 
 from .api_client import APIClient
 
