@@ -26,9 +26,22 @@ def fixture_unparsable_message():
     return message
 
 
+@pytest.fixture(name="escaped_message")
+def fixture_escaped_message():
+    message = MagicMock(V4Message)
+    message.message = "<div data-format=\"PresentationML\" data-version=\"2.0\"> \n" \
+                      "This is some escaped text &nbsp;</div>"
+    return message
+
+
 def test_get_text_content_from_message(message):
     plain_text = get_text_content_from_message(message)
     assert plain_text == "This is a link to Symphony's Website"
+
+
+def test_get_escaped_text_content_from_message(escaped_message):
+    plain_text = get_text_content_from_message(escaped_message)
+    assert plain_text == "This is some escaped text &#160;"
 
 
 def test_get_text_content_from_message_unparsable(unparsable_message):
