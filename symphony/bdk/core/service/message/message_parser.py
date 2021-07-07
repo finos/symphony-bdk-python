@@ -3,6 +3,7 @@ extracting entities like Mentions, Hashtags, Cashtags, Emojis and extracting tex
 contained in the message.
 """
 import json
+import html
 
 from enum import Enum
 from json import JSONDecodeError
@@ -20,9 +21,8 @@ def get_text_content_from_message(message: V4Message) -> str:
     :param message: message containing the PresentationML to be parsed
     :return: the message text content extracted from the given PresentationML
     """
-
     try:
-        presentation_ml = message.message
+        presentation_ml = html.unescape(message.message)
         return tostring(fromstring(presentation_ml), method="text").decode().strip()
     except ParseError as exc:
         raise MessageParserError("Unable to parse the PresentationML, it is not in the correct format.") from exc
