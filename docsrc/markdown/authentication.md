@@ -38,11 +38,17 @@ bot:
     certificate:
       path: /path/to/certificate.pem
 ```
-
 To know more about the format of the certificate file, check [SSLContext.load_cert_chain](https://docs.python.org/3/library/ssl.html#ssl.SSLContext.load_cert_chain).
 The certificate path will be passed to the `certfile` parameter of the `load_cert_chain_method`. We do not pass anything
 to `keyfile` and `password` parameters, which means certificate and decrypted private key should be put in the same file.
 
+The certificate path should lead to a single file in PEM format containing the certificate and the decrypted private key. 
+We do not support password encrypted private keys.
+
+Alternatively, if you have a `.pfx` file, you can use the OpenSSL Command line tool to convert it to `.pem` format:
+```bash
+openssl pkcs12 -in certificate.pfx -out certificate.pem -nodes
+```
 
 ### Bot authentication deep-dive
 The code snippet below explains how to manually retrieve your bot authentication session. However, note that by default
