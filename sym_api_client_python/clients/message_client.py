@@ -154,7 +154,15 @@ class MessageClient(APIClient):
         url = '/pod/v1/admin/messages/{0}/receipts'.format(msg_id)
         return self.bot_client.example('GET', url)
 
-    def list_stream_attachments(self, stream_id):
+    def list_stream_attachments(self, stream_id, since, to, limit=50, sort_dir="ASC"):
         logging.debug('MessageClient/list_msg_attachments()')
         url = '/pod/v1/streams/{0}/attachments'.format(stream_id)
-        return self.bot_client.execute_rest_call('GET', url)
+
+        params = {
+            'since': since,
+            'to': to,
+            'limit': limit,
+            'sortDir': sort_dir
+        }
+
+        return self.bot_client.execute_rest_call('GET', url, params=params)
