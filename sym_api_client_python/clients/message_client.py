@@ -154,12 +154,13 @@ class MessageClient(APIClient):
         url = '/pod/v1/admin/messages/{0}/receipts'.format(msg_id)
         return self.bot_client.example('GET', url)
 
-    def list_stream_attachments(self, stream_id: str, since: int, to: int, limit: int = 50, sort_dir: str = "ASC"):
+    def list_stream_attachments(self, stream_id: str, since: int = None, to: int = None, limit: int = 50,
+                                sort_dir: str = "ASC"):
         """List attachments in a particular stream.
                 See: `List Attachments <https://developers.symphony.com/restapi/reference#list-attachments>`_
                 :param stream_id: The stream ID where to look for the attachments
-                :param since: Timestamp of the first required attachment.
-                :param to: Timestamp of the last required attachment.
+                :param since: Unix epoch timestamp of the first required attachment in milliseconds.
+                :param to: Unix epoch timestamp of the last required attachment in milliseconds.
                 :param limit: Maximum number of attachments to return.
                             This optional value defaults to 50 and should be between 0 and 100.
                 :param sort_dir: Attachment date sort direction : ASC or DESC. Default: ASC.
@@ -169,10 +170,13 @@ class MessageClient(APIClient):
         url = '/pod/v1/streams/{0}/attachments'.format(stream_id)
 
         params = {
-            'since': since,
-            'to': to,
             'limit': limit,
             'sortDir': sort_dir
         }
+
+        if since is not None:
+            params["since"] = since
+        if to is not None:
+            params["to"] = to
 
         return self.bot_client.execute_rest_call('GET', url, params=params)
