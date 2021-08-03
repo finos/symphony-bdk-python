@@ -1,0 +1,56 @@
+name: security-checks
+
+on:
+  push:
+    branches: [ "2.0", "2.0-rc" ]
+  pull_request:
+    branches: [ "2.0", "2.0-rc" ]
+
+jobs:
+  build:
+    name: security-checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Set up Python 3.8
+        id: setup-python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Get pip cache dir
+        id: pip-cache
+        run: |
+          echo "::set-output name=dir::$(pip cache dir)"
+
+      - name: Cache pip dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.pip-cache.outputs.dir }}
+          key: ${{ runner.os }}-pip-${{ steps.setup-python.outputs.python-version }}
+
+      - name: Install Poetry
+        run: pip install poetry
+
+      - name: Cache poetry
+        uses: actions/cache@v2
+        with:
+          path: ${{ matrix.path }}
+          key: ${{ runner.os }}-poetry-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('poetry.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-poetry-${{ steps.setup-python.outputs.python-version }}-
+
+      - name: Install dependencies
+        run: poetry install
+
+      - name: Export dependencies
+        run: poetry export -o requirements.txt
+
+      - name: Run license checks
+        run: poetry run liccheck
+
+      - name: Run CVE checks
+        run: poetry run safety check
