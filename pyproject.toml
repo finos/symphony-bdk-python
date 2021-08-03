@@ -31,7 +31,7 @@ furo = "^2021.2.21-beta.25"
 hazelcast-python-client = "^4.1"
 safety = "^1.10.3"
 liccheck = "^0.6.2"
-coverage = "^6.0b1"
+coverage = {version = "^6.0b1", extras = ["toml"]}
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
