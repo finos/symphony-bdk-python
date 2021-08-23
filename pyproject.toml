@@ -1,10 +1,10 @@
 [tool.poetry]
-name = "sym_api_client_python"
+name = "symphony_bdk_python"
 version = "2.0.dev0"
-license = "MIT"
+license = "Apache-2.0"
 description = "Symphony Bot Development Kit for Python"
 readme = "README.md"
-authors = ["Symphony Platform Solutions <platformsolutions@symphony.com>"]
+authors = ["Symphony@FINOS <symphony@finos.org>"]
 packages = [
     { include = "symphony" }
 ]
