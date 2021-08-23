@@ -166,7 +166,7 @@ twice. This can be achieved by maintaining a short time lived cache of the alrea
 ### Running multiple instances of a bot (DF v2 only)
 
 An example is provided in the
-[multiple_instances](https://github.com/SymphonyPlatformSolutions/symphony-api-client-python/tree/2.0/examples/multiple_instances)
+[multiple_instances](https://github.com/finos/symphony-bdk-python/tree/main/examples/multiple_instances)
 folder.
 
 With datafeed v2 it is possible to run multiple instances of a bot. Each instance will receive events in turn. The

@@ -8,12 +8,12 @@
 
 This is the Symphony BDK for Python to help develop bots and interact with the [Symphony REST APIs](https://developers.symphony.com/restapi/reference).
 
-Legacy Python BDK is located in the master branch of this repo.
+Legacy Python BDK is located in the legacy branch of this repo.
 
 ## Installation and getting started
-The [reference documentation](https://symphonyplatformsolutions.github.io/symphony-api-client-python/) includes detailed
+The [reference documentation](https://symphony-bdk-python.finos.org/) includes detailed
 installation instructions as well as a comprehensive
-[getting started](https://symphonyplatformsolutions.github.io/symphony-api-client-python/markdown/getting_started.html)
+[getting started](https://symphony-bdk-python.finos.org/markdown/getting_started.html)
 guide.
 
 ## Build from source
@@ -32,7 +32,7 @@ It is possible to run pylint scan locally (on a specific file or package) execut
 To generate locally the Sphinx documentation, run: `cd docsrc && make html`.
 
 ## Contributing
-In order to get in touch with the project team, please open a [GitHub Issue](https://github.com/finos/symphony-bdk-java/issues).
+In order to get in touch with the project team, please open a [GitHub Issue](https://github.com/finos/symphony-bdk-python/issues).
 Alternatively, you can email/subscribe to [symphony@finos.org](https://groups.google.com/a/finos.org/g/symphony).
 
 1. Fork it
