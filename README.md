@@ -31,6 +31,12 @@ It is possible to run pylint scan locally (on a specific file or package) execut
 
 To generate locally the Sphinx documentation, run: `cd docsrc && make html`.
 
+## Roadmap
+
+Our next milestone is the [2.0](https://github.com/finos/symphony-bdk-python/milestone/2) one.
+It will only consist in delivering an official 2.0.0 version on Pypi under the new package name `symphony-bdk-python`.
+
+
 ## Contributing
 In order to get in touch with the project team, please open a [GitHub Issue](https://github.com/finos/symphony-bdk-python/issues).
 Alternatively, you can email/subscribe to [symphony@finos.org](https://groups.google.com/a/finos.org/g/symphony).
