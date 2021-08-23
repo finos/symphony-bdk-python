@@ -4,7 +4,7 @@ version = "2.0.dev0"
 license = "Apache-2.0"
 description = "Symphony Bot Development Kit for Python"
 readme = "README.md"
-authors = ["Symphony@FINOS <symphony@finos.org>"]
+authors = ["Symphony Platform Solutions <symphony@finos.org>"]
 packages = [
     { include = "symphony" }
 ]
