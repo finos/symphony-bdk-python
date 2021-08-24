@@ -2,7 +2,7 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Python](https://img.shields.io/badge/python-3.8%20%7C%203.9-blue)](https://www.python.org/downloads/release/python-3)
 [![Pypi](https://img.shields.io/badge/pypi-2.0b5-green)](https://pypi.org/project/sym-api-client-python/2.0b5/)
-![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/SymphonyPlatformSolutions/symphony-api-client-python/build/2.0)
+![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/finos/symphony-bdk-python/build/main)
 
 # Symphony BDK for Python
 
