@@ -26,7 +26,7 @@ Contents
 # Symphony BDK Reference Documentation
 
 This reference guide provides detailed information about the
-[Symphony BDK](https://github.com/SymphonyPlatformSolutions/symphony-api-client-python/tree/2.0).
+[Symphony BDK](https://github.com/finos/symphony-bdk-python).
 It provides a comprehensive documentation for all features and abstractions made on top of the
 [Symphony REST API](https://developers.symphony.com/restapi/reference).
 
