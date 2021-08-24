@@ -1,4 +1,4 @@
-name: build
+name: security-checks
 
 on:
   push:
@@ -8,20 +8,12 @@ on:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ ubuntu-latest, macos-latest, windows-latest ]
-        include:
-          - os: ubuntu-latest
-            path: ~/.cache/pypoetry/virtualenvs
-          - os: macos-latest
-            path: ~/Library/Caches/pypoetry/virtualenvs
-          - os: windows-latest
-            path: ~\AppData\Local\pypoetry\Cache\virtualenvs
+    name: security-checks
+    runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout Code
+        uses: actions/checkout@v2
 
       - name: Set up Python 3.8
         id: setup-python
@@ -46,7 +38,7 @@ jobs:
       - name: Cache poetry
         uses: actions/cache@v2
         with:
-          path: ${{ matrix.path }}
+          path: ~/.cache/pypoetry/virtualenvs
           key: ${{ runner.os }}-poetry-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('poetry.lock') }}
           restore-keys: |
             ${{ runner.os }}-poetry-${{ steps.setup-python.outputs.python-version }}-
@@ -54,20 +46,11 @@ jobs:
       - name: Install dependencies
         run: poetry install
 
-      - name: Run tests with coverage
-        run: poetry run pytest
-        timeout-minutes: 10
+      - name: Export dependencies
+        run: poetry export -o requirements.txt
 
-      - name: Upload test results
-        uses: actions/upload-artifact@v2
-        with:
-          name: pytest-results-${{ matrix.os }}
-          path: test-results/junit.xml
-        if: ${{ always() }}
+      - name: Run license checks
+        run: poetry run liccheck
 
-      - name: Upload test coverage
-        uses: actions/upload-artifact@v2
-        with:
-          name: pytest-coverage-${{ matrix.os }}
-          path: htmlcov
-        if: ${{ always() }}
+      - name: Run CVE checks
+        run: poetry run safety check

@@ -1,8 +1,8 @@
-name: On 2.0 push
+name: On main push
 
 on:
   push:
-    branches: [ "2.0" ]
+    branches: [ "main" ]
 
 jobs:
   security:
@@ -30,10 +30,10 @@ jobs:
         with:
           python-version: 3.8
 
-      - name: Copy 2.0 branch into gh-pages
+      - name: Copy main branch into gh-pages
         run: |
           git checkout gh-pages
-          git reset --hard 2.0
+          git reset --hard main
 
       - name: Get pip cache dir
         id: pip-cache
