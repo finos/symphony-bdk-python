@@ -169,7 +169,7 @@ In order to have a fully working extension app, your extension app backend will 
   return the result of `await ext_app_authenticator.validate_jwt(jwt)`.
 
 ### OBO (On Behalf Of) authentication
-> Read more about OBO authentication [here](https://developers.symphony.com/symphony-developer/docs/obo-overview)
+> Read more about OBO authentication [here](https://docs.developers.symphony.com/building-extension-applications-on-symphony/app-authentication/obo-authentication)
 
 The following example shows how to retrieve OBO sessions using `username` (type `str`) or `user_id` (type `int`)
 and to call services which have OBO endpoints (users, streams, connections and messages so far):

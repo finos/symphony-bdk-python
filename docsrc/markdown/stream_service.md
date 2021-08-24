@@ -44,4 +44,4 @@ if __name__ == "__main__":
 ```
 
 You can check more examples
-[here](https://github.com/SymphonyPlatformSolutions/symphony-api-client-python/blob/2.0/examples/services/streams.py)
+[here](https://github.com/finos/symphony-bdk-python/blob/main/examples/services/streams.py)
