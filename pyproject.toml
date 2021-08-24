@@ -15,7 +15,7 @@ python-dateutil = "^2.8.1"
 urllib3 = "^1.26.4"
 aiohttp = "^3.7.4"
 pyyaml = "^5.3.1"
-PyJWT= "^2.0.1"
+PyJWT = "^2.0.1"
 cryptography = "^3.4.6"
 tenacity = "^7.0.0"
 defusedxml = "^0.7.1"
@@ -29,6 +29,9 @@ Sphinx = "^3.5.1"
 recommonmark = "^0.7.1"
 furo = "^2021.2.21-beta.25"
 hazelcast-python-client = "^4.1"
+safety = "^1.10.3"
+liccheck = "^0.6.2"
+coverage = {version = "^6.0b1", extras = ["toml"]}
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -47,3 +50,12 @@ omit = ["symphony/bdk/gen/*"]
 
 [tool.coverage.report]
 fail_under = 90.0
+
+[tool.liccheck]
+authorized_licenses = [
+    "BSD",
+    "GNU Library or Lesser General Public License (LGPL)",
+    "MIT",
+    "Apache Software",
+    "Python Software Foundation"
+]
