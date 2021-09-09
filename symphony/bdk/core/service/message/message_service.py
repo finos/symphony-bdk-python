@@ -466,20 +466,6 @@ class MessageService(OboMessageService):
 
     @staticmethod
     def _validate_message_search_query(query: MessageSearchQuery):
-        """
-        // checks streamType value among accepted ones
-    if (query.getStreamType() != null && !equalsAny(query.getStreamType(), "CHAT", "IM", "MIM", "ROOM", "POST")) {
-      String errorMsg = "Wrong stream type '" + query.getStreamType() +
-          "'. Accepted values are: CHAT (1-1 instant messages and multi-party instant messages), "
-          + "IM (1-1 instant message), MIM (multi-party instant message), ROOM or POST (user profile wall posts)";
-      throw new IllegalArgumentException(errorMsg);
-    }
-
-    // text queries require streamId to be provided
-    if (query.getText() != null && query.getStreamId() == null) {
-      throw new IllegalArgumentException("Message text queries require a streamId to be provided.");
-    }
-        """
         # Check streamType value among accepted ones if specified
         if query.stream_type is not None and query.stream_type not in ["CHAT", "CHAT", "IM", "MIM", "ROOM", "POST"]:
             raise ValueError(f"Wrong stream type {query.stream_type}. "
