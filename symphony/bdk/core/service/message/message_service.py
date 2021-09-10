@@ -1,10 +1,12 @@
-from typing import Union, List, Tuple, IO
+from typing import Union, List, Tuple, IO, AsyncGenerator
 
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.core.service.message.model import Message
 from symphony.bdk.core.service.message.multi_attachments_messages_api import MultiAttachmentsMessagesApi
+from symphony.bdk.core.service.pagination import offset_based_pagination
 from symphony.bdk.gen.agent_api.attachments_api import AttachmentsApi
+from symphony.bdk.gen.agent_model.message_search_query import MessageSearchQuery
 from symphony.bdk.gen.agent_model.v4_import_response import V4ImportResponse
 from symphony.bdk.gen.agent_model.v4_imported_message import V4ImportedMessage
 from symphony.bdk.gen.agent_model.v4_message import V4Message
@@ -419,3 +421,58 @@ class MessageService(OboMessageService):
             "user_agent": ""
         }
         return await self._default_api.v1_admin_messages_message_id_metadata_relationships_get(**params)
+
+    @retry
+    async def search_messages(self, query: MessageSearchQuery, sort_dir: str = "desc", skip: int = 0,
+                              limit: int = 50) -> List[V4Message]:
+        """Searches for messages in the context of a specified user, given an argument-based query and pagination
+        attributes (skip and limit parameters).
+        See: `Message Search (using POST) <https://developers.symphony.com/restapi/reference#message-search-post>`_
+
+        :param query: The search query arguments
+        :param sort_dir: Sorting direction for response. Possible values are desc (default) and asc.
+        :param skip: Number of messages to skip. Default: 0
+        :param limit: Maximum number of messages to return. Default: 50
+        :return: The list of matching messages in the stream
+        """
+        MessageService._validate_message_search_query(query)
+        params = {
+            "session_token": await self._auth_session.session_token,
+            "key_manager_token": await self._auth_session.key_manager_token,
+            "query": query,
+            "sort_dir": sort_dir,
+            "skip": skip,
+            "limit": limit
+        }
+        message_list = await self._messages_api.v1_message_search_post(**params)
+        return message_list.value  # endpoint returns empty list when no values found
+
+    async def search_all_messages(self, query: MessageSearchQuery, sort_dir: str = "desc", chunk_size: int = 50,
+                                  max_number: int = None) -> AsyncGenerator[V4Message, None]:
+        """Searches for messages in the context of a specified user, given an argument-based query.
+        See: `Message Search (using POST) <https://developers.symphony.com/restapi/reference#message-search-post>`_
+
+        :param query: The search query arguments
+        :param sort_dir: Sorting direction for response. Possible values are desc (default) and asc.
+        :param chunk_size: the maximum number of elements to retrieve in one underlying HTTP call
+        :param max_number: the total maximum number of elements to retrieve
+        :return: an asynchronous generator of matching messages
+        """
+
+        async def search_messages_one_page(skip, limit):
+            return await self.search_messages(query, sort_dir, skip, limit)
+
+        return offset_based_pagination(search_messages_one_page, chunk_size, max_number)
+
+    @staticmethod
+    def _validate_message_search_query(query: MessageSearchQuery):
+        # Check streamType value among accepted ones if specified
+        if query.stream_type is not None and query.stream_type not in ["CHAT", "IM", "MIM", "ROOM", "POST"]:
+            raise ValueError(f"Wrong stream type {query.stream_type}. "
+                             f"Accepted values are: CHAT (1-1 instant messages and multi-party instant messages), "
+                             f"IM (1-1 instant message), MIM (multi-party instant message), "
+                             f"ROOM or POST (user profile wall posts)")
+
+        # Text queries require streamId to be provided
+        if query.text is not None and query.stream_id is None:
+            raise ValueError("Message text queries require a stream_id to be provided.")

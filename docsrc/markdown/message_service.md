@@ -5,6 +5,7 @@ More precisely:
 * [Get a message](https://developers.symphony.com/restapi/reference#get-message-v1)
 * [Get messages](https://developers.symphony.com/restapi/reference#messages-v4)
 * [Get message IDs by timestamp](https://developers.symphony.com/restapi/reference#get-message-ids-by-timestamp)
+* [Search messages](https://developers.symphony.com/restapi/reference#message-search-post)
 * [Send message](https://developers.symphony.com/restapi/reference#create-message-v4)
 * [Import messages](https://developers.symphony.com/restapi/reference#import-message-v4)
 * [Get attachment](https://developers.symphony.com/restapi/reference#attachment)
