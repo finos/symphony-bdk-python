@@ -467,7 +467,7 @@ class MessageService(OboMessageService):
     @staticmethod
     def _validate_message_search_query(query: MessageSearchQuery):
         # Check streamType value among accepted ones if specified
-        if query.stream_type is not None and query.stream_type not in ["CHAT", "CHAT", "IM", "MIM", "ROOM", "POST"]:
+        if query.stream_type is not None and query.stream_type not in ["CHAT", "IM", "MIM", "ROOM", "POST"]:
             raise ValueError(f"Wrong stream type {query.stream_type}. "
                              f"Accepted values are: CHAT (1-1 instant messages and multi-party instant messages), "
                              f"IM (1-1 instant message), MIM (multi-party instant message), "
