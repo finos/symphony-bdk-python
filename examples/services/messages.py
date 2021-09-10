@@ -5,6 +5,7 @@ from pathlib import Path
 from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.service.message.model import Message
 from symphony.bdk.core.symphony_bdk import SymphonyBdk
+from symphony.bdk.gen.agent_model.message_search_query import MessageSearchQuery
 
 
 async def run():
@@ -27,6 +28,10 @@ async def run():
                 open("/path/to/attachment-preview", "rb") as preview:
             message = Message(content="<messageML>Hello, World!</messageML>", attachments=[(attachment, preview)])
             await message_service.blast_message([stream_id_1, stream_id_2], message)
+
+        async for m in await message_service.search_all_messages(MessageSearchQuery(text="some_text",
+                                                                                    stream_id=stream_id_1)):
+            logging.debug(m.message_id)
 
         logging.info("Obo example:")
         obo_auth_session = bdk.obo(username="username")
