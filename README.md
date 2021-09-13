@@ -1,7 +1,7 @@
 [![FINOS - Incubating](https://cdn.jsdelivr.net/gh/finos/contrib-toolbox@master/images/badge-incubating.svg)](https://finosfoundation.atlassian.net/wiki/display/FINOS/Incubating)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Python](https://img.shields.io/badge/python-3.8%20%7C%203.9-blue)](https://www.python.org/downloads/release/python-3)
-[![Pypi](https://img.shields.io/badge/pypi-2.0b5-green)](https://pypi.org/project/sym-api-client-python/2.0b5/)
+[![Pypi](https://img.shields.io/pypi/v/symphony-bdk-python)](https://pypi.org/project/symphony-bdk-python/)
 ![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/finos/symphony-bdk-python/build/main)
 
 # Symphony BDK for Python
@@ -33,8 +33,8 @@ To generate locally the Sphinx documentation, run: `cd docsrc && make html`.
 
 ## Roadmap
 
-Our next milestone is the [2.0](https://github.com/finos/symphony-bdk-python/milestone/2) one.
-It will only consist in delivering an official 2.0.0 version on Pypi under the new package name `symphony-bdk-python`.
+Our next milestone is the [2.0.x](https://github.com/finos/symphony-bdk-python/milestone/1) one.
+It will only consist in delivering the next improvements of the BDK.
 
 
 ## Contributing
