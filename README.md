@@ -8,8 +8,6 @@
 
 This is the Symphony BDK for Python to help develop bots and interact with the [Symphony REST APIs](https://developers.symphony.com/restapi/reference).
 
-Legacy Python BDK is located in the legacy branch of this repo.
-
 ## Installation and getting started
 The [reference documentation](https://symphony-bdk-python.finos.org/) includes detailed
 installation instructions as well as a comprehensive
