@@ -10,7 +10,7 @@ For all Symphony BDK applications, you should start with the [Symphony Generator
 The Symphony Generator offers a fast way to bootstrap your Symphony BDK project in several languages, including Python:
 ```
 npm i -g generator-symphony
-yo symphony 2.0
+yo symphony
 ```
 After entering pod and bot information and selecting `Bot Application` as application type, you should be able to select
 Python as programming language. This will generated a configuration file, a `requirements.txt` and a simple python script.
@@ -33,13 +33,13 @@ setup(
     author_email='jane.doe@acme.com',
     description='My Python bot',
     python_requires='>=3.8',
-    install_requires=['sym-api-client-python>=2.0b0']
+    install_requires=['sym-api-client-python>=2.0.0']
 )
 
 ```
 and your `requirements.txt` like:
 ```
-sym-api-client-python>=2.0b0
+sym-api-client-python>=2.0.0
 ```
 
 ### Poetry based project
@@ -52,7 +52,7 @@ description = "My bot"
 
 [tool.poetry.dependencies]
 python = "^3.8"
-sym-api-client-python = "^2.0b0"
+sym-api-client-python = "^2.0.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
