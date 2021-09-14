@@ -1,7 +1,7 @@
 # symphony-api-client-python
 
 > **_INFO:_**  This is the legacy version of the BDK. We strongly recommend using the 2.0 version of the BDK delivered
-> under package name [symphony-bdk-python](https://pypi.org/project/symphony-bdk-python/)  in Pypi.
+> under package name [symphony-bdk-python](https://pypi.org/project/symphony-bdk-python/) in Pypi.
 > Source code of the 2.0 BDK can be found in the main branch of the [symphony-bdk-python repository](https://github.com/finos/symphony-bdk-python).
 
 ## Overview
