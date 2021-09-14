@@ -2,7 +2,7 @@
 
 > **_INFO:_**  This is the legacy version of the BDK. We strongly recommend using the 2.0 version of the BDK delivered
 > under package name [symphony-bdk-python](https://pypi.org/project/symphony-bdk-python/)  in Pypi.
-> Source dode of the 2.0 BDK can be found in the main branch of the [symphony-bdk-python repository](https://github.com/finos/symphony-bdk-python).
+> Source code of the 2.0 BDK can be found in the main branch of the [symphony-bdk-python repository](https://github.com/finos/symphony-bdk-python).
 
 ## Overview
 This Symphony bot client is written in an event handler architecture. The client keeps polling a datafeed and responds to different types of [Real Time Events](https://rest-api.symphony.com/docs/real-time-events) it receives.
