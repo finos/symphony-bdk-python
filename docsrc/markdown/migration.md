@@ -31,7 +31,7 @@ If your bot is deployed on premise, the following properties are required as wel
 
 ### Minimal configuration example
 
-#### Python BDK 1.x
+#### Using the BDK 1.x
 ```json
 {
     "sessionAuthHost": "acme.symphony.com",
@@ -45,7 +45,7 @@ If your bot is deployed on premise, the following properties are required as wel
 }
 ```
 
-### Python BDK 2.0
+#### Using the BDK 2.0
 In JSON:
 ```json
 {
@@ -98,11 +98,11 @@ class PingPongListener(IMListener):
         message_text = self.message_parser.get_text(im_message)[0]
 
         if message_text == "/ping":
-            self._send_message(stream_id, "<messageML>pong</messageML>")
+            self._send_message(stream_id, "pong")
         elif message_text == "/pong":
-            self._send_message(stream_id, "<messageML>ping</messageML>")
+            self._send_message(stream_id, "ping")
         else:
-            self._send_message(stream_id, "<messageML>Sorry, I don't understand!</messageML>")
+            self._send_message(stream_id, "Sorry, I don't understand!")
 
     def on_im_created(self, im_created):
         pass
@@ -158,12 +158,11 @@ class PingPongListener(RealTimeEventListener):
         message_text = get_text_content_from_message(event.message)
         stream_id = event.message.stream.stream_id
         if message_text == "/ping":
-            await self._message_service.send_message(stream_id=stream_id, message="<messageML>pong</messageML>")
+            await self._message_service.send_message(stream_id=stream_id, message="pong")
         elif message_text == "/pong":
-            await self._message_service.send_message(stream_id=stream_id, message="<messageML>ping</messageML>")
+            await self._message_service.send_message(stream_id=stream_id, message="ping")
         else:
-            await self._message_service.send_message(stream_id=stream_id,
-                                                     message="<messageML>Sorry, I don't understand!</messageML>")
+            await self._message_service.send_message(stream_id=stream_id, message="Sorry, I don't understand!")
 
 
 async def run():
@@ -185,7 +184,7 @@ if __name__ == "__main__":
 
 ## Event listeners
 
-### Python BDK 1.x
+### Using the BDK 1.x
 In the Python BDK 1.x, we have three main types of listeners:
 - for IM (1 to 1 conversation)
 - for MIM (room)
@@ -198,12 +197,25 @@ There are also listener types for:
 
 See [datafeed_event_service](https://github.com/finos/symphony-bdk-python/blob/legacy/sym_api_client_python/datafeed_event_service.py) for more details.
 
-### Python BDK 2.0
-In the Python BDK 2.0, we have a `RealTimeEventListener` type that listens to all events. Only events you are interested
+### Using the BDK 2.0
+In the Python BDK 2.0, we have a [`RealTimeEventListener`](../_autosummary/symphony.bdk.core.service.datafeed.real_time_event_listener.RealTimeEventListener.html)
+type that listens to all events. Only events you are interested
 in needs to have the corresponding method overridden. See [datafeed](./datafeed.md) documentation for more information.
 
 The BDK 2.0 also provides a simple way to listen for `MESSAGESENT` events thanks to activities.
 See the [dedicated page](./activity-api.md) on how to use it.
+
+## Message parsing functions
+
+The Python BDK 1.x provides utility modules to parse elements and messages.
+The [sym_elements_parser module](https://github.com/finos/symphony-bdk-python/blob/legacy/sym_api_client_python/processors/sym_elements_parser.py)
+has no replacement in the BDK 2.0 since method `on_symphony_elements_action` of
+[`RealTimeEventListener`](../_autosummary/symphony.bdk.core.service.datafeed.real_time_event_listener.RealTimeEventListener.html)
+already returned a structured object of type `V4SymphonyElementsAction`.
+
+However, the [sym_elements_parser](https://github.com/finos/symphony-bdk-python/blob/legacy/sym_api_client_python/processors/sym_elements_parser.py)
+is replaced by [message_parser](../_autosummary/symphony.bdk.core.service.message.message_parser.html#module-symphony.bdk.core.service.message.message_parser)
+which contains methods to extract cashtags, emojis, hashtags, mentions and the text content.
 
 ## Models
 Models names have been changed in Python BDK 2.0. They actually follow the models in the openapi specification of
