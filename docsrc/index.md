@@ -2,6 +2,7 @@ Contents
 --------
 
 * [Getting Started](markdown/getting_started.md)
+* [Migration guide](markdown/migration.md)
 * [Configuration](markdown/configuration.md)
 * [Authentication](markdown/authentication.md)
 * [Datafeed](markdown/datafeed.md)
@@ -35,6 +36,7 @@ If you are just getting started with Symphony Bot developments, you may want to 
 
 The reference documentation consists of the following sections:
 * [Getting Started](markdown/getting_started.md): Introducing Symphony BDK for beginners
+* [Migration guide](markdown/migration.md): Migrating from BDK 1.x to BDK 2.0
 * [Configuration](markdown/configuration.md): Configuration structure, formats, how to load from code
 * [Authentication](markdown/authentication.md): RSA authentication, OBO authentication
 * [Datafeed](markdown/datafeed.md): Listening and reacting to real-time events
