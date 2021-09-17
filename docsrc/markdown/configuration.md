@@ -130,6 +130,7 @@ manager which manages the key token of the bot.
   [ssl lib documentation on certificates](https://docs.python.org/3/library/ssl.html#certificates) for more information.
 
   To fetch the cert file in pem format, you can run the following openssl command: `openssl s_client -connect <host>:<port> -showcerts > cert.pem`
+  If not specified, the BDK will load default system certificates using [SSLContext.load_default_certs](https://docs.python.org/3/library/ssl.html#ssl.SSLContext.load_default_certs).
 - `bot` contains information about the bot like the username, the private key for authenticating the service account
   on pod.
 - `app` contains information about the extension app that the bot will use like
