@@ -22,8 +22,8 @@ def get_text_content_from_message(message: V4Message) -> str:
     :return: the message text content extracted from the given PresentationML
     """
     try:
-        presentation_ml = html.unescape(message.message)
-        return tostring(fromstring(presentation_ml), method="text").decode().strip()
+        escaped_text_content = tostring(fromstring(message.message), method="text").decode().strip()
+        return html.unescape(escaped_text_content)
     except ParseError as exc:
         raise MessageParserError("Unable to parse the PresentationML, it is not in the correct format.") from exc
 
