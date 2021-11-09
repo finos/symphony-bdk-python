@@ -1,6 +1,6 @@
 # Migration guide to Symphony BDK 2.0
 
-This guide provides information about how to migrate from Symphony BDK 1.0 to BDK 2.0. Migration for the following topics will be detailed here:
+This guide provides information about how to migrate from Symphony SDK 1.0 to BDK 2.0. Migration for the following topics will be detailed here:
 - Dependencies
 - Bot configuration
 - Symphony BDK entry point
@@ -8,12 +8,12 @@ This guide provides information about how to migrate from Symphony BDK 1.0 to BD
 - Event listeners
 
 ## Dependencies
-To use the Python BDK 1.x, you had to use the
+To use the Python SDK 1.x, you had to use the
 [`sym-api-client-python` Pypi package](https://pypi.org/project/sym-api-client-python/) in your `requirements.txt` file.
 For the Python BDK 2.0, package name has been changed to [`symphony-bdk-python`](https://pypi.org/project/symphony-bdk-python/).
 
 ## Bot configuration
-In order for bots to function, a configuration file is needed. Whereas Python BDK 1.x only supports JSON format,
+In order for bots to function, a configuration file is needed. Whereas Python SDK 1.x only supports JSON format,
 Python BDK 2.0 supports both JSON and YAML formats.
 
 Bot configuration for Python BDK 2.0 should have the following properties:
@@ -31,7 +31,7 @@ If your bot is deployed on premise, the following properties are required as wel
 
 ### Minimal configuration example
 
-#### Using the BDK 1.x
+#### Using the SDK 1.x
 ```json
 {
     "sessionAuthHost": "acme.symphony.com",
@@ -69,8 +69,8 @@ bot:
 
 ## Symphony BDK entry point
 
-For the BDK 1.x, `SymBotClient` object acts as an entry point for all services, whereas for the BDK 2.0, it is the `SymphonyBdk` object.
-Whereas the BDK 1.x exposes synchronous methods, the BDK 2.0 exposes most of the service methods as `async` methods.
+For the SDK 1.x, `SymBotClient` object acts as an entry point for all services, whereas for the BDK 2.0, it is the `SymphonyBdk` object.
+Whereas the SDK 1.x exposes synchronous methods, the BDK 2.0 exposes most of the service methods as `async` methods.
 Therefore, an `asyncio` loop is needed to use the BDK.
 
 Please check below for examples or check the [getting started](./getting_started.md) guide.
@@ -78,7 +78,7 @@ Please check below for examples or check the [getting started](./getting_started
 ## BDK services
 To illustrate the use of services, let's take an example of a bot reacting to *ping pong* messages.
 
-### Using the BDK 1.x
+### Using the SDK 1.x
 
 ```python
 from sym_api_client_python.auth.rsa_auth import SymBotRSAAuth
@@ -184,8 +184,8 @@ if __name__ == "__main__":
 
 ## Event listeners
 
-### Using the BDK 1.x
-In the Python BDK 1.x, we have three main types of listeners:
+### Using the SDK 1.x
+In the Python SDK 1.x, we have three main types of listeners:
 - for IM (1 to 1 conversation)
 - for MIM (room)
 - for Symphony elements
@@ -207,7 +207,7 @@ See the [dedicated page](./activity-api.md) on how to use it.
 
 ## Message parsing functions
 
-The Python BDK 1.x provides utility modules to parse elements and messages.
+The Python SDK 1.x provides utility modules to parse elements and messages.
 The [sym_elements_parser module](https://github.com/finos/symphony-bdk-python/blob/legacy/sym_api_client_python/processors/sym_elements_parser.py)
 has no replacement in the BDK 2.0 since method `on_symphony_elements_action` of
 [`RealTimeEventListener`](../_autosummary/symphony.bdk.core.service.datafeed.real_time_event_listener.RealTimeEventListener.html)
@@ -222,6 +222,6 @@ Models names have been changed in Python BDK 2.0. They actually follow the model
 [Symphony's public API](https://github.com/symphonyoss/symphony-api-spec). Field names in Python classes correspond to
 the field names in API's JSON payloads. This requires to change some variable types in your legacy bots.
 
-Whereas most of the objects used in the Python BDK 1.x are Python dictionaries, the Python BDK 2.0 leverages objects
+Whereas most of the objects used in the Python SDK 1.x are Python dictionaries, the Python BDK 2.0 leverages objects
 generated from the openapi specifications. All public methods exposed by the BDK have type hints so that you can easily
 know which types are used as parameters or returned. You can also check the generated documentation [here](../_autosummary/symphony.bdk.core.html).
