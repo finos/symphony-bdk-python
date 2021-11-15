@@ -412,3 +412,13 @@ async def test_search_all_messages(mocked_api_client, message_service):
     assert messages[0].message_id == "test-message1"
 
     assert mocked_api_client.call_api.call_count == 2
+
+
+@pytest.mark.asyncio
+async def test_update_message(mocked_api_client, message_service):
+    mocked_api_client.call_api.return_value = \
+        get_deserialized_object_from_resource(V4Message, "message_response/update_message.json")
+    message = await message_service.update_message("stream_id", "message_id", "test_message")
+
+    assert message.message_id == "ikCBeVCgQT876veVzQzOV3___oNI6f8obQ"
+    assert message.user.user_id == 11338713662703
