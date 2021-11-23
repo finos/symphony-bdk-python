@@ -7,7 +7,6 @@ More precisely:
 * [Get message IDs by timestamp](https://developers.symphony.com/restapi/reference#get-message-ids-by-timestamp)
 * [Search messages](https://developers.symphony.com/restapi/reference#message-search-post)
 * [Send message](https://developers.symphony.com/restapi/reference#create-message-v4)
-* [Update message](https://developers.symphony.com/restapi/reference#update-message-v4)
 * [Import messages](https://developers.symphony.com/restapi/reference#import-message-v4)
 * [Get attachment](https://developers.symphony.com/restapi/reference#attachment)
 * [List attachments](https://developers.symphony.com/restapi/reference#list-attachments)

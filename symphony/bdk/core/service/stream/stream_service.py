@@ -17,8 +17,6 @@ from symphony.bdk.gen.pod_model.stream_filter import StreamFilter
 from symphony.bdk.gen.pod_model.stream_list import StreamList
 from symphony.bdk.gen.pod_model.user_id import UserId
 from symphony.bdk.gen.pod_model.user_id_list import UserIdList
-from symphony.bdk.gen.pod_model.v1_im_attributes import V1IMAttributes
-from symphony.bdk.gen.pod_model.v1_im_detail import V1IMDetail
 from symphony.bdk.gen.pod_model.v2_admin_stream_filter import V2AdminStreamFilter
 from symphony.bdk.gen.pod_model.v2_admin_stream_info import V2AdminStreamInfo
 from symphony.bdk.gen.pod_model.v2_admin_stream_list import V2AdminStreamList
@@ -235,17 +233,6 @@ class StreamService(OboStreamService):
                                                            session_token=await self._auth_session.session_token)
 
     @retry
-    async def get_im_info(self, im_id: str) -> V1IMDetail:
-        """Get information about a particular IM.
-        Wraps the `IM info <https://developers.symphony.com/restapi/reference#im-info> endpoint`
-
-        :param im_id: the id of the IM.
-        :return: the im details.
-        """
-        return await self._streams_api.v1_im_id_info_get(id=im_id,
-                                                         session_token=await self._auth_session.session_token)
-
-    @retry
     async def set_room_active(self, room_id: str, active: bool) -> RoomDetail:
         """Deactivates or reactivates a chatroom. At creation time, the chatroom is activated by default.
         Wraps the `De/Reactivate Room <https://developers.symphony.com/restapi/reference#de-or-re-activate-room>`_
@@ -269,18 +256,6 @@ class StreamService(OboStreamService):
         """
         return await self._streams_api.v3_room_id_update_post(id=room_id, payload=room_attributes,
                                                               session_token=await self._auth_session.session_token)
-
-    @retry
-    async def update_im(self, im_id: str, im_attributes: V1IMAttributes) -> V1IMDetail:
-        """Updates the attributes of an existing im.
-        Wraps the `Update IM <https://developers.symphony.com/restapi/reference#update-im>`_ endpoint.
-
-        :param im_id: the id of the im to be updated.
-        :param im_attributes: the attributes of the im to be updated.
-        :return: the details of the updated im.
-        """
-        return await self._streams_api.v1_im_id_update_post(id=im_id, payload=im_attributes,
-                                                            session_token=await self._auth_session.session_token)
 
     @retry
     async def create_im_admin(self, user_ids: [int]) -> Stream:
@@ -370,7 +345,6 @@ class StreamService(OboStreamService):
         :param max_number: the total maximum number of elements to retrieve.
         :return: an asynchronous generator of the stream members.
         """
-
         async def list_stream_members_one_page(skip, limit):
             members = await self.list_stream_members(stream_id, skip, limit)
             return members.members.value if members.members else None
