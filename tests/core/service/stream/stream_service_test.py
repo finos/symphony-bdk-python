@@ -17,6 +17,8 @@ from symphony.bdk.gen.pod_model.stream_filter import StreamFilter
 from symphony.bdk.gen.pod_model.stream_list import StreamList
 from symphony.bdk.gen.pod_model.user_id import UserId
 from symphony.bdk.gen.pod_model.user_id_list import UserIdList
+from symphony.bdk.gen.pod_model.v1_im_attributes import V1IMAttributes
+from symphony.bdk.gen.pod_model.v1_im_detail import V1IMDetail
 from symphony.bdk.gen.pod_model.v2_admin_stream_filter import V2AdminStreamFilter
 from symphony.bdk.gen.pod_model.v2_admin_stream_list import V2AdminStreamList
 from symphony.bdk.gen.pod_model.v2_membership_list import V2MembershipList
@@ -124,7 +126,6 @@ async def test_list_all_streams(mocked_api_client, stream_service, streams_api):
 
 @pytest.mark.asyncio
 async def test_add_member_to_room(stream_service, room_membership_api):
-
     user_id = 1234456
     room_id = "room_id"
     await stream_service.add_member_to_room(user_id, room_id)  # check no exception raised
@@ -135,7 +136,6 @@ async def test_add_member_to_room(stream_service, room_membership_api):
 
 @pytest.mark.asyncio
 async def test_remove_member_from_room(stream_service, room_membership_api):
-
     user_id = 1234456
     room_id = "room_id"
     await stream_service.remove_member_from_room(user_id, room_id)  # check no exception raised
@@ -161,7 +161,6 @@ async def test_share(mocked_api_client, stream_service, share_api):
 
 @pytest.mark.asyncio
 async def test_promote_user(stream_service, room_membership_api):
-
     user_id = 12345
     room_id = "room_id"
     await stream_service.promote_user_to_room_owner(user_id, room_id)  # check no exception raised
@@ -172,7 +171,6 @@ async def test_promote_user(stream_service, room_membership_api):
 
 @pytest.mark.asyncio
 async def test_demote_owner(stream_service, room_membership_api):
-
     user_id = 12345
     room_id = "room_id"
     await stream_service.demote_owner_to_room_participant(user_id, room_id)  # check no exception raised
@@ -255,6 +253,19 @@ async def test_get_room_info(mocked_api_client, stream_service, streams_api):
 
 
 @pytest.mark.asyncio
+async def test_get_im_info(mocked_api_client, stream_service, streams_api):
+    mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(V1IMDetail,
+                                                                                    "stream/get_im_info.json")
+
+    im_id = "im_id"
+    im_details = await stream_service.get_im_info(im_id)
+
+    streams_api.v1_im_id_info_get.assert_called_once_with(id=im_id, session_token=SESSION_TOKEN)
+    assert im_details.v1_im_attributes.pinned_message_id == "vd7qwNb6hLoUV0BfXXPC43___oPIvkwJbQ"
+    assert im_details.im_system_info.id == "usnBKBkH_BVrGOiVpaupEH___okFfE7QdA"
+
+
+@pytest.mark.asyncio
 async def test_set_room_active(mocked_api_client, stream_service, streams_api):
     mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(RoomDetail,
                                                                                     "stream/deactivate_room.json")
@@ -281,6 +292,21 @@ async def test_update_room(mocked_api_client, stream_service, streams_api):
                                                                session_token=SESSION_TOKEN)
     assert room_details.room_attributes.name == "Test bot room"
     assert room_details.room_system_info.id == "ubaSiuUsc_j-_lVQ8vhAz3___opSJdJZdA"
+
+
+@pytest.mark.asyncio
+async def test_update_im(mocked_api_client, stream_service, streams_api):
+    mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(V1IMDetail,
+                                                                                    "stream/get_im_info.json")
+
+    im_id = "im_id"
+    im_attributes = V1IMAttributes()
+    im_details = await stream_service.update_im(im_id, im_attributes)
+
+    streams_api.v1_im_id_update_post.assert_called_once_with(id=im_id, payload=im_attributes,
+                                                             session_token=SESSION_TOKEN)
+    assert im_details.v1_im_attributes.pinned_message_id == "vd7qwNb6hLoUV0BfXXPC43___oPIvkwJbQ"
+    assert im_details.im_system_info.id == "usnBKBkH_BVrGOiVpaupEH___okFfE7QdA"
 
 
 @pytest.mark.asyncio
