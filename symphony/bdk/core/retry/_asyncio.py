@@ -73,7 +73,7 @@ class AsyncRetrying(BaseRetrying):
         return DoSleep(iteration_sleep)
 
     async def __call__(self, fn, *args, **kwargs):
-        self.begin(fn)
+        self.begin()
 
         retry_state = RetryCallState(retry_object=self, fn=fn, args=args, kwargs=kwargs)
         while True:
