@@ -691,3 +691,31 @@ async def test_suspend_user(user_api, user_service):
         payload=user_suspension,
         session_token="session_token"
     )
+
+
+@pytest.mark.asyncio
+async def test_suspend(user_api, user_service):
+    user_api.v1_admin_user_user_id_suspension_update_put = AsyncMock()
+    user_suspension = UserSuspension(suspended=True, suspended_until=1601596799999, suspension_reason="testing")
+
+    await user_service.suspend(user_id=1234, reason="testing", until=1601596799999)
+
+    user_api.v1_admin_user_user_id_suspension_update_put.assert_called_with(
+        user_id=1234,
+        payload=user_suspension,
+        session_token="session_token"
+    )
+
+
+@pytest.mark.asyncio
+async def test_unsuspend(user_api, user_service):
+    user_api.v1_admin_user_user_id_suspension_update_put = AsyncMock()
+    user_suspension = UserSuspension(suspended=False)
+
+    await user_service.unsuspend(1234)
+
+    user_api.v1_admin_user_user_id_suspension_update_put.assert_called_with(
+        user_id=1234,
+        payload=user_suspension,
+        session_token="session_token"
+    )

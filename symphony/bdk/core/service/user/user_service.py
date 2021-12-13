@@ -815,3 +815,49 @@ class UserService(OboUserService):
         }
 
         await self._user_api.v1_admin_user_user_id_suspension_update_put(**params)
+
+    @retry
+    async def suspend(
+            self,
+            user_id: int,
+            reason: str = None,
+            until: int = None
+    ) -> None:
+        """Suspends a user account.
+        Calling this endpoint requires a service account with the User Provisioning role.
+        See: `Suspend User Account v1 <https://developers.symphony.com/restapi/v20.10/reference#suspend-user-v1>`_
+
+        :param user_id:         User id to suspend
+        :param user_suspension: User suspension payload.
+        :param reason:          Reason why the user has to be suspended
+        :param until:           Time till when the user should be suspended in millis
+        """
+
+        user_suspension = UserSuspension(suspended=True, suspended_until=until, suspension_reason=reason)
+        params = {
+            'user_id': user_id,
+            'payload': user_suspension,
+            'session_token': await self._auth_session.session_token
+        }
+
+        await self._user_api.v1_admin_user_user_id_suspension_update_put(**params)
+
+    @retry
+    async def unsuspend(
+            self,
+            user_id: int
+    ) -> None:
+        """Unsuspend (Re-activates) a user account.
+        Calling this endpoint requires a service account with the User Provisioning role.
+        See: `Suspend User Account v1 <https://developers.symphony.com/restapi/v20.10/reference#suspend-user-v1>`_
+
+        :param user_id:     user id to reactivate
+        """
+
+        params = {
+            'user_id': user_id,
+            'payload': UserSuspension(suspended=False),
+            'session_token': await self._auth_session.session_token
+        }
+
+        await self._user_api.v1_admin_user_user_id_suspension_update_put(**params)
