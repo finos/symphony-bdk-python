@@ -34,6 +34,8 @@ async def run():
         await datafeed_loop.start()
 ```
 
+The overridden `RealTimeEventListener` methods *must* be `async` in order for them to be properly executed.
+
 Please mind that the handling of events is done concurrently for a given chunk of events received from one read datafeed
 call. For a given set of events received from one datafeed call, the datafeed loop will create separate asyncio
 tasks for every event in the chunk and for every registered listener. The loop will wait for all listener tasks to

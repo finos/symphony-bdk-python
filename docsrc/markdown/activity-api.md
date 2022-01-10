@@ -8,6 +8,15 @@ Two different kinds of activities are supported by the BDK:
   form message
 - **User Joined Room Activity**: triggered when a user joins a room in which the bot is a member
 
+---
+**NOTE**
+
+Please note that all callback methods *must* be `async` in order for them to be executed, namely:
+* the callback methods decorated with `@slash`
+* the `on_activity` methods for all activities
+
+---
+
 ## Activity Registry
 The central component for activities is the
 [`ActivityRegistry`](../_autosummary/symphony.bdk.core.activity.registry.ActivityRegistry.html).
