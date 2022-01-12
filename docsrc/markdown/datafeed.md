@@ -30,11 +30,16 @@ async def run():
     async with SymphonyBdk(BdkConfigLoader.load_from_symphony_dir("config.yaml")) as bdk:
         datafeed_loop = bdk.datafeed()
         datafeed_loop.subscribe(RealTimeEventListenerImpl())
-        
+
         await datafeed_loop.start()
 ```
 
 The overridden `RealTimeEventListener` methods *must* be `async` in order for them to be properly executed.
+
+If a listener throws an exception, it will be logged and datafeed loop will carry on. For more information about error
+handling, see [here](#error-handling)
+
+### Concurrency of datafeed event handling
 
 Please mind that the handling of events is done concurrently for a given chunk of events received from one read datafeed
 call. For a given set of events received from one datafeed call, the datafeed loop will create separate asyncio
@@ -45,9 +50,30 @@ This means, for a given received chunk of events:
 * for a given event, the corresponding listener method will run concurrently across the different listener instances.
 * for a given listener instance, the listener methods will run concurrently across the different events received.
 
-If a listener throws an exception, it will be logged and datafeed loop will carry on. For more information about error
-handling, see [here](#error-handling)
+If you don't want the listener calls to block the datafeed loop (i.e. having concurrency across listener calls and
+across datafeed events), all listener methods must create tasks and return immediately. For instance:
+```python
+import asyncio
+from symphony.bdk.core.activity.command import CommandActivity, CommandContext
 
+
+class HelloCommandActivity(CommandActivity):
+
+    def __init__(self):
+        super().__init__()
+
+    def matches(self, context: CommandContext) -> bool:
+        return context.text_content.startswith("@" + context.bot_display_name + " /command")
+
+    async def on_activity(self, context: CommandContext):
+         # Create task to enable parallelism. Must be done for all listeners in order for the datafeed loop not to be blocked by listeners.
+        asyncio.create_task(self.actual_logic(context))
+
+    async def actual_logic(self, context):
+      pass
+```
+
+### Logging
 To ease the logging of event handling, a ContextVar is set with the following value:
 `f"{current_task_name}/{event_id}/{listener_id}"`. It is accessible in
 `symphony.bdk.core.service.datafeed.abstract_datafeed_loop.event_listener_context` can be used in logging with a filter
@@ -114,7 +140,7 @@ Bot developers can also configure a dedicated retry configuration which will be 
 
 ### Default retry configuration
 By default, the Datafeed retry is configured to have an infinite number of attempts.
-If no configuration is provided for Datafeed, it is equivalent to use: 
+If no configuration is provided for Datafeed, it is equivalent to use:
 ```yaml
 datafeed:
   retry:
