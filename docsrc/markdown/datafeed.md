@@ -66,7 +66,7 @@ class HelloCommandActivity(CommandActivity):
         return context.text_content.startswith("@" + context.bot_display_name + " /command")
 
     async def on_activity(self, context: CommandContext):
-         # Create task to enable parallelism. Must be done for all listeners in order for the datafeed loop not to be blocked by listeners.
+        # Create task to enable parallelism. Must be done for all listeners in order for the datafeed loop not to be blocked by listeners.
         asyncio.create_task(self.actual_logic(context))
 
     async def actual_logic(self, context):
