@@ -1,6 +1,6 @@
 # Configuration
 
-The BDK configuration is one of the most essential feature of the Symphony BDK which allows developers to configure 
+The BDK configuration is one of the most essential feature of the Symphony BDK which allows developers to configure
 their bot environment.
 
 ## Minimal configuration example
@@ -8,7 +8,7 @@ The minimal configuration file that can be provided look like:
 ```yaml
 host: mypod.symphony.com                                     # (1)
 
-bot: 
+bot:
     username: bot-username                                  # (2)
     privateKey:
       path: /path/to/bot/rsa-private-key.pem                # (3)
@@ -117,6 +117,26 @@ user specify the dedicated `host`, `port`, `context`, `scheme` inside the client
 - `proxy` contains proxy related information. This field is optional.
 If set, it will use the provided `host` (mandatory), `port` (mandatory), `username` and `password`.
 It can be overridden in each of the `pod`, `agent`, `keyManager` and `sessionAuth` fields.
+For instance, if you want a proxy for the agent only:
+```yaml
+host: acme.symphony.com
+
+agent:
+  host: agent.symphony.com
+  proxy:
+    host: proxy.symphony.com
+    port: 1234
+    username: proxyuser
+    password: proxypassword
+
+bot:
+  username: bot-name
+  privateKey:
+    path: /path/to/bot/rsa-private-key.pem
+
+datafeed:
+  version: v2
+```
 - `defaultHeaders` contains the default headers to be sent along with each request.
   It can be overridden in each of the `pod`, `agent`, `keyManager` and `sessionAuth` fields.
 - `pod` contains information like host, port, scheme, context, proxy... of the pod on which
@@ -136,17 +156,17 @@ manager which manages the key token of the bot.
 - `app` contains information about the extension app that the bot will use like
 the appId, the private key or certificate for authenticating the extension app.
 - `datafeed` contains information about the datafeed service that the bot will use for the `DatafeedLoop` service.
-If the version field is configured to `v2`, the datafeed service v2 will be used. Otherwise, the datafeed service v1 
+If the version field is configured to `v2`, the datafeed service v2 will be used. Otherwise, the datafeed service v1
 will be used by default.
 - `retry` contains information for retry mechanism to be used by the bot.
 
 #### Retry Configuration
 The retry mechanism used by the bot will be configured by these following properties:
 - `maxAttempts`: maximum number of retry attempts that the bot will make. Setting it to `-1` is equivalent to an infinite number of attempts
-- `multiplier`: after each attempt, the interval between two attempts will be multiplied by 
+- `multiplier`: after each attempt, the interval between two attempts will be multiplied by
 this factor. (Exponential backoff strategy)
 - `initialIntervalMillis`: the interval between the initial two attempts in milliseconds.
-- `maxIntervalMillis`: the limit of the interval between two attempts. For example: if the 
+- `maxIntervalMillis`: the limit of the interval between two attempts. For example: if the
 current interval is 1000 millis, multiplier is 2.0 and the maxIntervalMillis is 1500 millis,
 then the interval for next retry will be 1500 millis.
 
