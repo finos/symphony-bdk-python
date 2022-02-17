@@ -2,6 +2,7 @@ import logging
 from abc import ABC, abstractmethod
 
 from symphony.bdk.core.auth.auth_session import AuthSession
+from symphony.bdk.core.client.api_client_factory import ApiClientFactory
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
 
 logger = logging.getLogger(__name__)
@@ -32,10 +33,18 @@ class BdkAuthenticationAware(ABC):
         pass
 
 
+class BdkApiClientFactoryAware(ABC):
+    @abstractmethod
+    def set_api_client_factory(self, api_client_factory: ApiClientFactory):
+        pass
+
+
 class ExtensionService:
-    def __init__(self, bot_session: AuthSession, bdk_config: BdkConfig):
+    def __init__(self, bot_session: AuthSession, bdk_config: BdkConfig, api_client_factory: ApiClientFactory):
         self._bot_session = bot_session
         self._bdk_config = bdk_config
+        self._api_client_factory = api_client_factory
+
         self._extensions = {}
         for extension_type in _EXTENSIONS:
             self.register(extension_type)
@@ -53,16 +62,23 @@ class ExtensionService:
         try:
             extension.set_configuration(self._bdk_config)
         except AttributeError:
-            logging.debug("Extension is not a configuration aware")
+            logging.debug("Extension is not configuration aware")
         except TypeError:
             logging.warning("set_configuration method must have a single positional argument")
 
         try:
             extension.set_auth_session(self._bot_session)
         except AttributeError:
-            logging.debug("Extension is not a authentication aware")
+            logging.debug("Extension is not authentication aware")
         except TypeError:
             logging.warning("set_auth_session method must have a single positional argument")
+
+        try:
+            extension.set_api_client_factory(self._api_client_factory)
+        except AttributeError:
+            logging.debug("Extension is not api client aware")
+        except TypeError:
+            logging.warning("set_api_client_factory method must have a single positional argument")
 
     def get_service(self, extension_type):
         extension = self._extensions[extension_type]

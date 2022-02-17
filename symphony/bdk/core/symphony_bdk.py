@@ -120,7 +120,7 @@ class SymphonyBdk:
         self._activity_registry = ActivityRegistry(self._session_service)
         self._datafeed_loop.subscribe(self._activity_registry)
         # initialises extension service and register decorated extensions
-        self._extension_service = ExtensionService(self._bot_session, self._config)
+        self._extension_service = ExtensionService(self._bot_session, self._config, self._api_client_factory)
 
     @bot_service
     def bot_session(self) -> AuthSession:
