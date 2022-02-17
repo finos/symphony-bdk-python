@@ -5,13 +5,13 @@ from pathlib import Path
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
-from symphony.bdk.core.extension import BdkRetryConfigAware, retry_aware
-from symphony.bdk.core.symphony_bdk import SymphonyBdk, register_extension
+from symphony.bdk.core.extension import retry_aware, register_extension
+from symphony.bdk.core.symphony_bdk import SymphonyBdk
 
 
 @register_extension
 @retry_aware  # so that _retry_config attribute is set and @retry decorator can be used with the same retry config
-class MyExtension(BdkRetryConfigAware):
+class MyExtension:
     def __init__(self):
         self._bot_session = None
         self._config = None

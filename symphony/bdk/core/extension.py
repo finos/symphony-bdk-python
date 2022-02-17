@@ -7,10 +7,16 @@ from symphony.bdk.core.config.model.bdk_config import BdkConfig
 logger = logging.getLogger(__name__)
 
 _RETRY_CONFIG_AWARE = []
+_EXTENSIONS = []
 
 
 def retry_aware(cls):
     _RETRY_CONFIG_AWARE.append(cls)
+    return cls
+
+
+def register_extension(cls):
+    _EXTENSIONS.append(cls)
     return cls
 
 
@@ -26,17 +32,13 @@ class BdkAuthenticationAware(ABC):
         pass
 
 
-class BdkRetryConfigAware(ABC):
-    """Marker interface to set attribute self,_retry_config used by @retry decorator.
-    """
-
-
 class ExtensionService:
     def __init__(self, bot_session: AuthSession, bdk_config: BdkConfig):
         self._bot_session = bot_session
         self._bdk_config = bdk_config
         self._extensions = {}
-        # what do we do if no bot configured (OBO-only usecase)?
+        for extension_type in _EXTENSIONS:
+            self.register(extension_type)
 
     def register(self, extension_type: type):
         if extension_type in self._extensions:
@@ -44,7 +46,8 @@ class ExtensionService:
         extension = extension_type.__new__(extension_type)
         self._extensions[extension_type] = extension
 
-        if isinstance(extension, BdkRetryConfigAware) or extension_type in _RETRY_CONFIG_AWARE:
+        if extension_type in _RETRY_CONFIG_AWARE:
+            logging.debug("Registering retry config")
             setattr(extension, "_retry_config", self._bdk_config.retry)
 
         try:

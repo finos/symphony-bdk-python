@@ -10,7 +10,7 @@ from symphony.bdk.core.auth.exception import AuthInitializationError
 from symphony.bdk.core.auth.ext_app_authenticator import ExtensionAppAuthenticator
 from symphony.bdk.core.client.api_client_factory import ApiClientFactory
 from symphony.bdk.core.config.exception import BotNotConfiguredError, BdkConfigError
-from symphony.bdk.core.extension import ExtensionService
+from symphony.bdk.core.extension import ExtensionService, _EXTENSIONS
 from symphony.bdk.core.service.application.application_service import ApplicationService
 from symphony.bdk.core.service.connection.connection_service import ConnectionService
 from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import AbstractDatafeedLoop
@@ -25,13 +25,6 @@ from symphony.bdk.core.service.user.user_service import UserService
 from symphony.bdk.core.service_factory import ServiceFactory
 
 logger = logging.getLogger(__name__)
-
-_EXTENSIONS = []
-
-
-def register_extension(cls):
-    _EXTENSIONS.append(cls)
-    return cls
 
 
 def bot_service(func):
@@ -128,8 +121,6 @@ class SymphonyBdk:
         self._datafeed_loop.subscribe(self._activity_registry)
         # initialises extension service and register decorated extensions
         self._extension_service = ExtensionService(self._bot_session, self._config)
-        for cls in _EXTENSIONS:
-            self._extension_service.register(cls)
 
     @bot_service
     def bot_session(self) -> AuthSession:
