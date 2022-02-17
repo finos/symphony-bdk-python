@@ -5,9 +5,10 @@ from pathlib import Path
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
-from symphony.bdk.core.symphony_bdk import SymphonyBdk
+from symphony.bdk.core.symphony_bdk import SymphonyBdk, register_extension
 
 
+@register_extension
 class MyExtension:
     def __init__(self):
         self._bot_session = None
@@ -30,7 +31,6 @@ class MyExtension:
 
 async def run():
     async with SymphonyBdk(BdkConfigLoader.load_from_symphony_dir("config.yaml")) as bdk:
-        bdk.extensions().register(MyExtension)
         service = bdk.extensions().get_service(MyExtension)
         logger.debug("Session token: " + await service.get_session_token())
 

@@ -26,6 +26,13 @@ from symphony.bdk.core.service_factory import ServiceFactory
 
 logger = logging.getLogger(__name__)
 
+_EXTENSIONS = []
+
+
+def register_extension(cls):
+    _EXTENSIONS.append(cls)
+    return cls
+
 
 def bot_service(func):
     """Decorator to check if a bot service account is configured before making the actual function call.
@@ -54,6 +61,7 @@ def app_service(func):
     :return: the value returned by the decorated function with the passed arguments.
     :raise: BdkConfigError if the app is not configured.
     """
+
     @functools.wraps(func)
     def check_if_app_configured_and_call_function(*args, **kwds):
         symphony_bdk = args[0]
@@ -118,7 +126,10 @@ class SymphonyBdk:
         # creates ActivityRegistry that subscribes to DF Loop events
         self._activity_registry = ActivityRegistry(self._session_service)
         self._datafeed_loop.subscribe(self._activity_registry)
+        # initialises extension service and register decorated extensions
         self._extension_service = ExtensionService(self._bot_session, self._config)
+        for cls in _EXTENSIONS:
+            self._extension_service.register(cls)
 
     @bot_service
     def bot_session(self) -> AuthSession:
