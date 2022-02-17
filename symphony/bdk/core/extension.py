@@ -6,6 +6,13 @@ from symphony.bdk.core.config.model.bdk_config import BdkConfig
 
 logger = logging.getLogger(__name__)
 
+_RETRY_CONFIG_AWARE = []
+
+
+def retry_aware(cls):
+    _RETRY_CONFIG_AWARE.append(cls)
+    return cls
+
 
 class BdkConfigAware(ABC):
     @abstractmethod
@@ -17,6 +24,11 @@ class BdkAuthenticationAware(ABC):
     @abstractmethod
     def set_auth_session(self, auth_session: AuthSession):
         pass
+
+
+class BdkRetryConfigAware(ABC):
+    """Marker interface to set attribute self,_retry_config used by @retry decorator.
+    """
 
 
 class ExtensionService:
@@ -31,6 +43,9 @@ class ExtensionService:
             raise ValueError(f"Extension {extension_type} already registered")
         extension = extension_type.__new__(extension_type)
         self._extensions[extension_type] = extension
+
+        if isinstance(extension, BdkRetryConfigAware) or extension_type in _RETRY_CONFIG_AWARE:
+            setattr(extension, "_retry_config", self._bdk_config.retry)
 
         try:
             extension.set_configuration(self._bdk_config)
