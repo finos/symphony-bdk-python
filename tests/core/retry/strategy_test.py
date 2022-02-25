@@ -1,6 +1,7 @@
 import asyncio
 from unittest.mock import Mock, AsyncMock
 
+import aiohttp
 import pytest
 from aiohttp import ClientConnectorError
 
@@ -108,15 +109,16 @@ async def test_should_retry():
     strategies = [TestAuthenticationStrategy(), TestRefreshSessionStrategy(), TestReadDatafeedStrategy()]
     connection_key = Mock()
     connection_key.ssl = "ssl"
-    exception_from_a_timeout = ClientConnectorError(connection_key, TimeoutError())
-    exception_from_a_timeout.__cause__ = TimeoutError()
-    thing = FixedChainedExceptions([ApiException(429), ApiException(500), exception_from_a_timeout])
+    exception_from_client = aiohttp.ClientConnectionError
+    exception_from_a_timeout = asyncio.TimeoutError()
+    thing = FixedChainedExceptions([ApiException(429), ApiException(500),
+                                    exception_from_client, exception_from_a_timeout])
 
     for s in strategies:
-        s._retry_config = minimal_retry_config_with_attempts(4)
+        s._retry_config = minimal_retry_config_with_attempts(5)
 
         value = await s._retryable_coroutine(thing)
 
         assert value is True
-        assert thing.call_count == 4
+        assert thing.call_count == 5
         thing.reset()  # Reset the counters
