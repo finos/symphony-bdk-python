@@ -1155,6 +1155,7 @@ class MessagesApi(object):
                 message (str): The message payload in MessageML.. [optional]
                 data (str): Optional message data in EntityJSON.. [optional]
                 version (str): Optional message version in the format \\\"major.minor\\\". If empty, defaults to the latest supported version. . [optional]
+                silent (str): Optional boolean field that will determine if the user/s should receive the message as read or not (true by default) . [optional]
                 _return_http_data_only (bool): response data without head status
                     code and headers. Default is True.
                 _preload_content (bool): if False, the urllib3.HTTPResponse object
@@ -1225,6 +1226,7 @@ class MessagesApi(object):
                     'message',
                     'data',
                     'version',
+                    'silent',
                 ],
                 'required': [
                     'sid',
@@ -1258,6 +1260,8 @@ class MessagesApi(object):
                         (str,),
                     'version':
                         (str,),
+                    'silent':
+                        (str,),
                 },
                 'attribute_map': {
                     'sid': 'sid',
@@ -1267,6 +1271,7 @@ class MessagesApi(object):
                     'message': 'message',
                     'data': 'data',
                     'version': 'version',
+                    'silent': 'silent',
                 },
                 'location_map': {
                     'sid': 'path',
@@ -1276,6 +1281,7 @@ class MessagesApi(object):
                     'message': 'form',
                     'data': 'form',
                     'version': 'form',
+                    'silent': 'form',
                 },
                 'collection_format_map': {
                 }

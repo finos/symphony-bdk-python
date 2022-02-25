@@ -98,6 +98,7 @@ class V4Message(ModelNormal):
             'replaced_by': (str, none_type),  # noqa: E501
             'initial_timestamp': (int, none_type),  # noqa: E501
             'initial_message_id': (str, none_type),  # noqa: E501
+            'silent': (bool, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -124,6 +125,7 @@ class V4Message(ModelNormal):
         'replaced_by': 'replacedBy',  # noqa: E501
         'initial_timestamp': 'initialTimestamp',  # noqa: E501
         'initial_message_id': 'initialMessageId',  # noqa: E501
+        'silent': 'silent',  # noqa: E501
     }
 
     _composed_schemas = {}
@@ -190,6 +192,7 @@ class V4Message(ModelNormal):
             replaced_by (str): Id of the message that the current message is being replaced with (present only if set). [optional]  # noqa: E501
             initial_timestamp (int): Timestamp of when the initial message has been created in milliseconds since Jan 1 1970 (present only if set). [optional]  # noqa: E501
             initial_message_id (str): Id the the initial message that has been updated (present only if set). [optional]  # noqa: E501
+            silent (bool): When false the user/s will receive the message update as unread (true by default).. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -232,6 +235,7 @@ class V4Message(ModelNormal):
         self.replaced_by: str = None
         self.initial_timestamp: int = None
         self.initial_message_id: str = None
+        self.silent: bool = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

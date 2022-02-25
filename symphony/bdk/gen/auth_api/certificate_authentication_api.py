@@ -44,7 +44,7 @@ class CertificateAuthenticationApi(object):
             self,
             **kwargs
         ):
-            """PROVISIONAL - Authenticate an application in a delegated context.  # noqa: E501
+            """(Deprecated - use RSA authentication instead /login/v1/pubkey/app/authenticate)  PROVISIONAL - Authenticate an application in a delegated context.   # noqa: E501
 
             Based on the SSL client certificate presented by the TLS layer, authenticate the API caller and return an application session.   # noqa: E501
             This method makes a synchronous HTTP request by default. To make an
@@ -151,7 +151,7 @@ class CertificateAuthenticationApi(object):
             session_token,
             **kwargs
         ):
-            """PROVISIONAL - Authenicate an application in a delegated context to act on behalf of a user  # noqa: E501
+            """(Deprecated - use RSA authentication instead /login/v1/app/user/{uid}/authenticate)  PROVISIONAL - Authenticate an application in a delegated context to act on behalf of a user   # noqa: E501
 
             This method makes a synchronous HTTP request by default. To make an
             asynchronous HTTP request, please pass async_req=True
@@ -277,7 +277,7 @@ class CertificateAuthenticationApi(object):
             session_token,
             **kwargs
         ):
-            """PROVISIONAL - Authenicate an application in a delegated context to act on behalf of a user  # noqa: E501
+            """(Deprecated - use RSA authentication instead /login/v1/app/username/{username}/authenticate)  PROVISIONAL - Authenticate an application in a delegated context to act on behalf of a user   # noqa: E501
 
             This method makes a synchronous HTTP request by default. To make an
             asynchronous HTTP request, please pass async_req=True
@@ -402,7 +402,7 @@ class CertificateAuthenticationApi(object):
             auth_request,
             **kwargs
         ):
-            """Authenticate a client-extension application  # noqa: E501
+            """(Deprecated - use RSA authentication instead /login/v1/pubkey/app/authenticate/extensionApp)  Authenticate a client-extension application   # noqa: E501
 
             Based on the application's SSL client certificate presented by the TLS layer, it authenticates the client-extension application and return a symphony verification token.   # noqa: E501
             This method makes a synchronous HTTP request by default. To make an
