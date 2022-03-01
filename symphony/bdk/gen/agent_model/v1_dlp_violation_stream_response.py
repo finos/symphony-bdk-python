@@ -84,8 +84,8 @@ class V1DLPViolationStreamResponse(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'violations': ([V1DLPViolationStream], none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'next_offset': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'violations': ([V1DLPViolationStream], none_type),  # noqa: E501
+            'next_offset': (str, none_type),  # noqa: E501
         }
 
     @cached_property

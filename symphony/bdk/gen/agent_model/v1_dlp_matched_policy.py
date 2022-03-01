@@ -81,12 +81,12 @@ class V1DLPMatchedPolicy(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'version': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'policy_name': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'type': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'terms': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'diagnostic': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'id': (str, none_type),  # noqa: E501
+            'version': (str, none_type),  # noqa: E501
+            'policy_name': (str, none_type),  # noqa: E501
+            'type': (str, none_type),  # noqa: E501
+            'terms': (str, none_type),  # noqa: E501
+            'diagnostic': (str, none_type),  # noqa: E501
         }
 
     @cached_property

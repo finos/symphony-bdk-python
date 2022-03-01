@@ -81,9 +81,9 @@ class JwtToken(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'token_type': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'expires_in': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'access_token': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'token_type': (str, none_type),  # noqa: E501
+            'expires_in': (int, none_type),  # noqa: E501
+            'access_token': (str, none_type),  # noqa: E501
         }
 
     @cached_property

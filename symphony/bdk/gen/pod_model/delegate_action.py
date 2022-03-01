@@ -85,8 +85,8 @@ class DelegateAction(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'user_id': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'action': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'user_id': (int, none_type),  # noqa: E501
+            'action': (str, none_type),  # noqa: E501
         }
 
     @cached_property

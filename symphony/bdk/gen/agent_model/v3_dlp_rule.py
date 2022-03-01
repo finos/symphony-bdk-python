@@ -94,12 +94,12 @@ class V3DLPRule(ModelNormal):
         return {
             'type': (str,),  # noqa: E501
             'name': (str,),  # noqa: E501
-            'id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'text_match_config': (V3DLPTextMatchConfig, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'file_size_config': (V3DLPFileSizeConfig, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'file_extension_config': (V3DLPFileExtensionConfig, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'file_password_config': (V3DLPFilePasswordConfig, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'file_classifier_config': (V3DLPFileClassifierConfig, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'id': (str, none_type),  # noqa: E501
+            'text_match_config': (V3DLPTextMatchConfig, none_type),  # noqa: E501
+            'file_size_config': (V3DLPFileSizeConfig, none_type),  # noqa: E501
+            'file_extension_config': (V3DLPFileExtensionConfig, none_type),  # noqa: E501
+            'file_password_config': (V3DLPFilePasswordConfig, none_type),  # noqa: E501
+            'file_classifier_config': (V3DLPFileClassifierConfig, none_type),  # noqa: E501
         }
 
     @cached_property

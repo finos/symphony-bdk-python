@@ -88,9 +88,9 @@ class RoomDetail(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'room_attributes': (RoomAttributes, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'room_system_info': (RoomSystemInfo, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'immutable_room_attributes': (ImmutableRoomAttributes, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'room_attributes': (RoomAttributes, none_type),  # noqa: E501
+            'room_system_info': (RoomSystemInfo, none_type),  # noqa: E501
+            'immutable_room_attributes': (ImmutableRoomAttributes, none_type),  # noqa: E501
         }
 
     @cached_property

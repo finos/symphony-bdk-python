@@ -86,10 +86,10 @@ class V3Health(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'services': ({str: (V3HealthComponent,)}, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'status': (V3HealthStatus, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'users': ({str: (V3HealthComponent,)}, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'version': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'services': ({str: (V3HealthComponent,)}, none_type),  # noqa: E501
+            'status': (V3HealthStatus, none_type),  # noqa: E501
+            'users': ({str: (V3HealthComponent,)}, none_type),  # noqa: E501
+            'version': (str, none_type),  # noqa: E501
         }
 
     @cached_property

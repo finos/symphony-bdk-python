@@ -84,9 +84,9 @@ class V3DLPTextMatchConfig(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'dictionaries': ([V3DLPDictionaryMeta], none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'count_unique_occurrences': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'applicable_file_types': ([str], none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'dictionaries': ([V3DLPDictionaryMeta], none_type),  # noqa: E501
+            'count_unique_occurrences': (int, none_type),  # noqa: E501
+            'applicable_file_types': ([str], none_type),  # noqa: E501
         }
 
     @cached_property

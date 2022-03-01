@@ -81,9 +81,9 @@ class MessageSuppressionResponse(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'message_id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'suppressed': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'suppression_date': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'message_id': (str, none_type),  # noqa: E501
+            'suppressed': (bool, none_type),  # noqa: E501
+            'suppression_date': (int, none_type),  # noqa: E501
         }
 
     @cached_property

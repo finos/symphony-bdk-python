@@ -86,8 +86,8 @@ class V4MessageBlastResponse(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'messages': ([V4Message], none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'errors': ({str: (Error,)}, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'messages': ([V4Message], none_type),  # noqa: E501
+            'errors': ({str: (Error,)}, none_type),  # noqa: E501
         }
 
     @cached_property

@@ -81,7 +81,7 @@ class V1IMAttributes(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'pinned_message_id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'pinned_message_id': (str, none_type),  # noqa: E501
         }
 
     @cached_property

@@ -81,12 +81,12 @@ class ConnectionRequestMessageAllOf(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'requesting_user_id': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'target_user_id': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'first_requested_at': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'updated_at': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'request_counter': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'status': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'requesting_user_id': (int, none_type),  # noqa: E501
+            'target_user_id': (int, none_type),  # noqa: E501
+            'first_requested_at': (int, none_type),  # noqa: E501
+            'updated_at': (int, none_type),  # noqa: E501
+            'request_counter': (int, none_type),  # noqa: E501
+            'status': (str, none_type),  # noqa: E501
         }
 
     @cached_property

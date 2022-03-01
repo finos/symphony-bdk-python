@@ -86,8 +86,8 @@ class V2UserList(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'users': ([UserV2], none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'errors': ([UserError], none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'users': ([UserV2], none_type),  # noqa: E501
+            'errors': ([UserError], none_type),  # noqa: E501
         }
 
     @cached_property

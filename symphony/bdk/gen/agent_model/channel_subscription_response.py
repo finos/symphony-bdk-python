@@ -84,10 +84,10 @@ class ChannelSubscriptionResponse(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'requested_subscription': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'successful_subscription': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'failed_subscription': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'subscription_errors': ([ChannelSubscriptionError], none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'requested_subscription': (int, none_type),  # noqa: E501
+            'successful_subscription': (int, none_type),  # noqa: E501
+            'failed_subscription': (int, none_type),  # noqa: E501
+            'subscription_errors': ([ChannelSubscriptionError], none_type),  # noqa: E501
         }
 
     @cached_property

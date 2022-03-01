@@ -87,7 +87,7 @@ class V1DLPDictionary(ModelNormal):
         """
         return {
             'dictionary_metadata': (V1DLPDictionaryMetadata,),  # noqa: E501
-            'content': (V1DLPDictionaryContent, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'content': (V1DLPDictionaryContent, none_type),  # noqa: E501
         }
 
     @cached_property

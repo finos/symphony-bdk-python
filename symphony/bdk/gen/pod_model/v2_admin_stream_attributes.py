@@ -81,16 +81,16 @@ class V2AdminStreamAttributes(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'room_name': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'room_description': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'members': ([int], none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'created_by_user_id': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'created_date': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'last_modified_date': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'origin_company': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'origin_company_id': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'members_count': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'last_message_date': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'room_name': (str, none_type),  # noqa: E501
+            'room_description': (str, none_type),  # noqa: E501
+            'members': ([int], none_type),  # noqa: E501
+            'created_by_user_id': (int, none_type),  # noqa: E501
+            'created_date': (int, none_type),  # noqa: E501
+            'last_modified_date': (int, none_type),  # noqa: E501
+            'origin_company': (str, none_type),  # noqa: E501
+            'origin_company_id': (int, none_type),  # noqa: E501
+            'members_count': (int, none_type),  # noqa: E501
+            'last_message_date': (int, none_type),  # noqa: E501
         }
 
     @cached_property

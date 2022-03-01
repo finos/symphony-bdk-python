@@ -85,8 +85,8 @@ class Pagination(ModelNormal):
         """
         return {
             'cursors': (PaginationCursors,),  # noqa: E501
-            'previous': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'next': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'previous': (str, none_type),  # noqa: E501
+            'next': (str, none_type),  # noqa: E501
         }
 
     @cached_property

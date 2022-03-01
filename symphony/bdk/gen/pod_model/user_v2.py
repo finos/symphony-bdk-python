@@ -91,23 +91,23 @@ class UserV2(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'id': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'email_address': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'first_name': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'last_name': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'display_name': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'title': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'company': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'username': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'location': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'account_type': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'avatars': (AvatarList, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'work_phone_number': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'mobile_phone_number': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'job_function': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'department': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'division': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'roles': (StringList, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'id': (int, none_type),  # noqa: E501
+            'email_address': (str, none_type),  # noqa: E501
+            'first_name': (str, none_type),  # noqa: E501
+            'last_name': (str, none_type),  # noqa: E501
+            'display_name': (str, none_type),  # noqa: E501
+            'title': (str, none_type),  # noqa: E501
+            'company': (str, none_type),  # noqa: E501
+            'username': (str, none_type),  # noqa: E501
+            'location': (str, none_type),  # noqa: E501
+            'account_type': (str, none_type),  # noqa: E501
+            'avatars': (AvatarList, none_type),  # noqa: E501
+            'work_phone_number': (str, none_type),  # noqa: E501
+            'mobile_phone_number': (str, none_type),  # noqa: E501
+            'job_function': (str, none_type),  # noqa: E501
+            'department': (str, none_type),  # noqa: E501
+            'division': (str, none_type),  # noqa: E501
+            'roles': (StringList, none_type),  # noqa: E501
         }
 
     @cached_property

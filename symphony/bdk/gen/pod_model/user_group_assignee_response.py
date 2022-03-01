@@ -86,8 +86,8 @@ class UserGroupAssigneeResponse(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'data': ([UserGroupAssignee], none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'pagination': (Pagination, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'data': ([UserGroupAssignee], none_type),  # noqa: E501
+            'pagination': (Pagination, none_type),  # noqa: E501
         }
 
     @cached_property

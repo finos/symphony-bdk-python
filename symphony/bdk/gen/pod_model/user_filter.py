@@ -85,9 +85,9 @@ class UserFilter(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'role': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'feature': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'status': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'role': (str, none_type),  # noqa: E501
+            'feature': (str, none_type),  # noqa: E501
+            'status': (str, none_type),  # noqa: E501
         }
 
     @cached_property

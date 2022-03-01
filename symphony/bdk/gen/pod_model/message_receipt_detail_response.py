@@ -92,16 +92,16 @@ class MessageReceiptDetailResponse(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'creator': (MessageUser, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'on_behalf_of_user': (MessageUser, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'stream': (MessageStream, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'creation_date': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'delivery_receipt_count': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'read_receipt_count': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'email_notification_count': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'download_receipt_counts': ([MessageDownloadReceiptCount], none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'message_receipt_detail': ([MessageReceiptDetail], none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'pagination': (Pagination, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'creator': (MessageUser, none_type),  # noqa: E501
+            'on_behalf_of_user': (MessageUser, none_type),  # noqa: E501
+            'stream': (MessageStream, none_type),  # noqa: E501
+            'creation_date': (int, none_type),  # noqa: E501
+            'delivery_receipt_count': (int, none_type),  # noqa: E501
+            'read_receipt_count': (int, none_type),  # noqa: E501
+            'email_notification_count': (int, none_type),  # noqa: E501
+            'download_receipt_counts': ([MessageDownloadReceiptCount], none_type),  # noqa: E501
+            'message_receipt_detail': ([MessageReceiptDetail], none_type),  # noqa: E501
+            'pagination': (Pagination, none_type),  # noqa: E501
         }
 
     @cached_property

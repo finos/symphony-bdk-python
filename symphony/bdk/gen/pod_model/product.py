@@ -92,8 +92,8 @@ class Product(ModelNormal):
             'name': (str,),  # noqa: E501
             'subscribed': (bool,),  # noqa: E501
             'type': (str,),  # noqa: E501
-            'app_id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'sku': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'app_id': (str, none_type),  # noqa: E501
+            'sku': (str, none_type),  # noqa: E501
         }
 
     @cached_property

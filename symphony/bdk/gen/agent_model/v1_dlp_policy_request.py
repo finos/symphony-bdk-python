@@ -85,7 +85,7 @@ class V1DLPPolicyRequest(ModelNormal):
             'name': (str,),  # noqa: E501
             'scopes': ([str],),  # noqa: E501
             'type': (str,),  # noqa: E501
-            'dictionary_ids': ([str], none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'dictionary_ids': ([str], none_type),  # noqa: E501
         }
 
     @cached_property

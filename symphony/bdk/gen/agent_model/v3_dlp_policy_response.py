@@ -84,7 +84,7 @@ class V3DLPPolicyResponse(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'data': (V3DLPPolicy, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'data': (V3DLPPolicy, none_type),  # noqa: E501
         }
 
     @cached_property

@@ -81,13 +81,13 @@ class CompanyCertInfo(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'finger_print': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'issuer_finger_print': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'last_seen': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'updated_at': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'updated_by': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'common_name': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'expiry_date': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'finger_print': (str, none_type),  # noqa: E501
+            'issuer_finger_print': (str, none_type),  # noqa: E501
+            'last_seen': (int, none_type),  # noqa: E501
+            'updated_at': (int, none_type),  # noqa: E501
+            'updated_by': (int, none_type),  # noqa: E501
+            'common_name': (str, none_type),  # noqa: E501
+            'expiry_date': (int, none_type),  # noqa: E501
         }
 
     @cached_property

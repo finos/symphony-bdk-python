@@ -86,8 +86,8 @@ class AssigneeCandidates(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'users': ([AssigneeCandidate], none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'pagination': (Pagination, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'users': ([AssigneeCandidate], none_type),  # noqa: E501
+            'pagination': (Pagination, none_type),  # noqa: E501
         }
 
     @cached_property

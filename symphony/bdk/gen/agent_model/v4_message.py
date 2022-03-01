@@ -88,25 +88,25 @@ class V4Message(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'message_id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'timestamp': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'message': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'shared_message': (V4Message, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'data': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'attachments': ([V4AttachmentInfo], none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'user': (V4User, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'stream': (V4Stream, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'external_recipients': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'diagnostic': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'user_agent': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'original_format': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'disclaimer': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'sid': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'replacing': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'replaced_by': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'initial_timestamp': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'initial_message_id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'silent': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'message_id': (str, none_type),  # noqa: E501
+            'timestamp': (int, none_type),  # noqa: E501
+            'message': (str, none_type),  # noqa: E501
+            'shared_message': (V4Message, none_type),  # noqa: E501
+            'data': (str, none_type),  # noqa: E501
+            'attachments': ([V4AttachmentInfo], none_type),  # noqa: E501
+            'user': (V4User, none_type),  # noqa: E501
+            'stream': (V4Stream, none_type),  # noqa: E501
+            'external_recipients': (bool, none_type),  # noqa: E501
+            'diagnostic': (str, none_type),  # noqa: E501
+            'user_agent': (str, none_type),  # noqa: E501
+            'original_format': (str, none_type),  # noqa: E501
+            'disclaimer': (str, none_type),  # noqa: E501
+            'sid': (str, none_type),  # noqa: E501
+            'replacing': (str, none_type),  # noqa: E501
+            'replaced_by': (str, none_type),  # noqa: E501
+            'initial_timestamp': (int, none_type),  # noqa: E501
+            'initial_message_id': (str, none_type),  # noqa: E501
+            'silent': (bool, none_type),  # noqa: E501
         }
 
     @cached_property

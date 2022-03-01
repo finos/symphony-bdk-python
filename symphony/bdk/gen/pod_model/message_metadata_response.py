@@ -84,11 +84,11 @@ class MessageMetadataResponse(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'message_id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'parent': (MessageMetadataResponseParent, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'replies': ([str], none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'forwards': ([str], none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'form_replies': ([str], none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'message_id': (str, none_type),  # noqa: E501
+            'parent': (MessageMetadataResponseParent, none_type),  # noqa: E501
+            'replies': ([str], none_type),  # noqa: E501
+            'forwards': ([str], none_type),  # noqa: E501
+            'form_replies': ([str], none_type),  # noqa: E501
         }
 
     @cached_property

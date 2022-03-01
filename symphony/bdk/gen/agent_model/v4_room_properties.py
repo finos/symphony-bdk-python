@@ -86,19 +86,19 @@ class V4RoomProperties(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'name': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'description': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'creator_user': (V4User, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'created_date': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'external': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'cross_pod': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'public': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'copy_protected': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'read_only': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'discoverable': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'members_can_invite': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'keywords': ([V4KeyValuePair], none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'can_view_history': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'name': (str, none_type),  # noqa: E501
+            'description': (str, none_type),  # noqa: E501
+            'creator_user': (V4User, none_type),  # noqa: E501
+            'created_date': (int, none_type),  # noqa: E501
+            'external': (bool, none_type),  # noqa: E501
+            'cross_pod': (bool, none_type),  # noqa: E501
+            'public': (bool, none_type),  # noqa: E501
+            'copy_protected': (bool, none_type),  # noqa: E501
+            'read_only': (bool, none_type),  # noqa: E501
+            'discoverable': (bool, none_type),  # noqa: E501
+            'members_can_invite': (bool, none_type),  # noqa: E501
+            'keywords': ([V4KeyValuePair], none_type),  # noqa: E501
+            'can_view_history': (bool, none_type),  # noqa: E501
         }
 
     @cached_property

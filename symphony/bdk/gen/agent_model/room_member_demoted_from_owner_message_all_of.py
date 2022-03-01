@@ -81,8 +81,8 @@ class RoomMemberDemotedFromOwnerMessageAllOf(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'demoted_by_user_id': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'demoted_user_id': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'demoted_by_user_id': (int, none_type),  # noqa: E501
+            'demoted_user_id': (int, none_type),  # noqa: E501
         }
 
     @cached_property

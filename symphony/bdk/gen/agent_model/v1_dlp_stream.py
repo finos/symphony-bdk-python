@@ -81,27 +81,27 @@ class V1DLPStream(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'name': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'creator_pretty_name': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'public_room': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'cross_pod': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'allow_external': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'creator_id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'room_description': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'stream_id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'state': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'type': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'last_disabled': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'member_add_user_enabled': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'active': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'discoverable': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'read_only': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'copy_disabled': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'external_owned': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'send_message_disabled': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'moderated': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'share_history_enabled': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'diagnostic': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'name': (str, none_type),  # noqa: E501
+            'creator_pretty_name': (str, none_type),  # noqa: E501
+            'public_room': (bool, none_type),  # noqa: E501
+            'cross_pod': (bool, none_type),  # noqa: E501
+            'allow_external': (bool, none_type),  # noqa: E501
+            'creator_id': (str, none_type),  # noqa: E501
+            'room_description': (str, none_type),  # noqa: E501
+            'stream_id': (str, none_type),  # noqa: E501
+            'state': (str, none_type),  # noqa: E501
+            'type': (str, none_type),  # noqa: E501
+            'last_disabled': (int, none_type),  # noqa: E501
+            'member_add_user_enabled': (bool, none_type),  # noqa: E501
+            'active': (bool, none_type),  # noqa: E501
+            'discoverable': (bool, none_type),  # noqa: E501
+            'read_only': (bool, none_type),  # noqa: E501
+            'copy_disabled': (bool, none_type),  # noqa: E501
+            'external_owned': (bool, none_type),  # noqa: E501
+            'send_message_disabled': (bool, none_type),  # noqa: E501
+            'moderated': (bool, none_type),  # noqa: E501
+            'share_history_enabled': (bool, none_type),  # noqa: E501
+            'diagnostic': (str, none_type),  # noqa: E501
         }
 
     @cached_property

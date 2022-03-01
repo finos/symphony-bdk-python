@@ -86,11 +86,11 @@ class UserSearchResults(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'count': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'skip': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'limit': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'search_query': (UserSearchQuery, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'users': ([UserV2], none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'count': (int, none_type),  # noqa: E501
+            'skip': (int, none_type),  # noqa: E501
+            'limit': (int, none_type),  # noqa: E501
+            'search_query': (UserSearchQuery, none_type),  # noqa: E501
+            'users': ([UserV2], none_type),  # noqa: E501
         }
 
     @cached_property

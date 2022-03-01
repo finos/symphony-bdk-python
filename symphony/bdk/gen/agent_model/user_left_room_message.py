@@ -89,10 +89,10 @@ class UserLeftRoomMessage(ModelComposed):
             'timestamp': (str,),  # noqa: E501
             'v2message_type': (str,),  # noqa: E501
             'stream_id': (str,),  # noqa: E501
-            'removed_by_user_id': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'member_left_user_id': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'information_barrier_remediation': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'removed_by_user_id': (int, none_type),  # noqa: E501
+            'member_left_user_id': (int, none_type),  # noqa: E501
+            'information_barrier_remediation': (bool, none_type),  # noqa: E501
+            'id': (str, none_type),  # noqa: E501
         }
 
     @cached_property

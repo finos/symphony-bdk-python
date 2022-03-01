@@ -84,7 +84,7 @@ class V2ConversationSpecificStreamAttributes(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'members': (UserIdList, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'members': (UserIdList, none_type),  # noqa: E501
         }
 
     @cached_property

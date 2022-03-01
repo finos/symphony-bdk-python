@@ -86,8 +86,8 @@ class UserGroupMembershipResponse(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'data': ([UserGroupMembershipResponseData], none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'pagination': (Pagination, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'data': ([UserGroupMembershipResponseData], none_type),  # noqa: E501
+            'pagination': (Pagination, none_type),  # noqa: E501
         }
 
     @cached_property

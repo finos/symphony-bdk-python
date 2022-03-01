@@ -81,7 +81,7 @@ class V2RoomSearchCriteriaAllOf(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'sub_type': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'sub_type': (str, none_type),  # noqa: E501
         }
 
     @cached_property

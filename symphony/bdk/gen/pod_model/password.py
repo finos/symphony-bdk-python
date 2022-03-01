@@ -81,10 +81,10 @@ class Password(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'h_salt': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'h_password': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'kh_salt': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'kh_password': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'h_salt': (str, none_type),  # noqa: E501
+            'h_password': (str, none_type),  # noqa: E501
+            'kh_salt': (str, none_type),  # noqa: E501
+            'kh_password': (str, none_type),  # noqa: E501
         }
 
     @cached_property

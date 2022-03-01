@@ -86,7 +86,7 @@ class V2MessageAllOf(ModelNormal):
         return {
             'message': (str,),  # noqa: E501
             'from_user_id': (int,),  # noqa: E501
-            'attachments': ([AttachmentInfo], none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'attachments': ([AttachmentInfo], none_type),  # noqa: E501
         }
 
     @cached_property

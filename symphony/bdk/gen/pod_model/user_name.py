@@ -81,7 +81,7 @@ class UserName(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'username': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'username': (str, none_type),  # noqa: E501
         }
 
     @cached_property

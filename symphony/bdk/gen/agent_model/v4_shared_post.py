@@ -84,8 +84,8 @@ class V4SharedPost(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'message': (V4Message, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'shared_message': (V4Message, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'message': (V4Message, none_type),  # noqa: E501
+            'shared_message': (V4Message, none_type),  # noqa: E501
         }
 
     @cached_property

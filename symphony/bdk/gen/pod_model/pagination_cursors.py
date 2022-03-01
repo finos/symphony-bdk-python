@@ -82,7 +82,7 @@ class PaginationCursors(ModelNormal):
         """
         return {
             'before': (str,),  # noqa: E501
-            'after': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'after': (str, none_type),  # noqa: E501
         }
 
     @cached_property

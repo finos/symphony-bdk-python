@@ -82,7 +82,7 @@ class V3DLPFileExtensionConfig(ModelNormal):
         """
         return {
             'allow_lists': ([str],),  # noqa: E501
-            'block_lists': ([str], none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'block_lists': ([str], none_type),  # noqa: E501
         }
 
     @cached_property

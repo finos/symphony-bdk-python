@@ -81,8 +81,8 @@ class UserJoinedRoomMessageAllOf(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'added_by_user_id': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'member_added_user_id': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'added_by_user_id': (int, none_type),  # noqa: E501
+            'member_added_user_id': (int, none_type),  # noqa: E501
         }
 
     @cached_property

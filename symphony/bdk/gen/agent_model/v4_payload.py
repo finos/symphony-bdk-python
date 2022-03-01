@@ -114,22 +114,22 @@ class V4Payload(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'message_sent': (V4MessageSent, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'shared_post': (V4SharedPost, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'instant_message_created': (V4InstantMessageCreated, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'room_created': (V4RoomCreated, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'room_updated': (V4RoomUpdated, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'room_deactivated': (V4RoomDeactivated, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'room_reactivated': (V4RoomReactivated, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'user_joined_room': (V4UserJoinedRoom, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'user_left_room': (V4UserLeftRoom, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'room_member_promoted_to_owner': (V4RoomMemberPromotedToOwner, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'room_member_demoted_from_owner': (V4RoomMemberDemotedFromOwner, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'connection_requested': (V4ConnectionRequested, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'connection_accepted': (V4ConnectionAccepted, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'message_suppressed': (V4MessageSuppressed, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'symphony_elements_action': (V4SymphonyElementsAction, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'user_requested_to_join_room': (V4UserRequestedToJoinRoom, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'message_sent': (V4MessageSent, none_type),  # noqa: E501
+            'shared_post': (V4SharedPost, none_type),  # noqa: E501
+            'instant_message_created': (V4InstantMessageCreated, none_type),  # noqa: E501
+            'room_created': (V4RoomCreated, none_type),  # noqa: E501
+            'room_updated': (V4RoomUpdated, none_type),  # noqa: E501
+            'room_deactivated': (V4RoomDeactivated, none_type),  # noqa: E501
+            'room_reactivated': (V4RoomReactivated, none_type),  # noqa: E501
+            'user_joined_room': (V4UserJoinedRoom, none_type),  # noqa: E501
+            'user_left_room': (V4UserLeftRoom, none_type),  # noqa: E501
+            'room_member_promoted_to_owner': (V4RoomMemberPromotedToOwner, none_type),  # noqa: E501
+            'room_member_demoted_from_owner': (V4RoomMemberDemotedFromOwner, none_type),  # noqa: E501
+            'connection_requested': (V4ConnectionRequested, none_type),  # noqa: E501
+            'connection_accepted': (V4ConnectionAccepted, none_type),  # noqa: E501
+            'message_suppressed': (V4MessageSuppressed, none_type),  # noqa: E501
+            'symphony_elements_action': (V4SymphonyElementsAction, none_type),  # noqa: E501
+            'user_requested_to_join_room': (V4UserRequestedToJoinRoom, none_type),  # noqa: E501
         }
 
     @cached_property

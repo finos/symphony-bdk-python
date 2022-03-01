@@ -81,9 +81,9 @@ class UserSuspension(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'suspended': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'suspended_until': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'suspension_reason': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'suspended': (bool, none_type),  # noqa: E501
+            'suspended_until': (int, none_type),  # noqa: E501
+            'suspension_reason': (str, none_type),  # noqa: E501
         }
 
     @cached_property

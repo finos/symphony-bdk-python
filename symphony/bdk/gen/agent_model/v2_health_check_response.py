@@ -81,20 +81,20 @@ class V2HealthCheckResponse(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'pod_connectivity': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'pod_connectivity_error': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'key_manager_connectivity': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'key_manager_connectivity_error': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'firehose_connectivity': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'firehose_connectivity_error': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'encrypt_decrypt_success': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'encrypt_decrypt_error': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'pod_version': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'agent_version': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'agent_service_user': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'agent_service_user_error': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'ce_service_user': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'ce_service_user_error': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'pod_connectivity': (bool, none_type),  # noqa: E501
+            'pod_connectivity_error': (str, none_type),  # noqa: E501
+            'key_manager_connectivity': (bool, none_type),  # noqa: E501
+            'key_manager_connectivity_error': (str, none_type),  # noqa: E501
+            'firehose_connectivity': (bool, none_type),  # noqa: E501
+            'firehose_connectivity_error': (str, none_type),  # noqa: E501
+            'encrypt_decrypt_success': (bool, none_type),  # noqa: E501
+            'encrypt_decrypt_error': (str, none_type),  # noqa: E501
+            'pod_version': (str, none_type),  # noqa: E501
+            'agent_version': (str, none_type),  # noqa: E501
+            'agent_service_user': (bool, none_type),  # noqa: E501
+            'agent_service_user_error': (str, none_type),  # noqa: E501
+            'ce_service_user': (bool, none_type),  # noqa: E501
+            'ce_service_user_error': (str, none_type),  # noqa: E501
         }
 
     @cached_property

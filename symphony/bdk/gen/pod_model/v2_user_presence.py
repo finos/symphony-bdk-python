@@ -87,7 +87,7 @@ class V2UserPresence(ModelComposed):
         """
         return {
             'category': (str,),  # noqa: E501
-            'user_id': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'user_id': (int, none_type),  # noqa: E501
         }
 
     @cached_property

@@ -84,20 +84,20 @@ class V3RoomAttributes(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'name': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'keywords': ([RoomTag], none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'description': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'members_can_invite': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'discoverable': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'public': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'read_only': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'copy_protected': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'cross_pod': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'view_history': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'multi_lateral_room': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'scheduled_meeting': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'sub_type': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'pinned_message_id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'name': (str, none_type),  # noqa: E501
+            'keywords': ([RoomTag], none_type),  # noqa: E501
+            'description': (str, none_type),  # noqa: E501
+            'members_can_invite': (bool, none_type),  # noqa: E501
+            'discoverable': (bool, none_type),  # noqa: E501
+            'public': (bool, none_type),  # noqa: E501
+            'read_only': (bool, none_type),  # noqa: E501
+            'copy_protected': (bool, none_type),  # noqa: E501
+            'cross_pod': (bool, none_type),  # noqa: E501
+            'view_history': (bool, none_type),  # noqa: E501
+            'multi_lateral_room': (bool, none_type),  # noqa: E501
+            'scheduled_meeting': (bool, none_type),  # noqa: E501
+            'sub_type': (str, none_type),  # noqa: E501
+            'pinned_message_id': (str, none_type),  # noqa: E501
         }
 
     @cached_property

@@ -90,15 +90,15 @@ class ApplicationDetail(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'application_info': (ApplicationInfo, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'icon_url': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'description': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'allow_origins': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'permissions': ([str], none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'cert': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'authentication_keys': (AppAuthenticationKeys, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'notification': (AppNotification, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'properties': (AppProperties, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'application_info': (ApplicationInfo, none_type),  # noqa: E501
+            'icon_url': (str, none_type),  # noqa: E501
+            'description': (str, none_type),  # noqa: E501
+            'allow_origins': (str, none_type),  # noqa: E501
+            'permissions': ([str], none_type),  # noqa: E501
+            'cert': (str, none_type),  # noqa: E501
+            'authentication_keys': (AppAuthenticationKeys, none_type),  # noqa: E501
+            'notification': (AppNotification, none_type),  # noqa: E501
+            'properties': (AppProperties, none_type),  # noqa: E501
         }
 
     @cached_property

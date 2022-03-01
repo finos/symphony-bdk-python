@@ -86,8 +86,8 @@ class UserInfo(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'user': (UserAttributes, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'user_system_info': (UserSystemInfo, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'user': (UserAttributes, none_type),  # noqa: E501
+            'user_system_info': (UserSystemInfo, none_type),  # noqa: E501
         }
 
     @cached_property

@@ -84,13 +84,13 @@ class V2AdminStreamFilter(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'stream_types': ([V2AdminStreamType], none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'scope': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'origin': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'status': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'privacy': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'start_date': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'end_date': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'stream_types': ([V2AdminStreamType], none_type),  # noqa: E501
+            'scope': (str, none_type),  # noqa: E501
+            'origin': (str, none_type),  # noqa: E501
+            'status': (str, none_type),  # noqa: E501
+            'privacy': (str, none_type),  # noqa: E501
+            'start_date': (int, none_type),  # noqa: E501
+            'end_date': (int, none_type),  # noqa: E501
         }
 
     @cached_property

@@ -81,9 +81,9 @@ class V1DLPDictionaryContent(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'data': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'num_keywords': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'md5': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'data': (str, none_type),  # noqa: E501
+            'num_keywords': (int, none_type),  # noqa: E501
+            'md5': (str, none_type),  # noqa: E501
         }
 
     @cached_property

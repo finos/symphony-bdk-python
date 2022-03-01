@@ -84,14 +84,14 @@ class V2AdminStreamInfo(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'is_external': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'is_active': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'is_public': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'type': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'cross_pod': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'origin': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'attributes': (V2AdminStreamAttributes, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'id': (str, none_type),  # noqa: E501
+            'is_external': (bool, none_type),  # noqa: E501
+            'is_active': (bool, none_type),  # noqa: E501
+            'is_public': (bool, none_type),  # noqa: E501
+            'type': (str, none_type),  # noqa: E501
+            'cross_pod': (bool, none_type),  # noqa: E501
+            'origin': (str, none_type),  # noqa: E501
+            'attributes': (V2AdminStreamAttributes, none_type),  # noqa: E501
         }
 
     @cached_property

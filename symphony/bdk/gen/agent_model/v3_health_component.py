@@ -86,10 +86,10 @@ class V3HealthComponent(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'auth_type': (V3HealthAuthType, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'message': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'status': (V3HealthStatus, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'version': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'auth_type': (V3HealthAuthType, none_type),  # noqa: E501
+            'message': (str, none_type),  # noqa: E501
+            'status': (V3HealthStatus, none_type),  # noqa: E501
+            'version': (str, none_type),  # noqa: E501
         }
 
     @cached_property

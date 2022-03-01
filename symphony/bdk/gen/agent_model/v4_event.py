@@ -86,13 +86,13 @@ class V4Event(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'message_id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'timestamp': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'type': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'diagnostic': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'initiator': (V4Initiator, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'payload': (V4Payload, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'id': (str, none_type),  # noqa: E501
+            'message_id': (str, none_type),  # noqa: E501
+            'timestamp': (int, none_type),  # noqa: E501
+            'type': (str, none_type),  # noqa: E501
+            'diagnostic': (str, none_type),  # noqa: E501
+            'initiator': (V4Initiator, none_type),  # noqa: E501
+            'payload': (V4Payload, none_type),  # noqa: E501
         }
 
     @cached_property

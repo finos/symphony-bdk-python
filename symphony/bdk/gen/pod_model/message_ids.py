@@ -84,7 +84,7 @@ class MessageIds(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'message_ids': (StringList, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'message_ids': (StringList, none_type),  # noqa: E501
         }
 
     @cached_property

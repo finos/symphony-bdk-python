@@ -81,8 +81,8 @@ class AttachmentPreview(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'file_id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'width': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'file_id': (str, none_type),  # noqa: E501
+            'width': (int, none_type),  # noqa: E501
         }
 
     @cached_property

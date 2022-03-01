@@ -81,8 +81,8 @@ class Error(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'code': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'message': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'code': (int, none_type),  # noqa: E501
+            'message': (str, none_type),  # noqa: E501
         }
 
     @cached_property

@@ -86,9 +86,9 @@ class V2UserCreate(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'user_attributes': (V2UserAttributes, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'password': (Password, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'roles': ([str], none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'user_attributes': (V2UserAttributes, none_type),  # noqa: E501
+            'password': (Password, none_type),  # noqa: E501
+            'roles': ([str], none_type),  # noqa: E501
         }
 
     @cached_property

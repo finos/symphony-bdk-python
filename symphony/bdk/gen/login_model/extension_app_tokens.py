@@ -81,10 +81,10 @@ class ExtensionAppTokens(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'app_id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'app_token': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'symphony_token': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'expire_at': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'app_id': (str, none_type),  # noqa: E501
+            'app_token': (str, none_type),  # noqa: E501
+            'symphony_token': (str, none_type),  # noqa: E501
+            'expire_at': (int, none_type),  # noqa: E501
         }
 
     @cached_property

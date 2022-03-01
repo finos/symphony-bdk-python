@@ -84,8 +84,8 @@ class StreamFilter(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'stream_types': ([StreamType], none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'include_inactive_streams': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'stream_types': ([StreamType], none_type),  # noqa: E501
+            'include_inactive_streams': (bool, none_type),  # noqa: E501
         }
 
     @cached_property

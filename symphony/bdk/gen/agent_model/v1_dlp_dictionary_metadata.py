@@ -86,9 +86,9 @@ class V1DLPDictionaryMetadata(ModelNormal):
         return {
             'dict_ref': (V1DLPDictionaryRef,),  # noqa: E501
             'type': (str,),  # noqa: E501
-            'creation_date': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'creator_id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'last_updated_date': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'creation_date': (int, none_type),  # noqa: E501
+            'creator_id': (str, none_type),  # noqa: E501
+            'last_updated_date': (int, none_type),  # noqa: E501
         }
 
     @cached_property

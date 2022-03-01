@@ -84,9 +84,9 @@ class V1DLPPoliciesCollectionResponse(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'policies': ([V1DLPPolicy], none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'page': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'page_count': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'policies': ([V1DLPPolicy], none_type),  # noqa: E501
+            'page': (int, none_type),  # noqa: E501
+            'page_count': (int, none_type),  # noqa: E501
         }
 
     @cached_property

@@ -81,10 +81,10 @@ class V4ImportResponse(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'message_id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'originating_system_id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'original_message_id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'diagnostic': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'message_id': (str, none_type),  # noqa: E501
+            'originating_system_id': (str, none_type),  # noqa: E501
+            'original_message_id': (str, none_type),  # noqa: E501
+            'diagnostic': (str, none_type),  # noqa: E501
         }
 
     @cached_property

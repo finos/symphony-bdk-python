@@ -86,12 +86,12 @@ class Signal(ModelComposed):
                 and the value is attribute type.
         """
         return {
-            'name': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'query': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'visible_on_profile': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'company_wide': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'timestamp': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'name': (str, none_type),  # noqa: E501
+            'query': (str, none_type),  # noqa: E501
+            'visible_on_profile': (bool, none_type),  # noqa: E501
+            'company_wide': (bool, none_type),  # noqa: E501
+            'id': (str, none_type),  # noqa: E501
+            'timestamp': (int, none_type),  # noqa: E501
         }
 
     @cached_property

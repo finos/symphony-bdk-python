@@ -86,14 +86,14 @@ class UserGroupMembershipResponseData(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'group_id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'group': (GroupRoleScope, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'user_id': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'user': (UserCompp, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'active': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'last_added_date': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'last_removed_date': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'id': (str, none_type),  # noqa: E501
+            'group_id': (str, none_type),  # noqa: E501
+            'group': (GroupRoleScope, none_type),  # noqa: E501
+            'user_id': (int, none_type),  # noqa: E501
+            'user': (UserCompp, none_type),  # noqa: E501
+            'active': (bool, none_type),  # noqa: E501
+            'last_added_date': (int, none_type),  # noqa: E501
+            'last_removed_date': (int, none_type),  # noqa: E501
         }
 
     @cached_property

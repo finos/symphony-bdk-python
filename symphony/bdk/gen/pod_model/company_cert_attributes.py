@@ -86,9 +86,9 @@ class CompanyCertAttributes(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'name': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'type': (CompanyCertType, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'status': (CompanyCertStatus, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'name': (str, none_type),  # noqa: E501
+            'type': (CompanyCertType, none_type),  # noqa: E501
+            'status': (CompanyCertStatus, none_type),  # noqa: E501
         }
 
     @cached_property

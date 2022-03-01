@@ -84,9 +84,9 @@ class V1DLPDictionaryMetadataCollectionResponse(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'items': ([V1DLPDictionaryMetadata], none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'page': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'page_count': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'items': ([V1DLPDictionaryMetadata], none_type),  # noqa: E501
+            'page': (int, none_type),  # noqa: E501
+            'page_count': (int, none_type),  # noqa: E501
         }
 
     @cached_property

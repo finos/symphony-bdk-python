@@ -86,9 +86,9 @@ class FileExtension(ModelNormal):
         """
         return {
             'extension': (str,),  # noqa: E501
-            'scope_internal': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'scope_external': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'source': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'scope_internal': (bool, none_type),  # noqa: E501
+            'scope_external': (bool, none_type),  # noqa: E501
+            'source': (str, none_type),  # noqa: E501
         }
 
     @cached_property

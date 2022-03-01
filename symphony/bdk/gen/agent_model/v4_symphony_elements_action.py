@@ -84,10 +84,10 @@ class V4SymphonyElementsAction(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'stream': (V4Stream, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'form_message_id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'form_id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'form_values': (bool, date, datetime, dict, float, int, list, str, none_type, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'stream': (V4Stream, none_type),  # noqa: E501
+            'form_message_id': (str, none_type),  # noqa: E501
+            'form_id': (str, none_type),  # noqa: E501
+            'form_values': (bool, date, datetime, dict, float, int, list, str, none_type, none_type),  # noqa: E501
         }
 
     @cached_property

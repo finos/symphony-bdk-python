@@ -84,8 +84,8 @@ class V5EventList(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'events': ([V4Event], none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'ack_id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'events': ([V4Event], none_type),  # noqa: E501
+            'ack_id': (str, none_type),  # noqa: E501
         }
 
     @cached_property

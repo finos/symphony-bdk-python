@@ -82,8 +82,8 @@ class V1DLPDictionaryRef(ModelNormal):
         """
         return {
             'name': (str,),  # noqa: E501
-            'dict_id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'version': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'dict_id': (str, none_type),  # noqa: E501
+            'version': (str, none_type),  # noqa: E501
         }
 
     @cached_property

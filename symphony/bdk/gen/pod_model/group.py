@@ -81,13 +81,13 @@ class Group(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'name': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'active': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'member_count': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'policies': ([str], none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'created_date': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'modified_date': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'id': (str, none_type),  # noqa: E501
+            'name': (str, none_type),  # noqa: E501
+            'active': (bool, none_type),  # noqa: E501
+            'member_count': (int, none_type),  # noqa: E501
+            'policies': ([str], none_type),  # noqa: E501
+            'created_date': (int, none_type),  # noqa: E501
+            'modified_date': (int, none_type),  # noqa: E501
         }
 
     @cached_property

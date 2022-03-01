@@ -87,7 +87,7 @@ class V4AttachmentInfo(ModelNormal):
             'id': (str,),  # noqa: E501
             'name': (str,),  # noqa: E501
             'size': (int,),  # noqa: E501
-            'images': ([V4ThumbnailInfo], none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'images': ([V4ThumbnailInfo], none_type),  # noqa: E501
         }
 
     @cached_property

@@ -93,14 +93,14 @@ class V2RoomSearchCriteria(ModelComposed):
         """
         return {
             'query': (str,),  # noqa: E501
-            'labels': ([str], none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'active': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'private': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'owner': (UserId, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'creator': (UserId, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'member': (UserId, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'sort_order': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'sub_type': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'labels': ([str], none_type),  # noqa: E501
+            'active': (bool, none_type),  # noqa: E501
+            'private': (bool, none_type),  # noqa: E501
+            'owner': (UserId, none_type),  # noqa: E501
+            'creator': (UserId, none_type),  # noqa: E501
+            'member': (UserId, none_type),  # noqa: E501
+            'sort_order': (str, none_type),  # noqa: E501
+            'sub_type': (str, none_type),  # noqa: E501
         }
 
     @cached_property

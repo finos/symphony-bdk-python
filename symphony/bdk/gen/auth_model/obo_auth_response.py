@@ -81,7 +81,7 @@ class OboAuthResponse(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'session_token': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'session_token': (str, none_type),  # noqa: E501
         }
 
     @cached_property

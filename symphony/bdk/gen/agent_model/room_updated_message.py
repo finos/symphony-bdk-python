@@ -91,16 +91,16 @@ class RoomUpdatedMessage(ModelComposed):
             'timestamp': (str,),  # noqa: E501
             'v2message_type': (str,),  # noqa: E501
             'stream_id': (str,),  # noqa: E501
-            'old_name': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'new_name': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'keywords': ([RoomTag], none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'old_description': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'new_description': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'members_can_invite': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'discoverable': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'read_only': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'copy_protected': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'old_name': (str, none_type),  # noqa: E501
+            'new_name': (str, none_type),  # noqa: E501
+            'keywords': ([RoomTag], none_type),  # noqa: E501
+            'old_description': (str, none_type),  # noqa: E501
+            'new_description': (str, none_type),  # noqa: E501
+            'members_can_invite': (bool, none_type),  # noqa: E501
+            'discoverable': (bool, none_type),  # noqa: E501
+            'read_only': (bool, none_type),  # noqa: E501
+            'copy_protected': (bool, none_type),  # noqa: E501
+            'id': (str, none_type),  # noqa: E501
         }
 
     @cached_property

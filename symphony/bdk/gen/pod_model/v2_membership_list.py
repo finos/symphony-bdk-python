@@ -84,10 +84,10 @@ class V2MembershipList(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'count': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'skip': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'limit': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'members': (V2MemberInfoList, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'count': (int, none_type),  # noqa: E501
+            'skip': (int, none_type),  # noqa: E501
+            'limit': (int, none_type),  # noqa: E501
+            'members': (V2MemberInfoList, none_type),  # noqa: E501
         }
 
     @cached_property

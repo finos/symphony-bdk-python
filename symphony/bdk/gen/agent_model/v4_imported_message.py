@@ -89,10 +89,10 @@ class V4ImportedMessage(ModelNormal):
             'intended_message_from_user_id': (int,),  # noqa: E501
             'originating_system_id': (str,),  # noqa: E501
             'stream_id': (str,),  # noqa: E501
-            'data': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'original_message_id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'attachments': ([V4ImportedMessageAttachment], none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'previews': ([V4ImportedMessageAttachment], none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'data': (str, none_type),  # noqa: E501
+            'original_message_id': (str, none_type),  # noqa: E501
+            'attachments': ([V4ImportedMessageAttachment], none_type),  # noqa: E501
+            'previews': ([V4ImportedMessageAttachment], none_type),  # noqa: E501
         }
 
     @cached_property

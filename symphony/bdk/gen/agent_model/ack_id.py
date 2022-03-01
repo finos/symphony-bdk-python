@@ -81,8 +81,8 @@ class AckId(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'ack_id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'update_presence': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'ack_id': (str, none_type),  # noqa: E501
+            'update_presence': (bool, none_type),  # noqa: E501
         }
 
     @cached_property

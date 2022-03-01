@@ -81,8 +81,8 @@ class NameValuePair(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'name': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'value': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'name': (str, none_type),  # noqa: E501
+            'value': (str, none_type),  # noqa: E501
         }
 
     @cached_property

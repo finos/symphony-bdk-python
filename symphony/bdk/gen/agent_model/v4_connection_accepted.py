@@ -84,7 +84,7 @@ class V4ConnectionAccepted(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'from_user': (V4User, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'from_user': (V4User, none_type),  # noqa: E501
         }
 
     @cached_property

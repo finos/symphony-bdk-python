@@ -84,7 +84,7 @@ class V5DatafeedCreateBody(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'tag': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'tag': (str, none_type),  # noqa: E501
         }
 
     @cached_property

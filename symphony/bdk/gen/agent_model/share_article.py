@@ -85,15 +85,15 @@ class ShareArticle(ModelNormal):
             'publisher': (str,),  # noqa: E501
             'author': (str,),  # noqa: E501
             'app_id': (str,),  # noqa: E501
-            'article_id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'sub_title': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'message': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'publish_date': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'thumbnail_url': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'article_url': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'summary': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'app_name': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'app_icon_url': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'article_id': (str, none_type),  # noqa: E501
+            'sub_title': (str, none_type),  # noqa: E501
+            'message': (str, none_type),  # noqa: E501
+            'publish_date': (int, none_type),  # noqa: E501
+            'thumbnail_url': (str, none_type),  # noqa: E501
+            'article_url': (str, none_type),  # noqa: E501
+            'summary': (str, none_type),  # noqa: E501
+            'app_name': (str, none_type),  # noqa: E501
+            'app_icon_url': (str, none_type),  # noqa: E501
         }
 
     @cached_property

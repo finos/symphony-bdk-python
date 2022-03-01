@@ -84,13 +84,13 @@ class AssigneeCandidate(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'user_id': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'username': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'first_name': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'surname': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'email_address': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'can_be_assigned': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'roles': (StringList, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'user_id': (int, none_type),  # noqa: E501
+            'username': (str, none_type),  # noqa: E501
+            'first_name': (str, none_type),  # noqa: E501
+            'surname': (str, none_type),  # noqa: E501
+            'email_address': (str, none_type),  # noqa: E501
+            'can_be_assigned': (bool, none_type),  # noqa: E501
+            'roles': (StringList, none_type),  # noqa: E501
         }
 
     @cached_property

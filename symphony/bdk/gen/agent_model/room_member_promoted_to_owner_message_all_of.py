@@ -81,8 +81,8 @@ class RoomMemberPromotedToOwnerMessageAllOf(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'promoted_by_user_id': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'promoted_user_id': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'promoted_by_user_id': (int, none_type),  # noqa: E501
+            'promoted_user_id': (int, none_type),  # noqa: E501
         }
 
     @cached_property

@@ -83,7 +83,7 @@ class V2Error(ModelNormal):
         return {
             'code': (int,),  # noqa: E501
             'message': (str,),  # noqa: E501
-            'details': (bool, date, datetime, dict, float, int, list, str, none_type, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'details': (bool, date, datetime, dict, float, int, list, str, none_type, none_type),  # noqa: E501
         }
 
     @cached_property

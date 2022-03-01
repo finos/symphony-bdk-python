@@ -84,11 +84,11 @@ class V2MemberInfo(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'user': (V2MemberUserDetail, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'is_owner': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'is_creator': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'join_date': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'added_through_groups': ([int], none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'user': (V2MemberUserDetail, none_type),  # noqa: E501
+            'is_owner': (bool, none_type),  # noqa: E501
+            'is_creator': (bool, none_type),  # noqa: E501
+            'join_date': (int, none_type),  # noqa: E501
+            'added_through_groups': ([int], none_type),  # noqa: E501
         }
 
     @cached_property

@@ -81,16 +81,16 @@ class MessageSearchQuery(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'text': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'stream_id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'stream_type': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'author': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'hashtag': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'cashtag': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'mention': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'signal': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'from_date': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'to_date': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'text': (str, none_type),  # noqa: E501
+            'stream_id': (str, none_type),  # noqa: E501
+            'stream_type': (str, none_type),  # noqa: E501
+            'author': (int, none_type),  # noqa: E501
+            'hashtag': (str, none_type),  # noqa: E501
+            'cashtag': (str, none_type),  # noqa: E501
+            'mention': (int, none_type),  # noqa: E501
+            'signal': (str, none_type),  # noqa: E501
+            'from_date': (int, none_type),  # noqa: E501
+            'to_date': (int, none_type),  # noqa: E501
         }
 
     @cached_property

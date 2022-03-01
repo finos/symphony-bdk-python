@@ -86,9 +86,9 @@ class V1DLPViolationMessage(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'violation': (V1DLPViolation, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'message': (V4Message, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'diagnostic': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'violation': (V1DLPViolation, none_type),  # noqa: E501
+            'message': (V4Message, none_type),  # noqa: E501
+            'diagnostic': (str, none_type),  # noqa: E501
         }
 
     @cached_property

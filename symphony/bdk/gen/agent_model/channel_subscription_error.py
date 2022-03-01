@@ -81,9 +81,9 @@ class ChannelSubscriptionError(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'user_id': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'code': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'message': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'user_id': (int, none_type),  # noqa: E501
+            'code': (str, none_type),  # noqa: E501
+            'message': (str, none_type),  # noqa: E501
         }
 
     @cached_property

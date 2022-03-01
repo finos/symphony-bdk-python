@@ -88,14 +88,14 @@ class V2StreamAttributes(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'cross_pod': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'origin': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'active': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'last_message_date': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'stream_type': (V2StreamType, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'stream_attributes': (V2ConversationSpecificStreamAttributes, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'room_attributes': (V2RoomSpecificStreamAttributes, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'id': (str, none_type),  # noqa: E501
+            'cross_pod': (bool, none_type),  # noqa: E501
+            'origin': (str, none_type),  # noqa: E501
+            'active': (bool, none_type),  # noqa: E501
+            'last_message_date': (int, none_type),  # noqa: E501
+            'stream_type': (V2StreamType, none_type),  # noqa: E501
+            'stream_attributes': (V2ConversationSpecificStreamAttributes, none_type),  # noqa: E501
+            'room_attributes': (V2RoomSpecificStreamAttributes, none_type),  # noqa: E501
         }
 
     @cached_property

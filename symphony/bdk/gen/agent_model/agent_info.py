@@ -81,13 +81,13 @@ class AgentInfo(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'ip_address': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'hostname': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'server_fqdn': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'version': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'url': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'on_prem': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'commit_id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'ip_address': (str, none_type),  # noqa: E501
+            'hostname': (str, none_type),  # noqa: E501
+            'server_fqdn': (str, none_type),  # noqa: E501
+            'version': (str, none_type),  # noqa: E501
+            'url': (str, none_type),  # noqa: E501
+            'on_prem': (bool, none_type),  # noqa: E501
+            'commit_id': (str, none_type),  # noqa: E501
         }
 
     @cached_property

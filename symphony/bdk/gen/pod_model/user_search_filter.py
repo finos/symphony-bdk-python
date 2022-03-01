@@ -84,14 +84,14 @@ class UserSearchFilter(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'account_types': (StringList, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'title': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'company': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'location': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'market_coverage': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'responsibility': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'function': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'instrument': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'account_types': (StringList, none_type),  # noqa: E501
+            'title': (str, none_type),  # noqa: E501
+            'company': (str, none_type),  # noqa: E501
+            'location': (str, none_type),  # noqa: E501
+            'market_coverage': (str, none_type),  # noqa: E501
+            'responsibility': (str, none_type),  # noqa: E501
+            'function': (str, none_type),  # noqa: E501
+            'instrument': (str, none_type),  # noqa: E501
         }
 
     @cached_property

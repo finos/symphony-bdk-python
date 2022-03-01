@@ -86,8 +86,8 @@ class V1AuditTrailInitiatorList(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'items': ([V1AuditTrailInitiatorResponse], none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'pagination': (Pagination, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'items': ([V1AuditTrailInitiatorResponse], none_type),  # noqa: E501
+            'pagination': (Pagination, none_type),  # noqa: E501
         }
 
     @cached_property

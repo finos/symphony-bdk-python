@@ -81,10 +81,10 @@ class RoomSystemInfo(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'creation_date': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'created_by_user_id': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'active': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'id': (str, none_type),  # noqa: E501
+            'creation_date': (int, none_type),  # noqa: E501
+            'created_by_user_id': (int, none_type),  # noqa: E501
+            'active': (bool, none_type),  # noqa: E501
         }
 
     @cached_property

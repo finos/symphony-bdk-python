@@ -81,8 +81,8 @@ class AppProperty(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'key': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'value': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'key': (str, none_type),  # noqa: E501
+            'value': (str, none_type),  # noqa: E501
         }
 
     @cached_property

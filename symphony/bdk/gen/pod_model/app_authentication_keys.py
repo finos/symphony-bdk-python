@@ -84,8 +84,8 @@ class AppAuthenticationKeys(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'current': (AppAuthenticationKey, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'previous': (AppAuthenticationKey, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'current': (AppAuthenticationKey, none_type),  # noqa: E501
+            'previous': (AppAuthenticationKey, none_type),  # noqa: E501
         }
 
     @cached_property

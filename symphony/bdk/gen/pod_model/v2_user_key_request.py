@@ -81,9 +81,9 @@ class V2UserKeyRequest(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'key': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'expiration_date': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'action': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'key': (str, none_type),  # noqa: E501
+            'expiration_date': (int, none_type),  # noqa: E501
+            'action': (str, none_type),  # noqa: E501
         }
 
     @cached_property

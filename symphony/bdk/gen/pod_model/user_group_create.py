@@ -83,8 +83,8 @@ class UserGroupCreate(ModelNormal):
         return {
             'name': (str,),  # noqa: E501
             'type': (str,),  # noqa: E501
-            'area': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'description': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'area': (str, none_type),  # noqa: E501
+            'description': (str, none_type),  # noqa: E501
         }
 
     @cached_property

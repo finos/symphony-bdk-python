@@ -84,7 +84,7 @@ class Jwks(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'keys': ([JwksEntry], none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'keys': ([JwksEntry], none_type),  # noqa: E501
         }
 
     @cached_property

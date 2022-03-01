@@ -86,11 +86,11 @@ class MessageReceiptDetail(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'user': (UserCompp, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'delivery_receipt_timestamp': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'read_receipt_timestamp': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'email_notification_timestamp': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'download_receipt_counts': ([DownloadReceiptCount], none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'user': (UserCompp, none_type),  # noqa: E501
+            'delivery_receipt_timestamp': (int, none_type),  # noqa: E501
+            'read_receipt_timestamp': (int, none_type),  # noqa: E501
+            'email_notification_timestamp': (int, none_type),  # noqa: E501
+            'download_receipt_counts': ([DownloadReceiptCount], none_type),  # noqa: E501
         }
 
     @cached_property

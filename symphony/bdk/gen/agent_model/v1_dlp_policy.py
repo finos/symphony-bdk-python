@@ -88,14 +88,14 @@ class V1DLPPolicy(ModelNormal):
             'name': (str,),  # noqa: E501
             'scopes': ([str],),  # noqa: E501
             'type': (str,),  # noqa: E501
-            'active': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'creation_date': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'creator_id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'dictionary_refs': ([V1DLPDictionaryRef], none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'last_disabled_date': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'last_updated_date': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'policy_id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'version': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'active': (bool, none_type),  # noqa: E501
+            'creation_date': (int, none_type),  # noqa: E501
+            'creator_id': (str, none_type),  # noqa: E501
+            'dictionary_refs': ([V1DLPDictionaryRef], none_type),  # noqa: E501
+            'last_disabled_date': (int, none_type),  # noqa: E501
+            'last_updated_date': (int, none_type),  # noqa: E501
+            'policy_id': (str, none_type),  # noqa: E501
+            'version': (str, none_type),  # noqa: E501
         }
 
     @cached_property

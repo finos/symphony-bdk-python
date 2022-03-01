@@ -84,10 +84,10 @@ class ChannelSubscriberResponse(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'offset': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'has_more': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'total': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'data': ([ChannelSubscriber], none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'offset': (int, none_type),  # noqa: E501
+            'has_more': (bool, none_type),  # noqa: E501
+            'total': (int, none_type),  # noqa: E501
+            'data': ([ChannelSubscriber], none_type),  # noqa: E501
         }
 
     @cached_property

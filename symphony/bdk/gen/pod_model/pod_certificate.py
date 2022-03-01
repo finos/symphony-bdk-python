@@ -81,7 +81,7 @@ class PodCertificate(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'certificate': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'certificate': (str, none_type),  # noqa: E501
         }
 
     @cached_property

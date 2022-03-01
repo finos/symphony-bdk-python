@@ -81,8 +81,8 @@ class AuthenticateExtensionAppRequest(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'app_token': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'auth_token': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'app_token': (str, none_type),  # noqa: E501
+            'auth_token': (str, none_type),  # noqa: E501
         }
 
     @cached_property

@@ -84,7 +84,7 @@ class FollowersList(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'followers': (UserIdList, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'followers': (UserIdList, none_type),  # noqa: E501
         }
 
     @cached_property

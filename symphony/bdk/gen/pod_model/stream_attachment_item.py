@@ -84,14 +84,14 @@ class StreamAttachmentItem(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'message_id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'ingestion_date': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'user_id': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'file_id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'name': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'size': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'content_type': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'previews': ([AttachmentPreview], none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'message_id': (str, none_type),  # noqa: E501
+            'ingestion_date': (int, none_type),  # noqa: E501
+            'user_id': (int, none_type),  # noqa: E501
+            'file_id': (str, none_type),  # noqa: E501
+            'name': (str, none_type),  # noqa: E501
+            'size': (int, none_type),  # noqa: E501
+            'content_type': (str, none_type),  # noqa: E501
+            'previews': ([AttachmentPreview], none_type),  # noqa: E501
         }
 
     @cached_property

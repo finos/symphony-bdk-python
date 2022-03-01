@@ -84,10 +84,10 @@ class MessageStatus(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'author': (MessageStatusUser, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'read': ([MessageStatusUser], none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'delivered': ([MessageStatusUser], none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'sent': ([MessageStatusUser], none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'author': (MessageStatusUser, none_type),  # noqa: E501
+            'read': ([MessageStatusUser], none_type),  # noqa: E501
+            'delivered': ([MessageStatusUser], none_type),  # noqa: E501
+            'sent': ([MessageStatusUser], none_type),  # noqa: E501
         }
 
     @cached_property

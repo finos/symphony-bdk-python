@@ -81,9 +81,9 @@ class UserError(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'error': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'email': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'error': (str, none_type),  # noqa: E501
+            'email': (str, none_type),  # noqa: E501
+            'id': (str, none_type),  # noqa: E501
         }
 
     @cached_property

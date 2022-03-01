@@ -81,11 +81,11 @@ class ApplicationInfo(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'app_id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'name': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'app_url': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'domain': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'publisher': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'app_id': (str, none_type),  # noqa: E501
+            'name': (str, none_type),  # noqa: E501
+            'app_url': (str, none_type),  # noqa: E501
+            'domain': (str, none_type),  # noqa: E501
+            'publisher': (str, none_type),  # noqa: E501
         }
 
     @cached_property

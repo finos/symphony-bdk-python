@@ -81,12 +81,12 @@ class V1AuditTrailInitiatorResponse(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'action': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'action_name': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'timestamp': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'initiator_id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'initiator_username': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'initiator_email_address': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'action': (str, none_type),  # noqa: E501
+            'action_name': (str, none_type),  # noqa: E501
+            'timestamp': (str, none_type),  # noqa: E501
+            'initiator_id': (str, none_type),  # noqa: E501
+            'initiator_username': (str, none_type),  # noqa: E501
+            'initiator_email_address': (str, none_type),  # noqa: E501
         }
 
     @cached_property

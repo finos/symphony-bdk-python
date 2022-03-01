@@ -81,10 +81,10 @@ class MemberInfo(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'id': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'owner': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'join_date': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'added_through_groups': ([int], none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'id': (int, none_type),  # noqa: E501
+            'owner': (bool, none_type),  # noqa: E501
+            'join_date': (int, none_type),  # noqa: E501
+            'added_through_groups': ([int], none_type),  # noqa: E501
         }
 
     @cached_property

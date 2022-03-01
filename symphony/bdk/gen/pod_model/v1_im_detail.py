@@ -86,8 +86,8 @@ class V1IMDetail(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'v1_im_attributes': (V1IMAttributes, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'im_system_info': (IMSystemInfo, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'v1_im_attributes': (V1IMAttributes, none_type),  # noqa: E501
+            'im_system_info': (IMSystemInfo, none_type),  # noqa: E501
         }
 
     @cached_property

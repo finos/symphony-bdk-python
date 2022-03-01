@@ -95,8 +95,8 @@ class UserAppEntitlement(ModelNormal):
             'app_id': (str,),  # noqa: E501
             'listed': (bool,),  # noqa: E501
             'install': (bool,),  # noqa: E501
-            'app_name': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'products': (ProductList, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'app_name': (str, none_type),  # noqa: E501
+            'products': (ProductList, none_type),  # noqa: E501
         }
 
     @cached_property

@@ -85,8 +85,8 @@ class BulkActionResult(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'overall_result': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'results': ([str], none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'overall_result': (str, none_type),  # noqa: E501
+            'results': ([str], none_type),  # noqa: E501
         }
 
     @cached_property

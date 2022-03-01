@@ -81,11 +81,11 @@ class UserData(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'id': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'username': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'first_name': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'last_name': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'email_address': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'id': (int, none_type),  # noqa: E501
+            'username': (str, none_type),  # noqa: E501
+            'first_name': (str, none_type),  # noqa: E501
+            'last_name': (str, none_type),  # noqa: E501
+            'email_address': (str, none_type),  # noqa: E501
         }
 
     @cached_property

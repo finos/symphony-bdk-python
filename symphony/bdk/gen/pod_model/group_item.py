@@ -81,8 +81,8 @@ class GroupItem(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'id': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'added_by': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'id': (int, none_type),  # noqa: E501
+            'added_by': (int, none_type),  # noqa: E501
         }
 
     @cached_property

@@ -81,12 +81,12 @@ class ChannelSubscriber(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'subscription_id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'pushed': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'owner': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'subscriber_name': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'user_id': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'timestamp': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'subscription_id': (str, none_type),  # noqa: E501
+            'pushed': (bool, none_type),  # noqa: E501
+            'owner': (bool, none_type),  # noqa: E501
+            'subscriber_name': (str, none_type),  # noqa: E501
+            'user_id': (int, none_type),  # noqa: E501
+            'timestamp': (int, none_type),  # noqa: E501
         }
 
     @cached_property

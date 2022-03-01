@@ -84,16 +84,16 @@ class V3DLPViolation(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'enforcement_event_id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'entity_id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'create_time': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'last_modified': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'requester_id': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'details': ([bool, date, datetime, dict, float, int, list, str, none_type], none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'action': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'outcome': (V1DLPOutcome, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'version': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'ignore_dl_pwarning': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'enforcement_event_id': (str, none_type),  # noqa: E501
+            'entity_id': (str, none_type),  # noqa: E501
+            'create_time': (int, none_type),  # noqa: E501
+            'last_modified': (int, none_type),  # noqa: E501
+            'requester_id': (int, none_type),  # noqa: E501
+            'details': ([bool, date, datetime, dict, float, int, list, str, none_type], none_type),  # noqa: E501
+            'action': (str, none_type),  # noqa: E501
+            'outcome': (V1DLPOutcome, none_type),  # noqa: E501
+            'version': (str, none_type),  # noqa: E501
+            'ignore_dl_pwarning': (bool, none_type),  # noqa: E501
         }
 
     @cached_property

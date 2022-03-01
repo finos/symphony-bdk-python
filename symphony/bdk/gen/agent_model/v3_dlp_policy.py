@@ -84,19 +84,19 @@ class V3DLPPolicy(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'policy_id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'version': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'name': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'creator_id': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'scopes': ([str], none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'applies_to': ([V3DLPPolicyAppliesTo], none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'active': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'deleted': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'creation_date': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'last_updated_date': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'last_disabled_date': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'system_policy': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'id': (str, none_type),  # noqa: E501
+            'policy_id': (str, none_type),  # noqa: E501
+            'version': (str, none_type),  # noqa: E501
+            'name': (str, none_type),  # noqa: E501
+            'creator_id': (int, none_type),  # noqa: E501
+            'scopes': ([str], none_type),  # noqa: E501
+            'applies_to': ([V3DLPPolicyAppliesTo], none_type),  # noqa: E501
+            'active': (bool, none_type),  # noqa: E501
+            'deleted': (bool, none_type),  # noqa: E501
+            'creation_date': (int, none_type),  # noqa: E501
+            'last_updated_date': (int, none_type),  # noqa: E501
+            'last_disabled_date': (int, none_type),  # noqa: E501
+            'system_policy': (bool, none_type),  # noqa: E501
         }
 
     @cached_property

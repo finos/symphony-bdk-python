@@ -89,8 +89,8 @@ class RoomReactivatedMessage(ModelComposed):
             'timestamp': (str,),  # noqa: E501
             'v2message_type': (str,),  # noqa: E501
             'stream_id': (str,),  # noqa: E501
-            'reactivated_by_user_id': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'reactivated_by_user_id': (int, none_type),  # noqa: E501
+            'id': (str, none_type),  # noqa: E501
         }
 
     @cached_property

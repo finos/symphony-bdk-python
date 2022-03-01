@@ -84,8 +84,8 @@ class V2RoomSpecificStreamAttributes(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'name': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'groups': ([GroupItem], none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'name': (str, none_type),  # noqa: E501
+            'groups': ([GroupItem], none_type),  # noqa: E501
         }
 
     @cached_property

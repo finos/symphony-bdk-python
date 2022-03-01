@@ -92,14 +92,14 @@ class UserDetail(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'user_attributes': (UserAttributes, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'user_system_info': (UserSystemInfo, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'features': (IntegerList, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'apps': (IntegerList, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'groups': (IntegerList, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'roles': (StringList, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'disclaimers': (IntegerList, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'avatar': (Avatar, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'user_attributes': (UserAttributes, none_type),  # noqa: E501
+            'user_system_info': (UserSystemInfo, none_type),  # noqa: E501
+            'features': (IntegerList, none_type),  # noqa: E501
+            'apps': (IntegerList, none_type),  # noqa: E501
+            'groups': (IntegerList, none_type),  # noqa: E501
+            'roles': (StringList, none_type),  # noqa: E501
+            'disclaimers': (IntegerList, none_type),  # noqa: E501
+            'avatar': (Avatar, none_type),  # noqa: E501
         }
 
     @cached_property

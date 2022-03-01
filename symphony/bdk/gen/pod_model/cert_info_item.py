@@ -84,8 +84,8 @@ class CertInfoItem(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'name': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'attributes': ([NameValuePair], none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'name': (str, none_type),  # noqa: E501
+            'attributes': ([NameValuePair], none_type),  # noqa: E501
         }
 
     @cached_property

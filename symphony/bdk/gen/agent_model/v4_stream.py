@@ -84,12 +84,12 @@ class V4Stream(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'stream_id': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'stream_type': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'room_name': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'members': ([V4User], none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'external': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'cross_pod': (bool, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'stream_id': (str, none_type),  # noqa: E501
+            'stream_type': (str, none_type),  # noqa: E501
+            'room_name': (str, none_type),  # noqa: E501
+            'members': ([V4User], none_type),  # noqa: E501
+            'external': (bool, none_type),  # noqa: E501
+            'cross_pod': (bool, none_type),  # noqa: E501
         }
 
     @cached_property

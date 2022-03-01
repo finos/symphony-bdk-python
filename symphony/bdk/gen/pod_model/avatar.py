@@ -81,8 +81,8 @@ class Avatar(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'size': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'url': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'size': (str, none_type),  # noqa: E501
+            'url': (str, none_type),  # noqa: E501
         }
 
     @cached_property

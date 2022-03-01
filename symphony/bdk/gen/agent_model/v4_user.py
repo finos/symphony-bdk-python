@@ -81,12 +81,12 @@ class V4User(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'user_id': (int, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'first_name': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'last_name': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'display_name': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'email': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'username': (str, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'user_id': (int, none_type),  # noqa: E501
+            'first_name': (str, none_type),  # noqa: E501
+            'last_name': (str, none_type),  # noqa: E501
+            'display_name': (str, none_type),  # noqa: E501
+            'email': (str, none_type),  # noqa: E501
+            'username': (str, none_type),  # noqa: E501
         }
 
     @cached_property

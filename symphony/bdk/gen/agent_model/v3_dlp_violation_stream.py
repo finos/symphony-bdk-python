@@ -86,8 +86,8 @@ class V3DLPViolationStream(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'violation': (V3DLPViolation, none_type),  # noqa: E501 TODO: check if we have to add none_type
-            'stream': (V1DLPStream, none_type),  # noqa: E501 TODO: check if we have to add none_type
+            'violation': (V3DLPViolation, none_type),  # noqa: E501
+            'stream': (V1DLPStream, none_type),  # noqa: E501
         }
 
     @cached_property
