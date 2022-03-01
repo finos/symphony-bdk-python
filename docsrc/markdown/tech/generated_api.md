@@ -13,7 +13,7 @@ from [swagger specifications](https://github.com/symphonyoss/symphony-api-spec) 
 In order to re-generate model and api files, run
 ```shell
 cd project_root/templates
-./generate_client_api.sh
+./generate_client_api.sh 
 ```
 
 The file templates/open-api-generator-cli.jar used to generated model and api files was created from changes done
