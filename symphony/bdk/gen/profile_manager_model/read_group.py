@@ -368,10 +368,10 @@ class ReadGroup(ModelComposed):
         self._var_name_to_model_instances = composed_info[1]
         self._additional_properties_model_instances = composed_info[2]
         discarded_args = composed_info[3]
-        self.type: str = type
-        self.owner_type: Owner = owner_type
-        self.owner_id: int = owner_id
-        self.name: str = name
+        self.type: str = kwargs['type']
+        self.owner_type: Owner = kwargs['owner_type']
+        self.owner_id: int = kwargs['owner_id']
+        self.name: str = kwargs['name']
         self.id: str = None
         self.created_date: datetime = None
         self.created_by: str = None

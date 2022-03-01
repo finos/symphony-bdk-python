@@ -247,7 +247,7 @@ class Protocol(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.scheme: str = scheme  # TODO check if ^read-only useful
+        self.scheme: str = scheme
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

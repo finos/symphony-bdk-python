@@ -286,11 +286,11 @@ class V4ImportedMessage(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.message: str = message  # TODO check if ^read-only useful
-        self.intended_message_timestamp: int = intended_message_timestamp  # TODO check if ^read-only useful
-        self.intended_message_from_user_id: int = intended_message_from_user_id  # TODO check if ^read-only useful
-        self.originating_system_id: str = originating_system_id  # TODO check if ^read-only useful
-        self.stream_id: str = stream_id  # TODO check if ^read-only useful
+        self.message: str = message
+        self.intended_message_timestamp: int = intended_message_timestamp
+        self.intended_message_from_user_id: int = intended_message_from_user_id
+        self.originating_system_id: str = originating_system_id
+        self.stream_id: str = stream_id
         self.data: str = None
         self.original_message_id: str = None
         self.attachments: List[V4ImportedMessageAttachment] = None

@@ -267,8 +267,8 @@ class V1DLPDictionaryMetadata(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.dict_ref: V1DLPDictionaryRef = dict_ref  # TODO check if ^read-only useful
-        self.type: str = type  # TODO check if ^read-only useful
+        self.dict_ref: V1DLPDictionaryRef = dict_ref
+        self.type: str = type
         self.creation_date: int = None
         self.creator_id: str = None
         self.last_updated_date: int = None

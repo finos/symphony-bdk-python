@@ -259,8 +259,8 @@ class V2MessageAllOf(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.message: str = message  # TODO check if ^read-only useful
-        self.from_user_id: int = from_user_id  # TODO check if ^read-only useful
+        self.message: str = message
+        self.from_user_id: int = from_user_id
         self.attachments: List[AttachmentInfo] = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

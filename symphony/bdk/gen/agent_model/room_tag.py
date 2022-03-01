@@ -252,8 +252,8 @@ class RoomTag(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.key: str = key  # TODO check if ^read-only useful
-        self.value: str = value  # TODO check if ^read-only useful
+        self.key: str = key
+        self.value: str = value
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

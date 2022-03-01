@@ -260,8 +260,8 @@ class UserGroupCreate(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.name: str = name  # TODO check if ^read-only useful
-        self.type: str = type  # TODO check if ^read-only useful
+        self.name: str = name
+        self.type: str = type
         self.area: str = None
         self.description: str = None
         for var_name, var_value in kwargs.items():

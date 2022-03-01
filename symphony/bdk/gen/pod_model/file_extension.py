@@ -263,7 +263,7 @@ class FileExtension(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.extension: str = extension  # TODO check if ^read-only useful
+        self.extension: str = extension
         self.scope_internal: bool = None
         self.scope_external: bool = None
         self.source: str = None

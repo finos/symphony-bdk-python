@@ -256,7 +256,7 @@ class V1DLPDictionary(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.dictionary_metadata: V1DLPDictionaryMetadata = dictionary_metadata  # TODO check if ^read-only useful
+        self.dictionary_metadata: V1DLPDictionaryMetadata = dictionary_metadata
         self.content: V1DLPDictionaryContent = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

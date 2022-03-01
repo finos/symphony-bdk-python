@@ -257,9 +257,9 @@ class V3DLPDictionaryMeta(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.dict_id: str = dict_id  # TODO check if ^read-only useful
-        self.version: str = version  # TODO check if ^read-only useful
-        self.name: str = name  # TODO check if ^read-only useful
+        self.dict_id: str = dict_id
+        self.version: str = version
+        self.name: str = name
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

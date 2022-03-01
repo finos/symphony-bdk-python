@@ -252,8 +252,8 @@ class V3DLPFileClassifierConfig(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.classifiers: Union[{str: (str,)}] = classifiers  # TODO check if ^read-only useful
-        self.applicable_file_types: List[str] = applicable_file_types  # TODO check if ^read-only useful
+        self.classifiers: Union[{str: (str,)}] = classifiers
+        self.applicable_file_types: List[str] = applicable_file_types
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

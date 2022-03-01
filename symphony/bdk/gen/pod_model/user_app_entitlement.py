@@ -276,9 +276,9 @@ class UserAppEntitlement(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.app_id: str = app_id  # TODO check if ^read-only useful
-        self.listed: bool = listed  # TODO check if ^read-only useful
-        self.install: bool = install  # TODO check if ^read-only useful
+        self.app_id: str = app_id
+        self.listed: bool = listed
+        self.install: bool = install
         self.app_name: str = None
         self.products: ProductList = None
         for var_name, var_value in kwargs.items():

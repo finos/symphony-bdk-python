@@ -314,7 +314,7 @@ class V2RoomSearchCriteria(ModelComposed):
         self._var_name_to_model_instances = composed_info[1]
         self._additional_properties_model_instances = composed_info[2]
         discarded_args = composed_info[3]
-        self.query: str = query
+        self.query: str = kwargs['query']
         self.labels: List[str] = None
         self.active: bool = None
         self.private: bool = None

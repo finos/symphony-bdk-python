@@ -275,11 +275,11 @@ class PodAppEntitlement(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.app_id: str = app_id  # TODO check if ^read-only useful
-        self.app_name: str = app_name  # TODO check if ^read-only useful
-        self.enable: bool = enable  # TODO check if ^read-only useful
-        self.listed: bool = listed  # TODO check if ^read-only useful
-        self.install: bool = install  # TODO check if ^read-only useful
+        self.app_id: str = app_id
+        self.app_name: str = app_name
+        self.enable: bool = enable
+        self.listed: bool = listed
+        self.install: bool = install
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

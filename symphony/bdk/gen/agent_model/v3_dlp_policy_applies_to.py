@@ -260,9 +260,9 @@ class V3DLPPolicyAppliesTo(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.data_type: str = data_type  # TODO check if ^read-only useful
-        self.action: str = action  # TODO check if ^read-only useful
-        self.rules: List[V3DLPRule] = rules  # TODO check if ^read-only useful
+        self.data_type: str = data_type
+        self.action: str = action
+        self.rules: List[V3DLPRule] = rules
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

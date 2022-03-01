@@ -251,7 +251,7 @@ class PaginationCursors(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.before: str = before  # TODO check if ^read-only useful
+        self.before: str = before
         self.after: str = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

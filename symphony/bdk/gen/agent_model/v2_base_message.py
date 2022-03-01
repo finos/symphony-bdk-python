@@ -294,9 +294,9 @@ class V2BaseMessage(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.timestamp: str = timestamp  # TODO check if ^read-only useful
-        self.v2message_type: str = v2message_type  # TODO check if ^read-only useful
-        self.stream_id: str = stream_id  # TODO check if ^read-only useful
+        self.timestamp: str = timestamp
+        self.v2message_type: str = v2message_type
+        self.stream_id: str = stream_id
         self.id: str = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

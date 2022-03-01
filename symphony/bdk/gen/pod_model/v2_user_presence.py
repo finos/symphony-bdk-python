@@ -280,7 +280,7 @@ class V2UserPresence(ModelComposed):
         self._var_name_to_model_instances = composed_info[1]
         self._additional_properties_model_instances = composed_info[2]
         discarded_args = composed_info[3]
-        self.category: str = category
+        self.category: str = kwargs['category']
         self.user_id: int = None
         for var_name, var_value in kwargs.items():
             if var_name in discarded_args and \

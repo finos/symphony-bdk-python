@@ -298,10 +298,10 @@ class ShareArticle(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.title: str = title  # TODO check if ^read-only useful
-        self.publisher: str = publisher  # TODO check if ^read-only useful
-        self.author: str = author  # TODO check if ^read-only useful
-        self.app_id: str = app_id  # TODO check if ^read-only useful
+        self.title: str = title
+        self.publisher: str = publisher
+        self.author: str = author
+        self.app_id: str = app_id
         self.article_id: str = None
         self.sub_title: str = None
         self.message: str = None

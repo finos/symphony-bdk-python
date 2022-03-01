@@ -278,7 +278,7 @@ class UserAppEntitlementPatch(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.app_id: str = app_id  # TODO check if ^read-only useful
+        self.app_id: str = app_id
         self.listed: str = None
         self.install: str = None
         self.product: Product = None

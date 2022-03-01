@@ -255,7 +255,7 @@ class V1DLPDictionaryRef(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.name: str = name  # TODO check if ^read-only useful
+        self.name: str = name
         self.dict_id: str = None
         self.version: str = None
         for var_name, var_value in kwargs.items():

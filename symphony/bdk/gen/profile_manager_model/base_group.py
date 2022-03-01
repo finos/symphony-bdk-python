@@ -271,10 +271,10 @@ class BaseGroup(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.type: str = type  # TODO check if ^read-only useful
-        self.owner_type: Owner = owner_type  # TODO check if ^read-only useful
-        self.owner_id: int = owner_id  # TODO check if ^read-only useful
-        self.name: str = name  # TODO check if ^read-only useful
+        self.type: str = type
+        self.owner_type: Owner = owner_type
+        self.owner_id: int = owner_id
+        self.name: str = name
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

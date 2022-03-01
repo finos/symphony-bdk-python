@@ -258,7 +258,7 @@ class Pagination(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.cursors: PaginationCursors = cursors  # TODO check if ^read-only useful
+        self.cursors: PaginationCursors = cursors
         self.previous: str = None
         self.next: str = None
         for var_name, var_value in kwargs.items():

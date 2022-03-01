@@ -297,10 +297,10 @@ class V1DLPPolicy(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.content_types: List[str] = content_types  # TODO check if ^read-only useful
-        self.name: str = name  # TODO check if ^read-only useful
-        self.scopes: List[str] = scopes  # TODO check if ^read-only useful
-        self.type: str = type  # TODO check if ^read-only useful
+        self.content_types: List[str] = content_types
+        self.name: str = name
+        self.scopes: List[str] = scopes
+        self.type: str = type
         self.active: bool = None
         self.creation_date: int = None
         self.creator_id: str = None

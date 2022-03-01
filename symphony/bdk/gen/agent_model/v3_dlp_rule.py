@@ -287,8 +287,8 @@ class V3DLPRule(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.type: str = type  # TODO check if ^read-only useful
-        self.name: str = name  # TODO check if ^read-only useful
+        self.type: str = type
+        self.name: str = name
         self.id: str = None
         self.text_match_config: V3DLPTextMatchConfig = None
         self.file_size_config: V3DLPFileSizeConfig = None

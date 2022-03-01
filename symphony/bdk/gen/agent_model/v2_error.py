@@ -256,8 +256,8 @@ class V2Error(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.code: int = code  # TODO check if ^read-only useful
-        self.message: str = message  # TODO check if ^read-only useful
+        self.code: int = code
+        self.message: str = message
         self.details: Union[bool, date, datetime, dict, float, int, list, str, none_type] = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

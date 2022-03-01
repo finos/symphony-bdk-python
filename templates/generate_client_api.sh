@@ -41,3 +41,4 @@ generate_files https://raw.githubusercontent.com/symphonyoss/symphony-api-spec/7
 
 curl https://raw.githubusercontent.com/finos/symphony-api-spec/7e3b6d0503a3f7875fc36fee01dd0d93ff4ceb20/profile-manager/symphony-common-definitions.yaml -o symphony-common-definitions.yaml
 generate_files https://raw.githubusercontent.com/finos/symphony-api-spec/7e3b6d0503a3f7875fc36fee01dd0d93ff4ceb20/profile-manager/profile-manager-api.yaml profile_manager
+rm symphony-common-definitions.yaml

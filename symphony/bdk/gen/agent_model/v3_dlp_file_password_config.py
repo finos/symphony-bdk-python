@@ -252,8 +252,8 @@ class V3DLPFilePasswordConfig(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.applicable_file_types: List[str] = applicable_file_types  # TODO check if ^read-only useful
-        self.match_criteria: str = match_criteria  # TODO check if ^read-only useful
+        self.applicable_file_types: List[str] = applicable_file_types
+        self.match_criteria: str = match_criteria
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

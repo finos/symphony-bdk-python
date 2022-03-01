@@ -303,9 +303,9 @@ class UserLeftRoomMessage(ModelComposed):
         self._var_name_to_model_instances = composed_info[1]
         self._additional_properties_model_instances = composed_info[2]
         discarded_args = composed_info[3]
-        self.timestamp: str = timestamp
-        self.v2message_type: str = v2message_type
-        self.stream_id: str = stream_id
+        self.timestamp: str = kwargs['timestamp']
+        self.v2message_type: str = kwargs['v2message_type']
+        self.stream_id: str = kwargs['stream_id']
         self.removed_by_user_id: int = None
         self.member_left_user_id: int = None
         self.information_barrier_remediation: bool = None

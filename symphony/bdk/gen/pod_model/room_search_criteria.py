@@ -282,7 +282,7 @@ class RoomSearchCriteria(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.query: str = query  # TODO check if ^read-only useful
+        self.query: str = query
         self.labels: List[str] = None
         self.active: bool = None
         self.private: bool = None

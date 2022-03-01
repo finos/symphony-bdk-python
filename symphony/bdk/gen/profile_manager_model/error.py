@@ -260,8 +260,8 @@ class Error(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.code: str = code  # TODO check if ^read-only useful
-        self.message: str = message  # TODO check if ^read-only useful
+        self.code: str = code
+        self.message: str = message
         self.context: Union[{str: (str,)}] = None
         self.details: Union[{str: (bool, date, datetime, dict, float, int, list, str, none_type)}] = None
         for var_name, var_value in kwargs.items():
