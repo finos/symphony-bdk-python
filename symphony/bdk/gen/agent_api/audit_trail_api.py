@@ -36,88 +36,7 @@ class AuditTrailApi(object):
         if api_client is None:
             api_client = ApiClient()
         self.api_client = api_client
-
-        def __v1_audittrail_privilegeduser_get(
-            self,
-            session_token,
-            key_manager_token,
-            start_timestamp,
-            **kwargs
-        ):
-            """Get a list of  actions performed by a privileged account acting as privileged user given a period of time.  # noqa: E501
-
-            Get a list of actions performed by a privileged account acting as privileged user given a period of time.  # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.v1_audittrail_privilegeduser_get(session_token, key_manager_token, start_timestamp, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-                start_timestamp (int): Start timestamp in unix timestamp in millseconds. 
-
-            Keyword Args:
-                end_timestamp (int): End timestamp in unix timestamp in millseconds. If not specified, it assumes to be current time. . [optional]
-                before (str): Return results from an opaque “before” cursor value as presented via a response cursor. . [optional]
-                after (str): Return results from an opaque “after” cursor value as presented via a response cursor. . [optional]
-                limit (int): Max No. of violations to return. If no value is provided, 50 is the default. Some maximums for limit may be enforced for performance reasons. The maximum supported value is 500. . [optional]
-                initiator_id (int): If present, only the initiator with this initiator <user id> will be returned. . [optional]
-                role (str): If present, only the audit trail initiated by s user with privileged role acting as privileged user will be returned. Privileged eliglible roles: User Provisioning (USER_PROVISIONING), Content Management (CONTENT_MANAGEMENT), Expression Filter Policy Management (EF_POLICY_MANAGEMENT), SCO (SUPER_COMPLIANCE_OFFICER), CO (COMPLIANCE_OFFICER), Super admin (SUPER_ADMINISTRATOR), Admin (ADMINISTRATOR), L1 (L1_SUPPORT), L2 (L2_SUPPORT), Scope Manager (SCOPE_MANAGEMENT) . [optional]
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                V1AuditTrailInitiatorList
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            kwargs['start_timestamp'] = \
-                start_timestamp
-            return self.call_with_http_info(**kwargs)
-
-        self.v1_audittrail_privilegeduser_get = _Endpoint(
+        self.v1_audittrail_privilegeduser_get_endpoint = _Endpoint(
             settings={
                 'response_type': (V1AuditTrailInitiatorList,),
                 'auth': [],
@@ -206,6 +125,98 @@ class AuditTrailApi(object):
                 ],
                 'content_type': [],
             },
-            api_client=api_client,
-            callable=__v1_audittrail_privilegeduser_get
+            api_client=api_client
         )
+
+    def v1_audittrail_privilegeduser_get(
+        self,
+        session_token,
+        key_manager_token,
+        start_timestamp,
+        **kwargs
+    ):
+        """Get a list of  actions performed by a privileged account acting as privileged user given a period of time.  # noqa: E501
+
+        Get a list of actions performed by a privileged account acting as privileged user given a period of time.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v1_audittrail_privilegeduser_get(session_token, key_manager_token, start_timestamp, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+            start_timestamp (int): Start timestamp in unix timestamp in millseconds. 
+
+        Keyword Args:
+            end_timestamp (int): End timestamp in unix timestamp in millseconds. If not specified, it assumes to be current time. . [optional]
+            before (str): Return results from an opaque “before” cursor value as presented via a response cursor. . [optional]
+            after (str): Return results from an opaque “after” cursor value as presented via a response cursor. . [optional]
+            limit (int): Max No. of violations to return. If no value is provided, 50 is the default. Some maximums for limit may be enforced for performance reasons. The maximum supported value is 500. . [optional]
+            initiator_id (int): If present, only the initiator with this initiator <user id> will be returned. . [optional]
+            role (str): If present, only the audit trail initiated by s user with privileged role acting as privileged user will be returned. Privileged eliglible roles: User Provisioning (USER_PROVISIONING), Content Management (CONTENT_MANAGEMENT), Expression Filter Policy Management (EF_POLICY_MANAGEMENT), SCO (SUPER_COMPLIANCE_OFFICER), CO (COMPLIANCE_OFFICER), Super admin (SUPER_ADMINISTRATOR), Admin (ADMINISTRATOR), L1 (L1_SUPPORT), L2 (L2_SUPPORT), Scope Manager (SCOPE_MANAGEMENT) . [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V1AuditTrailInitiatorList
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        kwargs['start_timestamp'] = \
+            start_timestamp
+        return self.v1_audittrail_privilegeduser_get_endpoint.call_with_http_info(**kwargs)
+

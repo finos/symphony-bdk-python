@@ -38,73 +38,7 @@ class AppEntitlementApi(object):
         if api_client is None:
             api_client = ApiClient()
         self.api_client = api_client
-
-        def __v1_admin_app_entitlement_list_get(
-            self,
-            session_token,
-            **kwargs
-        ):
-            """Get the list of application entitlements for the company  # noqa: E501
-
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = pod_api.v1_admin_app_entitlement_list_get(session_token, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                session_token (str): Session authentication token.
-
-            Keyword Args:
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                PodAppEntitlementList
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['session_token'] = \
-                session_token
-            return self.call_with_http_info(**kwargs)
-
-        self.v1_admin_app_entitlement_list_get = _Endpoint(
+        self.v1_admin_app_entitlement_list_get_endpoint = _Endpoint(
             settings={
                 'response_type': (PodAppEntitlementList,),
                 'auth': [],
@@ -151,80 +85,9 @@ class AppEntitlementApi(object):
                 ],
                 'content_type': [],
             },
-            api_client=api_client,
-            callable=__v1_admin_app_entitlement_list_get
+            api_client=api_client
         )
-
-        def __v1_admin_app_entitlement_list_post(
-            self,
-            session_token,
-            payload,
-            **kwargs
-        ):
-            """Update the application entitlements for the company  # noqa: E501
-
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = pod_api.v1_admin_app_entitlement_list_post(session_token, payload, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                session_token (str): Session authentication token.
-                payload (PodAppEntitlementList):
-
-            Keyword Args:
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                PodAppEntitlementList
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['session_token'] = \
-                session_token
-            kwargs['payload'] = \
-                payload
-            return self.call_with_http_info(**kwargs)
-
-        self.v1_admin_app_entitlement_list_post = _Endpoint(
+        self.v1_admin_app_entitlement_list_post_endpoint = _Endpoint(
             settings={
                 'response_type': (PodAppEntitlementList,),
                 'auth': [],
@@ -278,80 +141,9 @@ class AppEntitlementApi(object):
                     'application/json'
                 ]
             },
-            api_client=api_client,
-            callable=__v1_admin_app_entitlement_list_post
+            api_client=api_client
         )
-
-        def __v1_admin_user_uid_app_entitlement_list_get(
-            self,
-            session_token,
-            uid,
-            **kwargs
-        ):
-            """Get the list of application entitlements for this user  # noqa: E501
-
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = pod_api.v1_admin_user_uid_app_entitlement_list_get(session_token, uid, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                session_token (str): Session authentication token.
-                uid (int): User ID as a decimal integer
-
-            Keyword Args:
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                UserAppEntitlementList
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['session_token'] = \
-                session_token
-            kwargs['uid'] = \
-                uid
-            return self.call_with_http_info(**kwargs)
-
-        self.v1_admin_user_uid_app_entitlement_list_get = _Endpoint(
+        self.v1_admin_user_uid_app_entitlement_list_get_endpoint = _Endpoint(
             settings={
                 'response_type': (UserAppEntitlementList,),
                 'auth': [],
@@ -404,84 +196,9 @@ class AppEntitlementApi(object):
                 ],
                 'content_type': [],
             },
-            api_client=api_client,
-            callable=__v1_admin_user_uid_app_entitlement_list_get
+            api_client=api_client
         )
-
-        def __v1_admin_user_uid_app_entitlement_list_patch(
-            self,
-            session_token,
-            uid,
-            payload,
-            **kwargs
-        ):
-            """Update unique entitlement of an app for this user. Entitlement can be installation, visibility or product  # noqa: E501
-
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = pod_api.v1_admin_user_uid_app_entitlement_list_patch(session_token, uid, payload, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                session_token (str): Session authentication token.
-                uid (int): User ID as a decimal integer
-                payload (UserAppEntitlementsPatchList):
-
-            Keyword Args:
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                UserAppEntitlementList
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['session_token'] = \
-                session_token
-            kwargs['uid'] = \
-                uid
-            kwargs['payload'] = \
-                payload
-            return self.call_with_http_info(**kwargs)
-
-        self.v1_admin_user_uid_app_entitlement_list_patch = _Endpoint(
+        self.v1_admin_user_uid_app_entitlement_list_patch_endpoint = _Endpoint(
             settings={
                 'response_type': (UserAppEntitlementList,),
                 'auth': [],
@@ -541,84 +258,9 @@ class AppEntitlementApi(object):
                     'application/json'
                 ]
             },
-            api_client=api_client,
-            callable=__v1_admin_user_uid_app_entitlement_list_patch
+            api_client=api_client
         )
-
-        def __v1_admin_user_uid_app_entitlement_list_post(
-            self,
-            session_token,
-            uid,
-            payload,
-            **kwargs
-        ):
-            """Update the application entitlements for this user  # noqa: E501
-
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = pod_api.v1_admin_user_uid_app_entitlement_list_post(session_token, uid, payload, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                session_token (str): Session authentication token.
-                uid (int): User ID as a decimal integer
-                payload (UserAppEntitlementList):
-
-            Keyword Args:
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                UserAppEntitlementList
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['session_token'] = \
-                session_token
-            kwargs['uid'] = \
-                uid
-            kwargs['payload'] = \
-                payload
-            return self.call_with_http_info(**kwargs)
-
-        self.v1_admin_user_uid_app_entitlement_list_post = _Endpoint(
+        self.v1_admin_user_uid_app_entitlement_list_post_endpoint = _Endpoint(
             settings={
                 'response_type': (UserAppEntitlementList,),
                 'auth': [],
@@ -678,6 +320,415 @@ class AppEntitlementApi(object):
                     'application/json'
                 ]
             },
-            api_client=api_client,
-            callable=__v1_admin_user_uid_app_entitlement_list_post
+            api_client=api_client
         )
+
+    def v1_admin_app_entitlement_list_get(
+        self,
+        session_token,
+        **kwargs
+    ):
+        """Get the list of application entitlements for the company  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = pod_api.v1_admin_app_entitlement_list_get(session_token, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            session_token (str): Session authentication token.
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            PodAppEntitlementList
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['session_token'] = \
+            session_token
+        return self.v1_admin_app_entitlement_list_get_endpoint.call_with_http_info(**kwargs)
+
+    def v1_admin_app_entitlement_list_post(
+        self,
+        session_token,
+        payload,
+        **kwargs
+    ):
+        """Update the application entitlements for the company  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = pod_api.v1_admin_app_entitlement_list_post(session_token, payload, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            session_token (str): Session authentication token.
+            payload (PodAppEntitlementList):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            PodAppEntitlementList
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['session_token'] = \
+            session_token
+        kwargs['payload'] = \
+            payload
+        return self.v1_admin_app_entitlement_list_post_endpoint.call_with_http_info(**kwargs)
+
+    def v1_admin_user_uid_app_entitlement_list_get(
+        self,
+        session_token,
+        uid,
+        **kwargs
+    ):
+        """Get the list of application entitlements for this user  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = pod_api.v1_admin_user_uid_app_entitlement_list_get(session_token, uid, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            session_token (str): Session authentication token.
+            uid (int): User ID as a decimal integer
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            UserAppEntitlementList
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['session_token'] = \
+            session_token
+        kwargs['uid'] = \
+            uid
+        return self.v1_admin_user_uid_app_entitlement_list_get_endpoint.call_with_http_info(**kwargs)
+
+    def v1_admin_user_uid_app_entitlement_list_patch(
+        self,
+        session_token,
+        uid,
+        payload,
+        **kwargs
+    ):
+        """Update unique entitlement of an app for this user. Entitlement can be installation, visibility or product  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = pod_api.v1_admin_user_uid_app_entitlement_list_patch(session_token, uid, payload, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            session_token (str): Session authentication token.
+            uid (int): User ID as a decimal integer
+            payload (UserAppEntitlementsPatchList):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            UserAppEntitlementList
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['session_token'] = \
+            session_token
+        kwargs['uid'] = \
+            uid
+        kwargs['payload'] = \
+            payload
+        return self.v1_admin_user_uid_app_entitlement_list_patch_endpoint.call_with_http_info(**kwargs)
+
+    def v1_admin_user_uid_app_entitlement_list_post(
+        self,
+        session_token,
+        uid,
+        payload,
+        **kwargs
+    ):
+        """Update the application entitlements for this user  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = pod_api.v1_admin_user_uid_app_entitlement_list_post(session_token, uid, payload, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            session_token (str): Session authentication token.
+            uid (int): User ID as a decimal integer
+            payload (UserAppEntitlementList):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            UserAppEntitlementList
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['session_token'] = \
+            session_token
+        kwargs['uid'] = \
+            uid
+        kwargs['payload'] = \
+            payload
+        return self.v1_admin_user_uid_app_entitlement_list_post_endpoint.call_with_http_info(**kwargs)
+

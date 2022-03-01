@@ -41,79 +41,7 @@ class DatafeedApi(object):
         if api_client is None:
             api_client = ApiClient()
         self.api_client = api_client
-
-        def __create_datafeed(
-            self,
-            session_token,
-            key_manager_token,
-            **kwargs
-        ):
-            """Create a new real time messages / events stream (\"datafeed\").  # noqa: E501
-
-            _Available on Agent 2.57.0 and above._  The datafeed provides messages and events from all conversations that the user is in. The types of events surfaced in the datafeed can be found in the Real Time Events list. (see definition on top of the file)  Returns the ID of the datafeed that has just been created. This ID should then be used as input to the Read Messages/Events Stream v4 endpoint.   # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.create_datafeed(session_token, key_manager_token, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-
-            Keyword Args:
-                body (V5DatafeedCreateBody): [optional]
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                V5Datafeed
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            return self.call_with_http_info(**kwargs)
-
-        self.create_datafeed = _Endpoint(
+        self.create_datafeed_endpoint = _Endpoint(
             settings={
                 'response_type': (V5Datafeed,),
                 'auth': [],
@@ -170,85 +98,9 @@ class DatafeedApi(object):
                 ],
                 'content_type': [],
             },
-            api_client=api_client,
-            callable=__create_datafeed
+            api_client=api_client
         )
-
-        def __delete_datafeed(
-            self,
-            datafeed_id,
-            session_token,
-            key_manager_token,
-            **kwargs
-        ):
-            """Delete the specified real time message / event stream (\"datafeed\").  # noqa: E501
-
-            _Available on Agent 2.57.0 and above._  The datafeed provides messages and events from all conversations that the user is in. The types of events surfaced in the datafeed can be found in the Real Time Events list. (see definition on top of the file)  Delete the specified datafeed.   # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.delete_datafeed(datafeed_id, session_token, key_manager_token, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                datafeed_id (str): ID of the datafeed
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-
-            Keyword Args:
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                V2Error
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['datafeed_id'] = \
-                datafeed_id
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            return self.call_with_http_info(**kwargs)
-
-        self.delete_datafeed = _Endpoint(
+        self.delete_datafeed_endpoint = _Endpoint(
             settings={
                 'response_type': (V2Error,),
                 'auth': [],
@@ -307,82 +159,9 @@ class DatafeedApi(object):
                 ],
                 'content_type': [],
             },
-            api_client=api_client,
-            callable=__delete_datafeed
+            api_client=api_client
         )
-
-        def __list_datafeed(
-            self,
-            session_token,
-            key_manager_token,
-            **kwargs
-        ):
-            """Read list of real time messages / events stream (\"datafeed\").  # noqa: E501
-
-            _Available on Agent 2.57.0 and above._  The datafeed provides messages and events from all conversations that the user is in. The types of events surfaced in the datafeed can be found in the [Real Time Events](./docs/real-time-events.md) list.  Returns the list of the datafeeds for the user. Any datafeed ID of the list can then be used as input to the Read Messages/Events Stream v4 endpoint.   # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.list_datafeed(session_token, key_manager_token, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-
-            Keyword Args:
-                tag (str): A unique identifier to ensure uniqueness of the datafeed. Used to restrict search.. [optional]
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                [V5Datafeed]
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            return self.call_with_http_info(**kwargs)
-
-        self.list_datafeed = _Endpoint(
+        self.list_datafeed_endpoint = _Endpoint(
             settings={
                 'response_type': ([V5Datafeed],),
                 'auth': [],
@@ -440,91 +219,13 @@ class DatafeedApi(object):
             },
             headers_map={
                 'accept': [
-                    'application/json',
-                    '200 OK'
+                    'application/json'
                 ],
                 'content_type': [],
             },
-            api_client=api_client,
-            callable=__list_datafeed
+            api_client=api_client
         )
-
-        def __read_datafeed(
-            self,
-            datafeed_id,
-            session_token,
-            key_manager_token,
-            **kwargs
-        ):
-            """Read the specified real time message / event stream (\"datafeed\").  # noqa: E501
-
-            _Available on Agent 2.57.0 and above._  The datafeed provides messages and events from all conversations that the user is in. The types of events surfaced in the datafeed can be found in the Real Time Events list. (see definition on top of the file)  Read the specified datafeed.  The ackId sent as parameter can be empty for the first call. In the response an ackId will be sent back and it can be used for the next call: in this way you acknowledge that you have received the events that came with that ackId; datafeed will remove the events associated with that ackId from your queue   # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.read_datafeed(datafeed_id, session_token, key_manager_token, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                datafeed_id (str): ID of the datafeed
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-
-            Keyword Args:
-                ack_id (AckId): ackId received from last POST Base64 encoded.. [optional]
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                V5EventList
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['datafeed_id'] = \
-                datafeed_id
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            return self.call_with_http_info(**kwargs)
-
-        self.read_datafeed = _Endpoint(
+        self.read_datafeed_endpoint = _Endpoint(
             settings={
                 'response_type': (V5EventList,),
                 'auth': [],
@@ -589,81 +290,9 @@ class DatafeedApi(object):
                     'application/json'
                 ]
             },
-            api_client=api_client,
-            callable=__read_datafeed
+            api_client=api_client
         )
-
-        def __v4_datafeed_create_post(
-            self,
-            session_token,
-            key_manager_token,
-            **kwargs
-        ):
-            """Create a new real time message event stream.  # noqa: E501
-
-            A datafeed provides the messages in all conversations that a user is in. This also includes system messages like new users joining a chatroom.  A datafeed will expire if it isn't read before its capacity is reached.   # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.v4_datafeed_create_post(session_token, key_manager_token, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-
-            Keyword Args:
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                Datafeed
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            return self.call_with_http_info(**kwargs)
-
-        self.v4_datafeed_create_post = _Endpoint(
+        self.v4_datafeed_create_post_endpoint = _Endpoint(
             settings={
                 'response_type': (Datafeed,),
                 'auth': [],
@@ -716,86 +345,9 @@ class DatafeedApi(object):
                 ],
                 'content_type': [],
             },
-            api_client=api_client,
-            callable=__v4_datafeed_create_post
+            api_client=api_client
         )
-
-        def __v4_datafeed_id_read_get(
-            self,
-            id,
-            session_token,
-            key_manager_token,
-            **kwargs
-        ):
-            """Read a given datafeed.  # noqa: E501
-
-            Read messages from the given datafeed. If no more messages are available then this method will block. It is intended that the client should re-call this method as soon as it has processed the messages received in the previous call. If the client is able to consume messages more quickly than they become available then each call will initially block, there is no need to delay before re-calling this method.  A datafeed will expire if its unread capacity is reached. A datafeed can only be consumed by one client thread at a time. E.g. polling the datafeed by two threads may lead to messages being delivered out of order.   # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.v4_datafeed_id_read_get(id, session_token, key_manager_token, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                id (str): Datafeed ID 
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-
-            Keyword Args:
-                limit (int): Max No. of messages to return. . [optional]
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                V4EventList
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['id'] = \
-                id
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            return self.call_with_http_info(**kwargs)
-
-        self.v4_datafeed_id_read_get = _Endpoint(
+        self.v4_datafeed_id_read_get_endpoint = _Endpoint(
             settings={
                 'response_type': (V4EventList,),
                 'auth': [],
@@ -859,6 +411,514 @@ class DatafeedApi(object):
                 ],
                 'content_type': [],
             },
-            api_client=api_client,
-            callable=__v4_datafeed_id_read_get
+            api_client=api_client
         )
+
+    def create_datafeed(
+        self,
+        session_token,
+        key_manager_token,
+        **kwargs
+    ):
+        """Create a new real time messages / events stream (\"datafeed\").  # noqa: E501
+
+        _Available on Agent 2.57.0 and above._  The datafeed provides messages and events from all conversations that the user is in. The types of events surfaced in the datafeed can be found in the Real Time Events list. (see definition on top of the file)  Returns the ID of the datafeed that has just been created. This ID should then be used as input to the Read Messages/Events Stream v4 endpoint.   # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.create_datafeed(session_token, key_manager_token, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+
+        Keyword Args:
+            body (V5DatafeedCreateBody): [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V5Datafeed
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        return self.create_datafeed_endpoint.call_with_http_info(**kwargs)
+
+    def delete_datafeed(
+        self,
+        datafeed_id,
+        session_token,
+        key_manager_token,
+        **kwargs
+    ):
+        """Delete the specified real time message / event stream (\"datafeed\").  # noqa: E501
+
+        _Available on Agent 2.57.0 and above._  The datafeed provides messages and events from all conversations that the user is in. The types of events surfaced in the datafeed can be found in the Real Time Events list. (see definition on top of the file)  Delete the specified datafeed.   # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.delete_datafeed(datafeed_id, session_token, key_manager_token, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            datafeed_id (str): ID of the datafeed
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V2Error
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['datafeed_id'] = \
+            datafeed_id
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        return self.delete_datafeed_endpoint.call_with_http_info(**kwargs)
+
+    def list_datafeed(
+        self,
+        session_token,
+        key_manager_token,
+        **kwargs
+    ):
+        """Read list of real time messages / events stream (\"datafeed\").  # noqa: E501
+
+        _Available on Agent 2.57.0 and above._  The datafeed provides messages and events from all conversations that the user is in. The types of events surfaced in the datafeed can be found in the [Real Time Events](./docs/real-time-events.md) list.  Returns the list of the datafeeds for the user. Any datafeed ID of the list can then be used as input to the Read Messages/Events Stream v4 endpoint.   # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.list_datafeed(session_token, key_manager_token, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+
+        Keyword Args:
+            tag (str): A unique identifier to ensure uniqueness of the datafeed. Used to restrict search.. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            [V5Datafeed]
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        return self.list_datafeed_endpoint.call_with_http_info(**kwargs)
+
+    def read_datafeed(
+        self,
+        datafeed_id,
+        session_token,
+        key_manager_token,
+        **kwargs
+    ):
+        """Read the specified real time message / event stream (\"datafeed\").  # noqa: E501
+
+        _Available on Agent 2.57.0 and above._  The datafeed provides messages and events from all conversations that the user is in. The types of events surfaced in the datafeed can be found in the Real Time Events list. (see definition on top of the file)  Read the specified datafeed.  The ackId sent as parameter can be empty for the first call. In the response an ackId will be sent back and it can be used for the next call: in this way you acknowledge that you have received the events that came with that ackId; datafeed will remove the events associated with that ackId from your queue   # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.read_datafeed(datafeed_id, session_token, key_manager_token, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            datafeed_id (str): ID of the datafeed
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+
+        Keyword Args:
+            ack_id (AckId): ackId received from last POST Base64 encoded.. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V5EventList
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['datafeed_id'] = \
+            datafeed_id
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        return self.read_datafeed_endpoint.call_with_http_info(**kwargs)
+
+    def v4_datafeed_create_post(
+        self,
+        session_token,
+        key_manager_token,
+        **kwargs
+    ):
+        """Create a new real time message event stream.  # noqa: E501
+
+        A datafeed provides the messages in all conversations that a user is in. This also includes system messages like new users joining a chatroom.  A datafeed will expire if it isn't read before its capacity is reached.   # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v4_datafeed_create_post(session_token, key_manager_token, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            Datafeed
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        return self.v4_datafeed_create_post_endpoint.call_with_http_info(**kwargs)
+
+    def v4_datafeed_id_read_get(
+        self,
+        id,
+        session_token,
+        key_manager_token,
+        **kwargs
+    ):
+        """Read a given datafeed.  # noqa: E501
+
+        Read messages from the given datafeed. If no more messages are available then this method will block. It is intended that the client should re-call this method as soon as it has processed the messages received in the previous call. If the client is able to consume messages more quickly than they become available then each call will initially block, there is no need to delay before re-calling this method.  A datafeed will expire if its unread capacity is reached. A datafeed can only be consumed by one client thread at a time. E.g. polling the datafeed by two threads may lead to messages being delivered out of order.   # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v4_datafeed_id_read_get(id, session_token, key_manager_token, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            id (str): Datafeed ID 
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+
+        Keyword Args:
+            limit (int): Max No. of messages to return. . [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V4EventList
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['id'] = \
+            id
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        return self.v4_datafeed_id_read_get_endpoint.call_with_http_info(**kwargs)
+

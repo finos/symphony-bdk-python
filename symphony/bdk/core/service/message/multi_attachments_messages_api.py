@@ -15,118 +15,7 @@ class MultiAttachmentsMessagesApi(MessagesApi):
     def __init__(self, api_client=None):
         super().__init__(api_client)
 
-        def __v4_message_create_post(self, **kwargs):
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            return self.call_with_http_info(**kwargs)
-
-        self.v4_stream_sid_multi_attachment_message_create_post = Endpoint(
-            settings={
-                'response_type': (V4Message,),
-                'auth': [],
-                'endpoint_path': '/v4/stream/{sid}/message/create',
-                'operation_id': 'v4_stream_sid_message_create_post',
-                'http_method': 'POST',
-                'servers': None,
-            },
-            params_map={
-                'all': [
-                    'sid',
-                    'session_token',
-                    'key_manager_token',
-                    'message',
-                    'data',
-                    'version',
-                    'attachment',
-                    'preview',
-                ],
-                'required': [
-                    'sid',
-                    'session_token',
-                ],
-                'nullable': [
-                ],
-                'enum': [
-                ],
-                'validation': [
-                ]
-            },
-            root_map={
-                'validations': {
-                },
-                'allowed_values': {
-                },
-                'openapi_types': {
-                    'sid':
-                        (str,),
-                    'session_token':
-                        (str,),
-                    'key_manager_token':
-                        (str,),
-                    'message':
-                        (str,),
-                    'data':
-                        (str,),
-                    'version':
-                        (str,),
-                    'attachment':
-                        ([file_type],),
-                    'preview':
-                        ([file_type],),
-                },
-                'attribute_map': {
-                    'sid': 'sid',
-                    'session_token': 'sessionToken',
-                    'key_manager_token': 'keyManagerToken',
-                    'message': 'message',
-                    'data': 'data',
-                    'version': 'version',
-                    'attachment': 'attachment',
-                    'preview': 'preview',
-                },
-                'location_map': {
-                    'sid': 'path',
-                    'session_token': 'header',
-                    'key_manager_token': 'header',
-                    'message': 'form',
-                    'data': 'form',
-                    'version': 'form',
-                    'attachment': 'form',
-                    'preview': 'form',
-                },
-                'collection_format_map': {
-                }
-            },
-            headers_map={
-                'accept': [
-                    'application/json'
-                ],
-                'content_type': [
-                    'multipart/form-data'
-                ]
-            },
-            api_client=api_client,
-            callable=__v4_message_create_post
-        )
-
-        self.v4_multi_attachment_message_blast_post = Endpoint(
+        self.v4_multi_attachment_message_blast_post_endpoint = Endpoint(
             settings={
                 'response_type': (V4MessageBlastResponse,),
                 'auth': [],
@@ -212,6 +101,268 @@ class MultiAttachmentsMessagesApi(MessagesApi):
                     'multipart/form-data'
                 ]
             },
-            api_client=api_client,
-            callable=__v4_message_create_post
+            api_client=api_client
         )
+        self.v4_stream_sid_multi_attachment_message_create_post_endpoint = Endpoint(
+            settings={
+                'response_type': (V4Message,),
+                'auth': [],
+                'endpoint_path': '/v4/stream/{sid}/message/create',
+                'operation_id': 'v4_stream_sid_message_create_post',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'sid',
+                    'session_token',
+                    'key_manager_token',
+                    'message',
+                    'data',
+                    'version',
+                    'attachment',
+                    'preview',
+                ],
+                'required': [
+                    'sid',
+                    'session_token',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'sid':
+                        (str,),
+                    'session_token':
+                        (str,),
+                    'key_manager_token':
+                        (str,),
+                    'message':
+                        (str,),
+                    'data':
+                        (str,),
+                    'version':
+                        (str,),
+                    'attachment':
+                        ([file_type],),
+                    'preview':
+                        ([file_type],),
+                },
+                'attribute_map': {
+                    'sid': 'sid',
+                    'session_token': 'sessionToken',
+                    'key_manager_token': 'keyManagerToken',
+                    'message': 'message',
+                    'data': 'data',
+                    'version': 'version',
+                    'attachment': 'attachment',
+                    'preview': 'preview',
+                },
+                'location_map': {
+                    'sid': 'path',
+                    'session_token': 'header',
+                    'key_manager_token': 'header',
+                    'message': 'form',
+                    'data': 'form',
+                    'version': 'form',
+                    'attachment': 'form',
+                    'preview': 'form',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [
+                    'multipart/form-data'
+                ]
+            },
+            api_client=api_client
+        )
+
+    def v4_stream_sid_multi_attachment_message_create_post(
+        self,
+        sid,
+        session_token,
+        **kwargs
+    ):
+        """Post a message to one existing stream.  # noqa: E501
+
+        Post a new message to the given stream. The stream can be a chatroom, an IM or a multiparty IM.  You may include an attachment on the message.  The message can be provided as MessageMLV2 or PresentationML. Both formats support Freemarker templates.  The optional parameter \"data\" can be used to provide a JSON payload containing entity data. If the message contains explicit references to entity data (in \"data-entity-id\" element attributes), this parameter is required.  If the message is in MessageML and fails schema validation a client error results  If the message is sent then 200 is returned.  Regarding authentication, you must either use the sessionToken which was created for delegated app access or both the sessionToken and keyManagerToken together.   # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v4_stream_sid_message_create_post(sid, session_token, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            sid (str): Stream ID
+            session_token (str): Authorization token used to make delegated calls.
+
+        Keyword Args:
+            key_manager_token (str): Key Manager authentication token.. [optional]
+            message (str): The message payload in MessageML.. [optional]
+            data (str): Optional message data in EntityJSON.. [optional]
+            version (str): Optional message version in the format \\\"major.minor\\\". If empty, defaults to the latest supported version. . [optional]
+            attachment (file_type): Optional file attachment.. [optional]
+            preview (file_type): Optional attachment preview.. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V4Message
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['sid'] = \
+            sid
+        kwargs['session_token'] = \
+            session_token
+        return self.v4_stream_sid_multi_attachment_message_create_post_endpoint.call_with_http_info(**kwargs)
+
+    def v4_multi_attachment_message_blast_post(
+        self,
+        session_token,
+        sids,
+        **kwargs
+    ):
+        """Post a message to multiple existing streams.  # noqa: E501
+
+        Post a new message to the given list of streams. The stream can be a chatroom, an IM or a multiparty IM.  You may include an attachment on the message.  The message can be provided as MessageMLV2 or PresentationML. Both formats support Freemarker templates.  The optional parameter \"data\" can be used to provide a JSON payload containing entity data. If the message contains explicit references to entity data (in \"data-entity-id\" element attributes), this parameter is required.  If the message is in MessageML and fails schema validation a client error results  This endpoint is idempotent, it means that a 200 response will be returned even if the message has not been delivered to some streams. Check the `errors` map from the response in order to see on which stream(s) the message has not been delivered.  The maximum number of streams where the message can be sent is limitted to 100.  Regarding authentication, you must either use the sessionToken which was created for delegated app access or both the sessionToken and keyManagerToken together.   # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v4_message_blast_post(session_token, sids, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            session_token (str): Authorization token used to make delegated calls.
+            sids ([str]): A comma-separated list of Stream IDs
+
+        Keyword Args:
+            key_manager_token (str): Key Manager authentication token.. [optional]
+            message (str): The message payload in MessageML.. [optional]
+            data (str): Optional message data in EntityJSON.. [optional]
+            version (str): Optional message version in the format \\\"major.minor\\\". If empty, defaults to the latest supported version. . [optional]
+            attachment (file_type): Optional file attachment.. [optional]
+            preview (file_type): Optional attachment preview.. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V4MessageBlastResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['session_token'] = \
+            session_token
+        kwargs['sids'] = \
+            sids
+        return self.v4_multi_attachment_message_blast_post_endpoint.call_with_http_info(**kwargs)

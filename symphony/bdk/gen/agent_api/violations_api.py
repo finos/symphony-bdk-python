@@ -41,85 +41,7 @@ class ViolationsApi(object):
         if api_client is None:
             api_client = ApiClient()
         self.api_client = api_client
-
-        def __v1_dlp_violations_message_get(
-            self,
-            start_time,
-            session_token,
-            key_manager_token,
-            **kwargs
-        ):
-            """Get violations as a result of policy enforcement on messages.  # noqa: E501
-
-            TBD   # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.v1_dlp_violations_message_get(start_time, session_token, key_manager_token, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                start_time (int): Timestamp of the first required violation. This is a long integer value representing milliseconds since Jan 1 1970 
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-
-            Keyword Args:
-                end_time (int): Timestamp of the last required violation. This is a long integer value representing milliseconds since Jan 1 1970 If unspecified, it will default to current time of the request. . [optional]
-                next (str): Offset of the next chunk of violations. Value is null for the first request. . [optional]
-                limit (int): Max No. of violations to return. If no value is provided, 50 is the default. The maximum supported value is 500. . [optional]
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                V1DLPViolationMessageResponse
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['start_time'] = \
-                start_time
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            return self.call_with_http_info(**kwargs)
-
-        self.v1_dlp_violations_message_get = _Endpoint(
+        self.v1_dlp_violations_message_get_endpoint = _Endpoint(
             settings={
                 'response_type': (V1DLPViolationMessageResponse,),
                 'auth': [],
@@ -193,88 +115,9 @@ class ViolationsApi(object):
                 ],
                 'content_type': [],
             },
-            api_client=api_client,
-            callable=__v1_dlp_violations_message_get
+            api_client=api_client
         )
-
-        def __v1_dlp_violations_signal_get(
-            self,
-            start_time,
-            session_token,
-            key_manager_token,
-            **kwargs
-        ):
-            """Get violations as a result of policy enforcement on signals.  # noqa: E501
-
-            TBD   # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.v1_dlp_violations_signal_get(start_time, session_token, key_manager_token, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                start_time (int): Timestamp of the first required violation. This is a long integer value representing milliseconds since Jan 1 1970 
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-
-            Keyword Args:
-                end_time (int): Timestamp of the last required violation. This is a long integer value representing milliseconds since Jan 1 1970 If unspecified, it will default to current time of the request. . [optional]
-                next (str): Offset of the next chunk of violations. Value is null for the first request. . [optional]
-                limit (int): Max No. of violations to return. If no value is provided, 50 is the default. The maximum supported value is 500. . [optional]
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                V1DLPViolationSignalResponse
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['start_time'] = \
-                start_time
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            return self.call_with_http_info(**kwargs)
-
-        self.v1_dlp_violations_signal_get = _Endpoint(
+        self.v1_dlp_violations_signal_get_endpoint = _Endpoint(
             settings={
                 'response_type': (V1DLPViolationSignalResponse,),
                 'auth': [],
@@ -348,88 +191,9 @@ class ViolationsApi(object):
                 ],
                 'content_type': [],
             },
-            api_client=api_client,
-            callable=__v1_dlp_violations_signal_get
+            api_client=api_client
         )
-
-        def __v1_dlp_violations_stream_get(
-            self,
-            start_time,
-            session_token,
-            key_manager_token,
-            **kwargs
-        ):
-            """Get violations as a result of policy enforcement on streams.  # noqa: E501
-
-            TBD   # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.v1_dlp_violations_stream_get(start_time, session_token, key_manager_token, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                start_time (int): Timestamp of the first required violation. This is a long integer value representing milliseconds since Jan 1 1970 
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-
-            Keyword Args:
-                end_time (int): Timestamp of the last required violation. This is a long integer value representing milliseconds since Jan 1 1970 If unspecified, it will default to current time of the request. . [optional]
-                next (str): Offset of the next chunk of violations. Value is null for the first request. . [optional]
-                limit (int): Max No. of violations to return. If no value is provided, 50 is the default. The maximum supported value is 500. . [optional]
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                V1DLPViolationStreamResponse
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['start_time'] = \
-                start_time
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            return self.call_with_http_info(**kwargs)
-
-        self.v1_dlp_violations_stream_get = _Endpoint(
+        self.v1_dlp_violations_stream_get_endpoint = _Endpoint(
             settings={
                 'response_type': (V1DLPViolationStreamResponse,),
                 'auth': [],
@@ -503,89 +267,9 @@ class ViolationsApi(object):
                 ],
                 'content_type': [],
             },
-            api_client=api_client,
-            callable=__v1_dlp_violations_stream_get
+            api_client=api_client
         )
-
-        def __v3_dlp_violation_attachment_get(
-            self,
-            file_id,
-            violation_id,
-            session_token,
-            key_manager_token,
-            **kwargs
-        ):
-            """Get attachments that were sent as part of messages that were flagged by the DLP System.  # noqa: E501
-
-            Retrieves attachments from related message violations as a base64 encoded String.  # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.v3_dlp_violation_attachment_get(file_id, violation_id, session_token, key_manager_token, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                file_id (str): ID of attachment that will be downloaded. 
-                violation_id (str): ID of violation that corresponds to the flagged message that contains the attachment 
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-
-            Keyword Args:
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                str
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['file_id'] = \
-                file_id
-            kwargs['violation_id'] = \
-                violation_id
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            return self.call_with_http_info(**kwargs)
-
-        self.v3_dlp_violation_attachment_get = _Endpoint(
+        self.v3_dlp_violation_attachment_get_endpoint = _Endpoint(
             settings={
                 'response_type': (str,),
                 'auth': [],
@@ -650,88 +334,9 @@ class ViolationsApi(object):
                 ],
                 'content_type': [],
             },
-            api_client=api_client,
-            callable=__v3_dlp_violation_attachment_get
+            api_client=api_client
         )
-
-        def __v3_dlp_violations_message_get(
-            self,
-            start_time,
-            session_token,
-            key_manager_token,
-            **kwargs
-        ):
-            """Get violations as a result of policy enforcement on messages.  # noqa: E501
-
-            Retrieves DLP v3 message related violations for a given time range  # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.v3_dlp_violations_message_get(start_time, session_token, key_manager_token, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                start_time (int): Timestamp of the first required violation. This is a long integer value representing milliseconds since Jan 1 1970 
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-
-            Keyword Args:
-                end_time (int): Timestamp of the last required violation. This is a long integer value representing milliseconds since Jan 1 1970 If unspecified, it will default to current time of the request. . [optional]
-                next (str): Offset of the next chunk of violations. Value is null for the first request. . [optional]
-                limit (int): Max No. of violations to return. If no value is provided, 50 is the default. The maximum supported value is 500. . [optional]
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                V3DLPViolationMessageResponse
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['start_time'] = \
-                start_time
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            return self.call_with_http_info(**kwargs)
-
-        self.v3_dlp_violations_message_get = _Endpoint(
+        self.v3_dlp_violations_message_get_endpoint = _Endpoint(
             settings={
                 'response_type': (V3DLPViolationMessageResponse,),
                 'auth': [],
@@ -805,88 +410,9 @@ class ViolationsApi(object):
                 ],
                 'content_type': [],
             },
-            api_client=api_client,
-            callable=__v3_dlp_violations_message_get
+            api_client=api_client
         )
-
-        def __v3_dlp_violations_signal_get(
-            self,
-            start_time,
-            session_token,
-            key_manager_token,
-            **kwargs
-        ):
-            """Get violations as a result of policy enforcement on signals.  # noqa: E501
-
-            Retrieves DLP v3 signal related violations for a given time range  # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.v3_dlp_violations_signal_get(start_time, session_token, key_manager_token, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                start_time (int): Timestamp of the first required violation. This is a long integer value representing milliseconds since Jan 1 1970 
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-
-            Keyword Args:
-                end_time (int): Timestamp of the last required violation. This is a long integer value representing milliseconds since Jan 1 1970 If unspecified, it will default to current time of the request. . [optional]
-                next (str): Offset of the next chunk of violations. Value is null for the first request. . [optional]
-                limit (int): Max No. of violations to return. If no value is provided, 50 is the default. The maximum supported value is 500. . [optional]
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                V3DLPViolationSignalResponse
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['start_time'] = \
-                start_time
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            return self.call_with_http_info(**kwargs)
-
-        self.v3_dlp_violations_signal_get = _Endpoint(
+        self.v3_dlp_violations_signal_get_endpoint = _Endpoint(
             settings={
                 'response_type': (V3DLPViolationSignalResponse,),
                 'auth': [],
@@ -960,88 +486,9 @@ class ViolationsApi(object):
                 ],
                 'content_type': [],
             },
-            api_client=api_client,
-            callable=__v3_dlp_violations_signal_get
+            api_client=api_client
         )
-
-        def __v3_dlp_violations_stream_get(
-            self,
-            start_time,
-            session_token,
-            key_manager_token,
-            **kwargs
-        ):
-            """Get violations as a result of policy enforcement on streams.  # noqa: E501
-
-            Retrieves DLP v3 signal related violations for a given time range  # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.v3_dlp_violations_stream_get(start_time, session_token, key_manager_token, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                start_time (int): Timestamp of the first required violation. This is a long integer value representing milliseconds since Jan 1 1970 
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-
-            Keyword Args:
-                end_time (int): Timestamp of the last required violation. This is a long integer value representing milliseconds since Jan 1 1970 If unspecified, it will default to current time of the request. . [optional]
-                next (str): Offset of the next chunk of violations. Value is null for the first request. . [optional]
-                limit (int): Max No. of violations to return. If no value is provided, 50 is the default. The maximum supported value is 500. . [optional]
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                V3DLPViolationStreamResponse
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['start_time'] = \
-                start_time
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            return self.call_with_http_info(**kwargs)
-
-        self.v3_dlp_violations_stream_get = _Endpoint(
+        self.v3_dlp_violations_stream_get_endpoint = _Endpoint(
             settings={
                 'response_type': (V3DLPViolationStreamResponse,),
                 'auth': [],
@@ -1115,6 +562,630 @@ class ViolationsApi(object):
                 ],
                 'content_type': [],
             },
-            api_client=api_client,
-            callable=__v3_dlp_violations_stream_get
+            api_client=api_client
         )
+
+    def v1_dlp_violations_message_get(
+        self,
+        start_time,
+        session_token,
+        key_manager_token,
+        **kwargs
+    ):
+        """Get violations as a result of policy enforcement on messages.  # noqa: E501
+
+        TBD   # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v1_dlp_violations_message_get(start_time, session_token, key_manager_token, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            start_time (int): Timestamp of the first required violation. This is a long integer value representing milliseconds since Jan 1 1970 
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+
+        Keyword Args:
+            end_time (int): Timestamp of the last required violation. This is a long integer value representing milliseconds since Jan 1 1970 If unspecified, it will default to current time of the request. . [optional]
+            next (str): Offset of the next chunk of violations. Value is null for the first request. . [optional]
+            limit (int): Max No. of violations to return. If no value is provided, 50 is the default. The maximum supported value is 500. . [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V1DLPViolationMessageResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['start_time'] = \
+            start_time
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        return self.v1_dlp_violations_message_get_endpoint.call_with_http_info(**kwargs)
+
+    def v1_dlp_violations_signal_get(
+        self,
+        start_time,
+        session_token,
+        key_manager_token,
+        **kwargs
+    ):
+        """Get violations as a result of policy enforcement on signals.  # noqa: E501
+
+        TBD   # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v1_dlp_violations_signal_get(start_time, session_token, key_manager_token, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            start_time (int): Timestamp of the first required violation. This is a long integer value representing milliseconds since Jan 1 1970 
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+
+        Keyword Args:
+            end_time (int): Timestamp of the last required violation. This is a long integer value representing milliseconds since Jan 1 1970 If unspecified, it will default to current time of the request. . [optional]
+            next (str): Offset of the next chunk of violations. Value is null for the first request. . [optional]
+            limit (int): Max No. of violations to return. If no value is provided, 50 is the default. The maximum supported value is 500. . [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V1DLPViolationSignalResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['start_time'] = \
+            start_time
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        return self.v1_dlp_violations_signal_get_endpoint.call_with_http_info(**kwargs)
+
+    def v1_dlp_violations_stream_get(
+        self,
+        start_time,
+        session_token,
+        key_manager_token,
+        **kwargs
+    ):
+        """Get violations as a result of policy enforcement on streams.  # noqa: E501
+
+        TBD   # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v1_dlp_violations_stream_get(start_time, session_token, key_manager_token, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            start_time (int): Timestamp of the first required violation. This is a long integer value representing milliseconds since Jan 1 1970 
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+
+        Keyword Args:
+            end_time (int): Timestamp of the last required violation. This is a long integer value representing milliseconds since Jan 1 1970 If unspecified, it will default to current time of the request. . [optional]
+            next (str): Offset of the next chunk of violations. Value is null for the first request. . [optional]
+            limit (int): Max No. of violations to return. If no value is provided, 50 is the default. The maximum supported value is 500. . [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V1DLPViolationStreamResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['start_time'] = \
+            start_time
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        return self.v1_dlp_violations_stream_get_endpoint.call_with_http_info(**kwargs)
+
+    def v3_dlp_violation_attachment_get(
+        self,
+        file_id,
+        violation_id,
+        session_token,
+        key_manager_token,
+        **kwargs
+    ):
+        """Get attachments that were sent as part of messages that were flagged by the DLP System.  # noqa: E501
+
+        Retrieves attachments from related message violations as a base64 encoded String.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v3_dlp_violation_attachment_get(file_id, violation_id, session_token, key_manager_token, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            file_id (str): ID of attachment that will be downloaded. 
+            violation_id (str): ID of violation that corresponds to the flagged message that contains the attachment 
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            str
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['file_id'] = \
+            file_id
+        kwargs['violation_id'] = \
+            violation_id
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        return self.v3_dlp_violation_attachment_get_endpoint.call_with_http_info(**kwargs)
+
+    def v3_dlp_violations_message_get(
+        self,
+        start_time,
+        session_token,
+        key_manager_token,
+        **kwargs
+    ):
+        """Get violations as a result of policy enforcement on messages.  # noqa: E501
+
+        Retrieves DLP v3 message related violations for a given time range  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v3_dlp_violations_message_get(start_time, session_token, key_manager_token, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            start_time (int): Timestamp of the first required violation. This is a long integer value representing milliseconds since Jan 1 1970 
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+
+        Keyword Args:
+            end_time (int): Timestamp of the last required violation. This is a long integer value representing milliseconds since Jan 1 1970 If unspecified, it will default to current time of the request. . [optional]
+            next (str): Offset of the next chunk of violations. Value is null for the first request. . [optional]
+            limit (int): Max No. of violations to return. If no value is provided, 50 is the default. The maximum supported value is 500. . [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V3DLPViolationMessageResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['start_time'] = \
+            start_time
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        return self.v3_dlp_violations_message_get_endpoint.call_with_http_info(**kwargs)
+
+    def v3_dlp_violations_signal_get(
+        self,
+        start_time,
+        session_token,
+        key_manager_token,
+        **kwargs
+    ):
+        """Get violations as a result of policy enforcement on signals.  # noqa: E501
+
+        Retrieves DLP v3 signal related violations for a given time range  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v3_dlp_violations_signal_get(start_time, session_token, key_manager_token, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            start_time (int): Timestamp of the first required violation. This is a long integer value representing milliseconds since Jan 1 1970 
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+
+        Keyword Args:
+            end_time (int): Timestamp of the last required violation. This is a long integer value representing milliseconds since Jan 1 1970 If unspecified, it will default to current time of the request. . [optional]
+            next (str): Offset of the next chunk of violations. Value is null for the first request. . [optional]
+            limit (int): Max No. of violations to return. If no value is provided, 50 is the default. The maximum supported value is 500. . [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V3DLPViolationSignalResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['start_time'] = \
+            start_time
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        return self.v3_dlp_violations_signal_get_endpoint.call_with_http_info(**kwargs)
+
+    def v3_dlp_violations_stream_get(
+        self,
+        start_time,
+        session_token,
+        key_manager_token,
+        **kwargs
+    ):
+        """Get violations as a result of policy enforcement on streams.  # noqa: E501
+
+        Retrieves DLP v3 signal related violations for a given time range  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v3_dlp_violations_stream_get(start_time, session_token, key_manager_token, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            start_time (int): Timestamp of the first required violation. This is a long integer value representing milliseconds since Jan 1 1970 
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+
+        Keyword Args:
+            end_time (int): Timestamp of the last required violation. This is a long integer value representing milliseconds since Jan 1 1970 If unspecified, it will default to current time of the request. . [optional]
+            next (str): Offset of the next chunk of violations. Value is null for the first request. . [optional]
+            limit (int): Max No. of violations to return. If no value is provided, 50 is the default. The maximum supported value is 500. . [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V3DLPViolationStreamResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['start_time'] = \
+            start_time
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        return self.v3_dlp_violations_stream_get_endpoint.call_with_http_info(**kwargs)
+
