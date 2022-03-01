@@ -34,10 +34,10 @@ generate_files() {
   rm $file_name
 }
 
-# generate_files https://raw.githubusercontent.com/symphonyoss/symphony-api-spec/7e3b6d0503a3f7875fc36fee01dd0d93ff4ceb20/agent/agent-api-public.yaml agent
-# generate_files https://raw.githubusercontent.com/symphonyoss/symphony-api-spec/7e3b6d0503a3f7875fc36fee01dd0d93ff4ceb20/authenticator/authenticator-api-public-deprecated.yaml auth
-# generate_files https://raw.githubusercontent.com/symphonyoss/symphony-api-spec/7e3b6d0503a3f7875fc36fee01dd0d93ff4ceb20/login/login-api-public.yaml login
-# generate_files https://raw.githubusercontent.com/symphonyoss/symphony-api-spec/7e3b6d0503a3f7875fc36fee01dd0d93ff4ceb20/pod/pod-api-public.yaml pod
+generate_files https://raw.githubusercontent.com/symphonyoss/symphony-api-spec/7e3b6d0503a3f7875fc36fee01dd0d93ff4ceb20/agent/agent-api-public.yaml agent
+generate_files https://raw.githubusercontent.com/symphonyoss/symphony-api-spec/7e3b6d0503a3f7875fc36fee01dd0d93ff4ceb20/authenticator/authenticator-api-public-deprecated.yaml auth
+generate_files https://raw.githubusercontent.com/symphonyoss/symphony-api-spec/7e3b6d0503a3f7875fc36fee01dd0d93ff4ceb20/login/login-api-public.yaml login
+generate_files https://raw.githubusercontent.com/symphonyoss/symphony-api-spec/7e3b6d0503a3f7875fc36fee01dd0d93ff4ceb20/pod/pod-api-public.yaml pod
 
-curl https://raw.githubusercontent.com/finos/symphony-api-spec/master/profile-manager/symphony-common-definitions.yaml -o symphony-common-definitions.yaml
-generate_files https://raw.githubusercontent.com/finos/symphony-api-spec/master/profile-manager/profile-manager-api.yaml profile_manager
+curl https://raw.githubusercontent.com/finos/symphony-api-spec/7e3b6d0503a3f7875fc36fee01dd0d93ff4ceb20/profile-manager/symphony-common-definitions.yaml -o symphony-common-definitions.yaml
+generate_files https://raw.githubusercontent.com/finos/symphony-api-spec/7e3b6d0503a3f7875fc36fee01dd0d93ff4ceb20/profile-manager/profile-manager-api.yaml profile_manager
