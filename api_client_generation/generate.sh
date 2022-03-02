@@ -60,4 +60,4 @@ generate_files auth ${api_spec_base_url}/authenticator/authenticator-api-public-
 generate_files login ${api_spec_base_url}/login/login-api-public.yaml
 generate_files pod ${api_spec_base_url}/pod/pod-api-public.yaml
 
-generate_files profile_manager ${api_spec_base_url}/profile-manager/profile-manager-api.yaml ${api_spec_base_url}/profile-manager/symphony-common-definitions.yaml
+generate_files group ${api_spec_base_url}/profile-manager/profile-manager-api.yaml ${api_spec_base_url}/profile-manager/symphony-common-definitions.yaml
