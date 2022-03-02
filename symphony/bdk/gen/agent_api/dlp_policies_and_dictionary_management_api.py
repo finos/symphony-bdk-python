@@ -45,83 +45,7 @@ class DLPPoliciesAndDictionaryManagementApi(object):
         if api_client is None:
             api_client = ApiClient()
         self.api_client = api_client
-
-        def __v1_dlp_dictionaries_dict_id_data_download_get(
-            self,
-            session_token,
-            key_manager_token,
-            dict_id,
-            **kwargs
-        ):
-            """Downloads Base 64 encoded dictionary content.  # noqa: E501
-
-            Downloads Base 64 encoded dictionary content.  # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.v1_dlp_dictionaries_dict_id_data_download_get(session_token, key_manager_token, dict_id, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-                dict_id (str): Unique dictionary identifier
-
-            Keyword Args:
-                dict_version (str): If set to be valid dictionary version number, will return dictionary with specified version. Otherwise, return the latest dictionary. . [optional]
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                str
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            kwargs['dict_id'] = \
-                dict_id
-            return self.call_with_http_info(**kwargs)
-
-        self.v1_dlp_dictionaries_dict_id_data_download_get = _Endpoint(
+        self.v1_dlp_dictionaries_dict_id_data_download_get_endpoint = _Endpoint(
             settings={
                 'response_type': (str,),
                 'auth': [],
@@ -185,89 +109,9 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                 ],
                 'content_type': [],
             },
-            api_client=api_client,
-            callable=__v1_dlp_dictionaries_dict_id_data_download_get
+            api_client=api_client
         )
-
-        def __v1_dlp_dictionaries_dict_id_data_upload_post(
-            self,
-            session_token,
-            key_manager_token,
-            dict_id,
-            data,
-            **kwargs
-        ):
-            """Override dictionary content with provided content.  # noqa: E501
-
-            Override dictionary content with provided content.  # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.v1_dlp_dictionaries_dict_id_data_upload_post(session_token, key_manager_token, dict_id, data, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-                dict_id (str): Unique dictionary identifier
-                data (file_type):
-
-            Keyword Args:
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                V1DLPDictionaryMetadataResponse
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            kwargs['dict_id'] = \
-                dict_id
-            kwargs['data'] = \
-                data
-            return self.call_with_http_info(**kwargs)
-
-        self.v1_dlp_dictionaries_dict_id_data_upload_post = _Endpoint(
+        self.v1_dlp_dictionaries_dict_id_data_upload_post_endpoint = _Endpoint(
             settings={
                 'response_type': (V1DLPDictionaryMetadataResponse,),
                 'auth': [],
@@ -334,85 +178,9 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                     'multipart/form-data'
                 ]
             },
-            api_client=api_client,
-            callable=__v1_dlp_dictionaries_dict_id_data_upload_post
+            api_client=api_client
         )
-
-        def __v1_dlp_dictionaries_dict_id_delete(
-            self,
-            session_token,
-            key_manager_token,
-            dict_id,
-            **kwargs
-        ):
-            """Delete a dictionary  # noqa: E501
-
-            Deletes a dictionary. Note: All related policies will be affected.   # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.v1_dlp_dictionaries_dict_id_delete(session_token, key_manager_token, dict_id, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-                dict_id (str): Unique dictionary identifier
-
-            Keyword Args:
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                V1DLPDictionaryMetadataResponse
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            kwargs['dict_id'] = \
-                dict_id
-            return self.call_with_http_info(**kwargs)
-
-        self.v1_dlp_dictionaries_dict_id_delete = _Endpoint(
+        self.v1_dlp_dictionaries_dict_id_delete_endpoint = _Endpoint(
             settings={
                 'response_type': (V1DLPDictionaryMetadataResponse,),
                 'auth': [],
@@ -471,86 +239,9 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                 ],
                 'content_type': [],
             },
-            api_client=api_client,
-            callable=__v1_dlp_dictionaries_dict_id_delete
+            api_client=api_client
         )
-
-        def __v1_dlp_dictionaries_dict_id_get(
-            self,
-            session_token,
-            key_manager_token,
-            dict_id,
-            **kwargs
-        ):
-            """Get dictionary metadata  # noqa: E501
-
-            Get basic information for a dictionary.  # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.v1_dlp_dictionaries_dict_id_get(session_token, key_manager_token, dict_id, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-                dict_id (str): Unique dictionary identifier
-
-            Keyword Args:
-                dict_version (str): If set to be valid dictionary version number, will return dictionary metadata with specified version. Otherwise, return the latest dictionary metadata. . [optional]
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                V1DLPDictionaryMetadataResponse
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            kwargs['dict_id'] = \
-                dict_id
-            return self.call_with_http_info(**kwargs)
-
-        self.v1_dlp_dictionaries_dict_id_get = _Endpoint(
+        self.v1_dlp_dictionaries_dict_id_get_endpoint = _Endpoint(
             settings={
                 'response_type': (V1DLPDictionaryMetadataResponse,),
                 'auth': [],
@@ -614,89 +305,9 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                 ],
                 'content_type': [],
             },
-            api_client=api_client,
-            callable=__v1_dlp_dictionaries_dict_id_get
+            api_client=api_client
         )
-
-        def __v1_dlp_dictionaries_dict_id_put(
-            self,
-            session_token,
-            key_manager_token,
-            dict_id,
-            body,
-            **kwargs
-        ):
-            """Updates a dictionary  # noqa: E501
-
-            Updates the dictionary's basic metadata without content. This API cannot be used for creating a new dictionary. In case of update only \"name\" can be changed. Note: All related policies will also have versions updated.   # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.v1_dlp_dictionaries_dict_id_put(session_token, key_manager_token, dict_id, body, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-                dict_id (str): Unique dictionary identifier
-                body (V1DLPDictionaryMetadataUpdateRequest):
-
-            Keyword Args:
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                V1DLPDictionaryMetadataResponse
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            kwargs['dict_id'] = \
-                dict_id
-            kwargs['body'] = \
-                body
-            return self.call_with_http_info(**kwargs)
-
-        self.v1_dlp_dictionaries_dict_id_put = _Endpoint(
+        self.v1_dlp_dictionaries_dict_id_put_endpoint = _Endpoint(
             settings={
                 'response_type': (V1DLPDictionaryMetadataResponse,),
                 'auth': [],
@@ -762,83 +373,9 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                     'application/json'
                 ]
             },
-            api_client=api_client,
-            callable=__v1_dlp_dictionaries_dict_id_put
+            api_client=api_client
         )
-
-        def __v1_dlp_dictionaries_get(
-            self,
-            session_token,
-            key_manager_token,
-            **kwargs
-        ):
-            """Get all dictionary metadatas  # noqa: E501
-
-            Get all dictionary metadatas with the latest version. Each dictionary object will only contain meta data of the content.   # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.v1_dlp_dictionaries_get(session_token, key_manager_token, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-
-            Keyword Args:
-                page (int): Optional parameter to specify which page to return (default is 0). [optional]
-                limit (int): Optional parameter to specify the number of result to return per page, default is 50. Maximum is 50. . [optional]
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                V1DLPDictionaryMetadataCollectionResponse
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            return self.call_with_http_info(**kwargs)
-
-        self.v1_dlp_dictionaries_get = _Endpoint(
+        self.v1_dlp_dictionaries_get_endpoint = _Endpoint(
             settings={
                 'response_type': (V1DLPDictionaryMetadataCollectionResponse,),
                 'auth': [],
@@ -901,85 +438,9 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                 ],
                 'content_type': [],
             },
-            api_client=api_client,
-            callable=__v1_dlp_dictionaries_get
+            api_client=api_client
         )
-
-        def __v1_dlp_dictionaries_post(
-            self,
-            session_token,
-            key_manager_token,
-            body,
-            **kwargs
-        ):
-            """Create a dictionary  # noqa: E501
-
-            Creates a dictionary with basic metadata and no content. Only \"name\" and \"type\" field is used to create a new dictionary entry.   # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.v1_dlp_dictionaries_post(session_token, key_manager_token, body, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-                body (V1DLPDictionaryMetadataCreateRequest):
-
-            Keyword Args:
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                V1DLPDictionaryMetadataResponse
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            kwargs['body'] = \
-                body
-            return self.call_with_http_info(**kwargs)
-
-        self.v1_dlp_dictionaries_post = _Endpoint(
+        self.v1_dlp_dictionaries_post_endpoint = _Endpoint(
             settings={
                 'response_type': (V1DLPDictionaryMetadataResponse,),
                 'auth': [],
@@ -1039,83 +500,9 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                     'application/json'
                 ]
             },
-            api_client=api_client,
-            callable=__v1_dlp_dictionaries_post
+            api_client=api_client
         )
-
-        def __v1_dlp_policies_get(
-            self,
-            session_token,
-            key_manager_token,
-            **kwargs
-        ):
-            """Get all policies  # noqa: E501
-
-            Get all policies  # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.v1_dlp_policies_get(session_token, key_manager_token, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-
-            Keyword Args:
-                page (int): Optional parameter to specify which page to return (default is 0). [optional]
-                limit (int): Optional parameter to specify the number of result to return per page, default is 50. Maximum is 50. . [optional]
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                V1DLPPoliciesCollectionResponse
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            return self.call_with_http_info(**kwargs)
-
-        self.v1_dlp_policies_get = _Endpoint(
+        self.v1_dlp_policies_get_endpoint = _Endpoint(
             settings={
                 'response_type': (V1DLPPoliciesCollectionResponse,),
                 'auth': [],
@@ -1178,85 +565,9 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                 ],
                 'content_type': [],
             },
-            api_client=api_client,
-            callable=__v1_dlp_policies_get
+            api_client=api_client
         )
-
-        def __v1_dlp_policies_policy_id_delete(
-            self,
-            session_token,
-            key_manager_token,
-            policy_id,
-            **kwargs
-        ):
-            """Delete a policy  # noqa: E501
-
-            Delete a policy. Note: Only disabled policy can be deleted   # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.v1_dlp_policies_policy_id_delete(session_token, key_manager_token, policy_id, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-                policy_id (str): Unique dictionary identifier.
-
-            Keyword Args:
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                V1DLPPolicyResponse
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            kwargs['policy_id'] = \
-                policy_id
-            return self.call_with_http_info(**kwargs)
-
-        self.v1_dlp_policies_policy_id_delete = _Endpoint(
+        self.v1_dlp_policies_policy_id_delete_endpoint = _Endpoint(
             settings={
                 'response_type': (V1DLPPolicyResponse,),
                 'auth': [],
@@ -1315,85 +626,9 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                 ],
                 'content_type': [],
             },
-            api_client=api_client,
-            callable=__v1_dlp_policies_policy_id_delete
+            api_client=api_client
         )
-
-        def __v1_dlp_policies_policy_id_disable_post(
-            self,
-            session_token,
-            key_manager_token,
-            policy_id,
-            **kwargs
-        ):
-            """Disables a policy.  # noqa: E501
-
-            Disables a policy.  # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.v1_dlp_policies_policy_id_disable_post(session_token, key_manager_token, policy_id, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-                policy_id (str):
-
-            Keyword Args:
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                V1DLPPolicyResponse
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            kwargs['policy_id'] = \
-                policy_id
-            return self.call_with_http_info(**kwargs)
-
-        self.v1_dlp_policies_policy_id_disable_post = _Endpoint(
+        self.v1_dlp_policies_policy_id_disable_post_endpoint = _Endpoint(
             settings={
                 'response_type': (V1DLPPolicyResponse,),
                 'auth': [],
@@ -1452,85 +687,9 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                 ],
                 'content_type': [],
             },
-            api_client=api_client,
-            callable=__v1_dlp_policies_policy_id_disable_post
+            api_client=api_client
         )
-
-        def __v1_dlp_policies_policy_id_enable_post(
-            self,
-            session_token,
-            key_manager_token,
-            policy_id,
-            **kwargs
-        ):
-            """Enables a policy.  # noqa: E501
-
-            Enables a policy.  # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.v1_dlp_policies_policy_id_enable_post(session_token, key_manager_token, policy_id, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-                policy_id (str):
-
-            Keyword Args:
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                V1DLPPolicyResponse
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            kwargs['policy_id'] = \
-                policy_id
-            return self.call_with_http_info(**kwargs)
-
-        self.v1_dlp_policies_policy_id_enable_post = _Endpoint(
+        self.v1_dlp_policies_policy_id_enable_post_endpoint = _Endpoint(
             settings={
                 'response_type': (V1DLPPolicyResponse,),
                 'auth': [],
@@ -1589,86 +748,9 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                 ],
                 'content_type': [],
             },
-            api_client=api_client,
-            callable=__v1_dlp_policies_policy_id_enable_post
+            api_client=api_client
         )
-
-        def __v1_dlp_policies_policy_id_get(
-            self,
-            session_token,
-            key_manager_token,
-            policy_id,
-            **kwargs
-        ):
-            """Get a policy  # noqa: E501
-
-            Get a policy  # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.v1_dlp_policies_policy_id_get(session_token, key_manager_token, policy_id, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-                policy_id (str): Unique dictionary identifier.
-
-            Keyword Args:
-                policy_version (str): Optional parameter, if set to be valid policy version number,  will return policy with specified policyVersion. Otherwise, return the latest policy. . [optional]
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                V1DLPPolicyResponse
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            kwargs['policy_id'] = \
-                policy_id
-            return self.call_with_http_info(**kwargs)
-
-        self.v1_dlp_policies_policy_id_get = _Endpoint(
+        self.v1_dlp_policies_policy_id_get_endpoint = _Endpoint(
             settings={
                 'response_type': (V1DLPPolicyResponse,),
                 'auth': [],
@@ -1732,89 +814,9 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                 ],
                 'content_type': [],
             },
-            api_client=api_client,
-            callable=__v1_dlp_policies_policy_id_get
+            api_client=api_client
         )
-
-        def __v1_dlp_policies_policy_id_put(
-            self,
-            session_token,
-            key_manager_token,
-            policy_id,
-            body,
-            **kwargs
-        ):
-            """Updates a policy. Cannot be used for creation.  # noqa: E501
-
-            Update the policy (name, type, contentTypes, scopes) and also the dictionaries for a policy. Warning: If you send empty list of dictionaries during the update operation, then all the dictionaries for this policy are deleted and policy is automatically disabled. Note: The policy should already exist.   # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.v1_dlp_policies_policy_id_put(session_token, key_manager_token, policy_id, body, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-                policy_id (str): Unique dictionary identifier.
-                body (V1DLPPolicyRequest):
-
-            Keyword Args:
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                V1DLPPolicyResponse
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            kwargs['policy_id'] = \
-                policy_id
-            kwargs['body'] = \
-                body
-            return self.call_with_http_info(**kwargs)
-
-        self.v1_dlp_policies_policy_id_put = _Endpoint(
+        self.v1_dlp_policies_policy_id_put_endpoint = _Endpoint(
             settings={
                 'response_type': (V1DLPPolicyResponse,),
                 'auth': [],
@@ -1880,85 +882,9 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                     'application/json'
                 ]
             },
-            api_client=api_client,
-            callable=__v1_dlp_policies_policy_id_put
+            api_client=api_client
         )
-
-        def __v1_dlp_policies_post(
-            self,
-            session_token,
-            key_manager_token,
-            body,
-            **kwargs
-        ):
-            """Creates a policy  # noqa: E501
-
-            Creates a new policy with dictionary references.  At the time of policy creation, the caller should only provide - contentTypes, name, scopes and type. The rest of the information is populated automatically.  Note - You need to enable the policy after creation to start enforcing the policy.   # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.v1_dlp_policies_post(session_token, key_manager_token, body, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-                body (V1DLPPolicyRequest): Details about the policy that should be created.
-
-            Keyword Args:
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                V1DLPPolicyResponse
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            kwargs['body'] = \
-                body
-            return self.call_with_http_info(**kwargs)
-
-        self.v1_dlp_policies_post = _Endpoint(
+        self.v1_dlp_policies_post_endpoint = _Endpoint(
             settings={
                 'response_type': (V1DLPPolicyResponse,),
                 'auth': [],
@@ -2018,83 +944,9 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                     'application/json'
                 ]
             },
-            api_client=api_client,
-            callable=__v1_dlp_policies_post
+            api_client=api_client
         )
-
-        def __v3_dlp_policies_get(
-            self,
-            session_token,
-            key_manager_token,
-            **kwargs
-        ):
-            """Get all policies  # noqa: E501
-
-            Get all policies  # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.v3_dlp_policies_get(session_token, key_manager_token, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-
-            Keyword Args:
-                page (int): Optional parameter to specify which page to return (default is 0). [optional]
-                limit (int): Optional parameter to specify the number of result to return per page, default is 50. Maximum is 50. . [optional]
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                V3DLPPoliciesCollectionResponse
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            return self.call_with_http_info(**kwargs)
-
-        self.v3_dlp_policies_get = _Endpoint(
+        self.v3_dlp_policies_get_endpoint = _Endpoint(
             settings={
                 'response_type': (V3DLPPoliciesCollectionResponse,),
                 'auth': [],
@@ -2157,85 +1009,9 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                 ],
                 'content_type': [],
             },
-            api_client=api_client,
-            callable=__v3_dlp_policies_get
+            api_client=api_client
         )
-
-        def __v3_dlp_policies_policy_id_delete_post(
-            self,
-            session_token,
-            key_manager_token,
-            policy_id,
-            **kwargs
-        ):
-            """Delete a policy  # noqa: E501
-
-            Delete a policy. Note: Only disabled policy can be deleted   # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.v3_dlp_policies_policy_id_delete_post(session_token, key_manager_token, policy_id, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-                policy_id (str): Unique dictionary identifier.
-
-            Keyword Args:
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                V3DLPPolicyResponse
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            kwargs['policy_id'] = \
-                policy_id
-            return self.call_with_http_info(**kwargs)
-
-        self.v3_dlp_policies_policy_id_delete_post = _Endpoint(
+        self.v3_dlp_policies_policy_id_delete_post_endpoint = _Endpoint(
             settings={
                 'response_type': (V3DLPPolicyResponse,),
                 'auth': [],
@@ -2294,85 +1070,9 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                 ],
                 'content_type': [],
             },
-            api_client=api_client,
-            callable=__v3_dlp_policies_policy_id_delete_post
+            api_client=api_client
         )
-
-        def __v3_dlp_policies_policy_id_disable_post(
-            self,
-            session_token,
-            key_manager_token,
-            policy_id,
-            **kwargs
-        ):
-            """Disables a policy.  # noqa: E501
-
-            Disables a policy.  # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.v3_dlp_policies_policy_id_disable_post(session_token, key_manager_token, policy_id, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-                policy_id (str):
-
-            Keyword Args:
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                V3DLPPolicyResponse
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            kwargs['policy_id'] = \
-                policy_id
-            return self.call_with_http_info(**kwargs)
-
-        self.v3_dlp_policies_policy_id_disable_post = _Endpoint(
+        self.v3_dlp_policies_policy_id_disable_post_endpoint = _Endpoint(
             settings={
                 'response_type': (V3DLPPolicyResponse,),
                 'auth': [],
@@ -2431,85 +1131,9 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                 ],
                 'content_type': [],
             },
-            api_client=api_client,
-            callable=__v3_dlp_policies_policy_id_disable_post
+            api_client=api_client
         )
-
-        def __v3_dlp_policies_policy_id_enable_post(
-            self,
-            session_token,
-            key_manager_token,
-            policy_id,
-            **kwargs
-        ):
-            """Enables a policy.  # noqa: E501
-
-            Enables a policy.  # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.v3_dlp_policies_policy_id_enable_post(session_token, key_manager_token, policy_id, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-                policy_id (str):
-
-            Keyword Args:
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                V3DLPPolicyResponse
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            kwargs['policy_id'] = \
-                policy_id
-            return self.call_with_http_info(**kwargs)
-
-        self.v3_dlp_policies_policy_id_enable_post = _Endpoint(
+        self.v3_dlp_policies_policy_id_enable_post_endpoint = _Endpoint(
             settings={
                 'response_type': (V3DLPPolicyResponse,),
                 'auth': [],
@@ -2568,86 +1192,9 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                 ],
                 'content_type': [],
             },
-            api_client=api_client,
-            callable=__v3_dlp_policies_policy_id_enable_post
+            api_client=api_client
         )
-
-        def __v3_dlp_policies_policy_id_get(
-            self,
-            session_token,
-            key_manager_token,
-            policy_id,
-            **kwargs
-        ):
-            """Get a policy  # noqa: E501
-
-            Get a policy  # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.v3_dlp_policies_policy_id_get(session_token, key_manager_token, policy_id, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-                policy_id (str): Unique dictionary identifier.
-
-            Keyword Args:
-                policy_version (str): Optional parameter, if set to be valid policy version number,  will return policy with specified policyVersion. Otherwise, return the latest policy. . [optional]
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                V3DLPPolicyResponse
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            kwargs['policy_id'] = \
-                policy_id
-            return self.call_with_http_info(**kwargs)
-
-        self.v3_dlp_policies_policy_id_get = _Endpoint(
+        self.v3_dlp_policies_policy_id_get_endpoint = _Endpoint(
             settings={
                 'response_type': (V3DLPPolicyResponse,),
                 'auth': [],
@@ -2711,89 +1258,9 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                 ],
                 'content_type': [],
             },
-            api_client=api_client,
-            callable=__v3_dlp_policies_policy_id_get
+            api_client=api_client
         )
-
-        def __v3_dlp_policies_policy_id_update_post(
-            self,
-            session_token,
-            key_manager_token,
-            policy_id,
-            body,
-            **kwargs
-        ):
-            """Updates a policy. Cannot be used for creation.  # noqa: E501
-
-            Update the policy (name, type, contentTypes, scopes) and also the dictionaries for a policy. Warning: If you send empty list of dictionaries during the update operation, then all the dictionaries for this policy are deleted and policy is automatically disabled. Note: The policy should already exist.   # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.v3_dlp_policies_policy_id_update_post(session_token, key_manager_token, policy_id, body, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-                policy_id (str): Unique dictionary identifier.
-                body (V3DLPPolicyRequest):
-
-            Keyword Args:
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                V3DLPPolicyResponse
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            kwargs['policy_id'] = \
-                policy_id
-            kwargs['body'] = \
-                body
-            return self.call_with_http_info(**kwargs)
-
-        self.v3_dlp_policies_policy_id_update_post = _Endpoint(
+        self.v3_dlp_policies_policy_id_update_post_endpoint = _Endpoint(
             settings={
                 'response_type': (V3DLPPolicyResponse,),
                 'auth': [],
@@ -2859,85 +1326,9 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                     'application/json'
                 ]
             },
-            api_client=api_client,
-            callable=__v3_dlp_policies_policy_id_update_post
+            api_client=api_client
         )
-
-        def __v3_dlp_policies_post(
-            self,
-            session_token,
-            key_manager_token,
-            body,
-            **kwargs
-        ):
-            """Creates a policy  # noqa: E501
-
-            Creates a new policy with dictionary references. At the time of policy creation, the caller should only provide - contentTypes, name, scopes and type. The rest of the information is populated automatically. Note - You need to enable the policy after creation to start enforcing the policy.   # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.v3_dlp_policies_post(session_token, key_manager_token, body, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-                body (V3DLPPolicyRequest): Details about the policy that should be created.
-
-            Keyword Args:
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                V3DLPPolicyResponse
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            kwargs['body'] = \
-                body
-            return self.call_with_http_info(**kwargs)
-
-        self.v3_dlp_policies_post = _Endpoint(
+        self.v3_dlp_policies_post_endpoint = _Endpoint(
             settings={
                 'response_type': (V3DLPPolicyResponse,),
                 'auth': [],
@@ -2997,6 +1388,1826 @@ class DLPPoliciesAndDictionaryManagementApi(object):
                     'application/json'
                 ]
             },
-            api_client=api_client,
-            callable=__v3_dlp_policies_post
+            api_client=api_client
         )
+
+    def v1_dlp_dictionaries_dict_id_data_download_get(
+        self,
+        session_token,
+        key_manager_token,
+        dict_id,
+        **kwargs
+    ):
+        """Downloads Base 64 encoded dictionary content.  # noqa: E501
+
+        Downloads Base 64 encoded dictionary content.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v1_dlp_dictionaries_dict_id_data_download_get(session_token, key_manager_token, dict_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+            dict_id (str): Unique dictionary identifier
+
+        Keyword Args:
+            dict_version (str): If set to be valid dictionary version number, will return dictionary with specified version. Otherwise, return the latest dictionary. . [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            str
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        kwargs['dict_id'] = \
+            dict_id
+        return self.v1_dlp_dictionaries_dict_id_data_download_get_endpoint.call_with_http_info(**kwargs)
+
+    def v1_dlp_dictionaries_dict_id_data_upload_post(
+        self,
+        session_token,
+        key_manager_token,
+        dict_id,
+        data,
+        **kwargs
+    ):
+        """Override dictionary content with provided content.  # noqa: E501
+
+        Override dictionary content with provided content.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v1_dlp_dictionaries_dict_id_data_upload_post(session_token, key_manager_token, dict_id, data, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+            dict_id (str): Unique dictionary identifier
+            data (file_type):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V1DLPDictionaryMetadataResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        kwargs['dict_id'] = \
+            dict_id
+        kwargs['data'] = \
+            data
+        return self.v1_dlp_dictionaries_dict_id_data_upload_post_endpoint.call_with_http_info(**kwargs)
+
+    def v1_dlp_dictionaries_dict_id_delete(
+        self,
+        session_token,
+        key_manager_token,
+        dict_id,
+        **kwargs
+    ):
+        """Delete a dictionary  # noqa: E501
+
+        Deletes a dictionary. Note: All related policies will be affected.   # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v1_dlp_dictionaries_dict_id_delete(session_token, key_manager_token, dict_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+            dict_id (str): Unique dictionary identifier
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V1DLPDictionaryMetadataResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        kwargs['dict_id'] = \
+            dict_id
+        return self.v1_dlp_dictionaries_dict_id_delete_endpoint.call_with_http_info(**kwargs)
+
+    def v1_dlp_dictionaries_dict_id_get(
+        self,
+        session_token,
+        key_manager_token,
+        dict_id,
+        **kwargs
+    ):
+        """Get dictionary metadata  # noqa: E501
+
+        Get basic information for a dictionary.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v1_dlp_dictionaries_dict_id_get(session_token, key_manager_token, dict_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+            dict_id (str): Unique dictionary identifier
+
+        Keyword Args:
+            dict_version (str): If set to be valid dictionary version number, will return dictionary metadata with specified version. Otherwise, return the latest dictionary metadata. . [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V1DLPDictionaryMetadataResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        kwargs['dict_id'] = \
+            dict_id
+        return self.v1_dlp_dictionaries_dict_id_get_endpoint.call_with_http_info(**kwargs)
+
+    def v1_dlp_dictionaries_dict_id_put(
+        self,
+        session_token,
+        key_manager_token,
+        dict_id,
+        body,
+        **kwargs
+    ):
+        """Updates a dictionary  # noqa: E501
+
+        Updates the dictionary's basic metadata without content. This API cannot be used for creating a new dictionary. In case of update only \"name\" can be changed. Note: All related policies will also have versions updated.   # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v1_dlp_dictionaries_dict_id_put(session_token, key_manager_token, dict_id, body, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+            dict_id (str): Unique dictionary identifier
+            body (V1DLPDictionaryMetadataUpdateRequest):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V1DLPDictionaryMetadataResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        kwargs['dict_id'] = \
+            dict_id
+        kwargs['body'] = \
+            body
+        return self.v1_dlp_dictionaries_dict_id_put_endpoint.call_with_http_info(**kwargs)
+
+    def v1_dlp_dictionaries_get(
+        self,
+        session_token,
+        key_manager_token,
+        **kwargs
+    ):
+        """Get all dictionary metadatas  # noqa: E501
+
+        Get all dictionary metadatas with the latest version. Each dictionary object will only contain meta data of the content.   # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v1_dlp_dictionaries_get(session_token, key_manager_token, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+
+        Keyword Args:
+            page (int): Optional parameter to specify which page to return (default is 0). [optional]
+            limit (int): Optional parameter to specify the number of result to return per page, default is 50. Maximum is 50. . [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V1DLPDictionaryMetadataCollectionResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        return self.v1_dlp_dictionaries_get_endpoint.call_with_http_info(**kwargs)
+
+    def v1_dlp_dictionaries_post(
+        self,
+        session_token,
+        key_manager_token,
+        body,
+        **kwargs
+    ):
+        """Create a dictionary  # noqa: E501
+
+        Creates a dictionary with basic metadata and no content. Only \"name\" and \"type\" field is used to create a new dictionary entry.   # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v1_dlp_dictionaries_post(session_token, key_manager_token, body, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+            body (V1DLPDictionaryMetadataCreateRequest):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V1DLPDictionaryMetadataResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        kwargs['body'] = \
+            body
+        return self.v1_dlp_dictionaries_post_endpoint.call_with_http_info(**kwargs)
+
+    def v1_dlp_policies_get(
+        self,
+        session_token,
+        key_manager_token,
+        **kwargs
+    ):
+        """Get all policies  # noqa: E501
+
+        Get all policies  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v1_dlp_policies_get(session_token, key_manager_token, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+
+        Keyword Args:
+            page (int): Optional parameter to specify which page to return (default is 0). [optional]
+            limit (int): Optional parameter to specify the number of result to return per page, default is 50. Maximum is 50. . [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V1DLPPoliciesCollectionResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        return self.v1_dlp_policies_get_endpoint.call_with_http_info(**kwargs)
+
+    def v1_dlp_policies_policy_id_delete(
+        self,
+        session_token,
+        key_manager_token,
+        policy_id,
+        **kwargs
+    ):
+        """Delete a policy  # noqa: E501
+
+        Delete a policy. Note: Only disabled policy can be deleted   # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v1_dlp_policies_policy_id_delete(session_token, key_manager_token, policy_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+            policy_id (str): Unique dictionary identifier.
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V1DLPPolicyResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        kwargs['policy_id'] = \
+            policy_id
+        return self.v1_dlp_policies_policy_id_delete_endpoint.call_with_http_info(**kwargs)
+
+    def v1_dlp_policies_policy_id_disable_post(
+        self,
+        session_token,
+        key_manager_token,
+        policy_id,
+        **kwargs
+    ):
+        """Disables a policy.  # noqa: E501
+
+        Disables a policy.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v1_dlp_policies_policy_id_disable_post(session_token, key_manager_token, policy_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+            policy_id (str):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V1DLPPolicyResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        kwargs['policy_id'] = \
+            policy_id
+        return self.v1_dlp_policies_policy_id_disable_post_endpoint.call_with_http_info(**kwargs)
+
+    def v1_dlp_policies_policy_id_enable_post(
+        self,
+        session_token,
+        key_manager_token,
+        policy_id,
+        **kwargs
+    ):
+        """Enables a policy.  # noqa: E501
+
+        Enables a policy.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v1_dlp_policies_policy_id_enable_post(session_token, key_manager_token, policy_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+            policy_id (str):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V1DLPPolicyResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        kwargs['policy_id'] = \
+            policy_id
+        return self.v1_dlp_policies_policy_id_enable_post_endpoint.call_with_http_info(**kwargs)
+
+    def v1_dlp_policies_policy_id_get(
+        self,
+        session_token,
+        key_manager_token,
+        policy_id,
+        **kwargs
+    ):
+        """Get a policy  # noqa: E501
+
+        Get a policy  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v1_dlp_policies_policy_id_get(session_token, key_manager_token, policy_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+            policy_id (str): Unique dictionary identifier.
+
+        Keyword Args:
+            policy_version (str): Optional parameter, if set to be valid policy version number,  will return policy with specified policyVersion. Otherwise, return the latest policy. . [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V1DLPPolicyResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        kwargs['policy_id'] = \
+            policy_id
+        return self.v1_dlp_policies_policy_id_get_endpoint.call_with_http_info(**kwargs)
+
+    def v1_dlp_policies_policy_id_put(
+        self,
+        session_token,
+        key_manager_token,
+        policy_id,
+        body,
+        **kwargs
+    ):
+        """Updates a policy. Cannot be used for creation.  # noqa: E501
+
+        Update the policy (name, type, contentTypes, scopes) and also the dictionaries for a policy. Warning: If you send empty list of dictionaries during the update operation, then all the dictionaries for this policy are deleted and policy is automatically disabled. Note: The policy should already exist.   # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v1_dlp_policies_policy_id_put(session_token, key_manager_token, policy_id, body, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+            policy_id (str): Unique dictionary identifier.
+            body (V1DLPPolicyRequest):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V1DLPPolicyResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        kwargs['policy_id'] = \
+            policy_id
+        kwargs['body'] = \
+            body
+        return self.v1_dlp_policies_policy_id_put_endpoint.call_with_http_info(**kwargs)
+
+    def v1_dlp_policies_post(
+        self,
+        session_token,
+        key_manager_token,
+        body,
+        **kwargs
+    ):
+        """Creates a policy  # noqa: E501
+
+        Creates a new policy with dictionary references.  At the time of policy creation, the caller should only provide - contentTypes, name, scopes and type. The rest of the information is populated automatically.  Note - You need to enable the policy after creation to start enforcing the policy.   # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v1_dlp_policies_post(session_token, key_manager_token, body, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+            body (V1DLPPolicyRequest): Details about the policy that should be created.
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V1DLPPolicyResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        kwargs['body'] = \
+            body
+        return self.v1_dlp_policies_post_endpoint.call_with_http_info(**kwargs)
+
+    def v3_dlp_policies_get(
+        self,
+        session_token,
+        key_manager_token,
+        **kwargs
+    ):
+        """Get all policies  # noqa: E501
+
+        Get all policies  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v3_dlp_policies_get(session_token, key_manager_token, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+
+        Keyword Args:
+            page (int): Optional parameter to specify which page to return (default is 0). [optional]
+            limit (int): Optional parameter to specify the number of result to return per page, default is 50. Maximum is 50. . [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V3DLPPoliciesCollectionResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        return self.v3_dlp_policies_get_endpoint.call_with_http_info(**kwargs)
+
+    def v3_dlp_policies_policy_id_delete_post(
+        self,
+        session_token,
+        key_manager_token,
+        policy_id,
+        **kwargs
+    ):
+        """Delete a policy  # noqa: E501
+
+        Delete a policy. Note: Only disabled policy can be deleted   # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v3_dlp_policies_policy_id_delete_post(session_token, key_manager_token, policy_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+            policy_id (str): Unique dictionary identifier.
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V3DLPPolicyResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        kwargs['policy_id'] = \
+            policy_id
+        return self.v3_dlp_policies_policy_id_delete_post_endpoint.call_with_http_info(**kwargs)
+
+    def v3_dlp_policies_policy_id_disable_post(
+        self,
+        session_token,
+        key_manager_token,
+        policy_id,
+        **kwargs
+    ):
+        """Disables a policy.  # noqa: E501
+
+        Disables a policy.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v3_dlp_policies_policy_id_disable_post(session_token, key_manager_token, policy_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+            policy_id (str):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V3DLPPolicyResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        kwargs['policy_id'] = \
+            policy_id
+        return self.v3_dlp_policies_policy_id_disable_post_endpoint.call_with_http_info(**kwargs)
+
+    def v3_dlp_policies_policy_id_enable_post(
+        self,
+        session_token,
+        key_manager_token,
+        policy_id,
+        **kwargs
+    ):
+        """Enables a policy.  # noqa: E501
+
+        Enables a policy.  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v3_dlp_policies_policy_id_enable_post(session_token, key_manager_token, policy_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+            policy_id (str):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V3DLPPolicyResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        kwargs['policy_id'] = \
+            policy_id
+        return self.v3_dlp_policies_policy_id_enable_post_endpoint.call_with_http_info(**kwargs)
+
+    def v3_dlp_policies_policy_id_get(
+        self,
+        session_token,
+        key_manager_token,
+        policy_id,
+        **kwargs
+    ):
+        """Get a policy  # noqa: E501
+
+        Get a policy  # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v3_dlp_policies_policy_id_get(session_token, key_manager_token, policy_id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+            policy_id (str): Unique dictionary identifier.
+
+        Keyword Args:
+            policy_version (str): Optional parameter, if set to be valid policy version number,  will return policy with specified policyVersion. Otherwise, return the latest policy. . [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V3DLPPolicyResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        kwargs['policy_id'] = \
+            policy_id
+        return self.v3_dlp_policies_policy_id_get_endpoint.call_with_http_info(**kwargs)
+
+    def v3_dlp_policies_policy_id_update_post(
+        self,
+        session_token,
+        key_manager_token,
+        policy_id,
+        body,
+        **kwargs
+    ):
+        """Updates a policy. Cannot be used for creation.  # noqa: E501
+
+        Update the policy (name, type, contentTypes, scopes) and also the dictionaries for a policy. Warning: If you send empty list of dictionaries during the update operation, then all the dictionaries for this policy are deleted and policy is automatically disabled. Note: The policy should already exist.   # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v3_dlp_policies_policy_id_update_post(session_token, key_manager_token, policy_id, body, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+            policy_id (str): Unique dictionary identifier.
+            body (V3DLPPolicyRequest):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V3DLPPolicyResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        kwargs['policy_id'] = \
+            policy_id
+        kwargs['body'] = \
+            body
+        return self.v3_dlp_policies_policy_id_update_post_endpoint.call_with_http_info(**kwargs)
+
+    def v3_dlp_policies_post(
+        self,
+        session_token,
+        key_manager_token,
+        body,
+        **kwargs
+    ):
+        """Creates a policy  # noqa: E501
+
+        Creates a new policy with dictionary references. At the time of policy creation, the caller should only provide - contentTypes, name, scopes and type. The rest of the information is populated automatically. Note - You need to enable the policy after creation to start enforcing the policy.   # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v3_dlp_policies_post(session_token, key_manager_token, body, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+            body (V3DLPPolicyRequest): Details about the policy that should be created.
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V3DLPPolicyResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        kwargs['body'] = \
+            body
+        return self.v3_dlp_policies_post_endpoint.call_with_http_info(**kwargs)
+

@@ -41,81 +41,7 @@ class MessagesApi(object):
         if api_client is None:
             api_client = ApiClient()
         self.api_client = api_client
-
-        def __v1_message_id_get(
-            self,
-            session_token,
-            key_manager_token,
-            id,
-            **kwargs
-        ):
-            """Get a message by ID  # noqa: E501
-
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.v1_message_id_get(session_token, key_manager_token, id, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-                id (str): Message ID as a URL-safe string
-
-            Keyword Args:
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                V4Message
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            kwargs['id'] = \
-                id
-            return self.call_with_http_info(**kwargs)
-
-        self.v1_message_id_get = _Endpoint(
+        self.v1_message_id_get_endpoint = _Endpoint(
             settings={
                 'response_type': (V4Message,),
                 'auth': [],
@@ -174,89 +100,9 @@ class MessagesApi(object):
                 ],
                 'content_type': [],
             },
-            api_client=api_client,
-            callable=__v1_message_id_get
+            api_client=api_client
         )
-
-        def __v1_message_search_get(
-            self,
-            query,
-            session_token,
-            key_manager_token,
-            **kwargs
-        ):
-            """Search messages  # noqa: E501
-
-            Search messages according to the specified criteria. The \"query\" parameter takes a search query defined as \"field:value\" pairs combined by the operator \"AND\" (e.g. \"text:foo AND autor:bar\"). Supported fields are  (case-insensitive): \"text\", \"author\", \"hashtag\", \"cashtag\", \"mention\", \"signal\", \"fromDate\", \"toDate\",  \"streamId\", \"streamType\".  \"text\" search requires a \"streamId\" to be specified.  \"streamType\" accepts one of the following values: \"chat\" (IMs and MIMs), \"im\", \"mim\", \"chatroom\", \"post\".  \"signal\" queries can only be combined with \"fromDate\", \"toDate\", \"skip\" and \"limit\" parameters.   # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.v1_message_search_get(query, session_token, key_manager_token, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                query (str): The search query. See above for the query syntax.
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-
-            Keyword Args:
-                skip (int): No. of results to skip. . [optional]
-                limit (int): Max no. of results to return. If no value is provided, 50 is the default. . [optional]
-                scope (str): Describes where content should be searched for that query. It can exclusively apply to Symphony content or to one Connector. . [optional]
-                sort_dir (str): Messages sort direction : ASC or DESC (default to DESC) . [optional]
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                V4MessageList
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['query'] = \
-                query
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            return self.call_with_http_info(**kwargs)
-
-        self.v1_message_search_get = _Endpoint(
+        self.v1_message_search_get_endpoint = _Endpoint(
             settings={
                 'response_type': (V4MessageList,),
                 'auth': [],
@@ -335,89 +181,9 @@ class MessagesApi(object):
                 ],
                 'content_type': [],
             },
-            api_client=api_client,
-            callable=__v1_message_search_get
+            api_client=api_client
         )
-
-        def __v1_message_search_post(
-            self,
-            session_token,
-            key_manager_token,
-            query,
-            **kwargs
-        ):
-            """Search messages  # noqa: E501
-
-            Search messages according to the specified criteria.   # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.v1_message_search_post(session_token, key_manager_token, query, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-                query (MessageSearchQuery): The search query. See above for the query syntax.
-
-            Keyword Args:
-                skip (int): No. of results to skip. . [optional]
-                limit (int): Max no. of results to return. If no value is provided, 50 is the default. . [optional]
-                scope (str): Describes where content should be searched for that query. It can exclusively apply to Symphony content or to one Connector. . [optional]
-                sort_dir (str): Messages sort direction : ASC or DESC (default to DESC) . [optional]
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                V4MessageList
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            kwargs['query'] = \
-                query
-            return self.call_with_http_info(**kwargs)
-
-        self.v1_message_search_post = _Endpoint(
+        self.v1_message_search_post_endpoint = _Endpoint(
             settings={
                 'response_type': (V4MessageList,),
                 'auth': [],
@@ -497,87 +263,9 @@ class MessagesApi(object):
                     'application/json'
                 ]
             },
-            api_client=api_client,
-            callable=__v1_message_search_post
+            api_client=api_client
         )
-
-        def __v4_message_blast_post(
-            self,
-            session_token,
-            sids,
-            **kwargs
-        ):
-            """Post a message to multiple existing streams.  # noqa: E501
-
-            Post a new message to the given list of streams. The stream can be a chatroom, an IM or a multiparty IM.  You may include an attachment on the message.  The message can be provided as MessageMLV2 or PresentationML. Both formats support Freemarker templates.  The optional parameter \"data\" can be used to provide a JSON payload containing entity data. If the message contains explicit references to entity data (in \"data-entity-id\" element attributes), this parameter is required.  If the message is in MessageML and fails schema validation a client error results  This endpoint is idempotent, it means that a 200 response will be returned even if the message has not been delivered to some streams. Check the `errors` map from the response in order to see on which stream(s) the message has not been delivered.  The maximum number of streams where the message can be sent is limitted to 100.  Regarding authentication, you must either use the sessionToken which was created for delegated app access or both the sessionToken and keyManagerToken together.   # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.v4_message_blast_post(session_token, sids, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                session_token (str): Authorization token used to make delegated calls.
-                sids ([str]): A comma-separated list of Stream IDs
-
-            Keyword Args:
-                key_manager_token (str): Key Manager authentication token.. [optional]
-                message (str): The message payload in MessageML.. [optional]
-                data (str): Optional message data in EntityJSON.. [optional]
-                version (str): Optional message version in the format \\\"major.minor\\\". If empty, defaults to the latest supported version. . [optional]
-                attachment (file_type): Optional file attachment.. [optional]
-                preview (file_type): Optional attachment preview.. [optional]
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                V4MessageBlastResponse
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['session_token'] = \
-                session_token
-            kwargs['sids'] = \
-                sids
-            return self.call_with_http_info(**kwargs)
-
-        self.v4_message_blast_post = _Endpoint(
+        self.v4_message_blast_post_endpoint = _Endpoint(
             settings={
                 'response_type': (V4MessageBlastResponse,),
                 'auth': [],
@@ -663,85 +351,9 @@ class MessagesApi(object):
                     'multipart/form-data'
                 ]
             },
-            api_client=api_client,
-            callable=__v4_message_blast_post
+            api_client=api_client
         )
-
-        def __v4_message_import_post(
-            self,
-            session_token,
-            key_manager_token,
-            message_list,
-            **kwargs
-        ):
-            """Import messages from other systems into Symphony.  # noqa: E501
-
-            Sends a message to be imported into the system. Allows you to override the timestamp and author of the message with your desired values. The requesting user must have the Content Management role. The user that the message is intended to have come from must also be present in the conversation. The intended message timestamp must be a valid time from the past. It cannot be a future timestamp. Optionally the original message ID can be specified to identify the imported message for the purpose of repeat imports.   # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.v4_message_import_post(session_token, key_manager_token, message_list, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-                message_list (V4MessageImportList):
-
-            Keyword Args:
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                V4ImportResponseList
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            kwargs['message_list'] = \
-                message_list
-            return self.call_with_http_info(**kwargs)
-
-        self.v4_message_import_post = _Endpoint(
+        self.v4_message_import_post_endpoint = _Endpoint(
             settings={
                 'response_type': (V4ImportResponseList,),
                 'auth': [],
@@ -801,87 +413,9 @@ class MessagesApi(object):
                     'application/json'
                 ]
             },
-            api_client=api_client,
-            callable=__v4_message_import_post
+            api_client=api_client
         )
-
-        def __v4_stream_sid_message_create_post(
-            self,
-            sid,
-            session_token,
-            **kwargs
-        ):
-            """Post a message to one existing stream.  # noqa: E501
-
-            Post a new message to the given stream. The stream can be a chatroom, an IM or a multiparty IM.  You may include an attachment on the message.  The message can be provided as MessageMLV2 or PresentationML. Both formats support Freemarker templates.  The optional parameter \"data\" can be used to provide a JSON payload containing entity data. If the message contains explicit references to entity data (in \"data-entity-id\" element attributes), this parameter is required.  If the message is in MessageML and fails schema validation a client error results  If the message is sent then 200 is returned.  Regarding authentication, you must either use the sessionToken which was created for delegated app access or both the sessionToken and keyManagerToken together.   # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.v4_stream_sid_message_create_post(sid, session_token, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                sid (str): Stream ID
-                session_token (str): Authorization token used to make delegated calls.
-
-            Keyword Args:
-                key_manager_token (str): Key Manager authentication token.. [optional]
-                message (str): The message payload in MessageML.. [optional]
-                data (str): Optional message data in EntityJSON.. [optional]
-                version (str): Optional message version in the format \\\"major.minor\\\". If empty, defaults to the latest supported version. . [optional]
-                attachment (file_type): Optional file attachment.. [optional]
-                preview (file_type): Optional attachment preview.. [optional]
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                V4Message
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['sid'] = \
-                sid
-            kwargs['session_token'] = \
-                session_token
-            return self.call_with_http_info(**kwargs)
-
-        self.v4_stream_sid_message_create_post = _Endpoint(
+        self.v4_stream_sid_message_create_post_endpoint = _Endpoint(
             settings={
                 'response_type': (V4Message,),
                 'auth': [],
@@ -966,91 +500,9 @@ class MessagesApi(object):
                     'multipart/form-data'
                 ]
             },
-            api_client=api_client,
-            callable=__v4_stream_sid_message_create_post
+            api_client=api_client
         )
-
-        def __v4_stream_sid_message_get(
-            self,
-            sid,
-            since,
-            session_token,
-            key_manager_token,
-            **kwargs
-        ):
-            """Get messages from an existing stream.  # noqa: E501
-
-            A caller can fetch all unseen messages by passing the timestamp of the last message seen as the since parameter and the number of messages with the same timestamp value already seen as the skip parameter. This means that every message will be seen exactly once even in the case that an additional message is processed with the same timestamp as the last message returned by the previous call, and the case where there are more than maxMessages with the same timestamp value.  This method is intended for historic queries and is generally reliable but if guaranteed delivery of every message in real time is required then the equivilent firehose method should be called.   # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.v4_stream_sid_message_get(sid, since, session_token, key_manager_token, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                sid (str): Stream ID 
-                since (int): Timestamp of first required message.  This is a long integer value representing milliseconds since Jan 1 1970 
-                session_token (str): Session authentication token.
-                key_manager_token (str): Key Manager authentication token.
-
-            Keyword Args:
-                skip (int): No. of messages to skip. . [optional]
-                limit (int): Max No. of messages to return. If no value is provided, 50 is the default. The maximum supported value is 500. . [optional]
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                V4MessageList
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['sid'] = \
-                sid
-            kwargs['since'] = \
-                since
-            kwargs['session_token'] = \
-                session_token
-            kwargs['key_manager_token'] = \
-                key_manager_token
-            return self.call_with_http_info(**kwargs)
-
-        self.v4_stream_sid_message_get = _Endpoint(
+        self.v4_stream_sid_message_get_endpoint = _Endpoint(
             settings={
                 'response_type': (V4MessageList,),
                 'auth': [],
@@ -1125,90 +577,9 @@ class MessagesApi(object):
                 ],
                 'content_type': [],
             },
-            api_client=api_client,
-            callable=__v4_stream_sid_message_get
+            api_client=api_client
         )
-
-        def __v4_stream_sid_message_mid_update_post(
-            self,
-            sid,
-            mid,
-            session_token,
-            **kwargs
-        ):
-            """Update an existing message.  # noqa: E501
-
-            Update an existing message. The existing message must be a valid social message, that has not been deleted.  The message can be provided as MessageMLV2 or PresentationML. Both formats support Freemarker templates.  The optional parameter \"data\" can be used to provide a JSON payload containing entity data. If the message contains explicit references to entity data (in \"data-entity-id\" element attributes), this parameter is required.  If the message is in MessageML and fails schema validation a client error results  If the message is updated then 200 is returned.  Regarding authentication, you must either use the sessionToken which was created for delegated app access or both the sessionToken and keyManagerToken together.   # noqa: E501
-            This method makes a synchronous HTTP request by default. To make an
-            asynchronous HTTP request, please pass async_req=True
-
-            >>> thread = agent_api.v4_stream_sid_message_mid_update_post(sid, mid, session_token, async_req=True)
-            >>> result = thread.get()
-
-            Args:
-                sid (str): Stream ID
-                mid (str): Parent message ID
-                session_token (str): Authorization token used to make delegated calls.
-
-            Keyword Args:
-                key_manager_token (str): Key Manager authentication token.. [optional]
-                message (str): The message payload in MessageML.. [optional]
-                data (str): Optional message data in EntityJSON.. [optional]
-                version (str): Optional message version in the format \\\"major.minor\\\". If empty, defaults to the latest supported version. . [optional]
-                silent (str): Optional boolean field that will determine if the user/s should receive the message as read or not (true by default) . [optional]
-                _return_http_data_only (bool): response data without head status
-                    code and headers. Default is True.
-                _preload_content (bool): if False, the urllib3.HTTPResponse object
-                    will be returned without reading/decoding response data.
-                    Default is True.
-                _request_timeout (float/tuple): timeout setting for this request. If one
-                    number provided, it will be total request timeout. It can also
-                    be a pair (tuple) of (connection, read) timeouts.
-                    Default is None.
-                _check_input_type (bool): specifies if type checking
-                    should be done one the data sent to the server.
-                    Default is True.
-                _check_return_type (bool): specifies if type checking
-                    should be done one the data received from the server.
-                    Default is True.
-                _host_index (int/None): specifies the index of the server
-                    that we want to use.
-                    Default is read from the configuration.
-                async_req (bool): execute request asynchronously
-
-            Returns:
-                V4Message
-                    If the method is called asynchronously, returns the request
-                    thread.
-            """
-            kwargs['async_req'] = kwargs.get(
-                'async_req', False
-            )
-            kwargs['_return_http_data_only'] = kwargs.get(
-                '_return_http_data_only', True
-            )
-            kwargs['_preload_content'] = kwargs.get(
-                '_preload_content', True
-            )
-            kwargs['_request_timeout'] = kwargs.get(
-                '_request_timeout', None
-            )
-            kwargs['_check_input_type'] = kwargs.get(
-                '_check_input_type', True
-            )
-            kwargs['_check_return_type'] = kwargs.get(
-                '_check_return_type', True
-            )
-            kwargs['_host_index'] = kwargs.get('_host_index')
-            kwargs['sid'] = \
-                sid
-            kwargs['mid'] = \
-                mid
-            kwargs['session_token'] = \
-                session_token
-            return self.call_with_http_info(**kwargs)
-
-        self.v4_stream_sid_message_mid_update_post = _Endpoint(
+        self.v4_stream_sid_message_mid_update_post_endpoint = _Endpoint(
             settings={
                 'response_type': (V4Message,),
                 'auth': [],
@@ -1294,6 +665,716 @@ class MessagesApi(object):
                     'multipart/form-data'
                 ]
             },
-            api_client=api_client,
-            callable=__v4_stream_sid_message_mid_update_post
+            api_client=api_client
         )
+
+    def v1_message_id_get(
+        self,
+        session_token,
+        key_manager_token,
+        id,
+        **kwargs
+    ):
+        """Get a message by ID  # noqa: E501
+
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v1_message_id_get(session_token, key_manager_token, id, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+            id (str): Message ID as a URL-safe string
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V4Message
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        kwargs['id'] = \
+            id
+        return self.v1_message_id_get_endpoint.call_with_http_info(**kwargs)
+
+    def v1_message_search_get(
+        self,
+        query,
+        session_token,
+        key_manager_token,
+        **kwargs
+    ):
+        """Search messages  # noqa: E501
+
+        Search messages according to the specified criteria. The \"query\" parameter takes a search query defined as \"field:value\" pairs combined by the operator \"AND\" (e.g. \"text:foo AND autor:bar\"). Supported fields are  (case-insensitive): \"text\", \"author\", \"hashtag\", \"cashtag\", \"mention\", \"signal\", \"fromDate\", \"toDate\",  \"streamId\", \"streamType\".  \"text\" search requires a \"streamId\" to be specified.  \"streamType\" accepts one of the following values: \"chat\" (IMs and MIMs), \"im\", \"mim\", \"chatroom\", \"post\".  \"signal\" queries can only be combined with \"fromDate\", \"toDate\", \"skip\" and \"limit\" parameters.   # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v1_message_search_get(query, session_token, key_manager_token, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            query (str): The search query. See above for the query syntax.
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+
+        Keyword Args:
+            skip (int): No. of results to skip. . [optional]
+            limit (int): Max no. of results to return. If no value is provided, 50 is the default. . [optional]
+            scope (str): Describes where content should be searched for that query. It can exclusively apply to Symphony content or to one Connector. . [optional]
+            sort_dir (str): Messages sort direction : ASC or DESC (default to DESC) . [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V4MessageList
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['query'] = \
+            query
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        return self.v1_message_search_get_endpoint.call_with_http_info(**kwargs)
+
+    def v1_message_search_post(
+        self,
+        session_token,
+        key_manager_token,
+        query,
+        **kwargs
+    ):
+        """Search messages  # noqa: E501
+
+        Search messages according to the specified criteria.   # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v1_message_search_post(session_token, key_manager_token, query, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+            query (MessageSearchQuery): The search query. See above for the query syntax.
+
+        Keyword Args:
+            skip (int): No. of results to skip. . [optional]
+            limit (int): Max no. of results to return. If no value is provided, 50 is the default. . [optional]
+            scope (str): Describes where content should be searched for that query. It can exclusively apply to Symphony content or to one Connector. . [optional]
+            sort_dir (str): Messages sort direction : ASC or DESC (default to DESC) . [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V4MessageList
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        kwargs['query'] = \
+            query
+        return self.v1_message_search_post_endpoint.call_with_http_info(**kwargs)
+
+    def v4_message_blast_post(
+        self,
+        session_token,
+        sids,
+        **kwargs
+    ):
+        """Post a message to multiple existing streams.  # noqa: E501
+
+        Post a new message to the given list of streams. The stream can be a chatroom, an IM or a multiparty IM.  You may include an attachment on the message.  The message can be provided as MessageMLV2 or PresentationML. Both formats support Freemarker templates.  The optional parameter \"data\" can be used to provide a JSON payload containing entity data. If the message contains explicit references to entity data (in \"data-entity-id\" element attributes), this parameter is required.  If the message is in MessageML and fails schema validation a client error results  This endpoint is idempotent, it means that a 200 response will be returned even if the message has not been delivered to some streams. Check the `errors` map from the response in order to see on which stream(s) the message has not been delivered.  The maximum number of streams where the message can be sent is limitted to 100.  Regarding authentication, you must either use the sessionToken which was created for delegated app access or both the sessionToken and keyManagerToken together.   # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v4_message_blast_post(session_token, sids, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            session_token (str): Authorization token used to make delegated calls.
+            sids ([str]): A comma-separated list of Stream IDs
+
+        Keyword Args:
+            key_manager_token (str): Key Manager authentication token.. [optional]
+            message (str): The message payload in MessageML.. [optional]
+            data (str): Optional message data in EntityJSON.. [optional]
+            version (str): Optional message version in the format \\\"major.minor\\\". If empty, defaults to the latest supported version. . [optional]
+            attachment (file_type): Optional file attachment.. [optional]
+            preview (file_type): Optional attachment preview.. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V4MessageBlastResponse
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['session_token'] = \
+            session_token
+        kwargs['sids'] = \
+            sids
+        return self.v4_message_blast_post_endpoint.call_with_http_info(**kwargs)
+
+    def v4_message_import_post(
+        self,
+        session_token,
+        key_manager_token,
+        message_list,
+        **kwargs
+    ):
+        """Import messages from other systems into Symphony.  # noqa: E501
+
+        Sends a message to be imported into the system. Allows you to override the timestamp and author of the message with your desired values. The requesting user must have the Content Management role. The user that the message is intended to have come from must also be present in the conversation. The intended message timestamp must be a valid time from the past. It cannot be a future timestamp. Optionally the original message ID can be specified to identify the imported message for the purpose of repeat imports.   # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v4_message_import_post(session_token, key_manager_token, message_list, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+            message_list (V4MessageImportList):
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V4ImportResponseList
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        kwargs['message_list'] = \
+            message_list
+        return self.v4_message_import_post_endpoint.call_with_http_info(**kwargs)
+
+    def v4_stream_sid_message_create_post(
+        self,
+        sid,
+        session_token,
+        **kwargs
+    ):
+        """Post a message to one existing stream.  # noqa: E501
+
+        Post a new message to the given stream. The stream can be a chatroom, an IM or a multiparty IM.  You may include an attachment on the message.  The message can be provided as MessageMLV2 or PresentationML. Both formats support Freemarker templates.  The optional parameter \"data\" can be used to provide a JSON payload containing entity data. If the message contains explicit references to entity data (in \"data-entity-id\" element attributes), this parameter is required.  If the message is in MessageML and fails schema validation a client error results  If the message is sent then 200 is returned.  Regarding authentication, you must either use the sessionToken which was created for delegated app access or both the sessionToken and keyManagerToken together.   # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v4_stream_sid_message_create_post(sid, session_token, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            sid (str): Stream ID
+            session_token (str): Authorization token used to make delegated calls.
+
+        Keyword Args:
+            key_manager_token (str): Key Manager authentication token.. [optional]
+            message (str): The message payload in MessageML.. [optional]
+            data (str): Optional message data in EntityJSON.. [optional]
+            version (str): Optional message version in the format \\\"major.minor\\\". If empty, defaults to the latest supported version. . [optional]
+            attachment (file_type): Optional file attachment.. [optional]
+            preview (file_type): Optional attachment preview.. [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V4Message
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['sid'] = \
+            sid
+        kwargs['session_token'] = \
+            session_token
+        return self.v4_stream_sid_message_create_post_endpoint.call_with_http_info(**kwargs)
+
+    def v4_stream_sid_message_get(
+        self,
+        sid,
+        since,
+        session_token,
+        key_manager_token,
+        **kwargs
+    ):
+        """Get messages from an existing stream.  # noqa: E501
+
+        A caller can fetch all unseen messages by passing the timestamp of the last message seen as the since parameter and the number of messages with the same timestamp value already seen as the skip parameter. This means that every message will be seen exactly once even in the case that an additional message is processed with the same timestamp as the last message returned by the previous call, and the case where there are more than maxMessages with the same timestamp value.  This method is intended for historic queries and is generally reliable but if guaranteed delivery of every message in real time is required then the equivilent firehose method should be called.   # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v4_stream_sid_message_get(sid, since, session_token, key_manager_token, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            sid (str): Stream ID 
+            since (int): Timestamp of first required message.  This is a long integer value representing milliseconds since Jan 1 1970 
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+
+        Keyword Args:
+            skip (int): No. of messages to skip. . [optional]
+            limit (int): Max No. of messages to return. If no value is provided, 50 is the default. The maximum supported value is 500. . [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V4MessageList
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['sid'] = \
+            sid
+        kwargs['since'] = \
+            since
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        return self.v4_stream_sid_message_get_endpoint.call_with_http_info(**kwargs)
+
+    def v4_stream_sid_message_mid_update_post(
+        self,
+        sid,
+        mid,
+        session_token,
+        **kwargs
+    ):
+        """Update an existing message.  # noqa: E501
+
+        Update an existing message. The existing message must be a valid social message, that has not been deleted.  The message can be provided as MessageMLV2 or PresentationML. Both formats support Freemarker templates.  The optional parameter \"data\" can be used to provide a JSON payload containing entity data. If the message contains explicit references to entity data (in \"data-entity-id\" element attributes), this parameter is required.  If the message is in MessageML and fails schema validation a client error results  If the message is updated then 200 is returned.  Regarding authentication, you must either use the sessionToken which was created for delegated app access or both the sessionToken and keyManagerToken together.   # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.v4_stream_sid_message_mid_update_post(sid, mid, session_token, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            sid (str): Stream ID
+            mid (str): Parent message ID
+            session_token (str): Authorization token used to make delegated calls.
+
+        Keyword Args:
+            key_manager_token (str): Key Manager authentication token.. [optional]
+            message (str): The message payload in MessageML.. [optional]
+            data (str): Optional message data in EntityJSON.. [optional]
+            version (str): Optional message version in the format \\\"major.minor\\\". If empty, defaults to the latest supported version. . [optional]
+            silent (str): Optional boolean field that will determine if the user/s should receive the message as read or not (true by default) . [optional]
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V4Message
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['sid'] = \
+            sid
+        kwargs['mid'] = \
+            mid
+        kwargs['session_token'] = \
+            session_token
+        return self.v4_stream_sid_message_mid_update_post_endpoint.call_with_http_info(**kwargs)
+
