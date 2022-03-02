@@ -26,7 +26,7 @@ async def run():
         await streams.add_member_to_room(13056700579859, stream_id)
         await streams.remove_member_from_room(13056700579859, stream_id)
 
-        async for m in await streams.list_all_streams_members(stream_id):
+        async for m in await streams.list_all_stream_members(stream_id):
             logging.debug(m)
 
         stream_filter = StreamFilter(
