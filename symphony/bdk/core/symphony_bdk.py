@@ -10,6 +10,7 @@ from symphony.bdk.core.auth.exception import AuthInitializationError
 from symphony.bdk.core.auth.ext_app_authenticator import ExtensionAppAuthenticator
 from symphony.bdk.core.client.api_client_factory import ApiClientFactory
 from symphony.bdk.core.config.exception import BotNotConfiguredError, BdkConfigError
+from symphony.bdk.core.extension import ExtensionService
 from symphony.bdk.core.service.application.application_service import ApplicationService
 from symphony.bdk.core.service.connection.connection_service import ConnectionService
 from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import AbstractDatafeedLoop
@@ -117,6 +118,8 @@ class SymphonyBdk:
         # creates ActivityRegistry that subscribes to DF Loop events
         self._activity_registry = ActivityRegistry(self._session_service)
         self._datafeed_loop.subscribe(self._activity_registry)
+        # initialises extension service and register decorated extensions
+        self._extension_service = ExtensionService(self._bot_session, self._config, self._api_client_factory)
 
     @bot_service
     def bot_session(self) -> AuthSession:
@@ -247,6 +250,13 @@ class SymphonyBdk:
 
         """
         return self._activity_registry
+
+    @bot_service
+    def extensions(self) -> ExtensionService:
+        """
+        :return: The :class:`ExtensionService` instance
+        """
+        return self._extension_service
 
     async def close_clients(self):
         """Close all the existing api clients created by the api client factory.
