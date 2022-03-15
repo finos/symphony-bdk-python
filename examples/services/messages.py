@@ -1,4 +1,5 @@
 import asyncio
+import base64
 import logging.config
 from pathlib import Path
 
@@ -6,6 +7,8 @@ from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.service.message.model import Message
 from symphony.bdk.core.symphony_bdk import SymphonyBdk
 from symphony.bdk.gen.agent_model.message_search_query import MessageSearchQuery
+from symphony.bdk.gen.agent_model.v4_imported_message import V4ImportedMessage
+from symphony.bdk.gen.agent_model.v4_imported_message_attachment import V4ImportedMessageAttachment
 
 
 async def run():
@@ -32,6 +35,16 @@ async def run():
         async for m in await message_service.search_all_messages(MessageSearchQuery(text="some_text",
                                                                                     stream_id=stream_id_1)):
             logging.debug(m.message_id)
+
+        # import a message wih attachments
+        content = "symphony"
+        encoded_content = base64.b64encode(content.encode("ascii"))
+        attachment = V4ImportedMessageAttachment(filename="text.txt", content=encoded_content.decode("ascii"))
+        msg = V4ImportedMessage(intended_message_timestamp=1647353689268, intended_message_from_user_id=13056700580915,
+                                originating_system_id="fooChat", stream_id=stream_id_1,
+                                message="<messageML>This is an imported message!</messageML>",
+                                attachments=[attachment])
+        await message_service.import_messages([msg])
 
         logging.info("Obo example:")
         obo_auth_session = bdk.obo(username="username")
