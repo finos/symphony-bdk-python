@@ -13,6 +13,7 @@ Contents
 * [Application service](markdown/application_service.md)
 * [Signal service](markdown/signal_service.md)
 * [Presence service](markdown/presence_service.md)
+* [Extending the BDK](markdown/extension.md)
 * [FAQ](markdown/faq.md)
 
 ```eval_rst
@@ -47,6 +48,7 @@ The reference documentation consists of the following sections:
   * [Connection service](markdown/connection_service.md): Managing connections between users
   * [Signal service](markdown/signal_service.md): Managing signals, subscribing/unsubscribing to signals
   * [Presence service](markdown/presence_service.md): Reacting and managing presences
+* [Extending the BDK](markdown/extension.md): How to use or develop BDK extensions 
 
 ### Technical Documentation
 * Information on how we generate client side code from swagger specs in the
