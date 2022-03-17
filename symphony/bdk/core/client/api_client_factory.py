@@ -38,6 +38,7 @@ class ApiClientFactory:
                                                                       self._config.bot.certificate.path)
         self._app_session_auth_client = self._get_api_client_with_client_cert(self._config.session_auth, SESSION_AUTH,
                                                                               self._config.app.certificate.path)
+        self._custom_clients = []
 
     def get_login_client(self) -> ApiClient:
         """Returns a fully initialized ApiClient for Login API.
@@ -52,6 +53,16 @@ class ApiClientFactory:
         :return: an ApiClient instance for Pod API.
         """
         return self._pod_client
+
+    def get_client(self, context_path):
+        """Returns a fully initialized custom ApiClient
+
+        :param context_path: custom path to be used in the client
+        :return: an ApiClient instance
+        """
+        client = self._get_api_client(self._config.pod, context_path)
+        self._custom_clients.append(client)
+        return client
 
     def get_relay_client(self) -> ApiClient:
         """Returns a fully initialized ApiClient for Key Manager API.
@@ -99,6 +110,8 @@ class ApiClientFactory:
         await self._session_auth_client.close()
         await self._key_auth_client.close()
         await self._app_session_auth_client.close()
+        for client in self._custom_clients:
+            await client.close()
 
     def _get_api_client(self, server_config, context) -> ApiClient:
         configuration = self._get_client_config(context, server_config)

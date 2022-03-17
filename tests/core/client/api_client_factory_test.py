@@ -24,6 +24,7 @@ def fixture_add_x_trace_id():
 
     return mock_add_x_trace_id
 
+
 @pytest.fixture(name="client_certificate_path")
 def fixture_api_client_certificate(tmp_path, certificate, rsa_key):
     temp_directory = tmp_path / "cert"
@@ -31,6 +32,7 @@ def fixture_api_client_certificate(tmp_path, certificate, rsa_key):
     client_cert_path = temp_directory / "megabot.pem"
     client_cert_path.write_text(certificate + rsa_key)
     return client_cert_path.resolve()
+
 
 @pytest.mark.asyncio
 async def test_host_configured(config):
@@ -43,6 +45,26 @@ async def test_host_configured(config):
     assert_host_configured_only(client_factory.get_key_auth_client(), KEY_AUTH)
     assert_host_configured_only(client_factory.get_app_session_auth_client(), SESSION_AUTH)
     assert_host_configured_only(client_factory.get_relay_client(), RELAY)
+
+
+@pytest.mark.asyncio
+async def test_custom_host_configured(config):
+    custom_path = "/my-host"
+    client_factory = ApiClientFactory(config)
+
+    assert_host_configured_only(client_factory.get_client(custom_path), custom_path)
+    assert len(client_factory._custom_clients) == 1
+
+
+@pytest.mark.asyncio
+async def test_close_custom_host_configured(config):
+    custom_path = "/myhost"
+    client_factory = ApiClientFactory(config)
+
+    client_factory.get_client(custom_path)
+    assert client_factory._custom_clients[0].rest_client.pool_manager.closed is False
+    await client_factory.close_clients()
+    assert client_factory._custom_clients[0].rest_client.pool_manager.closed is True
 
 
 @pytest.mark.asyncio

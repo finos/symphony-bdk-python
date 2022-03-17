@@ -7,9 +7,11 @@ from symphony.bdk.core.auth.auth_session import AuthSession, OboAuthSession
 from symphony.bdk.core.auth.bot_authenticator import BotAuthenticatorRsa
 from symphony.bdk.core.auth.exception import AuthInitializationError
 from symphony.bdk.core.auth.obo_authenticator import OboAuthenticatorRsa
+from symphony.bdk.core.client.api_client_factory import ApiClientFactory
 from symphony.bdk.core.config.exception import BotNotConfiguredError, BdkConfigError
 from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
+from symphony.bdk.core.extension import ExtensionService
 from symphony.bdk.core.symphony_bdk import SymphonyBdk
 from tests.utils.resource_utils import get_config_resource_filepath
 
@@ -58,6 +60,16 @@ async def test_bot_session(config):
 
 
 @pytest.mark.asyncio
+async def test_bot_extensions_service_initialisation(config):
+    async with SymphonyBdk(config) as symphony_bdk:
+        extension_service = symphony_bdk.extensions()
+        assert isinstance(extension_service, ExtensionService)
+        assert isinstance(extension_service._api_client_factory, ApiClientFactory)
+        assert isinstance(extension_service._bot_session, AuthSession)
+        assert isinstance(extension_service._config, BdkConfig)
+
+
+@pytest.mark.asyncio
 async def test_bot_invalid_config_session(invalid_username_config):
     async with SymphonyBdk(invalid_username_config) as symphony_bdk:
         with pytest.raises(BotNotConfiguredError):
@@ -77,6 +89,9 @@ async def test_bot_invalid_config_session(invalid_username_config):
 
         with pytest.raises(BotNotConfiguredError):
             symphony_bdk.connections()
+
+        with pytest.raises(BotNotConfiguredError):
+            symphony_bdk.extensions()
 
 
 @pytest.mark.asyncio
