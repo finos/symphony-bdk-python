@@ -13,6 +13,7 @@ from symphony.bdk.gen.group_model.group_list import GroupList
 from symphony.bdk.gen.group_model.member import Member
 from symphony.bdk.gen.group_model.owner import Owner
 from symphony.bdk.gen.group_model.read_group import ReadGroup
+from symphony.bdk.gen.group_model.sort_order import SortOrder
 from symphony.bdk.gen.group_model.status import Status
 from symphony.bdk.gen.group_model.update_group import UpdateGroup
 from symphony.bdk.gen.group_model.upload_avatar import UploadAvatar
@@ -84,6 +85,23 @@ async def test_list_groups(group_service, mocked_group, api_client):
     assert len(groups.data) == 1
     api_client.call_api.assert_called_once()
     assert api_client.call_api.call_args.args[0] == "/v1/groups/type/{typeId}"
+
+
+@pytest.mark.asyncio
+async def test_list_groups_with_params(group_service, mocked_group, api_client):
+    api_client.call_api.return_value = GroupList(data=[mocked_group])
+
+    groups = await group_service.list_groups(status=Status(value="ACTIVE"), before="0", after="50", limit=50,
+                                             sort_order=SortOrder(value="ASC"))
+    assert len(groups.data) == 1
+    api_client.call_api.assert_called_once()
+    assert api_client.call_api.call_args.args[0] == "/v1/groups/type/{typeId}"
+    params = dict(api_client.call_api.call_args.args[3])
+    assert params["status"] == Status(value="ACTIVE")
+    assert params["before"] == "0"
+    assert params["after"] == "50"
+    assert params["limit"] == 50
+    assert params["sortOrder"] == SortOrder(value="ASC")
 
 
 @pytest.mark.asyncio
