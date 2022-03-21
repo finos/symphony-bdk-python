@@ -86,7 +86,7 @@ def test_get_session_service(service_factory):
 def test_get_datafeed_loop(config, service_factory):
     datafeed_loop = service_factory.get_datafeed_loop()
     assert datafeed_loop is not None
-    assert isinstance(datafeed_loop, DatafeedLoopV1)
+    assert isinstance(datafeed_loop, DatafeedLoopV2)
 
     config.datafeed.version = "v1"
     datafeed_loop = service_factory.get_datafeed_loop()
@@ -96,7 +96,7 @@ def test_get_datafeed_loop(config, service_factory):
     config.datafeed.version = "something"
     datafeed_loop = service_factory.get_datafeed_loop()
     assert datafeed_loop is not None
-    assert isinstance(datafeed_loop, DatafeedLoopV1)
+    assert isinstance(datafeed_loop, DatafeedLoopV2)
 
     config.datafeed.version = "v2"
     datafeed_loop = service_factory.get_datafeed_loop()

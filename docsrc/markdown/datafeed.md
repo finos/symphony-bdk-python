@@ -1,4 +1,9 @@
 # Datafeed
+> The datafeed 1 service will be fully replaced by the datafeed 2 service in the future. 
+> Please consider using datafeed 2.  
+> 
+> For more information on the timeline as well as on the benefits of datafeed 2, please reach out to your Technical 
+> Account Manager or to our [developer documentation](https://docs.developers.symphony.com/building-bots-on-symphony/datafeed).
 
 The datafeed service is a service used for handling the [_Real Time Events_](https://docs.developers.symphony.com/building-bots-on-symphony/datafeed/real-time-events).
 

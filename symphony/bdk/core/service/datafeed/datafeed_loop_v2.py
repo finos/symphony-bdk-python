@@ -47,7 +47,8 @@ class DatafeedLoopV2(AbstractDatafeedLoop):
         super().__init__(datafeed_api, session_service, auth_session, config)
         self._ack_id = ""
         self._datafeed_id = None
-        self._tag = config.bot.username[0:DATAFEED_TAG_MAX_LENGTH]
+        if config.bot.username is not None:
+            self._tag = config.bot.username[0:DATAFEED_TAG_MAX_LENGTH]
 
     async def _prepare_datafeed(self):
         datafeed = await self._retrieve_datafeed()
