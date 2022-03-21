@@ -4,7 +4,7 @@ code_gen_dir=`pwd`
 project_root=$code_gen_dir/..
 echo $code_gen_dir
 
-commit_hash=7e3b6d0503a3f7875fc36fee01dd0d93ff4ceb20
+commit_hash=16a902e2d0f8f64c680b5d799f871a3fc4884890
 api_spec_base_url=https://raw.githubusercontent.com/symphonyoss/symphony-api-spec/${commit_hash}
 echo $api_spec_base_url
 
@@ -55,7 +55,7 @@ generate_files() {
   fi
 }
 
-generate_files agent ${api_spec_base_url}/agent/agent-api-public.yaml
+generate_files agent ${api_spec_base_url}/agent/agent-api-public-deprecated.yaml
 generate_files auth ${api_spec_base_url}/authenticator/authenticator-api-public-deprecated.yaml
 generate_files login ${api_spec_base_url}/login/login-api-public.yaml
 generate_files pod ${api_spec_base_url}/pod/pod-api-public.yaml
