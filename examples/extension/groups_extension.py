@@ -16,10 +16,9 @@ logging.config.fileConfig(Path(__file__).parent.parent / "logging.conf", disable
 
 
 async def run():
-    async with SymphonyBdk(BdkConfigLoader.load_from_symphony_dir("configDevx3.yaml")) as bdk:
+    async with SymphonyBdk(BdkConfigLoader.load_from_symphony_dir("config.yaml")) as bdk:
         bdk.extensions().register(SymphonyGroupBdkExtension)
         group_service: SymphonyGroupService = bdk.extensions().service(SymphonyGroupBdkExtension)
-        await group_service._oauth_session.refresh()
 
         # list groups
         groups = await group_service.list_groups(status=Status("ACTIVE"))

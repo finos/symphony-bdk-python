@@ -22,6 +22,8 @@ def retry(*dargs, **dkw):
     if len(dargs) == 1 and callable(dargs[0]):
         return retry()(dargs[0])
 
+    retry_function = dkw.get("retry", refresh_session_if_unauthorized)
+
     def retry_decorator(fun: Callable):
         @wraps(fun)
         def decorator_f(self, *args, **kwargs):
@@ -34,7 +36,7 @@ def retry(*dargs, **dkw):
             _before_sleep = before_sleep_log(logger, logging.INFO)
             default_kwargs.update(dict(before_sleep=_before_sleep))
             if retry_config is not None:
-                config_kwargs = dict(retry=refresh_session_if_unauthorized,
+                config_kwargs = dict(retry=retry_function,
                                      wait=wait_exponential(multiplier=retry_config.multiplier,
                                                            min=retry_config.initial_interval.total_seconds(),
                                                            max=retry_config.max_interval.total_seconds()),

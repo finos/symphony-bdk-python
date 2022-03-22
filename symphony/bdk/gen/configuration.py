@@ -363,13 +363,12 @@ class Configuration(object):
             basic_auth=username + ':' + password
         ).get('authorization')
 
-    def auth_settings(self):
+    async def auth_settings(self):
         """Gets Auth Settings dict for api client.
 
         :return: The Auth Settings information dict.
         """
-        auth = {}
-        return auth
+        return {}
 
     def to_debug_report(self):
         """Gets the essential information for debugging.

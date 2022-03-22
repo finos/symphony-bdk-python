@@ -1,4 +1,7 @@
-from symphony.bdk.core.extension import BdkAuthenticationAware, BdkApiClientFactoryAware, BdkExtensionServiceProvider
+from symphony.bdk.core.extension import BdkAuthenticationAware, BdkApiClientFactoryAware, BdkExtensionServiceProvider, \
+    BdkConfigAware
+from symphony.bdk.core.retry import retry
+from symphony.bdk.core.retry.strategy import is_network_or_minor_error, is_unauthorized
 from symphony.bdk.core.service.user.user_util import extract_tenant_id
 from symphony.bdk.gen.group_api.group_api import GroupApi
 from symphony.bdk.gen.group_model.add_member import AddMember
@@ -13,12 +16,45 @@ from symphony.bdk.gen.group_model.upload_avatar import UploadAvatar
 from symphony.bdk.gen.login_api.authentication_api import AuthenticationApi
 
 
-class SymphonyGroupBdkExtension(BdkAuthenticationAware, BdkApiClientFactoryAware, BdkExtensionServiceProvider):
-    """ Extension for Symphony Groups APIs
+async def refresh_bearer_token_if_unauthorized(retry_state):
+    """Function used by the retry decorator to refresh the bearer token if conditions apply
+
+    :param retry_state: current retry state
+    :return: True if we want to retry, False otherwise
     """
+    service_oauth_session = retry_state.args[0]._oauth_session
+    return await _refresh_if_unauthorized(retry_state, service_oauth_session)
+
+
+async def refresh_session_token_if_unauthorized(retry_state):
+    """Function used by the retry decorator to refresh the session token if conditions apply
+
+    :param retry_state: current retry state
+    :return: True if we want to retry, False otherwise
+    """
+    service_auth_session = retry_state.args[0]._session
+    return await _refresh_if_unauthorized(retry_state, service_auth_session)
+
+
+async def _refresh_if_unauthorized(retry_state, service_session):
+    if retry_state.outcome.failed:
+        exception = retry_state.outcome.exception()
+        if is_network_or_minor_error(exception):
+            if is_unauthorized(exception):
+                await service_session.refresh()
+            return True
+    return False
+
+
+class SymphonyGroupBdkExtension(BdkAuthenticationAware, BdkApiClientFactoryAware, BdkConfigAware,
+                                BdkExtensionServiceProvider):
+    """Extension for Symphony Groups APIs
+    """
+
     def __init__(self):
         self._api_client_factory = None
         self._bot_session = None
+        self._config = None
 
     def set_api_client_factory(self, api_client_factory):
         self._api_client_factory = api_client_factory
@@ -26,27 +62,31 @@ class SymphonyGroupBdkExtension(BdkAuthenticationAware, BdkApiClientFactoryAware
     def set_bot_session(self, bot_session):
         self._bot_session = bot_session
 
+    def set_config(self, config):
+        self._config = config
+
     def get_service(self):
-        return SymphonyGroupService(self._api_client_factory, self._bot_session)
+        return SymphonyGroupService(self._api_client_factory, self._bot_session, self._config.retry)
 
 
 class SymphonyGroupService:
-    """ Service class for managing Symphony Groups
+    """Service class for managing Symphony Groups
     """
-    def __init__(self, api_client_factory, session):
+
+    def __init__(self, api_client_factory, session, retry_config):
         self._api_client_factory = api_client_factory
         self._session = session
-        self._oauth_session = OAuthSession(self._api_client_factory.get_login_client(), self._session)
-
+        self._retry_config = retry_config
+        self._oauth_session = OAuthSession(self._api_client_factory.get_login_client(), self._session,
+                                           self._retry_config)
         client = self._api_client_factory.get_client("/profile-manager")
-        # to enable setting the authorization header defined in api_client.ApiClient.update_params_for_auth
-        client.configuration.auth_settings = lambda: {
-            "bearerAuth": {"in": "header", "type": "bearer", "key": "Authorization",
-                           "value": "Bearer " + self._oauth_session.bearer_token()}}
+        client.configuration.auth_settings = self._oauth_session.get_auth_settings
+
         # needed for the x_symphony_host parameter to allow empty value
         client.configuration._disabled_client_side_validations = ["minLength"]
         self._group_api = GroupApi(client)
 
+    @retry(retry=refresh_bearer_token_if_unauthorized)
     async def insert_group(self, create_group: CreateGroup) -> ReadGroup:
         """Create a new group
         See: `Insert a new group <https://developers.symphony.com/restapi/reference/insertgroup>`_
@@ -56,6 +96,7 @@ class SymphonyGroupService:
         """
         return await self._group_api.insert_group(x_symphony_host="", create_group=create_group)
 
+    @retry(retry=refresh_bearer_token_if_unauthorized)
     async def list_groups(self, status: Status = None, before: str = None, after: str = None, limit: int = None,
                           sort_order: SortOrder = None) -> GroupList:
         """List groups of type SDL
@@ -82,6 +123,7 @@ class SymphonyGroupService:
             kwargs["sort_order"] = sort_order
         return await self._group_api.list_groups(**kwargs)
 
+    @retry(retry=refresh_bearer_token_if_unauthorized)
     async def update_group(self, if_match: str, group_id: str, update_group: UpdateGroup) -> ReadGroup:
         """Update an existing group
         See: `Update a group <https://developers.symphony.com/restapi/reference/updategroup>`_
@@ -94,6 +136,7 @@ class SymphonyGroupService:
         return await self._group_api.update_group(x_symphony_host="", if_match=if_match, group_id=group_id,
                                                   update_group=update_group)
 
+    @retry(retry=refresh_bearer_token_if_unauthorized)
     async def update_avatar(self, group_id: str, image: str) -> ReadGroup:
         """Update the group avatar
         See: `Update the group avatar <https://developers.symphony.com/restapi/reference/updateavatar>`_
@@ -106,6 +149,7 @@ class SymphonyGroupService:
         upload_avatar = UploadAvatar(image=image)
         return await self._group_api.update_avatar(x_symphony_host="", group_id=group_id, upload_avatar=upload_avatar)
 
+    @retry(retry=refresh_bearer_token_if_unauthorized)
     async def get_group(self, group_id: str) -> ReadGroup:
         """Retrieve a specific group
         See: `Retrieve a group <https://developers.symphony.com/restapi/reference/getgroup>`_
@@ -115,6 +159,7 @@ class SymphonyGroupService:
         """
         return await self._group_api.get_group(x_symphony_host="", group_id=group_id)
 
+    @retry(retry=refresh_bearer_token_if_unauthorized)
     async def add_member_to_group(self, group_id: str, user_id: int) -> ReadGroup:
         """Add a new user to an existing group.
         See: `Add a new user to an existing group <https://developers.symphony.com/restapi/reference/addmembertogroup>`_
@@ -131,11 +176,14 @@ class SymphonyGroupService:
 class OAuthSession:
     """Used to handle the bearer token needed to call Groups endpoints.
     """
-    def __init__(self, login_client, session):
+
+    def __init__(self, login_client, session, retry_config):
         self._authentication_api = AuthenticationApi(login_client)
         self._session = session
         self._bearer_token = None
+        self._retry_config = retry_config
 
+    @retry(retry=refresh_session_token_if_unauthorized)
     async def refresh(self):
         """Refreshes internal Bearer authentication token from the bot sessionToken.
         """
@@ -143,7 +191,17 @@ class OAuthSession:
                                                                    scope="profile-manager")
         self._bearer_token = jwt_token.access_token
 
-    def bearer_token(self):
+    async def get_auth_settings(self):
+        """Used to set the authorization header defined in api_client.ApiClient.update_params_for_auth
+
+        :return: the map of auth_settings containing the header value with the current bearer token
+        """
+        return {"bearerAuth": {"in": "header", "type": "bearer", "key": "Authorization",
+                               "value": "Bearer " + await self._get_bearer_token()}}
+
+    async def _get_bearer_token(self):
         """Returns the bearer token
         """
+        if self._bearer_token is None:
+            await self.refresh()
         return self._bearer_token
