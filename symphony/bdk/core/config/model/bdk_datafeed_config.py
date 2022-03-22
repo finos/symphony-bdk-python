@@ -9,6 +9,17 @@ DF_V1 = "v1"
 DF_V2 = "v2"
 
 
+def log_dfv1_deprecation(version):
+    """Logs a warning message when datafeed v1 is used in the bot configuration
+    """
+    if version is not None and version.lower() == DF_V1:
+        logging.warning(
+            "The datafeed 1 service will be fully replaced by the datafeed 2 service in the future. "
+            "Please consider migrating over to datafeed 2. For more information on the timeline as well as on "
+            "the benefits of datafeed 2, please reach out to your Technical Account Manager or to our developer "
+            "documentation https://docs.developers.symphony.com/building-bots-on-symphony/datafeed)")
+
+
 class BdkDatafeedConfig:
     """Class holding datafeed specific configuration.
     """
@@ -23,20 +34,10 @@ class BdkDatafeedConfig:
         self.retry = BdkRetryConfig(dict(maxAttempts=BdkRetryConfig.INFINITE_MAX_ATTEMPTS))
         if config is not None:
             self.id_file_path = Path(config.get(DF_ID_FILE_PATH)) if DF_ID_FILE_PATH in config else ""
-            self.log_dfv1_deprecation()
+            log_dfv1_deprecation(config.get(VERSION))
             self.version = config.get(VERSION)
             if "retry" in config:
                 self.retry = BdkRetryConfig(config.get("retry"))
-
-    def log_dfv1_deprecation(self):
-        """Logs a warning message when datafeed v1 is used in the bot configuration
-        """
-        if self.version.lower() == DF_V1:
-            logging.warning(
-                "The datafeed 1 service will be fully replaced by the datafeed 2 service in the future. "
-                "Please consider migrating over to datafeed 2. For more information on the timeline as well as on "
-                "the benefits of datafeed 2, please reach out to your Technical Account Manager or to our developer "
-                "documentation https://docs.developers.symphony.com/building-bots-on-symphony/datafeed)")
 
     def get_id_file_path(self) -> Path:
         """
