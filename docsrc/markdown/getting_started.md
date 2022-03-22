@@ -33,13 +33,13 @@ setup(
     author_email='jane.doe@acme.com',
     description='My Python bot',
     python_requires='>=3.8',
-    install_requires=['sym-api-client-python>=2.0.0']
+    install_requires=['symphony-bdk-python>=2.0.0']
 )
 
 ```
 and your `requirements.txt` like:
 ```
-sym-api-client-python>=2.0.0
+symphony-bdk-python>=2.0.0
 ```
 
 ### Poetry based project
@@ -52,7 +52,7 @@ description = "My bot"
 
 [tool.poetry.dependencies]
 python = "^3.8"
-sym-api-client-python = "^2.0.0"
+symphony-bdk-python = "^2.0.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
