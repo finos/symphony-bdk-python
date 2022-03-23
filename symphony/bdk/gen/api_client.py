@@ -181,7 +181,7 @@ class ApiClient(object):
             body = self.sanitize_for_serialization(body)
 
         # auth setting
-        self.update_params_for_auth(header_params, query_params,
+        await self.update_params_for_auth(header_params, query_params,
                                     auth_settings, resource_path, method, body)
 
         # request url
@@ -587,7 +587,7 @@ class ApiClient(object):
         else:
             return content_types[0]
 
-    def update_params_for_auth(self, headers, queries, auth_settings,
+    async def update_params_for_auth(self, headers, queries, auth_settings,
                                resource_path, method, body):
         """Updates header and query params based on authentication setting.
 
@@ -603,7 +603,7 @@ class ApiClient(object):
             return
 
         for auth in auth_settings:
-            auth_setting = self.configuration.auth_settings().get(auth)
+            auth_setting = (await self.configuration.auth_settings()).get(auth)
             if auth_setting:
                 if auth_setting['in'] == 'cookie':
                     headers['Cookie'] = auth_setting['value']
