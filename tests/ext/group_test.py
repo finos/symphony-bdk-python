@@ -218,7 +218,7 @@ async def test_oauth_session_initialisation(auth_session, retry_config):
 
     assert isinstance(oauth_session._authentication_api, AuthenticationApi)
     assert oauth_session._bearer_token is None
-    assert oauth_session._session == auth_session
+    assert oauth_session._auth_session == auth_session
     assert oauth_session._retry_config == retry_config
 
 

@@ -22,26 +22,11 @@ async def refresh_bearer_token_if_unauthorized(retry_state):
     :param retry_state: current retry state
     :return: True if we want to retry, False otherwise
     """
-    service_oauth_session = retry_state.args[0]._oauth_session
-    return await _refresh_if_unauthorized(retry_state, service_oauth_session)
-
-
-async def refresh_session_token_if_unauthorized(retry_state):
-    """Function used by the retry decorator to refresh the session token if conditions apply
-
-    :param retry_state: current retry state
-    :return: True if we want to retry, False otherwise
-    """
-    service_auth_session = retry_state.args[0]._session
-    return await _refresh_if_unauthorized(retry_state, service_auth_session)
-
-
-async def _refresh_if_unauthorized(retry_state, service_session):
     if retry_state.outcome.failed:
         exception = retry_state.outcome.exception()
         if is_network_or_minor_error(exception):
             if is_unauthorized(exception):
-                await service_session.refresh()
+                await retry_state.args[0]._oauth_session.refresh()
             return True
     return False
 
@@ -73,11 +58,11 @@ class SymphonyGroupService:
     """Service class for managing Symphony Groups
     """
 
-    def __init__(self, api_client_factory, session, retry_config):
+    def __init__(self, api_client_factory, auth_session, retry_config):
         self._api_client_factory = api_client_factory
-        self._session = session
+        self._auth_session = auth_session
         self._retry_config = retry_config
-        self._oauth_session = OAuthSession(self._api_client_factory.get_login_client(), self._session,
+        self._oauth_session = OAuthSession(self._api_client_factory.get_login_client(), self._auth_session,
                                            self._retry_config)
         client = self._api_client_factory.get_client("/profile-manager")
         client.configuration.auth_settings = self._oauth_session.get_auth_settings
@@ -179,15 +164,15 @@ class OAuthSession:
 
     def __init__(self, login_client, session, retry_config):
         self._authentication_api = AuthenticationApi(login_client)
-        self._session = session
+        self._auth_session = session
         self._bearer_token = None
         self._retry_config = retry_config
 
-    @retry(retry=refresh_session_token_if_unauthorized)
+    @retry
     async def refresh(self):
         """Refreshes internal Bearer authentication token from the bot sessionToken.
         """
-        jwt_token = await self._authentication_api.idm_tokens_post(await self._session.session_token,
+        jwt_token = await self._authentication_api.idm_tokens_post(await self._auth_session.session_token,
                                                                    scope="profile-manager")
         self._bearer_token = jwt_token.access_token
 
