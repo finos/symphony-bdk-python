@@ -150,14 +150,14 @@ class ServiceFactory:
         :return: a new DatafeedLoop instance.
         """
         df_version = self._config.datafeed.version
-        if df_version.lower() == DatafeedVersion.V2.value.lower():
-            return DatafeedLoopV2(
+        if df_version.lower() == DatafeedVersion.V1.value.lower():
+            return DatafeedLoopV1(
                 DatafeedApi(self._agent_client),
                 self._session_service,
                 self._auth_session,
                 self._config
             )
-        return DatafeedLoopV1(
+        return DatafeedLoopV2(
             DatafeedApi(self._agent_client),
             self._session_service,
             self._auth_session,

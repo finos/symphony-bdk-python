@@ -12,7 +12,7 @@ def fixture_datafeed_version(request):
 
 def test_empty_datafeed_config():
     datafeed_config = BdkDatafeedConfig(None)
-    assert datafeed_config.version == "v1"
+    assert datafeed_config.version == "v2"
 
     assert datafeed_config.id_file_path == ""
     assert isinstance(datafeed_config.get_id_file_path(), Path)
