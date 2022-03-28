@@ -11,4 +11,4 @@ List the other pull requests that should be merged before/along this one.
 - [ ] Filled properly the description and dependencies, if any
 - [ ] Unit tests updated or added
 - [ ] Docstrings added or updated
-- [ ] Updated the documentation in [docs folder](../docs)
+- [ ] Updated the documentation in [docsrc folder](../tree/main/docsrc)
