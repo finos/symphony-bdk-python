@@ -195,7 +195,7 @@ class OboServiceFactory:
     * Connection Service
     * Stream Service
 
-    See: `OBO-enabled endpoints <https://developers.symphony.com/restapi/reference#obo-enabled-endpoints>`_
+    See: `OBO-enabled endpoints <https://developers.symphony.com/restapi/reference/obo-enabled-endpoints#api-endpoints-enabled-for-obo>`_
     """
 
     def __init__(

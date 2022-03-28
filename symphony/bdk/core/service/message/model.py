@@ -11,7 +11,7 @@ class Message:
     """Class holding message information, used in
     :py:class:`~symphony.bdk.core.service.message.message_service.MessageService` to send a message.
     To know more about the format, see
-    `Create Message <https://developers.symphony.com/restapi/reference#create-message-v4>`_.
+    `Create Message <https://developers.symphony.com/restapi/reference/create-message-v4>`_.
     """
 
     def __init__(self, content: str, data=None,
