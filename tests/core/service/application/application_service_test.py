@@ -11,6 +11,8 @@ from symphony.bdk.gen.pod_model.pod_app_entitlement import PodAppEntitlement
 from symphony.bdk.gen.pod_model.pod_app_entitlement_list import PodAppEntitlementList
 from symphony.bdk.gen.pod_model.user_app_entitlement import UserAppEntitlement
 from symphony.bdk.gen.pod_model.user_app_entitlement_list import UserAppEntitlementList
+from symphony.bdk.gen.pod_model.user_app_entitlement_patch import UserAppEntitlementPatch
+from symphony.bdk.gen.pod_model.user_app_entitlements_patch_list import UserAppEntitlementsPatchList
 from tests.core.config import minimal_retry_config
 from tests.utils.resource_utils import get_deserialized_object_from_resource
 
@@ -182,3 +184,26 @@ async def test_update_user_applications(app_entitlement_api, application_service
 
     assert len(user_app_entitlements) == 3
     assert user_app_entitlements[0].app_id == "djApp"
+
+@pytest.mark.asyncio
+async def test_patch_user_applications(app_entitlement_api, application_service):
+    app_entitlement_api.v1_admin_user_uid_app_entitlement_list_patch = AsyncMock()
+    app_entitlement_api.v1_admin_user_uid_app_entitlement_list_patch.return_value = \
+        get_deserialized_object_from_resource(UserAppEntitlementList, "application/list_user_apps.json")
+
+    user_app_entitlement_patch = UserAppEntitlementPatch(
+        app_id="djApp",
+        listed="KEEP",
+        install="KEEP"
+    )
+
+    user_app_patched_entitlements = await application_service.patch_user_applications(1234, [user_app_entitlement_patch])
+
+    app_entitlement_api.v1_admin_user_uid_app_entitlement_list_patch.assert_called_with(
+        session_token="session_token",
+        uid=1234,
+        payload=UserAppEntitlementsPatchList(value=[user_app_entitlement_patch])
+    )
+
+    assert len(user_app_patched_entitlements) == 3
+    assert user_app_patched_entitlements[0].app_id == "djApp"
