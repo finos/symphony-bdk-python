@@ -172,7 +172,7 @@ class ApplicationService:
         """
         Update the application entitlements for a particular user.
 
-        See: `Update All User Apps `<https://developers.symphony.com/restapi/reference#update-user-apps`>`_
+        See: `Update All User Apps <https://developers.symphony.com/restapi/reference#update-user-apps>`_
 
         :param user_id:                 User Id
         :param user_app_entitlements:   The list of App Entitlements needs to be updated.
@@ -194,7 +194,7 @@ class ApplicationService:
         """
         Updates particular app entitlements for a particular user. Supports partial update.
 
-        See: Update User Apps `<https://developers.symphony.com/restapi/reference/partial-update-user-apps`>`_
+        See: `Update User Apps <https://developers.symphony.com/restapi/reference/partial-update-user-apps>`_
 
         :param user_id: User Id
         :param user_app_entitlements: The list of App Entitlements needs to be updated.
