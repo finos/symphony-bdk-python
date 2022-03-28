@@ -6,11 +6,11 @@ in Python. The Symphony BDK requires **Python 3.8 or higher**.
 ## Starting with Symphony Generator
 > This section requires `npm` ([Node Package Manager](https://www.npmjs.com/)) to be installed on your local machine as a prerequisite
 
-For all Symphony BDK applications, you should start with the [Symphony Generator](https://github.com/SymphonyPlatformSolutions/generator-symphony).
+For all Symphony BDK applications, you should start with the [Symphony Generator](https://github.com/finos/generator-symphony).
 The Symphony Generator offers a fast way to bootstrap your Symphony BDK project in several languages, including Python:
 ```
-npm i -g generator-symphony
-yo symphony
+npm i -g @finos/generator-symphony
+yo @finos/symphony
 ```
 After entering pod and bot information and selecting `Bot Application` as application type, you should be able to select
 Python as programming language. This will generated a configuration file, a `requirements.txt` and a simple python script.
