@@ -8,6 +8,8 @@ from symphony.bdk.gen.pod_model.pod_app_entitlement import PodAppEntitlement
 from symphony.bdk.gen.pod_model.pod_app_entitlement_list import PodAppEntitlementList
 from symphony.bdk.gen.pod_model.user_app_entitlement import UserAppEntitlement
 from symphony.bdk.gen.pod_model.user_app_entitlement_list import UserAppEntitlementList
+from symphony.bdk.gen.pod_model.user_app_entitlement_patch import UserAppEntitlementPatch
+from symphony.bdk.gen.pod_model.user_app_entitlements_patch_list import UserAppEntitlementsPatchList
 
 
 class ApplicationService:
@@ -186,3 +188,25 @@ class ApplicationService:
         user_app_entitlement_list \
             = await self._app_entitlement_api.v1_admin_user_uid_app_entitlement_list_post(**params)
         return user_app_entitlement_list.value
+
+    @retry
+    async def patch_user_applications(self, user_id: int, user_app_entitlements: [UserAppEntitlementPatch]):
+        """
+        Updates particular app entitlements for a particular user. Supports partial update.
+
+        See: `Update User Apps <https://developers.symphony.com/restapi/reference/partial-update-user-apps>`_
+
+        :param user_id: User Id
+        :param user_app_entitlements: The list of App Entitlements needs to be updated.
+
+        :return: The updated list of Symphony application entitlements for this user.
+
+        """
+        params = {
+          'uid': user_id,
+          'payload': UserAppEntitlementsPatchList(value=user_app_entitlements),
+          'session_token': await self._auth_session.session_token
+        }
+        user_app_entitlements_list \
+            = await self._app_entitlement_api.v1_admin_user_uid_app_entitlement_list_patch(**params)
+        return user_app_entitlements_list.value

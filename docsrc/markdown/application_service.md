@@ -12,11 +12,12 @@ More precisely:
 * [Update application entitlements](https://developers.symphony.com/restapi/reference#update-application-entitlements)
 * [List user applications](https://developers.symphony.com/restapi/reference#user-apps)
 * [Update user applications](https://developers.symphony.com/restapi/reference#update-user-apps)
+* [Patch user applications](https://developers.symphony.com/restapi/reference/partial-update-user-apps)
 
 
 ## How to use
 The central component for the Application Service is the `ApplicationService` class.
-This class exposes the user-friendly service APIs which serve all the services mentioned above 
+This class exposes the user-friendly service APIs which serve all the services mentioned above
 and is accessible from the `SymphonyBdk` object by calling the `applications()` method:
 ```python
 class ApplicationMain:
