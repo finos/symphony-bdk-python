@@ -16,7 +16,7 @@ class HealthService:
 
     async def health_check(self) -> V3Health:
         """ Returns the connectivity status of your Agent server.
-        Wraps the `Health Check v3 <https://developers.symphony.com/restapi/reference#health-check-v3>`_ endpoint.
+        Wraps the `Health Check v3 <https://developers.symphony.com/restapi/reference/health-check-v3>`_ endpoint.
         If your Agent server is started and running properly, the status value will be UP.
         Available on Agent 2.57.0 and above.
 
@@ -27,7 +27,7 @@ class HealthService:
     async def health_check_extended(self) -> V3Health:
         """Returns the connectivity status of the Agent services as well as users connectivity.
         Wraps the
-        `Health Check Extended v3 <https://developers.symphony.com/restapi/reference#health-check-extended-v3>`_
+        `Health Check Extended v3 <https://developers.symphony.com/restapi/reference/health-check-extended-v3>`_
         endpoint.
         Available on Agent 2.57.0 and above.
 
@@ -37,7 +37,7 @@ class HealthService:
 
     async def get_agent_info(self) -> AgentInfo:
         """Gets information about the Agent.
-        Wraps the `Agent Info v1 <https://developers.symphony.com/restapi/reference#agent-info-v1>`_ endpoint.
+        Wraps the `Agent Info v1 <https://developers.symphony.com/restapi/reference/agent-info-v1>`_ endpoint.
         Available on Agent 2.53.0 and above.
 
         :return: AgentInfo: information of  the agent server.

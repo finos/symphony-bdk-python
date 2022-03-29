@@ -3,7 +3,7 @@ import enum
 
 class RoleId(enum.Enum):
     """Static roles that have special logic attached to them.
-    See: `Symphony Roles <https://developers.symphony.com/restapi/docs/permissions>`_
+    See: `Symphony Roles <https://developers.symphony.com/restapi/reference/roles-object>`_
     """
     ADMINISTRATOR = "ADMINISTRATOR"
     SUPER_ADMINISTRATOR = "SUPER_ADMINISTRATOR"

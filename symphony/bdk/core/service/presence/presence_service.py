@@ -12,7 +12,7 @@ from symphony.bdk.gen.pod_model.v2_user_presence import V2UserPresence
 
 class PresenceStatus(Enum):
     """The list of all possible values for the presence status.
-    Set Presence <https://developers.symphony.com/restapi/reference#set-presence>`_
+    Set Presence <https://developers.symphony.com/restapi/reference/set-presence>`_
     """
 
     AVAILABLE = auto()
@@ -46,7 +46,7 @@ class OboPresenceService:
     @retry
     async def get_presence(self) -> V2Presence:
         """ Get the online status (presence info) of the calling user.
-        See: `Get Presence <https://developers.symphony.com/restapi/reference#get-presence>`_.
+        See: `Get Presence <https://developers.symphony.com/restapi/reference/get-presence>`_.
 
         :return: Presence info of the calling user.
         """
@@ -54,7 +54,7 @@ class OboPresenceService:
 
     async def get_all_presence(self, last_user_id: int, limit: int) -> List[V2Presence]:
         """ Get the presence info of all users in a pod.
-        See: `Get All Presence <https://developers.symphony.com/restapi/reference#get-all-presence>`_.
+        See: `Get All Presence <https://developers.symphony.com/restapi/reference/get-all-presence>`_.
 
         :param last_user_id: Last user ID retrieved, used for paging. If provided, results skip users with IDs less
           than this parameter.
@@ -70,7 +70,7 @@ class OboPresenceService:
     @retry
     async def get_user_presence(self, user_id: int, local: bool) -> V2Presence:
         """ Get the presence info of a specified user.
-        See: `Get User Presence <https://developers.symphony.com/restapi/reference#user-presence-v3>`_.
+        See: `Get User Presence <https://developers.symphony.com/restapi/reference/user-presence-v3>`_.
 
         :param user_id: User Id
         :param local: If true then Perform a local query and set the presence to OFFLINE for  users who are not local to
@@ -86,7 +86,7 @@ class OboPresenceService:
     async def external_presence_interest(self, user_ids: List[int]):
         """ Register interest in a list of external users to get their presence info.
         See: `External Presence Interest
-        <https://developers.symphony.com/restapi/reference#register-user-presence-interest>`_.
+        <https://developers.symphony.com/restapi/reference/register-user-presence-interest>`_.
 
         :param user_ids: List of user ids to be registered.
         """
@@ -96,7 +96,7 @@ class OboPresenceService:
     @retry
     async def set_presence(self, status: PresenceStatus, soft: bool) -> V2Presence:
         """ Set the presence info of the calling user.
-        See: `Set Presence <https://developers.symphony.com/restapi/reference#set-presence>`_.
+        See: `Set Presence <https://developers.symphony.com/restapi/reference/set-presence>`_.
 
         :param status: The new presence state for the user.
           Possible values are AVAILABLE, BUSY, AWAY, ON_THE_PHONE, BE_RIGHT_BACK, IN_A_MEETING, OUT_OF_OFFICE, OFF_WORK.
@@ -117,7 +117,7 @@ class OboPresenceService:
         """ Creates a new stream capturing online status changes ("presence feed") for the company (pod) and returns
         the ID of the new feed. The feed will return the presence of users whose presence status has changed since it
         was last read.
-        See: `Create Presence Feed <https://developers.symphony.com/restapi/reference#create-presence-feed>`_.
+        See: `Create Presence Feed <https://developers.symphony.com/restapi/reference/create-presence-feed>`_.
 
         :return: Presence feed Id
         """
@@ -129,7 +129,7 @@ class OboPresenceService:
     async def read_presence_feed(self, feed_id: str) -> List[V2Presence]:
         """ Reads the specified presence feed that was created.
         The feed returned includes the user presence statuses that have changed since they were last read.
-        See: `Read Presence Feed <https://developers.symphony.com/restapi/reference#read-presence-feed>`_.
+        See: `Read Presence Feed <https://developers.symphony.com/restapi/reference/read-presence-feed>`_.
 
         :param feed_id: The presence feed id to be read.
         :return: The list of user presences has changed since the last presence read.
@@ -142,7 +142,7 @@ class OboPresenceService:
     @retry
     async def delete_presence_feed(self, feed_id: str) -> str:
         """ Delete the specified presence feed that was created.
-        See: `Delete Presence Feed <https://developers.symphony.com/restapi/reference#delete-presence-feed>`_.
+        See: `Delete Presence Feed <https://developers.symphony.com/restapi/reference/delete-presence-feed>`_.
 
         :param feed_id: The presence feed id to be deleted.
         :return: The id of the deleted presence feed.
@@ -155,7 +155,7 @@ class OboPresenceService:
     async def set_user_presence(self, user_id: int, status: PresenceStatus, soft: bool) -> V2Presence:
         """ Set the presence state of a another user.
         See: `Set Other User's Presence - Admin V3
-        <https://developers.symphony.com/restapi/reference#set-user-presence>`_.
+        <https://developers.symphony.com/restapi/reference/set-user-presence>`_.
 
         :param user_id: The id of the specified user.
         :param status: Presence state to set.

@@ -37,7 +37,7 @@ class OboSignalService:
         """Lists signals on behalf of the user. The response includes signals that the user has created and
         public signals to which they have subscribed.
 
-        See: 'List signals <https://developers.symphony.com/restapi/reference#list-signals>'_
+        See: 'List signals <https://developers.symphony.com/restapi/reference/list-signals>'_
 
         :param skip: The number of signals to skip.
         :param limit: Maximum number of signals to return. Default is 50, maximum value is 500.
@@ -52,7 +52,7 @@ class OboSignalService:
         """Lists all signals on behalf of the user. The response includes signals that the user has created and
         public signals to which they have subscribed.
 
-        See: 'List signals <https://developers.symphony.com/restapi/reference#list-signals>'_
+        See: 'List signals <https://developers.symphony.com/restapi/reference/list-signals>'_
 
         :param chunk_size: the maximum number of elements to retrieve in one underlying HTTP call
         :param max_number: the total maximum number of elements to retrieve
@@ -69,7 +69,7 @@ class OboSignalService:
     async def get_signal(self, signal_id: str) -> Signal:
         """ Gets details about the specified signal.
 
-        See: 'Get signal <https://developers.symphony.com/restapi/reference#get-signal>'_
+        See: 'Get signal <https://developers.symphony.com/restapi/reference/get-signal>'_
 
         :param signal_id: Id of the signal to display.
         :return: The signal found.
@@ -83,7 +83,7 @@ class OboSignalService:
     async def create_signal(self, signal: BaseSignal) -> Signal:
         """ Creates a new Signal.
 
-        See: 'Create signal <https://developers.symphony.com/restapi/reference#create-signal>'_
+        See: 'Create signal <https://developers.symphony.com/restapi/reference/create-signal>'_
 
         :param signal: The new Signal object to be created.
         :return: The signal created.
@@ -97,7 +97,7 @@ class OboSignalService:
     async def update_signal(self, signal_id: str, signal: BaseSignal) -> Signal:
         """ Updates an existing Signal.
 
-        See: 'Update signal <https://developers.symphony.com/restapi/reference#update-signal>'_
+        See: 'Update signal <https://developers.symphony.com/restapi/reference/update-signal>'_
 
         :param signal_id: The Id of the signal to be modified.
         :param signal: The Signal object to be updated.
@@ -112,7 +112,7 @@ class OboSignalService:
     async def delete_signal(self, signal_id: str) -> None:
         """ Deletes an existing Signal.
 
-        See: 'Delete signal <https://developers.symphony.com/restapi/reference#delete-signal>'_
+        See: 'Delete signal <https://developers.symphony.com/restapi/reference/delete-signal>'_
 
         :param signal_id: The Id of the existing signal to be deleted.
         """
@@ -126,7 +126,7 @@ class OboSignalService:
                                         user_ids: [int]) -> ChannelSubscriptionResponse:
         """ Subscribe an array of users to a Signal.
 
-        See: 'Subscribe signal <https://developers.symphony.com/restapi/reference#subscribe-signal>'_
+        See: 'Subscribe signal <https://developers.symphony.com/restapi/reference/subscribe-signal>'_
 
         :param signal_id: The Id of the signal to be subscribed.
         :param pushed: Prevents the user from unsubscribing from the Signal
@@ -142,7 +142,7 @@ class OboSignalService:
     async def unsubscribe_users_to_signal(self, signal_id: str, user_ids: [int]) -> ChannelSubscriptionResponse:
         """ Unsubscribes an array of users from the specified Signal.
 
-        See: 'Unsubscribe signal <https://developers.symphony.com/restapi/reference#unsubscribe-signal>'_
+        See: 'Unsubscribe signal <https://developers.symphony.com/restapi/reference/unsubscribe-signal>'_
 
         :param signal_id: The Id of the signal to be subscribed.
         :param user_ids: An array of User Ids to subscribe to the Signal
@@ -157,7 +157,7 @@ class OboSignalService:
     async def list_subscribers(self, signal_id: str, skip: int = 0, limit: int = 50) -> ChannelSubscriberResponse:
         """Gets the subscribers for the specified signal.
 
-        See: 'Subscribers <https://developers.symphony.com/restapi/reference#subscribers>'_
+        See: 'Subscribers <https://developers.symphony.com/restapi/reference/subscribers>'_
 
         :param signal_id: The Id of the signal.
         :param skip: The number of results to skip.
@@ -174,7 +174,7 @@ class OboSignalService:
             -> AsyncGenerator[ChannelSubscriber, None]:
         """Gets all the subscribers for the specified signal.
 
-        See: 'Subscribers <https://developers.symphony.com/restapi/reference#subscribers>'_
+        See: 'Subscribers <https://developers.symphony.com/restapi/reference/subscribers>'_
 
         :param signal_id: the Id of the signal.
         :param chunk_size: the maximum number of elements to retrieve in one underlying HTTP call.

@@ -28,7 +28,7 @@ class OboConnectionService:
     async def get_connection(self, user_id: int) -> UserConnection:
         """
         Get connection status, i.e. check if the calling user is connected to the specified user.
-        See: `Get Connection <https://developers.symphony.com/restapi/reference#get-connection>`_
+        See: `Get Connection <https://developers.symphony.com/restapi/reference/get-connection>`_
 
         :param user_id: The id of the user with whom the caller want to check.
 
@@ -49,7 +49,7 @@ class OboConnectionService:
     ) -> [UserConnection]:
         """
         List all connection statuses of the requesting user with external or specified users.
-        See: `List Connections <https://developers.symphony.com/restapi/reference#list-connections>`_
+        See: `List Connections <https://developers.symphony.com/restapi/reference/list-connections>`_
 
         :param status:      Filter the connection list based on the connection status.
                             The connection status can only be pending_incoming, pending_outgoing,
@@ -76,7 +76,7 @@ class OboConnectionService:
     async def create_connection(self, user_id: int) -> UserConnection:
         """
         Sends a connection request to another user.
-        See: `Create Connection <https://developers.symphony.com/restapi/reference#create-connection>`_
+        See: `Create Connection <https://developers.symphony.com/restapi/reference/create-connection>`_
 
         :param user_id: The id of the user with whom the caller want to connect.
 
@@ -94,7 +94,7 @@ class OboConnectionService:
     async def accept_connection(self, user_id: int) -> UserConnection:
         """
         Accept the connection request from a requesting user.
-        See: `Accept Connection <https://developers.symphony.com/restapi/reference#accepted-connection>`_
+        See: `Accept Connection <https://developers.symphony.com/restapi/reference/accepted-connection>`_
 
         :param user_id: The id of the user who requested to connect with the caller.
 
@@ -112,7 +112,7 @@ class OboConnectionService:
     async def reject_connection(self, user_id: int) -> UserConnection:
         """
         Reject the connection request from a requesting user.
-        See: `Reject Connection <https://developers.symphony.com/restapi/reference#reject-connection>`_
+        See: `Reject Connection <https://developers.symphony.com/restapi/reference/reject-connection>`_
 
         :param user_id: The id of the user who requested to connect with the caller.
 
@@ -130,7 +130,7 @@ class OboConnectionService:
     async def remove_connection(self, user_id: int) -> None:
         """
         Removes a connection with a user.
-        See: `Remove Connection <https://developers.symphony.com/restapi/reference#remove-connection>`_
+        See: `Remove Connection <https://developers.symphony.com/restapi/reference/remove-connection>`_
 
         :param user_id: The id of the user with whom we want to remove the connection.
 
