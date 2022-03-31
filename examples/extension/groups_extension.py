@@ -24,6 +24,11 @@ async def run():
         groups = await group_service.list_groups(status=Status("ACTIVE"))
         logging.debug(f"List groups: {groups}")
 
+        # list groups with cursor based pagination
+        groups_generator = await group_service.list_all_groups(status=Status("ACTIVE"), chunk_size=2, max_number=4)
+        groups = [group async for group in groups_generator]
+        logging.debug(f"List groups: {groups}")
+
         # create a new group
         profile = BaseProfile(display_name="Mary's SDL")
         member = Member(member_tenant=190, member_id=13056700580915)
