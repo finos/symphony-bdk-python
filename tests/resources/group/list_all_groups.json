@@ -6,12 +6,12 @@
       "owner_type": "TENANT",
       "profile": {
         "display_name": "Demo Group 00",
-        "email": "f664abae-6f0c-4ad6-801a-0dfb2beaeaf8@sdl.symphony.com",
-        "id": "13056700586477"
+        "email": "email@sdl.symphony.com",
+        "id": "12345"
       },
       "status": "ACTIVE",
       "type": "SDL",
-      "updated_by": "13056700582923"
+      "updated_by": "1234"
     },
     {
       "name": "SDl test 1",
@@ -19,12 +19,12 @@
       "owner_type": "TENANT",
       "profile": {
         "display_name": "Demo Group 01",
-        "email": "f664abae-6f0c-4ad6-801a-0dfb2beaeaf8@sdl.symphony.com",
-        "id": "13056700586477"
+        "email": "email@sdl.symphony.com",
+        "id": "12345"
       },
       "status": "ACTIVE",
       "type": "SDL",
-      "updated_by": "13056700582923"
+      "updated_by": "1234"
     }
   ],
   "pagination": {

@@ -797,6 +797,40 @@ class UserService(OboUserService):
         return await self._audit_trail_api.v1_audittrail_privilegeduser_get(**params)
 
     @retry
+    async def list_all_audit_trail(
+            self,
+            start_timestamp: int,
+            end_timestamp: int = None,
+            initiator_id: int = None,
+            role: RoleId = None,
+            chunk_size: int = 100,
+            max_number: int = None
+    ) -> AsyncGenerator[V1AuditTrailInitiatorList, None]:
+        """Returns an asynchronous generation of audit trail of actions performed by a privileged user in a given period
+        of time.
+        See: `List Audit Trail v1 <https://developers.symphony.com/restapi/reference#list-audit-trail-v1>`_
+
+        :param start_timestamp: The start time of the period to retrieve the data.
+        :param end_timestamp:   The end time of the period to retrieve the data.
+        :param initiator_id:    The range and limit for pagination of data.
+        :param role:            Role to list audit trail for.
+        :param chunk_size:      The maximum number of audit trails to return. Default: 100.
+        :param max_number:      The total maximum number of audit trails to retrieve.
+        :return:                An async generator of audit trail.
+        """
+
+        async def audit_trail_one_page(limit, after=None):
+            result = await self.list_audit_trail(start_timestamp=start_timestamp,
+                                                 end_timestamp=end_timestamp,
+                                                 initiator_id=initiator_id,
+                                                 role=role,
+                                                 limit=limit,
+                                                 after=after)
+            return result.items, getattr(result.pagination.cursors, 'after', None)
+
+        return cursor_based_pagination(audit_trail_one_page, chunk_size, max_number)
+
+    @retry
     async def suspend_user(
             self,
             user_id: int,
