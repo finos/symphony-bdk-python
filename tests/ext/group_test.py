@@ -1,4 +1,4 @@
-from unittest.mock import Mock, AsyncMock, MagicMock, ANY
+from unittest.mock import Mock, AsyncMock, MagicMock
 
 import pytest
 
@@ -9,7 +9,6 @@ from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.core.service.user.user_util import extract_tenant_id
 from symphony.bdk.ext.group import SymphonyGroupBdkExtension, SymphonyGroupService, OAuthSession
 from symphony.bdk.gen import ApiClient, Configuration, ApiException
-from symphony.bdk.gen.group_api.group_api import GroupApi
 from symphony.bdk.gen.group_model.add_member import AddMember
 from symphony.bdk.gen.group_model.create_group import CreateGroup
 from symphony.bdk.gen.group_model.group_list import GroupList
@@ -67,10 +66,6 @@ def fixture_retry_config():
 @pytest.fixture(name="group_service")
 def fixture_group_service(api_client_factory, auth_session, retry_config):
     return SymphonyGroupService(api_client_factory, auth_session, retry_config)
-
-@pytest.fixture(name="group_api")
-def fixture_group_api():
-    return MagicMock(GroupApi)
 
 @pytest.fixture(name="mocked_group")
 def fixture_group():
