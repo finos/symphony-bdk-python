@@ -1,4 +1,4 @@
-from unittest.mock import Mock, AsyncMock, MagicMock
+from unittest.mock import Mock, AsyncMock, MagicMock, ANY
 
 import pytest
 
@@ -9,6 +9,7 @@ from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.core.service.user.user_util import extract_tenant_id
 from symphony.bdk.ext.group import SymphonyGroupBdkExtension, SymphonyGroupService, OAuthSession
 from symphony.bdk.gen import ApiClient, Configuration, ApiException
+from symphony.bdk.gen.group_api.group_api import GroupApi
 from symphony.bdk.gen.group_model.add_member import AddMember
 from symphony.bdk.gen.group_model.create_group import CreateGroup
 from symphony.bdk.gen.group_model.group_list import GroupList
@@ -21,6 +22,7 @@ from symphony.bdk.gen.group_model.update_group import UpdateGroup
 from symphony.bdk.gen.group_model.upload_avatar import UploadAvatar
 from symphony.bdk.gen.login_api.authentication_api import AuthenticationApi
 from symphony.bdk.gen.login_model.jwt_token import JwtToken
+from tests.utils.resource_utils import get_deserialized_object_from_resource
 
 SESSION_TOKEN = "session_token"
 
@@ -66,11 +68,13 @@ def fixture_retry_config():
 def fixture_group_service(api_client_factory, auth_session, retry_config):
     return SymphonyGroupService(api_client_factory, auth_session, retry_config)
 
+@pytest.fixture(name="group_api")
+def fixture_group_api():
+    return MagicMock(GroupApi)
 
 @pytest.fixture(name="mocked_group")
 def fixture_group():
     return ReadGroup(type="SDL", owner_type=Owner(value="TENANT"), owner_id=123, name="SDl test")
-
 
 def assert_called_idm_tokens(first_call_args, session_token=SESSION_TOKEN):
     assert first_call_args.args[0] == "/idm/tokens"
@@ -116,6 +120,37 @@ async def test_list_groups(group_service, mocked_group, api_client):
     assert len(groups.data) == 1
     api_client.call_api.assert_called_once()
     assert api_client.call_api.call_args.args[0] == "/v1/groups/type/{typeId}"
+
+@pytest.mark.asyncio
+async def test_list_all_groups(group_service, api_client):
+    api_client.call_api.return_value = \
+        get_deserialized_object_from_resource(GroupList, "group/list_all_groups.json")
+
+    gen = await group_service.list_all_groups(chunk_size=2)
+    groups = [d async for d in gen]
+
+    args, kwargs = api_client.call_api.call_args
+
+    assert args[0] == '/v1/groups/type/{typeId}'
+    assert args[3] == [('limit', 2)]
+    assert len(groups) == 2
+    assert groups[0]['name'] == 'SDl test 0'
+    assert groups[1]['name'] == 'SDl test 1'
+
+@pytest.mark.asyncio
+async def test_list_all_groups_max_number(group_service, api_client):
+    api_client.call_api.return_value = \
+        get_deserialized_object_from_resource(GroupList, "group/list_all_groups.json")
+
+    gen = await group_service.list_all_groups(chunk_size=2, max_number=1)
+    groups = [d async for d in gen]
+
+    args, kwargs = api_client.call_api.call_args
+
+    assert args[0] == '/v1/groups/type/{typeId}'
+    assert args[3] == [('limit', 2)]
+    assert len(groups) == 1
+    assert groups[0]['name'] == 'SDl test 0'
 
 
 @pytest.mark.asyncio
