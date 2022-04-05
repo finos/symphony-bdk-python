@@ -111,7 +111,6 @@ class SymphonyGroupService:
             kwargs["sort_order"] = sort_order
         return await self._group_api.list_groups(**kwargs)
 
-    @retry(retry=refresh_bearer_token_if_unauthorized)
     async def list_all_groups(
               self,
               status: Status = None,
@@ -122,8 +121,9 @@ class SymphonyGroupService:
         See: `List all groups of specified type <https://developers.symphony.com/restapi/reference/listgroups>`_
 
         :param status:      filter by status, active or deleted. If not specified, all of them are returned.
-        :param chunk_size:  the maximum number of groups to return. Default: 100.
-        :param max_number:  the total maximum number of groups to retrieve.
+        :param chunk_size:  the maximum number of groups to return in one HTTP call. Default: 100.
+        :param max_number:  the total maximum number of groups to retrieve. If set to None, we retrieve
+                            all groups until the last page.
         :return:            an async generator of groups list.
         """
 

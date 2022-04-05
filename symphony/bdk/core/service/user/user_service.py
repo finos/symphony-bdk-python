@@ -314,7 +314,8 @@ class UserService(OboUserService):
         See: 'List Users V2 <https://developers.symphony.com/restapi/reference/list-users-v2>'_
 
         :param chunk_size: the maximum number of elements to retrieve in one underlying HTTP call
-        :param max_number: the total maximum number of elements to retrieve
+        :param max_number: the total maximum number of elements to retrieve. If set to None, we retrieve
+                           all elements until the last page
         :return: an asynchronous generator of user details
         """
         return offset_based_pagination(self.list_user_details, chunk_size, max_number)
@@ -356,7 +357,8 @@ class UserService(OboUserService):
 
         :param user_filter: Filter using to filter users by.
         :param chunk_size: the maximum number of elements to retrieve in one underlying HTTP call
-        :param max_number: the total maximum number of elements to retrieve
+        :param max_number: the total maximum number of elements to retrieve. If set to None, we retrieve
+                           all elements until the last page.
         :return: an asynchronous generator of user details
         """
 
@@ -658,8 +660,9 @@ class UserService(OboUserService):
         See: `List User Followers <https://developers.symphony.com/restapi/reference/list-user-followers>`_
 
         :param user_id: the id of the user.
-        :param chunk_size: the maximum number of followers to return. Default: 100.
-        :param max_number: the total maximum number of elements to retrieve.
+        :param chunk_size: the maximum number of followers to return in one HTTP call. Default: 100.
+        :param max_number: the total maximum number of elements to retrieve. If set to None, we retrieve
+                           all follower users until the last page.
         :return: an async generator of the user IDs who are followers of a specific user.
         """
 
@@ -707,8 +710,9 @@ class UserService(OboUserService):
         See: `List Users Followed <https://developers.symphony.com/restapi/reference/list-users-followed>`_
 
         :param user_id: the user ID
-        :param chunk_size: the maximum number of followers to return. Default: 100.
-        :param max_number: the total maximum number of elements to retrieve.
+        :param chunk_size: the maximum number of followers to return in one HTTP call. Default: 100.
+        :param max_number: the total maximum number of elements to retrieve. If set to None, we retrieve
+                           all following users until the last page.
         :return: an async generator of the IDs of users followed by a given user.
         """
 
@@ -796,7 +800,6 @@ class UserService(OboUserService):
             params['after'] = after
         return await self._audit_trail_api.v1_audittrail_privilegeduser_get(**params)
 
-    @retry
     async def list_all_audit_trail(
             self,
             start_timestamp: int,
@@ -814,8 +817,9 @@ class UserService(OboUserService):
         :param end_timestamp:   The end time of the period to retrieve the data.
         :param initiator_id:    The range and limit for pagination of data.
         :param role:            Role to list audit trail for.
-        :param chunk_size:      The maximum number of audit trails to return. Default: 100.
-        :param max_number:      The total maximum number of audit trails to retrieve.
+        :param chunk_size:      This is the maximum number of audit trails to return in one HTTP call. Default: 100.
+        :param max_number:      The total maximum number of audit trails to retrieve. If set to None, we retrieve
+                                all audit trails until the last page.
         :return:                An async generator of audit trail.
         """
 
