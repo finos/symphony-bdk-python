@@ -682,7 +682,7 @@ async def test_list_audit_trail(audit_trail_api, user_service):
 async def test_list_all_user_audit_trail(audit_trail_api, user_service):
     audit_trail_api.v1_audittrail_privilegeduser_get = AsyncMock()
     audit_trail_api.v1_audittrail_privilegeduser_get.return_value = \
-        get_deserialized_object_from_resource(V1AuditTrailInitiatorList, "user/list_all_audit_trail.json")
+        get_deserialized_object_from_resource(V1AuditTrailInitiatorList, "user/list_all_audit_trail_one_page.json")
 
     gen = await user_service.list_all_audit_trail(start_timestamp=2345,
                                                   end_timestamp=12345,
@@ -700,34 +700,39 @@ async def test_list_all_user_audit_trail(audit_trail_api, user_service):
         limit=2,
         session_token="session_token",
         key_manager_token="km_token")
+
     assert len(audit_trail_list) == 2
     assert audit_trail_list[0]["action_name"] == "profileInfoUpdate"
     assert audit_trail_list[1]["action_name"] == "userAppEntitlementInstall"
 
 @pytest.mark.asyncio
-async def test_list_all_user_audit_trail_max_number(audit_trail_api, user_service):
+async def test_list_all_user_audit_trail_2_pages(audit_trail_api, user_service):
     audit_trail_api.v1_audittrail_privilegeduser_get = AsyncMock()
-    audit_trail_api.v1_audittrail_privilegeduser_get.return_value = \
-        get_deserialized_object_from_resource(V1AuditTrailInitiatorList, "user/list_all_audit_trail.json")
+
+    return_values = [get_deserialized_object_from_resource(
+      V1AuditTrailInitiatorList, "user/list_all_audit_trail_page_1.json"),
+      get_deserialized_object_from_resource(
+        V1AuditTrailInitiatorList, "user/list_all_audit_trail_page_2.json")]
+
+    audit_trail_api.v1_audittrail_privilegeduser_get.side_effect = return_values
 
     gen = await user_service.list_all_audit_trail(start_timestamp=2345,
                                                   end_timestamp=12345,
                                                   initiator_id=1234,
                                                   role=RoleId.SUPER_ADMINISTRATOR,
                                                   chunk_size=2,
-                                                  max_number=1)
+                                                  max_number=4)
     audit_trail_list = [audit async for audit in gen]
 
-    audit_trail_api.v1_audittrail_privilegeduser_get.assert_called_with(
-        start_timestamp=2345,
-        end_timestamp=12345,
-        initiator_id=1234,
-        role="SUPER_ADMINISTRATOR",
-        limit=2,
-        session_token="session_token",
-        key_manager_token="km_token")
-    assert len(audit_trail_list) == 1
-    assert audit_trail_list[0]["action_name"] == "profileInfoUpdate"
+    args, kwargs = audit_trail_api.v1_audittrail_privilegeduser_get.call_args
+
+    assert audit_trail_api.v1_audittrail_privilegeduser_get.call_count == 2
+    assert kwargs['after'] == '2'
+    assert len(audit_trail_list) == 4
+    assert audit_trail_list[0]["action_name"] == "profileInfoUpdate-2"
+    assert audit_trail_list[1]["action_name"] == "userAppEntitlementInstall-2"
+    assert audit_trail_list[2]["action_name"] == "profileInfoUpdate"
+    assert audit_trail_list[3]["action_name"] == "userAppEntitlementInstall"
 
 @pytest.mark.asyncio
 async def test_suspend_user(user_api, user_service):

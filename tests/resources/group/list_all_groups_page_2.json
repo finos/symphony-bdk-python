@@ -1,0 +1,36 @@
+{
+  "data": [
+    {
+      "name": "SDl test 2",
+      "owner_id": 123,
+      "owner_type": "TENANT",
+      "profile": {
+        "display_name": "Demo Group 00",
+        "email": "email@sdl.symphony.com",
+        "id": "12345"
+      },
+      "status": "ACTIVE",
+      "type": "SDL",
+      "updated_by": "1234"
+    },
+    {
+      "name": "SDl test 3",
+      "owner_id": 124,
+      "owner_type": "TENANT",
+      "profile": {
+        "display_name": "Demo Group 01",
+        "email": "email@sdl.symphony.com",
+        "id": "12345"
+      },
+      "status": "ACTIVE",
+      "type": "SDL",
+      "updated_by": "1234"
+    }
+  ],
+  "pagination": {
+    "cursors": {
+      "after": "2",
+      "before": "1"
+    }
+  }
+}

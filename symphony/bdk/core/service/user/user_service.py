@@ -724,7 +724,7 @@ class UserService(OboUserService):
             payload: V2UserCreate
     ) -> V2UserDetail:
         """Create a new user.
-        See: `Create User v2 <https://developers.symphony.com/restapi/reference#create-user-v2>`_
+        See: `Create User v2 <https://developers.symphony.com/restapi/reference/create-user-v2>`_
 
         :param payload: User's details to create.
         :return: Created user details.
@@ -742,7 +742,7 @@ class UserService(OboUserService):
             payload: V2UserAttributes
     ) -> V2UserDetail:
         """Updates an existing user.
-        See: `Update User v2 <https://developers.symphony.com/restapi/reference#update-user-v2>`_
+        See: `Update User v2 <https://developers.symphony.com/restapi/reference/update-user-v2>`_
 
         :param user_id: User Id
         :param payload: User's new attributes for update.
@@ -767,7 +767,7 @@ class UserService(OboUserService):
             after: int = None
     ) -> V1AuditTrailInitiatorList:
         """Returns audit trail of actions performed by a privileged user in a given period of time.
-        See: `List Audit Trail v1 <https://developers.symphony.com/restapi/reference#list-audit-trail-v1>`_
+        See: `List Audit Trail v1 <https://developers.symphony.com/restapi/reference/list-audit-trail-v1>`_
 
         :param start_timestamp: The start time of the period to retrieve the data.
         :param end_timestamp:   The end time of the period to retrieve the data.
@@ -808,7 +808,7 @@ class UserService(OboUserService):
     ) -> AsyncGenerator[V1AuditTrailInitiatorList, None]:
         """Returns an asynchronous generation of audit trail of actions performed by a privileged user in a given period
         of time.
-        See: `List Audit Trail v1 <https://developers.symphony.com/restapi/reference#list-audit-trail-v1>`_
+        See: `List Audit Trail v1 <https://developers.symphony.com/restapi/reference/list-audit-trail-v1>`_
 
         :param start_timestamp: The start time of the period to retrieve the data.
         :param end_timestamp:   The end time of the period to retrieve the data.
@@ -837,7 +837,7 @@ class UserService(OboUserService):
             user_suspension: UserSuspension
     ) -> None:
         """Suspends or re-activates (unsuspend) a user account.
-        See: `Suspend User Account v1 <https://developers.symphony.com/restapi/v20.10/reference#suspend-user-v1>`_
+        See: `Suspend User Account v1 <https://developers.symphony.com/restapi/v20.10/reference/suspend-user-v1>`_
 
         :param user_id:         User id.
         :param user_suspension: User suspension payload.
@@ -859,7 +859,7 @@ class UserService(OboUserService):
     ) -> None:
         """Suspends a user account.
         Calling this endpoint requires a service account with the User Provisioning role.
-        See: `Suspend User Account v1 <https://developers.symphony.com/restapi/v20.10/reference#suspend-user-v1>`_
+        See: `Suspend User Account v1 <https://developers.symphony.com/restapi/v20.10/reference/suspend-user-v1>`_
 
         :param user_id:         User id to suspend
         :param user_suspension: User suspension payload.
@@ -883,7 +883,7 @@ class UserService(OboUserService):
     ) -> None:
         """Unsuspend (Re-activates) a user account.
         Calling this endpoint requires a service account with the User Provisioning role.
-        See: `Suspend User Account v1 <https://developers.symphony.com/restapi/v20.10/reference#suspend-user-v1>`_
+        See: `Suspend User Account v1 <https://developers.symphony.com/restapi/v20.10/reference/suspend-user-v1>`_
 
         :param user_id:     user id to reactivate
         """

@@ -119,7 +119,7 @@ async def test_list_groups(group_service, mocked_group, api_client):
 @pytest.mark.asyncio
 async def test_list_all_groups(group_service, api_client):
     api_client.call_api.return_value = \
-        get_deserialized_object_from_resource(GroupList, "group/list_all_groups.json")
+        get_deserialized_object_from_resource(GroupList, "group/list_all_groups_one_page.json")
 
     gen = await group_service.list_all_groups(chunk_size=2)
     groups = [d async for d in gen]
@@ -133,20 +133,26 @@ async def test_list_all_groups(group_service, api_client):
     assert groups[1]['name'] == 'SDl test 1'
 
 @pytest.mark.asyncio
-async def test_list_all_groups_max_number(group_service, api_client):
-    api_client.call_api.return_value = \
-        get_deserialized_object_from_resource(GroupList, "group/list_all_groups.json")
+async def test_list_all_groups_2_pages(group_service, api_client):
+    return_values = [get_deserialized_object_from_resource(GroupList, "group/list_all_groups_page_1.json"),
+                     get_deserialized_object_from_resource(GroupList, "group/list_all_groups_page_2.json")]
 
-    gen = await group_service.list_all_groups(chunk_size=2, max_number=1)
+    api_client.call_api.side_effect = return_values
+
+    gen = await group_service.list_all_groups(chunk_size=2, max_number=4)
     groups = [d async for d in gen]
 
     args, kwargs = api_client.call_api.call_args
 
+    assert api_client.call_api.call_count == 2
     assert args[0] == '/v1/groups/type/{typeId}'
-    assert args[3] == [('limit', 2)]
-    assert len(groups) == 1
+    assert dict(args[3])['after'] == '2'
+    assert dict(args[3])['limit'] == 2
+    assert len(groups) == 4
     assert groups[0]['name'] == 'SDl test 0'
-
+    assert groups[1]['name'] == 'SDl test 1'
+    assert groups[2]['name'] == 'SDl test 2'
+    assert groups[3]['name'] == 'SDl test 3'
 
 @pytest.mark.asyncio
 async def test_list_groups_with_params(group_service, mocked_group, api_client):
