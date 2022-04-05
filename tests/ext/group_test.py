@@ -21,6 +21,7 @@ from symphony.bdk.gen.group_model.update_group import UpdateGroup
 from symphony.bdk.gen.group_model.upload_avatar import UploadAvatar
 from symphony.bdk.gen.login_api.authentication_api import AuthenticationApi
 from symphony.bdk.gen.login_model.jwt_token import JwtToken
+from tests.utils.resource_utils import get_deserialized_object_from_resource
 
 SESSION_TOKEN = "session_token"
 
@@ -66,11 +67,9 @@ def fixture_retry_config():
 def fixture_group_service(api_client_factory, auth_session, retry_config):
     return SymphonyGroupService(api_client_factory, auth_session, retry_config)
 
-
 @pytest.fixture(name="mocked_group")
 def fixture_group():
     return ReadGroup(type="SDL", owner_type=Owner(value="TENANT"), owner_id=123, name="SDl test")
-
 
 def assert_called_idm_tokens(first_call_args, session_token=SESSION_TOKEN):
     assert first_call_args.args[0] == "/idm/tokens"
@@ -117,6 +116,43 @@ async def test_list_groups(group_service, mocked_group, api_client):
     api_client.call_api.assert_called_once()
     assert api_client.call_api.call_args.args[0] == "/v1/groups/type/{typeId}"
 
+@pytest.mark.asyncio
+async def test_list_all_groups(group_service, api_client):
+    api_client.call_api.return_value = \
+        get_deserialized_object_from_resource(GroupList, "group/list_all_groups_one_page.json")
+
+    gen = await group_service.list_all_groups(chunk_size=2)
+    groups = [d async for d in gen]
+
+    args, kwargs = api_client.call_api.call_args
+
+    assert args[0] == '/v1/groups/type/{typeId}'
+    assert args[3] == [('limit', 2)]
+    assert len(groups) == 2
+    assert groups[0]['name'] == 'SDl test 0'
+    assert groups[1]['name'] == 'SDl test 1'
+
+@pytest.mark.asyncio
+async def test_list_all_groups_2_pages(group_service, api_client):
+    return_values = [get_deserialized_object_from_resource(GroupList, "group/list_all_groups_page_1.json"),
+                     get_deserialized_object_from_resource(GroupList, "group/list_all_groups_page_2.json")]
+
+    api_client.call_api.side_effect = return_values
+
+    gen = await group_service.list_all_groups(chunk_size=2, max_number=4)
+    groups = [d async for d in gen]
+
+    args, kwargs = api_client.call_api.call_args
+
+    assert api_client.call_api.call_count == 2
+    assert args[0] == '/v1/groups/type/{typeId}'
+    assert dict(args[3])['after'] == '2'
+    assert dict(args[3])['limit'] == 2
+    assert len(groups) == 4
+    assert groups[0]['name'] == 'SDl test 0'
+    assert groups[1]['name'] == 'SDl test 1'
+    assert groups[2]['name'] == 'SDl test 2'
+    assert groups[3]['name'] == 'SDl test 3'
 
 @pytest.mark.asyncio
 async def test_list_groups_with_params(group_service, mocked_group, api_client):

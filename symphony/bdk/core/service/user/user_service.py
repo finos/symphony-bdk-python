@@ -314,7 +314,8 @@ class UserService(OboUserService):
         See: 'List Users V2 <https://developers.symphony.com/restapi/reference/list-users-v2>'_
 
         :param chunk_size: the maximum number of elements to retrieve in one underlying HTTP call
-        :param max_number: the total maximum number of elements to retrieve
+        :param max_number: the total maximum number of elements to retrieve. If set to None, we retrieve
+                           all elements until the last page
         :return: an asynchronous generator of user details
         """
         return offset_based_pagination(self.list_user_details, chunk_size, max_number)
@@ -356,7 +357,8 @@ class UserService(OboUserService):
 
         :param user_filter: Filter using to filter users by.
         :param chunk_size: the maximum number of elements to retrieve in one underlying HTTP call
-        :param max_number: the total maximum number of elements to retrieve
+        :param max_number: the total maximum number of elements to retrieve. If set to None, we retrieve
+                           all elements until the last page.
         :return: an asynchronous generator of user details
         """
 
@@ -658,8 +660,9 @@ class UserService(OboUserService):
         See: `List User Followers <https://developers.symphony.com/restapi/reference/list-user-followers>`_
 
         :param user_id: the id of the user.
-        :param chunk_size: the maximum number of followers to return. Default: 100.
-        :param max_number: the total maximum number of elements to retrieve.
+        :param chunk_size: the maximum number of followers to return in one HTTP call. Default: 100.
+        :param max_number: the total maximum number of elements to retrieve. If set to None, we retrieve
+                           all follower users until the last page.
         :return: an async generator of the user IDs who are followers of a specific user.
         """
 
@@ -707,8 +710,9 @@ class UserService(OboUserService):
         See: `List Users Followed <https://developers.symphony.com/restapi/reference/list-users-followed>`_
 
         :param user_id: the user ID
-        :param chunk_size: the maximum number of followers to return. Default: 100.
-        :param max_number: the total maximum number of elements to retrieve.
+        :param chunk_size: the maximum number of followers to return in one HTTP call. Default: 100.
+        :param max_number: the total maximum number of elements to retrieve. If set to None, we retrieve
+                           all following users until the last page.
         :return: an async generator of the IDs of users followed by a given user.
         """
 
@@ -724,7 +728,7 @@ class UserService(OboUserService):
             payload: V2UserCreate
     ) -> V2UserDetail:
         """Create a new user.
-        See: `Create User v2 <https://developers.symphony.com/restapi/reference#create-user-v2>`_
+        See: `Create User v2 <https://developers.symphony.com/restapi/reference/create-user-v2>`_
 
         :param payload: User's details to create.
         :return: Created user details.
@@ -742,7 +746,7 @@ class UserService(OboUserService):
             payload: V2UserAttributes
     ) -> V2UserDetail:
         """Updates an existing user.
-        See: `Update User v2 <https://developers.symphony.com/restapi/reference#update-user-v2>`_
+        See: `Update User v2 <https://developers.symphony.com/restapi/reference/update-user-v2>`_
 
         :param user_id: User Id
         :param payload: User's new attributes for update.
@@ -767,7 +771,7 @@ class UserService(OboUserService):
             after: int = None
     ) -> V1AuditTrailInitiatorList:
         """Returns audit trail of actions performed by a privileged user in a given period of time.
-        See: `List Audit Trail v1 <https://developers.symphony.com/restapi/reference#list-audit-trail-v1>`_
+        See: `List Audit Trail v1 <https://developers.symphony.com/restapi/reference/list-audit-trail-v1>`_
 
         :param start_timestamp: The start time of the period to retrieve the data.
         :param end_timestamp:   The end time of the period to retrieve the data.
@@ -796,6 +800,40 @@ class UserService(OboUserService):
             params['after'] = after
         return await self._audit_trail_api.v1_audittrail_privilegeduser_get(**params)
 
+    async def list_all_audit_trail(
+            self,
+            start_timestamp: int,
+            end_timestamp: int = None,
+            initiator_id: int = None,
+            role: RoleId = None,
+            chunk_size: int = 100,
+            max_number: int = None
+    ) -> AsyncGenerator[V1AuditTrailInitiatorList, None]:
+        """Returns an asynchronous generation of audit trail of actions performed by a privileged user in a given period
+        of time.
+        See: `List Audit Trail v1 <https://developers.symphony.com/restapi/reference/list-audit-trail-v1>`_
+
+        :param start_timestamp: The start time of the period to retrieve the data.
+        :param end_timestamp:   The end time of the period to retrieve the data.
+        :param initiator_id:    The range and limit for pagination of data.
+        :param role:            Role to list audit trail for.
+        :param chunk_size:      This is the maximum number of audit trails to return in one HTTP call. Default: 100.
+        :param max_number:      The total maximum number of audit trails to retrieve. If set to None, we retrieve
+                                all audit trails until the last page.
+        :return:                An async generator of audit trail.
+        """
+
+        async def audit_trail_one_page(limit, after=None):
+            result = await self.list_audit_trail(start_timestamp=start_timestamp,
+                                                 end_timestamp=end_timestamp,
+                                                 initiator_id=initiator_id,
+                                                 role=role,
+                                                 limit=limit,
+                                                 after=after)
+            return result.items, getattr(result.pagination.cursors, 'after', None)
+
+        return cursor_based_pagination(audit_trail_one_page, chunk_size, max_number)
+
     @retry
     async def suspend_user(
             self,
@@ -803,7 +841,7 @@ class UserService(OboUserService):
             user_suspension: UserSuspension
     ) -> None:
         """Suspends or re-activates (unsuspend) a user account.
-        See: `Suspend User Account v1 <https://developers.symphony.com/restapi/v20.10/reference#suspend-user-v1>`_
+        See: `Suspend User Account v1 <https://developers.symphony.com/restapi/v20.10/reference/suspend-user-v1>`_
 
         :param user_id:         User id.
         :param user_suspension: User suspension payload.
@@ -825,7 +863,7 @@ class UserService(OboUserService):
     ) -> None:
         """Suspends a user account.
         Calling this endpoint requires a service account with the User Provisioning role.
-        See: `Suspend User Account v1 <https://developers.symphony.com/restapi/v20.10/reference#suspend-user-v1>`_
+        See: `Suspend User Account v1 <https://developers.symphony.com/restapi/v20.10/reference/suspend-user-v1>`_
 
         :param user_id:         User id to suspend
         :param user_suspension: User suspension payload.
@@ -849,7 +887,7 @@ class UserService(OboUserService):
     ) -> None:
         """Unsuspend (Re-activates) a user account.
         Calling this endpoint requires a service account with the User Provisioning role.
-        See: `Suspend User Account v1 <https://developers.symphony.com/restapi/v20.10/reference#suspend-user-v1>`_
+        See: `Suspend User Account v1 <https://developers.symphony.com/restapi/v20.10/reference/suspend-user-v1>`_
 
         :param user_id:     user id to reactivate
         """
