@@ -81,8 +81,8 @@ class PaginationCursors(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'before': (str,),  # noqa: E501
-            'after': (str,),  # noqa: E501
+            'before': (str, none_type),  # noqa: E501
+            'after': (str, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -102,12 +102,8 @@ class PaginationCursors(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, before, after, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, *args, **kwargs):  # noqa: E501
         """PaginationCursors - a agent_model defined in OpenAPI
-
-        Args:
-            before (str): This is the opaque url-safe string that points to the start of the page of data that has been returned. 
-            after (str): This is the opaque url-safe string that points to the end of the page of data that has been returned. 
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -140,6 +136,8 @@ class PaginationCursors(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            before (str): This is the opaque url-safe string that points to the start of the page of data that has been returned. . [optional]  # noqa: E501
+            after (str): This is the opaque url-safe string that points to the end of the page of data that has been returned. . [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -167,8 +165,6 @@ class PaginationCursors(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.before = before
-        self.after = after
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -189,12 +185,8 @@ class PaginationCursors(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, before, after, *args, **kwargs):  # noqa: E501
+    def __init__(self, *args, **kwargs):  # noqa: E501
         """PaginationCursors - a agent_model defined in OpenAPI
-
-        Args:
-            before (str): This is the opaque url-safe string that points to the start of the page of data that has been returned. 
-            after (str): This is the opaque url-safe string that points to the end of the page of data that has been returned. 
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -227,6 +219,8 @@ class PaginationCursors(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            before (str): This is the opaque url-safe string that points to the start of the page of data that has been returned. . [optional]  # noqa: E501
+            after (str): This is the opaque url-safe string that points to the end of the page of data that has been returned. . [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -252,8 +246,8 @@ class PaginationCursors(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.before: str = before
-        self.after: str = after
+        self.before: str = None
+        self.after: str = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

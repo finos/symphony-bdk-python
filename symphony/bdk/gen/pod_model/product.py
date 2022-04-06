@@ -62,6 +62,10 @@ class Product(ModelNormal):
             'max_length': 50,
             'min_length': 1,
         },
+        ('app_id',): {
+            'max_length': 256,
+            'min_length': 1,
+        },
         ('sku',): {
             'max_length': 100,
             'min_length': 1,
