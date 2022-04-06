@@ -62,7 +62,7 @@ class UserAppEntitlement(ModelNormal):
 
     validations = {
         ('app_id',): {
-            'max_length': 32,
+            'max_length': 256,
             'min_length': 1,
         },
         ('app_name',): {
