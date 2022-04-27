@@ -167,9 +167,9 @@ class ServiceFactory:
         )
 
     def get_datahose_loop(self) -> AbstractAckIdEventLoop:
-        """
+        """Returns a fully initialized DatahoseLoop
 
-        :return:
+        :return: a new DatahoseLoop instance.
         """
         if self._config.datahose is not None:
             return DatahoseLoop(

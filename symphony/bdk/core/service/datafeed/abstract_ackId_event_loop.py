@@ -15,9 +15,18 @@ logger = logging.getLogger(__name__)
 
 
 class AbstractAckIdEventLoop(AbstractDatafeedLoop, ABC):
+    """Base class for implementing datafeed types that relies on an ackId.
+    """
 
     def __init__(self, datafeed_api: DatafeedApi, session_service: SessionService, auth_session: AuthSession,
                  config: BdkConfig):
+        """
+
+        :param datafeed_api: DatafeedApi to request the service
+        :param session_service: the SessionService to get user session information
+        :param auth_session: the AuthSession instance used to get session and key manager tokens
+        :param config: the bot configuration
+        """
         super().__init__(datafeed_api, session_service, auth_session, config)
         self._ack_id = ""
 

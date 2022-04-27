@@ -14,8 +14,6 @@ from symphony.bdk.core.extension import ExtensionService
 from symphony.bdk.core.service.application.application_service import ApplicationService
 from symphony.bdk.core.service.connection.connection_service import ConnectionService
 from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import AbstractDatafeedLoop
-from symphony.bdk.core.service.datafeed.datahose_loop import DatahoseLoop
-from symphony.bdk.core.service.datafeed.datahose_loop import AbstractAckIdEventLoop
 from symphony.bdk.core.service.health.health_service import HealthService
 from symphony.bdk.core.service.message.message_service import MessageService
 from symphony.bdk.core.service.obo_services import OboServices
@@ -122,7 +120,6 @@ class SymphonyBdk:
         # creates ActivityRegistry that subscribes to DF Loop events
         self._activity_registry = ActivityRegistry(self._session_service)
         self._datafeed_loop.subscribe(self._activity_registry)
-        #self._datahose_loop.subscribe(self._activity_registry)
         # initialises extension service and register decorated extensions
         self._extension_service = ExtensionService(self._api_client_factory, self._bot_session, self._config)
 

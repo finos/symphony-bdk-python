@@ -14,6 +14,8 @@ class BdkDatahoseConfig:
 
         :param config: the dict containing the datahose specific configuration.
         """
+        self.tag = None
+        self.filters = None
         self.retry = BdkRetryConfig(dict(maxAttempts=BdkRetryConfig.INFINITE_MAX_ATTEMPTS))
         if config is not None:
             self.tag = config.get(TAG)

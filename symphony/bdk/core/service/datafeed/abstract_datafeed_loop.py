@@ -70,8 +70,9 @@ class AbstractDatafeedLoop(ABC):
                  config: BdkConfig):
         """
 
-        :param datafeed_api: The file location of the spreadsheet
-        :type auth_session: the AuthSession instance used to get session and key manager tokens
+        :param datafeed_api: DatafeedApi to request the service
+        :param session_service: the SessionService to get user session information
+        :param auth_session: the AuthSession instance used to get session and key manager tokens
         :param config: the bot configuration
         """
         self._datafeed_api = datafeed_api

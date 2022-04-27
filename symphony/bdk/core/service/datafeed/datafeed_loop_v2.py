@@ -27,7 +27,7 @@ class DatafeedLoopV2(AbstractAckIdEventLoop):
         This service will be started by calling :func:`~DatafeedLoopV2.start`.
 
         On the very first run, the BDK bot will try to retrieve the list of datafeed to which it is listening.
-        Since each bot should only listening to just one datafeed, the first datafeed in the list will be used by
+        Since each bot should only listen to just one datafeed, the first datafeed in the list will be used by
         the bot to be listened to. If the retrieved list is empty, the BDK bot will create a new datafeed to listen.
 
         The BDK bot will listen to this datafeed to get all the received real-time events.
@@ -43,7 +43,6 @@ class DatafeedLoopV2(AbstractAckIdEventLoop):
     def __init__(self, datafeed_api: DatafeedApi, session_service: SessionService, auth_session: AuthSession,
                  config: BdkConfig):
         super().__init__(datafeed_api, session_service, auth_session, config)
-        # self._ack_id = ""
         self._datafeed_id = None
         if config.bot.username is not None:
             self._tag = config.bot.username[0:DATAFEED_TAG_MAX_LENGTH]
@@ -54,46 +53,8 @@ class DatafeedLoopV2(AbstractAckIdEventLoop):
             datafeed = await self._create_datafeed()
         self._datafeed_id = datafeed.id
 
-    """async def _run_loop_iteration(self):
-        events = await self._read_datafeed()
-
-        is_run_successful = await self._run_all_listener_tasks(events.events)
-        if is_run_successful:
-            # updates ack id so that on next call DFv2 knows that events have been processed
-            # if not updated, events will be requeued after some time, typically 30s
-            self._ack_id = events.ack_id
-
-    async def _run_all_listener_tasks(self, events):
-        start = time.time()
-        done_tasks = await self._run_listener_tasks(events)
-        elapsed = time.time() - start
-
-        if elapsed > EVENT_PROCESSING_MAX_DURATION_SECONDS:
-            logging.warning("Events processing took longer than %s seconds, "
-                            "this might lead to events being re-queued in datafeed and re-dispatched. "
-                            "You might want to consider processing the event in a separated asyncio task if needed.",
-                            EVENT_PROCESSING_MAX_DURATION_SECONDS)
-
-        return await self._are_tasks_successful(done_tasks)
-
-    async def _are_tasks_successful(self, tasks):
-        success = True
-        for task in tasks:
-            exception = task.exception()
-            if exception:
-                if isinstance(exception, EventError):
-                    logger.warning("Failed to process events inside %s, "
-                                   "will not update ack id, events will be re-queued",
-                                   task.get_name(),
-                                   exc_info=exception)
-                    success = False
-                else:
-                    logging.debug("Exception occurred inside %s", task.get_name(), exc_info=exception)
-        return success"""
-
     @retry(retry=read_datafeed_retry)
     async def _read_events(self):
-        print("debug**")
         params = {
             "session_token": await self._auth_session.session_token,
             "key_manager_token": await self._auth_session.key_manager_token,

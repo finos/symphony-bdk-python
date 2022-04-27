@@ -9,14 +9,21 @@ from symphony.bdk.gen.agent_model.v5_events_read_body import V5EventsReadBody
 
 # DFv2 API authorizes a maximum length for the tag parameter
 DATAHOSE_TAG_MAX_LENGTH = 80
-TAG_DEFAULT_PREFIX = "datahose-"
 TYPE = "datahose"
 
 logger = logging.getLogger(__name__)
 
 
 class DatahoseLoop(AbstractAckIdEventLoop):
+    """A class for implementing the datahose loop service.
 
+        This service will be started by calling :func:`~DatahoseLoop.start`.
+
+        The BDK bot will listen to this datahose to get all the received real-time events that are set
+        as filters in the configuration.
+
+        This service will be stopped by calling :func:`~DatahoseLoop.stop`
+    """
     async def _prepare_datafeed(self):
         pass
 
@@ -24,8 +31,9 @@ class DatahoseLoop(AbstractAckIdEventLoop):
                  config: BdkConfig):
         super().__init__(datafeed_api, session_service, auth_session, config)
         if config.datahose is not None:
-            not_truncated_tag = \
-                config.datahose.tag if config.datahose.tag is not None else TAG_DEFAULT_PREFIX + config.bot.username
+            not_truncated_tag = config.datahose.tag if config.datahose.tag is not None \
+                else TYPE + "-" + config.bot.username if config.bot.username is not None \
+                else TYPE
             self._tag = not_truncated_tag[:DATAHOSE_TAG_MAX_LENGTH]
             self._retry = config.datahose.retry
             self._filters = config.datahose.filters
