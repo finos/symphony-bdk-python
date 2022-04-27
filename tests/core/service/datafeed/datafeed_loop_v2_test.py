@@ -128,7 +128,7 @@ def fixture_datafeed_loop(datafeed_api, session_service, auth_session, config):
 def fixture_mock_datafeed_loop(datafeed_api, session_service, auth_session, config):
     datafeed_loop = DatafeedLoopV2(datafeed_api, session_service, auth_session, config)
     datafeed_loop._prepare_datafeed = AsyncMock()
-    datafeed_loop._read_datafeed = AsyncMock()
+    datafeed_loop._read_events = AsyncMock()
     datafeed_loop._retrieve_datafeed = AsyncMock(V5Datafeed(id="test_id"))
 
     return datafeed_loop
@@ -239,7 +239,7 @@ async def test_start_datafeed_stale_datafeed(datafeed_loop, datafeed_api, messag
 
 @pytest.mark.asyncio
 async def test_read_datafeed_no_value(mock_datafeed_loop, mock_listener):
-    mock_datafeed_loop._read_datafeed.side_effect = read_df_function(EventsMock(None))
+    mock_datafeed_loop._read_events.side_effect = read_df_function(EventsMock(None))
     mock_datafeed_loop.subscribe(mock_listener)
 
     await start_and_stop_df_loop(mock_datafeed_loop)
@@ -250,7 +250,7 @@ async def test_read_datafeed_no_value(mock_datafeed_loop, mock_listener):
 
 @pytest.mark.asyncio
 async def test_read_datafeed_empty_list(mock_datafeed_loop, mock_listener):
-    mock_datafeed_loop._read_datafeed.side_effect = read_df_function(EventsMock([]))
+    mock_datafeed_loop._read_events.side_effect = read_df_function(EventsMock([]))
     mock_datafeed_loop.subscribe(mock_listener)
 
     await start_and_stop_df_loop(mock_datafeed_loop)
@@ -261,7 +261,7 @@ async def test_read_datafeed_empty_list(mock_datafeed_loop, mock_listener):
 
 @pytest.mark.asyncio
 async def test_read_datafeed_non_empty_list(mock_datafeed_loop, mock_listener, message_sent):
-    mock_datafeed_loop._read_datafeed.side_effect = read_df_function(EventsMock([message_sent]))
+    mock_datafeed_loop._read_events.side_effect = read_df_function(EventsMock([message_sent]))
     mock_datafeed_loop.subscribe(mock_listener)
 
     await start_and_stop_df_loop(mock_datafeed_loop)
@@ -273,7 +273,7 @@ async def test_read_datafeed_non_empty_list(mock_datafeed_loop, mock_listener, m
 @pytest.mark.asyncio
 async def test_read_datafeed_error_in_listener(mock_datafeed_loop, mock_listener, message_sent):
     mock_listener.on_message_sent.side_effect = ValueError()
-    mock_datafeed_loop._read_datafeed.side_effect = read_df_function(EventsMock([message_sent]))
+    mock_datafeed_loop._read_events.side_effect = read_df_function(EventsMock([message_sent]))
     mock_datafeed_loop.subscribe(mock_listener)
 
     await start_and_stop_df_loop(mock_datafeed_loop)
@@ -285,7 +285,7 @@ async def test_read_datafeed_error_in_listener(mock_datafeed_loop, mock_listener
 @pytest.mark.asyncio
 async def test_read_datafeed_event_error_in_listener(mock_datafeed_loop, mock_listener, message_sent):
     mock_listener.on_message_sent.side_effect = EventError()
-    mock_datafeed_loop._read_datafeed.side_effect = read_df_function(EventsMock([message_sent]))
+    mock_datafeed_loop._read_events.side_effect = read_df_function(EventsMock([message_sent]))
     mock_datafeed_loop.subscribe(mock_listener)
 
     await start_and_stop_df_loop(mock_datafeed_loop)
@@ -309,7 +309,7 @@ async def test_events_concurrency_within_same_read_df_chunk(mock_datafeed_loop, 
             elif self.count == 2:
                 await self.queue.put("message")
 
-    mock_datafeed_loop._read_datafeed.side_effect = read_df_function(EventsMock([message_sent, message_sent]))
+    mock_datafeed_loop._read_events.side_effect = read_df_function(EventsMock([message_sent, message_sent]))
     mock_datafeed_loop.subscribe(QueueListener())
 
     await mock_datafeed_loop.start()  # test no deadlock

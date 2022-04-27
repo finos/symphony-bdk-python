@@ -11,7 +11,7 @@ from ._asyncio import AsyncRetrying
 
 
 def retry(*dargs, **dkw):
-    """A decorator that provides a mechanism to to retry failed requests
+    """A decorator that provides a mechanism to retry failed requests
     Passed retry configuration arguments will override the default configuration defined in :py:meth:`decorator_f`
     If no _retry_config attribute is present in the decorated function instance, an AttributeError is raised.
 

@@ -31,6 +31,7 @@ from symphony.bdk.gen.agent_model.v4_event_list import V4EventList
 from symphony.bdk.gen.agent_model.v5_datafeed import V5Datafeed
 from symphony.bdk.gen.agent_model.v5_datafeed_create_body import V5DatafeedCreateBody
 from symphony.bdk.gen.agent_model.v5_event_list import V5EventList
+from symphony.bdk.gen.agent_model.v5_events_read_body import V5EventsReadBody
 
 
 class DatafeedApi(object):
@@ -281,6 +282,68 @@ class DatafeedApi(object):
                     'session_token': 'header',
                     'key_manager_token': 'header',
                     'ack_id': 'body',
+                },
+                'collection_format_map': {
+                }
+            },
+            headers_map={
+                'accept': [
+                    'application/json'
+                ],
+                'content_type': [
+                    'application/json'
+                ]
+            },
+            api_client=api_client
+        )
+        self.read_events_endpoint = _Endpoint(
+            settings={
+                'response_type': (V5EventList,),
+                'auth': [],
+                'endpoint_path': '/v5/events/read',
+                'operation_id': 'read_events',
+                'http_method': 'POST',
+                'servers': None,
+            },
+            params_map={
+                'all': [
+                    'session_token',
+                    'key_manager_token',
+                    'body',
+                ],
+                'required': [
+                    'session_token',
+                    'key_manager_token',
+                    'body',
+                ],
+                'nullable': [
+                ],
+                'enum': [
+                ],
+                'validation': [
+                ]
+            },
+            root_map={
+                'validations': {
+                },
+                'allowed_values': {
+                },
+                'openapi_types': {
+                    'session_token':
+                        (str,),
+                    'key_manager_token':
+                        (str,),
+                    'body':
+                        (V5EventsReadBody,),
+                },
+                'attribute_map': {
+                    'session_token': 'sessionToken',
+                    'key_manager_token': 'keyManagerToken',
+                },
+                'location_map': {
+                    'session_token': 'header',
+                    'key_manager_token': 'header',
+                    'body': 'body',
                 },
                 'collection_format_map': {
                 }
@@ -943,6 +1006,92 @@ class DatafeedApi(object):
             key_manager_token
         return self.read_datafeed_endpoint.call_with_http_info(**kwargs)
 
+    def read_events(
+        self,
+        session_token,
+        key_manager_token,
+        body,
+        **kwargs
+    ):
+        """Read Real Time Events from an event stream (aka datafeed)  # noqa: E501
+
+        _Available on Agent 20.15.0 and above._  This endpoint provides messages and events from all conversations that the user is in or events from the whole pod depending on the \"type\" field value. When \"type\": \"fanout\" is provided in the body, then only events from streams the account belongs to are returned. Otherwise, if \"type\": \"datahose\" is provided in the body, then events returned are not limited to the streams user belongs to. In this case, at least one event type must be provided in the \"filters\" field.  In case you are using a datahose feed and retrieving SOCIALMESSAGE events, ceservice account must be properly configured in the Agent.  The types of events returned can be found in the Real Time Events list (see definition on top of the file).  The ackId sent as parameter can be empty for the first call. In the response an ackId will be sent back and it can be used for the next call: in this way you acknowledge that you have received the events that came with that ackId.  If you have several instances of the same bot, they must share the same feed so that events are spread across all bot instances. To do so, you must: * share the same service account * provide the same \"tag\" and same \"filters\" values   # noqa: E501
+        This method makes a synchronous HTTP request by default. To make an
+        asynchronous HTTP request, please pass async_req=True
+
+        >>> thread = agent_api.read_events(session_token, key_manager_token, body, async_req=True)
+        >>> result = thread.get()
+
+        Args:
+            session_token (str): Session authentication token.
+            key_manager_token (str): Key Manager authentication token.
+            body (V5EventsReadBody): body containing all information of events to be fetched
+
+        Keyword Args:
+            _return_http_data_only (bool): response data without head status
+                code and headers. Default is True.
+            _preload_content (bool): if False, the urllib3.HTTPResponse object
+                will be returned without reading/decoding response data.
+                Default is True.
+            _request_timeout (int/float/tuple): timeout setting for this request. If
+                one number provided, it will be total request timeout. It can also
+                be a pair (tuple) of (connection, read) timeouts.
+                Default is None.
+            _check_input_type (bool): specifies if type checking
+                should be done one the data sent to the server.
+                Default is True.
+            _check_return_type (bool): specifies if type checking
+                should be done one the data received from the server.
+                Default is True.
+            _spec_property_naming (bool): True if the variable names in the input data
+                are serialized names, as specified in the OpenAPI document.
+                False if the variable names in the input data
+                are pythonic names, e.g. snake case (default)
+            _content_type (str/None): force body content-type.
+                Default is None and content-type will be predicted by allowed
+                content-types and body.
+            _host_index (int/None): specifies the index of the server
+                that we want to use.
+                Default is read from the configuration.
+            async_req (bool): execute request asynchronously
+
+        Returns:
+            V5EventList
+                If the method is called asynchronously, returns the request
+                thread.
+        """
+        kwargs['async_req'] = kwargs.get(
+            'async_req', False
+        )
+        kwargs['_return_http_data_only'] = kwargs.get(
+            '_return_http_data_only', True
+        )
+        kwargs['_preload_content'] = kwargs.get(
+            '_preload_content', True
+        )
+        kwargs['_request_timeout'] = kwargs.get(
+            '_request_timeout', None
+        )
+        kwargs['_check_input_type'] = kwargs.get(
+            '_check_input_type', True
+        )
+        kwargs['_check_return_type'] = kwargs.get(
+            '_check_return_type', True
+        )
+        kwargs['_spec_property_naming'] = kwargs.get(
+            '_spec_property_naming', False
+        )
+        kwargs['_content_type'] = kwargs.get(
+            '_content_type')
+        kwargs['_host_index'] = kwargs.get('_host_index')
+        kwargs['session_token'] = \
+            session_token
+        kwargs['key_manager_token'] = \
+            key_manager_token
+        kwargs['body'] = \
+            body
+        return self.read_events_endpoint.call_with_http_info(**kwargs)
+
     def v1_datafeed_create_post(
         self,
         session_token,
@@ -1205,7 +1354,7 @@ class DatafeedApi(object):
         key_manager_token,
         **kwargs
     ):
-        """(Deprecated - Datafeed v1 will be fully replaced by the datafeed 2 service in the future. Please consider migrating over to datafeed 2 APIs /agent/v5/datafeeds. For more information on the timeline as well as on the benefits of datafeed 2, please reach out to your Technical Account Manager or to our developer documentation https://docs.developers.symphony.com/building-bots-on-symphony/datafeed) Create a new real time message event stream.   # noqa: E501
+        """(Deprecated - Datafeed v1 will be fully replaced by the datafeed 2 service in the future.   Please consider migrating over to datafeed 2 APIs /agent/v5/datafeeds. For more information on the  timeline as well as on the benefits of datafeed 2, please reach out to your Technical Account Manager or to  our developer documentation https://docs.developers.symphony.com/building-bots-on-symphony/datafeed) Create a new real time message event stream.   # noqa: E501
 
         A datafeed provides the messages in all conversations that a user is in. This also includes system messages like new users joining a chatroom.  A datafeed will expire if it isn't read before its capacity is reached.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
@@ -1288,7 +1437,7 @@ class DatafeedApi(object):
         key_manager_token,
         **kwargs
     ):
-        """(Deprecated - Datafeed v1 will be fully replaced by the datafeed 2 service in the future. Please consider migrating over to datafeed 2 APIs /agent/v5/datafeeds/{id}/read. For more information on the timeline as well as on the benefits of datafeed 2, please reach out to your Technical Account Manager or to our developer documentation https://docs.developers.symphony.com/building-bots-on-symphony/datafeed) Read a given datafeed.   # noqa: E501
+        """(Deprecated - Datafeed v1 will be fully replaced by the datafeed 2 service in the future.   Please consider migrating over to datafeed 2 APIs /agent/v5/datafeeds/{id}/read. For more information on the  timeline as well as on the benefits of datafeed 2, please reach out to your Technical Account Manager or to  our developer documentation https://docs.developers.symphony.com/building-bots-on-symphony/datafeed) Read a given datafeed.   # noqa: E501
 
         Read messages from the given datafeed. If no more messages are available then this method will block. It is intended that the client should re-call this method as soon as it has processed the messages received in the previous call. If the client is able to consume messages more quickly than they become available then each call will initially block, there is no need to delay before re-calling this method.  A datafeed will expire if its unread capacity is reached. A datafeed can only be consumed by one client thread at a time. E.g. polling the datafeed by two threads may lead to messages being delivered out of order.   # noqa: E501
         This method makes a synchronous HTTP request by default. To make an

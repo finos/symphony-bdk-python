@@ -5,8 +5,10 @@ from symphony.bdk.core.config.model.bdk_config import BdkConfig
 from symphony.bdk.core.service.application.application_service import ApplicationService
 from symphony.bdk.core.service.connection.connection_service import ConnectionService, OboConnectionService
 from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import DatafeedVersion, AbstractDatafeedLoop
+from symphony.bdk.core.service.datafeed.abstract_ackId_event_loop import AbstractAckIdEventLoop
 from symphony.bdk.core.service.datafeed.datafeed_loop_v1 import DatafeedLoopV1
 from symphony.bdk.core.service.datafeed.datafeed_loop_v2 import DatafeedLoopV2
+from symphony.bdk.core.service.datafeed.datahose_loop import DatahoseLoop
 from symphony.bdk.core.service.health.health_service import HealthService
 from symphony.bdk.core.service.message.message_service import MessageService, OboMessageService
 from symphony.bdk.core.service.message.multi_attachments_messages_api import MultiAttachmentsMessagesApi
@@ -163,6 +165,19 @@ class ServiceFactory:
             self._auth_session,
             self._config
         )
+
+    def get_datahose_loop(self) -> AbstractAckIdEventLoop:
+        """
+
+        :return:
+        """
+        if self._config.datahose is not None:
+            return DatahoseLoop(
+                DatafeedApi(self._agent_client),
+                self._session_service,
+                self._auth_session,
+                self._config
+            )
 
     def get_health_service(self) -> HealthService:
         """Returns a fully initialized HealthService

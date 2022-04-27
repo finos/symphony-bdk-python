@@ -1,13 +1,11 @@
 import logging
-import time
 from typing import Optional
 
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
 from symphony.bdk.core.retry import retry
 from symphony.bdk.core.retry.strategy import read_datafeed_retry
-from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import AbstractDatafeedLoop
-from symphony.bdk.core.service.datafeed.exception import EventError
+from symphony.bdk.core.service.datafeed.abstract_ackId_event_loop import AbstractAckIdEventLoop
 from symphony.bdk.core.service.session.session_service import SessionService
 from symphony.bdk.gen.agent_api.datafeed_api import DatafeedApi
 from symphony.bdk.gen.agent_model.ack_id import AckId
@@ -15,7 +13,7 @@ from symphony.bdk.gen.agent_model.v5_datafeed import V5Datafeed
 from symphony.bdk.gen.agent_model.v5_datafeed_create_body import V5DatafeedCreateBody
 
 # Based on the DFv2 default visibility timeout, after which an event is re-queued
-EVENT_PROCESSING_MAX_DURATION_SECONDS = 30
+# EVENT_PROCESSING_MAX_DURATION_SECONDS = 30
 
 # DFv2 API authorizes a maximum length for the tag parameter
 DATAFEED_TAG_MAX_LENGTH = 100
@@ -23,7 +21,7 @@ DATAFEED_TAG_MAX_LENGTH = 100
 logger = logging.getLogger(__name__)
 
 
-class DatafeedLoopV2(AbstractDatafeedLoop):
+class DatafeedLoopV2(AbstractAckIdEventLoop):
     """A class for implementing the datafeed v2 loop service.
 
         This service will be started by calling :func:`~DatafeedLoopV2.start`.
@@ -45,7 +43,7 @@ class DatafeedLoopV2(AbstractDatafeedLoop):
     def __init__(self, datafeed_api: DatafeedApi, session_service: SessionService, auth_session: AuthSession,
                  config: BdkConfig):
         super().__init__(datafeed_api, session_service, auth_session, config)
-        self._ack_id = ""
+        # self._ack_id = ""
         self._datafeed_id = None
         if config.bot.username is not None:
             self._tag = config.bot.username[0:DATAFEED_TAG_MAX_LENGTH]
@@ -56,7 +54,7 @@ class DatafeedLoopV2(AbstractDatafeedLoop):
             datafeed = await self._create_datafeed()
         self._datafeed_id = datafeed.id
 
-    async def _run_loop_iteration(self):
+    """async def _run_loop_iteration(self):
         events = await self._read_datafeed()
 
         is_run_successful = await self._run_all_listener_tasks(events.events)
@@ -91,10 +89,11 @@ class DatafeedLoopV2(AbstractDatafeedLoop):
                     success = False
                 else:
                     logging.debug("Exception occurred inside %s", task.get_name(), exc_info=exception)
-        return success
+        return success"""
 
     @retry(retry=read_datafeed_retry)
-    async def _read_datafeed(self):
+    async def _read_events(self):
+        print("debug**")
         params = {
             "session_token": await self._auth_session.session_token,
             "key_manager_token": await self._auth_session.key_manager_token,

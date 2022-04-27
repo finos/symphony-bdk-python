@@ -91,6 +91,9 @@ class AbstractDatafeedLoop(ABC):
 
         :return: None
         """
+        if self._running:
+            raise ValueError("The datafeed service is already started")
+
         logger.debug("Starting datafeed loop")
         self._bot_info = await self._session_service.get_session()
 
