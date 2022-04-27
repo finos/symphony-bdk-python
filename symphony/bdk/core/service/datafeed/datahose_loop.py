@@ -1,6 +1,7 @@
 import logging
 
 from symphony.bdk.core.service.datafeed.abstract_ackId_event_loop import AbstractAckIdEventLoop
+from symphony.bdk.core.service.datafeed.abstract_datahose_loop import AbstractDatahoseLoop
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
 from symphony.bdk.core.service.session.session_service import SessionService
@@ -14,7 +15,7 @@ TYPE = "datahose"
 logger = logging.getLogger(__name__)
 
 
-class DatahoseLoop(AbstractAckIdEventLoop):
+class DatahoseLoop(AbstractAckIdEventLoop, AbstractDatahoseLoop):
     """A class for implementing the datahose loop service.
 
         This service will be started by calling :func:`~DatahoseLoop.start`.
@@ -37,6 +38,13 @@ class DatahoseLoop(AbstractAckIdEventLoop):
             self._tag = not_truncated_tag[:DATAHOSE_TAG_MAX_LENGTH]
             self._retry = config.datahose.retry
             self._filters = config.datahose.filters
+
+    async def start(self):
+        logger.debug("Starting datahose loop")
+        try:
+            await super().start()
+        finally:
+            logger.debug("Stopping datahose loop")
 
     async def _read_events(self):
         params = {

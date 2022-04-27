@@ -6,6 +6,7 @@ from symphony.bdk.core.service.application.application_service import Applicatio
 from symphony.bdk.core.service.connection.connection_service import ConnectionService, OboConnectionService
 from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import DatafeedVersion, AbstractDatafeedLoop
 from symphony.bdk.core.service.datafeed.abstract_ackId_event_loop import AbstractAckIdEventLoop
+from symphony.bdk.core.service.datafeed.abstract_datahose_loop import AbstractDatahoseLoop
 from symphony.bdk.core.service.datafeed.datafeed_loop_v1 import DatafeedLoopV1
 from symphony.bdk.core.service.datafeed.datafeed_loop_v2 import DatafeedLoopV2
 from symphony.bdk.core.service.datafeed.datahose_loop import DatahoseLoop
@@ -166,7 +167,7 @@ class ServiceFactory:
             self._config
         )
 
-    def get_datahose_loop(self) -> AbstractAckIdEventLoop:
+    def get_datahose_loop(self) -> AbstractDatahoseLoop:
         """Returns a fully initialized DatahoseLoop
 
         :return: a new DatahoseLoop instance.

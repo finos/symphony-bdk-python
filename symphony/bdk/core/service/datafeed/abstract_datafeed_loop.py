@@ -87,6 +87,7 @@ class AbstractDatafeedLoop(ABC):
         self._retry_config = config.datafeed.retry
         self._bot_info = None
 
+    @abstractmethod
     async def start(self):
         """Start the datafeed event service
 
@@ -95,21 +96,19 @@ class AbstractDatafeedLoop(ABC):
         if self._running:
             raise ValueError("The datafeed service is already started")
 
-        logger.debug("Starting datafeed loop")
         self._bot_info = await self._session_service.get_session()
 
         await self._prepare_datafeed()
         try:
             await self._run_loop()
         finally:
-            logger.debug("Stopping datafeed loop")
             await self._stop_listener_tasks()
 
     async def stop(self, hard_kill: bool = False, timeout: float = None):
         """Stop the datafeed event service
 
         :param hard_kill: if set to True, tasks running listener methods will be cancelled immediately. Otherwise, tasks
-          will be awaited until completion.
+          will be waited until completion.
         :param timeout: timeout in seconds to wait for tasks completion when loop stops.
           None means wait until completion. Ignored if hard_kill set to True.
         :return: None

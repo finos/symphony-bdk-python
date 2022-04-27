@@ -14,6 +14,7 @@ from symphony.bdk.core.extension import ExtensionService
 from symphony.bdk.core.service.application.application_service import ApplicationService
 from symphony.bdk.core.service.connection.connection_service import ConnectionService
 from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import AbstractDatafeedLoop
+from symphony.bdk.core.service.datafeed.abstract_datahose_loop import AbstractDatahoseLoop
 from symphony.bdk.core.service.health.health_service import HealthService
 from symphony.bdk.core.service.message.message_service import MessageService
 from symphony.bdk.core.service.obo_services import OboServices
@@ -189,7 +190,7 @@ class SymphonyBdk:
         return self._datafeed_loop
 
     @bot_service
-    def datahose(self) -> AbstractDatafeedLoop:
+    def datahose(self) -> AbstractDatahoseLoop:
         """
 
         :return:

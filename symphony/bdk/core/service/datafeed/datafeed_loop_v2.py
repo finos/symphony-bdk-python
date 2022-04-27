@@ -47,6 +47,10 @@ class DatafeedLoopV2(AbstractAckIdEventLoop):
         if config.bot.username is not None:
             self._tag = config.bot.username[0:DATAFEED_TAG_MAX_LENGTH]
 
+    async def start(self):
+        logger.debug("Starting datafeed V2 loop")
+        await super().start()
+
     async def _prepare_datafeed(self):
         datafeed = await self._retrieve_datafeed()
         if not datafeed:
