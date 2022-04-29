@@ -3,7 +3,9 @@ from unittest.mock import MagicMock, AsyncMock, call
 
 import pytest
 
-from symphony.bdk.core.auth.auth_session import AuthSession
+from tests.core.service.datafeed.test_fixtures import fixture_initiator_username, fixture_session_service, \
+    fixture_auth_session
+
 from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.config.model.bdk_datafeed_config import BdkDatafeedConfig
 from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import RealTimeEvent
@@ -16,7 +18,6 @@ from symphony.bdk.gen.agent_model.v4_event import V4Event
 from symphony.bdk.gen.agent_model.v4_initiator import V4Initiator
 from symphony.bdk.gen.agent_model.v4_message_sent import V4MessageSent
 from symphony.bdk.gen.agent_model.v4_payload import V4Payload
-from symphony.bdk.gen.agent_model.v4_user import V4User
 from symphony.bdk.gen.api_client import ApiClient
 from symphony.bdk.gen.exceptions import ApiException
 from symphony.bdk.gen.pod_model.user_v2 import UserV2
@@ -34,14 +35,6 @@ SLEEP_SECONDS = 0.0001
 class EventsMock:
     def __init__(self, events):
         self.value = events
-
-
-@pytest.fixture(name="auth_session")
-def fixture_auth_session():
-    auth_session = AuthSession(None)
-    auth_session.session_token = "session_token"
-    auth_session.key_manager_token = "km_token"
-    return auth_session
 
 
 @pytest.fixture(name="config")
@@ -63,16 +56,11 @@ def fixture_datafeed_api():
     return datafeed_api
 
 
-@pytest.fixture(name="initiator")
-def fixture_initiator():
-    return V4Initiator(user=V4User(username="username"))
-
-
 @pytest.fixture(name="message_sent")
-def fixture_message_sent(initiator):
+def fixture_message_sent(initiator_username):
     return V4Event(type=RealTimeEvent.MESSAGESENT.name,
                    payload=V4Payload(message_sent=V4MessageSent()),
-                   initiator=initiator)
+                   initiator=initiator_username)
 
 
 @pytest.fixture(name="message_sent_event")
@@ -96,13 +84,6 @@ def fixture_read_df_loop_side_effect(message_sent):
         return [message_sent]
 
     return read_df
-
-
-@pytest.fixture(name="session_service")
-def fixture_session_service():
-    session_service = AsyncMock()
-    session_service.get_session.return_value = BOT_INFO
-    return session_service
 
 
 @pytest.fixture(name="datafeed_loop_v1")
@@ -296,7 +277,7 @@ async def test_no_listener_task(mock_datafeed_loop_v1):
 
 
 @pytest.mark.asyncio
-async def test_listener_called(mock_datafeed_loop_v1, message_sent, initiator):
+async def test_listener_called(mock_datafeed_loop_v1, message_sent, initiator_username):
     class RealTimeEventListenerImpl(RealTimeEventListener):
 
         async def on_message_sent(self, initiator: V4Initiator, event: V4MessageSent):
@@ -307,11 +288,11 @@ async def test_listener_called(mock_datafeed_loop_v1, message_sent, initiator):
 
     await mock_datafeed_loop_v1.start()
 
-    listener.on_message_sent.assert_called_once_with(initiator, message_sent.payload.message_sent)
+    listener.on_message_sent.assert_called_once_with(initiator_username, message_sent.payload.message_sent)
 
 
 @pytest.mark.asyncio
-async def test_exception_in_listener_ignored(mock_datafeed_loop_v1, message_sent, initiator):
+async def test_exception_in_listener_ignored(mock_datafeed_loop_v1, message_sent, initiator_username):
     class RealTimeEventListenerImpl(RealTimeEventListener):
         count = 0
 
@@ -326,12 +307,12 @@ async def test_exception_in_listener_ignored(mock_datafeed_loop_v1, message_sent
 
     await mock_datafeed_loop_v1.start()
 
-    listener_call = call(initiator, message_sent.payload.message_sent)
+    listener_call = call(initiator_username, message_sent.payload.message_sent)
     listener.on_message_sent.assert_has_awaits([listener_call, listener_call])
 
 
 @pytest.mark.asyncio
-async def test_event_error_in_listener_ignored(mock_datafeed_loop_v1, message_sent, initiator):
+async def test_event_error_in_listener_ignored(mock_datafeed_loop_v1, message_sent, initiator_username):
     class RealTimeEventListenerImpl(RealTimeEventListener):
         count = 0
 
@@ -346,7 +327,7 @@ async def test_event_error_in_listener_ignored(mock_datafeed_loop_v1, message_se
 
     await mock_datafeed_loop_v1.start()
 
-    listener_call = call(initiator, message_sent.payload.message_sent)
+    listener_call = call(initiator_username, message_sent.payload.message_sent)
     listener.on_message_sent.assert_has_awaits([listener_call, listener_call])
 
 

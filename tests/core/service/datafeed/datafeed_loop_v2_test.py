@@ -3,7 +3,9 @@ from unittest.mock import MagicMock, AsyncMock, call
 
 import pytest
 
-from symphony.bdk.core.auth.auth_session import AuthSession
+from tests.core.service.datafeed.test_fixtures import fixture_initiator_username, fixture_session_service, \
+    fixture_auth_session
+
 from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import RealTimeEvent
 from symphony.bdk.core.service.datafeed.datafeed_loop_v2 import DatafeedLoopV2
@@ -16,7 +18,6 @@ from symphony.bdk.gen.agent_model.v4_event import V4Event
 from symphony.bdk.gen.agent_model.v4_initiator import V4Initiator
 from symphony.bdk.gen.agent_model.v4_message_sent import V4MessageSent
 from symphony.bdk.gen.agent_model.v4_payload import V4Payload
-from symphony.bdk.gen.agent_model.v4_user import V4User
 from symphony.bdk.gen.agent_model.v5_datafeed import V5Datafeed
 from symphony.bdk.gen.agent_model.v5_datafeed_create_body import V5DatafeedCreateBody
 from symphony.bdk.gen.pod_model.user_v2 import UserV2
@@ -50,14 +51,6 @@ async def start_and_stop_df_loop(mock_datafeed_loop):
     await t
 
 
-@pytest.fixture(name="auth_session")
-def fixture_auth_session():
-    auth_session = AuthSession(None)
-    auth_session.session_token = "session_token"
-    auth_session.key_manager_token = "km_token"
-    return auth_session
-
-
 @pytest.fixture(name="config")
 def fixture_config():
     config = BdkConfigLoader.load_from_file(get_config_resource_filepath("config.yaml"))
@@ -82,16 +75,11 @@ def fixture_mock_listener():
     return AsyncMock(wraps=RealTimeEventListener())
 
 
-@pytest.fixture(name="initiator")
-def fixture_initiator():
-    return V4Initiator(user=V4User(username="username"))
-
-
 @pytest.fixture(name="message_sent")
-def fixture_message_sent(initiator):
+def fixture_message_sent(initiator_username):
     return V4Event(type=RealTimeEvent.MESSAGESENT.name,
                    payload=V4Payload(message_sent=V4MessageSent()),
-                   initiator=initiator)
+                   initiator=initiator_username)
 
 
 @pytest.fixture(name="message_sent_event")
@@ -102,13 +90,6 @@ def fixture_message_sent_event(message_sent):
 @pytest.fixture(name="read_df_side_effect")
 def fixture_read_df_side_effect(message_sent_event):
     return read_df_function(message_sent_event)
-
-
-@pytest.fixture(name="session_service")
-def fixture_session_service():
-    session_service = AsyncMock()
-    session_service.get_session.return_value = UserV2(id=12345)
-    return session_service
 
 
 @pytest.fixture(name="datafeed_loop")

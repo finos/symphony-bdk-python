@@ -3,6 +3,10 @@ from unittest.mock import MagicMock, AsyncMock
 
 import pytest
 
+from tests.core.service.datafeed.test_fixtures import fixture_initiator_username, fixture_session_service, \
+    fixture_message_sent_events_mock
+
+from symphony.bdk.gen.agent_model.v5_event_list import V5EventList
 from symphony.bdk.core.service.datafeed.datahose_loop import DatahoseLoop
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.config.loader import BdkConfigLoader
@@ -14,21 +18,9 @@ from symphony.bdk.gen.agent_model.v4_initiator import V4Initiator
 from symphony.bdk.gen.agent_model.v4_message_sent import V4MessageSent
 from symphony.bdk.gen.agent_model.v4_event import V4Event
 from symphony.bdk.gen.agent_model.v4_payload import V4Payload
-from symphony.bdk.gen.agent_model.v4_user import V4User
-from symphony.bdk.gen.pod_model.user_v2 import UserV2
 from symphony.bdk.gen.agent_model.v5_events_read_body import V5EventsReadBody
-from symphony.bdk.gen.agent_model.v5_event_list import V5EventList
 from tests.core.config import minimal_retry_config
 from tests.utils.resource_utils import get_config_resource_filepath
-
-
-ACK_ID = "ack_id"
-
-
-class EventsMock:
-    def __init__(self, events, ack_id=ACK_ID):
-        self.events = events
-        self.ack_id = ack_id
 
 
 @pytest.fixture(name="auth_session")
@@ -60,13 +52,6 @@ def fixture_datafeed_api():
     return datafeed_api
 
 
-@pytest.fixture(name="session_service")
-def fixture_session_service():
-    session_service = AsyncMock()
-    session_service.get_session.return_value = UserV2(id=12345)
-    return session_service
-
-
 @pytest.fixture(name="datahose_loop")
 def fixture_datahose_loop(datafeed_api, session_service, auth_session, config):
     datahose_loop = DatahoseLoop(datafeed_api, session_service, auth_session, config)
@@ -80,38 +65,28 @@ def fixture_datahose_loop(datafeed_api, session_service, auth_session, config):
     return datahose_loop
 
 
-@pytest.fixture(name="initiator")
-def fixture_initiator():
-    return V4Initiator(user=V4User(username="username"))
-
-
 @pytest.fixture(name="message_sent")
-def fixture_message_sent(initiator):
+def fixture_message_sent(initiator_username):
     return V4Event(type=RealTimeEvent.MESSAGESENT.name,
                    payload=V4Payload(message_sent=V4MessageSent()),
-                   initiator=initiator)
-
-
-@pytest.fixture(name="message_sent_event")
-def fixture_message_sent_event(message_sent):
-    return EventsMock([message_sent], "test_events_ack_id")
+                   initiator=initiator_username)
 
 
 @pytest.fixture(name="read_events_side_effect")
-def fixture_read_events_side_effect(message_sent_event):
+def fixture_read_events_side_effect(message_sent_events_mock):
     async def read_events(**kwargs):
         await asyncio.sleep(0.001)  # to force the switching of tasks
         events_list = V5EventList()
         events_list.ack_id = "test_events_ack_id"
-        events_list.events = [message_sent_event]
+        events_list.events = [message_sent_events_mock]
         return events_list
 
     return read_events
 
 
 @pytest.mark.asyncio
-async def test_start(datahose_loop, datafeed_api, message_sent_event):
-    datafeed_api.read_events.return_value = message_sent_event
+async def test_start(datahose_loop, datafeed_api, message_sent_events_mock):
+    datafeed_api.read_events.return_value = message_sent_events_mock
     body = V5EventsReadBody(type="datahose", tag="TEST_TAG",
                             filters=["SOCIALMESSAGE"], ack_id="")
     await datahose_loop.start()
