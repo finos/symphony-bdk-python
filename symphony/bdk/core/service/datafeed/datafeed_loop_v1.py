@@ -36,8 +36,14 @@ class DatafeedLoopV1(AbstractDatafeedLoop):
         self._datafeed_id = None
 
     async def start(self):
+        if self._running:
+            raise RuntimeError("The datafeed service V1 is already started")
+
         logger.debug("Starting datafeed V1 loop")
-        await super().start()
+        try:
+            await super().start()
+        finally:
+            logger.debug("Stopping datafeed loop")
 
     async def _prepare_datafeed(self):
         self._datafeed_id = self._datafeed_repository.read()

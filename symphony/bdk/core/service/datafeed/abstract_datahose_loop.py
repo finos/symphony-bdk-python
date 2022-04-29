@@ -25,7 +25,7 @@ class AbstractDatahoseLoop(ABC):
         """Stop the datahose event service
 
         :param hard_kill: if set to True, tasks running listener methods will be cancelled immediately. Otherwise, tasks
-          will be waited until completion.
+          will be awaited until completion.
         :param timeout: timeout in seconds to wait for tasks completion when loop stops.
           None means wait until completion. Ignored if hard_kill set to True.
         :return: None

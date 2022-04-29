@@ -150,6 +150,13 @@ async def test_start(datafeed_loop_v1, datafeed_api, read_df_side_effect):
 
 
 @pytest.mark.asyncio
+async def test_start_already_started_datafeed_v1_loop_should_throw_error(datafeed_loop_v1):
+    datafeed_loop_v1._running = True
+    with pytest.raises(RuntimeError, match="The datafeed service V1 is already started"):
+        await datafeed_loop_v1.start()
+
+
+@pytest.mark.asyncio
 async def test_read_datafeed_none_list(datafeed_loop_v1, datafeed_api):
     datafeed_api.v4_datafeed_id_read_get.return_value = None
 

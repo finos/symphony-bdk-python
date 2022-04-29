@@ -12,9 +12,6 @@ from symphony.bdk.gen.agent_model.ack_id import AckId
 from symphony.bdk.gen.agent_model.v5_datafeed import V5Datafeed
 from symphony.bdk.gen.agent_model.v5_datafeed_create_body import V5DatafeedCreateBody
 
-# Based on the DFv2 default visibility timeout, after which an event is re-queued
-# EVENT_PROCESSING_MAX_DURATION_SECONDS = 30
-
 # DFv2 API authorizes a maximum length for the tag parameter
 DATAFEED_TAG_MAX_LENGTH = 100
 
@@ -48,8 +45,14 @@ class DatafeedLoopV2(AbstractAckIdEventLoop):
             self._tag = config.bot.username[0:DATAFEED_TAG_MAX_LENGTH]
 
     async def start(self):
+        if self._running:
+            raise RuntimeError("The datafeed service V2 is already started")
+
         logger.debug("Starting datafeed V2 loop")
-        await super().start()
+        try:
+            await super().start()
+        finally:
+            logger.debug("Stopping datafeed loop")
 
     async def _prepare_datafeed(self):
         datafeed = await self._retrieve_datafeed()
