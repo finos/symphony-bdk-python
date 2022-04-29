@@ -169,7 +169,7 @@ async def test_start_already_started_datafeed_v2_loop_should_throw_error(datafee
 
 @pytest.mark.asyncio
 async def test_start_datafeed_exist(datafeed_loop, datafeed_api, read_df_side_effect):
-    datafeed_api.list_datafeed.return_value = [V5Datafeed(id="test_id_exist")]
+    datafeed_api.list_datafeed.return_value = [V5Datafeed(id="abc_f_def")]
     datafeed_api.read_datafeed.side_effect = read_df_side_effect
 
     await datafeed_loop.start()
@@ -181,16 +181,40 @@ async def test_start_datafeed_exist(datafeed_loop, datafeed_api, read_df_side_ef
     )
     assert datafeed_api.read_datafeed.call_args_list[0].kwargs == {"session_token": "session_token",
                                                                    "key_manager_token": "km_token",
-                                                                   "datafeed_id": "test_id_exist",
+                                                                   "datafeed_id": "abc_f_def",
                                                                    "ack_id": AckId(ack_id="")}
-    assert datafeed_loop._datafeed_id == "test_id_exist"
+    assert datafeed_loop._datafeed_id == "abc_f_def"
+    assert datafeed_loop._ack_id == "ack_id"
+
+
+@pytest.mark.asyncio
+async def test_read_datafeed_bad_id(datafeed_loop, datafeed_api, read_df_side_effect):
+    datafeed_api.list_datafeed.return_value = [V5Datafeed(id="BAD_ID_FORMAT")]
+    datafeed_api.read_datafeed.side_effect = read_df_side_effect
+    datafeed_api.create_datafeed.return_value = V5Datafeed(id="abc_f_def")
+
+    await datafeed_loop.start()
+
+    datafeed_api.list_datafeed.assert_called_with(
+        session_token="session_token",
+        key_manager_token="km_token",
+        tag=BOT_USER
+    )
+    assert datafeed_api.read_datafeed.call_args_list[0].kwargs == {"session_token": "session_token",
+                                                                   "key_manager_token": "km_token",
+                                                                   "datafeed_id": "abc_f_def",
+                                                                   "ack_id": AckId(ack_id="")}
+
+    datafeed_api.create_datafeed.assert_called_once()
+
+    assert datafeed_loop._datafeed_id == "abc_f_def"
     assert datafeed_loop._ack_id == "ack_id"
 
 
 @pytest.mark.asyncio
 async def test_start_datafeed_stale_datafeed(datafeed_loop, datafeed_api, message_sent_event):
     datafeed_loop._retry_config = minimal_retry_config_with_attempts(2)
-    datafeed_api.list_datafeed.return_value = [V5Datafeed(id="fault_datafeed_id")]
+    datafeed_api.list_datafeed.return_value = [V5Datafeed(id="abc_f_def")]
     datafeed_api.create_datafeed.return_value = V5Datafeed(id="test_id")
 
     # This is done this way because side_effect with a list containing coroutines is not behaving as expected
@@ -216,7 +240,7 @@ async def test_start_datafeed_stale_datafeed(datafeed_loop, datafeed_api, messag
     datafeed_api.delete_datafeed.assert_called_with(
         session_token="session_token",
         key_manager_token="km_token",
-        datafeed_id="fault_datafeed_id"
+        datafeed_id="abc_f_def"
     )
 
     datafeed_api.create_datafeed.assert_called_with(
@@ -229,7 +253,7 @@ async def test_start_datafeed_stale_datafeed(datafeed_loop, datafeed_api, messag
         call(
             session_token="session_token",
             key_manager_token="km_token",
-            datafeed_id="fault_datafeed_id",
+            datafeed_id="abc_f_def",
             ack_id=AckId(ack_id="")
         ),
         call(
