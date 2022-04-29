@@ -89,6 +89,7 @@ class V4Message(ModelNormal):
         """
         return {
             'message_id': (str, none_type),  # noqa: E501
+            'parent_message_id': (str, none_type),  # noqa: E501
             'timestamp': (int, none_type),  # noqa: E501
             'message': (str, none_type),  # noqa: E501
             'shared_message': (V4Message, none_type),  # noqa: E501
@@ -116,6 +117,7 @@ class V4Message(ModelNormal):
 
     attribute_map = {
         'message_id': 'messageId',  # noqa: E501
+        'parent_message_id': 'parentMessageId',  # noqa: E501
         'timestamp': 'timestamp',  # noqa: E501
         'message': 'message',  # noqa: E501
         'shared_message': 'sharedMessage',  # noqa: E501
@@ -178,6 +180,7 @@ class V4Message(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             message_id (str): Id of the message. [optional]  # noqa: E501
+            parent_message_id (str): Id of the parent message, set when the message is a reply to another message or a forwarded message. Since Agent 20.14.. [optional]  # noqa: E501
             timestamp (int): Timestamp of the message in milliseconds since Jan 1 1970. [optional]  # noqa: E501
             message (str): Message content in MessageMLV2. [optional]  # noqa: E501
             shared_message (V4Message): [optional]  # noqa: E501
@@ -278,6 +281,7 @@ class V4Message(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             message_id (str): Id of the message. [optional]  # noqa: E501
+            parent_message_id (str): Id of the parent message, set when the message is a reply to another message or a forwarded message. Since Agent 20.14.. [optional]  # noqa: E501
             timestamp (int): Timestamp of the message in milliseconds since Jan 1 1970. [optional]  # noqa: E501
             message (str): Message content in MessageMLV2. [optional]  # noqa: E501
             shared_message (V4Message): [optional]  # noqa: E501
@@ -322,6 +326,7 @@ class V4Message(ModelNormal):
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
         self.message_id: str = None
+        self.parent_message_id: str = None
         self.timestamp: int = None
         self.message: str = None
         self.shared_message: V4Message = None
