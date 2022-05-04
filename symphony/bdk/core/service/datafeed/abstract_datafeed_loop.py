@@ -70,8 +70,9 @@ class AbstractDatafeedLoop(ABC):
                  config: BdkConfig):
         """
 
-        :param datafeed_api: The file location of the spreadsheet
-        :type auth_session: the AuthSession instance used to get session and key manager tokens
+        :param datafeed_api: DatafeedApi to request the service
+        :param session_service: the SessionService to get user session information
+        :param auth_session: the AuthSession instance used to get session and key manager tokens
         :param config: the bot configuration
         """
         self._datafeed_api = datafeed_api
@@ -86,19 +87,15 @@ class AbstractDatafeedLoop(ABC):
         self._retry_config = config.datafeed.retry
         self._bot_info = None
 
+    @abstractmethod
     async def start(self):
         """Start the datafeed event service
 
         :return: None
         """
-        logger.debug("Starting datafeed loop")
-        self._bot_info = await self._session_service.get_session()
-
-        await self._prepare_datafeed()
         try:
             await self._run_loop()
         finally:
-            logger.debug("Stopping datafeed loop")
             await self._stop_listener_tasks()
 
     async def stop(self, hard_kill: bool = False, timeout: float = None):
@@ -127,21 +124,6 @@ class AbstractDatafeedLoop(ABC):
         :param listener: the RealTimeEventListener to be removed.
         """
         self._listeners.remove(listener)
-
-    @abstractmethod
-    async def recreate_datafeed(self):
-        """Method called when datafeed is stale and needs to be recreated (i.e. :py:meth:`read_datafeed` raises an
-        ApiException with status 400)
-
-        :return: None
-        """
-
-    @abstractmethod
-    async def _prepare_datafeed(self):
-        """Method called when :py:meth:`start` is called and before datafeed loop is actually running
-
-        :return: None
-        """
 
     async def _run_loop(self):
         self._running = True
