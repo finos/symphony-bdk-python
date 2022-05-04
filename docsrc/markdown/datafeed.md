@@ -159,7 +159,7 @@ datafeed:
 Datahose is very similar to datafeed: it enables a bot to receive [_Real Time
 Events_](https://docs.developers.symphony.com/building-bots-on-symphony/datafeed/real-time-events) with the main
 difference that *all* events of the pod are received. The datahose loop is a core service built on top of the events API
-and provide a dedicated contract to bot developers to work with datahose. This is compatible with agent version 20.15 onwards.
+and provide a dedicated contract to bot developers to work with Datahose. This is compatible with Agent version 20.15 onwards.
 
 The [Activity API](./activity-api.md) is not meant to be used with datahose.
 
