@@ -68,7 +68,6 @@ def fixture_bare_df_loop(session_service):
     with patch.multiple(AbstractDatafeedLoop, __abstractmethods__=set()):
         mock_df = AbstractDatafeedLoop(DatafeedApi(AsyncMock()), session_service, None, BdkConfig())
         mock_df._stop_listener_tasks = AsyncMock()
-        mock_df._prepare_datafeed = AsyncMock()
         mock_df._run_loop_iteration = AsyncMock()
 
         return mock_df
@@ -104,26 +103,8 @@ async def test_start(bare_df_loop, session_service, run_iteration_side_effect):
     await bare_df_loop.stop()
     await t
 
-    session_service.get_session.assert_called_once()
-    assert bare_df_loop._bot_info == BOT_INFO
-    bare_df_loop._prepare_datafeed.assert_called_once()
     assert bare_df_loop._run_loop_iteration.call_count >= 1
     bare_df_loop._stop_listener_tasks.assert_called_once()
-
-
-@pytest.mark.asyncio
-async def test_error_in_prepare_should_be_propagated(bare_df_loop):
-    exception = ValueError("error")
-
-    bare_df_loop._prepare_datafeed.side_effect = exception
-
-    with pytest.raises(ValueError) as raised_exception:
-        await bare_df_loop.start()
-        assert raised_exception == exception
-
-    bare_df_loop._prepare_datafeed.assert_called_once()
-    bare_df_loop._run_loop_iteration.assert_not_called()
-    bare_df_loop._stop_listener_tasks.assert_not_called()
 
 
 @pytest.mark.asyncio
@@ -135,7 +116,6 @@ async def test_unexpected_error_should_be_propagated_and_call_stop_tasks(bare_df
         await bare_df_loop.start()
         assert raised_exception == exception
 
-    bare_df_loop._prepare_datafeed.assert_called_once()
     bare_df_loop._run_loop_iteration.assert_called()
     bare_df_loop._stop_listener_tasks.assert_called_once()
 
@@ -325,7 +305,8 @@ async def test_handle_room_member_promoted_to_owner(df_loop, listener, initiator
 
     await create_and_await_tasks(df_loop, [event])
 
-    listener.on_room_member_promoted_to_owner.assert_called_with(initiator_userid, payload.room_member_promoted_to_owner)
+    listener.on_room_member_promoted_to_owner.\
+        assert_called_with(initiator_userid, payload.room_member_promoted_to_owner)
 
 
 @pytest.mark.asyncio

@@ -85,12 +85,13 @@ def fixture_read_events_side_effect(message_sent_events_mock):
 
 
 @pytest.mark.asyncio
-async def test_start(datahose_loop, datafeed_api, message_sent_events_mock):
+async def test_start(datahose_loop, datafeed_api, session_service, message_sent_events_mock):
     datafeed_api.read_events.return_value = message_sent_events_mock
     body = V5EventsReadBody(type="datahose", tag="TEST_TAG",
                             filters=["SOCIALMESSAGE"], ack_id="")
     await datahose_loop.start()
 
+    session_service.get_session.assert_called_once()
     datafeed_api.read_events.assert_called_with(
         session_token="session_token",
         key_manager_token="km_token",

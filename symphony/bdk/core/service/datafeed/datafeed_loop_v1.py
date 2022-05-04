@@ -40,6 +40,9 @@ class DatafeedLoopV1(AbstractDatafeedLoop):
             raise RuntimeError("The datafeed service V1 is already started")
 
         logger.debug("Starting datafeed V1 loop")
+
+        self._bot_info = await self._session_service.get_session()
+        await self._prepare_datafeed()
         try:
             await super().start()
         finally:

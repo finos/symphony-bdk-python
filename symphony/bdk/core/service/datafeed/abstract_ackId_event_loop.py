@@ -30,9 +30,6 @@ class AbstractAckIdEventLoop(AbstractDatafeedLoop, ABC):
         super().__init__(datafeed_api, session_service, auth_session, config)
         self._ack_id = ""
 
-    async def recreate_datafeed(self):
-        self._ack_id = ""
-
     async def _run_loop_iteration(self):
         events = await self._read_events()
 

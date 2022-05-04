@@ -20,7 +20,6 @@ from symphony.bdk.gen.agent_model.v4_message_sent import V4MessageSent
 from symphony.bdk.gen.agent_model.v4_payload import V4Payload
 from symphony.bdk.gen.agent_model.v5_datafeed import V5Datafeed
 from symphony.bdk.gen.agent_model.v5_datafeed_create_body import V5DatafeedCreateBody
-from symphony.bdk.gen.pod_model.user_v2 import UserV2
 from tests.core.config import minimal_retry_config, minimal_retry_config_with_attempts
 from tests.utils.resource_utils import get_config_resource_filepath
 
@@ -116,12 +115,14 @@ def fixture_mock_datafeed_loop(datafeed_api, session_service, auth_session, conf
 
 
 @pytest.mark.asyncio
-async def test_start(datafeed_loop, datafeed_api, read_df_side_effect):
+async def test_start(datafeed_loop, datafeed_api, session_service, read_df_side_effect):
     datafeed_api.list_datafeed.return_value = []
     datafeed_api.create_datafeed.return_value = V5Datafeed(id="test_id")
     datafeed_api.read_datafeed.side_effect = read_df_side_effect
 
     await datafeed_loop.start()
+
+    session_service.get_session.assert_called_once()
 
     datafeed_api.list_datafeed.assert_called_with(
         session_token="session_token",
@@ -133,6 +134,7 @@ async def test_start(datafeed_loop, datafeed_api, read_df_side_effect):
         key_manager_token="km_token",
         body=V5DatafeedCreateBody(tag=BOT_USER)
     )
+
     assert datafeed_api.read_datafeed.call_args_list[0].kwargs == {"session_token": "session_token",
                                                                    "key_manager_token": "km_token",
                                                                    "datafeed_id": "test_id",
@@ -193,7 +195,7 @@ async def test_read_datafeed_bad_id(datafeed_loop, datafeed_api, read_df_side_ef
 
 
 @pytest.mark.asyncio
-async def test_start_datafeed_stale_datafeed(datafeed_loop, datafeed_api, message_sent_event):
+async def test_start_datafeed_stale_datafeed(datafeed_loop, datafeed_api, session_service, message_sent_event):
     datafeed_loop._retry_config = minimal_retry_config_with_attempts(2)
     datafeed_api.list_datafeed.return_value = [V5Datafeed(id="abc_f_def")]
     datafeed_api.create_datafeed.return_value = V5Datafeed(id="test_id")
@@ -211,6 +213,8 @@ async def test_start_datafeed_stale_datafeed(datafeed_loop, datafeed_api, messag
     datafeed_api.read_datafeed.side_effect = raise_and_return_event
 
     await datafeed_loop.start()
+
+    session_service.get_session.assert_called_once()
 
     datafeed_api.list_datafeed.assert_called_with(
         session_token="session_token",
@@ -380,3 +384,21 @@ async def test_unexpected_error_should_be_propagated_and_call_stop_tasks(datafee
     datafeed_api.read_datafeed.assert_called_once()
     datafeed_loop.recreate_datafeed.assert_not_called()
     datafeed_loop._stop_listener_tasks.assert_called_once()
+
+
+@pytest.mark.asyncio
+async def test_error_in_prepare_should_be_propagated(mock_datafeed_loop):
+    mock_datafeed_loop._run_loop_iteration = AsyncMock()
+    mock_datafeed_loop._stop_listener_tasks = AsyncMock()
+
+    exception = ValueError("error")
+
+    mock_datafeed_loop._prepare_datafeed.side_effect = exception
+
+    with pytest.raises(ValueError) as raised_exception:
+        await mock_datafeed_loop.start()
+        assert raised_exception == exception
+
+    mock_datafeed_loop._prepare_datafeed.assert_called_once()
+    mock_datafeed_loop._run_loop_iteration.assert_not_called()
+    mock_datafeed_loop._stop_listener_tasks.assert_not_called()

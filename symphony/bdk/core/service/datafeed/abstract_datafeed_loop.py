@@ -93,9 +93,6 @@ class AbstractDatafeedLoop(ABC):
 
         :return: None
         """
-        self._bot_info = await self._session_service.get_session()
-
-        await self._prepare_datafeed()
         try:
             await self._run_loop()
         finally:
@@ -127,21 +124,6 @@ class AbstractDatafeedLoop(ABC):
         :param listener: the RealTimeEventListener to be removed.
         """
         self._listeners.remove(listener)
-
-    @abstractmethod
-    async def recreate_datafeed(self):
-        """Method called when datafeed is stale and needs to be recreated (i.e. :py:meth:`read_datafeed` raises an
-        ApiException with status 400)
-
-        :return: None
-        """
-
-    @abstractmethod
-    async def _prepare_datafeed(self):
-        """Method called when :py:meth:`start` is called and before datafeed loop is actually running
-
-        :return: None
-        """
 
     async def _run_loop(self):
         self._running = True

@@ -35,13 +35,6 @@ def fixture_bare_df_loop(session_service):
 
 
 @pytest.mark.asyncio
-async def test_recreate_datafeed(bare_ackid_event_loop):
-    bare_ackid_event_loop._ack_id = "not_empty_ack_id"
-    await bare_ackid_event_loop.recreate_datafeed()
-    assert bare_ackid_event_loop._ack_id is ""
-
-
-@pytest.mark.asyncio
 async def test_run_loop_iteration(bare_ackid_event_loop, read_events_side_effect):
     bare_ackid_event_loop._read_events.side_effect = read_events_side_effect
     await bare_ackid_event_loop._run_loop_iteration()

@@ -27,8 +27,6 @@ class DatahoseLoop(AbstractAckIdEventLoop, AbstractDatahoseLoop):
 
         This service will be stopped by calling :func:`~DatahoseLoop.stop`
     """
-    async def _prepare_datafeed(self):
-        pass
 
     def __init__(self, datafeed_api: DatafeedApi, session_service: SessionService, auth_session: AuthSession,
                  config: BdkConfig):
@@ -46,6 +44,8 @@ class DatahoseLoop(AbstractAckIdEventLoop, AbstractDatahoseLoop):
             raise RuntimeError("The datahose service is already started")
 
         logger.debug("Starting datahose loop")
+
+        self._bot_info = await self._session_service.get_session()
         try:
             await super().start()
         finally:

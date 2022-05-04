@@ -20,14 +20,10 @@ from symphony.bdk.gen.agent_model.v4_message_sent import V4MessageSent
 from symphony.bdk.gen.agent_model.v4_payload import V4Payload
 from symphony.bdk.gen.api_client import ApiClient
 from symphony.bdk.gen.exceptions import ApiException
-from symphony.bdk.gen.pod_model.user_v2 import UserV2
 from tests.core.config import minimal_retry_config_with_attempts
 from tests.core.test.in_memory_datafeed_id_repository import InMemoryDatafeedIdRepository
 from tests.utils.resource_utils import get_config_resource_filepath
 from tests.utils.resource_utils import get_resource_content
-
-BOT_USER_ID = 12345
-BOT_INFO = UserV2(id=BOT_USER_ID)
 
 SLEEP_SECONDS = 0.0001
 
@@ -117,12 +113,13 @@ def auto_stopping_datafeed_loop_v1(datafeed_api, session_service, auth_session, 
 
 
 @pytest.mark.asyncio
-async def test_start(datafeed_loop_v1, datafeed_api, read_df_side_effect):
+async def test_start(datafeed_loop_v1, datafeed_api, session_service, read_df_side_effect):
     datafeed_api.v4_datafeed_create_post.return_value = Datafeed(id="test_id")
     datafeed_api.v4_datafeed_id_read_get.side_effect = read_df_side_effect
 
     await datafeed_loop_v1.start()
 
+    session_service.get_session.assert_called_once()
     datafeed_api.v4_datafeed_create_post.assert_called_once()
     assert datafeed_api.v4_datafeed_id_read_get.call_count >= 1
 
@@ -354,3 +351,20 @@ async def test_events_concurrency_within_same_read_df_chunk(mock_datafeed_loop_v
     mock_datafeed_loop_v1.subscribe(QueueListener())
 
     await mock_datafeed_loop_v1.start()  # test no deadlock
+
+
+@pytest.mark.asyncio
+async def test_error_in_prepare_should_be_propagated(mock_datafeed_loop_v1):
+    exception = ValueError("error")
+
+    mock_datafeed_loop_v1._run_loop_iteration = AsyncMock()
+    mock_datafeed_loop_v1._stop_listener_tasks = AsyncMock()
+    mock_datafeed_loop_v1._prepare_datafeed.side_effect = exception
+
+    with pytest.raises(ValueError) as raised_exception:
+        await mock_datafeed_loop_v1.start()
+        assert raised_exception == exception
+
+    mock_datafeed_loop_v1._prepare_datafeed.assert_called_once()
+    mock_datafeed_loop_v1._run_loop_iteration.assert_not_called()
+    mock_datafeed_loop_v1._stop_listener_tasks.assert_not_called()
