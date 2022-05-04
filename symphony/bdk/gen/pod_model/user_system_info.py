@@ -160,9 +160,9 @@ class UserSystemInfo(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             id (int): [optional]  # noqa: E501
             status (str): [optional]  # noqa: E501
-            suspended (bool): An optional attribute indicating whether the user is temporarily suspended or not. [optional]  # noqa: E501
-            suspended_until (int): An optional unix timestamp until which the suspension is effective. [optional]  # noqa: E501
-            suspension_reason (str): An optional description of the suspension reason. [optional]  # noqa: E501
+            suspended (bool): An optional attribute indicating whether the user is temporarily suspended or not. Since SBE 20.14.. [optional]  # noqa: E501
+            suspended_until (int): An optional unix timestamp until which the suspension is effective. Since SBE 20.14.. [optional]  # noqa: E501
+            suspension_reason (str): An optional description of the suspension reason. Since SBE 20.14.. [optional]  # noqa: E501
             created_date (int): [optional]  # noqa: E501
             created_by (str): [optional]  # noqa: E501
             last_updated_date (int): [optional]  # noqa: E501
@@ -252,9 +252,9 @@ class UserSystemInfo(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             id (int): [optional]  # noqa: E501
             status (str): [optional]  # noqa: E501
-            suspended (bool): An optional attribute indicating whether the user is temporarily suspended or not. [optional]  # noqa: E501
-            suspended_until (int): An optional unix timestamp until which the suspension is effective. [optional]  # noqa: E501
-            suspension_reason (str): An optional description of the suspension reason. [optional]  # noqa: E501
+            suspended (bool): An optional attribute indicating whether the user is temporarily suspended or not. Since SBE 20.14.. [optional]  # noqa: E501
+            suspended_until (int): An optional unix timestamp until which the suspension is effective. Since SBE 20.14.. [optional]  # noqa: E501
+            suspension_reason (str): An optional description of the suspension reason. Since SBE 20.14.. [optional]  # noqa: E501
             created_date (int): [optional]  # noqa: E501
             created_by (str): [optional]  # noqa: E501
             last_updated_date (int): [optional]  # noqa: E501
