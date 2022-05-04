@@ -143,7 +143,7 @@ class MemberInfo(ModelNormal):
             id (int): [optional]  # noqa: E501
             owner (bool): [optional]  # noqa: E501
             join_date (int): [optional]  # noqa: E501
-            added_through_groups ([int]): When the user has been added to the stream through a group (aka SDL), this array contains the group ID which the user belongs to.. [optional]  # noqa: E501
+            added_through_groups ([int]): When the user has been added to the stream through a group (aka SDL), this array contains the group ID which the user belongs to. Since SBE 20.14.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -228,7 +228,7 @@ class MemberInfo(ModelNormal):
             id (int): [optional]  # noqa: E501
             owner (bool): [optional]  # noqa: E501
             join_date (int): [optional]  # noqa: E501
-            added_through_groups ([int]): When the user has been added to the stream through a group (aka SDL), this array contains the group ID which the user belongs to.. [optional]  # noqa: E501
+            added_through_groups ([int]): When the user has been added to the stream through a group (aka SDL), this array contains the group ID which the user belongs to. Since SBE 20.14.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

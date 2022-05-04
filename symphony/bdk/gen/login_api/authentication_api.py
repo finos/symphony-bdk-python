@@ -404,7 +404,7 @@ class AuthenticationApi(object):
     ):
         """Returns the Common Access Token (JWT) public keys as a JWKS.  # noqa: E501
 
-        This is a public endpoint, no authentication is required. The JWKS can be used to verify JWT issued by the idm/tokens endpoint.  # noqa: E501
+        This is a public endpoint, no authentication is required. The JWKS can be used to verify JWT issued by the idm/tokens endpoint. Since SBE 20.14.  # noqa: E501
         This method makes a synchronous HTTP request by default. To make an
         asynchronous HTTP request, please pass async_req=True
 

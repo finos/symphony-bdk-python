@@ -104,10 +104,10 @@ class AppProperties(ModelSimple):
         Note that value can be passed either in args or in kwargs, but not in both.
 
         Args:
-            args[0] ([AppProperty]): Application configuration properties that are shared with the extension application, client side. Do not store sensitive information here..  # noqa: E501
+            args[0] ([AppProperty]): Application configuration properties that are shared with the extension application, client side. Do not store sensitive information here. Since SBE 20.14..  # noqa: E501
 
         Keyword Args:
-            value ([AppProperty]): Application configuration properties that are shared with the extension application, client side. Do not store sensitive information here..  # noqa: E501
+            value ([AppProperty]): Application configuration properties that are shared with the extension application, client side. Do not store sensitive information here. Since SBE 20.14..  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -194,10 +194,10 @@ class AppProperties(ModelSimple):
         Note that value can be passed either in args or in kwargs, but not in both.
 
         Args:
-            args[0] ([AppProperty]): Application configuration properties that are shared with the extension application, client side. Do not store sensitive information here..  # noqa: E501
+            args[0] ([AppProperty]): Application configuration properties that are shared with the extension application, client side. Do not store sensitive information here. Since SBE 20.14..  # noqa: E501
 
         Keyword Args:
-            value ([AppProperty]): Application configuration properties that are shared with the extension application, client side. Do not store sensitive information here..  # noqa: E501
+            value ([AppProperty]): Application configuration properties that are shared with the extension application, client side. Do not store sensitive information here. Since SBE 20.14..  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.

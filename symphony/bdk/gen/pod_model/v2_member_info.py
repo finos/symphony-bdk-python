@@ -149,7 +149,7 @@ class V2MemberInfo(ModelNormal):
             is_owner (bool): true if this is an owner of the room. [optional]  # noqa: E501
             is_creator (bool): true if this is the creator of the room. [optional]  # noqa: E501
             join_date (int): unix timestamp for join date. [optional]  # noqa: E501
-            added_through_groups ([int]): When the user has been added to the stream through a group (aka SDL), this array contains the group ID which the user belongs to.. [optional]  # noqa: E501
+            added_through_groups ([int]): When the user has been added to the stream through a group (aka SDL), this array contains the group ID which the user belongs to. Since SBE 20.14.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -235,7 +235,7 @@ class V2MemberInfo(ModelNormal):
             is_owner (bool): true if this is an owner of the room. [optional]  # noqa: E501
             is_creator (bool): true if this is the creator of the room. [optional]  # noqa: E501
             join_date (int): unix timestamp for join date. [optional]  # noqa: E501
-            added_through_groups ([int]): When the user has been added to the stream through a group (aka SDL), this array contains the group ID which the user belongs to.. [optional]  # noqa: E501
+            added_through_groups ([int]): When the user has been added to the stream through a group (aka SDL), this array contains the group ID which the user belongs to. Since SBE 20.14.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
