@@ -14,6 +14,7 @@ from symphony.bdk.gen.agent_model.v4_message_sent import V4MessageSent
 from symphony.bdk.gen.agent_model.v4_stream import V4Stream
 
 STREAM_ID = "stream_id"
+BOT_USER_ID = 1234567
 
 
 @pytest.fixture(name="session_service")
@@ -39,11 +40,23 @@ def fixture_bdk(activity_registry):
 
 @pytest.fixture(name="command_context")
 def fixture_command_context():
-    message_content = "<messageML>@bot_name /help</messageML>"
+    message_content = f"<div data-format=\"PresentationML\" data-version=\"2.0\" class=\"wysiwyg\">" \
+                      f"<p>" \
+                      f"<div>" \
+                      f"<p>" \
+                      f"<span class=\"entity\" data-entity-id=\"0\">@bot_name </span>" \
+                      f" /help</p></div></p></div>"
+    data = f"{{\"0\":{{\"id\":[{{\"type\":\"com.symphony.user.userId\",\"value\":\"{BOT_USER_ID}\"}}]," \
+           f"\"type\":\"com.symphony.user.mention\"}}}}"
     message_sent = V4MessageSent(message=V4Message(message_id="message_id",
                                                    message=message_content,
+                                                   data=data,
                                                    stream=V4Stream(stream_id=STREAM_ID)))
-    return CommandContext(V4Initiator(), message_sent, "bot_name")
+    return CommandContext(
+        initiator=V4Initiator(),
+        source_event=message_sent,
+        bot_display_name="bot_name",
+        bot_user_id=BOT_USER_ID)
 
 
 @pytest.mark.asyncio

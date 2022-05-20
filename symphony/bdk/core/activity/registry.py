@@ -24,7 +24,7 @@ def _initialize_display_name(func):
     """
     async def decorator(*args, **kwargs):
         registry = args[0]
-        await registry.fetch_bot_display_name()
+        await registry.fetch_bot_info()
         return await func(*args, **kwargs)
 
     return decorator
@@ -40,6 +40,7 @@ class ActivityRegistry(RealTimeEventListener):
         self._activity_list = []
         self._session_service = session_service
         self._bot_display_name = None
+        self._bot_user_id = None
 
     @property
     def activity_list(self):
@@ -60,7 +61,7 @@ class ActivityRegistry(RealTimeEventListener):
                 self._activity_list.remove(act)
                 logger.debug("Activity '%s' has been removed/unsubscribed in order to be replaced", act)
 
-    def slash(self, command: str, mention_bot: bool = True, description: str = ""):
+    def slash(self, command: str, mention_bot: bool = True, description: str = "", bot_user_id: int = ""):
         """Decorator around a listener callback coroutine which takes a
         :py:class:`~symphony.bdk.core.activity.command.CommandContext` as single parameter and returns nothing.
         This registers a new :py:class:`~symphony.bdk.core.activity.command.SlashCommandActivity`
@@ -69,18 +70,19 @@ class ActivityRegistry(RealTimeEventListener):
         :param command: the command name e.g. "/hello"
         :param mention_bot: if user should mention the bot to trigger the slash command
         :param description: command description
+        :param bot_user_id: bot user id
         :return: None
         """
         def decorator(func):
             logger.debug("Registering slash command with command=%s, mention_bot=%s", command, mention_bot)
-            self.register(SlashCommandActivity(command, mention_bot, func, description))
+            self.register(SlashCommandActivity(command, mention_bot, func, description, bot_user_id))
             return func
 
         return decorator
 
     @_initialize_display_name
     async def on_message_sent(self, initiator: V4Initiator, event: V4MessageSent):
-        context = CommandContext(initiator, event, self._bot_display_name)
+        context = CommandContext(initiator, event, self._bot_display_name, self._bot_user_id)
         for act in self._activity_list:
             if isinstance(act, CommandActivity):
                 act.before_matcher(context)
@@ -105,7 +107,7 @@ class ActivityRegistry(RealTimeEventListener):
                 if act.matches(context):
                     await act.on_activity(context)
 
-    async def fetch_bot_display_name(self):
+    async def fetch_bot_info(self):
         """Fetches the bot display name if not already done.
 
         :return: None
@@ -113,4 +115,5 @@ class ActivityRegistry(RealTimeEventListener):
         if self._bot_display_name is None:
             session = await self._session_service.get_session()
             self._bot_display_name = session.display_name
+            self._bot_user_id = session.id
             logger.debug("Bot display name is : %s", self._bot_display_name)
