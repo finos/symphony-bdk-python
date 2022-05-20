@@ -205,11 +205,8 @@ datahose:
 The minimal configuration for the datahose service is the `filters` field. It should contain at least one value chosen
 among the following:
 * SOCIALMESSAGE
-* CHANNEL_CREATE
-* CHANNEL_UPDATE
 * CREATE_ROOM
 * UPDATE_ROOM
-* UPDATE_STREAM
 
 :warning: If you want to use `SOCIALMESSAGE` filter (i.e. consume message sent events), `ceservice` credentials must be
 configured in your Symphony agent.
