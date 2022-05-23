@@ -13,6 +13,9 @@ Contents
 * [Application service](markdown/application_service.md)
 * [Signal service](markdown/signal_service.md)
 * [Presence service](markdown/presence_service.md)
+* [User service](markdown/user_service.md)
+* [Session service](markdown/session_service.md)
+* [Health service](markdown/health_service.md)
 * [Extending the BDK](markdown/extension.md)
 * [FAQ](markdown/faq.md)
 
