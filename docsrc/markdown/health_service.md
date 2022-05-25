@@ -7,8 +7,8 @@ More precisely:
 
 
 ## How to use
-The central component for the Health Service is the `UserService` class, it exposes the service APIs endpoints mentioned above.  
-The service is accessible from the`SymphonyBdk` object by calling the `users()` method:
+The central component for the Health Service is the `HealthService` class, it exposes the service APIs endpoints mentioned above.  
+The service is accessible from the`SymphonyBdk` object by calling the `health()` method:
 
 ```python
 class HealthMain:
