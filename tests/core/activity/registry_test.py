@@ -231,10 +231,9 @@ async def test_slash_command_without_mention_bot(activity_registry, message_sent
 async def test_slash_command_with_mention_bot(activity_registry, message_sent):
     listener = AsyncMock()
     mention_bot = True
-    bot_user_id = 12345
     command_name = "/command"
 
-    activity_registry.slash(command=command_name, mention_bot=mention_bot, bot_user_id=bot_user_id)(listener)
+    activity_registry.slash(command=command_name, mention_bot=mention_bot)(listener)
 
     assert len(activity_registry._activity_list) == 1
 
@@ -244,7 +243,6 @@ async def test_slash_command_with_mention_bot(activity_registry, message_sent):
     assert slash_activity._requires_mention_bot == mention_bot
     assert slash_activity._callback == listener
     assert isinstance(slash_activity._command_pattern.tokens[0], MatchingUserIdMentionToken)
-    assert slash_activity._command_pattern.tokens[0].matching_user_id == bot_user_id
 
 
 @pytest.mark.asyncio

@@ -24,9 +24,9 @@ def test_two_words_with_spaces():
 
 
 # TODO: fix this test
-def texst_words_inside_tags():
-    under_test = build_tokenizer("ttt<p> edc rtf</p>ddd")
-    assert under_test.tokens == ["ttt", "", "edc rtf"]
+def test_words_inside_tags():
+    under_test = build_tokenizer("ttt<p>ddd</p> edc rtf")
+    assert under_test.tokens == ["ttt", "ddd", "edc", "rtf"]
 
 
 def test_one_mention():

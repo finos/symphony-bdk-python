@@ -43,11 +43,15 @@ class StaticCommandToken(AbstractCommandToken):
     """
 
     def __init__(self, pattern: str):
+        if "{" in pattern or "}" in pattern:
+            raise ValueError("Invalid pattern syntax")
+
         # Begin and end anchors added to the pattern
         self._pattern = "^" + pattern + "$"
+        self._compiled_pattern = re.compile(r"" + self._pattern)
 
     def matches(self, token: object):
-        return isinstance(token, str) and re.compile(r"" + self.pattern).match(token)
+        return isinstance(token, str) and self._compiled_pattern.match(token)
 
     @property
     def pattern(self):
@@ -137,16 +141,15 @@ class MatchingUserIdMentionToken(AbstractCommandToken):
     Command token matching message token if it is a mention with a given user ID.
     """
 
-    def __init__(self, matching_user_id):
-        self._matching_user_id = matching_user_id
+    def __init__(self, bot_user_id_supplier):
+        """
+        :param bot_user_id_supplier: supplier function to get bot user id
+        """
+        self._matching_user_id_supplier = bot_user_id_supplier
 
     def matches(self, token: object):
-        return isinstance(token, Mention) and token.user_id == self._matching_user_id
+        return isinstance(token, Mention) and token.user_id == self._matching_user_id_supplier()
 
-    @property
-    def matching_user_id(self):
-        return self._matching_user_id
-
-    @matching_user_id.setter
-    def matching_user_id(self, user_id):
-        self._matching_user_id = user_id
+    def __eq__(self, o: object) -> bool:
+        return isinstance(o, MatchingUserIdMentionToken) and \
+               self._matching_user_id_supplier() == o._matching_user_id_supplier()

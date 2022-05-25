@@ -25,7 +25,7 @@ class Arguments:
         :return: Argument's value. It can be {@link String}, {@link Hashtag}, {@link Cashtag} or {@link Mention}.
                 None if not found
         """
-        return self._arguments[key]
+        return self._arguments.get(key)
 
     def get_as_string(self, key: str):
         """
@@ -33,9 +33,9 @@ class Arguments:
         :param key: Argument's name
         :return: Argument's value as String. None if not found.
         """
-        argument_value = self.arguments.get(key)
+        argument_value = self._arguments.get(key)
         if argument_value:
-            return str(argument_value)
+            return argument_value if isinstance(argument_value, str) else argument_value.text
         return None
 
     def get_string(self, key: str):
@@ -44,7 +44,7 @@ class Arguments:
         :param key:  Argument's name
         :return: Argument's value. If it is not a String or not found, None is returned.
         """
-        argument_value = self.arguments.get(key)
+        argument_value = self._arguments.get(key)
         if argument_value and isinstance(argument_value, str):
             return str(argument_value)
         return None
@@ -55,7 +55,7 @@ class Arguments:
         :param key: Argument's name
         :return: Argument's value. If it is not an instance of {@link Hashtag} or not found, None is returned.
         """
-        argument_value = self.arguments.get(key)
+        argument_value = self._arguments.get(key)
         if argument_value and isinstance(argument_value, Hashtag):
             return argument_value
         return None
@@ -66,7 +66,7 @@ class Arguments:
         :param key: Argument's name
         :return: Argument's value. If it is not an instance of {@link Cashtag} or not found, None is returned.
         """
-        argument_value = self.arguments.get(key)
+        argument_value = self._arguments.get(key)
         if argument_value and isinstance(argument_value, Cashtag):
             return argument_value
         return None
@@ -77,14 +77,10 @@ class Arguments:
         :param key: Argument's name
         :return: Argument's value. If it is not an instance of {@link Mention} or not found, None is returned.
         """
-        argument_value = self.arguments.get(key)
+        argument_value = self._arguments.get(key)
         if argument_value and isinstance(argument_value, Mention):
             return argument_value
         return None
-
-    @property
-    def arguments(self):
-        return self._arguments
 
     def __eq__(self, other):
         return isinstance(other, Arguments) and self._arguments == other._arguments

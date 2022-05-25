@@ -59,6 +59,17 @@ class CommandActivity(AbstractActivity[CommandContext]):
     """A command activity corresponds to any message sent in a chat where the bot is part of.
     """
 
+    def __init__(self):
+        self._bot_user_id = None
+
+    @property
+    def bot_user_id(self):
+        return self._bot_user_id
+
+    @bot_user_id.setter
+    def bot_user_id(self, bot_user_id):
+        self._bot_user_id = bot_user_id
+
     def matches(self, context: CommandContext) -> bool:
         pass
 
@@ -77,12 +88,13 @@ class SlashCommandActivity(CommandActivity):
       - "{name}" otherwise
     """
 
-    def __init__(self, name, requires_mention_bot, callback, description="", bot_user_id=None):
+    def __init__(self, name, requires_mention_bot, callback, description=""):
         """
         :param name: the command name
         :param requires_mention_bot: if the command requires the bot mention to trigger the slash command
         :param callback: the coroutine to be executed if message text matches
         """
+        super().__init__()
         self._name = name
         self._command_pattern = SlashCommandPattern(name)
         self._requires_mention_bot = requires_mention_bot
@@ -90,7 +102,8 @@ class SlashCommandActivity(CommandActivity):
         self._description = description
 
         if self._requires_mention_bot:
-            self._command_pattern.prepend_token(MatchingUserIdMentionToken(bot_user_id))
+            # The user id will be loaded in runtime in a lazy way
+            self._command_pattern.prepend_token(MatchingUserIdMentionToken(lambda: self.bot_user_id))
 
     @property
     def name(self) -> str:
@@ -101,9 +114,6 @@ class SlashCommandActivity(CommandActivity):
             else self._description + " (mention not required)"
 
     def matches(self, context: CommandContext) -> bool:
-        if self._requires_mention_bot and isinstance(self._command_pattern.tokens[0], MatchingUserIdMentionToken):
-            self._command_pattern.tokens[0].matching_user_id = context.bot_user_id
-
         match_result = self._command_pattern.get_match_result(context.source_event.message)
 
         if match_result.is_matching and match_result.arguments:

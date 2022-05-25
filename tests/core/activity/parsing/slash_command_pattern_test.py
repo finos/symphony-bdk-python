@@ -1,5 +1,3 @@
-import re
-
 import pytest
 
 from symphony.bdk.core.activity.parsing.message_entities import Cashtag, Hashtag, Mention
@@ -100,11 +98,9 @@ def test_slash_command_bad_cash_command_argument():
         SlashCommandPattern("{$$}")
 
 
-# TODO: fix this test
-def slash_command_static_argument_and_string_argument_glued():
-    with pytest.raises(re.error, match="Non valid regex"):
+def test_slash_command_static_argument_and_string_argument_glued():
+    with pytest.raises(ValueError, match="Invalid pattern syntax"):
         SlashCommandPattern("/command{arg}")
-        # SlashCommandPattern("/[.*")
 
 
 def test_slash_command_two_arguments_glued():

@@ -97,6 +97,9 @@ def test_slash_command_matches_with_bot_mention():
     other_bot_user_id = 123000
     slash_command = SlashCommandActivity(command, True, AsyncMock())
 
+    # The bot user id is set in runtime in a lazy way
+    slash_command.bot_user_id = BOT_USER_ID
+
     context = create_command_context(
         create_message_sent_with_data(
             content=f"<div><p><span class=\"entity\" data-entity-id=\"0\">"
