@@ -40,9 +40,8 @@ class InputTokenizer:
         self._buffer = ""
 
     def _parse_xml_text(self, root):
-        self._parse_buffer()
-
         if self._is_entity_node(root):
+            self._parse_buffer()
             entity_id = root.attrib[InputTokenizer.data_entity_id]
             entity_type = self._data_node[entity_id]['type']
             if self._is_entity_type_supported(entity_type):
@@ -51,8 +50,12 @@ class InputTokenizer:
                 self._parse_text(root)
         else:
             self._parse_text(root)
+
         if root.tail:
+            self._parse_buffer()
             self._buffer += root.tail
+        else:
+            self._parse_buffer()
 
     def _parse_entity_node(self, entity_id, root):
         """
