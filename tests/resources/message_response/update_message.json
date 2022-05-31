@@ -15,6 +15,7 @@
     "userAgent": "Agent-20.13.0-SNAPSHOT-Linux-4.14.243-185.433.amzn2.x86_64",
     "originalFormat": "com.symphony.messageml.v2",
     "sid": "b10d692f-899e-4601-b946-879da15c0462",
+    "silent": "true",
     "replacing": "PUQj2xA0eniBOfeNTbTu8X___oNdE9uDbQ",
     "initialTimestamp": 1634820957308,
     "initialMessageId": "PUQj2xA0eniBOfeNTbTu8X___oNdE9uDbQ"

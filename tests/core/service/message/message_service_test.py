@@ -418,7 +418,8 @@ async def test_search_all_messages(mocked_api_client, message_service):
 async def test_update_message(mocked_api_client, message_service):
     mocked_api_client.call_api.return_value = \
         get_deserialized_object_from_resource(V4Message, "message_response/update_message.json")
-    message = await message_service.update_message("stream_id", "message_id", "test_message")
+    message = await message_service.update_message("stream_id", "message_id", "test_message", "data", "version")
 
     assert message.message_id == "ikCBeVCgQT876veVzQzOV3___oNI6f8obQ"
     assert message.user.user_id == 11338713662703
+    assert message.silent
