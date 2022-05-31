@@ -248,11 +248,11 @@ class UserService(OboUserService):
     search users by ids, emails or usernames, perform some action related to
     user like:
 
-    * Add or remove roles from an user
-    * Get or update avatar of an user
-    * Get, assign or unassign disclaimer to an user
-    * Get, update feature entitlements of an user
-    * Get, update status of an user
+    * Add or remove roles from a user
+    * Get or update avatar of a user
+    * Get, assign or unassign disclaimer to a user
+    * Get, update feature entitlements of a user
+    * Get, update status of a user
     """
 
     def __init__(self, user_api: UserApi,
@@ -373,7 +373,7 @@ class UserService(OboUserService):
             user_id: int,
             role_id: RoleId
     ) -> None:
-        """Add a role to an user.
+        """Add a role to a user.
         See: `Add Role <https://developers.symphony.com/restapi/reference/add-role>`_
 
         :param user_id: user id
@@ -405,7 +405,7 @@ class UserService(OboUserService):
             user_id: int,
             role_id: RoleId
     ) -> None:
-        """Remove a role from an user.
+        """Remove a role from a user.
         See: `Remove Role <https://developers.symphony.com/restapi/reference/remove-role>`_
 
         :param user_id: user id
@@ -423,7 +423,7 @@ class UserService(OboUserService):
             self,
             user_id: int
     ) -> [Avatar]:
-        """Get the url of avatar of an user.
+        """Get the url of avatar of a user.
         See: `User Avatar <https://developers.symphony.com/restapi/reference/user-avatar>`_
 
         :param user_id: User id
@@ -442,7 +442,7 @@ class UserService(OboUserService):
             user_id: int,
             image: Union[str, bytes]
     ) -> None:
-        """Update avatar of an user.
+        """Update avatar of a user.
         See: `Update User Avatar <https://developers.symphony.com/restapi/reference/update-user-avatar>`_
 
         :param user_id: User id
@@ -519,7 +519,7 @@ class UserService(OboUserService):
         See: `User Delegates <https://developers.symphony.com/restapi/reference/delegates>`_
 
         :param user_id: User id.
-        :return: List of delegates assigned to an user.
+        :return: List of delegates assigned to a user.
         """
         params = {
             'uid': user_id,
@@ -535,7 +535,7 @@ class UserService(OboUserService):
             delegate_user_id: int,
             action: DelegateActionEnum
     ) -> None:
-        """Update delegates assigned to an user.
+        """Update delegates assigned to a user.
         See: `Update User Delegates <https://developers.symphony.com/restapi/reference/update-delegates>`_
 
         :param user_id:             User id.
@@ -554,7 +554,7 @@ class UserService(OboUserService):
             self,
             user_id: int
     ) -> [Feature]:
-        """Get feature entitlements of an user.
+        """Get feature entitlements of a user.
         See: `User Features <https://developers.symphony.com/restapi/reference/features>`_
 
         :param user_id: User id.
@@ -573,7 +573,7 @@ class UserService(OboUserService):
             user_id: int,
             features: [Feature]
     ) -> None:
-        """Update feature entitlements of an user.
+        """Update feature entitlements of a user.
         See: `Update User Features <https://developers.symphony.com/restapi/reference/update-features>`_
 
         :param user_id:     User id.
@@ -591,7 +591,7 @@ class UserService(OboUserService):
             self,
             user_id: int
     ) -> UserStatus:
-        """Get status of an user.
+        """Get status of a user.
         See: `User Status <https://developers.symphony.com/restapi/reference/user-status>`_
 
         :param user_id: User id.
@@ -609,7 +609,7 @@ class UserService(OboUserService):
             user_id: int,
             user_status: UserStatus
     ) -> None:
-        """Update the status of an user.
+        """Update the status of a user.
         See: `Update User Status <https://developers.symphony.com/restapi/reference/update-user-status>`_
 
         :param user_id:     User id.
@@ -866,7 +866,6 @@ class UserService(OboUserService):
         See: `Suspend User Account v1 <https://developers.symphony.com/restapi/v20.10/reference/suspend-user-v1>`_
 
         :param user_id:         User id to suspend
-        :param user_suspension: User suspension payload.
         :param reason:          Reason why the user has to be suspended
         :param until:           Time till when the user should be suspended in millis
         """
