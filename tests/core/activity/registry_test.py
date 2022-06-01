@@ -1,6 +1,8 @@
 from unittest.mock import MagicMock, AsyncMock
 
 import pytest
+
+from symphony.bdk.core.activity.parsing.command_token import MatchingUserIdMentionToken, StaticCommandToken
 from symphony.bdk.gen.agent_model.v4_user import V4User
 
 from symphony.bdk.core.activity.command import CommandActivity, SlashCommandActivity
@@ -208,7 +210,7 @@ async def test_slash_command_decorator(activity_registry, message_sent):
 
 
 @pytest.mark.asyncio
-async def test_slash_command(activity_registry, message_sent):
+async def test_slash_command_without_mention_bot(activity_registry, message_sent):
     listener = AsyncMock()
     mention_bot = False
     command_name = "/command"
@@ -222,6 +224,25 @@ async def test_slash_command(activity_registry, message_sent):
     assert slash_activity._name == command_name
     assert slash_activity._requires_mention_bot == mention_bot
     assert slash_activity._callback == listener
+    assert isinstance(slash_activity._command_pattern.tokens[0], StaticCommandToken)
+
+
+@pytest.mark.asyncio
+async def test_slash_command_with_mention_bot(activity_registry, message_sent):
+    listener = AsyncMock()
+    mention_bot = True
+    command_name = "/command"
+
+    activity_registry.slash(command=command_name, mention_bot=mention_bot)(listener)
+
+    assert len(activity_registry._activity_list) == 1
+
+    slash_activity = activity_registry._activity_list[0]
+    assert isinstance(slash_activity, SlashCommandActivity)
+    assert slash_activity._name == command_name
+    assert slash_activity._requires_mention_bot == mention_bot
+    assert slash_activity._callback == listener
+    assert isinstance(slash_activity._command_pattern.tokens[0], MatchingUserIdMentionToken)
 
 
 @pytest.mark.asyncio
