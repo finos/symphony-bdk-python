@@ -15,7 +15,7 @@ from symphony.bdk.gen.agent_model.v5_datafeed_create_body import V5DatafeedCreat
 
 # DFv2 API authorizes a maximum length for the tag parameter
 DATAFEED_TAG_MAX_LENGTH = 100
-DATAFEED_V2_ID_PATTERN = re.compile("^[^\\s_]+_f_[^\\s_]+$")
+DATAFEED_V2_ID_PATTERN = re.compile("^[^\\s_]+_f(_[^\\s_]+)?$")
 
 logger = logging.getLogger(__name__)
 

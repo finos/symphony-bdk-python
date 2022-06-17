@@ -151,6 +151,26 @@ async def test_start_already_started_datafeed_v2_loop_should_throw_error(datafee
 
 
 @pytest.mark.asyncio
+async def test_start_old_datafeed_format_exist(datafeed_loop, datafeed_api, read_df_side_effect):
+    datafeed_api.list_datafeed.return_value = [V5Datafeed(id="abc_f")]
+    datafeed_api.read_datafeed.side_effect = read_df_side_effect
+
+    await datafeed_loop.start()
+
+    datafeed_api.list_datafeed.assert_called_with(
+        session_token="session_token",
+        key_manager_token="km_token",
+        tag=BOT_USER
+    )
+    assert datafeed_api.read_datafeed.call_args_list[0].kwargs == {"session_token": "session_token",
+                                                                   "key_manager_token": "km_token",
+                                                                   "datafeed_id": "abc_f",
+                                                                   "ack_id": AckId(ack_id="")}
+    assert datafeed_loop._datafeed_id == "abc_f"
+    assert datafeed_loop._ack_id == "ack_id"
+
+
+@pytest.mark.asyncio
 async def test_start_datafeed_exist(datafeed_loop, datafeed_api, read_df_side_effect):
     datafeed_api.list_datafeed.return_value = [V5Datafeed(id="abc_f_def")]
     datafeed_api.read_datafeed.side_effect = read_df_side_effect
