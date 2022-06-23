@@ -45,6 +45,10 @@ generate_files() {
   rm __init__.py  # we don't care about __init__.py files
   cp *.py $project_root/symphony/bdk/gen/${name}_model
 
+  # update rest.py
+  cd $code_gen_dir/output/symphony/bdk/gen
+  cp rest.py $project_root/symphony/bdk/gen/rest.py
+
   # remove downloaded files
   cd $code_gen_dir
   rm -r output
@@ -53,6 +57,7 @@ generate_files() {
   then
     rm $support_file_name
   fi
+
 }
 
 generate_files agent ${api_spec_base_url}/agent/agent-api-public-deprecated.yaml
