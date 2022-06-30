@@ -24,7 +24,7 @@ def _initialize_display_name(func):
     """
     async def decorator(*args, **kwargs):
         registry = args[0]
-        await registry.fetch_bot_display_name()
+        await registry.fetch_bot_info()
         return await func(*args, **kwargs)
 
     return decorator
@@ -40,6 +40,7 @@ class ActivityRegistry(RealTimeEventListener):
         self._activity_list = []
         self._session_service = session_service
         self._bot_display_name = None
+        self._bot_user_id = None
 
     @property
     def activity_list(self):
@@ -80,7 +81,7 @@ class ActivityRegistry(RealTimeEventListener):
 
     @_initialize_display_name
     async def on_message_sent(self, initiator: V4Initiator, event: V4MessageSent):
-        context = CommandContext(initiator, event, self._bot_display_name)
+        context = CommandContext(initiator, event, self._bot_display_name, self._bot_user_id)
         for act in self._activity_list:
             if isinstance(act, CommandActivity):
                 act.before_matcher(context)
@@ -105,7 +106,7 @@ class ActivityRegistry(RealTimeEventListener):
                 if act.matches(context):
                     await act.on_activity(context)
 
-    async def fetch_bot_display_name(self):
+    async def fetch_bot_info(self):
         """Fetches the bot display name if not already done.
 
         :return: None
@@ -113,4 +114,9 @@ class ActivityRegistry(RealTimeEventListener):
         if self._bot_display_name is None:
             session = await self._session_service.get_session()
             self._bot_display_name = session.display_name
+            self._bot_user_id = session.id
+
+            for activity in self._activity_list:
+                activity.bot_user_id = self._bot_user_id
+
             logger.debug("Bot display name is : %s", self._bot_display_name)

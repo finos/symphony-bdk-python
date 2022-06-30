@@ -58,6 +58,10 @@ class ApplicationInfo(ModelNormal):
     }
 
     validations = {
+        ('app_id',): {
+            'max_length': 256,
+            'min_length': 1,
+        },
     }
 
     @cached_property

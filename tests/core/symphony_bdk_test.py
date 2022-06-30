@@ -85,6 +85,9 @@ async def test_bot_invalid_config_session(invalid_username_config):
             symphony_bdk.datafeed()
 
         with pytest.raises(BotNotConfiguredError):
+            symphony_bdk.datahose()
+
+        with pytest.raises(BotNotConfiguredError):
             symphony_bdk.users()
 
         with pytest.raises(BotNotConfiguredError):

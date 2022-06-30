@@ -11,16 +11,18 @@ class Message:
     """Class holding message information, used in
     :py:class:`~symphony.bdk.core.service.message.message_service.MessageService` to send a message.
     To know more about the format, see
-    `Create Message <https://developers.symphony.com/restapi/reference#create-message-v4>`_.
+    `Create Message <https://developers.symphony.com/restapi/reference/create-message-v4>`_.
     """
 
-    def __init__(self, content: str, data=None,
+    def __init__(self, content: str, data=None, silent=True,
                  attachments: List[Union[IO, Tuple[IO, IO]]] = None, version: str = ""):
         """Builds a message.
 
         :param content: the MessageML content to be sent. This is mandatory
           If there is no <messageML> tags, they will be added to the content.
-        :param data: an object (e.g. dict) that will be serialized into JSON using ``json.dumps``
+        :param data: an object (e.g. dict) that will be serialized into JSON using ``json.dumps``.
+        :param silent: the bool flag determine if the updated message will be marked as read (when it
+          is true and it s the default value) or unread (when it is false)
         :param attachments: list of attachments or list of (attachment, previews).
           These must be opened files either in binary or text mode.
           Previews are optional but if present, all attachments must have a preview.
@@ -32,6 +34,7 @@ class Message:
         self._content = self._get_content(content)
         self._data = "" if data is None else json.dumps(data)
         self._version = version
+        self._silent = silent
         self._attachments, self._previews = self._get_attachments_and_previews(attachments)
 
     @property
@@ -57,6 +60,14 @@ class Message:
         :return: the message format version
         """
         return self._version
+
+    @property
+    def silent(self) -> str:
+        """Message silent flag
+
+        :return: the message silent value
+        """
+        return self._silent
 
     @property
     def attachments(self) -> List[IO]:

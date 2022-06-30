@@ -46,7 +46,7 @@ class OboMessageService:
             attachment: List[Union[IO, Tuple[IO, IO]]] = None
     ) -> V4Message:
         """Send a message to an existing stream.
-        See: `Create Message <https://developers.symphony.com/restapi/reference#create-message-v4>`_
+        See: `Create Message <https://developers.symphony.com/restapi/reference/create-message-v4>`_
 
         :param stream_id: The ID of the stream to send the message to.
         :param message: a :py:class:`Message` instance or a string containing the MessageML content to be sent.
@@ -78,7 +78,7 @@ class OboMessageService:
             preview: List[IO] = None
     ) -> V4Message:
         """Send a message to an existing stream.
-        See: `Create Message <https://developers.symphony.com/restapi/reference#create-message-v4>`_
+        See: `Create Message <https://developers.symphony.com/restapi/reference/create-message-v4>`_
 
         :param stream_id: The ID of the stream to send the message to.
         :param message: The MessageML content to be sent.
@@ -113,7 +113,7 @@ class OboMessageService:
             message_id: str
     ) -> MessageSuppressionResponse:
         """Suppresses a message, preventing its contents from being displayed to users.
-        See: `Suppress Message <https://developers.symphony.com/restapi/reference#suppress-message>`_
+        See: `Suppress Message <https://developers.symphony.com/restapi/reference/suppress-message>`_
 
         :param message_id: Message ID of the message to be suppressed.
 
@@ -157,7 +157,7 @@ class MessageService(OboMessageService):
             limit: int = 50
     ) -> [V4Message]:
         """Get messages from an existing stream. Additionally returns any attachments associated with the message.
-        See: `Messages <https://developers.symphony.com/restapi/reference#messages-v4>`_
+        See: `Messages <https://developers.symphony.com/restapi/reference/messages-v4>`_
 
         :param stream_id: The stream where to look for messages
         :param since: Timestamp of the earliest possible date of the first message returned.
@@ -187,7 +187,7 @@ class MessageService(OboMessageService):
             attachment: List[Union[IO, Tuple[IO, IO]]] = None
     ) -> V4MessageBlastResponse:
         """Send a message to multiple existing streams.
-        See: `Blast Message <https://developers.symphony.com/restapi/reference#blast-message>`_
+        See: `Blast Message <https://developers.symphony.com/restapi/reference/blast-message>`_
 
         :param stream_ids: The list of stream IDs to send the message to
         :param message: a :py:class:`Message` instance or a string containing the MessageML content to be sent.
@@ -218,7 +218,7 @@ class MessageService(OboMessageService):
             preview: List[IO] = None
     ) -> V4MessageBlastResponse:
         """Send a message to multiple existing streams.
-        See: `Blast Message <https://developers.symphony.com/restapi/reference#blast-message>`_
+        See: `Blast Message <https://developers.symphony.com/restapi/reference/blast-message>`_
 
         :param stream_ids: The list of stream IDs to send the message to
         :param message: The messageML content to be sent.
@@ -253,7 +253,7 @@ class MessageService(OboMessageService):
             messages: List[V4ImportedMessage]
     ) -> [V4ImportResponse]:
         """Imports a list of messages to Symphony.
-        See: `Import Message <https://developers.symphony.com/restapi/reference#import-message-v4>`_
+        See: `Import Message <https://developers.symphony.com/restapi/reference/import-message-v4>`_
 
         :param messages: List of messages to import.
 
@@ -275,7 +275,7 @@ class MessageService(OboMessageService):
             attachment_id: str
     ) -> str:
         """Downloads the attachment body by the stream ID, message ID and attachment ID.
-        See: `Attachment <https://developers.symphony.com/restapi/reference#attachment>`_
+        See: `Attachment <https://developers.symphony.com/restapi/reference/attachment>`_
 
         :param stream_id: The stream ID where to look for the attachment.
         :param message_id: The ID of the message containing the attachment.
@@ -299,7 +299,7 @@ class MessageService(OboMessageService):
     ) -> MessageStatus:
         """Get the status of a particular message, i.e the list of users who the message was sent to,
         delivered to and the list of users who read the message.
-        See: `Message Status <https://developers.symphony.com/restapi/reference#message-status>`_
+        See: `Message Status <https://developers.symphony.com/restapi/reference/message-status>`_
 
         :param message_id: MessageId the ID of the message to be checked
 
@@ -315,7 +315,7 @@ class MessageService(OboMessageService):
     @retry
     async def get_attachment_types(self) -> List[str]:
         """Retrieves a list of supported file extensions for attachments.
-        See: `Attachment Types <https://developers.symphony.com/restapi/reference#attachment-types>`_
+        See: `Attachment Types <https://developers.symphony.com/restapi/reference/attachment-types>`_
 
         :return: a list of String containing all allowed file extensions for attachments.
 
@@ -332,7 +332,7 @@ class MessageService(OboMessageService):
             message_id: str
     ) -> V4Message:
         """Retrieves the details of a message given its message ID.
-        See: `Get Message <https://developers.symphony.com/restapi/reference#get-message-v1>`_
+        See: `Get Message <https://developers.symphony.com/restapi/reference/get-message-v1>`_
 
         :param message_id: MessageId the ID of the message to be retrieved.
 
@@ -356,7 +356,7 @@ class MessageService(OboMessageService):
             sort_dir: str = "ASC"
     ) -> List[StreamAttachmentItem]:
         """List attachments in a particular stream.
-        See: `List Attachments <https://developers.symphony.com/restapi/reference#list-attachments>`_
+        See: `List Attachments <https://developers.symphony.com/restapi/reference/list-attachments>`_
 
         :param stream_id: The stream ID where to look for the attachments
         :param since: Timestamp of the first required attachment.
@@ -387,7 +387,7 @@ class MessageService(OboMessageService):
             message_id: str
     ) -> MessageReceiptDetailResponse:
         """Fetches receipts details from a specific message.
-        See: `List Message Receipts <https://developers.symphony.com/restapi/reference#list-message-receipts>`_
+        See: `List Message Receipts <https://developers.symphony.com/restapi/reference/list-message-receipts>`_
 
         :param message_id: MessageId the ID of the message to get receipt details from.
 
@@ -408,7 +408,7 @@ class MessageService(OboMessageService):
         """Gets the message metadata relationship.
         This API allows users to track the relationship between a message and all the forwards and replies of that
         message.
-        See: `Message Metadata <https://developers.symphony.com/restapi/reference#message-metadata-relationship>`_
+        See: `Message Metadata <https://developers.symphony.com/restapi/reference/message-metadata-relationship>`_
 
 
         :param message_id: the ID of the message to get relationships from.
@@ -427,7 +427,7 @@ class MessageService(OboMessageService):
                               limit: int = 50) -> List[V4Message]:
         """Searches for messages in the context of a specified user, given an argument-based query and pagination
         attributes (skip and limit parameters).
-        See: `Message Search (using POST) <https://developers.symphony.com/restapi/reference#message-search-post>`_
+        See: `Message Search (using POST) <https://developers.symphony.com/restapi/reference/message-search-post>`_
 
         :param query: The search query arguments
         :param sort_dir: Sorting direction for response. Possible values are desc (default) and asc.
@@ -450,7 +450,7 @@ class MessageService(OboMessageService):
     async def search_all_messages(self, query: MessageSearchQuery, sort_dir: str = "desc", chunk_size: int = 50,
                                   max_number: int = None) -> AsyncGenerator[V4Message, None]:
         """Searches for messages in the context of a specified user, given an argument-based query.
-        See: `Message Search (using POST) <https://developers.symphony.com/restapi/reference#message-search-post>`_
+        See: `Message Search (using POST) <https://developers.symphony.com/restapi/reference/message-search-post>`_
 
         :param query: The search query arguments
         :param sort_dir: Sorting direction for response. Possible values are desc (default) and asc.
@@ -466,9 +466,9 @@ class MessageService(OboMessageService):
 
     @retry
     async def update_message(self, stream_id: str, message_id: str, message: Union[str, Message], data=None,
-                             version: str = "") -> V4Message:
+                             version: str = "", silent=True) -> V4Message:
         """Update an existing message. The existing message must be a valid social message, that has not been deleted.
-        See: `Update Message <https://developers.symphony.com/restapi/reference#update-message-v4>`_
+        See: `Update Message <https://developers.symphony.com/restapi/reference/update-message-v4>`_
 
         :param stream_id: The ID of the stream where the message is being updated.
         :param message_id: The ID of the message that is being updated.
@@ -476,12 +476,15 @@ class MessageService(OboMessageService):
           If it is a :py:class:`Message` instance, other parameters will be ignored.
           If it is a string, ``<messageML>`` tags can be omitted.
         :param data: an object (e.g. dict) that will be serialized into JSON using ``json.dumps``.
+        :param silent: a bool flag that will determine if the updated message is going to be marked as read (when true,
+          which is default value) or unread (when false).
         :param version: Optional message version in the format "major.minor".
           If empty, defaults to the latest supported version.
 
         :return: a V4Message object containing the details of the updated message.
         """
-        message_object = message if isinstance(message, Message) else Message(content=message, data=data, version=version)
+        message_object = message if isinstance(message, Message) else Message(content=message, data=data, silent=silent,
+                                                                              version=version)
 
         params = {
             "sid": stream_id,
@@ -490,7 +493,8 @@ class MessageService(OboMessageService):
             "key_manager_token": await self._auth_session.key_manager_token,
             "message": message_object.content,
             "data": message_object.data,
-            "version": message_object.version
+            "version": message_object.version,
+            "silent": str(message_object.silent)
         }
         return await self._messages_api.v4_stream_sid_message_mid_update_post(**params)
 

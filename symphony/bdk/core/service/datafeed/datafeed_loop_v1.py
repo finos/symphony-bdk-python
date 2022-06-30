@@ -35,6 +35,19 @@ class DatafeedLoopV1(AbstractDatafeedLoop):
         self._datafeed_repository = OnDiskDatafeedIdRepository(config) if repository is None else repository
         self._datafeed_id = None
 
+    async def start(self):
+        if self._running:
+            raise RuntimeError("The datafeed service V1 is already started")
+
+        logger.debug("Starting datafeed V1 loop")
+
+        self._bot_info = await self._session_service.get_session()
+        await self._prepare_datafeed()
+        try:
+            await super().start()
+        finally:
+            logger.debug("Stopping datafeed loop")
+
     async def _prepare_datafeed(self):
         self._datafeed_id = self._datafeed_repository.read()
         if not self._datafeed_id:

@@ -8,6 +8,8 @@ from symphony.bdk.gen.pod_model.pod_app_entitlement import PodAppEntitlement
 from symphony.bdk.gen.pod_model.pod_app_entitlement_list import PodAppEntitlementList
 from symphony.bdk.gen.pod_model.user_app_entitlement import UserAppEntitlement
 from symphony.bdk.gen.pod_model.user_app_entitlement_list import UserAppEntitlementList
+from symphony.bdk.gen.pod_model.user_app_entitlement_patch import UserAppEntitlementPatch
+from symphony.bdk.gen.pod_model.user_app_entitlements_patch_list import UserAppEntitlementsPatchList
 
 
 class ApplicationService:
@@ -38,8 +40,8 @@ class ApplicationService:
 
         See:
 
-        * `Create Application <https://developers.symphony.com/restapi/reference#create-app>`_
-        * `Create Application with an RSA Public Key <https://developers.symphony.com/restapi/reference#create-application-with-an-rsa-public-key>`_
+        * `Create Application <https://developers.symphony.com/restapi/reference/create-app>`_
+        * `Create Application with an RSA Public Key <https://developers.symphony.com/restapi/reference/create-application-with-an-rsa-public-key>`_
 
         :param application_detail:  Contains the following fields for creating an application: appId, name, appUrl,
                                     domain, and publisher. Note that appUrl is not required.
@@ -60,8 +62,8 @@ class ApplicationService:
 
         See:
 
-        * `Update Application <https://developers.symphony.com/restapi/reference#update-application>`_
-        * `Update Application with an RSA Public Key <https://developers.symphony.com/restapi/reference#update-application-with-an-rsa-public-key>`_
+        * `Update Application <https://developers.symphony.com/restapi/reference/update-application>`_
+        * `Update Application with an RSA Public Key <https://developers.symphony.com/restapi/reference/update-application-with-an-rsa-public-key>`_
 
         :param app_id:              Id of the application needs to be updated.
         :param application_detail:  Contains the following fields for creating an application: appId, name, appUrl,
@@ -82,7 +84,7 @@ class ApplicationService:
         """
         Delete an existing application.
 
-        See: `Delete Application <https://developers.symphony.com/restapi/reference#delete-application>`_
+        See: `Delete Application <https://developers.symphony.com/restapi/reference/delete-application>`_
 
         :param app_id:  Id of the application needs to be deleted.
 
@@ -98,7 +100,7 @@ class ApplicationService:
         """
         Get an existing application.
 
-        See: `Get Application <https://developers.symphony.com/restapi/reference#get-application>`_
+        See: `Get Application <https://developers.symphony.com/restapi/reference/get-application>`_
 
         :param app_id:  Id of the application.
 
@@ -116,7 +118,7 @@ class ApplicationService:
         """
         Get the list of application entitlements for the company.
 
-        See: `List App Entitlements <https://developers.symphony.com/restapi/reference#list-app-entitlements>`_
+        See: `List App Entitlements <https://developers.symphony.com/restapi/reference/list-app-entitlements>`_
 
         :return: The list of application entitlements.
 
@@ -132,7 +134,7 @@ class ApplicationService:
         """
         Update the list of application entitlements for the company.
 
-        See: `Update App Entitlements <https://developers.symphony.com/restapi/reference#update-application-entitlements>`_
+        See: `Update App Entitlements <https://developers.symphony.com/restapi/reference/update-application-entitlements>`_
 
         :param entitlements: The list of entitlements to be updated by.
 
@@ -151,7 +153,7 @@ class ApplicationService:
         """
         Get the list of Symphony application entitlements for a particular user.
 
-        See: `User Apps <https://developers.symphony.com/restapi/reference#user-apps>`_
+        See: `User Apps <https://developers.symphony.com/restapi/reference/user-apps>`_
 
         :param user_id: User Id
 
@@ -170,7 +172,7 @@ class ApplicationService:
         """
         Update the application entitlements for a particular user.
 
-        See: `Update User Apps <https://developers.symphony.com/restapi/reference#update-user-apps>`_
+        See: `Update User Apps <https://developers.symphony.com/restapi/reference/update-user-apps>`_
 
         :param user_id:                 User Id
         :param user_app_entitlements:   The list of App Entitlements needs to be updated.
@@ -186,3 +188,25 @@ class ApplicationService:
         user_app_entitlement_list \
             = await self._app_entitlement_api.v1_admin_user_uid_app_entitlement_list_post(**params)
         return user_app_entitlement_list.value
+
+    @retry
+    async def patch_user_applications(self, user_id: int, user_app_entitlements: [UserAppEntitlementPatch]):
+        """
+        Updates particular app entitlements for a particular user. Supports partial update.
+
+        See: `Update User Apps <https://developers.symphony.com/restapi/reference/partial-update-user-apps>`_
+
+        :param user_id: User Id
+        :param user_app_entitlements: The list of App Entitlements needs to be updated.
+
+        :return: The updated list of Symphony application entitlements for this user.
+
+        """
+        params = {
+          'uid': user_id,
+          'payload': UserAppEntitlementsPatchList(value=user_app_entitlements),
+          'session_token': await self._auth_session.session_token
+        }
+        user_app_entitlements_list \
+            = await self._app_entitlement_api.v1_admin_user_uid_app_entitlement_list_patch(**params)
+        return user_app_entitlements_list.value

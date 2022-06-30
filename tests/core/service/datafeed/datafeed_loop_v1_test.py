@@ -3,7 +3,9 @@ from unittest.mock import MagicMock, AsyncMock, call
 
 import pytest
 
-from symphony.bdk.core.auth.auth_session import AuthSession
+from tests.core.service.datafeed.test_fixtures import fixture_initiator_username, fixture_session_service, \
+    fixture_auth_session
+
 from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.config.model.bdk_datafeed_config import BdkDatafeedConfig
 from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import RealTimeEvent
@@ -16,17 +18,12 @@ from symphony.bdk.gen.agent_model.v4_event import V4Event
 from symphony.bdk.gen.agent_model.v4_initiator import V4Initiator
 from symphony.bdk.gen.agent_model.v4_message_sent import V4MessageSent
 from symphony.bdk.gen.agent_model.v4_payload import V4Payload
-from symphony.bdk.gen.agent_model.v4_user import V4User
 from symphony.bdk.gen.api_client import ApiClient
 from symphony.bdk.gen.exceptions import ApiException
-from symphony.bdk.gen.pod_model.user_v2 import UserV2
 from tests.core.config import minimal_retry_config_with_attempts
 from tests.core.test.in_memory_datafeed_id_repository import InMemoryDatafeedIdRepository
 from tests.utils.resource_utils import get_config_resource_filepath
 from tests.utils.resource_utils import get_resource_content
-
-BOT_USER_ID = 12345
-BOT_INFO = UserV2(id=BOT_USER_ID)
 
 SLEEP_SECONDS = 0.0001
 
@@ -34,14 +31,6 @@ SLEEP_SECONDS = 0.0001
 class EventsMock:
     def __init__(self, events):
         self.value = events
-
-
-@pytest.fixture(name="auth_session")
-def fixture_auth_session():
-    auth_session = AuthSession(None)
-    auth_session.session_token = "session_token"
-    auth_session.key_manager_token = "km_token"
-    return auth_session
 
 
 @pytest.fixture(name="config")
@@ -63,16 +52,11 @@ def fixture_datafeed_api():
     return datafeed_api
 
 
-@pytest.fixture(name="initiator")
-def fixture_initiator():
-    return V4Initiator(user=V4User(username="username"))
-
-
 @pytest.fixture(name="message_sent")
-def fixture_message_sent(initiator):
+def fixture_message_sent(initiator_username):
     return V4Event(type=RealTimeEvent.MESSAGESENT.name,
                    payload=V4Payload(message_sent=V4MessageSent()),
-                   initiator=initiator)
+                   initiator=initiator_username)
 
 
 @pytest.fixture(name="message_sent_event")
@@ -96,13 +80,6 @@ def fixture_read_df_loop_side_effect(message_sent):
         return [message_sent]
 
     return read_df
-
-
-@pytest.fixture(name="session_service")
-def fixture_session_service():
-    session_service = AsyncMock()
-    session_service.get_session.return_value = BOT_INFO
-    return session_service
 
 
 @pytest.fixture(name="datafeed_loop_v1")
@@ -136,17 +113,25 @@ def auto_stopping_datafeed_loop_v1(datafeed_api, session_service, auth_session, 
 
 
 @pytest.mark.asyncio
-async def test_start(datafeed_loop_v1, datafeed_api, read_df_side_effect):
+async def test_start(datafeed_loop_v1, datafeed_api, session_service, read_df_side_effect):
     datafeed_api.v4_datafeed_create_post.return_value = Datafeed(id="test_id")
     datafeed_api.v4_datafeed_id_read_get.side_effect = read_df_side_effect
 
     await datafeed_loop_v1.start()
 
+    session_service.get_session.assert_called_once()
     datafeed_api.v4_datafeed_create_post.assert_called_once()
     assert datafeed_api.v4_datafeed_id_read_get.call_count >= 1
 
     assert datafeed_loop_v1._datafeed_id == "test_id"
     assert datafeed_loop_v1._datafeed_repository.read()
+
+
+@pytest.mark.asyncio
+async def test_start_already_started_datafeed_v1_loop_should_throw_error(datafeed_loop_v1):
+    datafeed_loop_v1._running = True
+    with pytest.raises(RuntimeError, match="The datafeed service V1 is already started"):
+        await datafeed_loop_v1.start()
 
 
 @pytest.mark.asyncio
@@ -289,7 +274,7 @@ async def test_no_listener_task(mock_datafeed_loop_v1):
 
 
 @pytest.mark.asyncio
-async def test_listener_called(mock_datafeed_loop_v1, message_sent, initiator):
+async def test_listener_called(mock_datafeed_loop_v1, message_sent, initiator_username):
     class RealTimeEventListenerImpl(RealTimeEventListener):
 
         async def on_message_sent(self, initiator: V4Initiator, event: V4MessageSent):
@@ -300,11 +285,11 @@ async def test_listener_called(mock_datafeed_loop_v1, message_sent, initiator):
 
     await mock_datafeed_loop_v1.start()
 
-    listener.on_message_sent.assert_called_once_with(initiator, message_sent.payload.message_sent)
+    listener.on_message_sent.assert_called_once_with(initiator_username, message_sent.payload.message_sent)
 
 
 @pytest.mark.asyncio
-async def test_exception_in_listener_ignored(mock_datafeed_loop_v1, message_sent, initiator):
+async def test_exception_in_listener_ignored(mock_datafeed_loop_v1, message_sent, initiator_username):
     class RealTimeEventListenerImpl(RealTimeEventListener):
         count = 0
 
@@ -319,12 +304,12 @@ async def test_exception_in_listener_ignored(mock_datafeed_loop_v1, message_sent
 
     await mock_datafeed_loop_v1.start()
 
-    listener_call = call(initiator, message_sent.payload.message_sent)
+    listener_call = call(initiator_username, message_sent.payload.message_sent)
     listener.on_message_sent.assert_has_awaits([listener_call, listener_call])
 
 
 @pytest.mark.asyncio
-async def test_event_error_in_listener_ignored(mock_datafeed_loop_v1, message_sent, initiator):
+async def test_event_error_in_listener_ignored(mock_datafeed_loop_v1, message_sent, initiator_username):
     class RealTimeEventListenerImpl(RealTimeEventListener):
         count = 0
 
@@ -339,7 +324,7 @@ async def test_event_error_in_listener_ignored(mock_datafeed_loop_v1, message_se
 
     await mock_datafeed_loop_v1.start()
 
-    listener_call = call(initiator, message_sent.payload.message_sent)
+    listener_call = call(initiator_username, message_sent.payload.message_sent)
     listener.on_message_sent.assert_has_awaits([listener_call, listener_call])
 
 
@@ -366,3 +351,20 @@ async def test_events_concurrency_within_same_read_df_chunk(mock_datafeed_loop_v
     mock_datafeed_loop_v1.subscribe(QueueListener())
 
     await mock_datafeed_loop_v1.start()  # test no deadlock
+
+
+@pytest.mark.asyncio
+async def test_error_in_prepare_should_be_propagated(mock_datafeed_loop_v1):
+    exception = ValueError("error")
+
+    mock_datafeed_loop_v1._run_loop_iteration = AsyncMock()
+    mock_datafeed_loop_v1._stop_listener_tasks = AsyncMock()
+    mock_datafeed_loop_v1._prepare_datafeed.side_effect = exception
+
+    with pytest.raises(ValueError) as raised_exception:
+        await mock_datafeed_loop_v1.start()
+        assert raised_exception == exception
+
+    mock_datafeed_loop_v1._prepare_datafeed.assert_called_once()
+    mock_datafeed_loop_v1._run_loop_iteration.assert_not_called()
+    mock_datafeed_loop_v1._stop_listener_tasks.assert_not_called()

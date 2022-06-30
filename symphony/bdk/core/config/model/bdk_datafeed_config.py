@@ -27,7 +27,7 @@ class BdkDatafeedConfig:
     def __init__(self, config):
         """
 
-        :param config: the dict containing the datafeed specific confguration.
+        :param config: the dict containing the datafeed specific configuration.
         """
         self.version = DF_V2
         self.id_file_path = ""

@@ -14,6 +14,7 @@ from symphony.bdk.core.extension import ExtensionService
 from symphony.bdk.core.service.application.application_service import ApplicationService
 from symphony.bdk.core.service.connection.connection_service import ConnectionService
 from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import AbstractDatafeedLoop
+from symphony.bdk.core.service.datafeed.abstract_datahose_loop import AbstractDatahoseLoop
 from symphony.bdk.core.service.health.health_service import HealthService
 from symphony.bdk.core.service.message.message_service import MessageService
 from symphony.bdk.core.service.obo_services import OboServices
@@ -92,6 +93,7 @@ class SymphonyBdk:
         self._signal_service = None
         self._session_service = None
         self._datafeed_loop = None
+        self._datahose_loop = None
         self._health_service = None
         self._presence_service = None
         self._activity_registry = None
@@ -113,6 +115,7 @@ class SymphonyBdk:
         self._signal_service = self._service_factory.get_signal_service()
         self._session_service = self._service_factory.get_session_service()
         self._datafeed_loop = self._service_factory.get_datafeed_loop()
+        self._datahose_loop = self._service_factory.get_datahose_loop()
         self._health_service = self._service_factory.get_health_service()
         self._presence_service = self._service_factory.get_presence_service()
         # creates ActivityRegistry that subscribes to DF Loop events
@@ -185,6 +188,14 @@ class SymphonyBdk:
         :return: The Datafeed Loop instance.
         """
         return self._datafeed_loop
+
+    @bot_service
+    def datahose(self) -> AbstractDatahoseLoop:
+        """
+
+        :return:
+        """
+        return self._datahose_loop
 
     @bot_service
     def users(self) -> UserService:

@@ -6,11 +6,11 @@ in Python. The Symphony BDK requires **Python 3.8 or higher**.
 ## Starting with Symphony Generator
 > This section requires `npm` ([Node Package Manager](https://www.npmjs.com/)) to be installed on your local machine as a prerequisite
 
-For all Symphony BDK applications, you should start with the [Symphony Generator](https://github.com/SymphonyPlatformSolutions/generator-symphony).
+For all Symphony BDK applications, you should start with the [Symphony Generator](https://github.com/finos/generator-symphony).
 The Symphony Generator offers a fast way to bootstrap your Symphony BDK project in several languages, including Python:
 ```
-npm i -g generator-symphony
-yo symphony
+npm i -g @finos/generator-symphony
+yo @finos/symphony
 ```
 After entering pod and bot information and selecting `Bot Application` as application type, you should be able to select
 Python as programming language. This will generated a configuration file, a `requirements.txt` and a simple python script.
@@ -104,7 +104,7 @@ except KeyboardInterrupt:
     logging.info("Ending datafeed example")
 ```
 1. The `SymphonyBdk` class acts as an entry point into the library and provides an API to access
-to the main BDK features such as [Datafeed](./datafeed.md) or [message service](./message_service.md).
+to the main BDK features such as [Datafeed](./datafeed.md), [Datahose](./datafeed.md#datahose) or [message service](./message_service.md).
 2. Subscribe to the [`on_message_sent`](https://docs.developers.symphony.com/building-bots-on-symphony/datafeed/real-time-events#message-sent)
 [Real Time Event](https://docs.developers.symphony.com/building-bots-on-symphony/datafeed/real-time-events)
 3. When any message is sent into a stream where your bot is a member, it will reply with a hello message.

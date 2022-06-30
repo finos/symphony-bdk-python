@@ -101,6 +101,17 @@ datafeed:
     multiplier: 1.5
     maxIntervalMillis: 10000
 
+datahose:
+  tag: FANCY_TAG
+  filters:
+    - UPDATE_ROOM
+    - CREATE_ROOM
+  retry:
+    maxAttempts: 61
+    initialIntervalMillis: 20001
+    multiplier: 1.51
+    maxIntervalMillis: 100001
+    
 retry:
   maxAttempts: 6 # set '-1' for an infinite number of attempts, default value is '10'
   initialIntervalMillis: 2000

@@ -1,7 +1,10 @@
+from typing import AsyncGenerator
+
 from symphony.bdk.core.extension import BdkAuthenticationAware, BdkApiClientFactoryAware, BdkExtensionServiceProvider, \
     BdkConfigAware
 from symphony.bdk.core.retry import retry
 from symphony.bdk.core.retry.strategy import is_network_or_minor_error, is_unauthorized
+from symphony.bdk.core.service.pagination import offset_based_pagination, cursor_based_pagination
 from symphony.bdk.core.service.user.user_util import extract_tenant_id
 from symphony.bdk.gen.group_api.group_api import GroupApi
 from symphony.bdk.gen.group_model.add_member import AddMember
@@ -87,7 +90,7 @@ class SymphonyGroupService:
         """List groups of type SDL
         See: `List all groups of specified type <https://developers.symphony.com/restapi/reference/listgroups>`_
 
-        :param status: filter by status, active or deleted. If not specified, both are returned
+        :param status: filter by status, active or deleted. If not specified, all of them are returned.
         :param before: NOT SUPPORTED YET, currently ignored.
         :param after: cursor that points to the end of the current page of data. If not present, the current page is
             the first page
@@ -107,6 +110,30 @@ class SymphonyGroupService:
         if sort_order is not None:
             kwargs["sort_order"] = sort_order
         return await self._group_api.list_groups(**kwargs)
+
+    async def list_all_groups(
+              self,
+              status: Status = None,
+              chunk_size: int = 100,
+              max_number: int = None
+    ) -> AsyncGenerator[ReadGroup, None]:
+        """Returns an asynchronous generator of groups of type SDL
+        See: `List all groups of specified type <https://developers.symphony.com/restapi/reference/listgroups>`_
+
+        :param status:      filter by status, active or deleted. If not specified, all of them are returned.
+        :param chunk_size:  the maximum number of groups to return in one HTTP call. Default: 100.
+        :param max_number:  the total maximum number of groups to retrieve. If set to None, we retrieve
+                            all groups until the last page.
+        :return:            an async generator of groups list.
+        """
+
+        async def groups_one_page(limit, after=None):
+            result = await self.list_groups(status=status,
+                                            limit=limit,
+                                            after=after)
+            return result.data, getattr(result.pagination.cursors, 'after', None)
+
+        return cursor_based_pagination(groups_one_page, chunk_size, max_number)
 
     @retry(retry=refresh_bearer_token_if_unauthorized)
     async def update_group(self, if_match: str, group_id: str, update_group: UpdateGroup) -> ReadGroup:

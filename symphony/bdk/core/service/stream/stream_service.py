@@ -52,7 +52,7 @@ class OboStreamService:
     @retry
     async def get_stream(self, stream_id: str) -> V2StreamAttributes:
         """Returns information about a particular stream.
-        Wraps the `Stream Info V2 <https://developers.symphony.com/restapi/reference#stream-info-v2>`_ endpoint.
+        Wraps the `Stream Info V2 <https://developers.symphony.com/restapi/reference/stream-info-v2>`_ endpoint.
 
         :param stream_id: the ID of the stream to be retrieved.
         :return: the information about the given stream.
@@ -65,7 +65,7 @@ class OboStreamService:
                            limit: int = 50) -> StreamList:
         """Returns a list of all the streams of which the requesting user is a member,
         sorted by creation date (ascending - oldest to newest).
-        Wraps the `List User Streams <https://developers.symphony.com/restapi/reference#list-user-streams>`_ endpoint.
+        Wraps the `List User Streams <https://developers.symphony.com/restapi/reference/list-user-streams>`_ endpoint.
 
         :param stream_filter: the stream searching criteria.
         :param skip: number of stream results to skip.
@@ -80,7 +80,7 @@ class OboStreamService:
             -> AsyncGenerator[StreamAttributes, None]:
         """Returns an asynchronous of all the streams of which the requesting user is a member,
         sorted by creation date (ascending - oldest to newest).
-        Wraps the `List User Streams <https://developers.symphony.com/restapi/reference#list-user-streams>`_ endpoint.
+        Wraps the `List User Streams <https://developers.symphony.com/restapi/reference/list-user-streams>`_ endpoint.
 
         :param stream_filter:  the stream searching criteria.
         :param chunk_size: the maximum number of elements to retrieve in one underlying HTTP call
@@ -97,7 +97,7 @@ class OboStreamService:
     @retry
     async def add_member_to_room(self, user_id: int, room_id: str):
         """Adds a member to an existing room.
-        Wraps the `Add Member <https://developers.symphony.com/restapi/reference#add-member>`_ endpoint.
+        Wraps the `Add Member <https://developers.symphony.com/restapi/reference/add-member>`_ endpoint.
 
         :param user_id: the id of the user to be added to the room.
         :param room_id: the id of the room in which to add the user.
@@ -110,7 +110,7 @@ class OboStreamService:
     @retry
     async def remove_member_from_room(self, user_id: int, room_id: str):
         """Removes a member from an existing room.
-        Wraps the `Remove Member <https://developers.symphony.com/restapi/reference#remove-member>`_ endpoint.
+        Wraps the `Remove Member <https://developers.symphony.com/restapi/reference/remove-member>`_ endpoint.
 
         :param user_id: the id of the user to be removed from the room.
         :param room_id: the id of the room from which to remove the user.
@@ -124,7 +124,7 @@ class OboStreamService:
     async def share(self, stream_id: str, content: ShareContent) -> V2Message:
         """Share third-party content, such as a news article, into the specified stream.
         The stream can be a chat room, an IM, or an MIM.
-        Wraps the `Share <https://developers.symphony.com/restapi/reference#share-v3>`_ endpoint.
+        Wraps the `Share <https://developers.symphony.com/restapi/reference/share-v3>`_ endpoint.
 
         :param stream_id: the id of the stream in which to share the given content.
         :param content: the third-party content to be shared.
@@ -137,7 +137,7 @@ class OboStreamService:
     @retry
     async def promote_user_to_room_owner(self, user_id: int, room_id: str):
         """Promotes user to owner of the chat room.
-        Wraps the `Promote Owner <https://developers.symphony.com/restapi/reference#promote-owner>`_ endpoint.
+        Wraps the `Promote Owner <https://developers.symphony.com/restapi/reference/promote-owner>`_ endpoint.
 
         :param user_id: the id of the user to be promoted as owner.
         :param room_id: the room id.
@@ -149,7 +149,7 @@ class OboStreamService:
     @retry
     async def demote_owner_to_room_participant(self, user_id: int, room_id: str):
         """Demotes room owner to a participant in the chat room.
-        Wraps the `Demote Owner <https://developers.symphony.com/restapi/reference#demote-owner>`_ endpoint.
+        Wraps the `Demote Owner <https://developers.symphony.com/restapi/reference/demote-owner>`_ endpoint.
 
         :param user_id: the id of the room owner to be demoted.
         :param room_id: the room id.
@@ -172,7 +172,7 @@ class StreamService(OboStreamService):
         will be returned.
         If the given list of user ids contains only one id, an IM will be created, otherwise, a MIM will be created.
 
-        Wraps the `Create IM or MIM <https://developers.symphony.com/restapi/reference#create-im-or-mim>`_ endpoint.
+        Wraps the `Create IM or MIM <https://developers.symphony.com/restapi/reference/create-im-or-mim>`_ endpoint.
 
         :param user_ids: the list of user ids ti be put as room participants.
         :return: the created stream.
@@ -184,7 +184,7 @@ class StreamService(OboStreamService):
     async def create_room(self, room_attributes: V3RoomAttributes) -> V3RoomDetail:
         """Creates a new chatroom.
         If no  attributes are specified, the room is created as a private chatroom.
-        Wraps the `Create Room V3 <https://developers.symphony.com/restapi/reference#create-room-v3>`_ endpoint.
+        Wraps the `Create Room V3 <https://developers.symphony.com/restapi/reference/create-room-v3>`_ endpoint.
 
         :param room_attributes: attributes of the room to be created.
         :return: details of created room.
@@ -196,7 +196,7 @@ class StreamService(OboStreamService):
     async def search_rooms(self, query: V2RoomSearchCriteria, skip: int = 0,
                            limit: int = 50) -> V3RoomSearchResults:
         """Search for rooms according to the specified criteria.
-        Wraps the `Search Rooms V3 <https://developers.symphony.com/restapi/reference#search-rooms-v3>`_ endpoint.
+        Wraps the `Search Rooms V3 <https://developers.symphony.com/restapi/reference/search-rooms-v3>`_ endpoint.
 
         :param query: the search criteria.
         :param skip: number of rooms to skip, defaults to 0.
@@ -209,7 +209,7 @@ class StreamService(OboStreamService):
     async def search_all_rooms(self, query: V2RoomSearchCriteria, chunk_size: int = 50,
                                max_number: int = None) -> AsyncGenerator[V3RoomDetail, None]:
         """Search for rooms according to the specified criteria.
-        Wraps the `Search Rooms V3 <https://developers.symphony.com/restapi/reference#search-rooms-v3>`_ endpoint.
+        Wraps the `Search Rooms V3 <https://developers.symphony.com/restapi/reference/search-rooms-v3>`_ endpoint.
 
         :param query: the search criteria.
         :param chunk_size: the maximum number of elements to retrieve in one underlying HTTP call.
@@ -226,7 +226,7 @@ class StreamService(OboStreamService):
     @retry
     async def get_room_info(self, room_id: str) -> V3RoomDetail:
         """Get information about a particular room.
-        Wraps the `Room Info V3 <https://developers.symphony.com/restapi/reference#room-info-v3>`_ endpoint.
+        Wraps the `Room Info V3 <https://developers.symphony.com/restapi/reference/room-info-v3>`_ endpoint.
 
         :param room_id: the id of the room.
         :return: the room details.
@@ -237,7 +237,7 @@ class StreamService(OboStreamService):
     @retry
     async def get_im_info(self, im_id: str) -> V1IMDetail:
         """Get information about a particular IM.
-        Wraps the `IM info <https://developers.symphony.com/restapi/reference#im-info> endpoint`
+        Wraps the `IM info <https://developers.symphony.com/restapi/reference/im-info> endpoint`
 
         :param im_id: the id of the IM.
         :return: the im details.
@@ -248,7 +248,7 @@ class StreamService(OboStreamService):
     @retry
     async def set_room_active(self, room_id: str, active: bool) -> RoomDetail:
         """Deactivates or reactivates a chatroom. At creation time, the chatroom is activated by default.
-        Wraps the `De/Reactivate Room <https://developers.symphony.com/restapi/reference#de-or-re-activate-room>`_
+        Wraps the `De/Reactivate Room <https://developers.symphony.com/restapi/reference/de-or-re-activate-room>`_
         endpoint.
 
         :param room_id: the id of the room to be deactivated or reactivated.
@@ -261,7 +261,7 @@ class StreamService(OboStreamService):
     @retry
     async def update_room(self, room_id: str, room_attributes: V3RoomAttributes) -> V3RoomDetail:
         """Updates the attributes of an existing chatroom.
-        Wraps the `Update Room V3 <https://developers.symphony.com/restapi/reference#update-room-v3>`_ endpoint.
+        Wraps the `Update Room V3 <https://developers.symphony.com/restapi/reference/update-room-v3>`_ endpoint.
 
         :param room_id: the id of the room to be updated.
         :param room_attributes: the attributes of the room to be updated.
@@ -273,7 +273,7 @@ class StreamService(OboStreamService):
     @retry
     async def update_im(self, im_id: str, im_attributes: V1IMAttributes) -> V1IMDetail:
         """Updates the attributes of an existing im.
-        Wraps the `Update IM <https://developers.symphony.com/restapi/reference#update-im>`_ endpoint.
+        Wraps the `Update IM <https://developers.symphony.com/restapi/reference/update-im>`_ endpoint.
 
         :param im_id: the id of the im to be updated.
         :param im_attributes: the attributes of the im to be updated.
@@ -292,7 +292,7 @@ class StreamService(OboStreamService):
         will be returned.
 
         Wraps the
-        `Create IM or MIM Non-inclusive <https://developers.symphony.com/restapi/reference#create-im-or-mim-admin>`_
+        `Create IM or MIM Non-inclusive <https://developers.symphony.com/restapi/reference/create-im-or-mim-admin>`_
         endpoint.
 
         :param user_ids: the list of user IDs to be put as participants. At least two user IDs must be provided.
@@ -318,7 +318,7 @@ class StreamService(OboStreamService):
                                  limit: int = 50) -> V2AdminStreamList:
         """Retrieves all the streams across the enterprise.
         Wraps the `List Streams for Enterprise V2
-        <https://developers.symphony.com/restapi/reference#list-streams-for-enterprise-v2>`_ endpoint.
+        <https://developers.symphony.com/restapi/reference/list-streams-for-enterprise-v2>`_ endpoint.
 
         :param stream_filter: the stream searching filter.
         :param skip: the number of streams to skip.
@@ -332,7 +332,7 @@ class StreamService(OboStreamService):
             -> AsyncGenerator[V2AdminStreamInfo, None]:
         """Retrieves all the streams across the enterprise.
         Wraps the `List Streams for Enterprise V2
-        <https://developers.symphony.com/restapi/reference#list-streams-for-enterprise-v2>`_ endpoint.
+        <https://developers.symphony.com/restapi/reference/list-streams-for-enterprise-v2>`_ endpoint.
 
         :param stream_filter: the stream searching filter.
         :param chunk_size: the maximum number of elements to retrieve in one underlying HTTP call.

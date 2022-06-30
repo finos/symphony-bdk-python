@@ -96,9 +96,11 @@ A _Slash_ command can be used to directly define a very simple bot command such 
 ```
 $ @BotMention /command
 $ /command
+$ /command string_argument #hashtag_argument
+$ /command $cashtag_argument @user_mention_argument
 ```
 
-> Note: a Slash cannot have parameters
+> Note: a Slash can have parameters as String, Cashtag, Hashtag and Mention
 
 #### With the @slash decorator
 One can define a slash command by decorating a callback function which must take one parameter of type
@@ -127,7 +129,7 @@ async def run():
         await bdk.datafeed().start()
 ```
 1. `/hello` is the command name 
-2. `True` means that the bot has to be mentioned
+2. `True` means that the bot has to be mentioned (optional, True is the default)
 3. `This command says hello` is the command description (optional)
 
 The decorated function will then be called if a message is sent in an `IM`, `MIM` or `Chatroom` with a matching text message.
@@ -164,6 +166,58 @@ class HelpCommandActivity(SlashCommandActivity):
 
     async def help_command(self, context: CommandContext):
         return await self._messages.send_message(context.stream_id, "<messageML>Help command triggered</messageML>")
+```
+
+#### Slash command pattern format
+The slash command can be a simple static pattern without arguments, like `/command` or `/command help`.
+You may specify one or more arguments by enclosing them with braces like `{myArgument}`.
+The string inside the braces must have at least one character and must not have whitespaces.
+If there are some arguments, each argument is mandatory in order for the slash command to be triggered. For instance:
+* for command pattern `/command {arg}`:
+  * `/command` won't match
+  * `command help` will match
+  * `command help me` won't match
+
+Arguments can be of several types:
+* `{wordArgument}` will match a regular word only (won't match a mention, a cashtag or a hashtag)
+* `{@mentionArgument}` will match a mention only
+* `{#hastagArgument}` will match a hashtag only
+* `{$cashtagArgument}` will match a cashtag only
+
+In the slash command definition, each argument must be separated by a whitespace to be valid. For instance:
+* `{arg1} {@arg2}` is valid
+* `{arg1}{arg2}` is invalid
+
+Argument names must be unique inside a given pattern.
+* `/command {arg1} {@arg1} {#arg1}` is an invalid pattern.
+
+When a slash command matches, arguments can be retrieved thanks to the `arguments` field in the `CommandContext` object.
+Available functions to handle arguments:
+* context.arguments.get_argument_names(): Lists all arguments keys
+* context.arguments.get(key: str): Returns the argument value. None if not found.
+* context.arguments.get_string(key: str), get_hashtag(key: str), get_cashtag(key: str), get_mention(key: str): Returns the argument value. None if not found or if the type is not correct.
+* context.arguments.get_as_string(key: str): Returns the argument value as a String. None if not found.
+
+Example of a slash command with arguments:
+```python
+from symphony.bdk.core.activity.command import CommandContext
+from symphony.bdk.core.config.loader import BdkConfigLoader
+from symphony.bdk.core.symphony_bdk import SymphonyBdk
+
+
+async def run():
+    async with SymphonyBdk(BdkConfigLoader.load_from_symphony_dir("config.yaml")) as bdk:
+        activities = bdk.activities()
+        messages = bdk.messages()
+
+        @activities.slash("/buy {$ticker} {quantity}")
+        async def on_echo_mention(context: CommandContext):
+            ticker = context.arguments.get_cashtag("ticker").value # can also be retrieved with context.arguments.get("ticker").value
+            quantity = context.arguments.get_string("quantity")
+            
+            message = f"Buy ticker {ticker} with quantity {quantity}"
+
+            await messages.send_message(context.stream_id, f"<messageML>{message}</messageML>")
 ```
 
 ### Help Command

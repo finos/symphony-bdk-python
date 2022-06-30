@@ -21,7 +21,7 @@ from symphony.bdk.gen.pod_model.user_v2 import UserV2
 
 class RealTimeEventListener:
     """Interface for a callback to be invoked when a RealTimeEvent is received from the datafeed
-    `real-time-events <https://developers.symphony.com/restapi/docs/real-time-events>_`
+    `real-time-events <https://docs.developers.symphony.com/building-bots-on-symphony/datafeed/real-time-events>_`
     """
 
     @staticmethod

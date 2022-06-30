@@ -140,7 +140,7 @@ class V2RoomSpecificStreamAttributes(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             name (str): Room name.. [optional]  # noqa: E501
-            groups ([GroupItem]): List of groups (aka SDLs) that were added to the room.. [optional]  # noqa: E501
+            groups ([GroupItem]): List of groups (aka SDLs) that were added to the room. Since SBE 20.14.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -223,7 +223,7 @@ class V2RoomSpecificStreamAttributes(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             name (str): Room name.. [optional]  # noqa: E501
-            groups ([GroupItem]): List of groups (aka SDLs) that were added to the room.. [optional]  # noqa: E501
+            groups ([GroupItem]): List of groups (aka SDLs) that were added to the room. Since SBE 20.14.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

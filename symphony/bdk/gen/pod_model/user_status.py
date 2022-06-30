@@ -145,9 +145,9 @@ class UserStatus(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             status (str): [optional]  # noqa: E501
-            suspended (bool): An optional attribute indicating whether the user is temporarily suspended or not. [optional]  # noqa: E501
-            suspended_until (int): An optional unix timestamp until which the suspension is effective. [optional]  # noqa: E501
-            suspension_reason (str): An optional description of the suspension reason. [optional]  # noqa: E501
+            suspended (bool): An optional attribute indicating whether the user is temporarily suspended or not. Since SBE 20.14.. [optional]  # noqa: E501
+            suspended_until (int): An optional unix timestamp until which the suspension is effective. Since SBE 20.14.. [optional]  # noqa: E501
+            suspension_reason (str): An optional description of the suspension reason. Since SBE 20.14.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -230,9 +230,9 @@ class UserStatus(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             status (str): [optional]  # noqa: E501
-            suspended (bool): An optional attribute indicating whether the user is temporarily suspended or not. [optional]  # noqa: E501
-            suspended_until (int): An optional unix timestamp until which the suspension is effective. [optional]  # noqa: E501
-            suspension_reason (str): An optional description of the suspension reason. [optional]  # noqa: E501
+            suspended (bool): An optional attribute indicating whether the user is temporarily suspended or not. Since SBE 20.14.. [optional]  # noqa: E501
+            suspended_until (int): An optional unix timestamp until which the suspension is effective. Since SBE 20.14.. [optional]  # noqa: E501
+            suspension_reason (str): An optional description of the suspension reason. Since SBE 20.14.. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
