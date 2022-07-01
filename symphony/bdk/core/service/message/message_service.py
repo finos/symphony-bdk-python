@@ -126,6 +126,20 @@ class OboMessageService:
         }
         return await self._message_suppression_api.v1_admin_messagesuppression_id_suppress_post(**params)
 
+    @retry
+    async def get_attachment_types(self) -> List[str]:
+        """Retrieves a list of supported file extensions for attachments.
+        See: `Attachment Types <https://developers.symphony.com/restapi/reference/attachment-types>`_
+
+        :return: a list of String containing all allowed file extensions for attachments.
+
+        """
+        params = {
+            "session_token": await self._auth_session.session_token
+        }
+        type_list = await self._pod_api.v1_files_allowed_types_get(**params)
+        return type_list.value
+
 
 class MessageService(OboMessageService):
     """Service class for managing messages.
@@ -311,20 +325,6 @@ class MessageService(OboMessageService):
             "session_token": await self._auth_session.session_token
         }
         return await self._message_api.v1_message_mid_status_get(**params)
-
-    @retry
-    async def get_attachment_types(self) -> List[str]:
-        """Retrieves a list of supported file extensions for attachments.
-        See: `Attachment Types <https://developers.symphony.com/restapi/reference/attachment-types>`_
-
-        :return: a list of String containing all allowed file extensions for attachments.
-
-        """
-        params = {
-            "session_token": await self._auth_session.session_token
-        }
-        type_list = await self._pod_api.v1_files_allowed_types_get(**params)
-        return type_list.value
 
     @retry
     async def get_message(

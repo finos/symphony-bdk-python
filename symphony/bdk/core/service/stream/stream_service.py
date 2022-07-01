@@ -50,6 +50,35 @@ class OboStreamService:
         self._retry_config = retry_config
 
     @retry
+    async def create_im_or_mim(self, user_ids: [int]) -> Stream:
+        """Create a new single or multi party instant message conversation between the caller and specified users.
+        The caller is implicitly included in the members of the created chat.
+        Duplicate users will be included in the membership of the chat but the duplication will be silently ignored.
+        If there is an existing IM conversation with the same set of participants then the id of that existing stream
+        will be returned.
+        If the given list of user ids contains only one id, an IM will be created, otherwise, a MIM will be created.
+
+        Wraps the `Create IM or MIM <https://developers.symphony.com/restapi/reference/create-im-or-mim>`_ endpoint.
+
+        :param user_ids: the list of user ids ti be put as room participants.
+        :return: the created stream.
+        """
+        return await self._streams_api.v1_im_create_post(uid_list=UserIdList(value=user_ids),
+                                                         session_token=await self._auth_session.session_token)
+
+    @retry
+    async def create_room(self, room_attributes: V3RoomAttributes) -> V3RoomDetail:
+        """Creates a new chatroom.
+        If no  attributes are specified, the room is created as a private chatroom.
+        Wraps the `Create Room V3 <https://developers.symphony.com/restapi/reference/create-room-v3>`_ endpoint.
+
+        :param room_attributes: attributes of the room to be created.
+        :return: details of created room.
+        """
+        return await self._streams_api.v3_room_create_post(payload=room_attributes,
+                                                           session_token=await self._auth_session.session_token)
+
+    @retry
     async def get_stream(self, stream_id: str) -> V2StreamAttributes:
         """Returns information about a particular stream.
         Wraps the `Stream Info V2 <https://developers.symphony.com/restapi/reference/stream-info-v2>`_ endpoint.
@@ -59,6 +88,17 @@ class OboStreamService:
         """
         return await self._streams_api.v2_streams_sid_info_get(sid=stream_id,
                                                                session_token=await self._auth_session.session_token)
+
+    @retry
+    async def get_room_info(self, room_id: str) -> V3RoomDetail:
+        """Get information about a particular room.
+        Wraps the `Room Info V3 <https://developers.symphony.com/restapi/reference/room-info-v3>`_ endpoint.
+
+        :param room_id: the id of the room.
+        :return: the room details.
+        """
+        return await self._streams_api.v3_room_id_info_get(id=room_id,
+                                                           session_token=await self._auth_session.session_token)
 
     @retry
     async def list_streams(self, stream_filter: StreamFilter, skip: int = 0,
@@ -93,6 +133,49 @@ class OboStreamService:
             return result.value if result else None
 
         return offset_based_pagination(list_streams_one_page, chunk_size, max_number)
+
+    @retry
+    async def search_rooms(self, query: V2RoomSearchCriteria, skip: int = 0,
+                           limit: int = 50) -> V3RoomSearchResults:
+        """Search for rooms according to the specified criteria.
+        Wraps the `Search Rooms V3 <https://developers.symphony.com/restapi/reference/search-rooms-v3>`_ endpoint.
+
+        :param query: the search criteria.
+        :param skip: number of rooms to skip, defaults to 0.
+        :param limit: number of maximum rooms to return. Must be a positive integer that does not exceed 100.
+        :return: the rooms matching search criteria.
+        """
+        return await self._streams_api.v3_room_search_post(query=query, skip=skip, limit=limit,
+                                                           session_token=await self._auth_session.session_token)
+
+    async def search_all_rooms(self, query: V2RoomSearchCriteria, chunk_size: int = 50,
+                               max_number: int = None) -> AsyncGenerator[V3RoomDetail, None]:
+        """Search for rooms according to the specified criteria.
+        Wraps the `Search Rooms V3 <https://developers.symphony.com/restapi/reference/search-rooms-v3>`_ endpoint.
+
+        :param query: the search criteria.
+        :param chunk_size: the maximum number of elements to retrieve in one underlying HTTP call.
+        :param max_number: the total maximum number of elements to retrieve.
+        :return: an asynchronous generator of the rooms matching the search criteria.
+        """
+
+        async def search_rooms_one_page(skip, limit):
+            result = await self.search_rooms(query, skip, limit)
+            return result.rooms if result.rooms else None
+
+        return offset_based_pagination(search_rooms_one_page, chunk_size, max_number)
+
+    @retry
+    async def update_room(self, room_id: str, room_attributes: V3RoomAttributes) -> V3RoomDetail:
+        """Updates the attributes of an existing chatroom.
+        Wraps the `Update Room V3 <https://developers.symphony.com/restapi/reference/update-room-v3>`_ endpoint.
+
+        :param room_id: the id of the room to be updated.
+        :param room_attributes: the attributes of the room to be updated.
+        :return: the details of the updated room.
+        """
+        return await self._streams_api.v3_room_id_update_post(id=room_id, payload=room_attributes,
+                                                              session_token=await self._auth_session.session_token)
 
     @retry
     async def add_member_to_room(self, user_id: int, room_id: str):
@@ -164,77 +247,6 @@ class StreamService(OboStreamService):
     """
 
     @retry
-    async def create_im_or_mim(self, user_ids: [int]) -> Stream:
-        """Create a new single or multi party instant message conversation between the caller and specified users.
-        The caller is implicitly included in the members of the created chat.
-        Duplicate users will be included in the membership of the chat but the duplication will be silently ignored.
-        If there is an existing IM conversation with the same set of participants then the id of that existing stream
-        will be returned.
-        If the given list of user ids contains only one id, an IM will be created, otherwise, a MIM will be created.
-
-        Wraps the `Create IM or MIM <https://developers.symphony.com/restapi/reference/create-im-or-mim>`_ endpoint.
-
-        :param user_ids: the list of user ids ti be put as room participants.
-        :return: the created stream.
-        """
-        return await self._streams_api.v1_im_create_post(uid_list=UserIdList(value=user_ids),
-                                                         session_token=await self._auth_session.session_token)
-
-    @retry
-    async def create_room(self, room_attributes: V3RoomAttributes) -> V3RoomDetail:
-        """Creates a new chatroom.
-        If no  attributes are specified, the room is created as a private chatroom.
-        Wraps the `Create Room V3 <https://developers.symphony.com/restapi/reference/create-room-v3>`_ endpoint.
-
-        :param room_attributes: attributes of the room to be created.
-        :return: details of created room.
-        """
-        return await self._streams_api.v3_room_create_post(payload=room_attributes,
-                                                           session_token=await self._auth_session.session_token)
-
-    @retry
-    async def search_rooms(self, query: V2RoomSearchCriteria, skip: int = 0,
-                           limit: int = 50) -> V3RoomSearchResults:
-        """Search for rooms according to the specified criteria.
-        Wraps the `Search Rooms V3 <https://developers.symphony.com/restapi/reference/search-rooms-v3>`_ endpoint.
-
-        :param query: the search criteria.
-        :param skip: number of rooms to skip, defaults to 0.
-        :param limit: number of maximum rooms to return. Must be a positive integer that does not exceed 100.
-        :return: the rooms matching search criteria.
-        """
-        return await self._streams_api.v3_room_search_post(query=query, skip=skip, limit=limit,
-                                                           session_token=await self._auth_session.session_token)
-
-    async def search_all_rooms(self, query: V2RoomSearchCriteria, chunk_size: int = 50,
-                               max_number: int = None) -> AsyncGenerator[V3RoomDetail, None]:
-        """Search for rooms according to the specified criteria.
-        Wraps the `Search Rooms V3 <https://developers.symphony.com/restapi/reference/search-rooms-v3>`_ endpoint.
-
-        :param query: the search criteria.
-        :param chunk_size: the maximum number of elements to retrieve in one underlying HTTP call.
-        :param max_number: the total maximum number of elements to retrieve.
-        :return: an asynchronous generator of the rooms matching the search criteria.
-        """
-
-        async def search_rooms_one_page(skip, limit):
-            result = await self.search_rooms(query, skip, limit)
-            return result.rooms if result.rooms else None
-
-        return offset_based_pagination(search_rooms_one_page, chunk_size, max_number)
-
-    @retry
-    async def get_room_info(self, room_id: str) -> V3RoomDetail:
-        """Get information about a particular room.
-        Wraps the `Room Info V3 <https://developers.symphony.com/restapi/reference/room-info-v3>`_ endpoint.
-
-        :param room_id: the id of the room.
-        :return: the room details.
-        """
-        return await self._streams_api.v3_room_id_info_get(id=room_id,
-                                                           session_token=await self._auth_session.session_token)
-
-    @retry
     async def get_im_info(self, im_id: str) -> V1IMDetail:
         """Get information about a particular IM.
         Wraps the `IM info <https://developers.symphony.com/restapi/reference/im-info> endpoint`
@@ -257,18 +269,6 @@ class StreamService(OboStreamService):
         """
         return await self._streams_api.v1_room_id_set_active_post(id=room_id, active=active,
                                                                   session_token=await self._auth_session.session_token)
-
-    @retry
-    async def update_room(self, room_id: str, room_attributes: V3RoomAttributes) -> V3RoomDetail:
-        """Updates the attributes of an existing chatroom.
-        Wraps the `Update Room V3 <https://developers.symphony.com/restapi/reference/update-room-v3>`_ endpoint.
-
-        :param room_id: the id of the room to be updated.
-        :param room_attributes: the attributes of the room to be updated.
-        :return: the details of the updated room.
-        """
-        return await self._streams_api.v3_room_id_update_post(id=room_id, payload=room_attributes,
-                                                              session_token=await self._auth_session.session_token)
 
     @retry
     async def update_im(self, im_id: str, im_attributes: V1IMAttributes) -> V1IMDetail:
