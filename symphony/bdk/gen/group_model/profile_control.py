@@ -276,7 +276,7 @@ class ProfileControl(ModelNormal):
         self.wall_support: bool = None
         self.profile_fields: List[str] = None
         self.search_fields: List[str] = None
-        self.can_have_public_profile: bool = None
+        self.can_have_public_profile: bool = True
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

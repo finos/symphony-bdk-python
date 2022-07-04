@@ -269,7 +269,7 @@ class MembershipControl(ModelNormal):
         self.rule_membership: bool = None
         self.update_membership_on_rule_update: bool = None
         self.notify_members_on_update: bool = None
-        self.can_belong_to_multiple_group: bool = None
+        self.can_belong_to_multiple_group: bool = True
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

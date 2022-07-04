@@ -247,7 +247,7 @@ class AckId(ModelNormal):
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
         self.ack_id: str = None
-        self.update_presence: bool = None
+        self.update_presence: bool = True
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
