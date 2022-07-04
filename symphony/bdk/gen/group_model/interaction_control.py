@@ -265,7 +265,7 @@ class InteractionControl(ModelNormal):
         self.allow_rooms: bool = None
         self.interaction_transfer: InteractionTransfer = None
         self.tag_stream: str = None
-        self.can_have_interaction: bool = None
+        self.can_have_interaction: bool = True
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

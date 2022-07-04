@@ -71,7 +71,7 @@ class DatafeedLoopV2(AbstractAckIdEventLoop):
             "session_token": await self._auth_session.session_token,
             "key_manager_token": await self._auth_session.key_manager_token,
             "datafeed_id": self._datafeed_id,
-            "ack_id": AckId(ack_id=self._ack_id, update_presence=True)
+            "ack_id": AckId(ack_id=self._ack_id)
         }
         return await self._datafeed_api.read_datafeed(**params)
 
