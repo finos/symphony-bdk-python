@@ -279,8 +279,8 @@ class UserAppEntitlementPatch(ModelNormal):
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
         self.app_id: str = app_id
-        self.listed: str = None
-        self.install: str = None
+        self.listed: str = "KEEP"
+        self.install: str = "KEEP"
         self.product: Product = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
