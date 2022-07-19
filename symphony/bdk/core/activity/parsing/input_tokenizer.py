@@ -23,7 +23,7 @@ class InputTokenizer:
         :param message: message to be tokenized.
         """
         self._document = fromstring(message.message)
-        json_data = message.data if message.data else "{}"
+        json_data = message.data if hasattr(message, 'data') and message.data else "{}"
         self._data_node = json.loads(json_data)
         self._buffer = ""
         self._tokens = []
