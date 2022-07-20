@@ -1,3 +1,4 @@
+from lib2to3.pgen2.tokenize import tokenize
 from symphony.bdk.core.activity.parsing.message_entities import Cashtag, Hashtag, Mention
 from symphony.bdk.core.activity.parsing.input_tokenizer import InputTokenizer
 from symphony.bdk.gen.agent_model.v4_message import V4Message
@@ -129,6 +130,13 @@ def test_one_cashtag():
 
     assert under_test.tokens == [Cashtag("$mycashtag", "mycashtag")]
 
+class PartialV4Message:
+    def __init__(self, message: str):
+        self.message = message
+
+def test_partial_message():
+    tokenizer = InputTokenizer(PartialV4Message(message=build_v4_message("hello").message))
+    assert tokenizer.tokens == ["hello"]
 
 def build_tokenizer(content):
     return build_tokenizer_with_data(content, "{}")
@@ -143,3 +151,4 @@ def build_v4_message(content, data="{}"):
         message="<div data-format=\"PresentationML\" data-version=\"2.0\" class=\"wysiwyg\"><p>" + content +
                 "</p></div>",
         data=data)
+
