@@ -1,10 +1,7 @@
 name: build
 
 on:
-  push:
-    branches: [ "main", "*-rc" ]
-  pull_request:
-    branches: [ "main", "*-rc" ]
+  workflow_dispatch
 
 jobs:
   build:
