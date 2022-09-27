@@ -16,9 +16,8 @@ from symphony.bdk.gen.agent_api.datafeed_api import DatafeedApi
 def fixture_read_events_side_effect(message_sent_v4_event):
     async def read_events(**kwargs):
         await asyncio.sleep(0.001)  # to force the switching of tasks
-        events_list = V5EventList()
+        events_list = V5EventList([message_sent_v4_event])
         events_list.ack_id = "testing_ack_id"
-        events_list.events = [message_sent_v4_event]
         return events_list
 
     return read_events

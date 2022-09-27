@@ -44,7 +44,8 @@ def create_message_sent(message):
 
 def create_message_sent_with_data(content, data="{}"):
     return V4MessageSent(
-        message=V4Message(message_id=MESSAGE_ID,
+        message=V4Message(attachments=[],
+                          message_id=MESSAGE_ID,
                           message="<div data-format=\"PresentationML\" data-version=\"2.0\" class=\"wysiwyg\"><p>"
                                   + content + "</p></div>",
                           stream=V4Stream(stream_id=STREAM_ID),

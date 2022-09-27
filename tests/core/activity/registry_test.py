@@ -42,7 +42,8 @@ def fixture_user():
 
 @pytest.fixture(name="message_sent")
 def fixture_message_sent():
-    return V4MessageSent(message=V4Message(message_id="message_id",
+    return V4MessageSent(message=V4Message(attachments=[],
+                                           message_id="message_id",
                                            message="<div><p><span>hello world</span></p></div>",
                                            stream=V4Stream(stream_id="stream_id")))
 

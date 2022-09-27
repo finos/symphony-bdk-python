@@ -208,9 +208,7 @@ def test_match_result_mention_hashtag_cashtag():
 
 def test_match_result_one_static_token_one_argument():
     pattern = SlashCommandPattern("/command {string_arg}")
-    v4_message = V4Message(
-        message="<div>/command command2</div>",
-        data="{}")
+    v4_message = build_v4_message("<div>/command command2</div>")
 
     match_result = pattern.get_match_result(v4_message)
     expected_match_result = MatchResult(True, {"string_arg": "command2"})

@@ -58,7 +58,7 @@ def fixture_datafeed_api():
 
 @pytest.fixture(name="message_sent_v4_event")
 def fixture_message_sent_v4_event(initiator_userid):
-    payload = V4Payload(message_sent=V4MessageSent(message=V4Message(message="message")))
+    payload = V4Payload(message_sent=V4MessageSent(message=V4Message(attachments=[], message="message")))
     return V4Event(type=RealTimeEvent.MESSAGESENT.name, payload=payload, initiator=initiator_userid)
 
 

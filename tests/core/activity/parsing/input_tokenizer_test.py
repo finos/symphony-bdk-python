@@ -130,13 +130,16 @@ def test_one_cashtag():
 
     assert under_test.tokens == [Cashtag("$mycashtag", "mycashtag")]
 
+
 class PartialV4Message:
     def __init__(self, message: str):
         self.message = message
 
+
 def test_partial_message():
     tokenizer = InputTokenizer(PartialV4Message(message=build_v4_message("hello").message))
     assert tokenizer.tokens == ["hello"]
+
 
 def build_tokenizer(content):
     return build_tokenizer_with_data(content, "{}")
@@ -147,8 +150,7 @@ def build_tokenizer_with_data(content, data):
 
 
 def build_v4_message(content, data="{}"):
-    return V4Message(
-        message="<div data-format=\"PresentationML\" data-version=\"2.0\" class=\"wysiwyg\"><p>" + content +
-                "</p></div>",
-        data=data)
-
+    return V4Message(attachments=[],
+                     message="<div data-format=\"PresentationML\" data-version=\"2.0\" class=\"wysiwyg\"><p>" + content +
+                             "</p></div>",
+                     data=data)

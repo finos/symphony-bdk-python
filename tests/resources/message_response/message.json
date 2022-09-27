@@ -15,5 +15,6 @@
         "streamType": "ROOM"
     },
     "originalFormat": "com.symphony.messageml.v2",
-    "sid": "a4d08d18-0729-4b54-9c4568da"
+    "sid": "a4d08d18-0729-4b54-9c4568da",
+    "attachments": []
 }
