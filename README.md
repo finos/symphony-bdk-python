@@ -60,7 +60,7 @@ Python BDK uses [OpenAPITools/openapi-generator](https://github.com/OpenAPITools
 Here are the steps to follow:
 - Checkout the latest branch of the fork (currently [sym-python-5.4.0](https://github.com/symphony-soufiane/openapi-generator/tree/sym-python-5.4.0))
 - Update the fork source code, review and merge it
-- Generate a jar file in `penapi-generatormodules/openapi-generator-cli/target/openapi-generator-cli.jar`:
+- Generate a jar file in `openapi-generatormodules/openapi-generator-cli/target/openapi-generator-cli.jar`:
   - Using maven: `mvn clean install -Dmaven.test.skip=true && mvn clean package -Dmaven.test.skip=true`. _You can also use IntelliJ's build button to build the project and generate the jar_
 - Copy the jar in Python BDK repository `symphony-api-client-python/api_client_generation/openapi-generator-cli.jar`
 - Execute the generation script `./generate.sh` and commit and push you new code along with the new jar file.
