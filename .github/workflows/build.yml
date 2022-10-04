@@ -31,7 +31,6 @@ jobs:
         id: pip-cache
         run: |
           echo "::set-output name=dir::$(pip cache dir)"
-
       - name: Cache pip dependencies
         uses: actions/cache@v2
         with:
@@ -48,7 +47,6 @@ jobs:
           key: ${{ runner.os }}-poetry-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('poetry.lock') }}
           restore-keys: |
             ${{ runner.os }}-poetry-${{ steps.setup-python.outputs.python-version }}-
-
       - name: Install dependencies
         run: poetry install
 
