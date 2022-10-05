@@ -56,9 +56,9 @@ Please note that some CCLAs require individuals/employees to be explicitly named
 
 ### Update generated code
 While contributing to the project, you might need to update the generated code.
-Python BDK uses [OpenAPITools/openapi-generator](https://github.com/OpenAPITools/openapi-generator/) to generate code. In order to customise the templates, a fork has been created in [https://github.com/symphony-soufiane/openapi-generator/tree/sym-python-5.4.0](https://github.com/symphony-soufiane/openapi-generator/tree/sym-python-5.4.0).  
+Python BDK uses [OpenAPITools/openapi-generator](https://github.com/OpenAPITools/openapi-generator/) to generate code. In order to customise the templates, a fork has been created in [https://github.com/SymphonyPlatformSolutions/openapi-generator/tree/sym-python-5.5.0](https://github.com/SymphonyPlatformSolutions/openapi-generator/tree/sym-python-5.5.0).  
 Here are the steps to follow:
-- Checkout the latest branch of the fork (currently [sym-python-5.4.0](https://github.com/symphony-soufiane/openapi-generator/tree/sym-python-5.4.0))
+- Checkout the latest branch of the fork (currently [sym-python-5.5.0](https://github.com/SymphonyPlatformSolutions/openapi-generator/tree/sym-python-5.5.0))
 - Update the fork source code, review and merge it
 - Generate a jar file in `openapi-generatormodules/openapi-generator-cli/target/openapi-generator-cli.jar`:
   - Using maven: `mvn clean install -Dmaven.test.skip=true && mvn clean package -Dmaven.test.skip=true`. _You can also use IntelliJ's build button to build the project and generate the jar_
