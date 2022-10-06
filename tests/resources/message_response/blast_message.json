@@ -1,4 +1,5 @@
 {
+  "errors": {},
   "messages": [
     {
       "messageId": "-AANBHKtUC-2q6_0WSjBGX___pHnSfBKdA-1",
@@ -18,7 +19,8 @@
       },
       "userAgent": "Agent-2.63.0-SNAPSHOT-Windows 10-10.0",
       "originalFormat": "com.symphony.messageml.v2",
-      "sid": "a4d08d18-0729-4b54-9c4568da"
+      "sid": "a4d08d18-0729-4b54-9c4568da",
+      "attachments": ["attachment", "preview"]
     },
     {
       "messageId": "-AANBHKtUC-2q6_0WSjBGX___pHnSfBKdA-2",
@@ -38,7 +40,8 @@
       },
       "userAgent": "Agent-2.63.0-SNAPSHOT-Windows 10-10.0",
       "originalFormat": "com.symphony.messageml.v2",
-      "sid": "a4d08d18-0729-4b54-9c4568da"
+      "sid": "a4d08d18-0729-4b54-9c4568da",
+      "attachments": ["attachment", "preview"]
     }
   ]
 }

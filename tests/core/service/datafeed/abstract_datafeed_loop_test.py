@@ -45,7 +45,7 @@ async def create_and_await_tasks(datafeed_loop, events):
 @pytest.fixture(name="bot_message_sent_event")
 def fixture_bot_message_sent_event():
     initiator = V4Initiator(user=V4User(user_id=BOT_USER_ID))
-    payload = V4Payload(message_sent=V4MessageSent(message=V4Message(message="message")))
+    payload = V4Payload(message_sent=V4MessageSent(message=V4Message(attachments=[], message="message")))
     return V4Event(type=RealTimeEvent.MESSAGESENT.name, payload=payload, initiator=initiator)
 
 

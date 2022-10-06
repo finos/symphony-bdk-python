@@ -48,7 +48,8 @@ def fixture_command_context():
                       f" /help</p></div></p></div>"
     data = f"{{\"0\":{{\"id\":[{{\"type\":\"com.symphony.user.userId\",\"value\":\"{BOT_USER_ID}\"}}]," \
            f"\"type\":\"com.symphony.user.mention\"}}}}"
-    message_sent = V4MessageSent(message=V4Message(message_id="message_id",
+    message_sent = V4MessageSent(message=V4Message(attachments=[],
+                                                   message_id="message_id",
                                                    message=message_content,
                                                    data=data,
                                                    stream=V4Stream(stream_id=STREAM_ID)))

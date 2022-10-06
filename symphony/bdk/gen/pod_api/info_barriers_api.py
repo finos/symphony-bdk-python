@@ -114,6 +114,8 @@ class InfoBarriersApi(object):
                 'all': [
                     'gid',
                     'session_token',
+                    'skip',
+                    'limit',
                 ],
                 'required': [
                     'gid',
@@ -136,14 +138,22 @@ class InfoBarriersApi(object):
                         (str,),
                     'session_token':
                         (str,),
+                    'skip':
+                        (int,),
+                    'limit':
+                        (int,),
                 },
                 'attribute_map': {
                     'gid': 'gid',
                     'session_token': 'sessionToken',
+                    'skip': 'skip',
+                    'limit': 'limit',
                 },
                 'location_map': {
                     'gid': 'path',
                     'session_token': 'header',
+                    'skip': 'query',
+                    'limit': 'query',
                 },
                 'collection_format_map': {
                 }
@@ -421,6 +431,8 @@ class InfoBarriersApi(object):
             session_token (str): Session authentication token.
 
         Keyword Args:
+            skip (int): Number of records to skip. Must be a positive integer.. [optional]
+            limit (int): Max number of records to return. Default is 10000. Must be a positive integer and must not exceed 10000.. [optional]
             _return_http_data_only (bool): response data without head status
                 code and headers. Default is True.
             _preload_content (bool): if False, the urllib3.HTTPResponse object
