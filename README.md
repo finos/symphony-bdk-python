@@ -31,8 +31,8 @@ To generate locally the Sphinx documentation, run: `cd docsrc && make html`.
 
 ## Roadmap
 
-Our next milestone is the [2.0.x](https://github.com/finos/symphony-bdk-python/milestone/1) one.
-It will only consist in delivering the next improvements of the BDK.
+Our next milestone is the [2.5.x](https://github.com/finos/symphony-bdk-python/milestone/6) one.
+It will only consist in delivering the next improvements and bug fixes of the BDK.
 
 
 ## Contributing
@@ -54,6 +54,16 @@ Please note that some CCLAs require individuals/employees to be explicitly named
 
 *Need an ICLA? Unsure if you are covered under an existing CCLA? Email [help@finos.org](mailto:help@finos.org)*
 
+### Update generated code
+While contributing to the project, you might need to update the generated code.
+Python BDK uses [OpenAPITools/openapi-generator](https://github.com/OpenAPITools/openapi-generator/) to generate code. In order to customise the templates, a fork has been created in [https://github.com/SymphonyPlatformSolutions/openapi-generator/tree/sym-python-5.5.0](https://github.com/SymphonyPlatformSolutions/openapi-generator/tree/sym-python-5.5.0).  
+Here are the steps to follow:
+- Checkout the latest branch of the fork (currently [sym-python-5.5.0](https://github.com/SymphonyPlatformSolutions/openapi-generator/tree/sym-python-5.5.0))
+- Update the fork source code, review and merge it
+- Generate a jar file in `openapi-generatormodules/openapi-generator-cli/target/openapi-generator-cli.jar`:
+  - Using maven: `mvn clean install -Dmaven.test.skip=true && mvn clean package -Dmaven.test.skip=true`. _You can also use IntelliJ's build button to build the project and generate the jar_
+- Copy the jar in Python BDK repository `symphony-api-client-python/api_client_generation/openapi-generator-cli.jar`
+- Execute the generation script `./generate.sh` and commit and push you new code along with the new jar file.
 ## License
 Copyright 2021 Symphony LLC
 
