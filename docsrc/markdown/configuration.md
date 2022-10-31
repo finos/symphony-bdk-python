@@ -103,7 +103,7 @@ datafeed:
 
 datahose:
   tag: FANCY_TAG
-  filters:
+  eventTypes:
     - UPDATE_ROOM
     - CREATE_ROOM
   retry:

@@ -23,7 +23,7 @@ class DatahoseLoop(AbstractAckIdEventLoop, AbstractDatahoseLoop):
         This service will be started by calling :func:`~DatahoseLoop.start`.
 
         The BDK bot will listen to this datahose to get all the received real-time events that are set
-        as filters in the configuration.
+        as event_types in the configuration.
 
         This service will be stopped by calling :func:`~DatahoseLoop.stop`
     """
@@ -37,7 +37,7 @@ class DatahoseLoop(AbstractAckIdEventLoop, AbstractDatahoseLoop):
                 else TYPE
             self._tag = not_truncated_tag[:DATAHOSE_TAG_MAX_LENGTH]
             self._retry = config.datahose.retry
-            self._filters = config.datahose.filters
+            self._event_types = config.datahose.event_types
 
     async def start(self):
         if self._running:
@@ -56,7 +56,7 @@ class DatahoseLoop(AbstractAckIdEventLoop, AbstractDatahoseLoop):
         params = {
             "session_token": await self._auth_session.session_token,
             "key_manager_token": await self._auth_session.key_manager_token,
-            "body": V5EventsReadBody(type=TYPE, tag=self._tag, filters=self._filters, ack_id=self._ack_id)
+            "body": V5EventsReadBody(type=TYPE, tag=self._tag, event_types=self._event_types, ack_id=self._ack_id)
         }
 
         return await self._datafeed_api.read_events(**params)

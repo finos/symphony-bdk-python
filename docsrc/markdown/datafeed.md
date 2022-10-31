@@ -192,7 +192,7 @@ Datahose Service can be configured by the datafeed field in the configuration fi
 ```yaml
 datahose:
     tag: fancyTag # optional tag that will be used when creating or reusing a datahose feed
-    filters: # mandatory field, events you want to receive
+    eventTypes: # mandatory field, events you want to receive
         - SOCIALMESSAGE
         - CREATE_ROOM
     retry: # optional
@@ -202,13 +202,13 @@ datahose:
         maxIntervalMillis: 10000 # limit of the interval between two attempts
 ```
 
-The minimal configuration for the datahose service is the `filters` field. It should contain at least one value chosen
+The minimal configuration for the datahose service is the `eventTypes` field. It should contain at least one value chosen
 among the following:
 * SOCIALMESSAGE
 * CREATE_ROOM
 * UPDATE_ROOM
 
-:warning: If you want to use `SOCIALMESSAGE` filter (i.e. consume message sent events), `ceservice` credentials must be
+:warning: If you want to use `SOCIALMESSAGE` event type (i.e. consume message sent events), `ceservice` credentials must be
 configured in your Symphony agent.
 
 The `tag` field is optional and is used when creating and reusing datahose feeds. If you have several instances of the

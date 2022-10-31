@@ -1,8 +1,7 @@
 import asyncio
-from unittest.mock import MagicMock, AsyncMock
-
 import pytest
 
+from unittest.mock import MagicMock, AsyncMock
 from tests.core.service.datafeed.test_fixtures import fixture_initiator_username, fixture_session_service, \
     fixture_message_sent_events_mock
 
@@ -36,7 +35,7 @@ def fixture_config():
     config = BdkConfigLoader.load_from_file(get_config_resource_filepath("config.yaml"))
     config.datahose.retry = minimal_retry_config()
     config.datahose.tag = "TEST_TAG"
-    config.datahose.filters = ["SOCIALMESSAGE"]
+    config.datahose.event_types = ["SOCIALMESSAGE"]
     return config
 
 
@@ -88,7 +87,7 @@ def fixture_read_events_side_effect(message_sent_events_mock):
 async def test_start(datahose_loop, datafeed_api, session_service, message_sent_events_mock):
     datafeed_api.read_events.return_value = message_sent_events_mock
     body = V5EventsReadBody(type="datahose", tag="TEST_TAG",
-                            filters=["SOCIALMESSAGE"], ack_id="")
+                            event_types=["SOCIALMESSAGE"], ack_id="")
     await datahose_loop.start()
 
     session_service.get_session.assert_called_once()
