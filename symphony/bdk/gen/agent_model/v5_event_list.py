@@ -84,7 +84,7 @@ class V5EventList(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'events': ([V4Event],),  # noqa: E501
+            'events': ([V4Event], none_type),  # noqa: E501
             'ack_id': (str, none_type),  # noqa: E501
         }
 
@@ -105,11 +105,8 @@ class V5EventList(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, events, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, *args, **kwargs):  # noqa: E501
         """V5EventList - a agent_model defined in OpenAPI
-
-        Args:
-            events ([V4Event]):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -142,6 +139,7 @@ class V5EventList(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            events ([V4Event]): [optional] if omitted the server will use the default value of []  # noqa: E501
             ack_id (str): The ackId which acknowledges that the current batch of messages  have been successfully received by the client . [optional]  # noqa: E501
         """
 
@@ -170,7 +168,6 @@ class V5EventList(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.events = events
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -191,11 +188,8 @@ class V5EventList(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, events, *args, **kwargs):  # noqa: E501
+    def __init__(self, *args, **kwargs):  # noqa: E501
         """V5EventList - a agent_model defined in OpenAPI
-
-        Args:
-            events ([V4Event]):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -228,6 +222,7 @@ class V5EventList(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            events ([V4Event]): [optional] if omitted the server will use the default value of []  # noqa: E501
             ack_id (str): The ackId which acknowledges that the current batch of messages  have been successfully received by the client . [optional]  # noqa: E501
         """
 
@@ -254,7 +249,7 @@ class V5EventList(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.events: List[V4Event] = events
+        self.events: List[V4Event] = []
         self.ack_id: str = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

@@ -107,14 +107,14 @@ class V4MessageBlastResponse(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, messages, errors, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, errors, *args, **kwargs):  # noqa: E501
         """V4MessageBlastResponse - a agent_model defined in OpenAPI
 
         Args:
-            messages ([V4Message]): List of messages successfully sent
             errors ({str: (Error,)}): List of streams where the messages ingestion has failed
 
         Keyword Args:
+            messages ([V4Message]): List of messages successfully sent. defaults to []  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -147,6 +147,7 @@ class V4MessageBlastResponse(ModelNormal):
                                 _visited_composed_classes = (Animal,)
         """
 
+        messages = kwargs.get('messages', [])
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', False)
         _path_to_item = kwargs.pop('_path_to_item', ())
@@ -194,14 +195,14 @@ class V4MessageBlastResponse(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, messages, errors, *args, **kwargs):  # noqa: E501
+    def __init__(self, errors, *args, **kwargs):  # noqa: E501
         """V4MessageBlastResponse - a agent_model defined in OpenAPI
 
         Args:
-            messages ([V4Message]): List of messages successfully sent
             errors ({str: (Error,)}): List of streams where the messages ingestion has failed
 
         Keyword Args:
+            messages ([V4Message]): List of messages successfully sent. defaults to []  # noqa: E501
             _check_type (bool): if True, values for parameters in openapi_types
                                 will be type checked and a TypeError will be
                                 raised if the wrong type is input.
@@ -234,6 +235,7 @@ class V4MessageBlastResponse(ModelNormal):
                                 _visited_composed_classes = (Animal,)
         """
 
+        messages = kwargs.get('messages', [])
         _check_type = kwargs.pop('_check_type', True)
         _spec_property_naming = kwargs.pop('_spec_property_naming', False)
         _path_to_item = kwargs.pop('_path_to_item', ())

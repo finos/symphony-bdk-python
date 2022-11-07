@@ -139,8 +139,8 @@ class Token(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             name (str): The name of the header in which the token should be presented on subsequent API calls. . [optional]  # noqa: E501
-            token (str): Token that can be passed as header, it can be considered a refresh token along with the idm/tokens (\"authorizationToken\"). This should be considered opaque data by the client. It is not intended to contain any data interpretable by the client. The format is secret and subject to change without notice. . [optional]  # noqa: E501
-            authorization_token (str): Short lived access token built from a user session. It can be used for the same purposes as the sessionToken and It should be passed as an header named \"Authorization\". At least one between SessionToken or Authorization header must me provided on subsequent API calls. . [optional]  # noqa: E501
+            token (str): Authentication token that should be passed as header in each API rest calls. This should be considered opaque data by the client. It is not intended to contain any data interpretable by the client. The format is secret and subject to change without notice. . [optional]  # noqa: E501
+            authorization_token (str): (Beta) Short lived access token built from a user session. This field is still on Beta, please continue using  the returned \"token\" instead. . [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -223,8 +223,8 @@ class Token(ModelNormal):
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
             name (str): The name of the header in which the token should be presented on subsequent API calls. . [optional]  # noqa: E501
-            token (str): Token that can be passed as header, it can be considered a refresh token along with the idm/tokens (\"authorizationToken\"). This should be considered opaque data by the client. It is not intended to contain any data interpretable by the client. The format is secret and subject to change without notice. . [optional]  # noqa: E501
-            authorization_token (str): Short lived access token built from a user session. It can be used for the same purposes as the sessionToken and It should be passed as an header named \"Authorization\". At least one between SessionToken or Authorization header must me provided on subsequent API calls. . [optional]  # noqa: E501
+            token (str): Authentication token that should be passed as header in each API rest calls. This should be considered opaque data by the client. It is not intended to contain any data interpretable by the client. The format is secret and subject to change without notice. . [optional]  # noqa: E501
+            authorization_token (str): (Beta) Short lived access token built from a user session. This field is still on Beta, please continue using  the returned \"token\" instead. . [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)

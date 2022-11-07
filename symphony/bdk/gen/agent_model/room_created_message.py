@@ -88,12 +88,12 @@ class RoomCreatedMessage(ModelComposed):
                 and the value is attribute type.
         """
         return {
-            'keywords': ([RoomTag],),  # noqa: E501
             'timestamp': (str,),  # noqa: E501
             'v2message_type': (str,),  # noqa: E501
             'stream_id': (str,),  # noqa: E501
             'creation_date': (int, none_type),  # noqa: E501
             'name': (str, none_type),  # noqa: E501
+            'keywords': ([RoomTag], none_type),  # noqa: E501
             'description': (str, none_type),  # noqa: E501
             'created_by_user_id': (int, none_type),  # noqa: E501
             'read_only': (bool, none_type),  # noqa: E501
@@ -113,12 +113,12 @@ class RoomCreatedMessage(ModelComposed):
         return {'v2message_type': val}
 
     attribute_map = {
-        'keywords': 'keywords',  # noqa: E501
         'timestamp': 'timestamp',  # noqa: E501
         'v2message_type': 'v2messageType',  # noqa: E501
         'stream_id': 'streamId',  # noqa: E501
         'creation_date': 'creationDate',  # noqa: E501
         'name': 'name',  # noqa: E501
+        'keywords': 'keywords',  # noqa: E501
         'description': 'description',  # noqa: E501
         'created_by_user_id': 'createdByUserId',  # noqa: E501
         'read_only': 'readOnly',  # noqa: E501
@@ -138,7 +138,6 @@ class RoomCreatedMessage(ModelComposed):
         """RoomCreatedMessage - a agent_model defined in OpenAPI
 
         Keyword Args:
-            keywords ([RoomTag]):
             timestamp (str):
             v2message_type (str):
             stream_id (str):
@@ -174,6 +173,7 @@ class RoomCreatedMessage(ModelComposed):
                                 _visited_composed_classes = (Animal,)
             creation_date (int): [optional]  # noqa: E501
             name (str): [optional]  # noqa: E501
+            keywords ([RoomTag]): [optional] if omitted the server will use the default value of []  # noqa: E501
             description (str): [optional]  # noqa: E501
             created_by_user_id (int): The Symphony userId of the user who created the room.. [optional]  # noqa: E501
             read_only (bool): [optional]  # noqa: E501
@@ -251,7 +251,6 @@ class RoomCreatedMessage(ModelComposed):
         """RoomCreatedMessage - a agent_model defined in OpenAPI
 
         Keyword Args:
-            keywords ([RoomTag]):
             timestamp (str):
             v2message_type (str):
             stream_id (str):
@@ -287,6 +286,7 @@ class RoomCreatedMessage(ModelComposed):
                                 _visited_composed_classes = (Animal,)
             creation_date (int): [optional]  # noqa: E501
             name (str): [optional]  # noqa: E501
+            keywords ([RoomTag]): [optional] if omitted the server will use the default value of []  # noqa: E501
             description (str): [optional]  # noqa: E501
             created_by_user_id (int): The Symphony userId of the user who created the room.. [optional]  # noqa: E501
             read_only (bool): [optional]  # noqa: E501
@@ -333,12 +333,12 @@ class RoomCreatedMessage(ModelComposed):
         self._var_name_to_model_instances = composed_info[1]
         self._additional_properties_model_instances = composed_info[2]
         discarded_args = composed_info[3]
-        self.keywords: List[RoomTag] = kwargs['keywords']
         self.timestamp: str = kwargs['timestamp']
         self.v2message_type: str = kwargs['v2message_type']
         self.stream_id: str = kwargs['stream_id']
         self.creation_date: int = None
         self.name: str = None
+        self.keywords: List[RoomTag] = []
         self.description: str = None
         self.created_by_user_id: int = None
         self.read_only: bool = None

@@ -84,9 +84,9 @@ class RoomCreatedMessageAllOf(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'keywords': ([RoomTag],),  # noqa: E501
             'creation_date': (int, none_type),  # noqa: E501
             'name': (str, none_type),  # noqa: E501
+            'keywords': ([RoomTag], none_type),  # noqa: E501
             'description': (str, none_type),  # noqa: E501
             'created_by_user_id': (int, none_type),  # noqa: E501
             'read_only': (bool, none_type),  # noqa: E501
@@ -102,9 +102,9 @@ class RoomCreatedMessageAllOf(ModelNormal):
 
 
     attribute_map = {
-        'keywords': 'keywords',  # noqa: E501
         'creation_date': 'creationDate',  # noqa: E501
         'name': 'name',  # noqa: E501
+        'keywords': 'keywords',  # noqa: E501
         'description': 'description',  # noqa: E501
         'created_by_user_id': 'createdByUserId',  # noqa: E501
         'read_only': 'readOnly',  # noqa: E501
@@ -121,11 +121,8 @@ class RoomCreatedMessageAllOf(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, keywords, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, *args, **kwargs):  # noqa: E501
         """RoomCreatedMessageAllOf - a agent_model defined in OpenAPI
-
-        Args:
-            keywords ([RoomTag]):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -160,6 +157,7 @@ class RoomCreatedMessageAllOf(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             creation_date (int): [optional]  # noqa: E501
             name (str): [optional]  # noqa: E501
+            keywords ([RoomTag]): [optional] if omitted the server will use the default value of []  # noqa: E501
             description (str): [optional]  # noqa: E501
             created_by_user_id (int): The Symphony userId of the user who created the room.. [optional]  # noqa: E501
             read_only (bool): [optional]  # noqa: E501
@@ -194,7 +192,6 @@ class RoomCreatedMessageAllOf(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.keywords = keywords
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -215,11 +212,8 @@ class RoomCreatedMessageAllOf(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, keywords, *args, **kwargs):  # noqa: E501
+    def __init__(self, *args, **kwargs):  # noqa: E501
         """RoomCreatedMessageAllOf - a agent_model defined in OpenAPI
-
-        Args:
-            keywords ([RoomTag]):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -254,6 +248,7 @@ class RoomCreatedMessageAllOf(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             creation_date (int): [optional]  # noqa: E501
             name (str): [optional]  # noqa: E501
+            keywords ([RoomTag]): [optional] if omitted the server will use the default value of []  # noqa: E501
             description (str): [optional]  # noqa: E501
             created_by_user_id (int): The Symphony userId of the user who created the room.. [optional]  # noqa: E501
             read_only (bool): [optional]  # noqa: E501
@@ -286,9 +281,9 @@ class RoomCreatedMessageAllOf(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.keywords: List[RoomTag] = keywords
         self.creation_date: int = None
         self.name: str = None
+        self.keywords: List[RoomTag] = []
         self.description: str = None
         self.created_by_user_id: int = None
         self.read_only: bool = None

@@ -104,8 +104,9 @@ datafeed:
 datahose:
   tag: FANCY_TAG
   eventTypes:
-    - UPDATE_ROOM
-    - CREATE_ROOM
+    - INSTANTMESSAGECREATED
+    - ROOMUPDATED 
+    - ROOMCREATED
   retry:
     maxAttempts: 61
     initialIntervalMillis: 20001

@@ -88,12 +88,12 @@ class RoomUpdatedMessage(ModelComposed):
                 and the value is attribute type.
         """
         return {
-            'keywords': ([RoomTag],),  # noqa: E501
             'timestamp': (str,),  # noqa: E501
             'v2message_type': (str,),  # noqa: E501
             'stream_id': (str,),  # noqa: E501
             'old_name': (str, none_type),  # noqa: E501
             'new_name': (str, none_type),  # noqa: E501
+            'keywords': ([RoomTag], none_type),  # noqa: E501
             'old_description': (str, none_type),  # noqa: E501
             'new_description': (str, none_type),  # noqa: E501
             'members_can_invite': (bool, none_type),  # noqa: E501
@@ -112,12 +112,12 @@ class RoomUpdatedMessage(ModelComposed):
         return {'v2message_type': val}
 
     attribute_map = {
-        'keywords': 'keywords',  # noqa: E501
         'timestamp': 'timestamp',  # noqa: E501
         'v2message_type': 'v2messageType',  # noqa: E501
         'stream_id': 'streamId',  # noqa: E501
         'old_name': 'oldName',  # noqa: E501
         'new_name': 'newName',  # noqa: E501
+        'keywords': 'keywords',  # noqa: E501
         'old_description': 'oldDescription',  # noqa: E501
         'new_description': 'newDescription',  # noqa: E501
         'members_can_invite': 'membersCanInvite',  # noqa: E501
@@ -136,7 +136,6 @@ class RoomUpdatedMessage(ModelComposed):
         """RoomUpdatedMessage - a agent_model defined in OpenAPI
 
         Keyword Args:
-            keywords ([RoomTag]):
             timestamp (str):
             v2message_type (str):
             stream_id (str):
@@ -172,6 +171,7 @@ class RoomUpdatedMessage(ModelComposed):
                                 _visited_composed_classes = (Animal,)
             old_name (str): [optional]  # noqa: E501
             new_name (str): [optional]  # noqa: E501
+            keywords ([RoomTag]): [optional] if omitted the server will use the default value of []  # noqa: E501
             old_description (str): [optional]  # noqa: E501
             new_description (str): [optional]  # noqa: E501
             members_can_invite (bool): [optional]  # noqa: E501
@@ -248,7 +248,6 @@ class RoomUpdatedMessage(ModelComposed):
         """RoomUpdatedMessage - a agent_model defined in OpenAPI
 
         Keyword Args:
-            keywords ([RoomTag]):
             timestamp (str):
             v2message_type (str):
             stream_id (str):
@@ -284,6 +283,7 @@ class RoomUpdatedMessage(ModelComposed):
                                 _visited_composed_classes = (Animal,)
             old_name (str): [optional]  # noqa: E501
             new_name (str): [optional]  # noqa: E501
+            keywords ([RoomTag]): [optional] if omitted the server will use the default value of []  # noqa: E501
             old_description (str): [optional]  # noqa: E501
             new_description (str): [optional]  # noqa: E501
             members_can_invite (bool): [optional]  # noqa: E501
@@ -329,12 +329,12 @@ class RoomUpdatedMessage(ModelComposed):
         self._var_name_to_model_instances = composed_info[1]
         self._additional_properties_model_instances = composed_info[2]
         discarded_args = composed_info[3]
-        self.keywords: List[RoomTag] = kwargs['keywords']
         self.timestamp: str = kwargs['timestamp']
         self.v2message_type: str = kwargs['v2message_type']
         self.stream_id: str = kwargs['stream_id']
         self.old_name: str = None
         self.new_name: str = None
+        self.keywords: List[RoomTag] = []
         self.old_description: str = None
         self.new_description: str = None
         self.members_can_invite: bool = None

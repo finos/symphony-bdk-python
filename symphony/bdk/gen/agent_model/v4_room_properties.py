@@ -86,7 +86,6 @@ class V4RoomProperties(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'keywords': ([V4KeyValuePair],),  # noqa: E501
             'name': (str, none_type),  # noqa: E501
             'description': (str, none_type),  # noqa: E501
             'creator_user': (V4User, none_type),  # noqa: E501
@@ -98,6 +97,7 @@ class V4RoomProperties(ModelNormal):
             'read_only': (bool, none_type),  # noqa: E501
             'discoverable': (bool, none_type),  # noqa: E501
             'members_can_invite': (bool, none_type),  # noqa: E501
+            'keywords': ([V4KeyValuePair], none_type),  # noqa: E501
             'can_view_history': (bool, none_type),  # noqa: E501
         }
 
@@ -107,7 +107,6 @@ class V4RoomProperties(ModelNormal):
 
 
     attribute_map = {
-        'keywords': 'keywords',  # noqa: E501
         'name': 'name',  # noqa: E501
         'description': 'description',  # noqa: E501
         'creator_user': 'creatorUser',  # noqa: E501
@@ -119,6 +118,7 @@ class V4RoomProperties(ModelNormal):
         'read_only': 'readOnly',  # noqa: E501
         'discoverable': 'discoverable',  # noqa: E501
         'members_can_invite': 'membersCanInvite',  # noqa: E501
+        'keywords': 'keywords',  # noqa: E501
         'can_view_history': 'canViewHistory',  # noqa: E501
     }
 
@@ -129,11 +129,8 @@ class V4RoomProperties(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, keywords, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, *args, **kwargs):  # noqa: E501
         """V4RoomProperties - a agent_model defined in OpenAPI
-
-        Args:
-            keywords ([V4KeyValuePair]):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -177,6 +174,7 @@ class V4RoomProperties(ModelNormal):
             read_only (bool): [optional]  # noqa: E501
             discoverable (bool): [optional]  # noqa: E501
             members_can_invite (bool): [optional]  # noqa: E501
+            keywords ([V4KeyValuePair]): [optional] if omitted the server will use the default value of []  # noqa: E501
             can_view_history (bool): [optional]  # noqa: E501
         """
 
@@ -205,7 +203,6 @@ class V4RoomProperties(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.keywords = keywords
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -226,11 +223,8 @@ class V4RoomProperties(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, keywords, *args, **kwargs):  # noqa: E501
+    def __init__(self, *args, **kwargs):  # noqa: E501
         """V4RoomProperties - a agent_model defined in OpenAPI
-
-        Args:
-            keywords ([V4KeyValuePair]):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -274,6 +268,7 @@ class V4RoomProperties(ModelNormal):
             read_only (bool): [optional]  # noqa: E501
             discoverable (bool): [optional]  # noqa: E501
             members_can_invite (bool): [optional]  # noqa: E501
+            keywords ([V4KeyValuePair]): [optional] if omitted the server will use the default value of []  # noqa: E501
             can_view_history (bool): [optional]  # noqa: E501
         """
 
@@ -300,7 +295,6 @@ class V4RoomProperties(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.keywords: List[V4KeyValuePair] = keywords
         self.name: str = None
         self.description: str = None
         self.creator_user: V4User = None
@@ -312,6 +306,7 @@ class V4RoomProperties(ModelNormal):
         self.read_only: bool = None
         self.discoverable: bool = None
         self.members_can_invite: bool = None
+        self.keywords: List[V4KeyValuePair] = []
         self.can_view_history: bool = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \

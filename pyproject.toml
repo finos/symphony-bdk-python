@@ -42,7 +42,7 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.pytest.ini_options]
-addopts = "--junitxml=test-results/junit.xml --cov --cov-report=html"
+#addopts = "--junitxml=test-results/junit.xml --cov --cov-report=html"
 testpaths = ["tests"]
 norecursedirs = ["*.egg", ".*", "build", "dist", "venv", "legacy"]
 junit_logging = "all"
