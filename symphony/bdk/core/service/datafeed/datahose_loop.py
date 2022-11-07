@@ -1,7 +1,7 @@
 import logging
 
 from symphony.bdk.core.retry import retry
-from symphony.bdk.core.retry.strategy import read_datafeed_retry
+from symphony.bdk.core.retry.strategy import read_datahose_retry
 from symphony.bdk.core.service.datafeed.abstract_ackId_event_loop import AbstractAckIdEventLoop
 from symphony.bdk.core.service.datafeed.abstract_datahose_loop import AbstractDatahoseLoop
 from symphony.bdk.core.auth.auth_session import AuthSession
@@ -51,7 +51,7 @@ class DatahoseLoop(AbstractAckIdEventLoop, AbstractDatahoseLoop):
         finally:
             logger.debug("Stopping datahose loop")
 
-    @retry(retry=read_datafeed_retry)
+    @retry(retry=read_datahose_retry)
     async def _read_events(self):
         params = {
             "session_token": await self._auth_session.session_token,
