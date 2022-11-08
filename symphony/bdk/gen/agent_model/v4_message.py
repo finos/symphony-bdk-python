@@ -88,13 +88,13 @@ class V4Message(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'attachments': ([V4AttachmentInfo],),  # noqa: E501
             'message_id': (str, none_type),  # noqa: E501
             'parent_message_id': (str, none_type),  # noqa: E501
             'timestamp': (int, none_type),  # noqa: E501
             'message': (str, none_type),  # noqa: E501
             'shared_message': (V4Message, none_type),  # noqa: E501
             'data': (str, none_type),  # noqa: E501
+            'attachments': ([V4AttachmentInfo], none_type),  # noqa: E501
             'user': (V4User, none_type),  # noqa: E501
             'stream': (V4Stream, none_type),  # noqa: E501
             'external_recipients': (bool, none_type),  # noqa: E501
@@ -116,13 +116,13 @@ class V4Message(ModelNormal):
 
 
     attribute_map = {
-        'attachments': 'attachments',  # noqa: E501
         'message_id': 'messageId',  # noqa: E501
         'parent_message_id': 'parentMessageId',  # noqa: E501
         'timestamp': 'timestamp',  # noqa: E501
         'message': 'message',  # noqa: E501
         'shared_message': 'sharedMessage',  # noqa: E501
         'data': 'data',  # noqa: E501
+        'attachments': 'attachments',  # noqa: E501
         'user': 'user',  # noqa: E501
         'stream': 'stream',  # noqa: E501
         'external_recipients': 'externalRecipients',  # noqa: E501
@@ -145,11 +145,8 @@ class V4Message(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, attachments, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, *args, **kwargs):  # noqa: E501
         """V4Message - a agent_model defined in OpenAPI
-
-        Args:
-            attachments ([V4AttachmentInfo]): Message attachments
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -188,6 +185,7 @@ class V4Message(ModelNormal):
             message (str): Message content in MessageMLV2. [optional]  # noqa: E501
             shared_message (V4Message): [optional]  # noqa: E501
             data (str): Message data in EntityJSON. [optional]  # noqa: E501
+            attachments ([V4AttachmentInfo]): Message attachments. [optional] if omitted the server will use the default value of []  # noqa: E501
             user (V4User): [optional]  # noqa: E501
             stream (V4Stream): [optional]  # noqa: E501
             external_recipients (bool): Indicates if the message have external recipients. Only present on real time messaging.. [optional]  # noqa: E501
@@ -228,7 +226,6 @@ class V4Message(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.attachments = attachments
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -249,11 +246,8 @@ class V4Message(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, attachments, *args, **kwargs):  # noqa: E501
+    def __init__(self, *args, **kwargs):  # noqa: E501
         """V4Message - a agent_model defined in OpenAPI
-
-        Args:
-            attachments ([V4AttachmentInfo]): Message attachments
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -292,6 +286,7 @@ class V4Message(ModelNormal):
             message (str): Message content in MessageMLV2. [optional]  # noqa: E501
             shared_message (V4Message): [optional]  # noqa: E501
             data (str): Message data in EntityJSON. [optional]  # noqa: E501
+            attachments ([V4AttachmentInfo]): Message attachments. [optional] if omitted the server will use the default value of []  # noqa: E501
             user (V4User): [optional]  # noqa: E501
             stream (V4Stream): [optional]  # noqa: E501
             external_recipients (bool): Indicates if the message have external recipients. Only present on real time messaging.. [optional]  # noqa: E501
@@ -330,13 +325,13 @@ class V4Message(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.attachments: List[V4AttachmentInfo] = attachments
         self.message_id: str = None
         self.parent_message_id: str = None
         self.timestamp: int = None
         self.message: str = None
         self.shared_message: V4Message = None
         self.data: str = None
+        self.attachments: List[V4AttachmentInfo] = []
         self.user: V4User = None
         self.stream: V4Stream = None
         self.external_recipients: bool = None

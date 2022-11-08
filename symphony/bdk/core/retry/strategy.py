@@ -119,3 +119,20 @@ async def read_datafeed_retry(retry_state: RetryCallState):
             return True
         raise exception
     return False
+
+
+async def read_datahose_retry(retry_state: RetryCallState):
+    """Read datahose retry strategy
+
+    Retry if the raised exception verifies the is_network_or_minor_error predicate
+    For this exception, we refresh the current AuthSession tokens
+    The other exceptions like 400 client error are rethrown
+    """
+    if retry_state.outcome.failed:
+        exception = retry_state.outcome.exception()
+        if is_network_or_minor_error(exception):
+            service_auth_session = retry_state.args[0]._auth_session
+            await service_auth_session.refresh()
+            return True
+        raise exception
+    return False

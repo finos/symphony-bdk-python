@@ -88,9 +88,9 @@ class V2MessageSubmission(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'attachments': ([AttachmentInfo],),  # noqa: E501
             'format': (str, none_type),  # noqa: E501
             'message': (str, none_type),  # noqa: E501
+            'attachments': ([AttachmentInfo], none_type),  # noqa: E501
         }
 
     @cached_property
@@ -99,9 +99,9 @@ class V2MessageSubmission(ModelNormal):
 
 
     attribute_map = {
-        'attachments': 'attachments',  # noqa: E501
         'format': 'format',  # noqa: E501
         'message': 'message',  # noqa: E501
+        'attachments': 'attachments',  # noqa: E501
     }
 
     read_only_vars = {
@@ -111,11 +111,8 @@ class V2MessageSubmission(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, attachments, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, *args, **kwargs):  # noqa: E501
         """V2MessageSubmission - a agent_model defined in OpenAPI
-
-        Args:
-            attachments ([AttachmentInfo]):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -150,6 +147,7 @@ class V2MessageSubmission(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             format (str): [optional]  # noqa: E501
             message (str): [optional]  # noqa: E501
+            attachments ([AttachmentInfo]): [optional] if omitted the server will use the default value of []  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -177,7 +175,6 @@ class V2MessageSubmission(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.attachments = attachments
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -198,11 +195,8 @@ class V2MessageSubmission(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, attachments, *args, **kwargs):  # noqa: E501
+    def __init__(self, *args, **kwargs):  # noqa: E501
         """V2MessageSubmission - a agent_model defined in OpenAPI
-
-        Args:
-            attachments ([AttachmentInfo]):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -237,6 +231,7 @@ class V2MessageSubmission(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             format (str): [optional]  # noqa: E501
             message (str): [optional]  # noqa: E501
+            attachments ([AttachmentInfo]): [optional] if omitted the server will use the default value of []  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -262,9 +257,9 @@ class V2MessageSubmission(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.attachments: List[AttachmentInfo] = attachments
         self.format: str = None
         self.message: str = None
+        self.attachments: List[AttachmentInfo] = []
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

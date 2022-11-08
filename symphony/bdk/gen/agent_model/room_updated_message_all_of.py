@@ -84,9 +84,9 @@ class RoomUpdatedMessageAllOf(ModelNormal):
                 and the value is attribute type.
         """
         return {
-            'keywords': ([RoomTag],),  # noqa: E501
             'old_name': (str, none_type),  # noqa: E501
             'new_name': (str, none_type),  # noqa: E501
+            'keywords': ([RoomTag], none_type),  # noqa: E501
             'old_description': (str, none_type),  # noqa: E501
             'new_description': (str, none_type),  # noqa: E501
             'members_can_invite': (bool, none_type),  # noqa: E501
@@ -101,9 +101,9 @@ class RoomUpdatedMessageAllOf(ModelNormal):
 
 
     attribute_map = {
-        'keywords': 'keywords',  # noqa: E501
         'old_name': 'oldName',  # noqa: E501
         'new_name': 'newName',  # noqa: E501
+        'keywords': 'keywords',  # noqa: E501
         'old_description': 'oldDescription',  # noqa: E501
         'new_description': 'newDescription',  # noqa: E501
         'members_can_invite': 'membersCanInvite',  # noqa: E501
@@ -119,11 +119,8 @@ class RoomUpdatedMessageAllOf(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, keywords, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, *args, **kwargs):  # noqa: E501
         """RoomUpdatedMessageAllOf - a agent_model defined in OpenAPI
-
-        Args:
-            keywords ([RoomTag]):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -158,6 +155,7 @@ class RoomUpdatedMessageAllOf(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             old_name (str): [optional]  # noqa: E501
             new_name (str): [optional]  # noqa: E501
+            keywords ([RoomTag]): [optional] if omitted the server will use the default value of []  # noqa: E501
             old_description (str): [optional]  # noqa: E501
             new_description (str): [optional]  # noqa: E501
             members_can_invite (bool): [optional]  # noqa: E501
@@ -191,7 +189,6 @@ class RoomUpdatedMessageAllOf(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.keywords = keywords
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -212,11 +209,8 @@ class RoomUpdatedMessageAllOf(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, keywords, *args, **kwargs):  # noqa: E501
+    def __init__(self, *args, **kwargs):  # noqa: E501
         """RoomUpdatedMessageAllOf - a agent_model defined in OpenAPI
-
-        Args:
-            keywords ([RoomTag]):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -251,6 +245,7 @@ class RoomUpdatedMessageAllOf(ModelNormal):
                                 _visited_composed_classes = (Animal,)
             old_name (str): [optional]  # noqa: E501
             new_name (str): [optional]  # noqa: E501
+            keywords ([RoomTag]): [optional] if omitted the server will use the default value of []  # noqa: E501
             old_description (str): [optional]  # noqa: E501
             new_description (str): [optional]  # noqa: E501
             members_can_invite (bool): [optional]  # noqa: E501
@@ -282,9 +277,9 @@ class RoomUpdatedMessageAllOf(ModelNormal):
         self._configuration = _configuration
         self._visited_composed_classes = _visited_composed_classes + (self.__class__,)
 
-        self.keywords: List[RoomTag] = keywords
         self.old_name: str = None
         self.new_name: str = None
+        self.keywords: List[RoomTag] = []
         self.old_description: str = None
         self.new_description: str = None
         self.members_can_invite: bool = None

@@ -1,7 +1,7 @@
 import logging
 
 from symphony.bdk.core.retry import retry
-from symphony.bdk.core.retry.strategy import read_datafeed_retry
+from symphony.bdk.core.retry.strategy import read_datahose_retry
 from symphony.bdk.core.service.datafeed.abstract_ackId_event_loop import AbstractAckIdEventLoop
 from symphony.bdk.core.service.datafeed.abstract_datahose_loop import AbstractDatahoseLoop
 from symphony.bdk.core.auth.auth_session import AuthSession
@@ -23,7 +23,7 @@ class DatahoseLoop(AbstractAckIdEventLoop, AbstractDatahoseLoop):
         This service will be started by calling :func:`~DatahoseLoop.start`.
 
         The BDK bot will listen to this datahose to get all the received real-time events that are set
-        as filters in the configuration.
+        as event_types in the configuration.
 
         This service will be stopped by calling :func:`~DatahoseLoop.stop`
     """
@@ -37,7 +37,7 @@ class DatahoseLoop(AbstractAckIdEventLoop, AbstractDatahoseLoop):
                 else TYPE
             self._tag = not_truncated_tag[:DATAHOSE_TAG_MAX_LENGTH]
             self._retry = config.datahose.retry
-            self._filters = config.datahose.filters
+            self._event_types = config.datahose.event_types
 
     async def start(self):
         if self._running:
@@ -51,12 +51,12 @@ class DatahoseLoop(AbstractAckIdEventLoop, AbstractDatahoseLoop):
         finally:
             logger.debug("Stopping datahose loop")
 
-    @retry(retry=read_datafeed_retry)
+    @retry(retry=read_datahose_retry)
     async def _read_events(self):
         params = {
             "session_token": await self._auth_session.session_token,
             "key_manager_token": await self._auth_session.key_manager_token,
-            "body": V5EventsReadBody(type=TYPE, tag=self._tag, filters=self._filters, ack_id=self._ack_id)
+            "body": V5EventsReadBody(type=TYPE, tag=self._tag, event_types=self._event_types, ack_id=self._ack_id)
         }
 
         return await self._datafeed_api.read_events(**params)

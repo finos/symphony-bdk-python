@@ -25,6 +25,7 @@ from symphony.bdk.gen.auth_model.error import Error
 from symphony.bdk.gen.auth_model.extension_app_authenticate_request import ExtensionAppAuthenticateRequest
 from symphony.bdk.gen.auth_model.extension_app_tokens import ExtensionAppTokens
 from symphony.bdk.gen.auth_model.obo_auth_response import OboAuthResponse
+from symphony.bdk.gen.auth_model.success_response import SuccessResponse
 from symphony.bdk.gen.auth_model.token import Token
 
 
@@ -285,7 +286,7 @@ class CertificateAuthenticationApi(object):
         )
         self.v1_logout_post_endpoint = _Endpoint(
             settings={
-                'response_type': (Token,),
+                'response_type': (SuccessResponse,),
                 'auth': [],
                 'endpoint_path': '/v1/logout',
                 'operation_id': 'v1_logout_post',
@@ -765,7 +766,7 @@ class CertificateAuthenticationApi(object):
             async_req (bool): execute request asynchronously
 
         Returns:
-            Token
+            SuccessResponse
                 If the method is called asynchronously, returns the request
                 thread.
         """

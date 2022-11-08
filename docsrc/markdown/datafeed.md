@@ -156,6 +156,8 @@ datafeed:
 ```
 
 # Datahose
+> :warning: Please note that Datahose is available as beta and will remain as beta until further notice.
+
 Datahose is very similar to datafeed: it enables a bot to receive [_Real Time
 Events_](https://docs.developers.symphony.com/building-bots-on-symphony/datafeed/real-time-events) with the main
 difference that *all* events of the pod are received. The datahose loop is a core service built on top of the events API
@@ -192,9 +194,11 @@ Datahose Service can be configured by the datafeed field in the configuration fi
 ```yaml
 datahose:
     tag: fancyTag # optional tag that will be used when creating or reusing a datahose feed
-    filters: # mandatory field, events you want to receive
-        - SOCIALMESSAGE
-        - CREATE_ROOM
+    eventTypes: # mandatory field, events you want to receive
+        - INSTANTMESSAGECREATED
+        - ROOMCREATED
+        - ROOMUPDATED 
+        
     retry: # optional
         maxAttempts: 6 # maximum number of retry attempts
         initialIntervalMillis: 2000 # initial interval between two attempts
@@ -202,14 +206,10 @@ datahose:
         maxIntervalMillis: 10000 # limit of the interval between two attempts
 ```
 
-The minimal configuration for the datahose service is the `filters` field. It should contain at least one value chosen
-among the following:
-* SOCIALMESSAGE
-* CREATE_ROOM
-* UPDATE_ROOM
-
-:warning: If you want to use `SOCIALMESSAGE` filter (i.e. consume message sent events), `ceservice` credentials must be
-configured in your Symphony agent.
+The minimal configuration for the datahose service is the `eventTypes` field. It should contain at least one value 
+chosen among [_Real Time Events_](https://docs.developers.symphony.com/building-bots-on-symphony/datafeed/real-time-events) 
+list and that `MESSAGESENT`, `MESSAGESUPPRESSED` and `SYMPHONYELEMENTSACTION` values can be set only if the ceservice is
+properly configured and running in your Symphony agent.
 
 The `tag` field is optional and is used when creating and reusing datahose feeds. If you have several instances of the
 same bot and want them to use the same datahose feed (so that events are spread over bot instances),

@@ -86,7 +86,7 @@ class V2MessageAllOf(ModelNormal):
         return {
             'message': (str,),  # noqa: E501
             'from_user_id': (int,),  # noqa: E501
-            'attachments': ([AttachmentInfo],),  # noqa: E501
+            'attachments': ([AttachmentInfo], none_type),  # noqa: E501
         }
 
     @cached_property
@@ -107,13 +107,12 @@ class V2MessageAllOf(ModelNormal):
 
     @classmethod
     @convert_js_args_to_python_args
-    def _from_openapi_data(cls, message, from_user_id, attachments, *args, **kwargs):  # noqa: E501
+    def _from_openapi_data(cls, message, from_user_id, *args, **kwargs):  # noqa: E501
         """V2MessageAllOf - a agent_model defined in OpenAPI
 
         Args:
             message (str): Message text in MessageML
             from_user_id (int): the Symphony userId of the user who sent the message. This will be populated by the server (and actually ignored if included when sending a message).
-            attachments ([AttachmentInfo]):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -146,6 +145,7 @@ class V2MessageAllOf(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            attachments ([AttachmentInfo]): [optional] if omitted the server will use the default value of []  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -175,7 +175,6 @@ class V2MessageAllOf(ModelNormal):
 
         self.message = message
         self.from_user_id = from_user_id
-        self.attachments = attachments
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
@@ -196,13 +195,12 @@ class V2MessageAllOf(ModelNormal):
     ])
 
     @convert_js_args_to_python_args
-    def __init__(self, message, from_user_id, attachments, *args, **kwargs):  # noqa: E501
+    def __init__(self, message, from_user_id, *args, **kwargs):  # noqa: E501
         """V2MessageAllOf - a agent_model defined in OpenAPI
 
         Args:
             message (str): Message text in MessageML
             from_user_id (int): the Symphony userId of the user who sent the message. This will be populated by the server (and actually ignored if included when sending a message).
-            attachments ([AttachmentInfo]):
 
         Keyword Args:
             _check_type (bool): if True, values for parameters in openapi_types
@@ -235,6 +233,7 @@ class V2MessageAllOf(ModelNormal):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            attachments ([AttachmentInfo]): [optional] if omitted the server will use the default value of []  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -262,7 +261,7 @@ class V2MessageAllOf(ModelNormal):
 
         self.message: str = message
         self.from_user_id: int = from_user_id
-        self.attachments: List[AttachmentInfo] = attachments
+        self.attachments: List[AttachmentInfo] = []
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \

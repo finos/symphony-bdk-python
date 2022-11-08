@@ -90,10 +90,10 @@ class V2Message(ModelComposed):
         return {
             'message': (str,),  # noqa: E501
             'from_user_id': (int,),  # noqa: E501
-            'attachments': ([AttachmentInfo],),  # noqa: E501
             'timestamp': (str,),  # noqa: E501
             'v2message_type': (str,),  # noqa: E501
             'stream_id': (str,),  # noqa: E501
+            'attachments': ([AttachmentInfo], none_type),  # noqa: E501
             'id': (str, none_type),  # noqa: E501
         }
 
@@ -108,10 +108,10 @@ class V2Message(ModelComposed):
     attribute_map = {
         'message': 'message',  # noqa: E501
         'from_user_id': 'fromUserId',  # noqa: E501
-        'attachments': 'attachments',  # noqa: E501
         'timestamp': 'timestamp',  # noqa: E501
         'v2message_type': 'v2messageType',  # noqa: E501
         'stream_id': 'streamId',  # noqa: E501
+        'attachments': 'attachments',  # noqa: E501
         'id': 'id',  # noqa: E501
     }
 
@@ -126,7 +126,6 @@ class V2Message(ModelComposed):
         Keyword Args:
             message (str): Message text in MessageML
             from_user_id (int): the Symphony userId of the user who sent the message. This will be populated by the server (and actually ignored if included when sending a message).
-            attachments ([AttachmentInfo]):
             timestamp (str):
             v2message_type (str):
             stream_id (str):
@@ -160,6 +159,7 @@ class V2Message(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            attachments ([AttachmentInfo]): [optional] if omitted the server will use the default value of []  # noqa: E501
             id (str): The messageId is assigned by the ingestor service when a message is sent.. [optional]  # noqa: E501
         """
 
@@ -232,7 +232,6 @@ class V2Message(ModelComposed):
         Keyword Args:
             message (str): Message text in MessageML
             from_user_id (int): the Symphony userId of the user who sent the message. This will be populated by the server (and actually ignored if included when sending a message).
-            attachments ([AttachmentInfo]):
             timestamp (str):
             v2message_type (str):
             stream_id (str):
@@ -266,6 +265,7 @@ class V2Message(ModelComposed):
                                 Animal class but this time we won't travel
                                 through its discriminator because we passed in
                                 _visited_composed_classes = (Animal,)
+            attachments ([AttachmentInfo]): [optional] if omitted the server will use the default value of []  # noqa: E501
             id (str): The messageId is assigned by the ingestor service when a message is sent.. [optional]  # noqa: E501
         """
 
@@ -307,10 +307,10 @@ class V2Message(ModelComposed):
         discarded_args = composed_info[3]
         self.message: str = kwargs['message']
         self.from_user_id: int = kwargs['from_user_id']
-        self.attachments: List[AttachmentInfo] = kwargs['attachments']
         self.timestamp: str = kwargs['timestamp']
         self.v2message_type: str = kwargs['v2message_type']
         self.stream_id: str = kwargs['stream_id']
+        self.attachments: List[AttachmentInfo] = []
         self.id: str = None
         for var_name, var_value in kwargs.items():
             if var_name in discarded_args and \

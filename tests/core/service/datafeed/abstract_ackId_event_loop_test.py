@@ -1,8 +1,7 @@
 import asyncio
-from unittest.mock import AsyncMock, patch
-
 import pytest
 
+from unittest.mock import AsyncMock, patch
 from tests.core.service.datafeed.test_fixtures import fixture_initiator_userid, fixture_session_service, \
     fixture_message_sent_v4_event
 
@@ -14,9 +13,10 @@ from symphony.bdk.gen.agent_api.datafeed_api import DatafeedApi
 
 @pytest.fixture(name="read_events_side_effect")
 def fixture_read_events_side_effect(message_sent_v4_event):
-    async def read_events(**kwargs):
+    async def read_events():
         await asyncio.sleep(0.001)  # to force the switching of tasks
-        events_list = V5EventList([message_sent_v4_event])
+        events_list = V5EventList()
+        events_list.events = [message_sent_v4_event]
         events_list.ack_id = "testing_ack_id"
         return events_list
 
