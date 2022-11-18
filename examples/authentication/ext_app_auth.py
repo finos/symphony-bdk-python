@@ -14,9 +14,9 @@ async def run():
         app_auth = await ext_app_authenticator.authenticate_extension_app("appToken")
         ta = app_auth.app_token
         ts = app_auth.symphony_token
-        #nosemgrep - please don't log secrets in production; this is just for demo purposes
+        # nosemgrep - please don't log secrets in production; this is just for demo purposes
         logging.debug("App token: %s, Symphony token: %s", ta, ts)
-        #nosemgrep -please don't log secrets in production; this is just for demo purposes
+        # nosemgrep
         logging.debug("Is token pair valid: %s", await ext_app_authenticator.is_token_pair_valid(ta, ts))
 
 
