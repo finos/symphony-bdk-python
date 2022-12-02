@@ -1,9 +1,8 @@
 name: License Scanning for Python
 
 on:
-  push:
+  pull_request:
     paths:
-      - 'requirements.txt'
       - 'pyproject.toml'
       - '.github/workflows/license-scanning-python.yml'
 
