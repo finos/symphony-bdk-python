@@ -4,6 +4,7 @@ from pathlib import Path
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 
 VERSION = "version"
+TAG = "tag"
 DF_ID_FILE_PATH = "idFilePath"
 DF_V1 = "v1"
 DF_V2 = "v2"
@@ -30,12 +31,14 @@ class BdkDatafeedConfig:
         :param config: the dict containing the datafeed specific configuration.
         """
         self.version = DF_V2
+        self.tag = None
         self.id_file_path = ""
         self.retry = BdkRetryConfig(dict(maxAttempts=BdkRetryConfig.INFINITE_MAX_ATTEMPTS))
         if config is not None:
             self.id_file_path = Path(config.get(DF_ID_FILE_PATH)) if DF_ID_FILE_PATH in config else ""
             log_dfv1_deprecation(config.get(VERSION))
             self.version = config.get(VERSION)
+            self.tag = config.get(TAG)
             if "retry" in config:
                 self.retry = BdkRetryConfig(config.get("retry"))
 

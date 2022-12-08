@@ -43,8 +43,7 @@ class DatafeedLoopV2(AbstractAckIdEventLoop):
                  config: BdkConfig):
         super().__init__(datafeed_api, session_service, auth_session, config)
         self._datafeed_id = None
-        if config.bot.username is not None:
-            self._tag = config.bot.username[0:DATAFEED_TAG_MAX_LENGTH]
+        self._tag = config.datafeed.tag[0:DATAFEED_TAG_MAX_LENGTH] if config.datafeed.tag else None
 
     async def start(self):
         if self._running:
@@ -100,9 +99,11 @@ class DatafeedLoopV2(AbstractAckIdEventLoop):
         session_token = await self._auth_session.session_token
         key_manager_token = await self._auth_session.key_manager_token
 
+        body = V5DatafeedCreateBody(tag=self._tag) if self._tag else V5DatafeedCreateBody()
         return await self._datafeed_api.create_datafeed(session_token=session_token,
                                                         key_manager_token=key_manager_token,
-                                                        body=V5DatafeedCreateBody(tag=self._tag))
+                                                        body=body)
+                                                        #body=V5DatafeedCreateBody(tag=self._tag))
 
     @retry
     async def _delete_datafeed(self) -> None:

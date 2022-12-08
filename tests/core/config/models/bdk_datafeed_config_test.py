@@ -27,3 +27,10 @@ def test_version_should_default_on_v1(datafeed_version):
 def test_get_id_file_path():
     datafeed_config = BdkDatafeedConfig({"idFilePath": Path("dummy_path")})
     assert datafeed_config.get_id_file_path().resolve() == Path("dummy_path").resolve()
+    assert datafeed_config.tag is None
+
+
+def test_config_with_tag():
+    datafeed_config = BdkDatafeedConfig({"idFilePath": Path("dummy_path"), "tag": "tag"})
+    assert datafeed_config.get_id_file_path().resolve() == Path("dummy_path").resolve()
+    assert datafeed_config.tag == "tag"
