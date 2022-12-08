@@ -1,0 +1,8 @@
+# python.jwt.security.audit.jwt-exposed-data.jwt-python-exposed-data
+#  The object is passed strictly to jwt.encode(...) Make sure that sensitive information is not
+#  exposed through JWT token payload.
+#  Details: https://sg.run/ox8R
+
+#    45┆ return jwt.encode(payload, private_key, algorithm=JWT_ENCRYPTION_ALGORITHM)
+#  Ignore it as it is used for testing purpose only, not exposed
+symphony/bdk/core/auth/jwt_helper.py
