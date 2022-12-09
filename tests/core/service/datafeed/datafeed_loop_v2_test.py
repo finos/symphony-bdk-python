@@ -103,20 +103,6 @@ def fixture_datafeed_loop(datafeed_api, session_service, auth_session, config):
     return datafeed_loop
 
 
-@pytest.fixture(name="datafeed_loop_with_tag")
-def fixture_datafeed_loop_with_tag(datafeed_api, session_service, auth_session, config):
-    config.datafeed.tag = "tag"
-    datafeed_loop = DatafeedLoopV2(datafeed_api, session_service, auth_session, config)
-
-    class RealTimeEventListenerImpl(RealTimeEventListener):
-
-        async def on_message_sent(self, initiator: V4Initiator, event: V4MessageSent):
-            await datafeed_loop.stop()
-
-    datafeed_loop.subscribe(RealTimeEventListenerImpl())
-    return datafeed_loop
-
-
 @pytest.fixture(name="mock_datafeed_loop")
 def fixture_mock_datafeed_loop(datafeed_api, session_service, auth_session, config):
     datafeed_loop = DatafeedLoopV2(datafeed_api, session_service, auth_session, config)
@@ -125,35 +111,6 @@ def fixture_mock_datafeed_loop(datafeed_api, session_service, auth_session, conf
     datafeed_loop._retrieve_datafeed = AsyncMock(V5Datafeed(id="test_id"))
 
     return datafeed_loop
-
-
-@pytest.mark.asyncio
-async def test_with_tag(datafeed_loop_with_tag, datafeed_api, session_service, read_df_side_effect):
-    datafeed_api.list_datafeed.return_value = []
-    datafeed_api.create_datafeed.return_value = V5Datafeed(id="test_id")
-    datafeed_api.read_datafeed.side_effect = read_df_side_effect
-
-    await datafeed_loop_with_tag.start()
-
-    session_service.get_session.assert_called_once()
-
-    datafeed_api.list_datafeed.assert_called_with(
-        session_token="session_token",
-        key_manager_token="km_token",
-        tag="tag"
-    )
-    datafeed_api.create_datafeed.assert_called_with(
-        session_token="session_token",
-        key_manager_token="km_token",
-        body=V5DatafeedCreateBody(tag="tag")
-    )
-
-    assert datafeed_api.read_datafeed.call_args_list[0].kwargs == {"session_token": "session_token",
-                                                                   "key_manager_token": "km_token",
-                                                                   "datafeed_id": "test_id",
-                                                                   "ack_id": AckId(ack_id="", update_presence=True)}
-    assert datafeed_loop_with_tag._datafeed_id == "test_id"
-    assert datafeed_loop_with_tag._ack_id == "ack_id"
 
 
 @pytest.mark.asyncio
