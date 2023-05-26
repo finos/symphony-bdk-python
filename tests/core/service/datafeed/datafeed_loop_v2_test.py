@@ -125,13 +125,12 @@ async def test_start(datafeed_loop, datafeed_api, session_service, read_df_side_
 
     datafeed_api.list_datafeed.assert_called_with(
         session_token="session_token",
-        key_manager_token="km_token",
-        tag=None
+        key_manager_token="km_token"
     )
     datafeed_api.create_datafeed.assert_called_with(
         session_token="session_token",
         key_manager_token="km_token",
-        body=V5DatafeedCreateBody(tag=None)
+        body=V5DatafeedCreateBody()
     )
 
     assert datafeed_api.read_datafeed.call_args_list[0].kwargs == {"session_token": "session_token",
@@ -158,8 +157,7 @@ async def test_start_old_datafeed_format_exist(datafeed_loop, datafeed_api, read
 
     datafeed_api.list_datafeed.assert_called_with(
         session_token="session_token",
-        key_manager_token="km_token",
-        tag=None
+        key_manager_token="km_token"
     )
     assert datafeed_api.read_datafeed.call_args_list[0].kwargs == {"session_token": "session_token",
                                                                    "key_manager_token": "km_token",
@@ -178,8 +176,7 @@ async def test_start_datafeed_exist(datafeed_loop, datafeed_api, read_df_side_ef
 
     datafeed_api.list_datafeed.assert_called_with(
         session_token="session_token",
-        key_manager_token="km_token",
-        tag=None
+        key_manager_token="km_token"
     )
     assert datafeed_api.read_datafeed.call_args_list[0].kwargs == {"session_token": "session_token",
                                                                    "key_manager_token": "km_token",
@@ -199,8 +196,7 @@ async def test_read_datafeed_bad_id(datafeed_loop, datafeed_api, read_df_side_ef
 
     datafeed_api.list_datafeed.assert_called_with(
         session_token="session_token",
-        key_manager_token="km_token",
-        tag=None
+        key_manager_token="km_token"
     )
     assert datafeed_api.read_datafeed.call_args_list[0].kwargs == {"session_token": "session_token",
                                                                    "key_manager_token": "km_token",
@@ -237,8 +233,7 @@ async def test_start_datafeed_stale_datafeed(datafeed_loop, datafeed_api, sessio
 
     datafeed_api.list_datafeed.assert_called_with(
         session_token="session_token",
-        key_manager_token="km_token",
-        tag=None
+        key_manager_token="km_token"
     )
 
     datafeed_api.delete_datafeed.assert_called_with(
@@ -250,7 +245,7 @@ async def test_start_datafeed_stale_datafeed(datafeed_loop, datafeed_api, sessio
     datafeed_api.create_datafeed.assert_called_with(
         session_token="session_token",
         key_manager_token="km_token",
-        body=V5DatafeedCreateBody(tag=None)
+        body=V5DatafeedCreateBody()
     )
 
     datafeed_api.read_datafeed.assert_has_calls([

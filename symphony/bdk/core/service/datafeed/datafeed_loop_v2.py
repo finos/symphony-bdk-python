@@ -85,8 +85,7 @@ class DatafeedLoopV2(AbstractAckIdEventLoop):
         session_token = await self._auth_session.session_token
         key_manager_token = await self._auth_session.key_manager_token
         datafeeds = await self._datafeed_api.list_datafeed(session_token=session_token,
-                                                           key_manager_token=key_manager_token,
-                                                           tag=None)
+                                                           key_manager_token=key_manager_token)
 
         datafeeds = list(filter(lambda df: DATAFEED_V2_ID_PATTERN.match(df.id), datafeeds))
         if datafeeds:
