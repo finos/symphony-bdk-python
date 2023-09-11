@@ -10,7 +10,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: Run Snyk to check for vulnerabilities
-        uses: snyk/actions/python@master
+        uses: snyk/actions/python@b98d498629f1c368650224d6d212bf7dfa89e4bf
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
         with:
