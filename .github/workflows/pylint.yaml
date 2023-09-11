@@ -36,7 +36,7 @@ jobs:
         run: pip install pylint
 
       - name: Download previous run results
-        uses: dawidd6/action-download-artifact@v2.12.0
+        uses: dawidd6/action-download-artifact@8c96194455d424a24437ec57817e0aa1a1d72adb
         continue-on-error: true
         with:
           workflow: pylint.yaml
