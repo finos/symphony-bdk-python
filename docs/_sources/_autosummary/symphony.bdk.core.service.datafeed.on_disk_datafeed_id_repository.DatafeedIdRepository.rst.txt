@@ -1,0 +1,27 @@
+symphony.bdk.core.service.datafeed.on\_disk\_datafeed\_id\_repository.DatafeedIdRepository
+==========================================================================================
+
+.. currentmodule:: symphony.bdk.core.service.datafeed.on_disk_datafeed_id_repository
+
+.. autoclass:: DatafeedIdRepository
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~DatafeedIdRepository.__init__
+      ~DatafeedIdRepository.read
+      ~DatafeedIdRepository.write
+   
+   
+
+   
+   
+   
