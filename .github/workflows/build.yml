@@ -58,14 +58,14 @@ jobs:
         timeout-minutes: 10
 
       - name: Upload test results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: pytest-results-${{ matrix.os }}
           path: test-results/junit.xml
         if: ${{ always() }}
 
       - name: Upload test coverage
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: pytest-coverage-${{ matrix.os }}
           path: htmlcov
