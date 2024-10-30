@@ -25,10 +25,10 @@ defusedxml = "^0.7.1"
 docutils = "0.16"
 
 [tool.poetry.dev-dependencies]
-pytest = "^7.1.1"
+pytest = "^8.3.3"
 pylint = "^2.6.0"
-pytest-cov = "^3.0.0"
-pytest-asyncio = "^0.18.2"
+pytest-cov = "^5.0.0"
+pytest-asyncio = "^0.24.0"
 Sphinx = "^4.4.0"
 recommonmark = "^0.7.1"
 furo = "^2022.3.4"
