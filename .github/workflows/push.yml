@@ -8,7 +8,7 @@ jobs:
   security:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v4
       - name: Run Snyk to check for vulnerabilities
         uses: snyk/actions/python@b98d498629f1c368650224d6d212bf7dfa89e4bf
         env:
@@ -20,13 +20,13 @@ jobs:
   documentation:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Set up Python 3.8
         id: setup-python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: 3.8
 
@@ -41,7 +41,7 @@ jobs:
           echo "::set-output name=dir::$(pip cache dir)"
 
       - name: Cache pip dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ${{ steps.pip-cache.outputs.dir }}
           key: ${{ runner.os }}-pip-${{ steps.setup-python.outputs.python-version }}
@@ -50,7 +50,7 @@ jobs:
         run: pip install poetry
 
       - name: Cache poetry
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ~/.cache/pypoetry/virtualenvs
           key: ${{ runner.os }}-poetry-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('poetry.lock') }}
