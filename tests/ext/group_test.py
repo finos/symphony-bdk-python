@@ -44,7 +44,7 @@ def fixture_api_client_factory(api_client, login_client):
 
 @pytest.fixture(name="api_client")
 def fixture_api_client():
-    api_client = MagicMock(wraps=ApiClient())
+    api_client = MagicMock(ApiClient)
     api_client.call_api = AsyncMock()
     api_client.configuration = Configuration()
     return api_client
@@ -52,10 +52,10 @@ def fixture_api_client():
 
 @pytest.fixture(name="login_client")
 def fixture_login_client():
-    api_client = MagicMock(ApiClient)
-    api_client.call_api = AsyncMock()
-    api_client.configuration = Configuration()
-    return api_client
+    login_client = MagicMock(ApiClient)
+    login_client.call_api = AsyncMock()
+    login_client.configuration = Configuration()
+    return login_client
 
 
 @pytest.fixture(name="retry_config")
