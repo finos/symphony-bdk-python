@@ -87,7 +87,7 @@ class V4SymphonyElementsAction(ModelNormal):
             'stream': (V4Stream, none_type),  # noqa: E501
             'form_message_id': (str, none_type),  # noqa: E501
             'form_id': (str, none_type),  # noqa: E501
-            'form_values': ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}, none_type),  # noqa: E501
+            'form_values': ({str: (str,)}, none_type),  # noqa: E501
         }
 
     @cached_property
@@ -146,7 +146,7 @@ class V4SymphonyElementsAction(ModelNormal):
             stream (V4Stream): [optional]  # noqa: E501
             form_message_id (str): The id of the message that contains the Form. [optional]  # noqa: E501
             form_id (str): The id of the Form element. [optional]  # noqa: E501
-            form_values ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): The values (in JSON format) answered on the Form. [optional]  # noqa: E501
+            form_values ({str: (str,)}): The values (in JSON format) answered on the Form. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -231,7 +231,7 @@ class V4SymphonyElementsAction(ModelNormal):
             stream (V4Stream): [optional]  # noqa: E501
             form_message_id (str): The id of the message that contains the Form. [optional]  # noqa: E501
             form_id (str): The id of the Form element. [optional]  # noqa: E501
-            form_values ({str: (bool, date, datetime, dict, float, int, list, str, none_type)}): The values (in JSON format) answered on the Form. [optional]  # noqa: E501
+            form_values ({str: (str,)}): The values (in JSON format) answered on the Form. [optional]  # noqa: E501
         """
 
         _check_type = kwargs.pop('_check_type', True)
@@ -260,7 +260,7 @@ class V4SymphonyElementsAction(ModelNormal):
         self.stream: V4Stream = None
         self.form_message_id: str = None
         self.form_id: str = None
-        self.form_values: Union[{str: (bool, date, datetime, dict, float, int, list, str, none_type)}] = None
+        self.form_values: Union[{str: (str,)}] = None
         for var_name, var_value in kwargs.items():
             if var_name not in self.attribute_map and \
                         self._configuration is not None and \
