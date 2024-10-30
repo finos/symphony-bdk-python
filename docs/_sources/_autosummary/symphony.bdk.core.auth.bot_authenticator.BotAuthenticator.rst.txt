@@ -1,0 +1,27 @@
+symphony.bdk.core.auth.bot\_authenticator.BotAuthenticator
+==========================================================
+
+.. currentmodule:: symphony.bdk.core.auth.bot_authenticator
+
+.. autoclass:: BotAuthenticator
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~BotAuthenticator.__init__
+      ~BotAuthenticator.retrieve_key_manager_token
+      ~BotAuthenticator.retrieve_session_token
+   
+   
+
+   
+   
+   

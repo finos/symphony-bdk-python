@@ -1,0 +1,33 @@
+symphony.bdk.core.service.user.model
+====================================
+
+.. automodule:: symphony.bdk.core.service.user.model
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   symphony.bdk.core.service.user.model.delegate_action_enum
+   symphony.bdk.core.service.user.model.role_id
+

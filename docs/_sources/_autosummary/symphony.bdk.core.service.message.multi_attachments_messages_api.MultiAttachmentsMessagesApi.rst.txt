@@ -1,0 +1,42 @@
+symphony.bdk.core.service.message.multi\_attachments\_messages\_api.MultiAttachmentsMessagesApi
+===============================================================================================
+
+.. currentmodule:: symphony.bdk.core.service.message.multi_attachments_messages_api
+
+.. autoclass:: MultiAttachmentsMessagesApi
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~MultiAttachmentsMessagesApi.__init__
+      ~MultiAttachmentsMessagesApi.v1_message_id_get
+      ~MultiAttachmentsMessagesApi.v1_message_import_post
+      ~MultiAttachmentsMessagesApi.v1_message_search_get
+      ~MultiAttachmentsMessagesApi.v1_message_search_post
+      ~MultiAttachmentsMessagesApi.v1_stream_sid_message_create_post
+      ~MultiAttachmentsMessagesApi.v1_stream_sid_message_get
+      ~MultiAttachmentsMessagesApi.v2_message_import_post
+      ~MultiAttachmentsMessagesApi.v2_stream_sid_message_create_post
+      ~MultiAttachmentsMessagesApi.v2_stream_sid_message_get
+      ~MultiAttachmentsMessagesApi.v3_stream_sid_message_create_post
+      ~MultiAttachmentsMessagesApi.v4_message_blast_post
+      ~MultiAttachmentsMessagesApi.v4_message_import_post
+      ~MultiAttachmentsMessagesApi.v4_multi_attachment_message_blast_post
+      ~MultiAttachmentsMessagesApi.v4_stream_sid_message_create_post
+      ~MultiAttachmentsMessagesApi.v4_stream_sid_message_get
+      ~MultiAttachmentsMessagesApi.v4_stream_sid_message_mid_update_post
+      ~MultiAttachmentsMessagesApi.v4_stream_sid_multi_attachment_message_create_post
+   
+   
+
+   
+   
+   
