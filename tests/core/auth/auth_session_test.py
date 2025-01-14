@@ -1,9 +1,12 @@
+from datetime import datetime, timezone
+
 from unittest.mock import AsyncMock
 
 import pytest
 
 from symphony.bdk.core.auth.auth_session import AuthSession, OboAuthSession, AppAuthSession
 from symphony.bdk.core.auth.exception import AuthInitializationError
+from symphony.bdk.gen.login_model.token import Token
 from symphony.bdk.gen.login_model.extension_app_tokens import ExtensionAppTokens
 
 
@@ -17,6 +20,38 @@ async def test_refresh():
     await auth_session.refresh()
     assert await auth_session.session_token == "session_token"
     assert await auth_session.key_manager_token == "km_token"
+
+
+@pytest.mark.asyncio
+async def test_auth_token():
+    mock_bot_authenticator = AsyncMock()
+    expired_ts, fresh_ts, = (
+        datetime.now(timezone.utc).timestamp(),
+        datetime.now(timezone.utc).timestamp() + 500,
+    )
+    mock_bot_authenticator.retrieve_session_token_object.side_effect = [
+        (
+            Token(
+                authorization_token="initial_token",
+                token="session_tokeт",
+                name="sessionToken",
+            ),
+            expired_ts,
+        ),
+        (
+            Token(
+                authorization_token="updated_token",
+                token="session_token",
+                name="sessionToken",
+            ),
+            fresh_ts,
+        ),
+    ]
+    auth_session = AuthSession(mock_bot_authenticator)
+    assert await auth_session.auth_token == "initial_token"
+    assert await auth_session.auth_token == "updated_token"
+    assert await auth_session.auth_token == "updated_token"
+    assert mock_bot_authenticator.retrieve_session_token_object.call_count == 2
 
 
 @pytest.mark.asyncio
