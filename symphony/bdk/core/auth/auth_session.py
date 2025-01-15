@@ -58,12 +58,10 @@ class AuthSession:
             > datetime.now(timezone.utc).timestamp() + EXPIRATION_SAFETY_BUFFER_SECONDS
         ):
             return self._auth_token
-
-        token, expire_at = await self._authenticator.retrieve_auth_token()
+        token, expire_at = await self._authenticator.retrieve_session_token_object()
         self._expire_at = expire_at
         self._auth_token = token.authorization_token
         self._session_token = token.token
-
         return self._auth_token
 
     @property

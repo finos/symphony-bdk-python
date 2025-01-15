@@ -65,9 +65,9 @@ def validate_jwt(jwt_token: str, certificate: str, allowed_audience: str) -> dic
         raise AuthInitializationError("Unable to validate the jwt") from exc
 
 
-def generate_expiration_time():
+def generate_expiration_time() -> int:
     """Generates integer timestamp value for jwt token
-    :return int timestamp value
+    :return: timestamp value
     """
     return int(
         datetime.datetime.now(datetime.timezone.utc).timestamp()

@@ -40,7 +40,7 @@ class BotAuthenticator(ABC):
         """
         return await self._authenticate_and_get_token(self._session_auth_client)
 
-    async def retrieve_auth_token(self) -> Tuple[Token, str]:
+    async def retrieve_session_token_object(self) -> Tuple[Token, int]:
         """Authenticates and retrieves a new auth token.
 
         :return: retrieved token object + expiration date.
