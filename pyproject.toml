@@ -37,6 +37,9 @@ safety = "^2.2.0"
 liccheck = "^0.6.2"
 coverage = {version = "^6.0b1", extras = ["toml"]}
 
+[tool.poetry.requires-plugins]
+poetry-plugin-export = ">=1.8"
+
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
