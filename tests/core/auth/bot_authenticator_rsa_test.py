@@ -36,19 +36,21 @@ def fixture_config():
 
 @pytest.mark.asyncio
 async def test_bot_session_rsa(config, mocked_api_client):
-    with patch("symphony.bdk.core.auth.bot_authenticator.create_signed_jwt", return_value="privateKey"):
+    with patch("symphony.bdk.core.auth.bot_authenticator.create_signed_jwt", return_value="privateKey"), patch("symphony.bdk.core.auth.bot_authenticator.generate_expiration_time", return_value=100):
         login_api_client = mocked_api_client()
         relay_api_client = mocked_api_client()
 
-        login_api_client.call_api.return_value = Token(token="session_token")
+        login_api_client.call_api.return_value = Token(authorization_token="auth_token", token="session_token", name="sessionToken")
         relay_api_client.call_api.return_value = Token(token="km_token")
 
         bot_authenticator = BotAuthenticatorRsa(config, login_api_client, relay_api_client, minimal_retry_config())
         session_token = await bot_authenticator.retrieve_session_token()
         km_token = await bot_authenticator.retrieve_key_manager_token()
-
+        auth_token, expire_at = await bot_authenticator.retrieve_session_token_object()
         assert session_token == "session_token"
         assert km_token == "km_token"
+        assert auth_token == Token(authorization_token="auth_token", token="session_token", name="sessionToken")
+        assert expire_at == 100
 
 
 @pytest.mark.asyncio

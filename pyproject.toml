@@ -12,13 +12,13 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.9"
 nulltype = "^2.3.1"
 python-dateutil = "^2.8.2"
 urllib3 = "^1.26.19"
 aiohttp = "^3.10.2"
 pyyaml = "^6.0"
-PyJWT = "^2.3.0"
+PyJWT = "^2.10.0"
 cryptography = "^43.0.1"
 tenacity = "^8.0.1"
 defusedxml = "^0.7.1"
@@ -36,6 +36,9 @@ hazelcast-python-client = "^5.0.1"
 safety = "^2.2.0"
 liccheck = "^0.6.2"
 coverage = {version = "^6.0b1", extras = ["toml"]}
+
+[tool.poetry.requires-plugins]
+poetry-plugin-export = ">=1.8"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

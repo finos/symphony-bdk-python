@@ -1,11 +1,14 @@
 """Module containing session handle classes.
 
 """
+from datetime import datetime, timezone
 import logging
 
 from symphony.bdk.core.auth.exception import AuthInitializationError
 
 logger = logging.getLogger(__name__)
+
+EXPIRATION_SAFETY_BUFFER_SECONDS = 5
 
 
 class AuthSession:
@@ -21,7 +24,9 @@ class AuthSession:
         """
         self._session_token = None
         self._key_manager_token = None
+        self._auth_token = None
         self._authenticator = authenticator
+        self._expire_at = -1
 
     async def refresh(self):
         """Trigger re-authentication to refresh the tokens.
@@ -39,6 +44,26 @@ class AuthSession:
         if self._session_token is None:
             self._session_token = await self._authenticator.retrieve_session_token()
         return self._session_token
+
+    @property
+    async def auth_token(self):
+        """Auth token request calls the same endpoint that session token.
+        Therefore, session token is updated unintentionally,
+         since there's no explicit way to update authorization token exclusively
+         : return: (str) authorization_token like Bearer eyJh...
+        """
+
+        if (
+            self._auth_token
+            and self._expire_at
+            > datetime.now(timezone.utc).timestamp() + EXPIRATION_SAFETY_BUFFER_SECONDS
+        ):
+            return self._auth_token
+        token, expire_at = await self._authenticator.retrieve_session_token_object()
+        self._expire_at = expire_at
+        self._auth_token = token.authorization_token
+        self._session_token = token.token
+        return self._auth_token
 
     @property
     async def key_manager_token(self):
