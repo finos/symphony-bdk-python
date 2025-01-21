@@ -8,65 +8,80 @@
 
 This is the Symphony BDK for Python to help develop bots and interact with the [Symphony REST APIs](https://developers.symphony.com/restapi/reference).
 
-## Installation and getting started
-The [reference documentation](https://symphony-bdk-python.finos.org/) includes detailed
-installation instructions as well as a comprehensive
-[getting started](https://symphony-bdk-python.finos.org/markdown/getting_started.html)
-guide.
+## Project Overview
 
-## Build from source
+Symphony BDK for Python provides tools for building bots and integrating with Symphony APIs. This document outlines its usage, installation, and contribution guidelines.
 
-The Symphony BDK uses and requires Python 3.8 or higher. Be sure you have it installed before going further.
+## Prerequisites
 
-We use [poetry](https://python-poetry.org/) in order to manage dependencies, build, run tests and publish.
-To install poetry, follow instructions [here](https://python-poetry.org/docs/#installation).
+- Python 3.8 or higher
+- [Poetry](https://python-poetry.org/docs/#installation)
 
-On the first time, run `poetry install`. Then run `poetry build` to build the sdist and wheel packages.
-To run the tests, use `poetry run pytest`.
+## Installation Steps
 
-It is possible to run pylint scan locally (on a specific file or package) executing the following command:
-`poetry run pylint <module_name>`.
+### Option 1: Build from Source
+- Install dependencies: `poetry install`
+- Build the package: `poetry build`
+- Run tests: `poetry run pytest`
+- Perform a pylint scan locally: `poetry run pylint <module_name>`
+- Generate documentation locally: `cd docsrc && make html`
 
-To generate locally the Sphinx documentation, run: `cd docsrc && make html`.
+### Verification
+Verify the successful installation by running any of the following commands:
+```
+poetry --version
+```
+
+## External Documents
+
+Refer to the following for additional guidance:
+- [Reference Documentation](https://symphony-bdk-python.finos.org/)
+- [Getting Started Guide](https://symphony-bdk-python.finos.org/markdown/getting_started.html)
 
 ## Roadmap
 
-Our next milestone is the [2.5.x](https://github.com/finos/symphony-bdk-python/milestone/6) one.
-It will only consist in delivering the next improvements and bug fixes of the BDK.
-
+The next milestone is the [2.5.x](https://github.com/finos/symphony-bdk-python/milestone/6), focused on delivering improvements and bug fixes.
 
 ## Contributing
-In order to get in touch with the project team, please open a [GitHub Issue](https://github.com/finos/symphony-bdk-python/issues).
-Alternatively, you can email/subscribe to [symphony@finos.org](https://groups.google.com/a/finos.org/g/symphony).
 
-1. Fork it
-2. Create your feature branch (`git checkout -b feature/fooBar`)
-3. Read our [contribution guidelines](CONTRIBUTING.md) and [Community Code of Conduct](https://www.finos.org/code-of-conduct)
-4. Commit your changes (`git commit -am 'Add some fooBar'`)
-5. Push to the branch (`git push origin feature/fooBar`)
-6. Create a new Pull Request
+To contribute:
+1. Fork the repository.
+2. Create a feature branch: `git checkout -b feature/fooBar`
+3. Read the [Contribution Guidelines](CONTRIBUTING.md) and [Community Code of Conduct](https://www.finos.org/code-of-conduct)
+4. Commit changes: `git commit -am 'Add some fooBar'`
+5. Push changes: `git push origin feature/fooBar`
+6. Open a Pull Request.
 
-_NOTE:_ Commits and pull requests to FINOS repositories will only be accepted from those contributors with an active,
-executed Individual Contributor License Agreement (ICLA) with FINOS OR who are covered under an existing and active
-Corporate Contribution License Agreement (CCLA) executed with FINOS.
-Commits from individuals not covered under an ICLA or CCLA will be flagged and blocked by the FINOS Clabot tool.
-Please note that some CCLAs require individuals/employees to be explicitly named on the CCLA.
+_NOTE:_ Ensure you have an active Individual Contributor License Agreement (ICLA) or Corporate Contribution License Agreement (CCLA) with FINOS.
 
-*Need an ICLA? Unsure if you are covered under an existing CCLA? Email [help@finos.org](mailto:help@finos.org)*
+For further inquiries, email [help@finos.org](mailto:help@finos.org).
 
-### Update generated code
-While contributing to the project, you might need to update the generated code.
-Python BDK uses [OpenAPITools/openapi-generator](https://github.com/OpenAPITools/openapi-generator/) to generate code. In order to customise the templates, a fork has been created in [https://github.com/SymphonyPlatformSolutions/openapi-generator/tree/sym-python-5.5.0](https://github.com/SymphonyPlatformSolutions/openapi-generator/tree/sym-python-5.5.0).  
-Here are the steps to follow:
-- Checkout the latest branch of the fork (currently [sym-python-5.5.0](https://github.com/SymphonyPlatformSolutions/openapi-generator/tree/sym-python-5.5.0))
-- Update the fork source code, review and merge it
-- Generate a jar file in `openapi-generatormodules/openapi-generator-cli/target/openapi-generator-cli.jar`:
-  - Using maven: `mvn clean install -Dmaven.test.skip=true && mvn clean package -Dmaven.test.skip=true`. _You can also use IntelliJ's build button to build the project and generate the jar_
-- Copy the jar in Python BDK repository `symphony-api-client-python/api_client_generation/openapi-generator-cli.jar`
-- Execute the generation script `./generate.sh` and commit and push you new code along with the new jar file.
+
+### Updating Generated Code
+
+Python BDK uses [OpenAPITools/openapi-generator](https://github.com/OpenAPITools/openapi-generator/) to generate code. 
+To update the generated code, follow these steps:
+
+1. Checkout the latest branch of the fork (e.g., [sym-python-5.5.0](https://github.com/SymphonyPlatformSolutions/openapi-generator/tree/sym-python-5.5.0)).
+2. Update the fork source code, review, and merge it.
+3. Generate the JAR file in `openapi-generatormodules/openapi-generator-cli/target/openapi-generator-cli.jar`:
+   - Use Maven: 
+     ```bash
+     mvn clean install -Dmaven.test.skip=true && mvn clean package -Dmaven.test.skip=true
+     ```
+   - Alternatively, use IntelliJ's build button to build the project and generate the JAR file.
+4. Copy the JAR file to the Python BDK repository: `symphony-api-client-python/api_client_generation/openapi-generator-cli.jar`.
+5. Execute the generation script: 
+   ```bash
+   ./generate.sh
+   ```
+6. Commit and push the newly generated code along with the updated JAR file.
+
+
 ## License
+
 Copyright 2021 Symphony LLC
 
 Distributed under the [Apache License, Version 2.0](http://www.apache.org/licenses/LICENSE-2.0).
 
-SPDX-License-Identifier: [Apache-2.0](https://spdx.org/licenses/Apache-2.0)
+SPDX-License-Identifier: [Apache-2.0](https://spdx.org/licenses/Apache-2.0).
