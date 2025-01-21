@@ -1,0 +1,6 @@
+symphony.bdk.core.symphony\_bdk.app\_service
+============================================
+
+.. currentmodule:: symphony.bdk.core.symphony_bdk
+
+.. autofunction:: app_service

@@ -1,0 +1,31 @@
+symphony.bdk.core.service.connection.connection\_service.ConnectionService
+==========================================================================
+
+.. currentmodule:: symphony.bdk.core.service.connection.connection_service
+
+.. autoclass:: ConnectionService
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~ConnectionService.__init__
+      ~ConnectionService.accept_connection
+      ~ConnectionService.create_connection
+      ~ConnectionService.get_connection
+      ~ConnectionService.list_connections
+      ~ConnectionService.reject_connection
+      ~ConnectionService.remove_connection
+   
+   
+
+   
+   
+   

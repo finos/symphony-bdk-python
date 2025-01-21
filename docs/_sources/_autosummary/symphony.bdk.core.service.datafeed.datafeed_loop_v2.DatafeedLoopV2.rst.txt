@@ -1,0 +1,30 @@
+symphony.bdk.core.service.datafeed.datafeed\_loop\_v2.DatafeedLoopV2
+====================================================================
+
+.. currentmodule:: symphony.bdk.core.service.datafeed.datafeed_loop_v2
+
+.. autoclass:: DatafeedLoopV2
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~DatafeedLoopV2.__init__
+      ~DatafeedLoopV2.recreate_datafeed
+      ~DatafeedLoopV2.start
+      ~DatafeedLoopV2.stop
+      ~DatafeedLoopV2.subscribe
+      ~DatafeedLoopV2.unsubscribe
+   
+   
+
+   
+   
+   

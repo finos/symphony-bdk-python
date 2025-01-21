@@ -1,0 +1,26 @@
+symphony.bdk.core.config.loader.BdkConfigParser
+===============================================
+
+.. currentmodule:: symphony.bdk.core.config.loader
+
+.. autoclass:: BdkConfigParser
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~BdkConfigParser.__init__
+      ~BdkConfigParser.parse
+   
+   
+
+   
+   
+   
