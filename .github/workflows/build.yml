@@ -60,13 +60,13 @@ jobs:
       - name: Upload test results
         uses: actions/upload-artifact@v4
         with:
-          name: pytest-results-${{ matrix.os }}-${{ github.run_id }}
+          name: pytest-results-${{ matrix.os }}-${{ matrix.python-version }}-${{ github.run_id }}
           path: test-results/junit.xml
         if: ${{ always() }}
 
       - name: Upload test coverage
         uses: actions/upload-artifact@v4
         with:
-          name: pytest-coverage-${{ matrix.os }}-${{ github.run_id }}
+          name: pytest-coverage-${{ matrix.os }}-${{ matrix.python-version }}-${{ github.run_id }}
           path: htmlcov
         if: ${{ always() }}
