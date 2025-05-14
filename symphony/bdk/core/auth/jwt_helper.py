@@ -2,7 +2,7 @@
 """
 import datetime
 
-from jwt import PyJWT
+from jwt import PyJWT, DecodeError, ExpiredSignatureError
 from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
 from cryptography.x509 import load_pem_x509_certificate
 
@@ -58,7 +58,7 @@ def validate_jwt(jwt_token: str, certificate: str, allowed_audience: str) -> dic
     try:
         return jwt.decode(jwt_token, _parse_public_key_from_x509_cert(certificate),
                           algorithms=[JWT_ENCRYPTION_ALGORITHM], audience=allowed_audience)
-    except (jwt.DecodeError, jwt.ExpiredSignatureError) as exc:
+    except (DecodeError, ExpiredSignatureError) as exc:
         raise AuthInitializationError("Unable to validate the jwt") from exc
 
 
