@@ -2,7 +2,7 @@
 """
 import datetime
 
-import jwt
+from jwt import PyJWT
 from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
 from cryptography.x509 import load_pem_x509_certificate
 
@@ -13,6 +13,7 @@ JWT_ENCRYPTION_ALGORITHM = "RS512"
 
 DEFAULT_EXPIRATION_SECONDS = (5 * 50) - 10
 
+jwt = PyJWT({"verify_sub": False})
 
 def create_signed_jwt(private_key_config: BdkRsaKeyConfig, username: str, expiration: int = None) -> str:
     """Creates a JWT with the provided user name and expiration date, signed with the provided private key.
