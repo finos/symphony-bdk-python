@@ -1,0 +1,29 @@
+symphony.bdk.core.config.model.bdk\_bot\_config.BdkBotConfig
+============================================================
+
+.. currentmodule:: symphony.bdk.core.config.model.bdk_bot_config
+
+.. autoclass:: BdkBotConfig
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~BdkBotConfig.__init__
+      ~BdkBotConfig.is_authentication_configured
+      ~BdkBotConfig.is_certificate_configuration_valid
+      ~BdkBotConfig.is_rsa_authentication_configured
+      ~BdkBotConfig.is_rsa_configuration_valid
+   
+   
+
+   
+   
+   

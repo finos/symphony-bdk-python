@@ -1,0 +1,35 @@
+symphony.bdk.core.service.signal.signal\_service.OboSignalService
+=================================================================
+
+.. currentmodule:: symphony.bdk.core.service.signal.signal_service
+
+.. autoclass:: OboSignalService
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~OboSignalService.__init__
+      ~OboSignalService.create_signal
+      ~OboSignalService.delete_signal
+      ~OboSignalService.get_signal
+      ~OboSignalService.list_all_signals
+      ~OboSignalService.list_all_subscribers
+      ~OboSignalService.list_signals
+      ~OboSignalService.list_subscribers
+      ~OboSignalService.subscribe_users_to_signal
+      ~OboSignalService.unsubscribe_users_to_signal
+      ~OboSignalService.update_signal
+   
+   
+
+   
+   
+   

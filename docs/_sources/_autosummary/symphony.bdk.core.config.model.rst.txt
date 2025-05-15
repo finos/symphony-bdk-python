@@ -1,0 +1,43 @@
+symphony.bdk.core.config.model
+==============================
+
+.. automodule:: symphony.bdk.core.config.model
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   symphony.bdk.core.config.model.bdk_app_config
+   symphony.bdk.core.config.model.bdk_authentication_config
+   symphony.bdk.core.config.model.bdk_bot_config
+   symphony.bdk.core.config.model.bdk_certificate_config
+   symphony.bdk.core.config.model.bdk_client_config
+   symphony.bdk.core.config.model.bdk_config
+   symphony.bdk.core.config.model.bdk_datafeed_config
+   symphony.bdk.core.config.model.bdk_datahose_config
+   symphony.bdk.core.config.model.bdk_retry_config
+   symphony.bdk.core.config.model.bdk_rsa_key_config
+   symphony.bdk.core.config.model.bdk_server_config
+   symphony.bdk.core.config.model.bdk_ssl_config
+
