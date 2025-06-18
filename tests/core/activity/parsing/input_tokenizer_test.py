@@ -1,4 +1,3 @@
-from lib2to3.pgen2.tokenize import tokenize
 from symphony.bdk.core.activity.parsing.message_entities import Cashtag, Hashtag, Mention
 from symphony.bdk.core.activity.parsing.input_tokenizer import InputTokenizer
 from symphony.bdk.gen.agent_model.v4_message import V4Message
