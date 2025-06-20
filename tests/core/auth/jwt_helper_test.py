@@ -49,6 +49,24 @@ def test_validate_jwt(jwt_payload, certificate, rsa_key):
     assert claims == jwt_payload
 
 
+
+def test_validate_expired_jwt(jwt_payload, certificate, rsa_key):
+    jwt_payload["exp"] = (datetime.datetime.now(datetime.timezone.utc).timestamp() - 10)
+    signed_jwt = create_signed_jwt_with_claims(rsa_key, jwt_payload)
+
+    with pytest.raises(AuthInitializationError):
+        validate_jwt(signed_jwt, certificate, AUDIENCE)
+
+
+
+def test_validate_jwt_with_empty_sub(jwt_payload, certificate, rsa_key):
+    jwt_payload["sub"] = None
+    signed_jwt = create_signed_jwt_with_claims(rsa_key, jwt_payload)
+
+    claims = validate_jwt(signed_jwt, certificate, AUDIENCE)
+    assert claims == jwt_payload
+
+
 def test_validate_jwt_with_wrong_audience(jwt_payload, certificate, rsa_key):
     signed_jwt = create_signed_jwt_with_claims(rsa_key, jwt_payload)
 
