@@ -1,0 +1,29 @@
+symphony.bdk.core.config.model.bdk\_authentication\_config.BdkAuthenticationConfig
+==================================================================================
+
+.. currentmodule:: symphony.bdk.core.config.model.bdk_authentication_config
+
+.. autoclass:: BdkAuthenticationConfig
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~BdkAuthenticationConfig.__init__
+      ~BdkAuthenticationConfig.is_authentication_configured
+      ~BdkAuthenticationConfig.is_certificate_configuration_valid
+      ~BdkAuthenticationConfig.is_rsa_authentication_configured
+      ~BdkAuthenticationConfig.is_rsa_configuration_valid
+   
+   
+
+   
+   
+   

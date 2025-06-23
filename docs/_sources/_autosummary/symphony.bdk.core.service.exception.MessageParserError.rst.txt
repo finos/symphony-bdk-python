@@ -1,0 +1,6 @@
+symphony.bdk.core.service.exception.MessageParserError
+======================================================
+
+.. currentmodule:: symphony.bdk.core.service.exception
+
+.. autoexception:: MessageParserError

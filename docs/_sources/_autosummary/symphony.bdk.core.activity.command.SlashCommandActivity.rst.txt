@@ -1,0 +1,36 @@
+symphony.bdk.core.activity.command.SlashCommandActivity
+=======================================================
+
+.. currentmodule:: symphony.bdk.core.activity.command
+
+.. autoclass:: SlashCommandActivity
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~SlashCommandActivity.__init__
+      ~SlashCommandActivity.before_matcher
+      ~SlashCommandActivity.build_command_description
+      ~SlashCommandActivity.matches
+      ~SlashCommandActivity.on_activity
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~SlashCommandActivity.bot_user_id
+      ~SlashCommandActivity.name
+   
+   
