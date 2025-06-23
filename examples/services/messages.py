@@ -9,6 +9,9 @@ from symphony.bdk.core.symphony_bdk import SymphonyBdk
 from symphony.bdk.gen.agent_model.message_search_query import MessageSearchQuery
 from symphony.bdk.gen.agent_model.v4_imported_message import V4ImportedMessage
 from symphony.bdk.gen.agent_model.v4_imported_message_attachment import V4ImportedMessageAttachment
+from symphony.bdk.gen.pod_model.v1_im_attributes import V1IMAttributes
+from symphony.bdk.gen.pod_model.v3_room_attributes import V3RoomAttributes
+from symphony.bdk.core.service.stream.stream_service import StreamService
 
 
 async def run():
@@ -20,7 +23,15 @@ async def run():
     async with SymphonyBdk(config) as bdk:
         message_service = bdk.messages()
 
-        await message_service.send_message(stream_id_1, "<messageML>Hello, World!</messageML>")
+        previous_message: V4Message = await message_service.send_message(stream_id_1, "<messageML>Hello, World!</messageML>")
+        messageid = previous_message.message_id
+
+        # Message pinning
+        # For stram type room:
+        # Create an instance of V3RoomAttributes and set pinned message ID
+        room_attributes = V3RoomAttributes(pinned_message_id=messageid)
+        # Call the update_room method with the V3RoomAttributes instance
+        await StreamService.update_room(streamid, room_attributes=room_attributes)
 
         with open("/path/to/attachment1", "rb") as file1, \
                 open("/path/to/attachment2", "rb") as file2:
