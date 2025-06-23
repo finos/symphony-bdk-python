@@ -1,6 +1,6 @@
 [![FINOS - Active](https://cdn.jsdelivr.net/gh/finos/contrib-toolbox@master/images/badge-active.svg)](https://community.finos.org/docs/governance/Software-Projects/stages/active)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Python](https://img.shields.io/badge/python-3.8%20%7C%203.9-blue)](https://www.python.org/downloads/release/python-3)
+[![Python](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-blue)](https://www.python.org/downloads/)
 [![Pypi](https://img.shields.io/pypi/v/symphony-bdk-python)](https://pypi.org/project/symphony-bdk-python/)
 ![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/finos/symphony-bdk-python/build/main)
 
@@ -14,7 +14,7 @@ Symphony BDK for Python provides tools for building bots and integrating with Sy
 
 ## Prerequisites
 
-- Python 3.8 or higher
+- Python 3.9 or higher
 - [Poetry](https://python-poetry.org/docs/#installation)
 
 ## Installation Steps
