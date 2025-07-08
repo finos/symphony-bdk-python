@@ -4,7 +4,7 @@ code_gen_dir=`pwd`
 project_root=$code_gen_dir/..
 echo $code_gen_dir
 
-commit_hash=ab10aa5263cfed89ddae0720cea31eca0c06a003
+commit_hash=cd04b378e6566490557aae3e76b76f0c8bffe0fd
 api_spec_base_url=https://raw.githubusercontent.com/symphonyoss/symphony-api-spec/${commit_hash}
 echo $api_spec_base_url
 
