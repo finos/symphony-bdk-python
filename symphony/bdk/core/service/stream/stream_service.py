@@ -351,6 +351,39 @@ class StreamService(OboStreamService):
         return offset_based_pagination(list_streams_admin_one_page, chunk_size, max_number)
 
     @retry
+    async def list_user_streams_admin(self, uid: int, stream_filter: StreamFilter = None, skip: int = 0,
+                                limit: int = 50) -> StreamList:
+        """Retrieve a list of all streams of which a user is a member.
+        Wraps the `User Streams <https://developers.symphony.com/restapi/v20.16/reference#user-streams>`_ endpoint.
+
+        :param uid: the ID of the user.
+        :param stream_filter: the filtering criteria for the streams.
+        :param skip: the number of streams to skip.
+        :param limit: the maximum number of streams to retrieve. Must be less or equal than 1000.
+        :return: the list of streams for the specified user.
+        """
+        return await self._streams_api.v1_admin_user_uid_streams_list_post(
+            uid=uid, filter=stream_filter, skip=skip, limit=limit, session_token=await self._auth_session.session_token
+        )
+
+    async def list_all_user_streams_admin(self, uid: int, stream_filter: StreamFilter = None, chunk_size: int = 50,
+                                    max_number: int = None) -> AsyncGenerator[StreamAttributes, None]:
+        """Retrieves all streams of which a user is a member, handling pagination automatically.
+        Wraps the `User Streams <https://developers.symphony.com/restapi/v20.16/reference#user-streams>`_ endpoint.
+
+        :param uid: the ID of the user.
+        :param stream_filter: the filtering criteria for the streams.
+        :param chunk_size: the maximum number of streams to retrieve in one underlying HTTP call.
+        :param max_number: the total maximum number of streams to retrieve.
+        :return: an asynchronous generator of the streams.
+        """
+        async def list_streams_one_page(skip, limit):
+            result = await self.list_user_streams_admin(uid, stream_filter, skip, limit)
+            return result.streams.value if result.streams else None
+
+        return offset_based_pagination(list_streams_one_page, chunk_size, max_number)
+
+    @retry
     async def list_stream_members(self, stream_id: str, skip: int = 0, limit: int = 100) -> V2MembershipList:
         """List the current members of an existing stream. The stream can be of type IM, MIM, or ROOM.
         Wraps the `Stream Members <https://developers.symphony.com/restapi/reference#stream-members>`_ endpoint.
