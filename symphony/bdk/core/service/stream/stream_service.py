@@ -136,31 +136,35 @@ class OboStreamService:
 
     @retry
     async def search_rooms(self, query: V2RoomSearchCriteria, skip: int = 0,
-                           limit: int = 50) -> V3RoomSearchResults:
+                           limit: int = 50, include_non_discoverable=False) -> V3RoomSearchResults:
         """Search for rooms according to the specified criteria.
         Wraps the `Search Rooms V3 <https://developers.symphony.com/restapi/reference/search-rooms-v3>`_ endpoint.
 
         :param query: the search criteria.
         :param skip: number of rooms to skip, defaults to 0.
         :param limit: number of maximum rooms to return. Must be a positive integer that does not exceed 100.
+        :param include_non_discoverable: set to `True` to include rooms not publicly searchable, false by default.
         :return: the rooms matching search criteria.
         """
         return await self._streams_api.v3_room_search_post(query=query, skip=skip, limit=limit,
+                                                           include_non_discoverable=include_non_discoverable,
                                                            session_token=await self._auth_session.session_token)
 
     async def search_all_rooms(self, query: V2RoomSearchCriteria, chunk_size: int = 50,
-                               max_number: int = None) -> AsyncGenerator[V3RoomDetail, None]:
+                               max_number: int = None, include_non_discoverable : bool = False)\
+            -> AsyncGenerator[V3RoomDetail, None]:
         """Search for rooms according to the specified criteria.
         Wraps the `Search Rooms V3 <https://developers.symphony.com/restapi/reference/search-rooms-v3>`_ endpoint.
 
         :param query: the search criteria.
         :param chunk_size: the maximum number of elements to retrieve in one underlying HTTP call.
         :param max_number: the total maximum number of elements to retrieve.
+        :param include_non_discoverable: set to `True` to include rooms not publicly searchable, false by default.
         :return: an asynchronous generator of the rooms matching the search criteria.
         """
 
         async def search_rooms_one_page(skip, limit):
-            result = await self.search_rooms(query, skip, limit)
+            result = await self.search_rooms(query, skip, limit, include_non_discoverable)
             return result.rooms if result.rooms else None
 
         return offset_based_pagination(search_rooms_one_page, chunk_size, max_number)
