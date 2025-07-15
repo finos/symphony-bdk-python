@@ -379,7 +379,7 @@ class StreamService(OboStreamService):
         """
         async def list_streams_one_page(skip, limit):
             result = await self.list_user_streams_admin(uid, stream_filter, skip, limit)
-            return result.streams.value if result.streams else None
+            return result.value if result else None
 
         return offset_based_pagination(list_streams_one_page, chunk_size, max_number)
 
