@@ -74,7 +74,8 @@ class ServiceFactory:
             AuditTrailApi(self._agent_client),
             PodSystemApi(self._pod_client),
             self._auth_session,
-            self._config.retry
+            self._config.retry,
+            self._config.manifest
         )
 
     def get_message_service(self) -> MessageService:
