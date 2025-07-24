@@ -1,0 +1,40 @@
+symphony.bdk.core.service.message.message\_service.MessageService
+=================================================================
+
+.. currentmodule:: symphony.bdk.core.service.message.message_service
+
+.. autoclass:: MessageService
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~MessageService.__init__
+      ~MessageService.blast_message
+      ~MessageService.get_attachment
+      ~MessageService.get_attachment_types
+      ~MessageService.get_message
+      ~MessageService.get_message_relationships
+      ~MessageService.get_message_status
+      ~MessageService.import_messages
+      ~MessageService.list_attachments
+      ~MessageService.list_message_receipts
+      ~MessageService.list_messages
+      ~MessageService.search_all_messages
+      ~MessageService.search_messages
+      ~MessageService.send_message
+      ~MessageService.suppress_message
+      ~MessageService.update_message
+   
+   
+
+   
+   
+   

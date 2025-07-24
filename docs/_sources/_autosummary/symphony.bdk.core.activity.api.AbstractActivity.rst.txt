@@ -1,0 +1,28 @@
+symphony.bdk.core.activity.api.AbstractActivity
+===============================================
+
+.. currentmodule:: symphony.bdk.core.activity.api
+
+.. autoclass:: AbstractActivity
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~AbstractActivity.__init__
+      ~AbstractActivity.before_matcher
+      ~AbstractActivity.matches
+      ~AbstractActivity.on_activity
+   
+   
+
+   
+   
+   
