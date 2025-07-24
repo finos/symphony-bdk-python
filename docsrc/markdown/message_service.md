@@ -2,20 +2,20 @@
 
 The Message Service is a component at the service layer of the BDK which aims to cover the Messages part of the [REST API documentation](https://developers.symphony.com/restapi/reference#messages-v4).
 More precisely:
-* [Get a message](https://developers.symphony.com/restapi/reference#get-message-v1)
-* [Get messages](https://developers.symphony.com/restapi/reference#messages-v4)
-* [Get message IDs by timestamp](https://developers.symphony.com/restapi/reference#get-message-ids-by-timestamp)
-* [Search messages](https://developers.symphony.com/restapi/reference#message-search-post)
-* [Send message](https://developers.symphony.com/restapi/reference#create-message-v4)
-* [Update message](https://developers.symphony.com/restapi/reference#update-message-v4)
-* [Import messages](https://developers.symphony.com/restapi/reference#import-message-v4)
-* [Get attachment](https://developers.symphony.com/restapi/reference#attachment)
-* [List attachments](https://developers.symphony.com/restapi/reference#list-attachments)
-* [Get allowed attachment types](https://developers.symphony.com/restapi/reference#attachment-types)
-* [Suppress message](https://developers.symphony.com/restapi/reference#suppress-message)
-* [Get message status](https://developers.symphony.com/restapi/reference#message-status)
-* [Get message receipts](https://developers.symphony.com/restapi/reference#list-message-receipts)
-* [Get message relationships](https://developers.symphony.com/restapi/reference#message-metadata-relationship)
+* [Get a message](https://rest-api.symphony.com/main/messages/get-message-v1)
+* [Get messages](https://rest-api.symphony.com/main/messages/messages-v4)
+* [Get message IDs by timestamp](https://rest-api.symphony.com/deprecated-endpoints/get-message-ids-by-timestamp)
+* [Search messages](https://rest-api.symphony.com/main/messages/message-search-post)
+* [Send message](https://rest-api.symphony.com/main/messages/create-message-v4)
+* [Update message](https://rest-api.symphony.com/main/messages/update-message-v4)
+* [Import messages](https://rest-api.symphony.com/main/messages/import-message-v4)
+* [Get attachment](https://rest-api.symphony.com/main/messages/attachment)
+* [List attachments](https://rest-api.symphony.com/main/messages/list-attachments)
+* [Get allowed attachment types](https://rest-api.symphony.com/main/messages/attachment-types)
+* [Suppress message](https://rest-api.symphony.com/main/messages/suppress-message)
+* [Get message status](https://rest-api.symphony.com/main/messages/message-status)
+* [Get message receipts](https://rest-api.symphony.com/main/messages/list-message-receipts)
+* [Get message relationships](https://rest-api.symphony.com/main/messages/message-metadata-relationship)
 
 ## How to use
 The central component for the Message Service is the `MessageService` class.

@@ -2,17 +2,15 @@
 
 The Application Service is a component at the service layer of the BDK which aims to cover the Applications part of the [REST API documentation](https://developers.symphony.com/restapi/reference).
 More precisely:
-* [Create application](https://developers.symphony.com/restapi/reference#create-app)
-* [Create application with an RSA public key](https://developers.symphony.com/restapi/reference#create-application-with-an-rsa-public-key)
-* [Update application](https://developers.symphony.com/restapi/reference#update-application)
-* [Update application with an RSA public key](https://developers.symphony.com/restapi/reference#update-application-with-an-rsa-public-key)
-* [Delete application](https://developers.symphony.com/restapi/reference#delete-application)
-* [Get application](https://developers.symphony.com/restapi/reference#get-application)
-* [List application entitlements](https://developers.symphony.com/restapi/reference#list-app-entitlements)
-* [Update application entitlements](https://developers.symphony.com/restapi/reference#update-application-entitlements)
-* [List user applications](https://developers.symphony.com/restapi/reference#user-apps)
-* [Update user applications](https://developers.symphony.com/restapi/reference#update-user-apps)
-* [Patch user applications](https://developers.symphony.com/restapi/reference/partial-update-user-apps)
+* [Create application](https://rest-api.symphony.com/main/manage-apps/create-app)
+* [Update application](https://rest-api.symphony.com/main/manage-apps/update-application)
+* [Delete application](https://rest-api.symphony.com/main/manage-apps/delete-application)
+* [Get application](https://rest-api.symphony.com/main/manage-apps/get-application)
+* [List application entitlements](https://rest-api.symphony.com/main/apps-entitlements/list-app-entitlements)
+* [Update application entitlements](https://rest-api.symphony.com/main/apps-entitlements/update-application-entitlements)
+* [List user applications](https://rest-api.symphony.com/main/apps-entitlements/user-apps)
+* [Update user applications](https://rest-api.symphony.com/main/apps-entitlements/update-user-apps)
+* [Patch user applications](https://rest-api.symphony.com/main/apps-entitlements/partial-update-user-apps)
 
 
 ## How to use

@@ -2,14 +2,14 @@
 
 The Signal Service is a component at the service layer of the BDK which aims to cover the Signal part of the [REST API documentation](https://developers.symphony.com/restapi/reference).
 More precisely:
-* [List signals](https://developers.symphony.com/restapi/reference#list-signals)
-* [Get a signal](https://developers.symphony.com/restapi/reference#get-signal)
-* [Create a signal](https://developers.symphony.com/restapi/reference#create-signal)
-* [Update a signal](https://developers.symphony.com/restapi/reference#update-signal)
-* [Delete a signal](https://developers.symphony.com/restapi/reference#delete-signal)
-* [Subscribe Signal](https://developers.symphony.com/restapi/reference#subscribe-signal)
-* [Unsubscribe Signal](https://developers.symphony.com/restapi/reference#unsubscribe-signal)
-* [Subscribers](https://developers.symphony.com/restapi/reference#subscribers)
+* [List signals](https://rest-api.symphony.com/main/signals/list-signals)
+* [Get a signal](https://rest-api.symphony.com/main/signals/get-signal)
+* [Create a signal](https://rest-api.symphony.com/main/signals/create-signal)
+* [Update a signal](https://rest-api.symphony.com/main/signals/update-signal)
+* [Delete a signal](https://rest-api.symphony.com/main/signals/delete-signal)
+* [Subscribe Signal](https://rest-api.symphony.com/main/signals/subscribe-signal)
+* [Unsubscribe Signal](https://rest-api.symphony.com/main/signals/unsubscribe-signal)
+* [Subscribers](https://rest-api.symphony.com/main/signals/subscribers)
 
 
 ## How to use

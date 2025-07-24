@@ -2,15 +2,15 @@
 
 The Presence Service is a component at the service layer of the BDK which covers the Presence part of the [REST API documentation](https://developers.symphony.com/restapi/reference).
 More precisely:
-* [Get presence](https://developers.symphony.com/restapi/reference#get-presence)
-* [Get All Presence](https://developers.symphony.com/restapi/reference#get-all-presence)
-* [Get User Presence](https://developers.symphony.com/restapi/reference#user-presence-v3)
-* [External Presence Interest](https://developers.symphony.com/restapi/reference#register-user-presence-interest)
-* [Set Presence](https://developers.symphony.com/restapi/reference#set-presence)
-* [Create Presence Feed](https://developers.symphony.com/restapi/reference#create-presence-feed)
-* [Read Presence Feed](https://developers.symphony.com/restapi/reference#read-presence-feed)
-* [Delete Presence Feed](https://developers.symphony.com/restapi/reference#delete-presence-feed)
-* [Set Other User's Presence](https://developers.symphony.com/restapi/reference#set-user-presence)
+* [Get presence](https://rest-api.symphony.com/main/presence/get-presence)
+* [Get All Presence](https://rest-api.symphony.com/main/presence/get-all-presence)
+* [Get User Presence](https://rest-api.symphony.com/main/presence/user-presence-v3)
+* [External Presence Interest](https://rest-api.symphony.com/main/presence/register-user-presence-interest)
+* [Set Presence](https://rest-api.symphony.com/main/presence/set-presence)
+* [Create Presence Feed](https://rest-api.symphony.com/main/presence/create-presence-feed)
+* [Read Presence Feed](https://rest-api.symphony.com/main/presence/read-presence-feed)
+* [Delete Presence Feed](https://rest-api.symphony.com/main/presence/delete-presence-feed)
+* [Set Other User's Presence](https://rest-api.symphony.com/main/presence/set-user-presence)
 
 
 ## How to use
