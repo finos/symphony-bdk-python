@@ -30,6 +30,7 @@ class BdkConfig(BdkServerConfig):
         self.datafeed = BdkDatafeedConfig(config.get("datafeed"))
         self.datahose = BdkDatahoseConfig(config.get("datahose"))
         self.retry = BdkRetryConfig(config.get("retry"))
+        self.manifest = config.get("manifest")
 
     def is_bot_configured(self) -> bool:
         """

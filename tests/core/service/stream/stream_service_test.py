@@ -216,6 +216,7 @@ async def test_search_rooms(mocked_api_client, stream_service, streams_api):
     search_results = await stream_service.search_rooms(search_criteria, skip, limit)
 
     streams_api.v3_room_search_post.assert_called_once_with(query=search_criteria, skip=skip, limit=limit,
+                                                            include_non_discoverable=False,
                                                             session_token=SESSION_TOKEN)
     assert search_results.count == 1
     assert len(search_results.rooms) == 1
@@ -234,6 +235,7 @@ async def test_search_all_rooms(mocked_api_client, stream_service, streams_api):
     search_results = [r async for r in gen]
 
     streams_api.v3_room_search_post.assert_called_once_with(query=search_criteria, skip=0, limit=chunk_size,
+                                                            include_non_discoverable=False,
                                                             session_token=SESSION_TOKEN)
     assert len(search_results) == 1
     assert search_results[0].room_attributes.name == "New room name"
