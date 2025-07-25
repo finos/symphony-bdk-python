@@ -8,6 +8,7 @@ from symphony.bdk.core.config.model.bdk_bot_config import BdkBotConfig
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.core.retry import retry
 from symphony.bdk.core.retry.strategy import authentication_retry
+from symphony.bdk.core.service.version.agent_version_service import AgentVersionService
 from symphony.bdk.gen.api_client import ApiClient
 from symphony.bdk.gen.auth_api.certificate_authentication_api import CertificateAuthenticationApi
 from symphony.bdk.gen.login_api.authentication_api import AuthenticationApi
@@ -24,6 +25,7 @@ class BotAuthenticator(ABC):
         self._session_auth_client = session_auth_client
         self._key_manager_auth_client = key_manager_auth_client
         self._retry_config = retry_config
+        self._agent_version_service = None
 
     async def retrieve_session_token(self) -> str:
         """Authenticates and retrieves a new session token.
@@ -58,6 +60,15 @@ class BotAuthenticator(ABC):
           (either self._session_auth_client or self._key_manager_auth_client)
         :return: the token as a string
         """
+
+    @property
+    def agent_version_service(self) -> Optional[AgentVersionService]:
+        return self._agent_version_service
+
+    @agent_version_service.setter
+    def agent_version_service(self, agent_version_service: AgentVersionService):
+        self._agent_version_service = agent_version_service
+
 
 
 class BotAuthenticatorRsa(BotAuthenticator):

@@ -83,3 +83,10 @@ def _parse_public_key_from_x509_cert(certificate: str) -> str:
         return public_key.public_bytes(Encoding.PEM, PublicFormat.SubjectPublicKeyInfo).decode()
     except ValueError as exc:
         raise AuthInitializationError("Unable to parse the certificate. Check certificate format.") from exc
+
+
+def extract_session_token_claims(session_token):
+    return jwt.decode(session_token,
+                      algorithms=["RS512"],
+                      options={"verify_signature": False}
+                      )

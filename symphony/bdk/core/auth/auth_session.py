@@ -5,10 +5,13 @@ from datetime import datetime, timezone
 import logging
 
 from symphony.bdk.core.auth.exception import AuthInitializationError
+from symphony.bdk.core.auth.jwt_helper import extract_session_token_claims
+
 
 logger = logging.getLogger(__name__)
 
 EXPIRATION_SAFETY_BUFFER_SECONDS = 5
+SKD_FLAG_NAME = "canUseSimplifiedKeyDelivery"
 
 
 class AuthSession:
@@ -71,6 +74,10 @@ class AuthSession:
 
         :return: the key manager token
         """
+
+        if await self.skd_enabled:
+            return None
+
         if self._key_manager_token is None:
             self._key_manager_token = await self._authenticator.retrieve_key_manager_token()
         return self._key_manager_token
@@ -90,6 +97,15 @@ class AuthSession:
         :param value: the new key manager token.
         """
         self._key_manager_token = value
+
+    @property
+    async def skd_enabled(self):
+
+        token_data = extract_session_token_claims(await self.session_token)
+        if not token_data.get(SKD_FLAG_NAME, False):
+            return False
+        return self._authenticator.agent_version_service.is_skd_supported()
+
 
 
 class OboAuthSession(AuthSession):
