@@ -105,7 +105,8 @@ class SymphonyBdk:
                          "You can however use services in OBO mode if app authentication is configured.")
 
     def _initialize_bot_services(self):
-        self._bot_session = AuthSession(self._authenticator_factory.get_bot_authenticator())
+        bot_authenticator = self._authenticator_factory.get_bot_authenticator()
+        self._bot_session = AuthSession(bot_authenticator)
         self._service_factory = ServiceFactory(self._api_client_factory, self._bot_session, self._config)
         self._user_service = self._service_factory.get_user_service()
         self._message_service = self._service_factory.get_message_service()
@@ -123,6 +124,7 @@ class SymphonyBdk:
         self._datafeed_loop.subscribe(self._activity_registry)
         # initialises extension service and register decorated extensions
         self._extension_service = ExtensionService(self._api_client_factory, self._bot_session, self._config)
+        bot_authenticator.agent_version_service = self._service_factory.get_agent_version_service()
 
     @bot_service
     def bot_session(self) -> AuthSession:
