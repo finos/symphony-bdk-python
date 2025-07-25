@@ -18,6 +18,7 @@ from symphony.bdk.core.service.session.session_service import SessionService
 from symphony.bdk.core.service.signal.signal_service import SignalService, OboSignalService
 from symphony.bdk.core.service.stream.stream_service import StreamService, OboStreamService
 from symphony.bdk.core.service.user.user_service import UserService, OboUserService
+from symphony.bdk.core.service.version.agent_version_service import AgentVersionService
 from symphony.bdk.gen.agent_api.attachments_api import AttachmentsApi
 from symphony.bdk.gen.agent_api.audit_trail_api import AuditTrailApi
 from symphony.bdk.gen.agent_api.datafeed_api import DatafeedApi
@@ -202,6 +203,14 @@ class ServiceFactory:
             self._auth_session,
             self._config.retry
         )
+
+    def get_agent_version_service(self) -> AgentVersionService:
+        """Returns a fully initialized AgentVersionService
+
+        :return: a new AgentVersionService instance
+        """
+        return AgentVersionService(SignalsApi(self._agent_client),
+                                   self._config.retry)
 
 
 class OboServiceFactory:
