@@ -1,4 +1,6 @@
-from unittest.mock import MagicMock, AsyncMock
+import json
+from pathlib import Path
+from unittest.mock import MagicMock, AsyncMock, mock_open, patch
 
 import base64
 import pytest
@@ -20,6 +22,7 @@ from symphony.bdk.gen.pod_model.followers_list_response import FollowersListResp
 from symphony.bdk.gen.pod_model.following_list_response import FollowingListResponse
 from symphony.bdk.gen.pod_model.integer_list import IntegerList
 from symphony.bdk.gen.pod_model.role_detail_list import RoleDetailList
+from symphony.bdk.gen.pod_model.service_account_manifest import ServiceAccountManifest
 from symphony.bdk.gen.pod_model.string_id import StringId
 from symphony.bdk.gen.pod_model.user_detail_list import UserDetailList
 from symphony.bdk.gen.pod_model.user_filter import UserFilter
@@ -78,10 +81,10 @@ def fixture_user_service(user_api, users_api, audit_trail_api, system_api, auth_
         audit_trail_api,
         system_api,
         auth_session,
-        minimal_retry_config()
+        minimal_retry_config(),
+        "manifest.json"
     )
     return service
-
 
 @pytest.mark.asyncio
 async def test_list_users_by_ids(users_api, user_service):
@@ -774,3 +777,36 @@ async def test_unsuspend(user_api, user_service):
         payload=user_suspension,
         session_token="session_token"
     )
+
+@pytest.mark.asyncio
+async def test_get_manifest(user_api, user_service):
+    user_api.v1_user_manifest_own_get = AsyncMock()
+
+    await user_service.get_manifest()
+
+    user_api.v1_user_manifest_own_get.assert_called_with(session_token="session_token")
+
+
+@pytest.mark.asyncio
+async def test_update_manifest_file(user_api, user_service):
+    expected_manifest_data = {"commands": [
+        {
+            "args": [{"name": "[query1]"},{"name": "[query2]"}],
+            "desc": "Search users based on name, company or job title",
+            "example": "/search John Smith",
+            "name": "search"
+        }
+    ]}
+    mock_file_content_json = json.dumps(expected_manifest_data)
+
+    with patch('pathlib.Path.open', new_callable=mock_open, read_data=mock_file_content_json) as mock_path_open:
+        user_api.v1_user_manifest_own_post = AsyncMock()
+
+
+        await user_service.update_manifest_from_file()
+        mock_path_open.assert_called_once()
+
+        user_api.v1_user_manifest_own_post.assert_called_once_with(
+            session_token="session_token",
+            manifest=ServiceAccountManifest(json.dumps(expected_manifest_data))
+        )

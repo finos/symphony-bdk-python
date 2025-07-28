@@ -1,4 +1,6 @@
 import base64
+import json
+from pathlib import Path
 from typing import Union, AsyncGenerator
 
 from symphony.bdk.core.auth.auth_session import AuthSession
@@ -21,6 +23,7 @@ from symphony.bdk.gen.pod_model.followers_list import FollowersList
 from symphony.bdk.gen.pod_model.followers_list_response import FollowersListResponse
 from symphony.bdk.gen.pod_model.following_list_response import FollowingListResponse
 from symphony.bdk.gen.pod_model.role_detail import RoleDetail
+from symphony.bdk.gen.pod_model.service_account_manifest import ServiceAccountManifest
 from symphony.bdk.gen.pod_model.string_id import StringId
 from symphony.bdk.gen.pod_model.user_filter import UserFilter
 from symphony.bdk.gen.pod_model.user_id_list import UserIdList
@@ -260,10 +263,12 @@ class UserService(OboUserService):
                  audit_trail_api: AuditTrailApi,
                  system_api: SystemApi,
                  auth_session: AuthSession,
-                 retry_config: BdkRetryConfig):
+                 retry_config: BdkRetryConfig,
+                 manifest: str):
         super().__init__(user_api, users_api, auth_session, retry_config)
         self._audit_trail_api = audit_trail_api
         self._system_api = system_api
+        self._manifest = manifest
 
     @retry
     async def get_user_detail(
@@ -898,3 +903,40 @@ class UserService(OboUserService):
         }
 
         await self._user_api.v1_admin_user_user_id_suspension_update_put(**params)
+
+    @retry
+    async def update_manifest_from_json(self, manifest_data: str) -> None:
+        """
+        Updates the user manifest from a JSON string.
+
+        :param manifest_data: A JSON string.
+        :raises json.JSONDecodeError: If the string is not valid JSON.
+        """
+        await self._user_api.v1_user_manifest_own_post(
+            session_token=await self._auth_session.session_token,
+            manifest=ServiceAccountManifest(manifest_data)
+        )
+
+    async def update_manifest_from_file(self) -> None:
+        """
+        Updates the user manifest using the file mentioned in config.yaml under 'manifest'.
+
+        :raises FileNotFoundError: If the file does not exist.
+        :raises json.JSONDecodeError: If the file content is not valid JSON.
+        :raises IOError: If the file can't be read.
+        """
+        file_path = Path(self._manifest)
+
+        with file_path.open('r', encoding='utf-8') as f:
+            content = json.load(f)
+            manifest_text = json.dumps(content)
+
+        await self._user_api.v1_user_manifest_own_post(
+            session_token=await self._auth_session.session_token,
+            manifest=ServiceAccountManifest(manifest_text)
+        )
+
+    @retry
+    async def get_manifest(self) -> ServiceAccountManifest:
+        """Retrieves own user manifest"""
+        return await self._user_api.v1_user_manifest_own_get(session_token=await self._auth_session.session_token)

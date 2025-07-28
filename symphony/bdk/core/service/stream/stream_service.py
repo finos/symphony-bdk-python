@@ -136,31 +136,35 @@ class OboStreamService:
 
     @retry
     async def search_rooms(self, query: V2RoomSearchCriteria, skip: int = 0,
-                           limit: int = 50) -> V3RoomSearchResults:
+                           limit: int = 50, include_non_discoverable=False) -> V3RoomSearchResults:
         """Search for rooms according to the specified criteria.
         Wraps the `Search Rooms V3 <https://developers.symphony.com/restapi/reference/search-rooms-v3>`_ endpoint.
 
         :param query: the search criteria.
         :param skip: number of rooms to skip, defaults to 0.
         :param limit: number of maximum rooms to return. Must be a positive integer that does not exceed 100.
+        :param include_non_discoverable: set to `True` to include rooms not publicly searchable, false by default.
         :return: the rooms matching search criteria.
         """
         return await self._streams_api.v3_room_search_post(query=query, skip=skip, limit=limit,
+                                                           include_non_discoverable=include_non_discoverable,
                                                            session_token=await self._auth_session.session_token)
 
     async def search_all_rooms(self, query: V2RoomSearchCriteria, chunk_size: int = 50,
-                               max_number: int = None) -> AsyncGenerator[V3RoomDetail, None]:
+                               max_number: int = None, include_non_discoverable : bool = False)\
+            -> AsyncGenerator[V3RoomDetail, None]:
         """Search for rooms according to the specified criteria.
         Wraps the `Search Rooms V3 <https://developers.symphony.com/restapi/reference/search-rooms-v3>`_ endpoint.
 
         :param query: the search criteria.
         :param chunk_size: the maximum number of elements to retrieve in one underlying HTTP call.
         :param max_number: the total maximum number of elements to retrieve.
+        :param include_non_discoverable: set to `True` to include rooms not publicly searchable, false by default.
         :return: an asynchronous generator of the rooms matching the search criteria.
         """
 
         async def search_rooms_one_page(skip, limit):
-            result = await self.search_rooms(query, skip, limit)
+            result = await self.search_rooms(query, skip, limit, include_non_discoverable)
             return result.rooms if result.rooms else None
 
         return offset_based_pagination(search_rooms_one_page, chunk_size, max_number)
@@ -345,6 +349,39 @@ class StreamService(OboStreamService):
             return result.streams.value if result.streams else None
 
         return offset_based_pagination(list_streams_admin_one_page, chunk_size, max_number)
+
+    @retry
+    async def list_user_streams_admin(self, uid: int, stream_filter: StreamFilter = None, skip: int = 0,
+                                limit: int = 50) -> StreamList:
+        """Retrieve a list of all streams of which a user is a member.
+        Wraps the `User Streams <https://developers.symphony.com/restapi/v20.16/reference#user-streams>`_ endpoint.
+
+        :param uid: the ID of the user.
+        :param stream_filter: the filtering criteria for the streams.
+        :param skip: the number of streams to skip.
+        :param limit: the maximum number of streams to retrieve. Must be less or equal than 1000.
+        :return: the list of streams for the specified user.
+        """
+        return await self._streams_api.v1_admin_user_uid_streams_list_post(
+            uid=uid, filter=stream_filter, skip=skip, limit=limit, session_token=await self._auth_session.session_token
+        )
+
+    async def list_all_user_streams_admin(self, uid: int, stream_filter: StreamFilter = None, chunk_size: int = 50,
+                                    max_number: int = None) -> AsyncGenerator[StreamAttributes, None]:
+        """Retrieves all streams of which a user is a member, handling pagination automatically.
+        Wraps the `User Streams <https://developers.symphony.com/restapi/v20.16/reference#user-streams>`_ endpoint.
+
+        :param uid: the ID of the user.
+        :param stream_filter: the filtering criteria for the streams.
+        :param chunk_size: the maximum number of streams to retrieve in one underlying HTTP call.
+        :param max_number: the total maximum number of streams to retrieve.
+        :return: an asynchronous generator of the streams.
+        """
+        async def list_streams_one_page(skip, limit):
+            result = await self.list_user_streams_admin(uid, stream_filter, skip, limit)
+            return result.value if result else None
+
+        return offset_based_pagination(list_streams_one_page, chunk_size, max_number)
 
     @retry
     async def list_stream_members(self, stream_id: str, skip: int = 0, limit: int = 100) -> V2MembershipList:
