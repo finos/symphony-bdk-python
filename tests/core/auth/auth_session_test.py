@@ -13,16 +13,21 @@ from symphony.bdk.core.auth.auth_session import (
 from symphony.bdk.core.auth.exception import AuthInitializationError
 from symphony.bdk.gen.login_model.token import Token
 from symphony.bdk.gen.login_model.extension_app_tokens import ExtensionAppTokens
-
+from symphony.bdk.core.auth.bot_authenticator import BotAuthenticatorRsa
+from symphony.bdk.core.config.model.bdk_bot_config import BdkBotConfig
+from symphony.bdk.gen.api_client import ApiClient
 
 @pytest.fixture
 def mock_authenticator():
-    authenticator = MagicMock()
-    authenticator.agent_version_service = AsyncMock()
-    authenticator.retrieve_session_token = AsyncMock(
-        return_value="session_token_string"
-    )
+
+    config = MagicMock(spec=BdkBotConfig)
+    login_client = MagicMock(spec=ApiClient)
+    relay_client = MagicMock(spec=ApiClient)
+    retry_config = MagicMock()
+    authenticator = BotAuthenticatorRsa(config, login_client, relay_client, retry_config)
+    authenticator.retrieve_session_token = AsyncMock(return_value="session_token_string")
     authenticator.retrieve_key_manager_token = AsyncMock(return_value="km_token_string")
+    authenticator.agent_version_service = AsyncMock()
     return authenticator
 
 
