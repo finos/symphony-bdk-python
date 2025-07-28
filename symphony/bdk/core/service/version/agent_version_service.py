@@ -16,7 +16,7 @@ class AgentVersionService:
 
     """
 
-    def __init__(self, signals_api: SignalsApi, auth_session: AuthSession, retry_config: BdkRetryConfig):
+    def __init__(self, signals_api: SignalsApi, retry_config: BdkRetryConfig):
         self._signals_api = signals_api
         self._retry_config = retry_config
 

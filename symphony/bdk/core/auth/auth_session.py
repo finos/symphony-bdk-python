@@ -76,7 +76,7 @@ class AuthSession:
         """
 
         if await self.skd_enabled:
-            return None
+            return ""
 
         if self._key_manager_token is None:
             self._key_manager_token = await self._authenticator.retrieve_key_manager_token()
@@ -104,7 +104,7 @@ class AuthSession:
         token_data = extract_session_token_claims(await self.session_token)
         if not token_data.get(SKD_FLAG_NAME, False):
             return False
-        return self._authenticator.agent_version_service.is_skd_supported()
+        return await self._authenticator.agent_version_service.is_skd_supported()
 
 
 
