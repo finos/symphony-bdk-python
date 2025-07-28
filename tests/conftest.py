@@ -3,6 +3,7 @@ Fixtures defined here will be shared among all tests in the test suite.
 """
 
 import datetime
+from unittest.mock import patch
 
 import pytest
 
@@ -11,6 +12,8 @@ from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives import serialization, hashes
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.x509 import NameOID
+
+from symphony.bdk.core.auth.auth_session import SKD_FLAG_NAME
 
 
 @pytest.fixture(name="root_key", scope="session")  # the fixture will be created only once for entire test session.
@@ -42,3 +45,10 @@ def fixture_certificate(root_key):
         .not_valid_after(now + datetime.timedelta(days=30)) \
         .sign(root_key, hashes.SHA512(), default_backend())
     return cert.public_bytes(encoding=serialization.Encoding.PEM).decode("utf-8")
+
+
+@pytest.fixture(autouse=True)
+def mock_jwt_decode_for_skd():
+    with patch("symphony.bdk.core.auth.auth_session.extract_session_token_claims",
+               return_value={SKD_FLAG_NAME: False}) as mock:
+        yield mock
