@@ -27,6 +27,8 @@ class AgentVersionService:
         """
         try:
             agent_info = await self._signals_api.v1_info_get()
+            if not agent_info or not agent_info.version:
+                return False
         except ApiException:
             return False
         agent_major_version, agent_minor_version = self._parse_version(agent_info.version)
@@ -38,8 +40,9 @@ class AgentVersionService:
 
     @staticmethod
     def _parse_version(version_string):
-        match = re.match(r"Agent-(\d+)\.(\d+)\..*", version_string)
+        if not version_string:
+            return None, None
+        match = re.match(VERSION_REGEXP, version_string)
         if match:
             return int(match.group(1)), int(match.group(2))
-
         return None, None
