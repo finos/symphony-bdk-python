@@ -36,7 +36,10 @@ class AuthSession:
         """
         logger.debug("Authenticate")
         self._session_token = await self._authenticator.retrieve_session_token()
-        self._key_manager_token = await self._authenticator.retrieve_key_manager_token()
+        if await self.skd_enabled:
+            self._key_manager_token = ""
+            return
+        self.key_manager_token = await self._authenticator.retrieve_key_manager_token()
 
     @property
     async def session_token(self):
