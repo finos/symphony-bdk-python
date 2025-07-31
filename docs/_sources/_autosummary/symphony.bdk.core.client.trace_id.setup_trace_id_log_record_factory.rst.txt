@@ -1,0 +1,6 @@
+symphony.bdk.core.client.trace\_id.setup\_trace\_id\_log\_record\_factory
+=========================================================================
+
+.. currentmodule:: symphony.bdk.core.client.trace_id
+
+.. autofunction:: setup_trace_id_log_record_factory

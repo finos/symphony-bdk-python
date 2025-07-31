@@ -1,0 +1,37 @@
+symphony.bdk.core.service\_factory.ServiceFactory
+=================================================
+
+.. currentmodule:: symphony.bdk.core.service_factory
+
+.. autoclass:: ServiceFactory
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~ServiceFactory.__init__
+      ~ServiceFactory.get_agent_version_service
+      ~ServiceFactory.get_application_service
+      ~ServiceFactory.get_connection_service
+      ~ServiceFactory.get_datafeed_loop
+      ~ServiceFactory.get_datahose_loop
+      ~ServiceFactory.get_health_service
+      ~ServiceFactory.get_message_service
+      ~ServiceFactory.get_presence_service
+      ~ServiceFactory.get_session_service
+      ~ServiceFactory.get_signal_service
+      ~ServiceFactory.get_stream_service
+      ~ServiceFactory.get_user_service
+   
+   
+
+   
+   
+   

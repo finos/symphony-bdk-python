@@ -1,0 +1,6 @@
+symphony.bdk.core.service.message.messageml\_util.escape\_special\_chars
+========================================================================
+
+.. currentmodule:: symphony.bdk.core.service.message.messageml_util
+
+.. autofunction:: escape_special_chars
