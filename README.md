@@ -6,7 +6,7 @@
 
 # Symphony BDK for Python
 
-This is the Symphony BDK for Python to help develop bots and interact with the [Symphony REST APIs](https://developers.symphony.com/restapi/reference).
+This is the Symphony BDK for Python to help develop bots and interact with the [Symphony REST APIs](https://rest-api.symphony.com).
 
 ## Project Overview
 
