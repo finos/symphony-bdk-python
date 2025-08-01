@@ -1,7 +1,7 @@
 # Session service
-The Session Service is a component at the service layer of the BDK which covers the Session part of the [REST API documentation](https://developers.symphony.com/restapi/reference).
+The Session Service is a component at the service layer of the BDK which covers the Session part of the [REST API documentation](https://developers.symphony.com/restapi).
 More precisely:
-* [Get session](https://developers.symphony.com/restapi/reference/session-info-v2)
+* [Get session](https://rest-api.symphony.com/main/info-health-check/session-info-v2)
 
 
 ## How to use
