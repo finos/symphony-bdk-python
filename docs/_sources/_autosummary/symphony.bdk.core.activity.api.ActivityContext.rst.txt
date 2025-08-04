@@ -1,0 +1,32 @@
+symphony.bdk.core.activity.api.ActivityContext
+==============================================
+
+.. currentmodule:: symphony.bdk.core.activity.api
+
+.. autoclass:: ActivityContext
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~ActivityContext.__init__
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~ActivityContext.initiator
+      ~ActivityContext.source_event
+   
+   
