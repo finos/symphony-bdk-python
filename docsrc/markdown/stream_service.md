@@ -19,6 +19,7 @@ More precisely:
 * [List user streams](https://developers.symphony.com/restapi/reference#list-user-streams)
 * [List stream members](https://developers.symphony.com/restapi/reference#stream-members)
 * [List room members](https://developers.symphony.com/restapi/reference#room-members)
+* [List user streams (admin)](https://rest-api.symphony.com/main/streams-conversations/all-streams-endpoints/list-user-streams-admin)
 
 
 ## How to use
