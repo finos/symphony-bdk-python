@@ -2,12 +2,12 @@
 
 The Connection Service is a component at the service layer of the BDK which aims to cover the Connections part of the [REST API documentation](https://developers.symphony.com/restapi/reference).
 More precisely:
-* [Get connection](https://developers.symphony.com/restapi/reference#get-connection)
-* [List connections](https://developers.symphony.com/restapi/reference#list-connections)
-* [Create connection](https://developers.symphony.com/restapi/reference#create-connection)
-* [Accept connection](https://developers.symphony.com/restapi/reference#accepted-connection)
-* [Reject connection](https://developers.symphony.com/restapi/reference#reject-connection)
-* [Remove connection](https://developers.symphony.com/restapi/reference#remove-connection)
+* [Get connection](https://rest-api.symphony.com/main/connections/get-connection)
+* [List connections](https://rest-api.symphony.com/main/connections/list-connections)
+* [Create connection](https://rest-api.symphony.com/main/connections/create-connection)
+* [Accept connection](https://rest-api.symphony.com/main/connections/accepted-connection)
+* [Reject connection](https://rest-api.symphony.com/main/connections/reject-connection)
+* [Remove connection](https://rest-api.symphony.com/main/connections/remove-connection)
 
 
 ## How to use
