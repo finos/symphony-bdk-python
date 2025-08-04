@@ -1,9 +1,9 @@
 # Health service
-The Health Service is a component at the service layer of the BDK which covers the Health Service part of the [REST API documentation](https://developers.symphony.com/restapi/reference).
+The Health Service is a component at the service layer of the BDK which covers the Health Service part of the [REST API documentation](https://rest-api.symphony.com/main/info-health-check).
 More precisely:
-* [Health check](https://developers.symphony.com/restapi/reference/health-check-v3)
-* [Health check extended](https://developers.symphony.com/restapi/reference/health-check-extended-v3)
-* [Agent info](https://developers.symphony.com/restapi/reference/agent-info-v1)
+* [Health check](https://rest-api.symphony.com/main/info-health-check/health-check-v3)
+* [Health check extended](https://rest-api.symphony.com/main/info-health-check/health-check-extended-v3)
+* [Agent info](https://rest-api.symphony.com/main/info-health-check/agent-info-v1)
 
 
 ## How to use

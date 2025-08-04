@@ -33,7 +33,7 @@ Contents
 This reference guide provides detailed information about the
 [Symphony BDK](https://github.com/finos/symphony-bdk-python).
 It provides a comprehensive documentation for all features and abstractions made on top of the
-[Symphony REST API](https://developers.symphony.com/restapi/reference).
+[Symphony REST API](https://rest-api.symphony.com).
 
 If you are just getting started with Symphony Bot developments, you may want to begin reading the
 [Getting Started](markdown/getting_started.md) guide.

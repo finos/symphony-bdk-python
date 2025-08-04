@@ -118,6 +118,8 @@ retry:
   initialIntervalMillis: 2000
   multiplier: 1.5
   maxIntervalMillis: 10000
+
+manifest: path/to/manifest.json
 ```
 
 ### Configuration structure

@@ -21,6 +21,7 @@ More precisely:
 * [List user streams](https://rest-api.symphony.com/main/streams-conversations/all-streams-endpoints/list-user-streams)
 * [List stream members](https://rest-api.symphony.com/main/streams-conversations/all-streams-endpoints/stream-members)
 * [List room members](https://rest-api.symphony.com/main/streams-conversations/room-endpoints/room-members)
+* [List user streams (admin)](https://rest-api.symphony.com/main/streams-conversations/all-streams-endpoints/list-user-streams-admin)
 
 ## How to use
 The central component for the Message Service is the `StreamService` class.
