@@ -54,6 +54,11 @@ jobs:
         run: poetry install
 
       - name: Run tests with coverage
+        env:
+            TEST_RSA_KEY: ${{ secrets.TEST_RSA_KEY }}
+            BOT_USERNAME: ${{ vars.BOT_USERNAME }}
+            STREAM_ID: ${{ vars.STREAM_ID }}
+            SYMPHONY_HOST: ${{ vars.SYMPHONY_HOST }}
         run: poetry run pytest
         timeout-minutes: 10
 
