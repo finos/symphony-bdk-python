@@ -19,22 +19,20 @@ TEST_RSA_KEY = os.getenv("TEST_RSA_KEY")
 pytestmark = pytest.mark.skipif(
     not all([STREAM_ID, BOT_USERNAME, SYMPHONY_HOST, TEST_RSA_KEY]),
     reason="Required environment variables for integration tests are not set "
-           "(STREAM_ID, BOT_USERNAME, SYMPHONY_HOST, TEST_RSA_KEY)"
+    "(STREAM_ID, BOT_USERNAME, SYMPHONY_HOST, TEST_RSA_KEY)",
 )
 
 NUMBER_OF_MESSAGES = 3
+
+
 @pytest.fixture
 def bot_config_path(tmp_path: Path):
     key_path = tmp_path / "key.pem"
     config_path = tmp_path / "config.yaml"
 
-
     bot_config_dict = {
         "host": SYMPHONY_HOST,
-        "bot": {
-            "username": BOT_USERNAME,
-            "privateKey": {"path": str(key_path)}
-        }
+        "bot": {"username": BOT_USERNAME, "privateKey": {"path": str(key_path)}},
     }
 
     # Write the key and config files
@@ -46,17 +44,25 @@ def bot_config_path(tmp_path: Path):
 
     os.remove(key_path), os.remove(config_path)
 
+
 async def send_messages(messages, stream_id, since, uuid):
     for i in range(NUMBER_OF_MESSAGES):
-        await messages.send_message(stream_id, f"<messageML><b>{uuid}-{i}-{since}</b></messageML>")
+        await messages.send_message(
+            stream_id, f"<messageML><b>{uuid}-{i}-{since}</b></messageML>"
+        )
+
 
 async def get_test_messages(bdk, since, uuid):
     messages = await bdk.messages().list_messages(STREAM_ID, since=since)
     cleaned_messages_text = [
-      re.sub(r"<[^>]+>", " ", msg["message"]).strip()
-        for msg in messages
+        re.sub(r"<[^>]+>", " ", msg["message"]).strip() for msg in messages
     ]
-    return  list(filter(lambda msg: msg.startswith(uuid), cleaned_messages_text, ))
+    return list(
+        filter(
+            lambda msg: msg.startswith(uuid),
+            cleaned_messages_text,
+        )
+    )
 
 
 @pytest.mark.asyncio
@@ -72,4 +78,6 @@ async def test_bot_read_write_messages(bot_config_path):
         # Then: messages are readable with the same bot
         messages = await get_test_messages(bdk, since, uuid)
     # Then: Expected messages are posted to the room
-    assert sorted(messages) == [f"{uuid}-{i}-{since}" for i in range(NUMBER_OF_MESSAGES)]
+    assert sorted(messages) == [
+        f"{uuid}-{i}-{since}" for i in range(NUMBER_OF_MESSAGES)
+    ]
