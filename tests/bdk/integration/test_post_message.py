@@ -11,13 +11,13 @@ from symphony.bdk.core.symphony_bdk import SymphonyBdk
 
 NUMBER_OF_MESSAGES = 10
 STREAM_ID = os.getenv("STREAM_ID", "put-stream-id-to-env-vars")
-CONFIG_PATH = "./config.yaml"
+CONFIG_PATH = "/home/runner/.symphony/config.yaml"
 
 @fixture
 def bot_config():
     bot_user = os.getenv("BOT_USERNAME", "put-useranme-to-env-vars")
     sym_host = os.getenv("SYMPHONY_HOST", "put-symphony-host-to-env-vars")
-    key_path = "./key.pem"
+    key_path = "/home/runner/.symphony/key.pem"
     bot_config = {"host": sym_host,
                   "bot": {"username": bot_user, "privateKey": {"path": key_path}}}
     with open(CONFIG_PATH, "w") as config_file:
