@@ -1,32 +1,49 @@
 import os
-import yaml
-from pytest import fixture, mark
 import re
 from datetime import datetime, timedelta
+from pathlib import Path
+
+import pytest
+import yaml
 
 from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.symphony_bdk import SymphonyBdk
 
+STREAM_ID = os.getenv("STREAM_ID")
+BOT_USERNAME = os.getenv("BOT_USERNAME")
+SYMPHONY_HOST = os.getenv("SYMPHONY_HOST")
+TEST_RSA_KEY = os.getenv("TEST_RSA_KEY")
 
+# Skip all tests in this file if the required environment variables are not set.
+pytestmark = pytest.mark.skipif(
+    not all([STREAM_ID, BOT_USERNAME, SYMPHONY_HOST, TEST_RSA_KEY]),
+    reason="Required environment variables for integration tests are not set "
+           "(STREAM_ID, BOT_USERNAME, SYMPHONY_HOST, TEST_RSA_KEY)"
+)
 
 NUMBER_OF_MESSAGES = 10
-STREAM_ID = os.getenv("STREAM_ID", "put-stream-id-to-env-vars")
-CONFIG_PATH = "/home/runner/.symphony/config.yaml"
+@pytest.fixture
+def bot_config_path(tmp_path: Path):
+    key_path = tmp_path / "key.pem"
+    config_path = tmp_path / "config.yaml"
 
-@fixture
-def bot_config():
-    bot_user = os.getenv("BOT_USERNAME", "put-useranme-to-env-vars")
-    sym_host = os.getenv("SYMPHONY_HOST", "put-symphony-host-to-env-vars")
-    key_path = "/home/runner/.symphony/key.pem"
-    bot_config = {"host": sym_host,
-                  "bot": {"username": bot_user, "privateKey": {"path": key_path}}}
-    with open(CONFIG_PATH, "w") as config_file:
-        yaml.dump(bot_config, config_file)
 
-    with open(key_path, "w") as key_file:
-        key_file.write(os.getenv("TEST_RSA_KEY", "PUT A KEY HERE OR INTO ENV VAR"))
-    yield
-    os.remove(key_path), os.remove(CONFIG_PATH)
+    bot_config_dict = {
+        "host": SYMPHONY_HOST,
+        "bot": {
+            "username": BOT_USERNAME,
+            "privateKey": {"path": str(key_path)}
+        }
+    }
+
+    # Write the key and config files
+    key_path.write_text(TEST_RSA_KEY)
+    with config_path.open("w") as config_file:
+        yaml.dump(bot_config_dict, config_file)
+
+    yield config_path
+
+    os.remove(key_path), os.remove(config_path)
 
 async def send_messages(messages, stream_id, since):
     for i in range(NUMBER_OF_MESSAGES):
@@ -41,12 +58,12 @@ async def get_test_messages(bdk, since):
     return cleaned_messages_text
 
 
-@mark.asyncio
-async def test_bot_read_write_messages(bot_config):
+@pytest.mark.asyncio
+async def test_bot_read_write_messages(bot_config_path):
     # Given: test execution start time
     since = int((datetime.now() - timedelta(seconds=2)).timestamp()) * 1000
     # Given: BDK is initialized with config
-    config = BdkConfigLoader.load_from_symphony_dir(CONFIG_PATH)
+    config = BdkConfigLoader.load_from_symphony_dir(str(bot_config_path))
     async with SymphonyBdk(config) as bdk:
         # When: messages are sent via bot
         await send_messages(bdk.messages(), STREAM_ID, since)
