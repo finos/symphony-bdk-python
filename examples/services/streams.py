@@ -19,7 +19,7 @@ async def run():
     async with SymphonyBdk(config) as bdk:
         streams = bdk.streams()
 
-        await streams.create_im_or_mim([13056700579872, 13056700579891, 13056700579850])
+        await streams.create_im(13056700579872)
         await streams.create_room(V3RoomAttributes(name="New fancy room", description="test room"))
 
         logging.debug(await streams.get_stream(stream_id))
