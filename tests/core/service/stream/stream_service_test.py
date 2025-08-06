@@ -182,12 +182,12 @@ async def test_demote_owner(stream_service, room_membership_api):
 @pytest.mark.asyncio
 async def test_create_im(mocked_api_client, stream_service, streams_api):
     mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(Stream,
-                                                                                    "stream/create_im_or_mim.json")
+                                                                                    "stream/create_im.json")
 
-    user_ids = [12334]
-    stream = await stream_service.create_im_or_mim(user_ids)
+    user_id = 12334
+    stream = await stream_service.create_im(user_id)
 
-    streams_api.v1_im_create_post.assert_called_once_with(uid_list=UserIdList(value=user_ids),
+    streams_api.v1_im_create_post.assert_called_once_with(uid_list=UserIdList(value=[user_id]),
                                                           session_token=SESSION_TOKEN)
     assert stream.id == "-M8s5WG7K8lAP7cpIiuyTH___oh4zK8EdA"
 
@@ -314,7 +314,7 @@ async def test_update_im(mocked_api_client, stream_service, streams_api):
 @pytest.mark.asyncio
 async def test_create_im_admin(mocked_api_client, stream_service, streams_api):
     mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(Stream,
-                                                                                    "stream/create_im_or_mim.json")
+                                                                                    "stream/create_im.json")
 
     user_ids = [12334]
     stream = await stream_service.create_im_admin(user_ids)
