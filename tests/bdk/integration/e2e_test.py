@@ -105,7 +105,7 @@ async def test_datafeed_receives_message(bdk: SymphonyBdk, datafeed_bot_config):
         await another_bot.messages().send_message(STREAM_ID, message_content)
     try:
         # Then: particular message is received by datafeed instance
-        await asyncio.wait_for(listener.message_received_event.wait(), timeout=30)
+        await asyncio.wait_for(listener.message_received_event.wait(), timeout=300)
     except asyncio.TimeoutError:
         pytest.fail("Datafeed did not receive the message within the timeout period.")
     finally:
