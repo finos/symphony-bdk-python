@@ -56,9 +56,12 @@ jobs:
       - name: Run tests with coverage
         env:
             TEST_RSA_KEY: ${{ secrets.TEST_RSA_KEY }}
-            BOT_USERNAME: ${{ vars.BOT_USERNAME }}
+            MSG_BOT_USERNAME: ${{ vars.MSG_BOT_USERNAME }}
+            FEED_BOT_USERNAME: ${{ vars.FEED_BOT_USERNAME }}
             STREAM_ID: ${{ vars.STREAM_ID }}
             SYMPHONY_HOST: ${{ vars.SYMPHONY_HOST }}
+            TEST_USER_ID: ${{ vars.TEST_SYM_USER_ID }}
+            BOT_USER_ID: ${{ vars.BOT_USER_ID }}
         run: poetry run pytest
         timeout-minutes: 10
 
