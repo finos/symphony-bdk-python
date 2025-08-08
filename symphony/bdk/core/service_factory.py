@@ -255,6 +255,7 @@ class OboServiceFactory:
         return OboMessageService(
             MultiAttachmentsMessagesApi(self._agent_client),
             MessageSuppressionApi(self._pod_client),
+            self._pod_client,
             self._auth_session,
             self._config.retry
         )

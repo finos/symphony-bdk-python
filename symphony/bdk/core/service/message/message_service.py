@@ -30,10 +30,10 @@ class OboMessageService:
     """Class exposing OBO enabled endpoints for message management, e.g. send a message."""
 
     def __init__(self, messages_api: MultiAttachmentsMessagesApi, message_suppression_api: MessageSuppressionApi,
-                 auth_session: AuthSession,
-                 retry_config: BdkRetryConfig):
+                pod_api: PodApi, auth_session: AuthSession, retry_config: BdkRetryConfig):
         self._messages_api = messages_api
         self._message_suppression_api = message_suppression_api
+        self._pod_api = pod_api
         self._auth_session = auth_session
         self._retry_config = retry_config
 
@@ -257,11 +257,10 @@ class MessageService(OboMessageService):
                  default_api: DefaultApi,
                  auth_session: AuthSession,
                  retry_config: BdkRetryConfig):
-        super().__init__(messages_api, message_suppression_api, auth_session, retry_config)
+        super().__init__(messages_api, message_suppression_api, pod_api, auth_session, retry_config)
         self._message_api = message_api
         self._message_suppression_api = message_suppression_api
         self._streams_api = streams_api
-        self._pod_api = pod_api
         self._attachment_api = attachment_api
         self._default_api = default_api
 
