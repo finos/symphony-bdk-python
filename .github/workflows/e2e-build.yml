@@ -53,5 +53,5 @@ jobs:
             SYMPHONY_HOST: ${{ vars.SYMPHONY_HOST }}
             TEST_USER_ID: ${{ vars.TEST_SYM_USER_ID }}
             BOT_USER_ID: ${{ vars.BOT_USER_ID }}
-        run: poetry run pytest -m e2e
+        run: poetry run pytest -m e2e --no-cov
         timeout-minutes: 10
