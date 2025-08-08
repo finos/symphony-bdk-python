@@ -16,10 +16,9 @@ from tests.bdk.integration.helpers import (BOT_USER_ID, FEED_BOT_USERNAME,
                                            get_test_messages,
                                            messenger_bot_config, send_messages)
 
-pytestmark = pytest.mark.asyncio
-
-
-pytestmark = pytest.mark.skipif(
+pytestmark =[
+    pytest.mark.asyncio,
+ pytest.mark.skipif(
     not all(
         [
             STREAM_ID,
@@ -34,7 +33,7 @@ pytestmark = pytest.mark.skipif(
     reason="Required environment variables for integration tests are not set "
     "(STREAM_ID, MSG_BOT_USERNAME, FEED_BOT_USERNAME, SYMPHONY_HOST, TEST_RSA_KEY, TEST_USER_ID, BOT_USER_ID)",
 )
-
+]
 NUMBER_OF_MESSAGES = 3
 
 

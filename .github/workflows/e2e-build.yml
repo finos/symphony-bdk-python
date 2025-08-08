@@ -8,11 +8,11 @@ on:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [ '3.9', '3.10', '3.11', '3.12', '3.13' ]
-        os: [ ubuntu-latest, macos-latest, windows-latest ]
+        python-version: [ '3.12' ]
+        os: [ ubuntu-latest ]
         include:
           - os: ubuntu-latest
             path: ~/.cache/pypoetry/virtualenvs
@@ -53,20 +53,15 @@ jobs:
       - name: Install dependencies
         run: poetry install
 
-      - name: Run tests with coverage
+      - name: Run e2e tests with coverage
+        env:
+            TEST_RSA_KEY: ${{ secrets.TEST_RSA_KEY }}
+            MSG_BOT_USERNAME: ${{ vars.MSG_BOT_USERNAME }}
+            FEED_BOT_USERNAME: ${{ vars.FEED_BOT_USERNAME }}
+            STREAM_ID: ${{ vars.STREAM_ID }}
+            SYMPHONY_HOST: ${{ vars.SYMPHONY_HOST }}
+            TEST_USER_ID: ${{ vars.TEST_SYM_USER_ID }}
+            BOT_USER_ID: ${{ vars.BOT_USER_ID }}
         run: poetry run pytest
         timeout-minutes: 10
 
-      - name: Upload test results
-        uses: actions/upload-artifact@v4
-        with:
-          name: pytest-results-${{ matrix.os }}-${{ matrix.python-version }}-${{ github.run_id }}
-          path: test-results/junit.xml
-        if: ${{ always() }}
-
-      - name: Upload test coverage
-        uses: actions/upload-artifact@v4
-        with:
-          name: pytest-coverage-${{ matrix.os }}-${{ matrix.python-version }}-${{ github.run_id }}
-          path: htmlcov
-        if: ${{ always() }}
