@@ -18,6 +18,7 @@ from tests.bdk.integration.helpers import (BOT_USER_ID, FEED_BOT_USERNAME,
 
 pytestmark =[
     pytest.mark.asyncio,
+    pytest.mark.e2e,
  pytest.mark.skipif(
     not all(
         [

@@ -49,6 +49,7 @@ build-backend = "poetry.core.masonry.api"
 [tool.pytest.ini_options]
 addopts = "--junitxml=test-results/junit.xml --cov --cov-report=html"
 testpaths = ["tests"]
+markers = ["e2e: marks tests as end-to-end tests"]
 norecursedirs = ["*.egg", ".*", "build", "dist", "venv", "legacy"]
 junit_logging = "all"
 
