@@ -1,9 +1,7 @@
 name: E2E Tests
 on:
   push:
-    branches: [ "main", "*-rc" ]
-  pull_request:
-    branches: [ "main", "*-rc" ]
+    branches: [ "CAIP-80-extra-tests-based-on-examples" ]
 
 jobs:
   e2e-test:
