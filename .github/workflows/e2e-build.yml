@@ -1,5 +1,4 @@
-name: build
-
+name: E2E Tests
 on:
   push:
     branches: [ "main", "*-rc" ]
@@ -7,33 +6,22 @@ on:
     branches: [ "main", "*-rc" ]
 
 jobs:
-  build:
+  e2e-test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [ '3.12' ]
-        os: [ ubuntu-latest ]
-        include:
-          - os: ubuntu-latest
-            path: ~/.cache/pypoetry/virtualenvs
-          - os: macos-latest
-            path: ~/Library/Caches/pypoetry/virtualenvs
-          - os: windows-latest
-            path: ~\AppData\Local\pypoetry\Cache\virtualenvs
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Python ${{ matrix.python-version }}
+      - name: Set up Python
         id: setup-python
         uses: actions/setup-python@v4
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: '3.12'
 
       - name: Get pip cache dir
         id: pip-cache
         run: |
-          echo "::set-output name=dir::$(pip cache dir)"
+          echo "dir=$(pip cache dir)" >> $GITHUB_OUTPUT
       - name: Cache pip dependencies
         uses: actions/cache@v4
         with:
@@ -43,17 +31,20 @@ jobs:
       - name: Install Poetry
         run: pip install poetry
 
-      - name: Cache poetry
+      - name: Install Poetry plugins
+        run: poetry self add poetry-plugin-export
+
+      - name: Cache poetry virtualenv
         uses: actions/cache@v4
         with:
-          path: ${{ matrix.path }}
+          path: ~/.cache/pypoetry/virtualenvs
           key: ${{ runner.os }}-poetry-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('poetry.lock') }}
           restore-keys: |
             ${{ runner.os }}-poetry-${{ steps.setup-python.outputs.python-version }}-
       - name: Install dependencies
         run: poetry install
 
-      - name: Run e2e tests with coverage
+      - name: Run E2E tests
         env:
             TEST_RSA_KEY: ${{ secrets.TEST_RSA_KEY }}
             MSG_BOT_USERNAME: ${{ vars.MSG_BOT_USERNAME }}
@@ -62,6 +53,5 @@ jobs:
             SYMPHONY_HOST: ${{ vars.SYMPHONY_HOST }}
             TEST_USER_ID: ${{ vars.TEST_SYM_USER_ID }}
             BOT_USER_ID: ${{ vars.BOT_USER_ID }}
-        run: poetry run pytest
+        run: poetry run pytest -m e2e
         timeout-minutes: 10
-
