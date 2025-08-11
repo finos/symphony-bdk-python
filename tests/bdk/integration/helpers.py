@@ -5,6 +5,7 @@ import re
 import pytest
 import pytest_asyncio
 import yaml
+from pathlib import Path
 
 from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.service.datafeed.real_time_event_listener import \
@@ -23,7 +24,7 @@ BOT_USER_ID = os.getenv("BOT_USER_ID")
 NUMBER_OF_MESSAGES = 3
 
 
-def generate_config(tmp_dir, bot_username):
+def generate_config(tmp_dir: Path, bot_username: str):
     key_path = tmp_dir / "key.pem"
     config_path = tmp_dir / "config.yaml"
 
