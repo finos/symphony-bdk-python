@@ -73,84 +73,10 @@ authorized_licenses = [
     "Python Software Foundation"
 ]
 
-[tool.poetry]
-name = "symphony_bdk_python"
-version = "2.11.0-beta"
-license = "Apache-2.0"
-description = "Symphony Bot Development Kit for Python"
-readme = "README.md"
-authors = ["Symphony Platform Solutions <symphony@finos.org>"]
-repository = "https://github.com/finos/symphony-bdk-python"
-documentation = "https://symphony-bdk-python.finos.org/"
-packages = [
-    { include = "symphony" }
-]
 
-[tool.poetry.dependencies]
-python = ">3.9.0,<3.9.1 || >3.9.1,<4.0"
-nulltype = "^2.3.1"
-python-dateutil = "^2.8.2"
-urllib3 = ">=2.5.0,<3"
-aiohttp = "^3.12.14"
-pyyaml = "^6.0"
-PyJWT = "^2.10.0"
-cryptography = "^44.0.1"
-tenacity = "^8.0.1"
-defusedxml = "^0.7.1"
-docutils = "0.16"
-
-[tool.poetry.group.dev.dependencies]
-pytest = "^8.3.3"
-pylint = "^2.6.0"
-pytest-cov = "^5.0.0"
-pytest-asyncio = "^0.24.0"
-Sphinx = "^4.4.0"
-jinja2 = "^3.1.6"
-recommonmark = "^0.7.1"
-furo = "^2022.3.4"
-hazelcast-python-client = "^5.0.1"
-safety = "^2.3.5"
-setuptools = "^79.0.0"
-liccheck = "^0.9.2"
-coverage = {version = "^6.0b1", extras = ["toml"]}
-ruff = "^0.12.8"
-pre-commit = "^4.3.0"
-
-[tool.poetry.requires-plugins]
-poetry-plugin-export = ">=1.8"
-
-
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
-
-[tool.pytest.ini_options]
-addopts = "--junitxml=test-results/junit.xml --cov --cov-report=html"
-testpaths = ["tests"]
-markers = ["e2e: marks tests as end-to-end tests"]
-norecursedirs = ["*.egg", ".*", "build", "dist", "venv", "legacy"]
-junit_logging = "all"
-
-[tool.coverage.run]
-branch = true
-source = ["symphony"]
-omit = ["symphony/bdk/gen/*"]
-
-[tool.coverage.report]
-fail_under = 90.0
-
-[tool.liccheck]
-authorized_licenses = [
-    "BSD",
-    "GNU Library or Lesser General Public License (LGPL)",
-    "MIT",
-    "Apache Software",
-    "Apache-2.0",
-    "Python Software Foundation"
-]
 
 [tool.ruff]
-src = ["symphony", "tests", "examples"]
+include = ["pyproject.toml", "symphony/**/*.py", "examples/**/*.py"]
 exclude = [
     "symphony/bdk/gen",
 ]
@@ -160,6 +86,7 @@ line-length = 88
 
 [tool.ruff.lint]
 select = ["E", "W", "F", "I"]
+ignore = ["E501"]
 
 [tool.ruff.format]
 quote-style = "double"
