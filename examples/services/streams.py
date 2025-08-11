@@ -20,7 +20,9 @@ async def run():
         streams = bdk.streams()
 
         await streams.create_im(13056700579872)
-        await streams.create_room(V3RoomAttributes(name="New fancy room", description="test room"))
+        await streams.create_room(
+            V3RoomAttributes(name="New fancy room", description="test room")
+        )
 
         logging.debug(await streams.get_stream(stream_id))
         await streams.add_member_to_room(13056700579859, stream_id)
@@ -30,12 +32,19 @@ async def run():
             logging.debug(m)
 
         stream_filter = StreamFilter(
-            stream_types=[StreamType(type="IM"), StreamType(type="MIM"), StreamType(type="ROOM")],
-            include_inactive_streams=False)
+            stream_types=[
+                StreamType(type="IM"),
+                StreamType(type="MIM"),
+                StreamType(type="ROOM"),
+            ],
+            include_inactive_streams=False,
+        )
         async for s in await streams.list_all_streams(stream_filter):
             logging.debug(s)
 
 
-logging.config.fileConfig(Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False)
+logging.config.fileConfig(
+    Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False
+)
 
 asyncio.run(run())
