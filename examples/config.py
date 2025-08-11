@@ -1,6 +1,5 @@
 from symphony.bdk.core.config.loader import BdkConfigLoader
 
-
 config_1 = BdkConfigLoader.load_from_file("/absolute/path/to/config.yaml")
 
 with open("/absolute/path/to/config.yaml") as config_file:

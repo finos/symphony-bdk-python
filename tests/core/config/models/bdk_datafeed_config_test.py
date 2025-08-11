@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pytest
 
-from symphony.bdk.core.config.model.bdk_datafeed_config import BdkDatafeedConfig, DF_V1
+from symphony.bdk.core.config.model.bdk_datafeed_config import DF_V1, BdkDatafeedConfig
 
 
 @pytest.fixture(name="datafeed_version", params=["v1"])

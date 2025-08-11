@@ -23,8 +23,11 @@ Symphony BDK for Python provides tools for building bots and integrating with Sy
 - Install dependencies: `poetry install`
 - Build the package: `poetry build`
 - Run tests: `poetry run pytest`
-- Perform a pylint scan locally: `poetry run pylint <module_name>`
+- Perform a lint scan locally: `poetry run ruff check .`
 - Generate documentation locally: `cd docsrc && make html`
+
+
+
 
 ### Verification
 Verify the successful installation by running any of the following commands:
