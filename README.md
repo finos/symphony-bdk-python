@@ -24,10 +24,21 @@ Symphony BDK for Python provides tools for building bots and integrating with Sy
 - Build the package: `poetry build`
 - Run tests: `poetry run pytest`
 - Perform a lint scan locally: `poetry run ruff check .`
+- Format code locally: `poetry run ruff format .`
 - Generate documentation locally: `cd docsrc && make html`
 
+### Setting Up Git Hooks
+This project uses `pre-commit` with `ruff` to automatically format and lint code. This is the recommended setup for contributors to ensure code style consistency.
 
-
+1. **Install development dependencies** (this will also install `pre--commit` and `ruff`):
+   ```bash
+   poetry install
+   ```
+2. **Install the git hooks**:
+   ```bash
+   poetry run pre-commit install
+   ```
+Now, `ruff` will automatically run on every commit, formatting your code and checking for linting errors.
 
 ### Verification
 Verify the successful installation by running any of the following commands:
