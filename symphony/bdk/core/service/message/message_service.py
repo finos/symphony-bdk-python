@@ -30,10 +30,10 @@ class OboMessageService:
     """Class exposing OBO enabled endpoints for message management, e.g. send a message."""
 
     def __init__(self, messages_api: MultiAttachmentsMessagesApi, message_suppression_api: MessageSuppressionApi,
-                 auth_session: AuthSession,
-                 retry_config: BdkRetryConfig):
+                pod_api: PodApi, auth_session: AuthSession, retry_config: BdkRetryConfig):
         self._messages_api = messages_api
         self._message_suppression_api = message_suppression_api
+        self._pod_api = pod_api
         self._auth_session = auth_session
         self._retry_config = retry_config
 
@@ -127,6 +127,40 @@ class OboMessageService:
         return await self._message_suppression_api.v1_admin_messagesuppression_id_suppress_post(**params)
 
     @retry
+    async def update_message(self, stream_id: str, message_id: str, message: Union[str, Message], data=None,
+                             version: str = "", silent=True) -> V4Message:
+        """Update an existing message. The existing message must be a valid social message, that has not been deleted.
+        See: `Update Message <https://developers.symphony.com/restapi/reference/update-message-v4>`_
+
+        :param stream_id: The ID of the stream where the message is being updated.
+        :param message_id: The ID of the message that is being updated.
+        :param message: a :py:class:`Message` instance or a string containing the MessageML content to be sent.
+          If it is a :py:class:`Message` instance, other parameters will be ignored.
+          If it is a string, ``<messageML>`` tags can be omitted.
+        :param data: an object (e.g. dict) that will be serialized into JSON using ``json.dumps``.
+        :param silent: a bool flag that will determine if the updated message is going to be marked as read (when true,
+          which is default value) or unread (when false).
+        :param version: Optional message version in the format "major.minor".
+          If empty, defaults to the latest supported version.
+
+        :return: a V4Message object containing the details of the updated message.
+        """
+        message_object = message if isinstance(message, Message) else Message(content=message, data=data, silent=silent,
+                                                                              version=version)
+
+        params = {
+            "sid": stream_id,
+            "mid": message_id,
+            "session_token": await self._auth_session.session_token,
+            "key_manager_token": await self._auth_session.key_manager_token,
+            "message": message_object.content,
+            "data": message_object.data,
+            "version": message_object.version,
+            "silent": str(message_object.silent)
+        }
+        return await self._messages_api.v4_stream_sid_message_mid_update_post(**params)
+
+    @retry
     async def get_attachment_types(self) -> List[str]:
         """Retrieves a list of supported file extensions for attachments.
         See: `Attachment Types <https://developers.symphony.com/restapi/reference/attachment-types>`_
@@ -172,7 +206,7 @@ class OboMessageService:
     @retry
     async def _blast_message(
             self,
-            stream_ids: [str],
+            stream_ids: List[str],
             message: str,
             data: str = "",
             version: str = "",
@@ -223,11 +257,10 @@ class MessageService(OboMessageService):
                  default_api: DefaultApi,
                  auth_session: AuthSession,
                  retry_config: BdkRetryConfig):
-        super().__init__(messages_api, message_suppression_api, auth_session, retry_config)
+        super().__init__(messages_api, message_suppression_api, pod_api, auth_session, retry_config)
         self._message_api = message_api
         self._message_suppression_api = message_suppression_api
         self._streams_api = streams_api
-        self._pod_api = pod_api
         self._attachment_api = attachment_api
         self._default_api = default_api
 
@@ -463,40 +496,6 @@ class MessageService(OboMessageService):
             return await self.search_messages(query, sort_dir, skip, limit)
 
         return offset_based_pagination(search_messages_one_page, chunk_size, max_number)
-
-    @retry
-    async def update_message(self, stream_id: str, message_id: str, message: Union[str, Message], data=None,
-                             version: str = "", silent=True) -> V4Message:
-        """Update an existing message. The existing message must be a valid social message, that has not been deleted.
-        See: `Update Message <https://developers.symphony.com/restapi/reference/update-message-v4>`_
-
-        :param stream_id: The ID of the stream where the message is being updated.
-        :param message_id: The ID of the message that is being updated.
-        :param message: a :py:class:`Message` instance or a string containing the MessageML content to be sent.
-          If it is a :py:class:`Message` instance, other parameters will be ignored.
-          If it is a string, ``<messageML>`` tags can be omitted.
-        :param data: an object (e.g. dict) that will be serialized into JSON using ``json.dumps``.
-        :param silent: a bool flag that will determine if the updated message is going to be marked as read (when true,
-          which is default value) or unread (when false).
-        :param version: Optional message version in the format "major.minor".
-          If empty, defaults to the latest supported version.
-
-        :return: a V4Message object containing the details of the updated message.
-        """
-        message_object = message if isinstance(message, Message) else Message(content=message, data=data, silent=silent,
-                                                                              version=version)
-
-        params = {
-            "sid": stream_id,
-            "mid": message_id,
-            "session_token": await self._auth_session.session_token,
-            "key_manager_token": await self._auth_session.key_manager_token,
-            "message": message_object.content,
-            "data": message_object.data,
-            "version": message_object.version,
-            "silent": str(message_object.silent)
-        }
-        return await self._messages_api.v4_stream_sid_message_mid_update_post(**params)
 
     @staticmethod
     def _validate_message_search_query(query: MessageSearchQuery):

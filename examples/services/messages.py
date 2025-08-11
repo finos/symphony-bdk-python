@@ -52,7 +52,8 @@ async def run():
             # Message ID can be retrieved by following guide here:
             # https://docs.developers.symphony.com/building-bots-on-symphony/datafeed/overview-of-streams
             await obo_services.messages().suppress_message("URL-Safe MessageID")
-
+            obo_message = await obo_services.messages().send_message(stream_id_1, "Hello obo")
+            await obo_services.messages().update_message(stream_id_1, obo_message.message_id, "Hello obo updated")
 
 logging.config.fileConfig(Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False)
 
