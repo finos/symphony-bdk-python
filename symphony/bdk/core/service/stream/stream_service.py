@@ -50,20 +50,16 @@ class OboStreamService:
         self._retry_config = retry_config
 
     @retry
-    async def create_im_or_mim(self, user_ids: [int]) -> Stream:
-        """Create a new single or multi party instant message conversation between the caller and specified users.
+    async def create_im(self, user_id: int) -> Stream:
+        """Create a new single party instant message conversation between the caller and specified user.
         The caller is implicitly included in the members of the created chat.
-        Duplicate users will be included in the membership of the chat but the duplication will be silently ignored.
-        If there is an existing IM conversation with the same set of participants then the id of that existing stream
-        will be returned.
-        If the given list of user ids contains only one id, an IM will be created, otherwise, a MIM will be created.
 
-        Wraps the `Create IM or MIM <https://developers.symphony.com/restapi/reference/create-im-or-mim>`_ endpoint.
+        Wraps the `Create IM  <https://rest-api.symphony.com/main/streams-conversations/im-mim-endpoints/create-im-or-mim>`_ endpoint.
 
-        :param user_ids: the list of user ids ti be put as room participants.
+        :param user_id: the user id to be put as room participant.
         :return: the created stream.
         """
-        return await self._streams_api.v1_im_create_post(uid_list=UserIdList(value=user_ids),
+        return await self._streams_api.v1_im_create_post(uid_list=UserIdList(value=[user_id]),
                                                          session_token=await self._auth_session.session_token)
 
     @retry
