@@ -1,5 +1,11 @@
+# ruff: noqa
 import asyncio
 from unittest.mock import AsyncMock, patch
+from tests.core.service.datafeed.test_fixtures import (
+    fixture_initiator_userid,
+    fixture_session_service,
+    fixture_message_sent_v4_event,
+)
 
 import pytest
 

@@ -3,6 +3,13 @@ from unittest.mock import AsyncMock, MagicMock, call
 
 import pytest
 
+# ruff: noqa
+from tests.core.service.datafeed.test_fixtures import (
+    fixture_initiator_username,
+    fixture_session_service,
+    fixture_auth_session,
+)
+
 from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import RealTimeEvent
 from symphony.bdk.core.service.datafeed.datafeed_loop_v2 import DatafeedLoopV2

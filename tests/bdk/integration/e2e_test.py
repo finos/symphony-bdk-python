@@ -1,3 +1,4 @@
+# ruff: noqa
 import asyncio
 from datetime import datetime, timedelta
 from uuid import uuid4
@@ -17,7 +18,9 @@ from tests.bdk.integration.helpers import (
     TEST_RSA_KEY,
     TEST_USER_ID,
     MessageListener,
+    datafeed_bot_config,
     get_test_messages,
+    messenger_bot_config,
     send_messages,
 )
 

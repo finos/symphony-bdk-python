@@ -1,7 +1,14 @@
+# ruff: noqa
 import asyncio
-from unittest.mock import AsyncMock, MagicMock
 
 import pytest
+
+from unittest.mock import MagicMock, AsyncMock
+from tests.core.service.datafeed.test_fixtures import (
+    fixture_initiator_username,
+    fixture_session_service,
+    fixture_message_sent_events_mock,
+)
 
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.config.loader import BdkConfigLoader
