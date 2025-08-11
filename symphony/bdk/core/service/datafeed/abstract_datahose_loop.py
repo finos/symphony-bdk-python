@@ -1,7 +1,9 @@
 import logging
 from abc import ABC, abstractmethod
 
-from symphony.bdk.core.service.datafeed.real_time_event_listener import RealTimeEventListener
+from symphony.bdk.core.service.datafeed.real_time_event_listener import (
+    RealTimeEventListener,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -9,8 +11,8 @@ logger = logging.getLogger(__name__)
 class AbstractDatahoseLoop(ABC):
     """Base class for implementing the datahose services.
 
-        A datahose service can help a bot to get all the received real-time events that are set
-        as filters in the configuration.
+    A datahose service can help a bot to get all the received real-time events that are set
+    as filters in the configuration.
     """
 
     @abstractmethod

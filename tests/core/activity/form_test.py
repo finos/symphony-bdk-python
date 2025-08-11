@@ -2,7 +2,9 @@ import pytest
 
 from symphony.bdk.core.activity.form import FormReplyActivity, FormReplyContext
 from symphony.bdk.gen.agent_model.v4_initiator import V4Initiator
-from symphony.bdk.gen.agent_model.v4_symphony_elements_action import V4SymphonyElementsAction
+from symphony.bdk.gen.agent_model.v4_symphony_elements_action import (
+    V4SymphonyElementsAction,
+)
 
 
 @pytest.fixture(name="activity")
@@ -15,9 +17,14 @@ def fixture_activity():
 
 @pytest.fixture(name="context")
 def fixture_context():
-    return FormReplyContext(V4Initiator(), V4SymphonyElementsAction(form_id="test_form",
-                                                                    form_message_id="message_id",
-                                                                    form_values={"key": "value"}))
+    return FormReplyContext(
+        V4Initiator(),
+        V4SymphonyElementsAction(
+            form_id="test_form",
+            form_message_id="message_id",
+            form_values={"key": "value"},
+        ),
+    )
 
 
 def test_matcher(activity, context):

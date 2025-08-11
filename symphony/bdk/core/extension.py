@@ -1,5 +1,5 @@
-"""Module for managing extensions.
-"""
+"""Module for managing extensions."""
+
 import logging
 from abc import ABC, abstractmethod
 from typing import Union
@@ -12,8 +12,8 @@ logger = logging.getLogger(__name__)
 
 
 class BdkConfigAware(ABC):
-    """Interface that extensions need to implement to have the config injected
-    """
+    """Interface that extensions need to implement to have the config injected"""
+
     @abstractmethod
     def set_config(self, bdk_config: BdkConfig):
         """Method that is called by the :class:`ExtensionService` to inject the BDK configuration.
@@ -24,8 +24,8 @@ class BdkConfigAware(ABC):
 
 
 class BdkAuthenticationAware(ABC):
-    """Interface that extensions need to implement to have the bot session injected
-    """
+    """Interface that extensions need to implement to have the bot session injected"""
+
     @abstractmethod
     def set_bot_session(self, auth_session: AuthSession):
         """Method that is called by the :class:`ExtensionService` to inject the BDK auth session.
@@ -36,8 +36,8 @@ class BdkAuthenticationAware(ABC):
 
 
 class BdkApiClientFactoryAware(ABC):
-    """Interface that extensions need to implement to have the api client factory injected
-    """
+    """Interface that extensions need to implement to have the api client factory injected"""
+
     @abstractmethod
     def set_api_client_factory(self, api_client_factory: ApiClientFactory):
         """Method that is called by the :class:`ExtensionService` to inject the BDK api client factory.
@@ -48,8 +48,8 @@ class BdkApiClientFactoryAware(ABC):
 
 
 class BdkExtensionServiceProvider(ABC):
-    """Interface that extensions need to implement to expose a service
-    """
+    """Interface that extensions need to implement to expose a service"""
+
     @abstractmethod
     def get_service(self):
         """Method that is called by the :func:`~ExtensionService.service`
@@ -59,8 +59,8 @@ class BdkExtensionServiceProvider(ABC):
 
 
 class ExtensionService:
-    """Service class for managing extensions
-    """
+    """Service class for managing extensions"""
+
     def __init__(self, api_client_factory, bot_session, config):
         self._api_client_factory = api_client_factory
         self._bot_session = bot_session
@@ -102,7 +102,9 @@ class ExtensionService:
         try:
             return extension.get_service()
         except AttributeError:
-            raise ValueError(f"Extension {str(extension_type)} does not implement the get_service method")
+            raise ValueError(
+                f"Extension {str(extension_type)} does not implement the get_service method"
+            )
 
     def _inject_api_client_factory(self, extension):
         try:
@@ -110,7 +112,9 @@ class ExtensionService:
         except AttributeError:
             logger.debug("Extension is not api client aware")
         except TypeError:
-            logger.warning("set_api_client_factory method must have a single positional argument")
+            logger.warning(
+                "set_api_client_factory method must have a single positional argument"
+            )
 
     def _inject_bot_session(self, extension):
         try:
@@ -118,7 +122,9 @@ class ExtensionService:
         except AttributeError:
             logger.debug("Extension is not authentication aware")
         except TypeError:
-            logger.warning("set_bot_session method must have a single positional argument")
+            logger.warning(
+                "set_bot_session method must have a single positional argument"
+            )
 
     def _inject_config(self, extension):
         try:
@@ -126,4 +132,6 @@ class ExtensionService:
         except AttributeError:
             logger.debug("Extension is not configuration aware")
         except TypeError:
-            logger.warning("set_configuration method must have a single positional argument")
+            logger.warning(
+                "set_configuration method must have a single positional argument"
+            )

@@ -1,14 +1,14 @@
-"""Module containing the ApiClientFactory class.
-"""
+"""Module containing the ApiClientFactory class."""
+
 import logging
 import sys
-from importlib.metadata import distribution, PackageNotFoundError
+from importlib.metadata import PackageNotFoundError, distribution
 from ssl import SSLError
 
 import urllib3
 from aiohttp.hdrs import USER_AGENT
 
-from symphony.bdk.core.client.trace_id import add_x_trace_id, X_TRACE_ID
+from symphony.bdk.core.client.trace_id import X_TRACE_ID, add_x_trace_id
 from symphony.bdk.gen.api_client import ApiClient
 from symphony.bdk.gen.configuration import Configuration
 
@@ -23,8 +23,7 @@ logger = logging.getLogger(__name__)
 
 
 class ApiClientFactory:
-    """Factory responsible for creating ApiClient instances for each main Symphony's components.
-    """
+    """Factory responsible for creating ApiClient instances for each main Symphony's components."""
 
     def __init__(self, config):
         self._config = config
@@ -32,12 +31,15 @@ class ApiClientFactory:
         self._pod_client = self._get_api_client(self._config.pod, POD)
         self._relay_client = self._get_api_client(self._config.key_manager, RELAY)
         self._agent_client = self._get_api_client(self._config.agent, AGENT)
-        self._session_auth_client = self._get_api_client_with_client_cert(self._config.session_auth, SESSION_AUTH,
-                                                                          self._config.bot.certificate.path)
-        self._key_auth_client = self._get_api_client_with_client_cert(self._config.key_manager, KEY_AUTH,
-                                                                      self._config.bot.certificate.path)
-        self._app_session_auth_client = self._get_api_client_with_client_cert(self._config.session_auth, SESSION_AUTH,
-                                                                              self._config.app.certificate.path)
+        self._session_auth_client = self._get_api_client_with_client_cert(
+            self._config.session_auth, SESSION_AUTH, self._config.bot.certificate.path
+        )
+        self._key_auth_client = self._get_api_client_with_client_cert(
+            self._config.key_manager, KEY_AUTH, self._config.bot.certificate.path
+        )
+        self._app_session_auth_client = self._get_api_client_with_client_cert(
+            self._config.session_auth, SESSION_AUTH, self._config.app.certificate.path
+        )
         self._custom_clients = []
 
     def get_login_client(self) -> ApiClient:
@@ -115,16 +117,24 @@ class ApiClientFactory:
 
     def _get_api_client(self, server_config, context) -> ApiClient:
         configuration = self._get_client_config(context, server_config)
-        return ApiClientFactory._get_api_client_from_config(configuration, server_config)
+        return ApiClientFactory._get_api_client_from_config(
+            configuration, server_config
+        )
 
-    def _get_api_client_with_client_cert(self, server_config, context, certificate_path) -> ApiClient:
+    def _get_api_client_with_client_cert(
+        self, server_config, context, certificate_path
+    ) -> ApiClient:
         configuration = self._get_client_config(context, server_config)
         configuration.cert_file = certificate_path
 
-        return ApiClientFactory._get_api_client_from_config(configuration, server_config)
+        return ApiClientFactory._get_api_client_from_config(
+            configuration, server_config
+        )
 
     def _get_client_config(self, context, server_config):
-        configuration = Configuration(host=(server_config.get_base_path() + context), discard_unknown_keys=True)
+        configuration = Configuration(
+            host=(server_config.get_base_path() + context), discard_unknown_keys=True
+        )
         configuration.verify_ssl = True
         configuration.ssl_ca_cert = self._config.ssl.trust_store_path
         if server_config.proxy is not None:
@@ -138,7 +148,9 @@ class ApiClientFactory:
             ApiClientFactory._add_headers(client, server_config)
             return client
         except SSLError as exc:
-            logger.exception("SSL error when instantiating clients, please check certificates are valid")
+            logger.exception(
+                "SSL error when instantiating clients, please check certificates are valid"
+            )
             raise exc
 
     @staticmethod
@@ -149,7 +161,9 @@ class ApiClientFactory:
             client.set_default_header(header_name, header_value)
         client.user_agent = ApiClientFactory._user_agent(server_config)
 
-        if X_TRACE_ID.lower() not in (header_name.lower() for header_name in default_headers.keys()):
+        if X_TRACE_ID.lower() not in (
+            header_name.lower() for header_name in default_headers.keys()
+        ):
             client._ApiClient__call_api = add_x_trace_id(client._ApiClient__call_api)
 
     @staticmethod
@@ -159,23 +173,37 @@ class ApiClientFactory:
 
         configuration.proxy = proxy_config.get_url()
         if proxy_config.are_credentials_defined():
-            configuration.proxy_headers = urllib3.util.make_headers(proxy_basic_auth=proxy_config.get_credentials(),
-                                                                    user_agent=user_agent)
+            configuration.proxy_headers = urllib3.util.make_headers(
+                proxy_basic_auth=proxy_config.get_credentials(), user_agent=user_agent
+            )
         else:
-            configuration.proxy_headers = urllib3.util.make_headers(user_agent=user_agent)
+            configuration.proxy_headers = urllib3.util.make_headers(
+                user_agent=user_agent
+            )
 
     @staticmethod
     def _sanitized_default_headers(server_config):
-        default_headers = server_config.default_headers if server_config.default_headers is not None else {}
+        default_headers = (
+            server_config.default_headers
+            if server_config.default_headers is not None
+            else {}
+        )
 
         # we do this because we want to handle user-agent header separately
         # for client configuration and proxy header
-        return {header_key: default_headers[header_key] for header_key in default_headers
-                if header_key.lower() != USER_AGENT.lower()}
+        return {
+            header_key: default_headers[header_key]
+            for header_key in default_headers
+            if header_key.lower() != USER_AGENT.lower()
+        }
 
     @staticmethod
     def _user_agent(server_config):
-        default_headers = server_config.default_headers if server_config.default_headers is not None else {}
+        default_headers = (
+            server_config.default_headers
+            if server_config.default_headers is not None
+            else {}
+        )
 
         for header_key, header_value in default_headers.items():
             if header_key.lower() == USER_AGENT.lower():

@@ -1,14 +1,26 @@
-"""Module for instantiating various authenticator objects.
-"""
+"""Module for instantiating various authenticator objects."""
 
-from symphony.bdk.core.auth.bot_authenticator import BotAuthenticator, BotAuthenticatorRsa, BotAuthenticatorCert
+from symphony.bdk.core.auth.bot_authenticator import (
+    BotAuthenticator,
+    BotAuthenticatorCert,
+    BotAuthenticatorRsa,
+)
 from symphony.bdk.core.auth.exception import AuthInitializationError
-from symphony.bdk.core.auth.ext_app_authenticator import ExtensionAppAuthenticator, ExtensionAppAuthenticatorRsa, \
-    ExtensionAppAuthenticatorCert
-from symphony.bdk.core.auth.obo_authenticator import OboAuthenticator, OboAuthenticatorRsa, OboAuthenticatorCert
+from symphony.bdk.core.auth.ext_app_authenticator import (
+    ExtensionAppAuthenticator,
+    ExtensionAppAuthenticatorCert,
+    ExtensionAppAuthenticatorRsa,
+)
+from symphony.bdk.core.auth.obo_authenticator import (
+    OboAuthenticator,
+    OboAuthenticatorCert,
+    OboAuthenticatorRsa,
+)
 from symphony.bdk.core.client.api_client_factory import ApiClientFactory
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
-from symphony.bdk.gen.auth_api.certificate_authentication_api import CertificateAuthenticationApi
+from symphony.bdk.gen.auth_api.certificate_authentication_api import (
+    CertificateAuthenticationApi,
+)
 from symphony.bdk.gen.auth_api.certificate_pod_api import CertificatePodApi
 from symphony.bdk.gen.login_api.authentication_api import AuthenticationApi
 from symphony.bdk.gen.pod_api.pod_api import PodApi
@@ -45,18 +57,20 @@ class AuthenticatorFactory:
                 self._config.bot,
                 self._api_client_factory.get_login_client(),
                 self._api_client_factory.get_relay_client(),
-                self._config.retry
+                self._config.retry,
             )
         if self._config.bot.is_certificate_configuration_valid():
             return BotAuthenticatorCert(
                 self._api_client_factory.get_session_auth_client(),
                 self._api_client_factory.get_key_auth_client(),
-                self._config.retry
+                self._config.retry,
             )
-        raise AuthInitializationError("RSA or certificate authentication should be configured. "
-                                      "Only one field among private key path or content should be configured "
-                                      "for bot RSA authentication. "
-                                      "The path field should be specified for bot certificate authentication.")
+        raise AuthInitializationError(
+            "RSA or certificate authentication should be configured. "
+            "Only one field among private key path or content should be configured "
+            "for bot RSA authentication. "
+            "The path field should be specified for bot certificate authentication."
+        )
 
     def get_obo_authenticator(self) -> OboAuthenticator:
         """Creates a new instance of a Obo Authenticator service.
@@ -68,13 +82,17 @@ class AuthenticatorFactory:
             return OboAuthenticatorRsa(
                 app_config,
                 AuthenticationApi(self._api_client_factory.get_login_client()),
-                self._config.retry
+                self._config.retry,
             )
         if app_config.is_certificate_configuration_valid():
-            authentication_api = CertificateAuthenticationApi(self._api_client_factory.get_app_session_auth_client())
+            authentication_api = CertificateAuthenticationApi(
+                self._api_client_factory.get_app_session_auth_client()
+            )
             return OboAuthenticatorCert(authentication_api, self._config.retry)
-        raise AuthInitializationError("Application under 'app' field should be configured with a private key or "
-                                      "a certificate in order to use OBO authentication.")
+        raise AuthInitializationError(
+            "Application under 'app' field should be configured with a private key or "
+            "a certificate in order to use OBO authentication."
+        )
 
     def get_extension_app_authenticator(self) -> ExtensionAppAuthenticator:
         """Creates a new instance of an extension app authenticator service.
@@ -88,14 +106,20 @@ class AuthenticatorFactory:
                 PodApi(self._api_client_factory.get_pod_client()),
                 app_config.app_id,
                 app_config.private_key,
-                self._config.retry
+                self._config.retry,
             )
         if app_config.is_certificate_configuration_valid():
             return ExtensionAppAuthenticatorCert(
-                CertificateAuthenticationApi(self._api_client_factory.get_app_session_auth_client()),
-                CertificatePodApi(self._api_client_factory.get_app_session_auth_client()),
+                CertificateAuthenticationApi(
+                    self._api_client_factory.get_app_session_auth_client()
+                ),
+                CertificatePodApi(
+                    self._api_client_factory.get_app_session_auth_client()
+                ),
                 app_config.app_id,
-                self._config.retry
+                self._config.retry,
             )
-        raise AuthInitializationError("Application under 'app' field should be configured with a private key path or "
-                                      "content in order to authenticate extension app.")
+        raise AuthInitializationError(
+            "Application under 'app' field should be configured with a private key path or "
+            "content in order to authenticate extension app."
+        )

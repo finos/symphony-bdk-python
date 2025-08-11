@@ -1,31 +1,34 @@
 from datetime import datetime, timezone
-
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
 from symphony.bdk.core.auth.auth_session import (
+    SKD_FLAG_NAME,
+    AppAuthSession,
     AuthSession,
     OboAuthSession,
-    AppAuthSession,
-    SKD_FLAG_NAME,
 )
-from symphony.bdk.core.auth.exception import AuthInitializationError
-from symphony.bdk.gen.login_model.token import Token
-from symphony.bdk.gen.login_model.extension_app_tokens import ExtensionAppTokens
 from symphony.bdk.core.auth.bot_authenticator import BotAuthenticatorRsa
+from symphony.bdk.core.auth.exception import AuthInitializationError
 from symphony.bdk.core.config.model.bdk_bot_config import BdkBotConfig
 from symphony.bdk.gen.api_client import ApiClient
+from symphony.bdk.gen.login_model.extension_app_tokens import ExtensionAppTokens
+from symphony.bdk.gen.login_model.token import Token
+
 
 @pytest.fixture
 def mock_authenticator():
-
     config = MagicMock(spec=BdkBotConfig)
     login_client = MagicMock(spec=ApiClient)
     relay_client = MagicMock(spec=ApiClient)
     retry_config = MagicMock()
-    authenticator = BotAuthenticatorRsa(config, login_client, relay_client, retry_config)
-    authenticator.retrieve_session_token = AsyncMock(return_value="session_token_string")
+    authenticator = BotAuthenticatorRsa(
+        config, login_client, relay_client, retry_config
+    )
+    authenticator.retrieve_session_token = AsyncMock(
+        return_value="session_token_string"
+    )
     authenticator.retrieve_key_manager_token = AsyncMock(return_value="km_token_string")
     authenticator.agent_version_service = AsyncMock()
     return authenticator
@@ -51,7 +54,10 @@ async def test_refresh():
 @pytest.mark.asyncio
 async def test_auth_token():
     mock_bot_authenticator = AsyncMock()
-    expired_ts, fresh_ts, = (
+    (
+        expired_ts,
+        fresh_ts,
+    ) = (
         datetime.now(timezone.utc).timestamp(),
         datetime.now(timezone.utc).timestamp() + 500,
     )

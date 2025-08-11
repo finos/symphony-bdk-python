@@ -1,15 +1,16 @@
 import asyncio
 import os
 import re
+from pathlib import Path
 
 import pytest
 import pytest_asyncio
 import yaml
-from pathlib import Path
 
 from symphony.bdk.core.config.loader import BdkConfigLoader
-from symphony.bdk.core.service.datafeed.real_time_event_listener import \
-    RealTimeEventListener
+from symphony.bdk.core.service.datafeed.real_time_event_listener import (
+    RealTimeEventListener,
+)
 from symphony.bdk.core.symphony_bdk import SymphonyBdk
 from symphony.bdk.gen.agent_model.v4_initiator import V4Initiator
 from symphony.bdk.gen.agent_model.v4_message_sent import V4MessageSent

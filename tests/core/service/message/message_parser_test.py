@@ -3,8 +3,13 @@ from unittest.mock import MagicMock
 import pytest
 
 from symphony.bdk.core.service.exception import MessageParserError
-from symphony.bdk.core.service.message.message_parser import get_text_content_from_message, get_mentions, \
-    get_hashtags, get_cashtags, get_emojis
+from symphony.bdk.core.service.message.message_parser import (
+    get_cashtags,
+    get_emojis,
+    get_hashtags,
+    get_mentions,
+    get_text_content_from_message,
+)
 from symphony.bdk.gen.agent_model.v4_message import V4Message
 from tests.utils.resource_utils import get_resource_content
 
@@ -22,37 +27,52 @@ def assert_message_has_text_content(actual_message, expected_text_content):
 
 @pytest.fixture(name="message_with_data")
 def fixture_message_with_data():
-    return create_v4_message("<div data-format=\"PresentationML\" data-version=\"2.0\"> \n" \
-                             "<a href=\"http://www.symphony.com\">This is a link to Symphony's Website</a> \n </div>",
-                             get_resource_content("utils/message_entity_data.json"))
+    return create_v4_message(
+        '<div data-format="PresentationML" data-version="2.0"> \n'
+        '<a href="http://www.symphony.com">This is a link to Symphony\'s Website</a> \n </div>',
+        get_resource_content("utils/message_entity_data.json"),
+    )
 
 
 @pytest.fixture(name="message_with_invalid_data")
 def fixture_message_with_invalid_data():
-    return create_v4_message("<div data-format=\"PresentationML\" data-version=\"2.0\"> \n", "unparsable json data")
+    return create_v4_message(
+        '<div data-format="PresentationML" data-version="2.0"> \n',
+        "unparsable json data",
+    )
 
 
 def test_get_text_content_from_message():
-    message = create_v4_message("<div data-format=\"PresentationML\" data-version=\"2.0\"> \n"
-                                "<a href=\"http://www.symphony.com\">This is a link to Symphony's Website</a> \n </div>")
+    message = create_v4_message(
+        '<div data-format="PresentationML" data-version="2.0"> \n'
+        '<a href="http://www.symphony.com">This is a link to Symphony\'s Website</a> \n </div>'
+    )
     assert_message_has_text_content(message, "This is a link to Symphony's Website")
 
 
 def test_get_text_content_from_escaped_message_ampersand():
-    escaped_message_ampersand = create_v4_message("<div data-format=\"PresentationML\" data-version=\"2.0\"> \n"
-                                                  "This is some escaped text &amp;</div>")
-    assert_message_has_text_content(escaped_message_ampersand, "This is some escaped text &")
+    escaped_message_ampersand = create_v4_message(
+        '<div data-format="PresentationML" data-version="2.0"> \n'
+        "This is some escaped text &amp;</div>"
+    )
+    assert_message_has_text_content(
+        escaped_message_ampersand, "This is some escaped text &"
+    )
 
 
 def test_get_text_content_from_escaped_message_lt():
-    escaped_message_lt = create_v4_message("<div data-format=\"PresentationML\" data-version=\"2.0\"> \n"
-                                           "This is some escaped text &lt;</div>")
+    escaped_message_lt = create_v4_message(
+        '<div data-format="PresentationML" data-version="2.0"> \n'
+        "This is some escaped text &lt;</div>"
+    )
     assert_message_has_text_content(escaped_message_lt, "This is some escaped text <")
 
 
 def test_get_text_content_from_message_with_html_entities():
-    message_with_nbsp = create_v4_message("<div data-format=\"PresentationML\" data-version=\"2.0\"> \n"
-                                          "This is some escaped text &nbsp;</div>")
+    message_with_nbsp = create_v4_message(
+        '<div data-format="PresentationML" data-version="2.0"> \n'
+        "This is some escaped text &nbsp;</div>"
+    )
     with pytest.raises(MessageParserError):
         get_text_content_from_message(message_with_nbsp)
 

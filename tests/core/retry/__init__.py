@@ -1,5 +1,4 @@
 from symphony.bdk.core.retry import AsyncRetrying
-
 from symphony.bdk.gen import ApiException
 
 
@@ -49,7 +48,9 @@ class NoApiExceptionAfterCount:
         self.call_count += 1
         if self.counter < self.count:
             self.counter += 1
-            raise ApiException(status=self.status, reason="Hi there, I'm an ApiException")
+            raise ApiException(
+                status=self.status, reason="Hi there, I'm an ApiException"
+            )
         return True
 
 

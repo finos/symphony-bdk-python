@@ -1,23 +1,45 @@
 """Service factory module"""
+
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.client.api_client_factory import ApiClientFactory
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
 from symphony.bdk.core.service.application.application_service import ApplicationService
-from symphony.bdk.core.service.connection.connection_service import ConnectionService, OboConnectionService
-from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import DatafeedVersion, AbstractDatafeedLoop
-from symphony.bdk.core.service.datafeed.abstract_ackId_event_loop import AbstractAckIdEventLoop
-from symphony.bdk.core.service.datafeed.abstract_datahose_loop import AbstractDatahoseLoop
+from symphony.bdk.core.service.connection.connection_service import (
+    ConnectionService,
+    OboConnectionService,
+)
+from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import (
+    AbstractDatafeedLoop,
+    DatafeedVersion,
+)
+from symphony.bdk.core.service.datafeed.abstract_datahose_loop import (
+    AbstractDatahoseLoop,
+)
 from symphony.bdk.core.service.datafeed.datafeed_loop_v1 import DatafeedLoopV1
 from symphony.bdk.core.service.datafeed.datafeed_loop_v2 import DatafeedLoopV2
 from symphony.bdk.core.service.datafeed.datahose_loop import DatahoseLoop
 from symphony.bdk.core.service.health.health_service import HealthService
-from symphony.bdk.core.service.message.message_service import MessageService, OboMessageService
-from symphony.bdk.core.service.message.multi_attachments_messages_api import MultiAttachmentsMessagesApi
-from symphony.bdk.core.service.presence.presence_service import PresenceService, OboPresenceService
+from symphony.bdk.core.service.message.message_service import (
+    MessageService,
+    OboMessageService,
+)
+from symphony.bdk.core.service.message.multi_attachments_messages_api import (
+    MultiAttachmentsMessagesApi,
+)
+from symphony.bdk.core.service.presence.presence_service import (
+    OboPresenceService,
+    PresenceService,
+)
 from symphony.bdk.core.service.session.session_service import SessionService
-from symphony.bdk.core.service.signal.signal_service import SignalService, OboSignalService
-from symphony.bdk.core.service.stream.stream_service import StreamService, OboStreamService
-from symphony.bdk.core.service.user.user_service import UserService, OboUserService
+from symphony.bdk.core.service.signal.signal_service import (
+    OboSignalService,
+    SignalService,
+)
+from symphony.bdk.core.service.stream.stream_service import (
+    OboStreamService,
+    StreamService,
+)
+from symphony.bdk.core.service.user.user_service import OboUserService, UserService
 from symphony.bdk.core.service.version.agent_version_service import AgentVersionService
 from symphony.bdk.gen.agent_api.attachments_api import AttachmentsApi
 from symphony.bdk.gen.agent_api.audit_trail_api import AuditTrailApi
@@ -53,16 +75,18 @@ class ServiceFactory:
     """
 
     def __init__(
-            self,
-            api_client_factory: ApiClientFactory,
-            auth_session: AuthSession,
-            config: BdkConfig
+        self,
+        api_client_factory: ApiClientFactory,
+        auth_session: AuthSession,
+        config: BdkConfig,
     ):
         self._pod_client = api_client_factory.get_pod_client()
         self._agent_client = api_client_factory.get_agent_client()
         self._auth_session = auth_session
         self._config = config
-        self._session_service = SessionService(SessionApi(self._pod_client), self._auth_session, self._config.retry)
+        self._session_service = SessionService(
+            SessionApi(self._pod_client), self._auth_session, self._config.retry
+        )
 
     def get_user_service(self) -> UserService:
         """Returns a fully initialized UserService
@@ -76,7 +100,7 @@ class ServiceFactory:
             PodSystemApi(self._pod_client),
             self._auth_session,
             self._config.retry,
-            self._config.manifest
+            self._config.manifest,
         )
 
     def get_message_service(self) -> MessageService:
@@ -93,7 +117,7 @@ class ServiceFactory:
             AttachmentsApi(self._agent_client),
             DefaultApi(self._pod_client),
             self._auth_session,
-            self._config.retry
+            self._config.retry,
         )
 
     def get_connection_service(self) -> ConnectionService:
@@ -102,9 +126,7 @@ class ServiceFactory:
         :return: a new ConnectionService instance.
         """
         return ConnectionService(
-            ConnectionApi(self._pod_client),
-            self._auth_session,
-            self._config.retry
+            ConnectionApi(self._pod_client), self._auth_session, self._config.retry
         )
 
     def get_stream_service(self) -> StreamService:
@@ -117,7 +139,8 @@ class ServiceFactory:
             RoomMembershipApi(self._pod_client),
             ShareApi(self._agent_client),
             self._auth_session,
-            self._config.retry)
+            self._config.retry,
+        )
 
     def get_application_service(self) -> ApplicationService:
         """Returns a fully initialized ApplicationService
@@ -128,7 +151,7 @@ class ServiceFactory:
             ApplicationApi(self._pod_client),
             AppEntitlementApi(self._pod_client),
             self._auth_session,
-            self._config.retry
+            self._config.retry,
         )
 
     def get_signal_service(self) -> SignalService:
@@ -137,9 +160,7 @@ class ServiceFactory:
         :return: a new SignalService instance
         """
         return SignalService(
-            SignalsApi(self._agent_client),
-            self._auth_session,
-            self._config.retry
+            SignalsApi(self._agent_client), self._auth_session, self._config.retry
         )
 
     def get_session_service(self) -> SessionService:
@@ -160,13 +181,13 @@ class ServiceFactory:
                 DatafeedApi(self._agent_client),
                 self._session_service,
                 self._auth_session,
-                self._config
+                self._config,
             )
         return DatafeedLoopV2(
             DatafeedApi(self._agent_client),
             self._session_service,
             self._auth_session,
-            self._config
+            self._config,
         )
 
     def get_datahose_loop(self) -> AbstractDatahoseLoop:
@@ -179,7 +200,7 @@ class ServiceFactory:
                 DatafeedApi(self._agent_client),
                 self._session_service,
                 self._auth_session,
-                self._config
+                self._config,
             )
 
     def get_health_service(self) -> HealthService:
@@ -190,7 +211,7 @@ class ServiceFactory:
         return HealthService(
             AgentSystemApi(self._agent_client),
             SignalsApi(self._agent_client),
-            self._config.retry
+            self._config.retry,
         )
 
     def get_presence_service(self) -> PresenceService:
@@ -199,9 +220,7 @@ class ServiceFactory:
         :return: a new PresenceService instance
         """
         return PresenceService(
-            PresenceApi(self._pod_client),
-            self._auth_session,
-            self._config.retry
+            PresenceApi(self._pod_client), self._auth_session, self._config.retry
         )
 
     def get_agent_version_service(self) -> AgentVersionService:
@@ -209,8 +228,7 @@ class ServiceFactory:
 
         :return: a new AgentVersionService instance
         """
-        return AgentVersionService(SignalsApi(self._agent_client),
-                                   self._config.retry)
+        return AgentVersionService(SignalsApi(self._agent_client), self._config.retry)
 
 
 class OboServiceFactory:
@@ -225,10 +243,10 @@ class OboServiceFactory:
     """
 
     def __init__(
-            self,
-            api_client_factory: ApiClientFactory,
-            auth_session: AuthSession,
-            config: BdkConfig
+        self,
+        api_client_factory: ApiClientFactory,
+        auth_session: AuthSession,
+        config: BdkConfig,
     ):
         self._pod_client = api_client_factory.get_pod_client()
         self._agent_client = api_client_factory.get_agent_client()
@@ -244,7 +262,7 @@ class OboServiceFactory:
             UserApi(self._pod_client),
             UsersApi(self._pod_client),
             self._auth_session,
-            self._config.retry
+            self._config.retry,
         )
 
     def get_message_service(self) -> OboMessageService:
@@ -257,7 +275,7 @@ class OboServiceFactory:
             MessageSuppressionApi(self._pod_client),
             self._pod_client,
             self._auth_session,
-            self._config.retry
+            self._config.retry,
         )
 
     def get_connection_service(self) -> OboConnectionService:
@@ -266,9 +284,7 @@ class OboServiceFactory:
         :return: a new OboConnectionService instance.
         """
         return OboConnectionService(
-            ConnectionApi(self._pod_client),
-            self._auth_session,
-            self._config.retry
+            ConnectionApi(self._pod_client), self._auth_session, self._config.retry
         )
 
     def get_stream_service(self) -> OboStreamService:
@@ -281,7 +297,8 @@ class OboServiceFactory:
             RoomMembershipApi(self._pod_client),
             ShareApi(self._agent_client),
             self._auth_session,
-            self._config.retry)
+            self._config.retry,
+        )
 
     def get_presence_service(self) -> OboPresenceService:
         """Returns a fully initialized OboPresenceService
@@ -289,9 +306,7 @@ class OboServiceFactory:
         :return: a new OboPresenceService instance
         """
         return OboPresenceService(
-            PresenceApi(self._pod_client),
-            self._auth_session,
-            self._config.retry
+            PresenceApi(self._pod_client), self._auth_session, self._config.retry
         )
 
     def get_signal_service(self) -> OboSignalService:
@@ -300,7 +315,5 @@ class OboServiceFactory:
         :return: a new OboSignalService instance
         """
         return OboSignalService(
-            SignalsApi(self._agent_client),
-            self._auth_session,
-            self._config.retry
+            SignalsApi(self._agent_client), self._auth_session, self._config.retry
         )

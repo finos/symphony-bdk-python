@@ -1,10 +1,10 @@
-"""Module to help with jwt handling.
-"""
+"""Module to help with jwt handling."""
+
 import datetime
 
-from jwt import PyJWT, DecodeError, ExpiredSignatureError
 from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
 from cryptography.x509 import load_pem_x509_certificate
+from jwt import DecodeError, ExpiredSignatureError, PyJWT
 
 from symphony.bdk.core.auth.exception import AuthInitializationError
 from symphony.bdk.core.config.model.bdk_rsa_key_config import BdkRsaKeyConfig
@@ -15,7 +15,10 @@ DEFAULT_EXPIRATION_SECONDS = (5 * 50) - 10
 
 jwt = PyJWT({"verify_sub": False})
 
-def create_signed_jwt(private_key_config: BdkRsaKeyConfig, username: str, expiration: int = None) -> str:
+
+def create_signed_jwt(
+    private_key_config: BdkRsaKeyConfig, username: str, expiration: int = None
+) -> str:
     """Creates a JWT with the provided user name and expiration date, signed with the provided private key.
 
     :param private_key_config:  The private key configuration for a service account or an extension app.
@@ -26,13 +29,18 @@ def create_signed_jwt(private_key_config: BdkRsaKeyConfig, username: str, expira
 
     :return: a signed JWT for a specific user or an extension app.
     """
-    expiration = expiration if expiration is not None else int(
-        datetime.datetime.now(datetime.timezone.utc).timestamp() + DEFAULT_EXPIRATION_SECONDS)
-    payload = {
-        "sub": username,
-        "exp": expiration
-    }
-    return create_signed_jwt_with_claims(private_key_config.get_private_key_content(), payload)
+    expiration = (
+        expiration
+        if expiration is not None
+        else int(
+            datetime.datetime.now(datetime.timezone.utc).timestamp()
+            + DEFAULT_EXPIRATION_SECONDS
+        )
+    )
+    payload = {"sub": username, "exp": expiration}
+    return create_signed_jwt_with_claims(
+        private_key_config.get_private_key_content(), payload
+    )
 
 
 def create_signed_jwt_with_claims(private_key: str, payload: dict) -> str:
@@ -56,8 +64,12 @@ def validate_jwt(jwt_token: str, certificate: str, allowed_audience: str) -> dic
     :raise AuthInitializationError: If the certificate or jwt are invalid.
     """
     try:
-        return jwt.decode(jwt_token, _parse_public_key_from_x509_cert(certificate),
-                          algorithms=[JWT_ENCRYPTION_ALGORITHM], audience=allowed_audience)
+        return jwt.decode(
+            jwt_token,
+            _parse_public_key_from_x509_cert(certificate),
+            algorithms=[JWT_ENCRYPTION_ALGORITHM],
+            audience=allowed_audience,
+        )
     except (DecodeError, ExpiredSignatureError) as exc:
         raise AuthInitializationError("Unable to validate the jwt") from exc
 
@@ -80,16 +92,21 @@ def _parse_public_key_from_x509_cert(certificate: str) -> str:
     """
     try:
         public_key = load_pem_x509_certificate(certificate.encode()).public_key()
-        return public_key.public_bytes(Encoding.PEM, PublicFormat.SubjectPublicKeyInfo).decode()
+        return public_key.public_bytes(
+            Encoding.PEM, PublicFormat.SubjectPublicKeyInfo
+        ).decode()
     except ValueError as exc:
-        raise AuthInitializationError("Unable to parse the certificate. Check certificate format.") from exc
+        raise AuthInitializationError(
+            "Unable to parse the certificate. Check certificate format."
+        ) from exc
 
 
 def extract_token_claims(session_token):
     try:
-        return jwt.decode(session_token,
-                      algorithms=[JWT_ENCRYPTION_ALGORITHM],
-                      options={"verify_signature": False}
-                      )
+        return jwt.decode(
+            session_token,
+            algorithms=[JWT_ENCRYPTION_ALGORITHM],
+            options={"verify_signature": False},
+        )
     except DecodeError:
         return {}

@@ -1,7 +1,7 @@
-"""Module handling authentication part of the configuration.
-"""
-from symphony.bdk.core.config.model.bdk_rsa_key_config import BdkRsaKeyConfig
+"""Module handling authentication part of the configuration."""
+
 from symphony.bdk.core.config.model.bdk_certificate_config import BdkCertificateConfig
+from symphony.bdk.core.config.model.bdk_rsa_key_config import BdkRsaKeyConfig
 
 
 class BdkAuthenticationConfig:
@@ -11,17 +11,26 @@ class BdkAuthenticationConfig:
     """
 
     def __init__(self, private_key_config=None, certificate_config=None):
-        self.private_key = BdkRsaKeyConfig(
-            **private_key_config) if private_key_config is not None else BdkRsaKeyConfig()
-        self.certificate = BdkCertificateConfig(
-            **certificate_config) if certificate_config is not None else BdkCertificateConfig()
+        self.private_key = (
+            BdkRsaKeyConfig(**private_key_config)
+            if private_key_config is not None
+            else BdkRsaKeyConfig()
+        )
+        self.certificate = (
+            BdkCertificateConfig(**certificate_config)
+            if certificate_config is not None
+            else BdkCertificateConfig()
+        )
 
     def is_authentication_configured(self) -> bool:
         """Check if either RSA or certificate authentication is configured
 
         :return: True if RSA or certificate authentication is configured
         """
-        return self.is_rsa_configuration_valid() or self.is_certificate_configuration_valid()
+        return (
+            self.is_rsa_configuration_valid()
+            or self.is_certificate_configuration_valid()
+        )
 
     def is_rsa_authentication_configured(self) -> bool:
         """Check if the RSA authentication is configured

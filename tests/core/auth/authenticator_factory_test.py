@@ -3,13 +3,24 @@ from unittest.mock import MagicMock, Mock
 import pytest
 
 from symphony.bdk.core.auth.authenticator_factory import AuthenticatorFactory
-from symphony.bdk.core.auth.bot_authenticator import BotAuthenticatorRsa, BotAuthenticatorCert
+from symphony.bdk.core.auth.bot_authenticator import (
+    BotAuthenticatorCert,
+    BotAuthenticatorRsa,
+)
 from symphony.bdk.core.auth.exception import AuthInitializationError
-from symphony.bdk.core.auth.ext_app_authenticator import ExtensionAppAuthenticatorRsa, ExtensionAppAuthenticatorCert
-from symphony.bdk.core.auth.obo_authenticator import OboAuthenticatorRsa, OboAuthenticatorCert
+from symphony.bdk.core.auth.ext_app_authenticator import (
+    ExtensionAppAuthenticatorCert,
+    ExtensionAppAuthenticatorRsa,
+)
+from symphony.bdk.core.auth.obo_authenticator import (
+    OboAuthenticatorCert,
+    OboAuthenticatorRsa,
+)
 from symphony.bdk.core.client.api_client_factory import ApiClientFactory
 from symphony.bdk.core.config.loader import BdkConfigLoader
-from symphony.bdk.core.config.model.bdk_authentication_config import BdkAuthenticationConfig
+from symphony.bdk.core.config.model.bdk_authentication_config import (
+    BdkAuthenticationConfig,
+)
 from tests.utils.resource_utils import get_config_resource_filepath
 
 
@@ -20,12 +31,16 @@ def fixture_config():
 
 @pytest.fixture(name="bot_cert_config")
 def fixture_bot_cert_config():
-    return BdkConfigLoader.load_from_file(get_config_resource_filepath("config_bot_cert.yaml"))
+    return BdkConfigLoader.load_from_file(
+        get_config_resource_filepath("config_bot_cert.yaml")
+    )
 
 
 @pytest.fixture(name="app_cert_config")
 def fixture_app_cert_config():
-    return BdkConfigLoader.load_from_file(get_config_resource_filepath("config_obo_cert.yaml"))
+    return BdkConfigLoader.load_from_file(
+        get_config_resource_filepath("config_obo_cert.yaml")
+    )
 
 
 @pytest.fixture(name="api_client_factory")
@@ -110,7 +125,9 @@ def test_get_ext_app_authenticator_app_wrongly_configured(config, api_client_fac
 
 def test_get_ext_app_authenticator_rsa(config, api_client_factory):
     authenticator_factory = AuthenticatorFactory(config, api_client_factory)
-    extension_app_authenticator = authenticator_factory.get_extension_app_authenticator()
+    extension_app_authenticator = (
+        authenticator_factory.get_extension_app_authenticator()
+    )
 
     assert extension_app_authenticator is not None
     assert isinstance(extension_app_authenticator, ExtensionAppAuthenticatorRsa)
@@ -118,7 +135,9 @@ def test_get_ext_app_authenticator_rsa(config, api_client_factory):
 
 def test_get_ext_app_authenticator_cert(app_cert_config, api_client_factory):
     authenticator_factory = AuthenticatorFactory(app_cert_config, api_client_factory)
-    extension_app_authenticator = authenticator_factory.get_extension_app_authenticator()
+    extension_app_authenticator = (
+        authenticator_factory.get_extension_app_authenticator()
+    )
 
     assert extension_app_authenticator is not None
     assert isinstance(extension_app_authenticator, ExtensionAppAuthenticatorCert)

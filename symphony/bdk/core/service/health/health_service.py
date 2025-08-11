@@ -1,21 +1,25 @@
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
-from symphony.bdk.gen.agent_api.system_api import SystemApi
 from symphony.bdk.gen.agent_api.signals_api import SignalsApi
+from symphony.bdk.gen.agent_api.system_api import SystemApi
 from symphony.bdk.gen.agent_model.agent_info import AgentInfo
-
 from symphony.bdk.gen.agent_model.v3_health import V3Health
 
 
 class HealthService:
     """Service class for checking health of the Agent server."""
 
-    def __init__(self, system_api: SystemApi, signals_api: SignalsApi, retry_config: BdkRetryConfig):
+    def __init__(
+        self,
+        system_api: SystemApi,
+        signals_api: SignalsApi,
+        retry_config: BdkRetryConfig,
+    ):
         self._system_api = system_api
         self._signals_api = signals_api
         self._retry_config = retry_config
 
     async def health_check(self) -> V3Health:
-        """ Returns the connectivity status of your Agent server.
+        """Returns the connectivity status of your Agent server.
         Wraps the `Health Check v3 <https://developers.symphony.com/restapi/reference/health-check-v3>`_ endpoint.
         If your Agent server is started and running properly, the status value will be UP.
         Available on Agent 2.57.0 and above.

@@ -7,14 +7,16 @@ except ImportError:
 
 import sys
 
-
 import six
-
-from tenacity import AttemptManager, RetryAction, TryAgain
-from tenacity import BaseRetrying
-from tenacity import DoAttempt
-from tenacity import DoSleep
-from tenacity import RetryCallState
+from tenacity import (
+    AttemptManager,
+    BaseRetrying,
+    DoAttempt,
+    DoSleep,
+    RetryAction,
+    RetryCallState,
+    TryAgain,
+)
 
 
 class AsyncRetrying(BaseRetrying):
@@ -23,6 +25,7 @@ class AsyncRetrying(BaseRetrying):
 
     There is an open PR for this change on the tenacity repository: https://github.com/jd/tenacity/pull/289
     """
+
     def __init__(self, sleep=asyncio.sleep, **kwargs):
         super().__init__(**kwargs)
         self.sleep = sleep

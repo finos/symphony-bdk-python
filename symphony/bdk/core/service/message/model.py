@@ -1,5 +1,5 @@
 import json
-from typing import List, Tuple, Union, IO
+from typing import IO, List, Tuple, Union
 
 from symphony.bdk.core.service.exception import MessageCreationError
 
@@ -14,8 +14,14 @@ class Message:
     `Create Message <https://developers.symphony.com/restapi/reference/create-message-v4>`_.
     """
 
-    def __init__(self, content: str, data=None, silent=True,
-                 attachments: List[Union[IO, Tuple[IO, IO]]] = None, version: str = ""):
+    def __init__(
+        self,
+        content: str,
+        data=None,
+        silent=True,
+        attachments: List[Union[IO, Tuple[IO, IO]]] = None,
+        version: str = "",
+    ):
         """Builds a message.
 
         :param content: the MessageML content to be sent. This is mandatory
@@ -35,7 +41,9 @@ class Message:
         self._data = "" if data is None else json.dumps(data)
         self._version = version
         self._silent = silent
-        self._attachments, self._previews = self._get_attachments_and_previews(attachments)
+        self._attachments, self._previews = self._get_attachments_and_previews(
+            attachments
+        )
 
     @property
     def content(self) -> str:
@@ -89,7 +97,9 @@ class Message:
     def _get_content(content):
         if content is None:
             raise MessageCreationError("Message content is mandatory")
-        if not content.startswith(MESSAGE_ML_START_TAG) and not content.endswith(MESSAGE_ML_END_TAG):
+        if not content.startswith(MESSAGE_ML_START_TAG) and not content.endswith(
+            MESSAGE_ML_END_TAG
+        ):
             return MESSAGE_ML_START_TAG + content + MESSAGE_ML_END_TAG
         return content
 
@@ -109,6 +119,8 @@ class Message:
                 attachments.append(item)
 
         if previews and len(previews) != len(attachments):
-            raise MessageCreationError("Message should contain either no preview or as many previews as attachments")
+            raise MessageCreationError(
+                "Message should contain either no preview or as many previews as attachments"
+            )
 
         return attachments, previews

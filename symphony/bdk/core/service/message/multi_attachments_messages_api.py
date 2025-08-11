@@ -1,10 +1,10 @@
 from symphony.bdk.gen.agent_api.messages_api import MessagesApi
 from symphony.bdk.gen.agent_model.v4_message import V4Message
-from symphony.bdk.gen.agent_model.v4_message_blast_response import V4MessageBlastResponse
-from symphony.bdk.gen.api_client import Endpoint
-from symphony.bdk.gen.model_utils import (
-    file_type
+from symphony.bdk.gen.agent_model.v4_message_blast_response import (
+    V4MessageBlastResponse,
 )
+from symphony.bdk.gen.api_client import Endpoint
+from symphony.bdk.gen.model_utils import file_type
 
 
 class MultiAttachmentsMessagesApi(MessagesApi):
@@ -17,185 +17,147 @@ class MultiAttachmentsMessagesApi(MessagesApi):
 
         self.v4_multi_attachment_message_blast_post_endpoint = Endpoint(
             settings={
-                'response_type': (V4MessageBlastResponse,),
-                'auth': [],
-                'endpoint_path': '/v4/message/blast',
-                'operation_id': 'v4_message_blast_post',
-                'http_method': 'POST',
-                'servers': None,
+                "response_type": (V4MessageBlastResponse,),
+                "auth": [],
+                "endpoint_path": "/v4/message/blast",
+                "operation_id": "v4_message_blast_post",
+                "http_method": "POST",
+                "servers": None,
             },
             params_map={
-                'all': [
-                    'session_token',
-                    'sids',
-                    'key_manager_token',
-                    'message',
-                    'data',
-                    'version',
-                    'attachment',
-                    'preview',
+                "all": [
+                    "session_token",
+                    "sids",
+                    "key_manager_token",
+                    "message",
+                    "data",
+                    "version",
+                    "attachment",
+                    "preview",
                 ],
-                'required': [
-                    'session_token',
-                    'sids',
+                "required": [
+                    "session_token",
+                    "sids",
                 ],
-                'nullable': [
-                ],
-                'enum': [
-                ],
-                'validation': [
-                ]
+                "nullable": [],
+                "enum": [],
+                "validation": [],
             },
             root_map={
-                'validations': {
+                "validations": {},
+                "allowed_values": {},
+                "openapi_types": {
+                    "session_token": (str,),
+                    "sids": ([str],),
+                    "key_manager_token": (str,),
+                    "message": (str,),
+                    "data": (str,),
+                    "version": (str,),
+                    "attachment": ([file_type],),
+                    "preview": ([file_type],),
                 },
-                'allowed_values': {
+                "attribute_map": {
+                    "session_token": "sessionToken",
+                    "sids": "sids",
+                    "key_manager_token": "keyManagerToken",
+                    "message": "message",
+                    "data": "data",
+                    "version": "version",
+                    "attachment": "attachment",
+                    "preview": "preview",
                 },
-                'openapi_types': {
-                    'session_token':
-                        (str,),
-                    'sids':
-                        ([str],),
-                    'key_manager_token':
-                        (str,),
-                    'message':
-                        (str,),
-                    'data':
-                        (str,),
-                    'version':
-                        (str,),
-                    'attachment':
-                        ([file_type],),
-                    'preview':
-                        ([file_type],),
+                "location_map": {
+                    "session_token": "header",
+                    "sids": "form",
+                    "key_manager_token": "header",
+                    "message": "form",
+                    "data": "form",
+                    "version": "form",
+                    "attachment": "form",
+                    "preview": "form",
                 },
-                'attribute_map': {
-                    'session_token': 'sessionToken',
-                    'sids': 'sids',
-                    'key_manager_token': 'keyManagerToken',
-                    'message': 'message',
-                    'data': 'data',
-                    'version': 'version',
-                    'attachment': 'attachment',
-                    'preview': 'preview',
+                "collection_format_map": {
+                    "sids": "csv",
                 },
-                'location_map': {
-                    'session_token': 'header',
-                    'sids': 'form',
-                    'key_manager_token': 'header',
-                    'message': 'form',
-                    'data': 'form',
-                    'version': 'form',
-                    'attachment': 'form',
-                    'preview': 'form',
-                },
-                'collection_format_map': {
-                    'sids': 'csv',
-                }
             },
             headers_map={
-                'accept': [
-                    'application/json'
-                ],
-                'content_type': [
-                    'multipart/form-data'
-                ]
+                "accept": ["application/json"],
+                "content_type": ["multipart/form-data"],
             },
-            api_client=api_client
+            api_client=api_client,
         )
         self.v4_stream_sid_multi_attachment_message_create_post_endpoint = Endpoint(
             settings={
-                'response_type': (V4Message,),
-                'auth': [],
-                'endpoint_path': '/v4/stream/{sid}/message/create',
-                'operation_id': 'v4_stream_sid_message_create_post',
-                'http_method': 'POST',
-                'servers': None,
+                "response_type": (V4Message,),
+                "auth": [],
+                "endpoint_path": "/v4/stream/{sid}/message/create",
+                "operation_id": "v4_stream_sid_message_create_post",
+                "http_method": "POST",
+                "servers": None,
             },
             params_map={
-                'all': [
-                    'sid',
-                    'session_token',
-                    'key_manager_token',
-                    'message',
-                    'data',
-                    'version',
-                    'attachment',
-                    'preview',
+                "all": [
+                    "sid",
+                    "session_token",
+                    "key_manager_token",
+                    "message",
+                    "data",
+                    "version",
+                    "attachment",
+                    "preview",
                 ],
-                'required': [
-                    'sid',
-                    'session_token',
+                "required": [
+                    "sid",
+                    "session_token",
                 ],
-                'nullable': [
-                ],
-                'enum': [
-                ],
-                'validation': [
-                ]
+                "nullable": [],
+                "enum": [],
+                "validation": [],
             },
             root_map={
-                'validations': {
+                "validations": {},
+                "allowed_values": {},
+                "openapi_types": {
+                    "sid": (str,),
+                    "session_token": (str,),
+                    "key_manager_token": (str,),
+                    "message": (str,),
+                    "data": (str,),
+                    "version": (str,),
+                    "attachment": ([file_type],),
+                    "preview": ([file_type],),
                 },
-                'allowed_values': {
+                "attribute_map": {
+                    "sid": "sid",
+                    "session_token": "sessionToken",
+                    "key_manager_token": "keyManagerToken",
+                    "message": "message",
+                    "data": "data",
+                    "version": "version",
+                    "attachment": "attachment",
+                    "preview": "preview",
                 },
-                'openapi_types': {
-                    'sid':
-                        (str,),
-                    'session_token':
-                        (str,),
-                    'key_manager_token':
-                        (str,),
-                    'message':
-                        (str,),
-                    'data':
-                        (str,),
-                    'version':
-                        (str,),
-                    'attachment':
-                        ([file_type],),
-                    'preview':
-                        ([file_type],),
+                "location_map": {
+                    "sid": "path",
+                    "session_token": "header",
+                    "key_manager_token": "header",
+                    "message": "form",
+                    "data": "form",
+                    "version": "form",
+                    "attachment": "form",
+                    "preview": "form",
                 },
-                'attribute_map': {
-                    'sid': 'sid',
-                    'session_token': 'sessionToken',
-                    'key_manager_token': 'keyManagerToken',
-                    'message': 'message',
-                    'data': 'data',
-                    'version': 'version',
-                    'attachment': 'attachment',
-                    'preview': 'preview',
-                },
-                'location_map': {
-                    'sid': 'path',
-                    'session_token': 'header',
-                    'key_manager_token': 'header',
-                    'message': 'form',
-                    'data': 'form',
-                    'version': 'form',
-                    'attachment': 'form',
-                    'preview': 'form',
-                },
-                'collection_format_map': {
-                }
+                "collection_format_map": {},
             },
             headers_map={
-                'accept': [
-                    'application/json'
-                ],
-                'content_type': [
-                    'multipart/form-data'
-                ]
+                "accept": ["application/json"],
+                "content_type": ["multipart/form-data"],
             },
-            api_client=api_client
+            api_client=api_client,
         )
 
     def v4_stream_sid_multi_attachment_message_create_post(
-        self,
-        sid,
-        session_token,
-        **kwargs
+        self, sid, session_token, **kwargs
     ):
         """Post a message to one existing stream.  # noqa: E501
 
@@ -249,42 +211,22 @@ class MultiAttachmentsMessagesApi(MessagesApi):
                 If the method is called asynchronously, returns the request
                 thread.
         """
-        kwargs['async_req'] = kwargs.get(
-            'async_req', False
+        kwargs["async_req"] = kwargs.get("async_req", False)
+        kwargs["_return_http_data_only"] = kwargs.get("_return_http_data_only", True)
+        kwargs["_preload_content"] = kwargs.get("_preload_content", True)
+        kwargs["_request_timeout"] = kwargs.get("_request_timeout", None)
+        kwargs["_check_input_type"] = kwargs.get("_check_input_type", True)
+        kwargs["_check_return_type"] = kwargs.get("_check_return_type", True)
+        kwargs["_spec_property_naming"] = kwargs.get("_spec_property_naming", False)
+        kwargs["_content_type"] = kwargs.get("_content_type")
+        kwargs["_host_index"] = kwargs.get("_host_index")
+        kwargs["sid"] = sid
+        kwargs["session_token"] = session_token
+        return self.v4_stream_sid_multi_attachment_message_create_post_endpoint.call_with_http_info(
+            **kwargs
         )
-        kwargs['_return_http_data_only'] = kwargs.get(
-            '_return_http_data_only', True
-        )
-        kwargs['_preload_content'] = kwargs.get(
-            '_preload_content', True
-        )
-        kwargs['_request_timeout'] = kwargs.get(
-            '_request_timeout', None
-        )
-        kwargs['_check_input_type'] = kwargs.get(
-            '_check_input_type', True
-        )
-        kwargs['_check_return_type'] = kwargs.get(
-            '_check_return_type', True
-        )
-        kwargs['_spec_property_naming'] = kwargs.get(
-            '_spec_property_naming', False
-        )
-        kwargs['_content_type'] = kwargs.get(
-            '_content_type')
-        kwargs['_host_index'] = kwargs.get('_host_index')
-        kwargs['sid'] = \
-            sid
-        kwargs['session_token'] = \
-            session_token
-        return self.v4_stream_sid_multi_attachment_message_create_post_endpoint.call_with_http_info(**kwargs)
 
-    def v4_multi_attachment_message_blast_post(
-        self,
-        session_token,
-        sids,
-        **kwargs
-    ):
+    def v4_multi_attachment_message_blast_post(self, session_token, sids, **kwargs):
         """Post a message to multiple existing streams.  # noqa: E501
 
         Post a new message to the given list of streams. The stream can be a chatroom, an IM or a multiparty IM.  You may include an attachment on the message.  The message can be provided as MessageMLV2 or PresentationML. Both formats support Freemarker templates.  The optional parameter \"data\" can be used to provide a JSON payload containing entity data. If the message contains explicit references to entity data (in \"data-entity-id\" element attributes), this parameter is required.  If the message is in MessageML and fails schema validation a client error results  This endpoint is idempotent, it means that a 200 response will be returned even if the message has not been delivered to some streams. Check the `errors` map from the response in order to see on which stream(s) the message has not been delivered.  The maximum number of streams where the message can be sent is limitted to 100.  Regarding authentication, you must either use the sessionToken which was created for delegated app access or both the sessionToken and keyManagerToken together.   # noqa: E501
@@ -337,32 +279,17 @@ class MultiAttachmentsMessagesApi(MessagesApi):
                 If the method is called asynchronously, returns the request
                 thread.
         """
-        kwargs['async_req'] = kwargs.get(
-            'async_req', False
+        kwargs["async_req"] = kwargs.get("async_req", False)
+        kwargs["_return_http_data_only"] = kwargs.get("_return_http_data_only", True)
+        kwargs["_preload_content"] = kwargs.get("_preload_content", True)
+        kwargs["_request_timeout"] = kwargs.get("_request_timeout", None)
+        kwargs["_check_input_type"] = kwargs.get("_check_input_type", True)
+        kwargs["_check_return_type"] = kwargs.get("_check_return_type", True)
+        kwargs["_spec_property_naming"] = kwargs.get("_spec_property_naming", False)
+        kwargs["_content_type"] = kwargs.get("_content_type")
+        kwargs["_host_index"] = kwargs.get("_host_index")
+        kwargs["session_token"] = session_token
+        kwargs["sids"] = sids
+        return self.v4_multi_attachment_message_blast_post_endpoint.call_with_http_info(
+            **kwargs
         )
-        kwargs['_return_http_data_only'] = kwargs.get(
-            '_return_http_data_only', True
-        )
-        kwargs['_preload_content'] = kwargs.get(
-            '_preload_content', True
-        )
-        kwargs['_request_timeout'] = kwargs.get(
-            '_request_timeout', None
-        )
-        kwargs['_check_input_type'] = kwargs.get(
-            '_check_input_type', True
-        )
-        kwargs['_check_return_type'] = kwargs.get(
-            '_check_return_type', True
-        )
-        kwargs['_spec_property_naming'] = kwargs.get(
-            '_spec_property_naming', False
-        )
-        kwargs['_content_type'] = kwargs.get(
-            '_content_type')
-        kwargs['_host_index'] = kwargs.get('_host_index')
-        kwargs['session_token'] = \
-            session_token
-        kwargs['sids'] = \
-            sids
-        return self.v4_multi_attachment_message_blast_post_endpoint.call_with_http_info(**kwargs)

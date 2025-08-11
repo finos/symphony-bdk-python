@@ -7,8 +7,12 @@ from symphony.bdk.core.service.pagination import offset_based_pagination
 from symphony.bdk.gen.agent_api.signals_api import SignalsApi
 from symphony.bdk.gen.agent_model.base_signal import BaseSignal
 from symphony.bdk.gen.agent_model.channel_subscriber import ChannelSubscriber
-from symphony.bdk.gen.agent_model.channel_subscriber_response import ChannelSubscriberResponse
-from symphony.bdk.gen.agent_model.channel_subscription_response import ChannelSubscriptionResponse
+from symphony.bdk.gen.agent_model.channel_subscriber_response import (
+    ChannelSubscriberResponse,
+)
+from symphony.bdk.gen.agent_model.channel_subscription_response import (
+    ChannelSubscriptionResponse,
+)
 from symphony.bdk.gen.agent_model.signal import Signal
 from symphony.bdk.gen.agent_model.signal_list import SignalList
 
@@ -27,7 +31,12 @@ class OboSignalService:
     * Subscribe or unsubscribe a signal
     """
 
-    def __init__(self, signals_api: SignalsApi, auth_session: AuthSession, retry_config: BdkRetryConfig):
+    def __init__(
+        self,
+        signals_api: SignalsApi,
+        auth_session: AuthSession,
+        retry_config: BdkRetryConfig,
+    ):
         self._signals_api = signals_api
         self._auth_session = auth_session
         self._retry_config = retry_config
@@ -45,10 +54,15 @@ class OboSignalService:
         """
 
         return await self._signals_api.v1_signals_list_get(
-            skip=skip, limit=limit, session_token=await self._auth_session.session_token,
-            key_manager_token=await self._auth_session.key_manager_token)
+            skip=skip,
+            limit=limit,
+            session_token=await self._auth_session.session_token,
+            key_manager_token=await self._auth_session.key_manager_token,
+        )
 
-    async def list_all_signals(self, chunk_size: int = 50, max_number: int = None) -> AsyncGenerator[Signal, None]:
+    async def list_all_signals(
+        self, chunk_size: int = 50, max_number: int = None
+    ) -> AsyncGenerator[Signal, None]:
         """Lists all signals on behalf of the user. The response includes signals that the user has created and
         public signals to which they have subscribed.
 
@@ -67,7 +81,7 @@ class OboSignalService:
 
     @retry
     async def get_signal(self, signal_id: str) -> Signal:
-        """ Gets details about the specified signal.
+        """Gets details about the specified signal.
 
         See: 'Get signal <https://developers.symphony.com/restapi/reference/get-signal>'_
 
@@ -76,12 +90,14 @@ class OboSignalService:
         """
 
         return await self._signals_api.v1_signals_id_get_get(
-            id=signal_id, session_token=await self._auth_session.session_token,
-            key_manager_token=await self._auth_session.key_manager_token)
+            id=signal_id,
+            session_token=await self._auth_session.session_token,
+            key_manager_token=await self._auth_session.key_manager_token,
+        )
 
     @retry
     async def create_signal(self, signal: BaseSignal) -> Signal:
-        """ Creates a new Signal.
+        """Creates a new Signal.
 
         See: 'Create signal <https://developers.symphony.com/restapi/reference/create-signal>'_
 
@@ -90,12 +106,14 @@ class OboSignalService:
         """
 
         return await self._signals_api.v1_signals_create_post(
-            signal=signal, session_token=await self._auth_session.session_token,
-            key_manager_token=await self._auth_session.key_manager_token)
+            signal=signal,
+            session_token=await self._auth_session.session_token,
+            key_manager_token=await self._auth_session.key_manager_token,
+        )
 
     @retry
     async def update_signal(self, signal_id: str, signal: BaseSignal) -> Signal:
-        """ Updates an existing Signal.
+        """Updates an existing Signal.
 
         See: 'Update signal <https://developers.symphony.com/restapi/reference/update-signal>'_
 
@@ -105,26 +123,32 @@ class OboSignalService:
         """
 
         return await self._signals_api.v1_signals_id_update_post(
-            id=signal_id, signal=signal, session_token=await self._auth_session.session_token,
-            key_manager_token=await self._auth_session.key_manager_token)
+            id=signal_id,
+            signal=signal,
+            session_token=await self._auth_session.session_token,
+            key_manager_token=await self._auth_session.key_manager_token,
+        )
 
     @retry
     async def delete_signal(self, signal_id: str) -> None:
-        """ Deletes an existing Signal.
+        """Deletes an existing Signal.
 
         See: 'Delete signal <https://developers.symphony.com/restapi/reference/delete-signal>'_
 
         :param signal_id: The Id of the existing signal to be deleted.
         """
 
-        await self._signals_api.v1_signals_id_delete_post(id=signal_id,
-                                                          session_token=await self._auth_session.session_token,
-                                                          key_manager_token=await self._auth_session.key_manager_token)
+        await self._signals_api.v1_signals_id_delete_post(
+            id=signal_id,
+            session_token=await self._auth_session.session_token,
+            key_manager_token=await self._auth_session.key_manager_token,
+        )
 
     @retry
-    async def subscribe_users_to_signal(self, signal_id: str, pushed: bool,
-                                        user_ids: [int]) -> ChannelSubscriptionResponse:
-        """ Subscribe an array of users to a Signal.
+    async def subscribe_users_to_signal(
+        self, signal_id: str, pushed: bool, user_ids: [int]
+    ) -> ChannelSubscriptionResponse:
+        """Subscribe an array of users to a Signal.
 
         See: 'Subscribe signal <https://developers.symphony.com/restapi/reference/subscribe-signal>'_
 
@@ -135,12 +159,18 @@ class OboSignalService:
         """
 
         return await self._signals_api.v1_signals_id_subscribe_post(
-            id=signal_id, pushed=pushed, users=user_ids, session_token=await self._auth_session.session_token,
-            key_manager_token=await self._auth_session.key_manager_token)
+            id=signal_id,
+            pushed=pushed,
+            users=user_ids,
+            session_token=await self._auth_session.session_token,
+            key_manager_token=await self._auth_session.key_manager_token,
+        )
 
     @retry
-    async def unsubscribe_users_to_signal(self, signal_id: str, user_ids: [int]) -> ChannelSubscriptionResponse:
-        """ Unsubscribes an array of users from the specified Signal.
+    async def unsubscribe_users_to_signal(
+        self, signal_id: str, user_ids: [int]
+    ) -> ChannelSubscriptionResponse:
+        """Unsubscribes an array of users from the specified Signal.
 
         See: 'Unsubscribe signal <https://developers.symphony.com/restapi/reference/unsubscribe-signal>'_
 
@@ -150,11 +180,16 @@ class OboSignalService:
         """
 
         return await self._signals_api.v1_signals_id_unsubscribe_post(
-            id=signal_id, users=user_ids, session_token=await self._auth_session.session_token,
-            key_manager_token=await self._auth_session.key_manager_token)
+            id=signal_id,
+            users=user_ids,
+            session_token=await self._auth_session.session_token,
+            key_manager_token=await self._auth_session.key_manager_token,
+        )
 
     @retry
-    async def list_subscribers(self, signal_id: str, skip: int = 0, limit: int = 50) -> ChannelSubscriberResponse:
+    async def list_subscribers(
+        self, signal_id: str, skip: int = 0, limit: int = 50
+    ) -> ChannelSubscriberResponse:
         """Gets the subscribers for the specified signal.
 
         See: 'Subscribers <https://developers.symphony.com/restapi/reference/subscribers>'_
@@ -167,11 +202,16 @@ class OboSignalService:
         """
 
         return await self._signals_api.v1_signals_id_subscribers_get(
-            id=signal_id, skip=skip, limit=limit, session_token=await self._auth_session.session_token,
-            key_manager_token=await self._auth_session.key_manager_token)
+            id=signal_id,
+            skip=skip,
+            limit=limit,
+            session_token=await self._auth_session.session_token,
+            key_manager_token=await self._auth_session.key_manager_token,
+        )
 
-    async def list_all_subscribers(self, signal_id: str, chunk_size: int = 50, max_number: int = None) \
-            -> AsyncGenerator[ChannelSubscriber, None]:
+    async def list_all_subscribers(
+        self, signal_id: str, chunk_size: int = 50, max_number: int = None
+    ) -> AsyncGenerator[ChannelSubscriber, None]:
         """Gets all the subscribers for the specified signal.
 
         See: 'Subscribers <https://developers.symphony.com/restapi/reference/subscribers>'_
@@ -186,7 +226,9 @@ class OboSignalService:
             result = await self.list_subscribers(signal_id, skip, limit)
             return result.data if result else None
 
-        return offset_based_pagination(list_subscribers_one_page, chunk_size, max_number)
+        return offset_based_pagination(
+            list_subscribers_one_page, chunk_size, max_number
+        )
 
 
 class SignalService(OboSignalService):

@@ -1,9 +1,18 @@
 class BdkServerConfig:
     """Base class for server and client configurations"""
+
     DEFAULT_SCHEME: str = "https"
     DEFAULT_HTTPS_PORT: int = 443
 
-    def __init__(self, scheme=None, port=None, context="", host=None, proxy=None, default_headers=None):
+    def __init__(
+        self,
+        scheme=None,
+        port=None,
+        context="",
+        host=None,
+        proxy=None,
+        default_headers=None,
+    ):
         self.scheme = scheme if scheme is not None else self.DEFAULT_SCHEME
         self.port = port if port is not None else self.DEFAULT_HTTPS_PORT
         self.context = context

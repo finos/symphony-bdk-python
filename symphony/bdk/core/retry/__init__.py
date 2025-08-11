@@ -1,8 +1,8 @@
 import logging
-from typing import Callable
 from functools import wraps
+from typing import Callable
 
-from tenacity import stop_after_attempt, wait_exponential, before_sleep_log
+from tenacity import before_sleep_log, stop_after_attempt, wait_exponential
 
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.core.retry.strategy import refresh_session_if_unauthorized
@@ -31,21 +31,27 @@ def retry(*dargs, **dkw):
             arguments for the AsyncRetrying object.
             """
             default_kwargs = {}
-            retry_config: BdkRetryConfig = getattr(self, '_retry_config')
+            retry_config: BdkRetryConfig = getattr(self, "_retry_config")
             logger = logging.getLogger(self.__module__)
             _before_sleep = before_sleep_log(logger, logging.INFO)
             default_kwargs.update(dict(before_sleep=_before_sleep))
             if retry_config is not None:
-                config_kwargs = dict(retry=retry_function,
-                                     wait=wait_exponential(multiplier=retry_config.multiplier,
-                                                           min=retry_config.initial_interval.total_seconds(),
-                                                           max=retry_config.max_interval.total_seconds()),
-                                     stop=stop_after_attempt(retry_config.max_attempts),
-                                     reraise=True)
+                config_kwargs = dict(
+                    retry=retry_function,
+                    wait=wait_exponential(
+                        multiplier=retry_config.multiplier,
+                        min=retry_config.initial_interval.total_seconds(),
+                        max=retry_config.max_interval.total_seconds(),
+                    ),
+                    stop=stop_after_attempt(retry_config.max_attempts),
+                    reraise=True,
+                )
                 default_kwargs.update(config_kwargs)
             # update default arguments by the ones passed as parameters
             default_kwargs.update(**dkw)
-            return AsyncRetrying(*dargs, **default_kwargs).wraps(fun)(self, *args, **kwargs)
+            return AsyncRetrying(*dargs, **default_kwargs).wraps(fun)(
+                self, *args, **kwargs
+            )
 
         return decorator_f
 

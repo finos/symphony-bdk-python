@@ -1,8 +1,13 @@
-from symphony.bdk.core.config.model.bdk_server_config import BdkServerConfig, BdkProxyConfig
+from symphony.bdk.core.config.model.bdk_server_config import (
+    BdkProxyConfig,
+    BdkServerConfig,
+)
 
 
 def test_get_base_path():
-    config = BdkServerConfig(scheme="https", host="dev.symphony.com", port=123, context="context")
+    config = BdkServerConfig(
+        scheme="https", host="dev.symphony.com", port=123, context="context"
+    )
     assert config.get_base_path() == "https://dev.symphony.com:123/context"
 
 

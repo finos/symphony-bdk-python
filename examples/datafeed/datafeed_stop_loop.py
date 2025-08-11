@@ -2,8 +2,12 @@ import asyncio
 import logging.config
 
 from symphony.bdk.core.config.loader import BdkConfigLoader
-from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import event_listener_context
-from symphony.bdk.core.service.datafeed.real_time_event_listener import RealTimeEventListener
+from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import (
+    event_listener_context,
+)
+from symphony.bdk.core.service.datafeed.real_time_event_listener import (
+    RealTimeEventListener,
+)
 from symphony.bdk.core.symphony_bdk import SymphonyBdk
 from symphony.bdk.gen.agent_model.v4_initiator import V4Initiator
 from symphony.bdk.gen.agent_model.v4_message_sent import V4MessageSent
@@ -25,7 +29,6 @@ async def run():
 
 
 class RealTimeEventListenerImpl(RealTimeEventListener):
-
     async def on_message_sent(self, initiator: V4Initiator, event: V4MessageSent):
         logging.debug("Received event: %s", event.message.message_id)
         await asyncio.sleep(5)
@@ -41,32 +44,34 @@ class EventListenerLoggingFilter(logging.Filter):
         return True
 
 
-logging.config.dictConfig({
-    "version": 1,
-    "disable_existing_loggers": False,
-    "filters": {"contextFilter": {"()": "__main__.EventListenerLoggingFilter"}},
-    "formatters": {
-        "standard": {
-            "format": "%(asctime)s - %(name)s - %(levelname)s - %(context_id)s - %(message)s"
+logging.config.dictConfig(
+    {
+        "version": 1,
+        "disable_existing_loggers": False,
+        "filters": {"contextFilter": {"()": "__main__.EventListenerLoggingFilter"}},
+        "formatters": {
+            "standard": {
+                "format": "%(asctime)s - %(name)s - %(levelname)s - %(context_id)s - %(message)s"
+            },
         },
-    },
-    "handlers": {
-        "default": {
-            "level": "DEBUG",
-            "formatter": "standard",
-            "class": "logging.StreamHandler",
-            "stream": "ext://sys.stdout",  # Default is stderr
-            "filters": ["contextFilter"]
+        "handlers": {
+            "default": {
+                "level": "DEBUG",
+                "formatter": "standard",
+                "class": "logging.StreamHandler",
+                "stream": "ext://sys.stdout",  # Default is stderr
+                "filters": ["contextFilter"],
+            },
         },
-    },
-    "loggers": {
-        "": {  # root logger
-            "handlers": ["default"],
-            "level": "DEBUG",
-            "propagate": False
-        }
+        "loggers": {
+            "": {  # root logger
+                "handlers": ["default"],
+                "level": "DEBUG",
+                "propagate": False,
+            }
+        },
     }
-})
+)
 
 try:
     logging.info("Running datafeed example...")

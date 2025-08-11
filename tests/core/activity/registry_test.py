@@ -1,21 +1,25 @@
-from unittest.mock import MagicMock, AsyncMock
+from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from symphony.bdk.core.activity.parsing.command_token import MatchingUserIdMentionToken, StaticCommandToken
-from symphony.bdk.gen.agent_model.v4_user import V4User
-
 from symphony.bdk.core.activity.command import CommandActivity, SlashCommandActivity
 from symphony.bdk.core.activity.form import FormReplyActivity
+from symphony.bdk.core.activity.parsing.command_token import (
+    MatchingUserIdMentionToken,
+    StaticCommandToken,
+)
 from symphony.bdk.core.activity.registry import ActivityRegistry
+from symphony.bdk.core.activity.user_joined_room import UserJoinedRoomActivity
 from symphony.bdk.core.service.session.session_service import SessionService
 from symphony.bdk.gen.agent_model.v4_initiator import V4Initiator
 from symphony.bdk.gen.agent_model.v4_message import V4Message
 from symphony.bdk.gen.agent_model.v4_message_sent import V4MessageSent
 from symphony.bdk.gen.agent_model.v4_stream import V4Stream
-from symphony.bdk.core.activity.user_joined_room import UserJoinedRoomActivity
+from symphony.bdk.gen.agent_model.v4_symphony_elements_action import (
+    V4SymphonyElementsAction,
+)
+from symphony.bdk.gen.agent_model.v4_user import V4User
 from symphony.bdk.gen.agent_model.v4_user_joined_room import V4UserJoinedRoom
-from symphony.bdk.gen.agent_model.v4_symphony_elements_action import V4SymphonyElementsAction
 
 
 @pytest.fixture(name="session_service")
@@ -42,22 +46,26 @@ def fixture_user():
 
 @pytest.fixture(name="message_sent")
 def fixture_message_sent():
-    return V4MessageSent(message=V4Message(attachments=[],
-                                           message_id="message_id",
-                                           message="<div><p><span>hello world</span></p></div>",
-                                           stream=V4Stream(stream_id="stream_id")))
+    return V4MessageSent(
+        message=V4Message(
+            attachments=[],
+            message_id="message_id",
+            message="<div><p><span>hello world</span></p></div>",
+            stream=V4Stream(stream_id="stream_id"),
+        )
+    )
 
 
 @pytest.fixture(name="elements_action")
 def fixture_elements_action():
-    return V4SymphonyElementsAction(form_id="test_form",
-                                    form_values={"key": "value"})
+    return V4SymphonyElementsAction(form_id="test_form", form_values={"key": "value"})
 
 
 @pytest.fixture(name="user_joined_room")
 def fixture_user_joined_room():
-    return V4UserJoinedRoom(stream=V4Stream(stream_id="12345678"),
-                            affected_user=V4User(user_id=0))
+    return V4UserJoinedRoom(
+        stream=V4Stream(stream_id="12345678"), affected_user=V4User(user_id=0)
+    )
 
 
 @pytest.fixture(name="activity_registry")
@@ -78,8 +86,15 @@ async def test_register(activity_registry, session_service, message_sent):
 
 
 @pytest.mark.asyncio
-async def test_register_different_activities_instance(activity_registry, command, form, user, message_sent,
-                                                      elements_action, user_joined_room):
+async def test_register_different_activities_instance(
+    activity_registry,
+    command,
+    form,
+    user,
+    message_sent,
+    elements_action,
+    user_joined_room,
+):
     command.on_activity = AsyncMock()
     form.on_activity = AsyncMock()
     user.on_activity = AsyncMock()
@@ -160,7 +175,9 @@ async def test_on_symphony_elements_action(activity_registry, elements_action, f
 
 
 @pytest.mark.asyncio
-async def test_on_symphony_elements_action_false_match(activity_registry, elements_action, form):
+async def test_on_symphony_elements_action_false_match(
+    activity_registry, elements_action, form
+):
     form.on_activity = AsyncMock()
     form.matches.return_value = False
 
@@ -187,7 +204,9 @@ async def test_on_user_joined_room(activity_registry, user_joined_room, user):
 
 
 @pytest.mark.asyncio
-async def test_on_user_joined_room_false_match(activity_registry, user_joined_room, user):
+async def test_on_user_joined_room_false_match(
+    activity_registry, user_joined_room, user
+):
     user.on_activity = AsyncMock()
 
     user.matches.return_value = False
@@ -243,7 +262,9 @@ async def test_slash_command_with_mention_bot(activity_registry, message_sent):
     assert slash_activity._name == command_name
     assert slash_activity._requires_mention_bot == mention_bot
     assert slash_activity._callback == listener
-    assert isinstance(slash_activity._command_pattern.tokens[0], MatchingUserIdMentionToken)
+    assert isinstance(
+        slash_activity._command_pattern.tokens[0], MatchingUserIdMentionToken
+    )
 
 
 @pytest.mark.asyncio
@@ -266,7 +287,9 @@ async def test_slash_same_command_name_and_mention(activity_registry, message_se
 
 
 @pytest.mark.asyncio
-async def test_slash_same_command_name_different_mention(activity_registry, message_sent):
+async def test_slash_same_command_name_different_mention(
+    activity_registry, message_sent
+):
     listener1 = AsyncMock()
     listener2 = AsyncMock()
     command_name = "/command"
@@ -285,4 +308,3 @@ async def test_slash_same_command_name_different_mention(activity_registry, mess
     assert slash_activity2._name == command_name
     assert not slash_activity2._requires_mention_bot
     assert slash_activity2._callback == listener2
-

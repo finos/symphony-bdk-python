@@ -1,16 +1,15 @@
 import asyncio
-from unittest.mock import MagicMock, AsyncMock, call
+from unittest.mock import AsyncMock, MagicMock, call
 
 import pytest
-
-from tests.core.service.datafeed.test_fixtures import fixture_initiator_username, fixture_session_service, \
-    fixture_auth_session
 
 from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import RealTimeEvent
 from symphony.bdk.core.service.datafeed.datafeed_loop_v2 import DatafeedLoopV2
 from symphony.bdk.core.service.datafeed.exception import EventError
-from symphony.bdk.core.service.datafeed.real_time_event_listener import RealTimeEventListener
+from symphony.bdk.core.service.datafeed.real_time_event_listener import (
+    RealTimeEventListener,
+)
 from symphony.bdk.gen import ApiClient, ApiException
 from symphony.bdk.gen.agent_api.datafeed_api import DatafeedApi
 from symphony.bdk.gen.agent_model.ack_id import AckId
@@ -75,9 +74,11 @@ def fixture_mock_listener():
 
 @pytest.fixture(name="message_sent")
 def fixture_message_sent(initiator_username):
-    return V4Event(type=RealTimeEvent.MESSAGESENT.name,
-                   payload=V4Payload(message_sent=V4MessageSent()),
-                   initiator=initiator_username)
+    return V4Event(
+        type=RealTimeEvent.MESSAGESENT.name,
+        payload=V4Payload(message_sent=V4MessageSent()),
+        initiator=initiator_username,
+    )
 
 
 @pytest.fixture(name="message_sent_event")
@@ -95,7 +96,6 @@ def fixture_datafeed_loop(datafeed_api, session_service, auth_session, config):
     datafeed_loop = DatafeedLoopV2(datafeed_api, session_service, auth_session, config)
 
     class RealTimeEventListenerImpl(RealTimeEventListener):
-
         async def on_message_sent(self, initiator: V4Initiator, event: V4MessageSent):
             await datafeed_loop.stop()
 
@@ -124,19 +124,20 @@ async def test_start(datafeed_loop, datafeed_api, session_service, read_df_side_
     session_service.get_session.assert_called_once()
 
     datafeed_api.list_datafeed.assert_called_with(
-        session_token="session_token",
-        key_manager_token="km_token"
+        session_token="session_token", key_manager_token="km_token"
     )
     datafeed_api.create_datafeed.assert_called_with(
         session_token="session_token",
         key_manager_token="km_token",
-        body=V5DatafeedCreateBody()
+        body=V5DatafeedCreateBody(),
     )
 
-    assert datafeed_api.read_datafeed.call_args_list[0].kwargs == {"session_token": "session_token",
-                                                                   "key_manager_token": "km_token",
-                                                                   "datafeed_id": "test_id",
-                                                                   "ack_id": AckId(ack_id="", update_presence=True)}
+    assert datafeed_api.read_datafeed.call_args_list[0].kwargs == {
+        "session_token": "session_token",
+        "key_manager_token": "km_token",
+        "datafeed_id": "test_id",
+        "ack_id": AckId(ack_id="", update_presence=True),
+    }
     assert datafeed_loop._datafeed_id == "test_id"
     assert datafeed_loop._ack_id == "ack_id"
 
@@ -144,25 +145,30 @@ async def test_start(datafeed_loop, datafeed_api, session_service, read_df_side_
 @pytest.mark.asyncio
 async def test_start_already_started_datafeed_v2_loop_should_throw_error(datafeed_loop):
     datafeed_loop._running = True
-    with pytest.raises(RuntimeError, match="The datafeed service V2 is already started"):
+    with pytest.raises(
+        RuntimeError, match="The datafeed service V2 is already started"
+    ):
         await datafeed_loop.start()
 
 
 @pytest.mark.asyncio
-async def test_start_old_datafeed_format_exist(datafeed_loop, datafeed_api, read_df_side_effect):
+async def test_start_old_datafeed_format_exist(
+    datafeed_loop, datafeed_api, read_df_side_effect
+):
     datafeed_api.list_datafeed.return_value = [V5Datafeed(id="abc_f")]
     datafeed_api.read_datafeed.side_effect = read_df_side_effect
 
     await datafeed_loop.start()
 
     datafeed_api.list_datafeed.assert_called_with(
-        session_token="session_token",
-        key_manager_token="km_token"
+        session_token="session_token", key_manager_token="km_token"
     )
-    assert datafeed_api.read_datafeed.call_args_list[0].kwargs == {"session_token": "session_token",
-                                                                   "key_manager_token": "km_token",
-                                                                   "datafeed_id": "abc_f",
-                                                                   "ack_id": AckId(ack_id="", update_presence=True)}
+    assert datafeed_api.read_datafeed.call_args_list[0].kwargs == {
+        "session_token": "session_token",
+        "key_manager_token": "km_token",
+        "datafeed_id": "abc_f",
+        "ack_id": AckId(ack_id="", update_presence=True),
+    }
     assert datafeed_loop._datafeed_id == "abc_f"
     assert datafeed_loop._ack_id == "ack_id"
 
@@ -175,13 +181,14 @@ async def test_start_datafeed_exist(datafeed_loop, datafeed_api, read_df_side_ef
     await datafeed_loop.start()
 
     datafeed_api.list_datafeed.assert_called_with(
-        session_token="session_token",
-        key_manager_token="km_token"
+        session_token="session_token", key_manager_token="km_token"
     )
-    assert datafeed_api.read_datafeed.call_args_list[0].kwargs == {"session_token": "session_token",
-                                                                   "key_manager_token": "km_token",
-                                                                   "datafeed_id": "abc_f_def",
-                                                                   "ack_id": AckId(ack_id="", update_presence=True)}
+    assert datafeed_api.read_datafeed.call_args_list[0].kwargs == {
+        "session_token": "session_token",
+        "key_manager_token": "km_token",
+        "datafeed_id": "abc_f_def",
+        "ack_id": AckId(ack_id="", update_presence=True),
+    }
     assert datafeed_loop._datafeed_id == "abc_f_def"
     assert datafeed_loop._ack_id == "ack_id"
 
@@ -195,13 +202,14 @@ async def test_read_datafeed_bad_id(datafeed_loop, datafeed_api, read_df_side_ef
     await datafeed_loop.start()
 
     datafeed_api.list_datafeed.assert_called_with(
-        session_token="session_token",
-        key_manager_token="km_token"
+        session_token="session_token", key_manager_token="km_token"
     )
-    assert datafeed_api.read_datafeed.call_args_list[0].kwargs == {"session_token": "session_token",
-                                                                   "key_manager_token": "km_token",
-                                                                   "datafeed_id": "abc_f_def",
-                                                                   "ack_id": AckId(ack_id="", update_presence=True)}
+    assert datafeed_api.read_datafeed.call_args_list[0].kwargs == {
+        "session_token": "session_token",
+        "key_manager_token": "km_token",
+        "datafeed_id": "abc_f_def",
+        "ack_id": AckId(ack_id="", update_presence=True),
+    }
 
     datafeed_api.create_datafeed.assert_called_once()
 
@@ -210,7 +218,9 @@ async def test_read_datafeed_bad_id(datafeed_loop, datafeed_api, read_df_side_ef
 
 
 @pytest.mark.asyncio
-async def test_start_datafeed_stale_datafeed(datafeed_loop, datafeed_api, session_service, message_sent_event):
+async def test_start_datafeed_stale_datafeed(
+    datafeed_loop, datafeed_api, session_service, message_sent_event
+):
     datafeed_loop._retry_config = minimal_retry_config_with_attempts(2)
     datafeed_api.list_datafeed.return_value = [V5Datafeed(id="abc_f_def")]
     datafeed_api.create_datafeed.return_value = V5Datafeed(id="test_id")
@@ -232,36 +242,37 @@ async def test_start_datafeed_stale_datafeed(datafeed_loop, datafeed_api, sessio
     session_service.get_session.assert_called_once()
 
     datafeed_api.list_datafeed.assert_called_with(
-        session_token="session_token",
-        key_manager_token="km_token"
+        session_token="session_token", key_manager_token="km_token"
     )
 
     datafeed_api.delete_datafeed.assert_called_with(
         session_token="session_token",
         key_manager_token="km_token",
-        datafeed_id="abc_f_def"
+        datafeed_id="abc_f_def",
     )
 
     datafeed_api.create_datafeed.assert_called_with(
         session_token="session_token",
         key_manager_token="km_token",
-        body=V5DatafeedCreateBody()
+        body=V5DatafeedCreateBody(),
     )
 
-    datafeed_api.read_datafeed.assert_has_calls([
-        call(
-            session_token="session_token",
-            key_manager_token="km_token",
-            datafeed_id="abc_f_def",
-            ack_id=AckId(ack_id="", update_presence=True)
-        ),
-        call(
-            session_token="session_token",
-            key_manager_token="km_token",
-            datafeed_id="test_id",
-            ack_id=AckId(ack_id="", update_presence=True)
-        )
-    ])
+    datafeed_api.read_datafeed.assert_has_calls(
+        [
+            call(
+                session_token="session_token",
+                key_manager_token="km_token",
+                datafeed_id="abc_f_def",
+                ack_id=AckId(ack_id="", update_presence=True),
+            ),
+            call(
+                session_token="session_token",
+                key_manager_token="km_token",
+                datafeed_id="test_id",
+                ack_id=AckId(ack_id="", update_presence=True),
+            ),
+        ]
+    )
 
     assert datafeed_loop._datafeed_id == "test_id"
     assert datafeed_loop._ack_id == "ack_id"
@@ -290,42 +301,62 @@ async def test_read_datafeed_empty_list(mock_datafeed_loop, mock_listener):
 
 
 @pytest.mark.asyncio
-async def test_read_datafeed_non_empty_list(mock_datafeed_loop, mock_listener, message_sent):
-    mock_datafeed_loop._read_events.side_effect = read_df_function(EventsMock([message_sent]))
+async def test_read_datafeed_non_empty_list(
+    mock_datafeed_loop, mock_listener, message_sent
+):
+    mock_datafeed_loop._read_events.side_effect = read_df_function(
+        EventsMock([message_sent])
+    )
     mock_datafeed_loop.subscribe(mock_listener)
 
     await start_and_stop_df_loop(mock_datafeed_loop)
 
     assert mock_datafeed_loop._ack_id == ACK_ID
-    mock_listener.on_message_sent.assert_called_with(message_sent.initiator, message_sent.payload.message_sent)
+    mock_listener.on_message_sent.assert_called_with(
+        message_sent.initiator, message_sent.payload.message_sent
+    )
 
 
 @pytest.mark.asyncio
-async def test_read_datafeed_error_in_listener(mock_datafeed_loop, mock_listener, message_sent):
+async def test_read_datafeed_error_in_listener(
+    mock_datafeed_loop, mock_listener, message_sent
+):
     mock_listener.on_message_sent.side_effect = ValueError()
-    mock_datafeed_loop._read_events.side_effect = read_df_function(EventsMock([message_sent]))
+    mock_datafeed_loop._read_events.side_effect = read_df_function(
+        EventsMock([message_sent])
+    )
     mock_datafeed_loop.subscribe(mock_listener)
 
     await start_and_stop_df_loop(mock_datafeed_loop)
 
     assert mock_datafeed_loop._ack_id == ACK_ID
-    mock_listener.on_message_sent.assert_called_with(message_sent.initiator, message_sent.payload.message_sent)
+    mock_listener.on_message_sent.assert_called_with(
+        message_sent.initiator, message_sent.payload.message_sent
+    )
 
 
 @pytest.mark.asyncio
-async def test_read_datafeed_event_error_in_listener(mock_datafeed_loop, mock_listener, message_sent):
+async def test_read_datafeed_event_error_in_listener(
+    mock_datafeed_loop, mock_listener, message_sent
+):
     mock_listener.on_message_sent.side_effect = EventError()
-    mock_datafeed_loop._read_events.side_effect = read_df_function(EventsMock([message_sent]))
+    mock_datafeed_loop._read_events.side_effect = read_df_function(
+        EventsMock([message_sent])
+    )
     mock_datafeed_loop.subscribe(mock_listener)
 
     await start_and_stop_df_loop(mock_datafeed_loop)
 
     assert mock_datafeed_loop._ack_id == ""  # ack id not updated
-    mock_listener.on_message_sent.assert_called_with(message_sent.initiator, message_sent.payload.message_sent)
+    mock_listener.on_message_sent.assert_called_with(
+        message_sent.initiator, message_sent.payload.message_sent
+    )
 
 
 @pytest.mark.asyncio
-async def test_events_concurrency_within_same_read_df_chunk(mock_datafeed_loop, message_sent):
+async def test_events_concurrency_within_same_read_df_chunk(
+    mock_datafeed_loop, message_sent
+):
     class QueueListener(RealTimeEventListener):
         def __init__(self):
             self.queue = asyncio.Queue()
@@ -339,7 +370,9 @@ async def test_events_concurrency_within_same_read_df_chunk(mock_datafeed_loop, 
             elif self.count == 2:
                 await self.queue.put("message")
 
-    mock_datafeed_loop._read_events.side_effect = read_df_function(EventsMock([message_sent, message_sent]))
+    mock_datafeed_loop._read_events.side_effect = read_df_function(
+        EventsMock([message_sent, message_sent])
+    )
     mock_datafeed_loop.subscribe(QueueListener())
 
     await mock_datafeed_loop.start()  # test no deadlock
@@ -349,7 +382,10 @@ async def test_events_concurrency_within_same_read_df_chunk(mock_datafeed_loop, 
 async def test_400_should_call_recreate_df_and_retry(datafeed_loop, datafeed_api):
     datafeed_loop._retry_config = minimal_retry_config_with_attempts(2)
     datafeed_loop.recreate_datafeed = AsyncMock()
-    datafeed_api.read_datafeed.side_effect = [ApiException(status=400), ApiException(status=500)]
+    datafeed_api.read_datafeed.side_effect = [
+        ApiException(status=400),
+        ApiException(status=500),
+    ]
 
     with pytest.raises(ApiException) as exception:
         await datafeed_loop.start()
@@ -360,7 +396,9 @@ async def test_400_should_call_recreate_df_and_retry(datafeed_loop, datafeed_api
 
 
 @pytest.mark.asyncio
-async def test_400_should_call_recreate_df_return_and_retry(datafeed_loop, datafeed_api, message_sent_event):
+async def test_400_should_call_recreate_df_return_and_retry(
+    datafeed_loop, datafeed_api, message_sent_event
+):
     async def read_df(**kwargs):
         if read_df.first_time:
             read_df.first_time = False
@@ -382,7 +420,9 @@ async def test_400_should_call_recreate_df_return_and_retry(datafeed_loop, dataf
 
 
 @pytest.mark.asyncio
-async def test_unexpected_error_should_be_propagated_and_call_stop_tasks(datafeed_loop, datafeed_api):
+async def test_unexpected_error_should_be_propagated_and_call_stop_tasks(
+    datafeed_loop, datafeed_api
+):
     exception = ValueError("An error")
     datafeed_api.read_datafeed.side_effect = exception
 

@@ -8,8 +8,12 @@ from symphony.bdk.gen.pod_model.pod_app_entitlement import PodAppEntitlement
 from symphony.bdk.gen.pod_model.pod_app_entitlement_list import PodAppEntitlementList
 from symphony.bdk.gen.pod_model.user_app_entitlement import UserAppEntitlement
 from symphony.bdk.gen.pod_model.user_app_entitlement_list import UserAppEntitlementList
-from symphony.bdk.gen.pod_model.user_app_entitlement_patch import UserAppEntitlementPatch
-from symphony.bdk.gen.pod_model.user_app_entitlements_patch_list import UserAppEntitlementsPatchList
+from symphony.bdk.gen.pod_model.user_app_entitlement_patch import (
+    UserAppEntitlementPatch,
+)
+from symphony.bdk.gen.pod_model.user_app_entitlements_patch_list import (
+    UserAppEntitlementsPatchList,
+)
 
 
 class ApplicationService:
@@ -26,15 +30,22 @@ class ApplicationService:
     * Update user applications
     """
 
-    def __init__(self, application_api: ApplicationApi, app_entitlement_api: AppEntitlementApi,
-                 auth_session: AuthSession, retry_config: BdkRetryConfig):
+    def __init__(
+        self,
+        application_api: ApplicationApi,
+        app_entitlement_api: AppEntitlementApi,
+        auth_session: AuthSession,
+        retry_config: BdkRetryConfig,
+    ):
         self._application_api = application_api
         self._app_entitlement_api = app_entitlement_api
         self._auth_session = auth_session
         self._retry_config = retry_config
 
     @retry
-    async def create_application(self, application_detail: ApplicationDetail) -> ApplicationDetail:
+    async def create_application(
+        self, application_detail: ApplicationDetail
+    ) -> ApplicationDetail:
         """
         Create a new application.
 
@@ -50,13 +61,15 @@ class ApplicationService:
 
         """
         params = {
-            'application_detail': application_detail,
-            'session_token': await self._auth_session.session_token
+            "application_detail": application_detail,
+            "session_token": await self._auth_session.session_token,
         }
         return await self._application_api.v1_admin_app_create_post(**params)
 
     @retry
-    async def update_application(self, app_id: str, application_detail: ApplicationDetail) -> ApplicationDetail:
+    async def update_application(
+        self, app_id: str, application_detail: ApplicationDetail
+    ) -> ApplicationDetail:
         """
         Update an existing application.
 
@@ -73,9 +86,9 @@ class ApplicationService:
 
         """
         params = {
-            'id': app_id,
-            'application_detail': application_detail,
-            'session_token': await self._auth_session.session_token
+            "id": app_id,
+            "application_detail": application_detail,
+            "session_token": await self._auth_session.session_token,
         }
         return await self._application_api.v1_admin_app_id_update_post(**params)
 
@@ -89,10 +102,7 @@ class ApplicationService:
         :param app_id:  Id of the application needs to be deleted.
 
         """
-        params = {
-            'id': app_id,
-            'session_token': await self._auth_session.session_token
-        }
+        params = {"id": app_id, "session_token": await self._auth_session.session_token}
         await self._application_api.v1_admin_app_id_delete_post(**params)
 
     @retry
@@ -107,10 +117,7 @@ class ApplicationService:
         :return: The detail of the lookup application.
 
         """
-        params = {
-            'id': app_id,
-            'session_token': await self._auth_session.session_token
-        }
+        params = {"id": app_id, "session_token": await self._auth_session.session_token}
         return await self._application_api.v1_admin_app_id_get_get(**params)
 
     @retry
@@ -123,14 +130,16 @@ class ApplicationService:
         :return: The list of application entitlements.
 
         """
-        params = {
-            'session_token': await self._auth_session.session_token
-        }
-        pod_app_entitlement_list = await self._app_entitlement_api.v1_admin_app_entitlement_list_get(**params)
+        params = {"session_token": await self._auth_session.session_token}
+        pod_app_entitlement_list = (
+            await self._app_entitlement_api.v1_admin_app_entitlement_list_get(**params)
+        )
         return pod_app_entitlement_list.value
 
     @retry
-    async def update_application_entitlements(self, entitlements: [PodAppEntitlement]) -> [PodAppEntitlement]:
+    async def update_application_entitlements(
+        self, entitlements: [PodAppEntitlement]
+    ) -> [PodAppEntitlement]:
         """
         Update the list of application entitlements for the company.
 
@@ -142,10 +151,12 @@ class ApplicationService:
 
         """
         params = {
-            'payload': PodAppEntitlementList(value=entitlements),
-            'session_token': await self._auth_session.session_token
+            "payload": PodAppEntitlementList(value=entitlements),
+            "session_token": await self._auth_session.session_token,
         }
-        pod_app_entitlement_list = await self._app_entitlement_api.v1_admin_app_entitlement_list_post(**params)
+        pod_app_entitlement_list = (
+            await self._app_entitlement_api.v1_admin_app_entitlement_list_post(**params)
+        )
         return pod_app_entitlement_list.value
 
     @retry
@@ -161,14 +172,20 @@ class ApplicationService:
 
         """
         params = {
-            'uid': user_id,
-            'session_token': await self._auth_session.session_token
+            "uid": user_id,
+            "session_token": await self._auth_session.session_token,
         }
-        user_app_entitlement_list = await self._app_entitlement_api.v1_admin_user_uid_app_entitlement_list_get(**params)
+        user_app_entitlement_list = (
+            await self._app_entitlement_api.v1_admin_user_uid_app_entitlement_list_get(
+                **params
+            )
+        )
         return user_app_entitlement_list.value
 
     @retry
-    async def update_user_applications(self, user_id: int, user_app_entitlements: [UserAppEntitlement]):
+    async def update_user_applications(
+        self, user_id: int, user_app_entitlements: [UserAppEntitlement]
+    ):
         """
         Update the application entitlements for a particular user.
 
@@ -181,16 +198,21 @@ class ApplicationService:
 
         """
         params = {
-            'uid': user_id,
-            'payload': UserAppEntitlementList(value=user_app_entitlements),
-            'session_token': await self._auth_session.session_token
+            "uid": user_id,
+            "payload": UserAppEntitlementList(value=user_app_entitlements),
+            "session_token": await self._auth_session.session_token,
         }
-        user_app_entitlement_list \
-            = await self._app_entitlement_api.v1_admin_user_uid_app_entitlement_list_post(**params)
+        user_app_entitlement_list = (
+            await self._app_entitlement_api.v1_admin_user_uid_app_entitlement_list_post(
+                **params
+            )
+        )
         return user_app_entitlement_list.value
 
     @retry
-    async def patch_user_applications(self, user_id: int, user_app_entitlements: [UserAppEntitlementPatch]):
+    async def patch_user_applications(
+        self, user_id: int, user_app_entitlements: [UserAppEntitlementPatch]
+    ):
         """
         Updates particular app entitlements for a particular user. Supports partial update.
 
@@ -203,10 +225,11 @@ class ApplicationService:
 
         """
         params = {
-          'uid': user_id,
-          'payload': UserAppEntitlementsPatchList(value=user_app_entitlements),
-          'session_token': await self._auth_session.session_token
+            "uid": user_id,
+            "payload": UserAppEntitlementsPatchList(value=user_app_entitlements),
+            "session_token": await self._auth_session.session_token,
         }
-        user_app_entitlements_list \
-            = await self._app_entitlement_api.v1_admin_user_uid_app_entitlement_list_patch(**params)
+        user_app_entitlements_list = await self._app_entitlement_api.v1_admin_user_uid_app_entitlement_list_patch(
+            **params
+        )
         return user_app_entitlements_list.value

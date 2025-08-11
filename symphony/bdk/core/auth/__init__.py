@@ -1,2 +1,1 @@
-"""Package containing all modules related to authentication
-"""
+"""Package containing all modules related to authentication"""

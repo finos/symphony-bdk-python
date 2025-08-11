@@ -3,7 +3,12 @@ from unittest.mock import AsyncMock
 
 import pytest
 
-from symphony.bdk.core.client.trace_id import DistributedTracingContext, add_x_trace_id, TRACE_ID_LENGTH, X_TRACE_ID
+from symphony.bdk.core.client.trace_id import (
+    TRACE_ID_LENGTH,
+    X_TRACE_ID,
+    DistributedTracingContext,
+    add_x_trace_id,
+)
 
 
 def setup_function():
@@ -15,7 +20,9 @@ def assert_args_except_trace_id_kept_as_is(input_args, actual_args):
 
     if len(actual_args) >= 4:
         assert X_TRACE_ID in actual_args[4]
-        assert {k: actual_args[4][k] for k in actual_args[4].keys() - {X_TRACE_ID}} == input_args[4]
+        assert {
+            k: actual_args[4][k] for k in actual_args[4].keys() - {X_TRACE_ID}
+        } == input_args[4]
 
     if len(actual_args) >= 5:
         assert actual_args[5:] == input_args[5:]

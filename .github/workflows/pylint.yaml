@@ -1,5 +1,4 @@
-name: pylint
-
+name: Linting
 on:
   push:
     branches: [ "main" ]
@@ -7,8 +6,8 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
-    name: pylint
+  ruff:
+    name: Ruff Linter & Formatter
     runs-on: ubuntu-latest
 
     steps:
@@ -16,41 +15,34 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Set up Python 3.9
-        id: setup-python
         uses: actions/setup-python@v4
         with:
           python-version: 3.9
 
-      - name: Get pip cache dir
-        id: pip-cache
-        run: |
-          echo "::set-output name=dir::$(pip cache dir)"
+      - name: Install Poetry
+        run: pip install poetry
 
-      - name: Cache pip dependencies
+      - name: Cache poetry virtualenv
         uses: actions/cache@v4
         with:
-          path: ${{ steps.pip-cache.outputs.dir }}
-          key: ${{ runner.os }}-pip-${{ steps.setup-python.outputs.python-version }}
+          path: ~/.cache/pypoetry/virtualenvs
+          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-poetry-
 
-      - name: Install Pylint
-        run: pip install pylint
+      - name: Install dependencies
+        run: poetry install
 
-      - name: Download previous run results
-        uses: dawidd6/action-download-artifact@8c96194455d424a24437ec57817e0aa1a1d72adb
-        continue-on-error: true
+      - name: Cache ruff
+        uses: actions/cache@v4
         with:
-          workflow: pylint.yaml
-          workflow_conclusion: success
-          name: .pylint.d
-          path: /home/runner/.pylint.d
-          branch: "main"
+          path: .ruff_cache
+          key: ${{ runner.os }}-ruff-${{ github.ref_name }}-${{ hashFiles('poetry.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-ruff-main-${{ hashFiles('poetry.lock') }}
 
-      - name: Run Pylint
-        run: pylint symphony tests
+      - name: Run ruff formatter check
+        run: poetry run ruff format --check .
 
-      - name: Upload Pylint results
-        if: ${{ always() }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: .pylint.d
-          path: ~/.pylint.d
+      - name: Run ruff linter
+        run: poetry run ruff check .

@@ -1,5 +1,5 @@
-from pathlib import Path
 import json
+from pathlib import Path
 
 from symphony.bdk.gen.api_client import validate_and_convert_types
 from symphony.bdk.gen.configuration import Configuration
@@ -34,12 +34,14 @@ def deserialize_object(model, payload):
         test_data = json.loads(payload)
     except json.JSONDecodeError:
         test_data = payload
-    return validate_and_convert_types(input_value=test_data,
-                                      required_types_mixed=(model,),
-                                      path_to_item=["test_data"],
-                                      spec_property_naming=True,
-                                      _check_type=True,
-                                      configuration=Configuration(discard_unknown_keys=True))
+    return validate_and_convert_types(
+        input_value=test_data,
+        required_types_mixed=(model,),
+        path_to_item=["test_data"],
+        spec_property_naming=True,
+        _check_type=True,
+        configuration=Configuration(discard_unknown_keys=True),
+    )
 
 
 def get_config_resource_filepath(relative_path):

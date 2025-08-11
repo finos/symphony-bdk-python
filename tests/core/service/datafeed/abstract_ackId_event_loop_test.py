@@ -1,14 +1,14 @@
 import asyncio
+from unittest.mock import AsyncMock, patch
+
 import pytest
 
-from unittest.mock import AsyncMock, patch
-from tests.core.service.datafeed.test_fixtures import fixture_initiator_userid, fixture_session_service, \
-    fixture_message_sent_v4_event
-
-from symphony.bdk.gen.agent_model.v5_event_list import V5EventList
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
-from symphony.bdk.core.service.datafeed.abstract_ackId_event_loop import AbstractAckIdEventLoop
+from symphony.bdk.core.service.datafeed.abstract_ackId_event_loop import (
+    AbstractAckIdEventLoop,
+)
 from symphony.bdk.gen.agent_api.datafeed_api import DatafeedApi
+from symphony.bdk.gen.agent_model.v5_event_list import V5EventList
 
 
 @pytest.fixture(name="read_events_side_effect")
@@ -27,7 +27,9 @@ def fixture_read_events_side_effect(message_sent_v4_event):
 def fixture_bare_df_loop(session_service):
     # patch.multiple called in order to be able to instantiate AbstractDatafeedLoop
     with patch.multiple(AbstractAckIdEventLoop, __abstractmethods__=set()):
-        mock_df = AbstractAckIdEventLoop(DatafeedApi(AsyncMock()), session_service, None, BdkConfig())
+        mock_df = AbstractAckIdEventLoop(
+            DatafeedApi(AsyncMock()), session_service, None, BdkConfig()
+        )
         mock_df._read_events = AsyncMock()
         mock_df._run_listener_tasks = AsyncMock()
         return mock_df

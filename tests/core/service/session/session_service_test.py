@@ -1,4 +1,4 @@
-from unittest.mock import MagicMock, AsyncMock
+from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
@@ -6,8 +6,8 @@ from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.service.session.session_service import SessionService
 from symphony.bdk.gen.pod_api.session_api import SessionApi
 from symphony.bdk.gen.pod_model.user_v2 import UserV2
-from tests.utils.resource_utils import get_deserialized_object_from_resource
 from tests.core.config import minimal_retry_config
+from tests.utils.resource_utils import get_deserialized_object_from_resource
 
 
 @pytest.fixture(name="auth_session")
@@ -25,19 +25,16 @@ def fixture_session_api():
 
 @pytest.fixture(name="session_service")
 def fixture_session_service(session_api, auth_session):
-    service = SessionService(
-        session_api,
-        auth_session,
-        minimal_retry_config()
-    )
+    service = SessionService(session_api, auth_session, minimal_retry_config())
     return service
 
 
 @pytest.mark.asyncio
 async def test_get_session(session_api, session_service):
     session_api.v2_sessioninfo_get = AsyncMock()
-    session_api.v2_sessioninfo_get.return_value = get_deserialized_object_from_resource(UserV2,
-                                                                                        "session/get_session.json")
+    session_api.v2_sessioninfo_get.return_value = get_deserialized_object_from_resource(
+        UserV2, "session/get_session.json"
+    )
 
     session = await session_service.get_session()
     assert session.display_name == "Symphony Admin"

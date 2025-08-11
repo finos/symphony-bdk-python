@@ -6,7 +6,9 @@ from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
 from symphony.bdk.core.retry import retry
 from symphony.bdk.core.retry.strategy import read_datafeed_retry
-from symphony.bdk.core.service.datafeed.abstract_ackId_event_loop import AbstractAckIdEventLoop
+from symphony.bdk.core.service.datafeed.abstract_ackId_event_loop import (
+    AbstractAckIdEventLoop,
+)
 from symphony.bdk.core.service.session.session_service import SessionService
 from symphony.bdk.gen.agent_api.datafeed_api import DatafeedApi
 from symphony.bdk.gen.agent_model.ack_id import AckId
@@ -23,24 +25,29 @@ logger = logging.getLogger(__name__)
 class DatafeedLoopV2(AbstractAckIdEventLoop):
     """A class for implementing the datafeed v2 loop service.
 
-        This service will be started by calling :func:`~DatafeedLoopV2.start`.
+    This service will be started by calling :func:`~DatafeedLoopV2.start`.
 
-        On the very first run, the BDK bot will try to retrieve the list of datafeed to which it is listening.
-        Since each bot should only listen to just one datafeed, the first datafeed in the list will be used by
-        the bot to be listened to. If the retrieved list is empty, the BDK bot will create a new datafeed to listen.
+    On the very first run, the BDK bot will try to retrieve the list of datafeed to which it is listening.
+    Since each bot should only listen to just one datafeed, the first datafeed in the list will be used by
+    the bot to be listened to. If the retrieved list is empty, the BDK bot will create a new datafeed to listen.
 
-        The BDK bot will listen to this datafeed to get all the received real-time events.
+    The BDK bot will listen to this datafeed to get all the received real-time events.
 
-        If this datafeed becomes stale or faulty, the BDK bot will create the new one for listening.
+    If this datafeed becomes stale or faulty, the BDK bot will create the new one for listening.
 
-        This service will be stopped by calling :func:`~DatafeedLoopV1.stop`
+    This service will be stopped by calling :func:`~DatafeedLoopV1.stop`
 
-        If the datafeed service is stopped during a read datafeed call, it has to wait until the last read finish to be
-        really stopped
-        """
+    If the datafeed service is stopped during a read datafeed call, it has to wait until the last read finish to be
+    really stopped
+    """
 
-    def __init__(self, datafeed_api: DatafeedApi, session_service: SessionService, auth_session: AuthSession,
-                 config: BdkConfig):
+    def __init__(
+        self,
+        datafeed_api: DatafeedApi,
+        session_service: SessionService,
+        auth_session: AuthSession,
+        config: BdkConfig,
+    ):
         super().__init__(datafeed_api, session_service, auth_session, config)
         self._datafeed_id = None
 
@@ -69,7 +76,7 @@ class DatafeedLoopV2(AbstractAckIdEventLoop):
             "session_token": await self._auth_session.session_token,
             "key_manager_token": await self._auth_session.key_manager_token,
             "datafeed_id": self._datafeed_id,
-            "ack_id": AckId(ack_id=self._ack_id)
+            "ack_id": AckId(ack_id=self._ack_id),
         }
         return await self._datafeed_api.read_datafeed(**params)
 
@@ -84,10 +91,13 @@ class DatafeedLoopV2(AbstractAckIdEventLoop):
     async def _retrieve_datafeed(self) -> Optional[V5Datafeed]:
         session_token = await self._auth_session.session_token
         key_manager_token = await self._auth_session.key_manager_token
-        datafeeds = await self._datafeed_api.list_datafeed(session_token=session_token,
-                                                           key_manager_token=key_manager_token)
+        datafeeds = await self._datafeed_api.list_datafeed(
+            session_token=session_token, key_manager_token=key_manager_token
+        )
 
-        datafeeds = list(filter(lambda df: DATAFEED_V2_ID_PATTERN.match(df.id), datafeeds))
+        datafeeds = list(
+            filter(lambda df: DATAFEED_V2_ID_PATTERN.match(df.id), datafeeds)
+        )
         if datafeeds:
             return datafeeds[0]
         return None
@@ -97,14 +107,18 @@ class DatafeedLoopV2(AbstractAckIdEventLoop):
         session_token = await self._auth_session.session_token
         key_manager_token = await self._auth_session.key_manager_token
 
-        return await self._datafeed_api.create_datafeed(session_token=session_token,
-                                                        key_manager_token=key_manager_token,
-                                                        body=V5DatafeedCreateBody())
+        return await self._datafeed_api.create_datafeed(
+            session_token=session_token,
+            key_manager_token=key_manager_token,
+            body=V5DatafeedCreateBody(),
+        )
 
     @retry
     async def _delete_datafeed(self) -> None:
         session_token = await self._auth_session.session_token
         key_manager_token = await self._auth_session.key_manager_token
-        await self._datafeed_api.delete_datafeed(datafeed_id=self._datafeed_id,
-                                                 session_token=session_token,
-                                                 key_manager_token=key_manager_token)
+        await self._datafeed_api.delete_datafeed(
+            datafeed_id=self._datafeed_id,
+            session_token=session_token,
+            key_manager_token=key_manager_token,
+        )

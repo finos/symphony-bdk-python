@@ -24,6 +24,8 @@ class MatchResult:
         return self._arguments
 
     def __eq__(self, other):
-        return isinstance(other, MatchResult) \
-               and self._is_matching == other._is_matching \
-               and self._arguments == other._arguments
+        return (
+            isinstance(other, MatchResult)
+            and self._is_matching == other._is_matching
+            and self._arguments == other._arguments
+        )

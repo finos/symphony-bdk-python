@@ -76,7 +76,7 @@ authorized_licenses = [
 
 
 [tool.ruff]
-include = ["pyproject.toml", "symphony/**/*.py", "examples/**/*.py"]
+include = ["pyproject.toml", "symphony/**/*.py", "examples/**/*.py", "tests/**/*.py"]
 exclude = [
     "symphony/bdk/gen",
 ]

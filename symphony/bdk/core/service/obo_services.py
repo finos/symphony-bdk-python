@@ -11,7 +11,7 @@ from symphony.bdk.core.service_factory import OboServiceFactory
 
 class OboServices:
     """Entry point for OBO-enabled services, see
-        `the list of OBO-enabled endpoints <https://developers.symphony.com/restapi/reference/obo-enabled-endpoints#api-endpoints-enabled-for-obo>`_
+    `the list of OBO-enabled endpoints <https://developers.symphony.com/restapi/reference/obo-enabled-endpoints#api-endpoints-enabled-for-obo>`_
     """
 
     async def __aenter__(self):
@@ -30,7 +30,9 @@ class OboServices:
         self._obo_session = obo_session
 
         self._api_client_factory = ApiClientFactory(config)
-        self._service_factory = OboServiceFactory(self._api_client_factory, self._obo_session, self._config)
+        self._service_factory = OboServiceFactory(
+            self._api_client_factory, self._obo_session, self._config
+        )
         self._connection_service = self._service_factory.get_connection_service()
         self._message_service = self._service_factory.get_message_service()
         self._stream_service = self._service_factory.get_stream_service()
@@ -73,6 +75,5 @@ class OboServices:
         return self._signal_service
 
     async def close_clients(self):
-        """Close all the existing api clients created by the api client factory.
-        """
+        """Close all the existing api clients created by the api client factory."""
         await self._api_client_factory.close_clients()

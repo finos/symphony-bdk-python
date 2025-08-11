@@ -6,8 +6,15 @@ from symphony.bdk.core.service.exception import MessageCreationError
 from symphony.bdk.core.service.message.model import Message
 
 
-def assert_message_properties_equal(actual_message, expected_content, expected_data, expected_silent, expected_version,
-                                    expected_attachments, expected_previews):
+def assert_message_properties_equal(
+    actual_message,
+    expected_content,
+    expected_data,
+    expected_silent,
+    expected_version,
+    expected_attachments,
+    expected_previews,
+):
     assert actual_message.content == expected_content
     assert actual_message.data == expected_data
     assert actual_message.silent == expected_silent
@@ -22,15 +29,23 @@ def test_create_message_with_no_content():
 
 
 def test_create_message_content_only_without_tags():
-    assert_message_properties_equal(Message(content="Hello world!"),
-                                    "<messageML>Hello world!</messageML>", "", True, "", [], [])
+    assert_message_properties_equal(
+        Message(content="Hello world!"),
+        "<messageML>Hello world!</messageML>",
+        "",
+        True,
+        "",
+        [],
+        [],
+    )
 
 
 def test_create_message_content_only():
     content = "<messageML>Hello world!</messageML>"
 
-    assert_message_properties_equal(Message(content=content),
-                                    content, "", True, "", [], [])
+    assert_message_properties_equal(
+        Message(content=content), content, "", True, "", [], []
+    )
 
 
 def test_create_message_content_data_version():
@@ -39,44 +54,76 @@ def test_create_message_content_data_version():
     data = ["foo", {"bar": ("baz", 1.0, 2)}]
     json_data = json.dumps(data)
 
-    assert_message_properties_equal(Message(content=content, version=version, data=data),
-                                    content, json_data, True, version, [], [])
+    assert_message_properties_equal(
+        Message(content=content, version=version, data=data),
+        content,
+        json_data,
+        True,
+        version,
+        [],
+        [],
+    )
 
 
 def test_create_message_with_attachment():
     content = "<messageML>Hello world!</messageML>"
     attachments = ["some attachment"]
 
-    assert_message_properties_equal(Message(content=content, attachments=attachments),
-                                    content, "", True, "", attachments, [])
+    assert_message_properties_equal(
+        Message(content=content, attachments=attachments),
+        content,
+        "",
+        True,
+        "",
+        attachments,
+        [],
+    )
 
 
 def test_create_message_with_attachment_one_element_tuple():
     content = "<messageML>Hello world!</messageML>"
     attachment = "some attachment"
 
-    assert_message_properties_equal(Message(content=content, attachments=[(attachment,)]),
-                                    content, "", True, "", [attachment], [])
+    assert_message_properties_equal(
+        Message(content=content, attachments=[(attachment,)]),
+        content,
+        "",
+        True,
+        "",
+        [attachment],
+        [],
+    )
 
 
 def test_create_message_with_attachment_and_preview():
     content = "<messageML>Hello world!</messageML>"
     attachment = "some attachment"
     preview = "some preview"
-    assert_message_properties_equal(Message(content=content, attachments=[(attachment, preview)]),
-                                    content, "", True, "", [attachment], [preview])
+    assert_message_properties_equal(
+        Message(content=content, attachments=[(attachment, preview)]),
+        content,
+        "",
+        True,
+        "",
+        [attachment],
+        [preview],
+    )
 
 
 def test_create_message_with_attachment_and_no_preview_for_second_attachment():
     with pytest.raises(MessageCreationError):
-        Message(content="<messageML>Hello world!</messageML>",
-                attachments=[("first attachment", "first preview"), "second attachment"])
+        Message(
+            content="<messageML>Hello world!</messageML>",
+            attachments=[("first attachment", "first preview"), "second attachment"],
+        )
 
 
 def test_create_message_with_attachment_and_no_preview_for_first_attachment():
     with pytest.raises(MessageCreationError):
-        Message(content="<messageML>Hello world!</messageML>",
-                attachments=["first attachment", ("second attachment", "second preview")])
+        Message(
+            content="<messageML>Hello world!</messageML>",
+            attachments=["first attachment", ("second attachment", "second preview")],
+        )
 
 
 def test_create_message_content_data_version_silent():
@@ -86,5 +133,12 @@ def test_create_message_content_data_version_silent():
     silent = False
     json_data = json.dumps(data)
 
-    assert_message_properties_equal(Message(content=content, version=version, data=data, silent=silent),
-                                    content, json_data, silent, version, [], [])
+    assert_message_properties_equal(
+        Message(content=content, version=version, data=data, silent=silent),
+        content,
+        json_data,
+        silent,
+        version,
+        [],
+        [],
+    )

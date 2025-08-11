@@ -1,12 +1,14 @@
-"""A bot (named benchmark-injector) sending messages to a room and checking that all messages have been replied to.
-"""
+"""A bot (named benchmark-injector) sending messages to a room and checking that all messages have been replied to."""
+
 import asyncio
 import logging.config
 from datetime import datetime
 from pathlib import Path
 
 from symphony.bdk.core.config.loader import BdkConfigLoader
-from symphony.bdk.core.service.message.message_parser import get_text_content_from_message
+from symphony.bdk.core.service.message.message_parser import (
+    get_text_content_from_message,
+)
 from symphony.bdk.core.service.message.message_service import MessageService
 from symphony.bdk.core.symphony_bdk import SymphonyBdk
 from symphony.bdk.gen.pod_model.v3_room_attributes import V3RoomAttributes
@@ -27,13 +29,21 @@ async def run():
         stream_id = await create_test_room(bdk.streams())
 
         await send_messages(bdk.messages(), stream_id)
-        await check_all_messages_have_been_replied_to(bdk.messages(), config.bot.username, stream_id)
+        await check_all_messages_have_been_replied_to(
+            bdk.messages(), config.bot.username, stream_id
+        )
 
 
 async def create_test_room(streams):
     start_date = datetime.now().isoformat()
     room = await streams.create_room(
-        V3RoomAttributes(name=f"Test-{start_date}", description=f"Test-{start_date}", public=True, discoverable=True))
+        V3RoomAttributes(
+            name=f"Test-{start_date}",
+            description=f"Test-{start_date}",
+            public=True,
+            discoverable=True,
+        )
+    )
     stream_id = room.room_system_info.id
 
     await streams.add_member_to_room(REPLIER_BOT_ID, stream_id)
@@ -45,20 +55,36 @@ async def create_test_room(streams):
 
 async def send_messages(messages, stream_id):
     for i in range(NUMBER_OF_MESSAGES):
-        await messages.send_message(stream_id, f"<messageML><b>{i}</b> {datetime.now().isoformat()}</messageML>")
+        await messages.send_message(
+            stream_id, f"<messageML><b>{i}</b> {datetime.now().isoformat()}</messageML>"
+        )
     logging.debug("Messages sent")
 
 
-async def check_all_messages_have_been_replied_to(message_service: MessageService, injector_bot_username, stream_id):
-    messages = await message_service.list_messages(stream_id, 0, 0, 2 * NUMBER_OF_MESSAGES)
+async def check_all_messages_have_been_replied_to(
+    message_service: MessageService, injector_bot_username, stream_id
+):
+    messages = await message_service.list_messages(
+        stream_id, 0, 0, 2 * NUMBER_OF_MESSAGES
+    )
     while len(messages) != 2 * NUMBER_OF_MESSAGES:
-        sent_ids = extract_ids(filter(lambda m: m.user.username == injector_bot_username, messages))
-        replied_ids = extract_ids(filter(lambda m: m.user.user_id == REPLIER_BOT_ID, messages))
+        sent_ids = extract_ids(
+            filter(lambda m: m.user.username == injector_bot_username, messages)
+        )
+        replied_ids = extract_ids(
+            filter(lambda m: m.user.user_id == REPLIER_BOT_ID, messages)
+        )
 
-        logging.debug("Not replied to all messages yet (%s/%s), missing messages: %s", len(messages),
-                      2 * NUMBER_OF_MESSAGES, sent_ids - replied_ids)
+        logging.debug(
+            "Not replied to all messages yet (%s/%s), missing messages: %s",
+            len(messages),
+            2 * NUMBER_OF_MESSAGES,
+            sent_ids - replied_ids,
+        )
         await asyncio.sleep(0.1)
-        messages = await message_service.list_messages(stream_id, 0, 0, 2 * NUMBER_OF_MESSAGES)
+        messages = await message_service.list_messages(
+            stream_id, 0, 0, 2 * NUMBER_OF_MESSAGES
+        )
     logging.debug("Replied to all messages")
 
 
@@ -66,7 +92,9 @@ def extract_ids(iterable):
     return set(map(lambda m: get_text_content_from_message(m).split(" ")[0], iterable))
 
 
-logging.config.fileConfig(Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False)
+logging.config.fileConfig(
+    Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False
+)
 
 if __name__ == "__main__":
     asyncio.run(run())

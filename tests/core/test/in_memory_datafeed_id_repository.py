@@ -1,4 +1,6 @@
-from symphony.bdk.core.service.datafeed.on_disk_datafeed_id_repository import DatafeedIdRepository
+from symphony.bdk.core.service.datafeed.on_disk_datafeed_id_repository import (
+    DatafeedIdRepository,
+)
 
 
 class InMemoryDatafeedIdRepository(DatafeedIdRepository):
@@ -9,7 +11,9 @@ class InMemoryDatafeedIdRepository(DatafeedIdRepository):
 
     def write(self, datafeed_id: str, agent_base_path=None):
         self.datafeed_id = datafeed_id
-        self.agent_base_path = self.default_agent_base_path if agent_base_path is None else agent_base_path
+        self.agent_base_path = (
+            self.default_agent_base_path if agent_base_path is None else agent_base_path
+        )
 
     def read(self):
         return self.datafeed_id

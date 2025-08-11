@@ -4,6 +4,7 @@ There is an outstanding issue with aiohttp and Python 3.8+ on Windows. This affe
 proxy on Windows with Python 3.8+. As known workaround, the following code is meant to avoid this issue by detecting the
 operating system and setting WindowsSelectorEventLoopPolicy as event loop policy.
 """
+
 import asyncio
 import os
 
