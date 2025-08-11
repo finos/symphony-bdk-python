@@ -1,0 +1,55 @@
+name: e2e test
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  e2e-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        id: setup-python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Get pip cache dir
+        id: pip-cache
+        run: |
+          echo "dir=$(pip cache dir)" >> $GITHUB_OUTPUT
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.pip-cache.outputs.dir }}
+          key: ${{ runner.os }}-pip-${{ steps.setup-python.outputs.python-version }}
+
+      - name: Install Poetry
+        run: pip install poetry
+
+      - name: Install Poetry plugins
+        run: poetry self add poetry-plugin-export
+
+      - name: Cache poetry virtualenv
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pypoetry/virtualenvs
+          key: ${{ runner.os }}-poetry-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('poetry.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-poetry-${{ steps.setup-python.outputs.python-version }}-
+      - name: Install dependencies
+        run: poetry install
+
+      - name: Run E2E tests
+        env:
+            TEST_RSA_KEY: ${{ secrets.TEST_RSA_KEY }}
+            MSG_BOT_USERNAME: ${{ vars.MSG_BOT_USERNAME }}
+            FEED_BOT_USERNAME: ${{ vars.FEED_BOT_USERNAME }}
+            STREAM_ID: ${{ vars.STREAM_ID }}
+            SYMPHONY_HOST: ${{ vars.SYMPHONY_HOST }}
+            TEST_USER_ID: ${{ vars.TEST_SYM_USER_ID }}
+            BOT_USER_ID: ${{ vars.BOT_USER_ID }}
+        run: poetry run pytest -m e2e --no-cov
+        timeout-minutes: 10
