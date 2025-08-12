@@ -19,9 +19,7 @@ class BdkRetryConfig:
         if self.max_attempts < 0:
             self.max_attempts = sys.maxsize
         self.initial_interval = timedelta(
-            milliseconds=config.get(
-                "initialIntervalMillis", self.DEFAULT_INITIAL_INTERVAL
-            )
+            milliseconds=config.get("initialIntervalMillis", self.DEFAULT_INITIAL_INTERVAL)
         )
         self.multiplier = config.get("multiplier", self.DEFAULT_MULTIPLIER)
         if self.multiplier < 1:

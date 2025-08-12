@@ -2,9 +2,7 @@ import logging
 
 from symphony.bdk.core.activity.api import AbstractActivity, ActivityContext
 from symphony.bdk.gen.agent_model.v4_initiator import V4Initiator
-from symphony.bdk.gen.agent_model.v4_symphony_elements_action import (
-    V4SymphonyElementsAction,
-)
+from symphony.bdk.gen.agent_model.v4_symphony_elements_action import V4SymphonyElementsAction
 
 logger = logging.getLogger(__name__)
 

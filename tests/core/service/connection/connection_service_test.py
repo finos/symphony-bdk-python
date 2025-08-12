@@ -4,9 +4,7 @@ import pytest
 
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.service.connection.connection_service import ConnectionService
-from symphony.bdk.core.service.connection.model.connection_status import (
-    ConnectionStatus,
-)
+from symphony.bdk.core.service.connection.model.connection_status import ConnectionStatus
 from symphony.bdk.gen.pod_api.connection_api import ConnectionApi
 from symphony.bdk.gen.pod_model.user_connection import UserConnection
 from symphony.bdk.gen.pod_model.user_connection_list import UserConnectionList
@@ -37,10 +35,8 @@ def fixture_connection_service(connection_api, auth_session):
 @pytest.mark.asyncio
 async def test_get_connection(connection_api, connection_service):
     connection_api.v1_connection_user_user_id_info_get = AsyncMock()
-    connection_api.v1_connection_user_user_id_info_get.return_value = (
-        deserialize_object(
-            UserConnection, '{   "userId": 769658112378,   "status": "ACCEPTED"}'
-        )
+    connection_api.v1_connection_user_user_id_info_get.return_value = deserialize_object(
+        UserConnection, '{   "userId": 769658112378,   "status": "ACCEPTED"}'
     )
 
     user_connection = await connection_service.get_connection(769658112378)

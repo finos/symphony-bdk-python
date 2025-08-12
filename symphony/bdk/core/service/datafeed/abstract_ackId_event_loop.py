@@ -4,9 +4,7 @@ from abc import ABC, abstractmethod
 
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
-from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import (
-    AbstractDatafeedLoop,
-)
+from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import AbstractDatafeedLoop
 from symphony.bdk.core.service.datafeed.exception import EventError
 from symphony.bdk.core.service.session.session_service import SessionService
 from symphony.bdk.gen.agent_api.datafeed_api import DatafeedApi
@@ -75,9 +73,7 @@ class AbstractAckIdEventLoop(AbstractDatafeedLoop, ABC):
                     success = False
                 else:
                     logging.debug(
-                        "Exception occurred inside %s",
-                        task.get_name(),
-                        exc_info=exception,
+                        "Exception occurred inside %s", task.get_name(), exc_info=exception
                     )
         return success
 

@@ -23,12 +23,8 @@ def mock_authenticator():
     login_client = MagicMock(spec=ApiClient)
     relay_client = MagicMock(spec=ApiClient)
     retry_config = MagicMock()
-    authenticator = BotAuthenticatorRsa(
-        config, login_client, relay_client, retry_config
-    )
-    authenticator.retrieve_session_token = AsyncMock(
-        return_value="session_token_string"
-    )
+    authenticator = BotAuthenticatorRsa(config, login_client, relay_client, retry_config)
+    authenticator.retrieve_session_token = AsyncMock(return_value="session_token_string")
     authenticator.retrieve_key_manager_token = AsyncMock(return_value="km_token_string")
     authenticator.agent_version_service = AsyncMock()
     return authenticator
@@ -133,21 +129,17 @@ async def test_app_auth_session():
     expire_at = 1539636528288
 
     ext_app_authenticator = AsyncMock()
-    ext_app_authenticator.authenticate_and_retrieve_tokens.return_value = (
-        ExtensionAppTokens(
-            app_id="app_id",
-            app_token=retrieved_app_token,
-            symphony_token=symphony_token,
-            expire_at=expire_at,
-        )
+    ext_app_authenticator.authenticate_and_retrieve_tokens.return_value = ExtensionAppTokens(
+        app_id="app_id",
+        app_token=retrieved_app_token,
+        symphony_token=symphony_token,
+        expire_at=expire_at,
     )
 
     session = AppAuthSession(ext_app_authenticator, input_app_token)
     await session.refresh()
 
-    ext_app_authenticator.authenticate_and_retrieve_tokens.assert_called_once_with(
-        input_app_token
-    )
+    ext_app_authenticator.authenticate_and_retrieve_tokens.assert_called_once_with(input_app_token)
     assert session.app_token == retrieved_app_token
     assert session.symphony_token == symphony_token
     assert session.expire_at == expire_at
@@ -156,9 +148,7 @@ async def test_app_auth_session():
 @pytest.mark.asyncio
 async def test_skd_disabled_if_claim_is_missing(auth_session):
     # Given: The token claims do not contain the SKD flag
-    with patch(
-        "symphony.bdk.core.auth.auth_session.extract_token_claims", return_value={}
-    ):
+    with patch("symphony.bdk.core.auth.auth_session.extract_token_claims", return_value={}):
         # When: skd_enabled is checked
         is_enabled = await auth_session.skd_enabled
         # Then: The result is False
@@ -214,13 +204,9 @@ async def test_km_token_is_empty_when_skd_enabled(auth_session, mock_authenticat
 
 
 @pytest.mark.asyncio
-async def test_km_token_is_retrieved_when_skd_disabled(
-    auth_session, mock_authenticator
-):
+async def test_km_token_is_retrieved_when_skd_disabled(auth_session, mock_authenticator):
     # Given: SKD is disabled because the token claim is missing
-    with patch(
-        "symphony.bdk.core.auth.auth_session.extract_token_claims", return_value={}
-    ):
+    with patch("symphony.bdk.core.auth.auth_session.extract_token_claims", return_value={}):
         # When: The key manager token is requested
         km_token = await auth_session.key_manager_token
         # Then: The real token is returned and the retrieval method was called

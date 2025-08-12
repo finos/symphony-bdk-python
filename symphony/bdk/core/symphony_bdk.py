@@ -13,12 +13,8 @@ from symphony.bdk.core.config.exception import BdkConfigError, BotNotConfiguredE
 from symphony.bdk.core.extension import ExtensionService
 from symphony.bdk.core.service.application.application_service import ApplicationService
 from symphony.bdk.core.service.connection.connection_service import ConnectionService
-from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import (
-    AbstractDatafeedLoop,
-)
-from symphony.bdk.core.service.datafeed.abstract_datahose_loop import (
-    AbstractDatahoseLoop,
-)
+from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import AbstractDatafeedLoop
+from symphony.bdk.core.service.datafeed.abstract_datahose_loop import AbstractDatahoseLoop
 from symphony.bdk.core.service.health.health_service import HealthService
 from symphony.bdk.core.service.message.message_service import MessageService
 from symphony.bdk.core.service.obo_services import OboServices
@@ -46,9 +42,7 @@ def bot_service(func):
         if not symphony_bdk._config.bot.is_authentication_configured():
             raise BotNotConfiguredError("Error calling bot service ")
         if not symphony_bdk._config.is_bot_configured():
-            raise BotNotConfiguredError(
-                "Bot username field is not configured correctly."
-            )
+            raise BotNotConfiguredError("Bot username field is not configured correctly.")
         return func(*args)
 
     return check_if_bot_configured_and_call_function
@@ -138,9 +132,7 @@ class SymphonyBdk:
         self._extension_service = ExtensionService(
             self._api_client_factory, self._bot_session, self._config
         )
-        bot_authenticator.agent_version_service = (
-            self._service_factory.get_agent_version_service()
-        )
+        bot_authenticator.agent_version_service = self._service_factory.get_agent_version_service()
 
     @bot_service
     def bot_session(self) -> AuthSession:
@@ -178,8 +170,7 @@ class SymphonyBdk:
                 username
             )
         raise AuthInitializationError(
-            "At least user_id or username should be given to OBO authenticate the "
-            "extension app"
+            "At least user_id or username should be given to OBO authenticate the extension app"
         )
 
     @app_service

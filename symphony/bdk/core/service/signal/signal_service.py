@@ -7,12 +7,8 @@ from symphony.bdk.core.service.pagination import offset_based_pagination
 from symphony.bdk.gen.agent_api.signals_api import SignalsApi
 from symphony.bdk.gen.agent_model.base_signal import BaseSignal
 from symphony.bdk.gen.agent_model.channel_subscriber import ChannelSubscriber
-from symphony.bdk.gen.agent_model.channel_subscriber_response import (
-    ChannelSubscriberResponse,
-)
-from symphony.bdk.gen.agent_model.channel_subscription_response import (
-    ChannelSubscriptionResponse,
-)
+from symphony.bdk.gen.agent_model.channel_subscriber_response import ChannelSubscriberResponse
+from symphony.bdk.gen.agent_model.channel_subscription_response import ChannelSubscriptionResponse
 from symphony.bdk.gen.agent_model.signal import Signal
 from symphony.bdk.gen.agent_model.signal_list import SignalList
 
@@ -32,10 +28,7 @@ class OboSignalService:
     """
 
     def __init__(
-        self,
-        signals_api: SignalsApi,
-        auth_session: AuthSession,
-        retry_config: BdkRetryConfig,
+        self, signals_api: SignalsApi, auth_session: AuthSession, retry_config: BdkRetryConfig
     ):
         self._signals_api = signals_api
         self._auth_session = auth_session
@@ -226,9 +219,7 @@ class OboSignalService:
             result = await self.list_subscribers(signal_id, skip, limit)
             return result.data if result else None
 
-        return offset_based_pagination(
-            list_subscribers_one_page, chunk_size, max_number
-        )
+        return offset_based_pagination(list_subscribers_one_page, chunk_size, max_number)
 
 
 class SignalService(OboSignalService):

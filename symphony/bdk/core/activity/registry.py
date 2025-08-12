@@ -1,25 +1,17 @@
 import logging
 
 from symphony.bdk.core.activity.api import AbstractActivity
-from symphony.bdk.core.activity.command import (
-    CommandActivity,
-    CommandContext,
-    SlashCommandActivity,
-)
+from symphony.bdk.core.activity.command import CommandActivity, CommandContext, SlashCommandActivity
 from symphony.bdk.core.activity.form import FormReplyActivity, FormReplyContext
 from symphony.bdk.core.activity.user_joined_room import (
     UserJoinedRoomActivity,
     UserJoinedRoomContext,
 )
-from symphony.bdk.core.service.datafeed.real_time_event_listener import (
-    RealTimeEventListener,
-)
+from symphony.bdk.core.service.datafeed.real_time_event_listener import RealTimeEventListener
 from symphony.bdk.core.service.session.session_service import SessionService
 from symphony.bdk.gen.agent_model.v4_initiator import V4Initiator
 from symphony.bdk.gen.agent_model.v4_message_sent import V4MessageSent
-from symphony.bdk.gen.agent_model.v4_symphony_elements_action import (
-    V4SymphonyElementsAction,
-)
+from symphony.bdk.gen.agent_model.v4_symphony_elements_action import V4SymphonyElementsAction
 from symphony.bdk.gen.agent_model.v4_user_joined_room import V4UserJoinedRoom
 
 logger = logging.getLogger(__name__)
@@ -71,8 +63,7 @@ class ActivityRegistry(RealTimeEventListener):
             if act == activity:
                 self._activity_list.remove(act)
                 logger.debug(
-                    "Activity '%s' has been removed/unsubscribed in order to be replaced",
-                    act,
+                    "Activity '%s' has been removed/unsubscribed in order to be replaced", act
                 )
 
     def slash(self, command: str, mention_bot: bool = True, description: str = ""):
@@ -89,9 +80,7 @@ class ActivityRegistry(RealTimeEventListener):
 
         def decorator(func):
             logger.debug(
-                "Registering slash command with command=%s, mention_bot=%s",
-                command,
-                mention_bot,
+                "Registering slash command with command=%s, mention_bot=%s", command, mention_bot
             )
             self.register(SlashCommandActivity(command, mention_bot, func, description))
             return func
@@ -100,9 +89,7 @@ class ActivityRegistry(RealTimeEventListener):
 
     @_initialize_display_name
     async def on_message_sent(self, initiator: V4Initiator, event: V4MessageSent):
-        context = CommandContext(
-            initiator, event, self._bot_display_name, self._bot_user_id
-        )
+        context = CommandContext(initiator, event, self._bot_display_name, self._bot_user_id)
         for act in self._activity_list:
             if isinstance(act, CommandActivity):
                 act.before_matcher(context)
@@ -121,9 +108,7 @@ class ActivityRegistry(RealTimeEventListener):
                     await act.on_activity(context)
 
     @_initialize_display_name
-    async def on_user_joined_room(
-        self, initiator: V4Initiator, event: V4UserJoinedRoom
-    ):
+    async def on_user_joined_room(self, initiator: V4Initiator, event: V4UserJoinedRoom):
         context = UserJoinedRoomContext(initiator, event)
         for act in self._activity_list:
             if isinstance(act, UserJoinedRoomActivity):

@@ -15,9 +15,7 @@ from symphony.bdk.gen.agent_model.v4_initiator import V4Initiator
 from symphony.bdk.gen.agent_model.v4_message import V4Message
 from symphony.bdk.gen.agent_model.v4_message_sent import V4MessageSent
 from symphony.bdk.gen.agent_model.v4_stream import V4Stream
-from symphony.bdk.gen.agent_model.v4_symphony_elements_action import (
-    V4SymphonyElementsAction,
-)
+from symphony.bdk.gen.agent_model.v4_symphony_elements_action import V4SymphonyElementsAction
 from symphony.bdk.gen.agent_model.v4_user import V4User
 from symphony.bdk.gen.agent_model.v4_user_joined_room import V4UserJoinedRoom
 
@@ -63,9 +61,7 @@ def fixture_elements_action():
 
 @pytest.fixture(name="user_joined_room")
 def fixture_user_joined_room():
-    return V4UserJoinedRoom(
-        stream=V4Stream(stream_id="12345678"), affected_user=V4User(user_id=0)
-    )
+    return V4UserJoinedRoom(stream=V4Stream(stream_id="12345678"), affected_user=V4User(user_id=0))
 
 
 @pytest.fixture(name="activity_registry")
@@ -87,13 +83,7 @@ async def test_register(activity_registry, session_service, message_sent):
 
 @pytest.mark.asyncio
 async def test_register_different_activities_instance(
-    activity_registry,
-    command,
-    form,
-    user,
-    message_sent,
-    elements_action,
-    user_joined_room,
+    activity_registry, command, form, user, message_sent, elements_action, user_joined_room
 ):
     command.on_activity = AsyncMock()
     form.on_activity = AsyncMock()
@@ -175,9 +165,7 @@ async def test_on_symphony_elements_action(activity_registry, elements_action, f
 
 
 @pytest.mark.asyncio
-async def test_on_symphony_elements_action_false_match(
-    activity_registry, elements_action, form
-):
+async def test_on_symphony_elements_action_false_match(activity_registry, elements_action, form):
     form.on_activity = AsyncMock()
     form.matches.return_value = False
 
@@ -204,9 +192,7 @@ async def test_on_user_joined_room(activity_registry, user_joined_room, user):
 
 
 @pytest.mark.asyncio
-async def test_on_user_joined_room_false_match(
-    activity_registry, user_joined_room, user
-):
+async def test_on_user_joined_room_false_match(activity_registry, user_joined_room, user):
     user.on_activity = AsyncMock()
 
     user.matches.return_value = False
@@ -262,9 +248,7 @@ async def test_slash_command_with_mention_bot(activity_registry, message_sent):
     assert slash_activity._name == command_name
     assert slash_activity._requires_mention_bot == mention_bot
     assert slash_activity._callback == listener
-    assert isinstance(
-        slash_activity._command_pattern.tokens[0], MatchingUserIdMentionToken
-    )
+    assert isinstance(slash_activity._command_pattern.tokens[0], MatchingUserIdMentionToken)
 
 
 @pytest.mark.asyncio
@@ -287,9 +271,7 @@ async def test_slash_same_command_name_and_mention(activity_registry, message_se
 
 
 @pytest.mark.asyncio
-async def test_slash_same_command_name_different_mention(
-    activity_registry, message_sent
-):
+async def test_slash_same_command_name_different_mention(activity_registry, message_sent):
     listener1 = AsyncMock()
     listener2 = AsyncMock()
     command_name = "/command"

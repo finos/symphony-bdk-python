@@ -1,6 +1,4 @@
-from symphony.bdk.core.config.model.bdk_authentication_config import (
-    BdkAuthenticationConfig,
-)
+from symphony.bdk.core.config.model.bdk_authentication_config import BdkAuthenticationConfig
 
 
 class BdkBotConfig(BdkAuthenticationConfig):

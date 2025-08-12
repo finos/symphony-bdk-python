@@ -45,9 +45,7 @@ async def offset_based_pagination(
 
 
 async def cursor_based_pagination(
-    func: Callable[[int, str], Awaitable[Tuple[T, str]]],
-    chunk_size=100,
-    max_number=None,
+    func: Callable[[int, str], Awaitable[Tuple[T, str]]], chunk_size=100, max_number=None
 ) -> AsyncGenerator[T, None]:
     """Creates an asynchronous generator from a cursor based endpoint. The generator makes the call to the underlying
     endpoint `func` until the `max_number` of items is reached or results are exhausted (i.e. cursor returned by `func`

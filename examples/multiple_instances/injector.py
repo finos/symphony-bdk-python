@@ -6,9 +6,7 @@ from datetime import datetime
 from pathlib import Path
 
 from symphony.bdk.core.config.loader import BdkConfigLoader
-from symphony.bdk.core.service.message.message_parser import (
-    get_text_content_from_message,
-)
+from symphony.bdk.core.service.message.message_parser import get_text_content_from_message
 from symphony.bdk.core.service.message.message_service import MessageService
 from symphony.bdk.core.symphony_bdk import SymphonyBdk
 from symphony.bdk.gen.pod_model.v3_room_attributes import V3RoomAttributes
@@ -64,16 +62,10 @@ async def send_messages(messages, stream_id):
 async def check_all_messages_have_been_replied_to(
     message_service: MessageService, injector_bot_username, stream_id
 ):
-    messages = await message_service.list_messages(
-        stream_id, 0, 0, 2 * NUMBER_OF_MESSAGES
-    )
+    messages = await message_service.list_messages(stream_id, 0, 0, 2 * NUMBER_OF_MESSAGES)
     while len(messages) != 2 * NUMBER_OF_MESSAGES:
-        sent_ids = extract_ids(
-            filter(lambda m: m.user.username == injector_bot_username, messages)
-        )
-        replied_ids = extract_ids(
-            filter(lambda m: m.user.user_id == REPLIER_BOT_ID, messages)
-        )
+        sent_ids = extract_ids(filter(lambda m: m.user.username == injector_bot_username, messages))
+        replied_ids = extract_ids(filter(lambda m: m.user.user_id == REPLIER_BOT_ID, messages))
 
         logging.debug(
             "Not replied to all messages yet (%s/%s), missing messages: %s",
@@ -82,9 +74,7 @@ async def check_all_messages_have_been_replied_to(
             sent_ids - replied_ids,
         )
         await asyncio.sleep(0.1)
-        messages = await message_service.list_messages(
-            stream_id, 0, 0, 2 * NUMBER_OF_MESSAGES
-        )
+        messages = await message_service.list_messages(stream_id, 0, 0, 2 * NUMBER_OF_MESSAGES)
     logging.debug("Replied to all messages")
 
 

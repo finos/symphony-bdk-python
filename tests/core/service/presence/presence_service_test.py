@@ -3,10 +3,7 @@ from unittest.mock import AsyncMock, MagicMock
 import pytest
 
 from symphony.bdk.core.auth.auth_session import AuthSession
-from symphony.bdk.core.service.presence.presence_service import (
-    PresenceService,
-    PresenceStatus,
-)
+from symphony.bdk.core.service.presence.presence_service import PresenceService, PresenceStatus
 from symphony.bdk.gen import ApiException
 from symphony.bdk.gen.pod_api.presence_api import PresenceApi
 from symphony.bdk.gen.pod_model.string_id import StringId
@@ -43,16 +40,13 @@ def fixture_mocked_presence_api_client():
 
 @pytest.fixture(name="presence_service")
 def fixture_presence_service(mocked_presence_api_client, auth_session):
-    return PresenceService(
-        mocked_presence_api_client, auth_session, minimal_retry_config()
-    )
+    return PresenceService(mocked_presence_api_client, auth_session, minimal_retry_config())
 
 
 @pytest.mark.asyncio
 async def test_get_presence(presence_service, mocked_presence_api_client):
     mocked_presence_api_client.v2_user_presence_get.return_value = deserialize_object(
-        V2Presence,
-        '{"category":"AVAILABLE","userId":14568529068038,"timestamp":1533928483800}',
+        V2Presence, '{"category":"AVAILABLE","userId":14568529068038,"timestamp":1533928483800}'
     )
 
     presence = await presence_service.get_presence()
@@ -109,13 +103,8 @@ async def test_get_all_presence_failed(presence_service, mocked_presence_api_cli
 
 @pytest.mark.asyncio
 async def test_get_user_presence(presence_service, mocked_presence_api_client):
-    mocked_presence_api_client.v3_user_uid_presence_get.return_value = (
-        deserialize_object(
-            V2Presence,
-            '{"category":"AVAILABLE",'
-            '"userId":14568529068038,'
-            '"timestamp":1533928483800}',
-        )
+    mocked_presence_api_client.v3_user_uid_presence_get.return_value = deserialize_object(
+        V2Presence, '{"category":"AVAILABLE","userId":14568529068038,"timestamp":1533928483800}'
     )
 
     presence = await presence_service.get_user_presence(1234, True)
@@ -145,12 +134,8 @@ async def test_external_presence_interest(presence_service, mocked_presence_api_
 
 
 @pytest.mark.asyncio
-async def test_external_presence_interest_failed(
-    presence_service, mocked_presence_api_client
-):
-    mocked_presence_api_client.v1_user_presence_register_post.side_effect = (
-        ApiException(400)
-    )
+async def test_external_presence_interest_failed(presence_service, mocked_presence_api_client):
+    mocked_presence_api_client.v1_user_presence_register_post.side_effect = ApiException(400)
     uid_list = [1234]
     with pytest.raises(ApiException):
         await presence_service.external_presence_interest(uid_list)
@@ -159,16 +144,13 @@ async def test_external_presence_interest_failed(
 @pytest.mark.asyncio
 async def test_set_presence(presence_service, mocked_presence_api_client):
     mocked_presence_api_client.v2_user_presence_post.return_value = deserialize_object(
-        V2Presence,
-        '{"category":"AWAY","userId":14568529068038,"timestamp":1533928483800}',
+        V2Presence, '{"category":"AWAY","userId":14568529068038,"timestamp":1533928483800}'
     )
 
     presence = await presence_service.set_presence(PresenceStatus.AWAY, True)
 
     mocked_presence_api_client.v2_user_presence_post.assert_called_once_with(
-        session_token="session_token",
-        presence=V2PresenceStatus(category="AWAY"),
-        soft=True,
+        session_token="session_token", presence=V2PresenceStatus(category="AWAY"), soft=True
     )
     assert presence.category == "AWAY"
     assert presence.user_id == 14568529068038
@@ -184,8 +166,8 @@ async def test_set_presence_failed(presence_service, mocked_presence_api_client)
 
 @pytest.mark.asyncio
 async def test_create_presence_feed(presence_service, mocked_presence_api_client):
-    mocked_presence_api_client.v1_presence_feed_create_post.return_value = (
-        deserialize_object(StringId, '{"id":"c4dca251-8639-48db-a9d4-f387089e17cf"}')
+    mocked_presence_api_client.v1_presence_feed_create_post.return_value = deserialize_object(
+        StringId, '{"id":"c4dca251-8639-48db-a9d4-f387089e17cf"}'
     )
 
     feed_id = await presence_service.create_presence_feed()
@@ -194,12 +176,8 @@ async def test_create_presence_feed(presence_service, mocked_presence_api_client
 
 
 @pytest.mark.asyncio
-async def test_create_presence_feed_failed(
-    presence_service, mocked_presence_api_client
-):
-    mocked_presence_api_client.v1_presence_feed_create_post.side_effect = ApiException(
-        400
-    )
+async def test_create_presence_feed_failed(presence_service, mocked_presence_api_client):
+    mocked_presence_api_client.v1_presence_feed_create_post.side_effect = ApiException(400)
 
     with pytest.raises(ApiException):
         await presence_service.create_presence_feed()
@@ -207,22 +185,20 @@ async def test_create_presence_feed_failed(
 
 @pytest.mark.asyncio
 async def test_read_presence_feed(presence_service, mocked_presence_api_client):
-    mocked_presence_api_client.v1_presence_feed_feed_id_read_get.return_value = (
-        deserialize_object(
-            V2PresenceList,
-            "["
-            "  {"
-            '      "category":"AVAILABLE",'
-            '      "userId":7078106103901,'
-            '      "timestamp":1489769156271'
-            "  },"
-            "  {"
-            '      "category":"ON_THE_PHONE",'
-            '      "userId":7078106103902,'
-            '      "timestamp":1489769156273'
-            "  }"
-            "]",
-        )
+    mocked_presence_api_client.v1_presence_feed_feed_id_read_get.return_value = deserialize_object(
+        V2PresenceList,
+        "["
+        "  {"
+        '      "category":"AVAILABLE",'
+        '      "userId":7078106103901,'
+        '      "timestamp":1489769156271'
+        "  },"
+        "  {"
+        '      "category":"ON_THE_PHONE",'
+        '      "userId":7078106103902,'
+        '      "timestamp":1489769156273'
+        "  }"
+        "]",
     )
 
     feed_id = "c4dca251-8639-48db-a9d4-f387089e17cf"
@@ -240,9 +216,7 @@ async def test_read_presence_feed(presence_service, mocked_presence_api_client):
 
 @pytest.mark.asyncio
 async def test_read_presence_feed_failed(presence_service, mocked_presence_api_client):
-    mocked_presence_api_client.v1_presence_feed_feed_id_read_get.side_effect = (
-        ApiException(400)
-    )
+    mocked_presence_api_client.v1_presence_feed_feed_id_read_get.side_effect = ApiException(400)
 
     with pytest.raises(ApiException):
         await presence_service.read_presence_feed("1234")
@@ -254,9 +228,7 @@ async def test_delete_presence_feed(presence_service, mocked_presence_api_client
         deserialize_object(StringId, '{"id":"c4dca251-8639-48db-a9d4-f387089e17cf"}')
     )
 
-    feed_id = await presence_service.delete_presence_feed(
-        "c4dca251-8639-48db-a9d4-f387089e17cf"
-    )
+    feed_id = await presence_service.delete_presence_feed("c4dca251-8639-48db-a9d4-f387089e17cf")
 
     mocked_presence_api_client.v1_presence_feed_feed_id_delete_post.assert_called_once_with(
         session_token="session_token", feed_id=feed_id
@@ -265,12 +237,8 @@ async def test_delete_presence_feed(presence_service, mocked_presence_api_client
 
 
 @pytest.mark.asyncio
-async def test_delete_presence_feed_failed(
-    presence_service, mocked_presence_api_client
-):
-    mocked_presence_api_client.v1_presence_feed_feed_id_delete_post.side_effect = (
-        ApiException(400)
-    )
+async def test_delete_presence_feed_failed(presence_service, mocked_presence_api_client):
+    mocked_presence_api_client.v1_presence_feed_feed_id_delete_post.side_effect = ApiException(400)
 
     with pytest.raises(ApiException):
         await presence_service.delete_presence_feed("1234")
@@ -279,13 +247,10 @@ async def test_delete_presence_feed_failed(
 @pytest.mark.asyncio
 async def test_set_user_presence(presence_service, mocked_presence_api_client):
     mocked_presence_api_client.v3_user_presence_post.return_value = deserialize_object(
-        V2Presence,
-        '{"category":"AWAY","userId":14568529068038,"timestamp":1533928483800}',
+        V2Presence, '{"category":"AWAY","userId":14568529068038,"timestamp":1533928483800}'
     )
 
-    presence = await presence_service.set_user_presence(
-        14568529068038, PresenceStatus.AWAY, True
-    )
+    presence = await presence_service.set_user_presence(14568529068038, PresenceStatus.AWAY, True)
 
     mocked_presence_api_client.v3_user_presence_post.assert_called_once_with(
         session_token="session_token",

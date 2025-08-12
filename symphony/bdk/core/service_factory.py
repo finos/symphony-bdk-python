@@ -12,33 +12,19 @@ from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import (
     AbstractDatafeedLoop,
     DatafeedVersion,
 )
-from symphony.bdk.core.service.datafeed.abstract_datahose_loop import (
-    AbstractDatahoseLoop,
-)
+from symphony.bdk.core.service.datafeed.abstract_datahose_loop import AbstractDatahoseLoop
 from symphony.bdk.core.service.datafeed.datafeed_loop_v1 import DatafeedLoopV1
 from symphony.bdk.core.service.datafeed.datafeed_loop_v2 import DatafeedLoopV2
 from symphony.bdk.core.service.datafeed.datahose_loop import DatahoseLoop
 from symphony.bdk.core.service.health.health_service import HealthService
-from symphony.bdk.core.service.message.message_service import (
-    MessageService,
-    OboMessageService,
-)
+from symphony.bdk.core.service.message.message_service import MessageService, OboMessageService
 from symphony.bdk.core.service.message.multi_attachments_messages_api import (
     MultiAttachmentsMessagesApi,
 )
-from symphony.bdk.core.service.presence.presence_service import (
-    OboPresenceService,
-    PresenceService,
-)
+from symphony.bdk.core.service.presence.presence_service import OboPresenceService, PresenceService
 from symphony.bdk.core.service.session.session_service import SessionService
-from symphony.bdk.core.service.signal.signal_service import (
-    OboSignalService,
-    SignalService,
-)
-from symphony.bdk.core.service.stream.stream_service import (
-    OboStreamService,
-    StreamService,
-)
+from symphony.bdk.core.service.signal.signal_service import OboSignalService, SignalService
+from symphony.bdk.core.service.stream.stream_service import OboStreamService, StreamService
 from symphony.bdk.core.service.user.user_service import OboUserService, UserService
 from symphony.bdk.core.service.version.agent_version_service import AgentVersionService
 from symphony.bdk.gen.agent_api.attachments_api import AttachmentsApi
@@ -75,10 +61,7 @@ class ServiceFactory:
     """
 
     def __init__(
-        self,
-        api_client_factory: ApiClientFactory,
-        auth_session: AuthSession,
-        config: BdkConfig,
+        self, api_client_factory: ApiClientFactory, auth_session: AuthSession, config: BdkConfig
     ):
         self._pod_client = api_client_factory.get_pod_client()
         self._agent_client = api_client_factory.get_agent_client()
@@ -159,9 +142,7 @@ class ServiceFactory:
 
         :return: a new SignalService instance
         """
-        return SignalService(
-            SignalsApi(self._agent_client), self._auth_session, self._config.retry
-        )
+        return SignalService(SignalsApi(self._agent_client), self._auth_session, self._config.retry)
 
     def get_session_service(self) -> SessionService:
         """Returns a fully initialized SessionService
@@ -184,10 +165,7 @@ class ServiceFactory:
                 self._config,
             )
         return DatafeedLoopV2(
-            DatafeedApi(self._agent_client),
-            self._session_service,
-            self._auth_session,
-            self._config,
+            DatafeedApi(self._agent_client), self._session_service, self._auth_session, self._config
         )
 
     def get_datahose_loop(self) -> AbstractDatahoseLoop:
@@ -209,9 +187,7 @@ class ServiceFactory:
         :return: a new HealthService instance
         """
         return HealthService(
-            AgentSystemApi(self._agent_client),
-            SignalsApi(self._agent_client),
-            self._config.retry,
+            AgentSystemApi(self._agent_client), SignalsApi(self._agent_client), self._config.retry
         )
 
     def get_presence_service(self) -> PresenceService:
@@ -243,10 +219,7 @@ class OboServiceFactory:
     """
 
     def __init__(
-        self,
-        api_client_factory: ApiClientFactory,
-        auth_session: AuthSession,
-        config: BdkConfig,
+        self, api_client_factory: ApiClientFactory, auth_session: AuthSession, config: BdkConfig
     ):
         self._pod_client = api_client_factory.get_pod_client()
         self._agent_client = api_client_factory.get_agent_client()

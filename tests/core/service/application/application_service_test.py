@@ -11,12 +11,8 @@ from symphony.bdk.gen.pod_model.pod_app_entitlement import PodAppEntitlement
 from symphony.bdk.gen.pod_model.pod_app_entitlement_list import PodAppEntitlementList
 from symphony.bdk.gen.pod_model.user_app_entitlement import UserAppEntitlement
 from symphony.bdk.gen.pod_model.user_app_entitlement_list import UserAppEntitlementList
-from symphony.bdk.gen.pod_model.user_app_entitlement_patch import (
-    UserAppEntitlementPatch,
-)
-from symphony.bdk.gen.pod_model.user_app_entitlements_patch_list import (
-    UserAppEntitlementsPatchList,
-)
+from symphony.bdk.gen.pod_model.user_app_entitlement_patch import UserAppEntitlementPatch
+from symphony.bdk.gen.pod_model.user_app_entitlements_patch_list import UserAppEntitlementsPatchList
 from tests.core.config import minimal_retry_config
 from tests.utils.resource_utils import get_deserialized_object_from_resource
 
@@ -50,15 +46,11 @@ def fixture_application_service(application_api, app_entitlement_api, auth_sessi
 @pytest.mark.asyncio
 async def test_create_application(application_api, application_service):
     application_api.v1_admin_app_create_post = AsyncMock()
-    application_api.v1_admin_app_create_post.return_value = (
-        get_deserialized_object_from_resource(
-            ApplicationDetail, "application/create_application.json"
-        )
+    application_api.v1_admin_app_create_post.return_value = get_deserialized_object_from_resource(
+        ApplicationDetail, "application/create_application.json"
     )
 
-    application_detail = await application_service.create_application(
-        ApplicationDetail()
-    )
+    application_detail = await application_service.create_application(ApplicationDetail())
 
     application_api.v1_admin_app_create_post.assert_called_with(
         session_token="session_token", application_detail=ApplicationDetail()
@@ -82,9 +74,7 @@ async def test_update_application(application_api, application_service):
     )
 
     application_api.v1_admin_app_id_update_post.assert_called_with(
-        session_token="session_token",
-        id="my-test-app",
-        application_detail=ApplicationDetail(),
+        session_token="session_token", id="my-test-app", application_detail=ApplicationDetail()
     )
 
     assert application_detail.application_info.app_id == "my-test-app"
@@ -105,10 +95,8 @@ async def test_delete_application(application_api, application_service):
 @pytest.mark.asyncio
 async def test_get_application(application_api, application_service):
     application_api.v1_admin_app_id_get_get = AsyncMock()
-    application_api.v1_admin_app_id_get_get.return_value = (
-        get_deserialized_object_from_resource(
-            ApplicationDetail, "application/get_application.json"
-        )
+    application_api.v1_admin_app_id_get_get.return_value = get_deserialized_object_from_resource(
+        ApplicationDetail, "application/get_application.json"
     )
 
     application_detail = await application_service.get_application("my-test-app")
@@ -141,9 +129,7 @@ async def test_list_application_entitlements(app_entitlement_api, application_se
 
 
 @pytest.mark.asyncio
-async def test_update_application_entitlements(
-    app_entitlement_api, application_service
-):
+async def test_update_application_entitlements(app_entitlement_api, application_service):
     app_entitlement_api.v1_admin_app_entitlement_list_post = AsyncMock()
     app_entitlement_api.v1_admin_app_entitlement_list_post.return_value = (
         get_deserialized_object_from_resource(
@@ -163,8 +149,7 @@ async def test_update_application_entitlements(
     )
 
     app_entitlement_api.v1_admin_app_entitlement_list_post.assert_called_with(
-        session_token="session_token",
-        payload=PodAppEntitlementList(value=[pod_app_entitlement]),
+        session_token="session_token", payload=PodAppEntitlementList(value=[pod_app_entitlement])
     )
 
     assert len(pod_app_entitlements) == 1
@@ -199,9 +184,7 @@ async def test_update_user_applications(app_entitlement_api, application_service
         )
     )
 
-    user_app_entitlement = UserAppEntitlement(
-        app_id="djApp", listed=True, install=False
-    )
+    user_app_entitlement = UserAppEntitlement(app_id="djApp", listed=True, install=False)
 
     user_app_entitlements = await application_service.update_user_applications(
         1234, [user_app_entitlement]

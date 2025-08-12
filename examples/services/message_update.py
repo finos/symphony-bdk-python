@@ -10,9 +10,7 @@ from symphony.bdk.gen.agent_model.v4_message import V4Message
 
 
 async def run():
-    async with SymphonyBdk(
-        BdkConfigLoader.load_from_symphony_dir("config.yaml")
-    ) as bdk:
+    async with SymphonyBdk(BdkConfigLoader.load_from_symphony_dir("config.yaml")) as bdk:
         activities = bdk.activities()
         messages = bdk.messages()
 

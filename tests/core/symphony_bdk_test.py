@@ -22,23 +22,18 @@ def fixture_config():
 
 @pytest.fixture(name="invalid_username_config")
 def fixture_invalid_username_config():
-    return BdkConfig(
-        host="acme.symphony.com", bot={"privateKey": {"path": "/path/to/key.pem"}}
-    )
+    return BdkConfig(host="acme.symphony.com", bot={"privateKey": {"path": "/path/to/key.pem"}})
 
 
 @pytest.fixture(name="invalid_app_id_config")
 def fixture_invalid_app_id_config():
-    return BdkConfig(
-        host="acme.symphony.com", app={"privateKey": {"path": "/path/to/key.pem"}}
-    )
+    return BdkConfig(host="acme.symphony.com", app={"privateKey": {"path": "/path/to/key.pem"}})
 
 
 @pytest.fixture(name="obo_only_config")
 def fixture_obo_only_config():
     return BdkConfig(
-        host="acme.symphony.com",
-        app={"appId": "app", "privateKey": {"path": "/path/to/key.pem"}},
+        host="acme.symphony.com", app={"appId": "app", "privateKey": {"path": "/path/to/key.pem"}}
     )
 
 
@@ -53,8 +48,7 @@ def fixture_mock_obo_session():
 @pytest.mark.asyncio
 async def test_bot_session(config):
     with patch(
-        "symphony.bdk.core.auth.bot_authenticator.create_signed_jwt",
-        return_value="privateKey",
+        "symphony.bdk.core.auth.bot_authenticator.create_signed_jwt", return_value="privateKey"
     ):
         bot_authenticator = AsyncMock(BotAuthenticatorRsa)
         bot_authenticator.retrieve_session_token.return_value = "session_token"
@@ -108,9 +102,7 @@ async def test_bot_invalid_config_session(invalid_username_config):
 
 @pytest.mark.asyncio
 async def test_obo_with_user_id(config):
-    with patch.object(
-        OboAuthenticatorRsa, "authenticate_by_user_id"
-    ) as mock_authenticate:
+    with patch.object(OboAuthenticatorRsa, "authenticate_by_user_id") as mock_authenticate:
         mock_authenticate.return_value = Mock(OboAuthSession)
         user_id = 12345
 
@@ -123,9 +115,7 @@ async def test_obo_with_user_id(config):
 
 @pytest.mark.asyncio
 async def test_obo_with_username(config):
-    with patch.object(
-        OboAuthenticatorRsa, "authenticate_by_username"
-    ) as mock_authenticate:
+    with patch.object(OboAuthenticatorRsa, "authenticate_by_username") as mock_authenticate:
         mock_authenticate.return_value = Mock(OboAuthSession)
         username = "my.bot.user"
 
@@ -139,12 +129,8 @@ async def test_obo_with_username(config):
 @pytest.mark.asyncio
 async def test_obo_with_user_id_and_username(config):
     with (
-        patch.object(
-            OboAuthenticatorRsa, "authenticate_by_username"
-        ) as authenticate_by_username,
-        patch.object(
-            OboAuthenticatorRsa, "authenticate_by_user_id"
-        ) as authenticate_by_user_id,
+        patch.object(OboAuthenticatorRsa, "authenticate_by_username") as authenticate_by_username,
+        patch.object(OboAuthenticatorRsa, "authenticate_by_user_id") as authenticate_by_user_id,
     ):
         authenticate_by_user_id.return_value = Mock(OboAuthSession)
         user_id = 12345

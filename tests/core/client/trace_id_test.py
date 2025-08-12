@@ -20,9 +20,7 @@ def assert_args_except_trace_id_kept_as_is(input_args, actual_args):
 
     if len(actual_args) >= 4:
         assert X_TRACE_ID in actual_args[4]
-        assert {
-            k: actual_args[4][k] for k in actual_args[4].keys() - {X_TRACE_ID}
-        } == input_args[4]
+        assert {k: actual_args[4][k] for k in actual_args[4].keys() - {X_TRACE_ID}} == input_args[4]
 
     if len(actual_args) >= 5:
         assert actual_args[5:] == input_args[5:]

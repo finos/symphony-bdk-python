@@ -2,11 +2,7 @@ from unittest.mock import AsyncMock
 
 import pytest
 
-from symphony.bdk.core.activity.command import (
-    CommandActivity,
-    CommandContext,
-    SlashCommandActivity,
-)
+from symphony.bdk.core.activity.command import CommandActivity, CommandContext, SlashCommandActivity
 from symphony.bdk.core.activity.exception import FatalActivityExecutionException
 from symphony.bdk.gen.agent_model.v4_initiator import V4Initiator
 from symphony.bdk.gen.agent_model.v4_message import V4Message
@@ -81,9 +77,7 @@ def test_context_with_valid_message(activity, message_sent):
 
 
 def test_context_with_invalid_message(activity):
-    message = (
-        "<div<p><span>hello world<span></p></div>"  # Bad xml format, missing chevron
-    )
+    message = "<div<p><span>hello world<span></p></div>"  # Bad xml format, missing chevron
     with pytest.raises(FatalActivityExecutionException):
         create_command_context(create_message_sent(message))
 
@@ -163,9 +157,7 @@ def test_slash_command_matches_without_bot_mention():
     assert not slash_command.matches(context)
 
     context = create_command_context(
-        create_message_sent_with_data(
-            content=f"<div><p>{other_command}</p></div>", data="{}"
-        )
+        create_message_sent_with_data(content=f"<div><p>{other_command}</p></div>", data="{}")
     )
     assert not slash_command.matches(context)
 

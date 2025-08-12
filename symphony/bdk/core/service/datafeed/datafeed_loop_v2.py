@@ -6,9 +6,7 @@ from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
 from symphony.bdk.core.retry import retry
 from symphony.bdk.core.retry.strategy import read_datafeed_retry
-from symphony.bdk.core.service.datafeed.abstract_ackId_event_loop import (
-    AbstractAckIdEventLoop,
-)
+from symphony.bdk.core.service.datafeed.abstract_ackId_event_loop import AbstractAckIdEventLoop
 from symphony.bdk.core.service.session.session_service import SessionService
 from symphony.bdk.gen.agent_api.datafeed_api import DatafeedApi
 from symphony.bdk.gen.agent_model.ack_id import AckId
@@ -95,9 +93,7 @@ class DatafeedLoopV2(AbstractAckIdEventLoop):
             session_token=session_token, key_manager_token=key_manager_token
         )
 
-        datafeeds = list(
-            filter(lambda df: DATAFEED_V2_ID_PATTERN.match(df.id), datafeeds)
-        )
+        datafeeds = list(filter(lambda df: DATAFEED_V2_ID_PATTERN.match(df.id), datafeeds))
         if datafeeds:
             return datafeeds[0]
         return None

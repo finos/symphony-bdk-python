@@ -14,9 +14,7 @@ from symphony.bdk.gen.agent_model.message_search_query import MessageSearchQuery
 from symphony.bdk.gen.agent_model.v4_import_response_list import V4ImportResponseList
 from symphony.bdk.gen.agent_model.v4_imported_message import V4ImportedMessage
 from symphony.bdk.gen.agent_model.v4_message import V4Message
-from symphony.bdk.gen.agent_model.v4_message_blast_response import (
-    V4MessageBlastResponse,
-)
+from symphony.bdk.gen.agent_model.v4_message_blast_response import V4MessageBlastResponse
 from symphony.bdk.gen.agent_model.v4_message_list import V4MessageList
 from symphony.bdk.gen.api_client import ApiClient, Configuration
 from symphony.bdk.gen.pod_api.default_api import DefaultApi
@@ -25,22 +23,13 @@ from symphony.bdk.gen.pod_api.message_suppression_api import MessageSuppressionA
 from symphony.bdk.gen.pod_api.pod_api import PodApi
 from symphony.bdk.gen.pod_api.streams_api import StreamsApi
 from symphony.bdk.gen.pod_model.message_metadata_response import MessageMetadataResponse
-from symphony.bdk.gen.pod_model.message_receipt_detail_response import (
-    MessageReceiptDetailResponse,
-)
+from symphony.bdk.gen.pod_model.message_receipt_detail_response import MessageReceiptDetailResponse
 from symphony.bdk.gen.pod_model.message_status import MessageStatus
-from symphony.bdk.gen.pod_model.message_suppression_response import (
-    MessageSuppressionResponse,
-)
-from symphony.bdk.gen.pod_model.stream_attachment_response import (
-    StreamAttachmentResponse,
-)
+from symphony.bdk.gen.pod_model.message_suppression_response import MessageSuppressionResponse
+from symphony.bdk.gen.pod_model.stream_attachment_response import StreamAttachmentResponse
 from symphony.bdk.gen.pod_model.string_list import StringList
 from tests.core.config import minimal_retry_config
-from tests.utils.resource_utils import (
-    deserialize_object,
-    get_deserialized_object_from_resource,
-)
+from tests.utils.resource_utils import deserialize_object, get_deserialized_object_from_resource
 
 
 @pytest.fixture(name="auth_session")
@@ -109,9 +98,7 @@ async def test_send_simple_message(message_service):
 
     await message_service.send_message(stream_id, message)
 
-    message_service._send_message.assert_called_once_with(
-        stream_id, message, "", "", [], []
-    )
+    message_service._send_message.assert_called_once_with(stream_id, message, "", "", [], [])
 
 
 @pytest.mark.asyncio
@@ -144,9 +131,7 @@ async def test_send_message_with_data(message_service):
 
     await message_service.send_message(stream_id, message, data)
 
-    message_service._send_message.assert_called_once_with(
-        stream_id, message, json_data, "", [], []
-    )
+    message_service._send_message.assert_called_once_with(stream_id, message, json_data, "", [], [])
 
 
 @pytest.mark.asyncio
@@ -184,12 +169,8 @@ async def test_blast_message(mocked_api_client, message_service):
     )
 
     assert len(blast_message.messages) == 2
-    assert (
-        blast_message.messages[0].message_id == "-AANBHKtUC-2q6_0WSjBGX___pHnSfBKdA-1"
-    )
-    assert (
-        blast_message.messages[1].message_id == "-AANBHKtUC-2q6_0WSjBGX___pHnSfBKdA-2"
-    )
+    assert blast_message.messages[0].message_id == "-AANBHKtUC-2q6_0WSjBGX___pHnSfBKdA-1"
+    assert blast_message.messages[1].message_id == "-AANBHKtUC-2q6_0WSjBGX___pHnSfBKdA-2"
 
 
 @pytest.mark.asyncio
@@ -203,9 +184,7 @@ async def test_blast_simple_message(message_service):
 
     await message_service.blast_message(stream_ids, message)
 
-    message_service._blast_message.assert_called_once_with(
-        stream_ids, message, "", "", [], []
-    )
+    message_service._blast_message.assert_called_once_with(stream_ids, message, "", "", [], [])
 
 
 @pytest.mark.asyncio
@@ -299,9 +278,7 @@ async def test_import_message(mocked_api_client, message_service):
 async def test_get_attachment(mocked_api_client, message_service):
     mocked_api_client.call_api.return_value = "attachment-string"
 
-    attachment = await message_service.get_attachment(
-        "stream-id", "message-id", "attachment-id"
-    )
+    attachment = await message_service.get_attachment("stream-id", "message-id", "attachment-id")
 
     assert attachment == "attachment-string"
 
@@ -365,10 +342,7 @@ async def test_list_attachments(mocked_api_client, message_service):
 
     assert len(attachments) == 2
     assert attachments[0].message_id == "PYLHNm/1K6ppeOpj+FbQ"
-    assert (
-        attachments[1].file_id
-        == "internal_14362370637825%2FeM6zGAILWFakDObCwMANrw%3D%3D"
-    )
+    assert attachments[1].file_id == "internal_14362370637825%2FeM6zGAILWFakDObCwMANrw%3D%3D"
 
 
 @pytest.mark.asyncio
@@ -419,17 +393,13 @@ async def test_search_messages_with_valid_stream_type(
         V4MessageList, "message_response/list_messages.json"
     )
 
-    messages = await message_service.search_messages(
-        MessageSearchQuery(stream_type=stream_type)
-    )
+    messages = await message_service.search_messages(MessageSearchQuery(stream_type=stream_type))
     assert len(messages) == 1
     assert messages[0].message_id == "test-message1"
 
 
 @pytest.mark.asyncio
-async def test_search_messages_with_invalid_stream_type(
-    mocked_api_client, message_service
-):
+async def test_search_messages_with_invalid_stream_type(mocked_api_client, message_service):
     mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
         V4MessageList, "message_response/list_messages.json"
     )
@@ -495,9 +465,7 @@ async def test_search_messages_with_stream_type_text_and_no_sid(
 @pytest.mark.asyncio
 async def test_search_all_messages(mocked_api_client, message_service):
     mocked_api_client.call_api.side_effect = [
-        get_deserialized_object_from_resource(
-            V4MessageList, "message_response/list_messages.json"
-        ),
+        get_deserialized_object_from_resource(V4MessageList, "message_response/list_messages.json"),
         V4MessageList(value=[]),
     ]
     chunk_size = 1

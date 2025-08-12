@@ -14,9 +14,7 @@ def escape_special_chars(raw_text: str) -> str:
     parsed_text = ""
     matches = re.finditer(_pattern(), raw_text)
     for match in matches:
-        parsed_text += raw_text[current_parsed_index : match.start()] + _replacement(
-            match.group(0)
-        )
+        parsed_text += raw_text[current_parsed_index : match.start()] + _replacement(match.group(0))
         current_parsed_index = match.end()
     return parsed_text + raw_text[current_parsed_index:]
 

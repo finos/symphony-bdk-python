@@ -33,12 +33,10 @@ def fixture_config():
 async def test_bot_session_rsa(config, mocked_api_client):
     with (
         patch(
-            "symphony.bdk.core.auth.bot_authenticator.create_signed_jwt",
-            return_value="privateKey",
+            "symphony.bdk.core.auth.bot_authenticator.create_signed_jwt", return_value="privateKey"
         ),
         patch(
-            "symphony.bdk.core.auth.bot_authenticator.generate_expiration_time",
-            return_value=100,
+            "symphony.bdk.core.auth.bot_authenticator.generate_expiration_time", return_value=100
         ),
     ):
         login_api_client = mocked_api_client()
@@ -66,8 +64,7 @@ async def test_bot_session_rsa(config, mocked_api_client):
 @pytest.mark.asyncio
 async def test_api_exception_rsa(config, mocked_api_client):
     with patch(
-        "symphony.bdk.core.auth.bot_authenticator.create_signed_jwt",
-        return_value="privateKey",
+        "symphony.bdk.core.auth.bot_authenticator.create_signed_jwt", return_value="privateKey"
     ):
         login_api_client = mocked_api_client()
         relay_api_client = mocked_api_client()

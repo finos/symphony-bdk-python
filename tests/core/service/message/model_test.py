@@ -30,22 +30,14 @@ def test_create_message_with_no_content():
 
 def test_create_message_content_only_without_tags():
     assert_message_properties_equal(
-        Message(content="Hello world!"),
-        "<messageML>Hello world!</messageML>",
-        "",
-        True,
-        "",
-        [],
-        [],
+        Message(content="Hello world!"), "<messageML>Hello world!</messageML>", "", True, "", [], []
     )
 
 
 def test_create_message_content_only():
     content = "<messageML>Hello world!</messageML>"
 
-    assert_message_properties_equal(
-        Message(content=content), content, "", True, "", [], []
-    )
+    assert_message_properties_equal(Message(content=content), content, "", True, "", [], [])
 
 
 def test_create_message_content_data_version():
@@ -70,13 +62,7 @@ def test_create_message_with_attachment():
     attachments = ["some attachment"]
 
     assert_message_properties_equal(
-        Message(content=content, attachments=attachments),
-        content,
-        "",
-        True,
-        "",
-        attachments,
-        [],
+        Message(content=content, attachments=attachments), content, "", True, "", attachments, []
     )
 
 

@@ -117,9 +117,7 @@ class ApiClientFactory:
 
     def _get_api_client(self, server_config, context) -> ApiClient:
         configuration = self._get_client_config(context, server_config)
-        return ApiClientFactory._get_api_client_from_config(
-            configuration, server_config
-        )
+        return ApiClientFactory._get_api_client_from_config(configuration, server_config)
 
     def _get_api_client_with_client_cert(
         self, server_config, context, certificate_path
@@ -127,9 +125,7 @@ class ApiClientFactory:
         configuration = self._get_client_config(context, server_config)
         configuration.cert_file = certificate_path
 
-        return ApiClientFactory._get_api_client_from_config(
-            configuration, server_config
-        )
+        return ApiClientFactory._get_api_client_from_config(configuration, server_config)
 
     def _get_client_config(self, context, server_config):
         configuration = Configuration(
@@ -177,16 +173,12 @@ class ApiClientFactory:
                 proxy_basic_auth=proxy_config.get_credentials(), user_agent=user_agent
             )
         else:
-            configuration.proxy_headers = urllib3.util.make_headers(
-                user_agent=user_agent
-            )
+            configuration.proxy_headers = urllib3.util.make_headers(user_agent=user_agent)
 
     @staticmethod
     def _sanitized_default_headers(server_config):
         default_headers = (
-            server_config.default_headers
-            if server_config.default_headers is not None
-            else {}
+            server_config.default_headers if server_config.default_headers is not None else {}
         )
 
         # we do this because we want to handle user-agent header separately
@@ -200,9 +192,7 @@ class ApiClientFactory:
     @staticmethod
     def _user_agent(server_config):
         default_headers = (
-            server_config.default_headers
-            if server_config.default_headers is not None
-            else {}
+            server_config.default_headers if server_config.default_headers is not None else {}
         )
 
         for header_key, header_value in default_headers.items():

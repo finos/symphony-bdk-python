@@ -8,9 +8,7 @@ from symphony.bdk.core.service.message.model import Message
 from symphony.bdk.core.symphony_bdk import SymphonyBdk
 from symphony.bdk.gen.agent_model.message_search_query import MessageSearchQuery
 from symphony.bdk.gen.agent_model.v4_imported_message import V4ImportedMessage
-from symphony.bdk.gen.agent_model.v4_imported_message_attachment import (
-    V4ImportedMessageAttachment,
-)
+from symphony.bdk.gen.agent_model.v4_imported_message_attachment import V4ImportedMessageAttachment
 
 
 async def run():
@@ -22,17 +20,14 @@ async def run():
     async with SymphonyBdk(config) as bdk:
         message_service = bdk.messages()
 
-        await message_service.send_message(
-            stream_id_1, "<messageML>Hello, World!</messageML>"
-        )
+        await message_service.send_message(stream_id_1, "<messageML>Hello, World!</messageML>")
 
         with (
             open("/path/to/attachment1", "rb") as file1,
             open("/path/to/attachment2", "rb") as file2,
         ):
             message = Message(
-                content="<messageML>Hello, World!</messageML>",
-                attachments=[file1, file2],
+                content="<messageML>Hello, World!</messageML>", attachments=[file1, file2]
             )
             await message_service.blast_message([stream_id_1, stream_id_2], message)
 
@@ -41,8 +36,7 @@ async def run():
             open("/path/to/attachment-preview", "rb") as preview,
         ):
             message = Message(
-                content="<messageML>Hello, World!</messageML>",
-                attachments=[(attachment, preview)],
+                content="<messageML>Hello, World!</messageML>", attachments=[(attachment, preview)]
             )
             await message_service.blast_message([stream_id_1, stream_id_2], message)
 
@@ -73,9 +67,7 @@ async def run():
             # Message ID can be retrieved by following guide here:
             # https://docs.developers.symphony.com/building-bots-on-symphony/datafeed/overview-of-streams
             await obo_services.messages().suppress_message("URL-Safe MessageID")
-            obo_message = await obo_services.messages().send_message(
-                stream_id_1, "Hello obo"
-            )
+            obo_message = await obo_services.messages().send_message(stream_id_1, "Hello obo")
             await obo_services.messages().update_message(
                 stream_id_1, obo_message.message_id, "Hello obo updated"
             )

@@ -45,9 +45,7 @@ class AgentVersionService:
                 return False
         except ApiException:
             return False
-        agent_major_version, agent_minor_version = self._parse_version(
-            agent_info.version
-        )
+        agent_major_version, agent_minor_version = self._parse_version(agent_info.version)
         if not agent_major_version:
             return False
         if agent_major_version == MIN_MAJOR_VERSION:

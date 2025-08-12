@@ -46,10 +46,7 @@ def test_get_base_path_from_client(parent_config):
     client_config_dict = {"host": "dev.symphony.com", "port": 1234}
     client_config = BdkClientConfig(parent_config, client_config_dict)
 
-    assert (
-        client_config.get_base_path()
-        == "parent_scheme://dev.symphony.com:1234/parent_context"
-    )
+    assert client_config.get_base_path() == "parent_scheme://dev.symphony.com:1234/parent_context"
 
 
 def test_get_base_path_from_client_no_root():

@@ -18,13 +18,9 @@ logging.config.fileConfig(
 
 
 async def run():
-    async with SymphonyBdk(
-        BdkConfigLoader.load_from_symphony_dir("config.yaml")
-    ) as bdk:
+    async with SymphonyBdk(BdkConfigLoader.load_from_symphony_dir("config.yaml")) as bdk:
         bdk.extensions().register(SymphonyGroupBdkExtension)
-        group_service: SymphonyGroupService = bdk.extensions().service(
-            SymphonyGroupBdkExtension
-        )
+        group_service: SymphonyGroupService = bdk.extensions().service(SymphonyGroupBdkExtension)
 
         # list groups
         groups = await group_service.list_groups(status=Status("ACTIVE"))
@@ -74,9 +70,7 @@ async def run():
 
         # update group avatar
         image_base_64 = "base_64_format_image"
-        group = await group_service.update_avatar(
-            group_id=group.id, image=image_base_64
-        )
+        group = await group_service.update_avatar(group_id=group.id, image=image_base_64)
         logging.debug(f"Group after avatar update: {group}")
 
         # get a group by id

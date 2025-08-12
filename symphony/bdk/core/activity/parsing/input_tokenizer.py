@@ -3,11 +3,7 @@ import re
 
 from defusedxml.ElementTree import fromstring
 
-from symphony.bdk.core.activity.parsing.message_entities import (
-    Cashtag,
-    Hashtag,
-    Mention,
-)
+from symphony.bdk.core.activity.parsing.message_entities import Cashtag, Hashtag, Mention
 from symphony.bdk.gen.agent_model.v4_message import V4Message
 
 

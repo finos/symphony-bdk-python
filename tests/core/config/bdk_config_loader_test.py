@@ -15,16 +15,13 @@ def fixture_simple_config_path(request):
     return get_config_resource_filepath(request.param)
 
 
-@pytest.fixture(
-    name="global_config_path", params=["config_global.json", "config_global.yaml"]
-)
+@pytest.fixture(name="global_config_path", params=["config_global.json", "config_global.yaml"])
 def fixture_global_config_path(request):
     return get_config_resource_filepath(request.param)
 
 
 @pytest.fixture(
-    name="wrong_path",
-    params=["/wrong_path/config.json", "/wrong_path/wrong_extension.something"],
+    name="wrong_path", params=["/wrong_path/config.json", "/wrong_path/wrong_extension.something"]
 )
 def fixture_wrong_path(request):
     return request.param
@@ -43,9 +40,7 @@ def test_load_from_content(simple_config_path):
 
 
 def test_load_from_file_not_found(wrong_path):
-    fail_error_message = (
-        f"Config file has not been found at: {Path(wrong_path).absolute()}"
-    )
+    fail_error_message = f"Config file has not been found at: {Path(wrong_path).absolute()}"
     with pytest.raises(BdkConfigError, match=re.escape(fail_error_message)):
         BdkConfigLoader.load_from_file(wrong_path)
 
@@ -67,10 +62,7 @@ def test_load_from_symphony_directory(simple_config_path):
 def test_load_client_global_config(global_config_path):
     expected_scheme = "https"
     expected_host = "devx1.symphony.com"
-    expected_default_headers = {
-        "user-agent": "custom-user-agent",
-        "header-key": "header-value",
-    }
+    expected_default_headers = {"user-agent": "custom-user-agent", "header-key": "header-value"}
 
     config = BdkConfigLoader.load_from_file(global_config_path)
 
@@ -174,10 +166,7 @@ def test_load_default_headers_defined_at_child_level_only():
 
 
 def test_load_default_headers_defined_at_global_and_child_level():
-    global_headers = {
-        "user-agent": "global-user-agent",
-        "header-key": "global-header-value",
-    }
+    global_headers = {"user-agent": "global-user-agent", "header-key": "global-header-value"}
 
     config = BdkConfigLoader.load_from_file(
         get_config_resource_filepath("config_headers_global_child.yaml")

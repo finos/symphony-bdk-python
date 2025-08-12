@@ -10,9 +10,7 @@ from symphony.bdk.core.symphony_bdk import SymphonyBdk
 
 
 async def run():
-    async with SymphonyBdk(
-        BdkConfigLoader.load_from_symphony_dir("config.yaml")
-    ) as bdk:
+    async with SymphonyBdk(BdkConfigLoader.load_from_symphony_dir("config.yaml")) as bdk:
         bdk.activities().register(SlashGifCommandActivity(bdk.messages()))
         bdk.activities().register(ReplyFormReplyActivity(bdk.messages()))
         await bdk.datafeed().start()
@@ -44,16 +42,12 @@ class ReplyFormReplyActivity(FormReplyActivity):
         category = context.get_form_value("category")
         await self.messages.send_message(
             context.source_event.stream.stream_id,
-            "<messageML> You just submitted this category: "
-            + category
-            + "</messageML>",
+            "<messageML> You just submitted this category: " + category + "</messageML>",
         )
 
 
 def load_gif_elements_form():
-    return (Path(__file__).parent.parent / "resources/gif.mml.xml").read_text(
-        encoding="utf-8"
-    )
+    return (Path(__file__).parent.parent / "resources/gif.mml.xml").read_text(encoding="utf-8")
 
 
 logging.config.fileConfig(

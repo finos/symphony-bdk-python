@@ -41,9 +41,7 @@ def add_x_trace_id(func):
             DistributedTracingContext.set_new_trace_id()
 
         if DistributedTracingContext.has_trace_id() and len(args) > HEADER_ARG_INDEX:
-            args[HEADER_ARG_INDEX][X_TRACE_ID] = (
-                DistributedTracingContext.get_trace_id()
-            )
+            args[HEADER_ARG_INDEX][X_TRACE_ID] = DistributedTracingContext.get_trace_id()
 
         return await func(*args, **kwargs)
 
@@ -96,9 +94,7 @@ class DistributedTracingContext:
 
         :return: None
         """
-        trace_id = "".join(
-            random.choices(string.ascii_letters + string.digits, k=TRACE_ID_LENGTH)
-        )
+        trace_id = "".join(random.choices(string.ascii_letters + string.digits, k=TRACE_ID_LENGTH))
         cls._trace_id_context.set(trace_id)
 
     @classmethod

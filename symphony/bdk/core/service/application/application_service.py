@@ -8,12 +8,8 @@ from symphony.bdk.gen.pod_model.pod_app_entitlement import PodAppEntitlement
 from symphony.bdk.gen.pod_model.pod_app_entitlement_list import PodAppEntitlementList
 from symphony.bdk.gen.pod_model.user_app_entitlement import UserAppEntitlement
 from symphony.bdk.gen.pod_model.user_app_entitlement_list import UserAppEntitlementList
-from symphony.bdk.gen.pod_model.user_app_entitlement_patch import (
-    UserAppEntitlementPatch,
-)
-from symphony.bdk.gen.pod_model.user_app_entitlements_patch_list import (
-    UserAppEntitlementsPatchList,
-)
+from symphony.bdk.gen.pod_model.user_app_entitlement_patch import UserAppEntitlementPatch
+from symphony.bdk.gen.pod_model.user_app_entitlements_patch_list import UserAppEntitlementsPatchList
 
 
 class ApplicationService:
@@ -43,9 +39,7 @@ class ApplicationService:
         self._retry_config = retry_config
 
     @retry
-    async def create_application(
-        self, application_detail: ApplicationDetail
-    ) -> ApplicationDetail:
+    async def create_application(self, application_detail: ApplicationDetail) -> ApplicationDetail:
         """
         Create a new application.
 
@@ -171,14 +165,9 @@ class ApplicationService:
         :return: The list of Symphony application entitlements for this user.
 
         """
-        params = {
-            "uid": user_id,
-            "session_token": await self._auth_session.session_token,
-        }
+        params = {"uid": user_id, "session_token": await self._auth_session.session_token}
         user_app_entitlement_list = (
-            await self._app_entitlement_api.v1_admin_user_uid_app_entitlement_list_get(
-                **params
-            )
+            await self._app_entitlement_api.v1_admin_user_uid_app_entitlement_list_get(**params)
         )
         return user_app_entitlement_list.value
 
@@ -203,9 +192,7 @@ class ApplicationService:
             "session_token": await self._auth_session.session_token,
         }
         user_app_entitlement_list = (
-            await self._app_entitlement_api.v1_admin_user_uid_app_entitlement_list_post(
-                **params
-            )
+            await self._app_entitlement_api.v1_admin_user_uid_app_entitlement_list_post(**params)
         )
         return user_app_entitlement_list.value
 
@@ -229,7 +216,7 @@ class ApplicationService:
             "payload": UserAppEntitlementsPatchList(value=user_app_entitlements),
             "session_token": await self._auth_session.session_token,
         }
-        user_app_entitlements_list = await self._app_entitlement_api.v1_admin_user_uid_app_entitlement_list_patch(
-            **params
+        user_app_entitlements_list = (
+            await self._app_entitlement_api.v1_admin_user_uid_app_entitlement_list_patch(**params)
         )
         return user_app_entitlements_list.value

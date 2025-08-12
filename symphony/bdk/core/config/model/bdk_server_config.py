@@ -5,13 +5,7 @@ class BdkServerConfig:
     DEFAULT_HTTPS_PORT: int = 443
 
     def __init__(
-        self,
-        scheme=None,
-        port=None,
-        context="",
-        host=None,
-        proxy=None,
-        default_headers=None,
+        self, scheme=None, port=None, context="", host=None, proxy=None, default_headers=None
     ):
         self.scheme = scheme if scheme is not None else self.DEFAULT_SCHEME
         self.port = port if port is not None else self.DEFAULT_HTTPS_PORT
@@ -26,7 +20,9 @@ class BdkServerConfig:
         :return: scheme://host:port + formatted_context
         :rtype: str
         """
-        return f"{self.scheme}://{self.host}{self.get_port_as_string()}{self.get_formatted_context()}"
+        return (
+            f"{self.scheme}://{self.host}{self.get_port_as_string()}{self.get_formatted_context()}"
+        )
 
     def get_formatted_context(self) -> str:
         """Formats the context field

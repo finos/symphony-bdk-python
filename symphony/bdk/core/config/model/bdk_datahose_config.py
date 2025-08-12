@@ -15,9 +15,7 @@ class BdkDatahoseConfig:
         """
         self.tag = None
         self.event_types = None
-        self.retry = BdkRetryConfig(
-            dict(maxAttempts=BdkRetryConfig.INFINITE_MAX_ATTEMPTS)
-        )
+        self.retry = BdkRetryConfig(dict(maxAttempts=BdkRetryConfig.INFINITE_MAX_ATTEMPTS))
         if config is not None:
             self.tag = config.get(TAG)
             self.event_types = config.get(EVENT_TYPES)

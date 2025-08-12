@@ -1,11 +1,7 @@
 import pytest
 
 from symphony.bdk.core.activity.parsing.arguments import Arguments
-from symphony.bdk.core.activity.parsing.message_entities import (
-    Cashtag,
-    Hashtag,
-    Mention,
-)
+from symphony.bdk.core.activity.parsing.message_entities import Cashtag, Hashtag, Mention
 
 
 @pytest.fixture(name="arguments_dict")

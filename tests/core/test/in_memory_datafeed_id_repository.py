@@ -1,6 +1,4 @@
-from symphony.bdk.core.service.datafeed.on_disk_datafeed_id_repository import (
-    DatafeedIdRepository,
-)
+from symphony.bdk.core.service.datafeed.on_disk_datafeed_id_repository import DatafeedIdRepository
 
 
 class InMemoryDatafeedIdRepository(DatafeedIdRepository):

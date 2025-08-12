@@ -1,9 +1,7 @@
 import logging
 from abc import ABC, abstractmethod
 
-from symphony.bdk.core.service.datafeed.real_time_event_listener import (
-    RealTimeEventListener,
-)
+from symphony.bdk.core.service.datafeed.real_time_event_listener import RealTimeEventListener
 
 logger = logging.getLogger(__name__)
 

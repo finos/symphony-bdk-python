@@ -10,9 +10,7 @@ from typing import List
 
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
-from symphony.bdk.core.service.datafeed.real_time_event_listener import (
-    RealTimeEventListener,
-)
+from symphony.bdk.core.service.datafeed.real_time_event_listener import RealTimeEventListener
 from symphony.bdk.core.service.session.session_service import SessionService
 from symphony.bdk.gen.agent_api.datafeed_api import DatafeedApi
 from symphony.bdk.gen.agent_model.v4_event import V4Event
@@ -46,20 +44,14 @@ class RealTimeEvent(Enum):
     ROOMUPDATED = ("on_room_updated", "room_updated")
     ROOMDEACTIVATED = ("on_room_deactivated", "room_deactivated")
     ROOMREACTIVATED = ("on_room_reactivated", "room_reactivated")
-    USERREQUESTEDTOJOINROOM = (
-        "on_user_requested_to_join_room",
-        "user_requested_to_join_room",
-    )
+    USERREQUESTEDTOJOINROOM = ("on_user_requested_to_join_room", "user_requested_to_join_room")
     USERJOINEDROOM = ("on_user_joined_room", "user_joined_room")
     USERLEFTROOM = ("on_user_left_room", "user_left_room")
     ROOMMEMBERPROMOTEDTOOWNER = (
         "on_room_member_promoted_to_owner",
         "room_member_promoted_to_owner",
     )
-    ROOMMEMBERDEMOTEDFROMOWNER = (
-        "on_room_demoted_from_owner",
-        "room_member_demoted_from_owner",
-    )
+    ROOMMEMBERDEMOTEDFROMOWNER = ("on_room_demoted_from_owner", "room_member_demoted_from_owner")
     CONNECTIONREQUESTED = ("on_connection_requested", "connection_requested")
     CONNECTIONACCEPTED = ("on_connection_accepted", "connection_accepted")
     SYMPHONYELEMENTSACTION = ("on_symphony_elements_action", "symphony_elements_action")
@@ -188,16 +180,12 @@ class AbstractDatafeedLoop(ABC):
         for event in sanitized_events:
             for listener in self._listeners:
                 if await listener.is_accepting_event(event, self._bot_info):
-                    task = asyncio.create_task(
-                        self._dispatch_to_listener_method(listener, event)
-                    )
+                    task = asyncio.create_task(self._dispatch_to_listener_method(listener, event))
                     tasks.append(task)
 
         return tasks
 
-    async def _dispatch_to_listener_method(
-        self, listener: RealTimeEventListener, event: V4Event
-    ):
+    async def _dispatch_to_listener_method(self, listener: RealTimeEventListener, event: V4Event):
         current_task = asyncio.current_task()
         _set_context_var(current_task, event, listener)
 

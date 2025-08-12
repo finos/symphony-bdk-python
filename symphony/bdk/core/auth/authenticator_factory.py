@@ -18,9 +18,7 @@ from symphony.bdk.core.auth.obo_authenticator import (
 )
 from symphony.bdk.core.client.api_client_factory import ApiClientFactory
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
-from symphony.bdk.gen.auth_api.certificate_authentication_api import (
-    CertificateAuthenticationApi,
-)
+from symphony.bdk.gen.auth_api.certificate_authentication_api import CertificateAuthenticationApi
 from symphony.bdk.gen.auth_api.certificate_pod_api import CertificatePodApi
 from symphony.bdk.gen.login_api.authentication_api import AuthenticationApi
 from symphony.bdk.gen.pod_api.pod_api import PodApi
@@ -113,9 +111,7 @@ class AuthenticatorFactory:
                 CertificateAuthenticationApi(
                     self._api_client_factory.get_app_session_auth_client()
                 ),
-                CertificatePodApi(
-                    self._api_client_factory.get_app_session_auth_client()
-                ),
+                CertificatePodApi(self._api_client_factory.get_app_session_auth_client()),
                 app_config.app_id,
                 self._config.retry,
             )

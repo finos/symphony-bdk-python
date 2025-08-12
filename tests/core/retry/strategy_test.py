@@ -156,12 +156,7 @@ async def test_should_retry():
     exception_from_client = aiohttp.ClientConnectionError
     exception_from_a_timeout = asyncio.TimeoutError()
     thing = FixedChainedExceptions(
-        [
-            ApiException(429),
-            ApiException(500),
-            exception_from_client,
-            exception_from_a_timeout,
-        ]
+        [ApiException(429), ApiException(500), exception_from_client, exception_from_a_timeout]
     )
 
     for s in strategies:

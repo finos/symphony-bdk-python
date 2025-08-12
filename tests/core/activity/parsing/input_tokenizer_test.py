@@ -1,9 +1,5 @@
 from symphony.bdk.core.activity.parsing.input_tokenizer import InputTokenizer
-from symphony.bdk.core.activity.parsing.message_entities import (
-    Cashtag,
-    Hashtag,
-    Mention,
-)
+from symphony.bdk.core.activity.parsing.message_entities import Cashtag, Hashtag, Mention
 from symphony.bdk.gen.agent_model.v4_message import V4Message
 
 
@@ -44,9 +40,7 @@ def test_one_mention():
 
 
 def test_mention_without_data():
-    under_test = build_tokenizer(
-        '<span class="entity" data-entity-id="0">@jane-doe</span>'
-    )
+    under_test = build_tokenizer('<span class="entity" data-entity-id="0">@jane-doe</span>')
     assert under_test.tokens == ["@jane-doe"], (
         "The mentions is handled as a string argument since no json entity provided"
     )
@@ -61,10 +55,7 @@ def test_two_mentions_with_space():
         '"value":"12345679"}],"type":"com.symphony.user.mention"}}',
     )
 
-    assert under_test.tokens == [
-        Mention("@jane-doe", 12345678),
-        Mention("@John Doe", 12345679),
-    ]
+    assert under_test.tokens == [Mention("@jane-doe", 12345678), Mention("@John Doe", 12345679)]
     assert under_test.tokens[0].user_display_name == "jane-doe"
     assert under_test.tokens[1].user_display_name == "John Doe"
 
@@ -78,10 +69,7 @@ def test_two_mentions_without_space():
         '"value":"12345679"}],"type":"com.symphony.user.mention"}}',
     )
 
-    assert under_test.tokens == [
-        Mention("@jane-doe", 12345678),
-        Mention("@John Doe", 12345679),
-    ]
+    assert under_test.tokens == [Mention("@jane-doe", 12345678), Mention("@John Doe", 12345679)]
     assert under_test.tokens[0].user_display_name == "jane-doe"
     assert under_test.tokens[1].user_display_name == "John Doe"
 
@@ -162,9 +150,7 @@ class PartialV4Message:
 
 
 def test_partial_message():
-    tokenizer = InputTokenizer(
-        PartialV4Message(message=build_v4_message("hello").message)
-    )
+    tokenizer = InputTokenizer(PartialV4Message(message=build_v4_message("hello").message))
     assert tokenizer.tokens == ["hello"]
 
 

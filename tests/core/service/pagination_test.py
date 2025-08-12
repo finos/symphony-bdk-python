@@ -2,10 +2,7 @@ from unittest.mock import AsyncMock, call
 
 import pytest
 
-from symphony.bdk.core.service.pagination import (
-    cursor_based_pagination,
-    offset_based_pagination,
-)
+from symphony.bdk.core.service.pagination import cursor_based_pagination, offset_based_pagination
 
 AFTER = "after"
 
@@ -154,9 +151,7 @@ class TestCursorBasedPagination:
         mock_func = AsyncMock()
         mock_func.side_effect = [(["one"], None)]
 
-        assert [x async for x in cursor_based_pagination(mock_func, CHUNK_SIZE)] == [
-            "one"
-        ]
+        assert [x async for x in cursor_based_pagination(mock_func, CHUNK_SIZE)] == ["one"]
         mock_func.assert_has_awaits([call(CHUNK_SIZE, None)])
 
     @pytest.mark.asyncio
@@ -175,18 +170,14 @@ class TestCursorBasedPagination:
     async def test_negative_max_number(self):
         mock_func = AsyncMock()
 
-        assert [
-            x async for x in cursor_based_pagination(mock_func, CHUNK_SIZE, -1)
-        ] == []
+        assert [x async for x in cursor_based_pagination(mock_func, CHUNK_SIZE, -1)] == []
         mock_func.assert_not_awaited()
 
     @pytest.mark.asyncio
     async def test_zero_max_number(self):
         mock_func = AsyncMock()
 
-        assert [
-            x async for x in cursor_based_pagination(mock_func, CHUNK_SIZE, 0)
-        ] == []
+        assert [x async for x in cursor_based_pagination(mock_func, CHUNK_SIZE, 0)] == []
         mock_func.assert_not_awaited()
 
     @pytest.mark.asyncio
@@ -194,9 +185,7 @@ class TestCursorBasedPagination:
         mock_func = AsyncMock()
         mock_func.side_effect = [(["one", "two"], AFTER)]
 
-        assert [x async for x in cursor_based_pagination(mock_func, CHUNK_SIZE, 1)] == [
-            "one"
-        ]
+        assert [x async for x in cursor_based_pagination(mock_func, CHUNK_SIZE, 1)] == ["one"]
         mock_func.assert_has_awaits([call(CHUNK_SIZE, None)])
 
     @pytest.mark.asyncio
@@ -213,10 +202,7 @@ class TestCursorBasedPagination:
     @pytest.mark.asyncio
     async def test_max_number_equals_more_than_one_chunk(self):
         mock_func = AsyncMock()
-        mock_func.side_effect = [
-            (["one", "two"], AFTER),
-            (["three", "four"], "after_two"),
-        ]
+        mock_func.side_effect = [(["one", "two"], AFTER), (["three", "four"], "after_two")]
 
         assert [x async for x in cursor_based_pagination(mock_func, CHUNK_SIZE, 3)] == [
             "one",

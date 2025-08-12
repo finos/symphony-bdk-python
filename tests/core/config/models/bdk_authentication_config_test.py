@@ -1,6 +1,4 @@
-from symphony.bdk.core.config.model.bdk_authentication_config import (
-    BdkAuthenticationConfig,
-)
+from symphony.bdk.core.config.model.bdk_authentication_config import BdkAuthenticationConfig
 
 
 def test_rsa_configuration():
@@ -15,8 +13,7 @@ def test_rsa_configuration():
     authentication_config.private_key.content = "not_empty"
     assert authentication_config.is_rsa_authentication_configured() is True
     assert authentication_config.private_key._path is None, (
-        "rsa key path should have been overridden to None when "
-        "setting non empty content "
+        "rsa key path should have been overridden to None when setting non empty content "
     )
     assert authentication_config.is_rsa_configuration_valid() is True
 

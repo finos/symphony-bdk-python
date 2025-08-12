@@ -33,9 +33,7 @@ async def test_authenticate_extension_app_calls_refresh():
     ) as mock_refresh:
         ext_app_authenticator = new_ext_app_authenticator()
 
-        auth_session = await ext_app_authenticator.authenticate_extension_app(
-            "app_token"
-        )
+        auth_session = await ext_app_authenticator.authenticate_extension_app("app_token")
         assert auth_session is not None
         mock_refresh.assert_called_once()
 
@@ -51,24 +49,18 @@ async def test_authenticate_extension_app(ext_app_authenticator):
         symphony_token=symphony_token,
         expire_at=12345,
     )
-    ext_app_authenticator.authenticate_and_retrieve_tokens = AsyncMock(
-        return_value=tokens
-    )
+    ext_app_authenticator.authenticate_and_retrieve_tokens = AsyncMock(return_value=tokens)
 
     auth_session = await ext_app_authenticator.authenticate_extension_app(app_token)
 
     assert auth_session is not None
     assert isinstance(auth_session, AppAuthSession)
-    ext_app_authenticator.authenticate_and_retrieve_tokens.assert_awaited_once_with(
-        app_token
-    )
+    ext_app_authenticator.authenticate_and_retrieve_tokens.assert_awaited_once_with(app_token)
 
 
 @pytest.mark.asyncio
 async def test_authenticate_and_retrieve_tokens():
-    with patch(
-        "symphony.bdk.core.auth.ext_app_authenticator.create_signed_jwt"
-    ) as mock_create_jwt:
+    with patch("symphony.bdk.core.auth.ext_app_authenticator.create_signed_jwt") as mock_create_jwt:
         signed_jwt = "signed jwt"
         app_token = "app_token"
         app_id = "app_id"
@@ -84,26 +76,22 @@ async def test_authenticate_and_retrieve_tokens():
             expire_at=12345,
         )
         mock_authentication_api = AsyncMock()
-        mock_authentication_api.v1_pubkey_app_authenticate_extension_app_post = (
-            AsyncMock(return_value=extension_app_tokens)
+        mock_authentication_api.v1_pubkey_app_authenticate_extension_app_post = AsyncMock(
+            return_value=extension_app_tokens
         )
 
         extension_app_authenticator = ExtensionAppAuthenticatorRsa(
             mock_authentication_api, None, app_id, key_config, minimal_retry_config()
         )
         returned_ext_app_tokens = (
-            await extension_app_authenticator.authenticate_and_retrieve_tokens(
-                app_token
-            )
+            await extension_app_authenticator.authenticate_and_retrieve_tokens(app_token)
         )
 
         assert returned_ext_app_tokens == extension_app_tokens
         assert extension_app_authenticator._tokens_repository._tokens == {
             out_app_token: symphony_token
         }
-        assert await extension_app_authenticator.is_token_pair_valid(
-            out_app_token, symphony_token
-        )
+        assert await extension_app_authenticator.is_token_pair_valid(out_app_token, symphony_token)
         assert not await extension_app_authenticator.is_token_pair_valid(
             "invalid app token", symphony_token
         )
@@ -114,33 +102,29 @@ async def test_authenticate_and_retrieve_tokens():
         mock_create_jwt.assert_called_once_with(key_config, app_id)
         mock_authentication_api.v1_pubkey_app_authenticate_extension_app_post.assert_called_once()
 
-        call_args = mock_authentication_api.v1_pubkey_app_authenticate_extension_app_post.call_args.args[
-            0
-        ]
+        call_args = (
+            mock_authentication_api.v1_pubkey_app_authenticate_extension_app_post.call_args.args[0]
+        )
         assert call_args.app_token == app_token
         assert call_args.auth_token == signed_jwt
 
 
 @pytest.mark.asyncio
 async def test_authenticate_and_retrieve_tokens_failure():
-    with patch(
-        "symphony.bdk.core.auth.ext_app_authenticator.create_signed_jwt"
-    ) as mock_create_jwt:
+    with patch("symphony.bdk.core.auth.ext_app_authenticator.create_signed_jwt") as mock_create_jwt:
         key_config = BdkRsaKeyConfig(content="key content")
         mock_create_jwt.return_value = "signed jwt"
 
         mock_authentication_api = AsyncMock()
-        mock_authentication_api.v1_pubkey_app_authenticate_extension_app_post = (
-            AsyncMock(side_effect=ValueError)
+        mock_authentication_api.v1_pubkey_app_authenticate_extension_app_post = AsyncMock(
+            side_effect=ValueError
         )
 
         extension_app_authenticator = ExtensionAppAuthenticatorRsa(
             mock_authentication_api, None, "app_id", key_config, minimal_retry_config()
         )
         with pytest.raises(ValueError):
-            await extension_app_authenticator.authenticate_and_retrieve_tokens(
-                "app_token"
-            )
+            await extension_app_authenticator.authenticate_and_retrieve_tokens("app_token")
 
         assert extension_app_authenticator._tokens_repository._tokens == {}
         mock_authentication_api.v1_pubkey_app_authenticate_extension_app_post.assert_called_once()
@@ -148,9 +132,7 @@ async def test_authenticate_and_retrieve_tokens_failure():
 
 @pytest.mark.asyncio
 async def test_validate_jwt_get_pod_certificate_failure():
-    with patch(
-        "symphony.bdk.core.auth.ext_app_authenticator.validate_jwt"
-    ) as mock_validate:
+    with patch("symphony.bdk.core.auth.ext_app_authenticator.validate_jwt") as mock_validate:
         mock_pod_api = AsyncMock()
         mock_pod_api.v1_podcert_get = AsyncMock(side_effect=ApiException(status=400))
 
@@ -166,9 +148,7 @@ async def test_validate_jwt_get_pod_certificate_failure():
 
 @pytest.mark.asyncio
 async def test_validate_jwt():
-    with patch(
-        "symphony.bdk.core.auth.ext_app_authenticator.validate_jwt"
-    ) as mock_validate:
+    with patch("symphony.bdk.core.auth.ext_app_authenticator.validate_jwt") as mock_validate:
         certificate_content = "certificate content"
         jwt = "my-jwt"
         app_id = "app-id"
@@ -195,10 +175,7 @@ async def test_cert_authenticate_and_retrieve_tokens():
     symphony_token = "symphony_token"
 
     extension_app_tokens = ExtensionAppTokens(
-        app_id="my_app_id",
-        app_token=out_app_token,
-        symphony_token=symphony_token,
-        expire_at=12345,
+        app_id="my_app_id", app_token=out_app_token, symphony_token=symphony_token, expire_at=12345
     )
     mock_authentication_api = AsyncMock()
     mock_authentication_api.v1_authenticate_extension_app_post = AsyncMock(
@@ -208,17 +185,13 @@ async def test_cert_authenticate_and_retrieve_tokens():
     extension_app_authenticator = ExtensionAppAuthenticatorCert(
         mock_authentication_api, None, app_id, minimal_retry_config()
     )
-    returned_ext_app_tokens = (
-        await extension_app_authenticator.authenticate_and_retrieve_tokens(app_token)
+    returned_ext_app_tokens = await extension_app_authenticator.authenticate_and_retrieve_tokens(
+        app_token
     )
 
     assert returned_ext_app_tokens == extension_app_tokens
-    assert extension_app_authenticator._tokens_repository._tokens == {
-        out_app_token: symphony_token
-    }
-    assert await extension_app_authenticator.is_token_pair_valid(
-        out_app_token, symphony_token
-    )
+    assert extension_app_authenticator._tokens_repository._tokens == {out_app_token: symphony_token}
+    assert await extension_app_authenticator.is_token_pair_valid(out_app_token, symphony_token)
     assert not await extension_app_authenticator.is_token_pair_valid(
         "invalid app token", symphony_token
     )
@@ -234,9 +207,7 @@ async def test_cert_authenticate_and_retrieve_tokens():
 
 @pytest.mark.asyncio
 async def test_cert_validate_jwt():
-    with patch(
-        "symphony.bdk.core.auth.ext_app_authenticator.validate_jwt"
-    ) as mock_validate:
+    with patch("symphony.bdk.core.auth.ext_app_authenticator.validate_jwt") as mock_validate:
         certificate_content = "certificate content"
         jwt = "my-jwt"
         app_id = "app-id"

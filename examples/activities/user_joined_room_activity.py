@@ -12,9 +12,7 @@ from symphony.bdk.core.symphony_bdk import SymphonyBdk
 
 
 async def run():
-    async with SymphonyBdk(
-        BdkConfigLoader.load_from_symphony_dir("config.yaml")
-    ) as bdk:
+    async with SymphonyBdk(BdkConfigLoader.load_from_symphony_dir("config.yaml")) as bdk:
         bdk.activities().register(JoinRoomActivity(bdk.messages()))
         await bdk.datafeed().start()
 

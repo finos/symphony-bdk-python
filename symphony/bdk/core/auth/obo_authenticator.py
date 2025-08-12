@@ -8,9 +8,7 @@ from symphony.bdk.core.config.model.bdk_app_config import BdkAppConfig
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.core.retry import retry
 from symphony.bdk.core.retry.strategy import authentication_retry
-from symphony.bdk.gen.auth_api.certificate_authentication_api import (
-    CertificateAuthenticationApi,
-)
+from symphony.bdk.gen.auth_api.certificate_authentication_api import CertificateAuthenticationApi
 from symphony.bdk.gen.login_api.authentication_api import AuthenticationApi
 from symphony.bdk.gen.login_model.authenticate_request import AuthenticateRequest
 
@@ -86,9 +84,7 @@ class OboAuthenticatorRsa(OboAuthenticator):
         :raise AuthUnauthorizedError: if session token cannot be retrieved
         """
         app_session_token = await self._authenticate_and_retrieve_app_session_token()
-        return await self._authenticate_by_username(
-            app_session_token, username=username
-        )
+        return await self._authenticate_by_username(app_session_token, username=username)
 
     @retry(retry=authentication_retry)
     async def _authenticate_and_retrieve_app_session_token(self) -> str:
@@ -100,10 +96,8 @@ class OboAuthenticatorRsa(OboAuthenticator):
 
     @retry(retry=authentication_retry)
     async def _authenticate_by_user_id(self, app_session_token, user_id) -> str:
-        token = (
-            await self._authentication_api.pubkey_app_user_user_id_authenticate_post(
-                session_token=app_session_token, user_id=user_id
-            )
+        token = await self._authentication_api.pubkey_app_user_user_id_authenticate_post(
+            session_token=app_session_token, user_id=user_id
         )
         return token.token
 
@@ -149,10 +143,8 @@ class OboAuthenticatorCert(OboAuthenticator):
         :raise AuthUnauthorizedError: if session token cannot be retrieved
         """
         app_session_token = await self._retrieve_app_session_token()
-        obo_auth = (
-            await self._authentication_api.v1_app_username_username_authenticate_post(
-                session_token=app_session_token, username=username
-            )
+        obo_auth = await self._authentication_api.v1_app_username_username_authenticate_post(
+            session_token=app_session_token, username=username
         )
         return obo_auth.session_token
 

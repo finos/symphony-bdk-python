@@ -29,17 +29,13 @@ def fixture_mocked_signals_api_client():
 
 @pytest.fixture(name="health_service")
 def fixture_health_service(mocked_system_api_client, mocked_signals_api_client):
-    return HealthService(
-        mocked_system_api_client, mocked_signals_api_client, minimal_retry_config
-    )
+    return HealthService(mocked_system_api_client, mocked_signals_api_client, minimal_retry_config)
 
 
 @pytest.mark.asyncio
 async def test_health_check(health_service, mocked_system_api_client):
-    mocked_system_api_client.v3_health.return_value = (
-        get_deserialized_object_from_resource(
-            V3Health, resource_path="health_response/health_check.json"
-        )
+    mocked_system_api_client.v3_health.return_value = get_deserialized_object_from_resource(
+        V3Health, resource_path="health_response/health_check.json"
     )
 
     health = await health_service.health_check()
@@ -80,10 +76,8 @@ async def test_health_check_extended_failed(health_service, mocked_system_api_cl
 
 @pytest.mark.asyncio
 async def test_get_agent_info(health_service, mocked_signals_api_client):
-    mocked_signals_api_client.v1_info_get.return_value = (
-        get_deserialized_object_from_resource(
-            AgentInfo, resource_path="health_response/agent_info.json"
-        )
+    mocked_signals_api_client.v1_info_get.return_value = get_deserialized_object_from_resource(
+        AgentInfo, resource_path="health_response/agent_info.json"
     )
 
     agent_info = await health_service.get_agent_info()

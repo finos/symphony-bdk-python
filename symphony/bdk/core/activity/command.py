@@ -6,9 +6,7 @@ from symphony.bdk.core.activity.parsing.arguments import Arguments
 from symphony.bdk.core.activity.parsing.command_token import MatchingUserIdMentionToken
 from symphony.bdk.core.activity.parsing.slash_command_pattern import SlashCommandPattern
 from symphony.bdk.core.service.exception import MessageParserError
-from symphony.bdk.core.service.message.message_parser import (
-    get_text_content_from_message,
-)
+from symphony.bdk.core.service.message.message_parser import get_text_content_from_message
 from symphony.bdk.gen.agent_model.v4_initiator import V4Initiator
 from symphony.bdk.gen.agent_model.v4_message_sent import V4MessageSent
 
@@ -33,9 +31,7 @@ class CommandContext(ActivityContext[V4MessageSent]):
         try:
             self._text_content = get_text_content_from_message(source_event.message)
         except MessageParserError as exc:
-            raise FatalActivityExecutionException(
-                "Unable to parse presentationML"
-            ) from exc
+            raise FatalActivityExecutionException("Unable to parse presentationML") from exc
         super().__init__(initiator, source_event)
 
     @property
@@ -126,9 +122,7 @@ class SlashCommandActivity(CommandActivity):
         )
 
     def matches(self, context: CommandContext) -> bool:
-        match_result = self._command_pattern.get_match_result(
-            context.source_event.message
-        )
+        match_result = self._command_pattern.get_match_result(context.source_event.message)
 
         if match_result.is_matching and match_result.arguments:
             context._arguments = match_result.arguments
@@ -140,8 +134,5 @@ class SlashCommandActivity(CommandActivity):
 
     def __eq__(self, o: object) -> bool:
         if isinstance(o, SlashCommandActivity):
-            return (
-                self._name == o._name
-                and self._requires_mention_bot == o._requires_mention_bot
-            )
+            return self._name == o._name and self._requires_mention_bot == o._requires_mention_bot
         return False

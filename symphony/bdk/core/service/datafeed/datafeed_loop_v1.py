@@ -2,9 +2,7 @@ import logging
 
 from symphony.bdk.core.retry import retry
 from symphony.bdk.core.retry.strategy import read_datafeed_retry
-from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import (
-    AbstractDatafeedLoop,
-)
+from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import AbstractDatafeedLoop
 from symphony.bdk.core.service.datafeed.exception import EventError
 from symphony.bdk.core.service.datafeed.on_disk_datafeed_id_repository import (
     OnDiskDatafeedIdRepository,
@@ -34,9 +32,7 @@ class DatafeedLoopV1(AbstractDatafeedLoop):
     really stopped
     """
 
-    def __init__(
-        self, datafeed_api, session_service, auth_session, config, repository=None
-    ):
+    def __init__(self, datafeed_api, session_service, auth_session, config, repository=None):
         super().__init__(datafeed_api, session_service, auth_session, config)
         self._datafeed_repository = (
             OnDiskDatafeedIdRepository(config) if repository is None else repository
@@ -83,9 +79,7 @@ class DatafeedLoopV1(AbstractDatafeedLoop):
         session_token = await self._auth_session.session_token
         key_manager_token = await self._auth_session.key_manager_token
         events = await self._datafeed_api.v4_datafeed_id_read_get(
-            id=self._datafeed_id,
-            session_token=session_token,
-            key_manager_token=key_manager_token,
+            id=self._datafeed_id, session_token=session_token, key_manager_token=key_manager_token
         )
         return events.value if events is not None and events.value else []
 
@@ -100,6 +94,4 @@ class DatafeedLoopV1(AbstractDatafeedLoop):
                     exc_info=exception,
                 )
             else:
-                logging.debug(
-                    "Exception occurred inside %s", task.get_name(), exc_info=exception
-                )
+                logging.debug("Exception occurred inside %s", task.get_name(), exc_info=exception)

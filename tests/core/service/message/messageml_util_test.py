@@ -15,9 +15,7 @@ def test_escape_special_chars_no_match_found():
 
 def test_escape_special_chars_multiple_matches():
     text = "Here's multiple chars <'\"$#=.[]"
-    expected_text = (
-        "Here&apos;s multiple chars &lt;&apos;&quot;&#36;&#35;&#61;&#46;&#91;&#93;"
-    )
+    expected_text = "Here&apos;s multiple chars &lt;&apos;&quot;&#36;&#35;&#61;&#46;&#91;&#93;"
     assert expected_text == escape_special_chars(text)
 
 

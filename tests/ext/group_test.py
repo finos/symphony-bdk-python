@@ -7,11 +7,7 @@ from symphony.bdk.core.auth.bot_authenticator import BotAuthenticator
 from symphony.bdk.core.client.api_client_factory import ApiClientFactory
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.core.service.user.user_util import extract_tenant_id
-from symphony.bdk.ext.group import (
-    OAuthSession,
-    SymphonyGroupBdkExtension,
-    SymphonyGroupService,
-)
+from symphony.bdk.ext.group import OAuthSession, SymphonyGroupBdkExtension, SymphonyGroupService
 from symphony.bdk.gen import ApiClient, ApiException, Configuration
 from symphony.bdk.gen.group_model.add_member import AddMember
 from symphony.bdk.gen.group_model.create_group import CreateGroup
@@ -64,9 +60,7 @@ def fixture_login_client():
 
 @pytest.fixture(name="retry_config")
 def fixture_retry_config():
-    return BdkRetryConfig(
-        {"maxAttempts": 2, "multiplier": 1, "initialIntervalMillis": 50}
-    )
+    return BdkRetryConfig({"maxAttempts": 2, "multiplier": 1, "initialIntervalMillis": 50})
 
 
 @pytest.fixture(name="group_service")
@@ -76,9 +70,7 @@ def fixture_group_service(api_client_factory, auth_session, retry_config):
 
 @pytest.fixture(name="mocked_group")
 def fixture_group():
-    return ReadGroup(
-        type="SDL", owner_type=Owner(value="TENANT"), owner_id=123, name="SDl test"
-    )
+    return ReadGroup(type="SDL", owner_type=Owner(value="TENANT"), owner_id=123, name="SDl test")
 
 
 def assert_called_idm_tokens(first_call_args, session_token=SESSION_TOKEN):
@@ -150,12 +142,8 @@ async def test_list_all_groups(group_service, api_client):
 @pytest.mark.asyncio
 async def test_list_all_groups_2_pages(group_service, api_client):
     return_values = [
-        get_deserialized_object_from_resource(
-            GroupList, "group/list_all_groups_page_1.json"
-        ),
-        get_deserialized_object_from_resource(
-            GroupList, "group/list_all_groups_page_2.json"
-        ),
+        get_deserialized_object_from_resource(GroupList, "group/list_all_groups_page_1.json"),
+        get_deserialized_object_from_resource(GroupList, "group/list_all_groups_page_2.json"),
     ]
 
     api_client.call_api.side_effect = return_values
@@ -255,9 +243,7 @@ async def test_add_member_to_group(group_service, mocked_group, api_client):
     mocked_group.id = "group_id"
     api_client.call_api.return_value = mocked_group
     user_id = 12345
-    group = await group_service.add_member_to_group(
-        group_id=mocked_group.id, user_id=user_id
-    )
+    group = await group_service.add_member_to_group(group_id=mocked_group.id, user_id=user_id)
 
     assert group.name == mocked_group.name
     api_client.call_api.assert_called_once()
@@ -277,9 +263,7 @@ async def test_add_member_to_group_with_retries(
     api_client.call_api.side_effect = [ApiException(status=401), mocked_group]
     user_id = 12345
 
-    group = await group_service.add_member_to_group(
-        group_id=mocked_group.id, user_id=user_id
-    )
+    group = await group_service.add_member_to_group(group_id=mocked_group.id, user_id=user_id)
 
     login_client.call_api.assert_called_once()
     assert group.name == mocked_group.name
@@ -315,9 +299,7 @@ async def test_oauth_session_refresh(auth_session, retry_config, login_client):
 
 
 @pytest.mark.asyncio
-async def test_oauth_session_refresh_with_retries(
-    auth_session, retry_config, login_client
-):
+async def test_oauth_session_refresh_with_retries(auth_session, retry_config, login_client):
     bearer_token = "bearer token"
     login_client.call_api.side_effect = [
         ApiException(status=401),
@@ -333,9 +315,7 @@ async def test_oauth_session_refresh_with_retries(
 
     assert login_client.call_api.call_count == 2
     assert_called_idm_tokens(login_client.call_api.call_args_list[0])
-    assert_called_idm_tokens(
-        login_client.call_api.call_args_list[1], updated_session_token
-    )
+    assert_called_idm_tokens(login_client.call_api.call_args_list[1], updated_session_token)
     assert oauth_session._bearer_token == bearer_token
 
 

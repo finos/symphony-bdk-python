@@ -27,10 +27,7 @@ class BdkAuthenticationConfig:
 
         :return: True if RSA or certificate authentication is configured
         """
-        return (
-            self.is_rsa_configuration_valid()
-            or self.is_certificate_configuration_valid()
-        )
+        return self.is_rsa_configuration_valid() or self.is_certificate_configuration_valid()
 
     def is_rsa_authentication_configured(self) -> bool:
         """Check if the RSA authentication is configured

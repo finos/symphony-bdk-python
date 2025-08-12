@@ -2,12 +2,8 @@ import asyncio
 import logging.config
 
 from symphony.bdk.core.config.loader import BdkConfigLoader
-from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import (
-    event_listener_context,
-)
-from symphony.bdk.core.service.datafeed.real_time_event_listener import (
-    RealTimeEventListener,
-)
+from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import event_listener_context
+from symphony.bdk.core.service.datafeed.real_time_event_listener import RealTimeEventListener
 from symphony.bdk.core.symphony_bdk import SymphonyBdk
 from symphony.bdk.gen.agent_model.v4_initiator import V4Initiator
 from symphony.bdk.gen.agent_model.v4_message_sent import V4MessageSent

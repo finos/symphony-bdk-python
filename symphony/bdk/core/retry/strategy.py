@@ -21,9 +21,7 @@ def is_client_timeout_error(exception: Exception):
     :param exception: The exception to be checked
     :return: True if checks the predicate, False otherwise
     """
-    return isinstance(exception, ClientConnectionError) or isinstance(
-        exception, TimeoutError
-    )
+    return isinstance(exception, ClientConnectionError) or isinstance(exception, TimeoutError)
 
 
 def can_authentication_be_retried(exception: Exception) -> bool:

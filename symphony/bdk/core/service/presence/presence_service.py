@@ -39,10 +39,7 @@ class OboPresenceService:
     """
 
     def __init__(
-        self,
-        presence_api: PresenceApi,
-        auth_session: AuthSession,
-        retry_config: BdkRetryConfig,
+        self, presence_api: PresenceApi, auth_session: AuthSession, retry_config: BdkRetryConfig
     ):
         self._presence_api = presence_api
         self._auth_session = auth_session
@@ -87,9 +84,7 @@ class OboPresenceService:
         :return: Presence info of the looked up user.
         """
         return await self._presence_api.v3_user_uid_presence_get(
-            uid=user_id,
-            session_token=await self._auth_session.session_token,
-            local=local,
+            uid=user_id, session_token=await self._auth_session.session_token, local=local
         )
 
     @retry
@@ -184,13 +179,9 @@ class OboPresenceService:
           represented as AWAY)
         :return: The presence info of the specified user.
         """
-        user_presence: V2UserPresence = V2UserPresence(
-            category=status.name, user_id=user_id
-        )
+        user_presence: V2UserPresence = V2UserPresence(category=status.name, user_id=user_id)
         return await self._presence_api.v3_user_presence_post(
-            session_token=await self._auth_session.session_token,
-            presence=user_presence,
-            soft=soft,
+            session_token=await self._auth_session.session_token, presence=user_presence, soft=soft
         )
 
 

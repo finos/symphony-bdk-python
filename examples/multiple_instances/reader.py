@@ -12,12 +12,8 @@ import hazelcast
 from hazelcast import HazelcastClient
 
 from symphony.bdk.core.config.loader import BdkConfigLoader
-from symphony.bdk.core.service.datafeed.real_time_event_listener import (
-    RealTimeEventListener,
-)
-from symphony.bdk.core.service.message.message_parser import (
-    get_text_content_from_message,
-)
+from symphony.bdk.core.service.datafeed.real_time_event_listener import RealTimeEventListener
+from symphony.bdk.core.service.message.message_parser import get_text_content_from_message
 from symphony.bdk.core.service.message.message_service import MessageService
 from symphony.bdk.core.symphony_bdk import SymphonyBdk
 from symphony.bdk.gen.agent_model.v4_initiator import V4Initiator
@@ -29,14 +25,10 @@ class EventListener(RealTimeEventListener):
         self._messages = messages
         self._client = hz_client
         self._id = str(uuid.uuid4())
-        self._color = hex(randrange(0xFFFFFF + 1))[
-            2:
-        ]  # substring to remove leading "0x"
+        self._color = hex(randrange(0xFFFFFF + 1))[2:]  # substring to remove leading "0x"
 
     async def on_message_sent(self, initiator: V4Initiator, event: V4MessageSent):
-        lock = self._client.cp_subsystem.get_lock(
-            event.message.stream.stream_id
-        ).blocking()
+        lock = self._client.cp_subsystem.get_lock(event.message.stream.stream_id).blocking()
         lock.lock()
         try:
             return await self._reply_to_message(event)
@@ -53,9 +45,7 @@ class EventListener(RealTimeEventListener):
 
         logging.debug("Already processed messages: %s", processed_events.values())
         if processed_events.contains_key(message.message_id):
-            logging.debug(
-                "Message already processed: " + processed_events.get(message.message_id)
-            )
+            logging.debug("Message already processed: " + processed_events.get(message.message_id))
             return
 
         await self._send_reply_message(message.stream.stream_id, text_message)
@@ -67,9 +57,7 @@ class EventListener(RealTimeEventListener):
 
 
 async def run(hz_client):
-    async with SymphonyBdk(
-        BdkConfigLoader.load_from_symphony_dir("config_reader.yaml")
-    ) as bdk:
+    async with SymphonyBdk(BdkConfigLoader.load_from_symphony_dir("config_reader.yaml")) as bdk:
         datafeed = bdk.datafeed()
         datafeed.subscribe(EventListener(bdk.messages(), hz_client))
         logging.debug("Starting datafeed")

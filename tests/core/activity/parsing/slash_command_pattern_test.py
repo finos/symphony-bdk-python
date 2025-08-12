@@ -8,11 +8,7 @@ from symphony.bdk.core.activity.parsing.command_token import (
     StringArgumentCommandToken,
 )
 from symphony.bdk.core.activity.parsing.match_result import MatchResult
-from symphony.bdk.core.activity.parsing.message_entities import (
-    Cashtag,
-    Hashtag,
-    Mention,
-)
+from symphony.bdk.core.activity.parsing.message_entities import Cashtag, Hashtag, Mention
 from symphony.bdk.core.activity.parsing.slash_command_pattern import SlashCommandPattern
 from tests.core.activity.parsing.input_tokenizer_test import build_v4_message
 
@@ -48,21 +44,14 @@ def test_slash_command_one_static_string_with_spaces():
 def test_slash_command_two_static_strings():
     pattern = SlashCommandPattern("/command command2")
 
-    assert pattern.tokens == [
-        StaticCommandToken("/command"),
-        StaticCommandToken("command2"),
-    ]
+    assert pattern.tokens == [StaticCommandToken("/command"), StaticCommandToken("command2")]
     assert pattern.tokens[0].pattern == "^/command$"
     assert pattern.tokens[1].pattern == "^command2$"
 
     assert not pattern.get_match_result(build_v4_message("")).is_matching
     assert not pattern.get_match_result(build_v4_message("/command")).is_matching
-    assert not pattern.get_match_result(
-        build_v4_message("/command command3")
-    ).is_matching
-    assert not pattern.get_match_result(
-        build_v4_message("/command command2 command3")
-    ).is_matching
+    assert not pattern.get_match_result(build_v4_message("/command command3")).is_matching
+    assert not pattern.get_match_result(build_v4_message("/command command2 command3")).is_matching
     assert pattern.get_match_result(build_v4_message("/command command2")).is_matching
     assert pattern.get_match_result(build_v4_message("/command command2 ")).is_matching
 
@@ -70,21 +59,14 @@ def test_slash_command_two_static_strings():
 def test_slash_command_two_static_strings_with_spaces():
     pattern = SlashCommandPattern(" /command command2 ")
 
-    assert pattern.tokens == [
-        StaticCommandToken("/command"),
-        StaticCommandToken("command2"),
-    ]
+    assert pattern.tokens == [StaticCommandToken("/command"), StaticCommandToken("command2")]
     assert pattern.tokens[0].pattern == "^/command$"
     assert pattern.tokens[1].pattern == "^command2$"
 
     assert not pattern.get_match_result(build_v4_message("")).is_matching
     assert not pattern.get_match_result(build_v4_message("/command")).is_matching
-    assert not pattern.get_match_result(
-        build_v4_message("/command command3")
-    ).is_matching
-    assert not pattern.get_match_result(
-        build_v4_message("/command command2 command3")
-    ).is_matching
+    assert not pattern.get_match_result(build_v4_message("/command command3")).is_matching
+    assert not pattern.get_match_result(build_v4_message("/command command2 command3")).is_matching
     assert pattern.get_match_result(build_v4_message("/command command2")).is_matching
     assert pattern.get_match_result(build_v4_message("/command command2 ")).is_matching
 
@@ -105,9 +87,7 @@ def test_slash_command_with_two_string_arguments():
     assert not pattern.get_match_result(build_v4_message("/command")).is_matching
     assert not pattern.get_match_result(build_v4_message("/command arg1")).is_matching
     assert pattern.get_match_result(build_v4_message("/command arg1 arg2")).is_matching
-    assert pattern.get_match_result(
-        build_v4_message(" /command arg1 arg2 ")
-    ).is_matching
+    assert pattern.get_match_result(build_v4_message(" /command arg1 arg2 ")).is_matching
 
 
 def test_slash_command_bad_string_command_argument():
@@ -151,9 +131,7 @@ def test_slash_command_bad_mention_command_argument():
 
 
 def test_string_argument_command():
-    pattern = SlashCommandPattern(
-        "/command {string_arg} {@mention} {#hashtag} {$cashtag}"
-    )
+    pattern = SlashCommandPattern("/command {string_arg} {@mention} {#hashtag} {$cashtag}")
     assert pattern.tokens == [
         StaticCommandToken("/command"),
         StringArgumentCommandToken("{string_arg}"),
@@ -204,9 +182,7 @@ def test_match_result_hashtag():
     )
 
     match_result = pattern.get_match_result(v4_message)
-    expected_match_result = MatchResult(
-        True, {"hashtag": Hashtag("#myhashtag", "hashtag")}
-    )
+    expected_match_result = MatchResult(True, {"hashtag": Hashtag("#myhashtag", "hashtag")})
 
     assert expected_match_result == match_result
 
@@ -220,9 +196,7 @@ def test_match_result_cashtag():
     )
 
     match_result = pattern.get_match_result(v4_message)
-    expected_match_result = MatchResult(
-        True, {"cashtag": Cashtag("$mycashtag", "cashtag")}
-    )
+    expected_match_result = MatchResult(True, {"cashtag": Cashtag("$mycashtag", "cashtag")})
 
     assert expected_match_result == match_result
 

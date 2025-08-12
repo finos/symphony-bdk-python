@@ -1,8 +1,4 @@
-from symphony.bdk.core.activity.parsing.message_entities import (
-    Cashtag,
-    Hashtag,
-    Mention,
-)
+from symphony.bdk.core.activity.parsing.message_entities import Cashtag, Hashtag, Mention
 
 
 class Arguments:
@@ -39,11 +35,7 @@ class Arguments:
         """
         argument_value = self._arguments.get(key)
         if argument_value:
-            return (
-                argument_value
-                if isinstance(argument_value, str)
-                else argument_value.text
-            )
+            return argument_value if isinstance(argument_value, str) else argument_value.text
         return None
 
     def get_string(self, key: str):

@@ -112,9 +112,7 @@ class ExtensionService:
         except AttributeError:
             logger.debug("Extension is not api client aware")
         except TypeError:
-            logger.warning(
-                "set_api_client_factory method must have a single positional argument"
-            )
+            logger.warning("set_api_client_factory method must have a single positional argument")
 
     def _inject_bot_session(self, extension):
         try:
@@ -122,9 +120,7 @@ class ExtensionService:
         except AttributeError:
             logger.debug("Extension is not authentication aware")
         except TypeError:
-            logger.warning(
-                "set_bot_session method must have a single positional argument"
-            )
+            logger.warning("set_bot_session method must have a single positional argument")
 
     def _inject_config(self, extension):
         try:
@@ -132,6 +128,4 @@ class ExtensionService:
         except AttributeError:
             logger.debug("Extension is not configuration aware")
         except TypeError:
-            logger.warning(
-                "set_configuration method must have a single positional argument"
-            )
+            logger.warning("set_configuration method must have a single positional argument")

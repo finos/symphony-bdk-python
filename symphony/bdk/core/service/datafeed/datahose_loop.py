@@ -4,12 +4,8 @@ from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
 from symphony.bdk.core.retry import retry
 from symphony.bdk.core.retry.strategy import read_datahose_retry
-from symphony.bdk.core.service.datafeed.abstract_ackId_event_loop import (
-    AbstractAckIdEventLoop,
-)
-from symphony.bdk.core.service.datafeed.abstract_datahose_loop import (
-    AbstractDatahoseLoop,
-)
+from symphony.bdk.core.service.datafeed.abstract_ackId_event_loop import AbstractAckIdEventLoop
+from symphony.bdk.core.service.datafeed.abstract_datahose_loop import AbstractDatahoseLoop
 from symphony.bdk.core.service.session.session_service import SessionService
 from symphony.bdk.gen.agent_api.datafeed_api import DatafeedApi
 from symphony.bdk.gen.agent_model.v5_events_read_body import V5EventsReadBody
@@ -70,10 +66,7 @@ class DatahoseLoop(AbstractAckIdEventLoop, AbstractDatahoseLoop):
             "session_token": await self._auth_session.session_token,
             "key_manager_token": await self._auth_session.key_manager_token,
             "body": V5EventsReadBody(
-                type=TYPE,
-                tag=self._tag,
-                event_types=self._event_types,
-                ack_id=self._ack_id,
+                type=TYPE, tag=self._tag, event_types=self._event_types, ack_id=self._ack_id
             ),
         }
 

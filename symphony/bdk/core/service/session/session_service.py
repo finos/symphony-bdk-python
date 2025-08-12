@@ -9,10 +9,7 @@ class OboSessionService:
     """Service interface exposing OBO-enabled endpoints to get user session information."""
 
     def __init__(
-        self,
-        session_api: SessionApi,
-        auth_session: AuthSession,
-        retry_config: BdkRetryConfig,
+        self, session_api: SessionApi, auth_session: AuthSession, retry_config: BdkRetryConfig
     ):
         self._session_api = session_api
         self._auth_session = auth_session

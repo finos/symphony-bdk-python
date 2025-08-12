@@ -9,9 +9,7 @@ from symphony.bdk.core.service.user.model.delegate_action_enum import DelegateAc
 from symphony.bdk.core.service.user.model.role_id import RoleId
 from symphony.bdk.core.service.user.user_service import UserService
 from symphony.bdk.gen.agent_api.audit_trail_api import AuditTrailApi
-from symphony.bdk.gen.agent_model.v1_audit_trail_initiator_list import (
-    V1AuditTrailInitiatorList,
-)
+from symphony.bdk.gen.agent_model.v1_audit_trail_initiator_list import V1AuditTrailInitiatorList
 from symphony.bdk.gen.pod_api.system_api import SystemApi
 from symphony.bdk.gen.pod_api.user_api import UserApi
 from symphony.bdk.gen.pod_api.users_api import UsersApi
@@ -78,9 +76,7 @@ def fixture_system_api():
 
 
 @pytest.fixture(name="user_service")
-def fixture_user_service(
-    user_api, users_api, audit_trail_api, system_api, auth_session
-):
+def fixture_user_service(user_api, users_api, audit_trail_api, system_api, auth_session):
     service = UserService(
         user_api,
         users_api,
@@ -99,15 +95,10 @@ async def test_list_users_by_ids(users_api, user_service):
     users_api.v3_users_get.return_value = get_deserialized_object_from_resource(
         V2UserList, "user/list_user.json"
     )
-    users_list = await user_service.list_users_by_ids(
-        [15942919536460, 15942919536461], active=True
-    )
+    users_list = await user_service.list_users_by_ids([15942919536460, 15942919536461], active=True)
 
     users_api.v3_users_get.assert_called_with(
-        uid="15942919536460,15942919536461",
-        local=False,
-        session_token="session_token",
-        active=True,
+        uid="15942919536460,15942919536461", local=False, session_token="session_token", active=True
     )
     assert len(users_list.users) == 2
     assert len(users_list.errors) == 2
@@ -159,18 +150,13 @@ async def test_search_users(users_api, user_service):
         UserSearchResults, "user/search_user.json"
     )
     query = UserSearchQuery(
-        query="jane",
-        filters=UserSearchFilter(title="Sales Manager", company="Symphony"),
+        query="jane", filters=UserSearchFilter(title="Sales Manager", company="Symphony")
     )
 
     result = await user_service.search_users(query)
 
     users_api.v1_user_search_post.assert_called_with(
-        search_request=query,
-        local=False,
-        skip=0,
-        limit=50,
-        session_token="session_token",
+        search_request=query, local=False, skip=0, limit=50, session_token="session_token"
     )
     assert result.count == 1
     assert len(result.users) == 1
@@ -184,19 +170,14 @@ async def test_search_all_users(users_api, user_service):
         UserSearchResults, "user/search_user.json"
     )
     query = UserSearchQuery(
-        query="jane",
-        filters=UserSearchFilter(title="Sales Manager", company="Symphony"),
+        query="jane", filters=UserSearchFilter(title="Sales Manager", company="Symphony")
     )
 
     gen = await user_service.search_all_users(query)
     result = [u async for u in gen]
 
     users_api.v1_user_search_post.assert_called_with(
-        search_request=query,
-        local=False,
-        skip=0,
-        limit=50,
-        session_token="session_token",
+        search_request=query, local=False, skip=0, limit=50, session_token="session_token"
     )
     assert len(result) == 1
     assert result[0].id == 13056700581099
@@ -249,10 +230,8 @@ async def test_get_user_detail(user_api, user_service):
 @pytest.mark.asyncio
 async def test_list_user_details(user_api, user_service):
     user_api.v2_admin_user_list_get = AsyncMock()
-    user_api.v2_admin_user_list_get.return_value = (
-        get_deserialized_object_from_resource(
-            V2UserDetailList, "user/list_user_detail.json"
-        )
+    user_api.v2_admin_user_list_get.return_value = get_deserialized_object_from_resource(
+        V2UserDetailList, "user/list_user_detail.json"
     )
 
     user_detail_list = await user_service.list_user_details()
@@ -269,10 +248,8 @@ async def test_list_user_details(user_api, user_service):
 @pytest.mark.asyncio
 async def test_list_all_user_details(user_api, user_service):
     user_api.v2_admin_user_list_get = AsyncMock()
-    user_api.v2_admin_user_list_get.return_value = (
-        get_deserialized_object_from_resource(
-            V2UserDetailList, "user/list_user_detail.json"
-        )
+    user_api.v2_admin_user_list_get.return_value = get_deserialized_object_from_resource(
+        V2UserDetailList, "user/list_user_detail.json"
     )
 
     gen = await user_service.list_all_user_details()
@@ -290,10 +267,8 @@ async def test_list_all_user_details(user_api, user_service):
 @pytest.mark.asyncio
 async def test_list_user_details_by_filter(user_api, user_service):
     user_api.v1_admin_user_find_post = AsyncMock()
-    user_api.v1_admin_user_find_post.return_value = (
-        get_deserialized_object_from_resource(
-            UserDetailList, "user/list_user_by_filter.json"
-        )
+    user_api.v1_admin_user_find_post.return_value = get_deserialized_object_from_resource(
+        UserDetailList, "user/list_user_by_filter.json"
     )
     user_filter = UserFilter(status="ENABLED", role="INDIVIDUAL")
 
@@ -311,10 +286,8 @@ async def test_list_user_details_by_filter(user_api, user_service):
 @pytest.mark.asyncio
 async def test_list_all_user_details_by_filter(user_api, user_service):
     user_api.v1_admin_user_find_post = AsyncMock()
-    user_api.v1_admin_user_find_post.return_value = (
-        get_deserialized_object_from_resource(
-            UserDetailList, "user/list_user_by_filter.json"
-        )
+    user_api.v1_admin_user_find_post.return_value = get_deserialized_object_from_resource(
+        UserDetailList, "user/list_user_by_filter.json"
     )
     user_filter = UserFilter(status="ENABLED")
 
@@ -344,15 +317,13 @@ async def test_add_role(user_api, user_service):
 @pytest.mark.asyncio
 async def test_list_roles(system_api, user_service):
     system_api.v1_admin_system_roles_list_get = AsyncMock()
-    system_api.v1_admin_system_roles_list_get.return_value = (
-        get_deserialized_object_from_resource(RoleDetailList, "user/list_roles.json")
+    system_api.v1_admin_system_roles_list_get.return_value = get_deserialized_object_from_resource(
+        RoleDetailList, "user/list_roles.json"
     )
 
     role_list = await user_service.list_roles()
 
-    system_api.v1_admin_system_roles_list_get.assert_called_with(
-        session_token="session_token"
-    )
+    system_api.v1_admin_system_roles_list_get.assert_called_with(session_token="session_token")
 
     assert len(role_list) == 12
     assert role_list[0].id == "CONTENT_MANAGEMENT"
@@ -373,8 +344,8 @@ async def test_remove_role(user_api, user_service):
 @pytest.mark.asyncio
 async def test_get_avatar(user_api, user_service):
     user_api.v1_admin_user_uid_avatar_get = AsyncMock()
-    user_api.v1_admin_user_uid_avatar_get.return_value = (
-        get_deserialized_object_from_resource(AvatarList, "user/list_avatar.json")
+    user_api.v1_admin_user_uid_avatar_get.return_value = get_deserialized_object_from_resource(
+        AvatarList, "user/list_avatar.json"
     )
 
     avatar_list = await user_service.get_avatar(1234)
@@ -397,14 +368,10 @@ async def test_update_avatar(user_api, user_service):
 
     await user_service.update_avatar(1234, "image_string")
     user_api.v1_admin_user_uid_avatar_update_post.assert_called_with(
-        uid=1234,
-        payload=AvatarUpdate(image="image_string"),
-        session_token="session_token",
+        uid=1234, payload=AvatarUpdate(image="image_string"), session_token="session_token"
     )
 
-    with open(
-        get_resource_filepath("user/FINOS_icon_rgb.png", as_text=True), "rb"
-    ) as file:
+    with open(get_resource_filepath("user/FINOS_icon_rgb.png", as_text=True), "rb") as file:
         avatar_bytes = file.read()
         await user_service.update_avatar(1234, avatar_bytes)
 
@@ -418,8 +385,8 @@ async def test_update_avatar(user_api, user_service):
 @pytest.mark.asyncio
 async def test_get_disclaimer(user_api, user_service):
     user_api.v1_admin_user_uid_disclaimer_get = AsyncMock()
-    user_api.v1_admin_user_uid_disclaimer_get.return_value = (
-        get_deserialized_object_from_resource(Disclaimer, "disclaimer/disclaimer.json")
+    user_api.v1_admin_user_uid_disclaimer_get.return_value = get_deserialized_object_from_resource(
+        Disclaimer, "disclaimer/disclaimer.json"
     )
 
     disclaimer = await user_service.get_disclaimer(1234)
@@ -475,15 +442,11 @@ async def test_get_delegates(user_api, user_service):
 async def test_update_delegates(user_api, user_service):
     user_api.v1_admin_user_uid_delegates_update_post = AsyncMock()
 
-    await user_service.update_delegates(
-        7215545078541, 7215545078461, DelegateActionEnum.ADD
-    )
+    await user_service.update_delegates(7215545078541, 7215545078461, DelegateActionEnum.ADD)
 
     user_api.v1_admin_user_uid_delegates_update_post.assert_called_with(
         uid=7215545078541,
-        payload=DelegateAction(
-            user_id=7215545078461, action=DelegateActionEnum.ADD.value
-        ),
+        payload=DelegateAction(user_id=7215545078461, action=DelegateActionEnum.ADD.value),
         session_token="session_token",
     )
 
@@ -558,10 +521,8 @@ async def test_update_status(user_api, user_service):
 @pytest.mark.asyncio
 async def test_list_user_followers(user_api, user_service):
     user_api.v1_user_uid_followers_get = AsyncMock()
-    user_api.v1_user_uid_followers_get.return_value = (
-        get_deserialized_object_from_resource(
-            FollowersListResponse, "user/list_user_followers.json"
-        )
+    user_api.v1_user_uid_followers_get.return_value = get_deserialized_object_from_resource(
+        FollowersListResponse, "user/list_user_followers.json"
     )
 
     follower_list = await user_service.list_user_followers(1234, before=4, after=1)
@@ -578,10 +539,8 @@ async def test_list_user_followers(user_api, user_service):
 @pytest.mark.asyncio
 async def test_list_all_user_followers(user_api, user_service):
     user_api.v1_user_uid_followers_get = AsyncMock()
-    user_api.v1_user_uid_followers_get.return_value = (
-        get_deserialized_object_from_resource(
-            FollowersListResponse, "user/list_user_followers.json"
-        )
+    user_api.v1_user_uid_followers_get.return_value = get_deserialized_object_from_resource(
+        FollowersListResponse, "user/list_user_followers.json"
     )
 
     gen = await user_service.list_all_user_followers(1234, max_number=2)
@@ -601,15 +560,11 @@ async def test_list_all_user_followers(user_api, user_service):
 @pytest.mark.asyncio
 async def test_list_users_following(user_api, user_service):
     user_api.v1_user_uid_following_get = AsyncMock()
-    user_api.v1_user_uid_following_get.return_value = (
-        get_deserialized_object_from_resource(
-            FollowingListResponse, "user/list_users_following.json"
-        )
+    user_api.v1_user_uid_following_get.return_value = get_deserialized_object_from_resource(
+        FollowingListResponse, "user/list_users_following.json"
     )
 
-    following_user_list = await user_service.list_users_following(
-        1234, before=4, after=1
-    )
+    following_user_list = await user_service.list_users_following(1234, before=4, after=1)
 
     user_api.v1_user_uid_following_get.assert_called_with(
         uid=1234, limit=100, session_token="session_token", before=4, after=1
@@ -623,10 +578,8 @@ async def test_list_users_following(user_api, user_service):
 @pytest.mark.asyncio
 async def test_list_all_users_following(user_api, user_service):
     user_api.v1_user_uid_following_get = AsyncMock()
-    user_api.v1_user_uid_following_get.return_value = (
-        get_deserialized_object_from_resource(
-            FollowingListResponse, "user/list_users_following.json"
-        )
+    user_api.v1_user_uid_following_get.return_value = get_deserialized_object_from_resource(
+        FollowingListResponse, "user/list_users_following.json"
     )
 
     gen = await user_service.list_all_users_following(1234, max_number=2)
@@ -644,8 +597,8 @@ async def test_list_all_users_following(user_api, user_service):
 @pytest.mark.asyncio
 async def test_create(user_api, user_service):
     user_api.v2_admin_user_create_post = AsyncMock()
-    user_api.v2_admin_user_create_post.return_value = (
-        get_deserialized_object_from_resource(V2UserDetail, "user/user_detail.json")
+    user_api.v2_admin_user_create_post.return_value = get_deserialized_object_from_resource(
+        V2UserDetail, "user/user_detail.json"
     )
 
     user_create = V2UserCreate()
@@ -663,8 +616,8 @@ async def test_create(user_api, user_service):
 @pytest.mark.asyncio
 async def test_update(user_api, user_service):
     user_api.v2_admin_user_uid_update_post = AsyncMock()
-    user_api.v2_admin_user_uid_update_post.return_value = (
-        get_deserialized_object_from_resource(V2UserDetail, "user/user_detail.json")
+    user_api.v2_admin_user_uid_update_post.return_value = get_deserialized_object_from_resource(
+        V2UserDetail, "user/user_detail.json"
     )
 
     user_attribute = V2UserAttributes()

@@ -49,9 +49,7 @@ def retry(*dargs, **dkw):
                 default_kwargs.update(config_kwargs)
             # update default arguments by the ones passed as parameters
             default_kwargs.update(**dkw)
-            return AsyncRetrying(*dargs, **default_kwargs).wraps(fun)(
-                self, *args, **kwargs
-            )
+            return AsyncRetrying(*dargs, **default_kwargs).wraps(fun)(self, *args, **kwargs)
 
         return decorator_f
 

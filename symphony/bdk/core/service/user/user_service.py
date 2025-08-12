@@ -6,16 +6,11 @@ from typing import AsyncGenerator, Union
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.core.retry import retry
-from symphony.bdk.core.service.pagination import (
-    cursor_based_pagination,
-    offset_based_pagination,
-)
+from symphony.bdk.core.service.pagination import cursor_based_pagination, offset_based_pagination
 from symphony.bdk.core.service.user.model.delegate_action_enum import DelegateActionEnum
 from symphony.bdk.core.service.user.model.role_id import RoleId
 from symphony.bdk.gen.agent_api.audit_trail_api import AuditTrailApi
-from symphony.bdk.gen.agent_model.v1_audit_trail_initiator_list import (
-    V1AuditTrailInitiatorList,
-)
+from symphony.bdk.gen.agent_model.v1_audit_trail_initiator_list import V1AuditTrailInitiatorList
 from symphony.bdk.gen.pod_api.system_api import SystemApi
 from symphony.bdk.gen.pod_api.user_api import UserApi
 from symphony.bdk.gen.pod_api.users_api import UsersApi
@@ -121,9 +116,7 @@ class OboUserService:
         return await self._users_api.v3_users_get(**params)
 
     @retry
-    async def list_users_by_usernames(
-        self, usernames: [str], active: bool = None
-    ) -> V2UserList:
+    async def list_users_by_usernames(self, usernames: [str], active: bool = None) -> V2UserList:
         """Search users by usernames.
         See : `Users Lookup v3 <https://developers.symphony.com/restapi/reference/users-lookup-v3>`_
 
@@ -146,11 +139,7 @@ class OboUserService:
 
     @retry
     async def search_users(
-        self,
-        query: UserSearchQuery,
-        local: bool = False,
-        skip: int = 0,
-        limit: int = 50,
+        self, query: UserSearchQuery, local: bool = False, skip: int = 0, limit: int = 50
     ) -> UserSearchResults:
         """Search for users by first name, last name, display name, and email; optionally, filter results by company,
         title, location, marketCoverage, responsibility, function, or instrument.
@@ -272,10 +261,7 @@ class UserService(OboUserService):
         :param user_id: User Id
         :return: Details of the user.
         """
-        params = {
-            "uid": user_id,
-            "session_token": await self._auth_session.session_token,
-        }
+        params = {"uid": user_id, "session_token": await self._auth_session.session_token}
         return await self._user_api.v2_admin_user_uid_get(**params)
 
     @retry
@@ -349,9 +335,7 @@ class UserService(OboUserService):
         async def list_user_details_one_page(skip, limit):
             return await self.list_user_details_by_filter(user_filter, skip, limit)
 
-        return offset_based_pagination(
-            list_user_details_one_page, chunk_size, max_number
-        )
+        return offset_based_pagination(list_user_details_one_page, chunk_size, max_number)
 
     @retry
     async def add_role(self, user_id: int, role_id: RoleId) -> None:
@@ -402,10 +386,7 @@ class UserService(OboUserService):
         :param user_id: User id
         :return: List of avatar urls of the user
         """
-        params = {
-            "uid": user_id,
-            "session_token": await self._auth_session.session_token,
-        }
+        params = {"uid": user_id, "session_token": await self._auth_session.session_token}
         avatar_list = await self._user_api.v1_admin_user_uid_avatar_get(**params)
         return avatar_list.value
 
@@ -435,10 +416,7 @@ class UserService(OboUserService):
         :param user_id: user id
         :return: Disclaimer assigned to the user.
         """
-        params = {
-            "uid": user_id,
-            "session_token": await self._auth_session.session_token,
-        }
+        params = {"uid": user_id, "session_token": await self._auth_session.session_token}
         return await self._user_api.v1_admin_user_uid_disclaimer_get(**params)
 
     @retry
@@ -448,10 +426,7 @@ class UserService(OboUserService):
 
         :param user_id: user id
         """
-        params = {
-            "uid": user_id,
-            "session_token": await self._auth_session.session_token,
-        }
+        params = {"uid": user_id, "session_token": await self._auth_session.session_token}
         await self._user_api.v1_admin_user_uid_disclaimer_delete(**params)
 
     @retry
@@ -477,10 +452,7 @@ class UserService(OboUserService):
         :param user_id: User id.
         :return: List of delegates assigned to a user.
         """
-        params = {
-            "uid": user_id,
-            "session_token": await self._auth_session.session_token,
-        }
+        params = {"uid": user_id, "session_token": await self._auth_session.session_token}
         delegates_list = await self._user_api.v1_admin_user_uid_delegates_get(**params)
         return delegates_list.value
 
@@ -510,17 +482,12 @@ class UserService(OboUserService):
         :param user_id: User id.
         :return: List of feature entitlements of the user.
         """
-        params = {
-            "uid": user_id,
-            "session_token": await self._auth_session.session_token,
-        }
+        params = {"uid": user_id, "session_token": await self._auth_session.session_token}
         feature_list = await self._user_api.v1_admin_user_uid_features_get(**params)
         return feature_list.value
 
     @retry
-    async def update_feature_entitlements(
-        self, user_id: int, features: [Feature]
-    ) -> None:
+    async def update_feature_entitlements(self, user_id: int, features: [Feature]) -> None:
         """Update feature entitlements of a user.
         See: `Update User Features <https://developers.symphony.com/restapi/reference/update-features>`_
 
@@ -542,10 +509,7 @@ class UserService(OboUserService):
         :param user_id: User id.
         :return: Status of the user.
         """
-        params = {
-            "uid": user_id,
-            "session_token": await self._auth_session.session_token,
-        }
+        params = {"uid": user_id, "session_token": await self._auth_session.session_token}
         return await self._user_api.v1_admin_user_uid_status_get(**params)
 
     @retry
@@ -657,10 +621,7 @@ class UserService(OboUserService):
         :param payload: User's details to create.
         :return: Created user details.
         """
-        params = {
-            "payload": payload,
-            "session_token": await self._auth_session.session_token,
-        }
+        params = {"payload": payload, "session_token": await self._auth_session.session_token}
         return await self._user_api.v2_admin_user_create_post(**params)
 
     @retry
@@ -773,9 +734,7 @@ class UserService(OboUserService):
         await self._user_api.v1_admin_user_user_id_suspension_update_put(**params)
 
     @retry
-    async def suspend(
-        self, user_id: int, reason: str = None, until: int = None
-    ) -> None:
+    async def suspend(self, user_id: int, reason: str = None, until: int = None) -> None:
         """Suspends a user account.
         Calling this endpoint requires a service account with the User Provisioning role.
         See: `Suspend User Account v1 <https://developers.symphony.com/restapi/v20.10/reference/suspend-user-v1>`_

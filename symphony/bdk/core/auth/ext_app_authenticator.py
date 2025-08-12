@@ -4,17 +4,12 @@ from abc import ABC, abstractmethod
 
 from symphony.bdk.core.auth.auth_session import AppAuthSession
 from symphony.bdk.core.auth.jwt_helper import create_signed_jwt, validate_jwt
-from symphony.bdk.core.auth.tokens_repository import (
-    InMemoryTokensRepository,
-    TokensRepository,
-)
+from symphony.bdk.core.auth.tokens_repository import InMemoryTokensRepository, TokensRepository
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.core.config.model.bdk_rsa_key_config import BdkRsaKeyConfig
 from symphony.bdk.core.retry import retry
 from symphony.bdk.core.retry.strategy import authentication_retry
-from symphony.bdk.gen.auth_api.certificate_authentication_api import (
-    CertificateAuthenticationApi,
-)
+from symphony.bdk.gen.auth_api.certificate_authentication_api import CertificateAuthenticationApi
 from symphony.bdk.gen.auth_api.certificate_pod_api import CertificatePodApi
 from symphony.bdk.gen.auth_model.extension_app_authenticate_request import (
     ExtensionAppAuthenticateRequest,
@@ -62,9 +57,7 @@ class ExtensionAppAuthenticator(ABC):
         pod_certificate = await self._get_pod_certificate()
         return validate_jwt(jwt, pod_certificate.certificate, self._app_id)
 
-    async def authenticate_and_retrieve_tokens(
-        self, app_token: str
-    ) -> ExtensionAppTokens:
+    async def authenticate_and_retrieve_tokens(self, app_token: str) -> ExtensionAppTokens:
         """Actually authenticates and retrieves the tokens.
         Save the tokens in the tokens repository.
 
@@ -72,9 +65,7 @@ class ExtensionAppAuthenticator(ABC):
         :return: the extension app tokens
         """
         ext_app_tokens = await self._retrieve_tokens(app_token)
-        await self._tokens_repository.save(
-            ext_app_tokens.app_token, ext_app_tokens.symphony_token
-        )
+        await self._tokens_repository.save(ext_app_tokens.app_token, ext_app_tokens.symphony_token)
 
         return ext_app_tokens
 

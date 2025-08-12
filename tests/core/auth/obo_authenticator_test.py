@@ -2,10 +2,7 @@ from unittest.mock import AsyncMock, patch
 
 import pytest
 
-from symphony.bdk.core.auth.obo_authenticator import (
-    OboAuthenticatorCert,
-    OboAuthenticatorRsa,
-)
+from symphony.bdk.core.auth.obo_authenticator import OboAuthenticatorCert, OboAuthenticatorRsa
 from symphony.bdk.core.config.model.bdk_app_config import BdkAppConfig
 from symphony.bdk.gen.auth_model.obo_auth_response import OboAuthResponse
 from symphony.bdk.gen.exceptions import ApiException
@@ -29,23 +26,18 @@ async def test_obo_session_username(config):
 
     with (
         patch(
-            "symphony.bdk.core.auth.obo_authenticator.create_signed_jwt",
-            return_value=signed_jwt,
+            "symphony.bdk.core.auth.obo_authenticator.create_signed_jwt", return_value=signed_jwt
         ) as create_jwt,
         patch("symphony.bdk.core.auth.obo_authenticator.AuthenticationApi") as auth_api,
     ):
-        auth_api.pubkey_app_authenticate_post = AsyncMock(
-            return_value=Token(token=app_token)
-        )
+        auth_api.pubkey_app_authenticate_post = AsyncMock(return_value=Token(token=app_token))
         auth_api.pubkey_app_username_username_authenticate_post = AsyncMock(
             return_value=Token(token=session_token)
         )
 
-        obo_authenticator = OboAuthenticatorRsa(
-            config, auth_api, minimal_retry_config()
-        )
-        retrieved_session_token = (
-            await obo_authenticator.retrieve_obo_session_token_by_username(username)
+        obo_authenticator = OboAuthenticatorRsa(config, auth_api, minimal_retry_config())
+        retrieved_session_token = await obo_authenticator.retrieve_obo_session_token_by_username(
+            username
         )
 
         assert retrieved_session_token == session_token
@@ -67,23 +59,18 @@ async def test_obo_session_user_id(config):
 
     with (
         patch(
-            "symphony.bdk.core.auth.obo_authenticator.create_signed_jwt",
-            return_value=signed_jwt,
+            "symphony.bdk.core.auth.obo_authenticator.create_signed_jwt", return_value=signed_jwt
         ) as create_jwt,
         patch("symphony.bdk.core.auth.obo_authenticator.AuthenticationApi") as auth_api,
     ):
-        auth_api.pubkey_app_authenticate_post = AsyncMock(
-            return_value=Token(token=app_token)
-        )
+        auth_api.pubkey_app_authenticate_post = AsyncMock(return_value=Token(token=app_token))
         auth_api.pubkey_app_user_user_id_authenticate_post = AsyncMock(
             return_value=Token(token=session_token)
         )
 
-        obo_authenticator = OboAuthenticatorRsa(
-            config, auth_api, minimal_retry_config()
-        )
-        retrieved_session_token = (
-            await obo_authenticator.retrieve_obo_session_token_by_user_id(user_id)
+        obo_authenticator = OboAuthenticatorRsa(config, auth_api, minimal_retry_config())
+        retrieved_session_token = await obo_authenticator.retrieve_obo_session_token_by_user_id(
+            user_id
         )
 
         assert retrieved_session_token == session_token
@@ -100,16 +87,13 @@ async def test_obo_session_user_id(config):
 async def test_api_exception(config):
     with (
         patch(
-            "symphony.bdk.core.auth.obo_authenticator.create_signed_jwt",
-            return_value="signed_jwt",
+            "symphony.bdk.core.auth.obo_authenticator.create_signed_jwt", return_value="signed_jwt"
         ),
         patch("symphony.bdk.core.auth.obo_authenticator.AuthenticationApi") as auth_api,
     ):
         auth_api.pubkey_app_authenticate_post = AsyncMock(side_effect=ApiException(400))
 
-        obo_authenticator = OboAuthenticatorRsa(
-            config, auth_api, minimal_retry_config()
-        )
+        obo_authenticator = OboAuthenticatorRsa(config, auth_api, minimal_retry_config())
 
         with pytest.raises(ApiException):
             await obo_authenticator.retrieve_obo_session_token_by_username("username")
@@ -122,21 +106,16 @@ async def test_api_exception(config):
 async def test_api_exception_in_authenticate_username(config):
     with (
         patch(
-            "symphony.bdk.core.auth.obo_authenticator.create_signed_jwt",
-            return_value="signed_jwt",
+            "symphony.bdk.core.auth.obo_authenticator.create_signed_jwt", return_value="signed_jwt"
         ),
         patch("symphony.bdk.core.auth.obo_authenticator.AuthenticationApi") as auth_api,
     ):
-        auth_api.pubkey_app_authenticate_post = AsyncMock(
-            return_value=Token(token="app_token")
-        )
+        auth_api.pubkey_app_authenticate_post = AsyncMock(return_value=Token(token="app_token"))
         auth_api.pubkey_app_username_username_authenticate_post = AsyncMock(
             side_effect=ApiException(400)
         )
 
-        obo_authenticator = OboAuthenticatorRsa(
-            config, auth_api, minimal_retry_config()
-        )
+        obo_authenticator = OboAuthenticatorRsa(config, auth_api, minimal_retry_config())
 
         with pytest.raises(ApiException):
             await obo_authenticator.retrieve_obo_session_token_by_username("username")
@@ -146,21 +125,16 @@ async def test_api_exception_in_authenticate_username(config):
 async def test_api_exception_in_authenticate_userid(config):
     with (
         patch(
-            "symphony.bdk.core.auth.obo_authenticator.create_signed_jwt",
-            return_value="signed_jwt",
+            "symphony.bdk.core.auth.obo_authenticator.create_signed_jwt", return_value="signed_jwt"
         ),
         patch("symphony.bdk.core.auth.obo_authenticator.AuthenticationApi") as auth_api,
     ):
-        auth_api.pubkey_app_authenticate_post = AsyncMock(
-            return_value=Token(token="app_token")
-        )
+        auth_api.pubkey_app_authenticate_post = AsyncMock(return_value=Token(token="app_token"))
         auth_api.pubkey_app_user_user_id_authenticate_post = AsyncMock(
             side_effect=ApiException(400)
         )
 
-        obo_authenticator = OboAuthenticatorRsa(
-            config, auth_api, minimal_retry_config()
-        )
+        obo_authenticator = OboAuthenticatorRsa(config, auth_api, minimal_retry_config())
 
         with pytest.raises(ApiException):
             await obo_authenticator.retrieve_obo_session_token_by_user_id(1234)
@@ -175,21 +149,16 @@ async def test_authenticate_by_username(config):
 
     with (
         patch(
-            "symphony.bdk.core.auth.obo_authenticator.create_signed_jwt",
-            return_value=signed_jwt,
+            "symphony.bdk.core.auth.obo_authenticator.create_signed_jwt", return_value=signed_jwt
         ) as create_jwt,
         patch("symphony.bdk.core.auth.obo_authenticator.AuthenticationApi") as auth_api,
     ):
-        auth_api.pubkey_app_authenticate_post = AsyncMock(
-            return_value=Token(token=app_token)
-        )
+        auth_api.pubkey_app_authenticate_post = AsyncMock(return_value=Token(token=app_token))
         auth_api.pubkey_app_username_username_authenticate_post = AsyncMock(
             return_value=Token(token=session_token)
         )
 
-        obo_authenticator = OboAuthenticatorRsa(
-            config, auth_api, minimal_retry_config()
-        )
+        obo_authenticator = OboAuthenticatorRsa(config, auth_api, minimal_retry_config())
         obo_session = obo_authenticator.authenticate_by_username(username)
 
         assert await obo_session.session_token == session_token
@@ -211,21 +180,16 @@ async def test_authenticate_by_user_id(config):
 
     with (
         patch(
-            "symphony.bdk.core.auth.obo_authenticator.create_signed_jwt",
-            return_value=signed_jwt,
+            "symphony.bdk.core.auth.obo_authenticator.create_signed_jwt", return_value=signed_jwt
         ) as create_jwt,
         patch("symphony.bdk.core.auth.obo_authenticator.AuthenticationApi") as auth_api,
     ):
-        auth_api.pubkey_app_authenticate_post = AsyncMock(
-            return_value=Token(token=app_token)
-        )
+        auth_api.pubkey_app_authenticate_post = AsyncMock(return_value=Token(token=app_token))
         auth_api.pubkey_app_user_user_id_authenticate_post = AsyncMock(
             return_value=Token(token=session_token)
         )
 
-        obo_authenticator = OboAuthenticatorRsa(
-            config, auth_api, minimal_retry_config()
-        )
+        obo_authenticator = OboAuthenticatorRsa(config, auth_api, minimal_retry_config())
         obo_session = obo_authenticator.authenticate_by_user_id(1234)
 
         assert await obo_session.session_token == "session_token"
@@ -240,23 +204,19 @@ async def test_authenticate_by_user_id(config):
 
 @pytest.mark.asyncio
 async def test_obo_session_username_cert_authentication():
-    with patch(
-        "symphony.bdk.core.auth.obo_authenticator.CertificateAuthenticationApi"
-    ) as auth_api:
+    with patch("symphony.bdk.core.auth.obo_authenticator.CertificateAuthenticationApi") as auth_api:
         username = "username"
         app_token = "app_token"
         session_token = "session_token"
 
-        auth_api.v1_app_authenticate_post = AsyncMock(
-            return_value=Token(token=app_token)
-        )
+        auth_api.v1_app_authenticate_post = AsyncMock(return_value=Token(token=app_token))
         auth_api.v1_app_username_username_authenticate_post = AsyncMock(
             return_value=OboAuthResponse(session_token=session_token)
         )
 
         obo_authenticator = OboAuthenticatorCert(auth_api, minimal_retry_config())
-        retrieved_session_token = (
-            await obo_authenticator.retrieve_obo_session_token_by_username(username)
+        retrieved_session_token = await obo_authenticator.retrieve_obo_session_token_by_username(
+            username
         )
 
         assert retrieved_session_token == session_token
@@ -268,23 +228,19 @@ async def test_obo_session_username_cert_authentication():
 
 @pytest.mark.asyncio
 async def test_obo_session_user_id_cert_authentication():
-    with patch(
-        "symphony.bdk.core.auth.obo_authenticator.CertificateAuthenticationApi"
-    ) as auth_api:
+    with patch("symphony.bdk.core.auth.obo_authenticator.CertificateAuthenticationApi") as auth_api:
         user_id = 1234
         app_token = "app_token"
         session_token = "session_token"
 
-        auth_api.v1_app_authenticate_post = AsyncMock(
-            return_value=Token(token=app_token)
-        )
+        auth_api.v1_app_authenticate_post = AsyncMock(return_value=Token(token=app_token))
         auth_api.v1_app_user_uid_authenticate_post = AsyncMock(
             return_value=OboAuthResponse(session_token=session_token)
         )
 
         obo_authenticator = OboAuthenticatorCert(auth_api, minimal_retry_config())
-        retrieved_session_token = (
-            await obo_authenticator.retrieve_obo_session_token_by_user_id(user_id)
+        retrieved_session_token = await obo_authenticator.retrieve_obo_session_token_by_user_id(
+            user_id
         )
 
         assert retrieved_session_token == session_token
@@ -296,9 +252,7 @@ async def test_obo_session_user_id_cert_authentication():
 
 @pytest.mark.asyncio
 async def test_api_exception_cert_auth_in_app_authenticate():
-    with patch(
-        "symphony.bdk.core.auth.obo_authenticator.CertificateAuthenticationApi"
-    ) as auth_api:
+    with patch("symphony.bdk.core.auth.obo_authenticator.CertificateAuthenticationApi") as auth_api:
         auth_api.v1_app_authenticate_post = AsyncMock(side_effect=ApiException(400))
         obo_authenticator = OboAuthenticatorCert(auth_api, minimal_retry_config())
 
@@ -311,12 +265,8 @@ async def test_api_exception_cert_auth_in_app_authenticate():
 
 @pytest.mark.asyncio
 async def test_api_exception_cert_auth_in_username_authenticate():
-    with patch(
-        "symphony.bdk.core.auth.obo_authenticator.CertificateAuthenticationApi"
-    ) as auth_api:
-        auth_api.v1_app_authenticate_post = AsyncMock(
-            return_value=Token(token="app_token")
-        )
+    with patch("symphony.bdk.core.auth.obo_authenticator.CertificateAuthenticationApi") as auth_api:
+        auth_api.v1_app_authenticate_post = AsyncMock(return_value=Token(token="app_token"))
         auth_api.v1_app_username_username_authenticate_post = AsyncMock(
             side_effect=ApiException(400)
         )
@@ -328,15 +278,9 @@ async def test_api_exception_cert_auth_in_username_authenticate():
 
 @pytest.mark.asyncio
 async def test_api_exception_cert_auth_in_userid_authenticate():
-    with patch(
-        "symphony.bdk.core.auth.obo_authenticator.CertificateAuthenticationApi"
-    ) as auth_api:
-        auth_api.v1_app_authenticate_post = AsyncMock(
-            return_value=Token(token="app_token")
-        )
-        auth_api.v1_app_user_uid_authenticate_post = AsyncMock(
-            side_effect=ApiException(400)
-        )
+    with patch("symphony.bdk.core.auth.obo_authenticator.CertificateAuthenticationApi") as auth_api:
+        auth_api.v1_app_authenticate_post = AsyncMock(return_value=Token(token="app_token"))
+        auth_api.v1_app_user_uid_authenticate_post = AsyncMock(side_effect=ApiException(400))
         obo_authenticator = OboAuthenticatorCert(auth_api, minimal_retry_config())
 
         with pytest.raises(ApiException):
@@ -345,16 +289,12 @@ async def test_api_exception_cert_auth_in_userid_authenticate():
 
 @pytest.mark.asyncio
 async def test_authenticate_by_username_cert_authentication():
-    with patch(
-        "symphony.bdk.core.auth.obo_authenticator.CertificateAuthenticationApi"
-    ) as auth_api:
+    with patch("symphony.bdk.core.auth.obo_authenticator.CertificateAuthenticationApi") as auth_api:
         username = "username"
         app_token = "app_token"
         session_token = "session_token"
 
-        auth_api.v1_app_authenticate_post = AsyncMock(
-            return_value=Token(token=app_token)
-        )
+        auth_api.v1_app_authenticate_post = AsyncMock(return_value=Token(token=app_token))
         auth_api.v1_app_username_username_authenticate_post = AsyncMock(
             return_value=OboAuthResponse(session_token=session_token)
         )
@@ -372,16 +312,12 @@ async def test_authenticate_by_username_cert_authentication():
 
 @pytest.mark.asyncio
 async def test_authenticate_by_user_id_cert_authentication():
-    with patch(
-        "symphony.bdk.core.auth.obo_authenticator.CertificateAuthenticationApi"
-    ) as auth_api:
+    with patch("symphony.bdk.core.auth.obo_authenticator.CertificateAuthenticationApi") as auth_api:
         user_id = 1234
         app_token = "app_token"
         session_token = "session_token"
 
-        auth_api.v1_app_authenticate_post = AsyncMock(
-            return_value=Token(token=app_token)
-        )
+        auth_api.v1_app_authenticate_post = AsyncMock(return_value=Token(token=app_token))
         auth_api.v1_app_user_uid_authenticate_post = AsyncMock(
             return_value=OboAuthResponse(session_token=session_token)
         )

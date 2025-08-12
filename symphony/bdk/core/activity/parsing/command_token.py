@@ -3,11 +3,7 @@
 import re
 from abc import ABC, abstractmethod
 
-from symphony.bdk.core.activity.parsing.message_entities import (
-    Cashtag,
-    Hashtag,
-    Mention,
-)
+from symphony.bdk.core.activity.parsing.message_entities import Cashtag, Hashtag, Mention
 
 argument_name_pattern = re.compile(r"^[a-zA-Z_][a-zA-Z_$\d]*$")
 
@@ -79,14 +75,10 @@ class StringArgumentCommandToken(AbstractCommandToken, ArgumentCommandToken):
             raise ValueError("Argument name is not valid")
 
     def matches(self, token: object):
-        return isinstance(
-            token, str
-        ) and StringArgumentCommandToken.whitespace_pattern.match(token)
+        return isinstance(token, str) and StringArgumentCommandToken.whitespace_pattern.match(token)
 
     def __eq__(self, o: object) -> bool:
-        return (
-            isinstance(o, StringArgumentCommandToken) and self._arg_name == o._arg_name
-        )
+        return isinstance(o, StringArgumentCommandToken) and self._arg_name == o._arg_name
 
 
 class HashArgumentCommandToken(AbstractCommandToken, ArgumentCommandToken):
@@ -140,9 +132,7 @@ class MentionArgumentCommandToken(AbstractCommandToken, ArgumentCommandToken):
         return isinstance(token, Mention)
 
     def __eq__(self, o: object) -> bool:
-        return (
-            isinstance(o, MentionArgumentCommandToken) and self._arg_name == o._arg_name
-        )
+        return isinstance(o, MentionArgumentCommandToken) and self._arg_name == o._arg_name
 
 
 class MatchingUserIdMentionToken(AbstractCommandToken):
@@ -157,10 +147,7 @@ class MatchingUserIdMentionToken(AbstractCommandToken):
         self._matching_user_id_supplier = bot_user_id_supplier
 
     def matches(self, token: object):
-        return (
-            isinstance(token, Mention)
-            and token.user_id == self._matching_user_id_supplier()
-        )
+        return isinstance(token, Mention) and token.user_id == self._matching_user_id_supplier()
 
     def __eq__(self, o: object) -> bool:
         return (

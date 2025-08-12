@@ -75,13 +75,13 @@ authorized_licenses = [
 
 
 [tool.ruff]
-include = ["pyproject.toml", "symphony/**/*.py", "examples/**/*.py", "tests/**/*.py"]
+include = ["pyproject.toml", "symphony/**/*.py", "examples/**/*.py"]
 exclude = [
     "symphony/bdk/gen",
 ]
 
 target-version = "py39"
-line-length = 88
+line-length = 100
 
 [tool.ruff.lint]
 select = ["E", "W", "F", "I"]

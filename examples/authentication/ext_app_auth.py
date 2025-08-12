@@ -18,8 +18,7 @@ async def run():
         logging.debug("App token: %s, Symphony token: %s", ta, ts)
         # nosemgrep
         logging.debug(
-            "Is token pair valid: %s",
-            await ext_app_authenticator.is_token_pair_valid(ta, ts),
+            "Is token pair valid: %s", await ext_app_authenticator.is_token_pair_valid(ta, ts)
         )
 
 

@@ -9,10 +9,7 @@ class HealthService:
     """Service class for checking health of the Agent server."""
 
     def __init__(
-        self,
-        system_api: SystemApi,
-        signals_api: SignalsApi,
-        retry_config: BdkRetryConfig,
+        self, system_api: SystemApi, signals_api: SignalsApi, retry_config: BdkRetryConfig
     ):
         self._system_api = system_api
         self._signals_api = signals_api

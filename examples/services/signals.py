@@ -27,9 +27,7 @@ async def run():
         logging.info(await signal_service.get_signal(signal.id))
 
         logging.info("Add a subscriber to the signal.")
-        await signal_service.subscribe_users_to_signal(
-            signal.id, True, [13056700580913]
-        )
+        await signal_service.subscribe_users_to_signal(signal.id, True, [13056700580913])
 
         logging.info("Unsubscribe added user to the signal.")
         await signal_service.unsubscribe_users_to_signal(signal.id, [13056700580913])

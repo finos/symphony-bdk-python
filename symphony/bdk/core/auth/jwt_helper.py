@@ -33,14 +33,11 @@ def create_signed_jwt(
         expiration
         if expiration is not None
         else int(
-            datetime.datetime.now(datetime.timezone.utc).timestamp()
-            + DEFAULT_EXPIRATION_SECONDS
+            datetime.datetime.now(datetime.timezone.utc).timestamp() + DEFAULT_EXPIRATION_SECONDS
         )
     )
     payload = {"sub": username, "exp": expiration}
-    return create_signed_jwt_with_claims(
-        private_key_config.get_private_key_content(), payload
-    )
+    return create_signed_jwt_with_claims(private_key_config.get_private_key_content(), payload)
 
 
 def create_signed_jwt_with_claims(private_key: str, payload: dict) -> str:
@@ -79,8 +76,7 @@ def generate_expiration_time() -> int:
     :return: timestamp value
     """
     return int(
-        datetime.datetime.now(datetime.timezone.utc).timestamp()
-        + DEFAULT_EXPIRATION_SECONDS
+        datetime.datetime.now(datetime.timezone.utc).timestamp() + DEFAULT_EXPIRATION_SECONDS
     )
 
 
@@ -92,9 +88,7 @@ def _parse_public_key_from_x509_cert(certificate: str) -> str:
     """
     try:
         public_key = load_pem_x509_certificate(certificate.encode()).public_key()
-        return public_key.public_bytes(
-            Encoding.PEM, PublicFormat.SubjectPublicKeyInfo
-        ).decode()
+        return public_key.public_bytes(Encoding.PEM, PublicFormat.SubjectPublicKeyInfo).decode()
     except ValueError as exc:
         raise AuthInitializationError(
             "Unable to parse the certificate. Check certificate format."

@@ -19,9 +19,7 @@ class Cashtag:
         return self._value
 
     def __eq__(self, o: object) -> bool:
-        return (
-            isinstance(o, Cashtag) and self._text == o._text and self._value == o._value
-        )
+        return isinstance(o, Cashtag) and self._text == o._text and self._value == o._value
 
 
 class Hashtag:
@@ -42,9 +40,7 @@ class Hashtag:
         return self._value
 
     def __eq__(self, o: object) -> bool:
-        return (
-            isinstance(o, Hashtag) and self._text == o._text and self._value == o._value
-        )
+        return isinstance(o, Hashtag) and self._text == o._text and self._value == o._value
 
 
 class Mention:

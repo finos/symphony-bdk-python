@@ -47,9 +47,7 @@ def test_default_retry_configuration():
         milliseconds=BdkRetryConfig.DEFAULT_INITIAL_INTERVAL
     )
     assert config.retry.multiplier == BdkRetryConfig.DEFAULT_MULTIPLIER
-    assert config.retry.max_interval == timedelta(
-        milliseconds=BdkRetryConfig.DEFAULT_MAX_INTERVAL
-    )
+    assert config.retry.max_interval == timedelta(milliseconds=BdkRetryConfig.DEFAULT_MAX_INTERVAL)
 
     # Datafeed default retry
     assert config.datafeed.retry.max_attempts == sys.maxsize

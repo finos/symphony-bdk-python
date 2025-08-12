@@ -30,9 +30,7 @@ class BdkDatafeedConfig:
         """
         self.version = DF_V2
         self.id_file_path = ""
-        self.retry = BdkRetryConfig(
-            dict(maxAttempts=BdkRetryConfig.INFINITE_MAX_ATTEMPTS)
-        )
+        self.retry = BdkRetryConfig(dict(maxAttempts=BdkRetryConfig.INFINITE_MAX_ATTEMPTS))
         if config is not None:
             self.id_file_path = (
                 Path(config.get(DF_ID_FILE_PATH)) if DF_ID_FILE_PATH in config else ""

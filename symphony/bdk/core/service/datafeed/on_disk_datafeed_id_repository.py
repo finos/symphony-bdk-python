@@ -42,9 +42,7 @@ class OnDiskDatafeedIdRepository(DatafeedIdRepository):
         self.datafeed_id_file_path.write_text(f"{datafeed_id}@{agent_base_path}")
 
     def read(self) -> str:
-        logger.debug(
-            "Retrieving datafeed id from file %s", self.datafeed_id_file_path.absolute()
-        )
+        logger.debug("Retrieving datafeed id from file %s", self.datafeed_id_file_path.absolute())
         if not os.path.exists(self.datafeed_id_file_path):
             logger.debug(
                 "Could not retrieve datafeed id from file %s: file not found",

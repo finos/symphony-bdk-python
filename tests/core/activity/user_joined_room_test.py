@@ -22,9 +22,7 @@ def fixture_activty():
 def fixture_context():
     return UserJoinedRoomContext(
         V4Initiator(),
-        V4UserJoinedRoom(
-            stream=V4Stream(stream_id="12345678"), affected_user=V4User(user_id=0)
-        ),
+        V4UserJoinedRoom(stream=V4Stream(stream_id="12345678"), affected_user=V4User(user_id=0)),
     )
 
 

@@ -1,9 +1,7 @@
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.core.retry import retry
-from symphony.bdk.core.service.connection.model.connection_status import (
-    ConnectionStatus,
-)
+from symphony.bdk.core.service.connection.model.connection_status import ConnectionStatus
 from symphony.bdk.gen.pod_api.connection_api import ConnectionApi
 from symphony.bdk.gen.pod_model.user_connection import UserConnection
 from symphony.bdk.gen.pod_model.user_connection_request import UserConnectionRequest
@@ -22,10 +20,7 @@ class OboConnectionService:
     """
 
     def __init__(
-        self,
-        connection_api: ConnectionApi,
-        auth_session: AuthSession,
-        retry_config: BdkRetryConfig,
+        self, connection_api: ConnectionApi, auth_session: AuthSession, retry_config: BdkRetryConfig
     ):
         self._connection_api = connection_api
         self._auth_session = auth_session
@@ -42,10 +37,7 @@ class OboConnectionService:
         :return: Connection status with the specified user.
 
         """
-        params = {
-            "user_id": str(user_id),
-            "session_token": await self._auth_session.session_token,
-        }
+        params = {"user_id": str(user_id), "session_token": await self._auth_session.session_token}
         return await self._connection_api.v1_connection_user_user_id_info_get(**params)
 
     @retry
@@ -67,16 +59,11 @@ class OboConnectionService:
         :return: List of connection statuses with the specified users and status.
 
         """
-        params = {
-            "status": status.value,
-            "session_token": await self._auth_session.session_token,
-        }
+        params = {"status": status.value, "session_token": await self._auth_session.session_token}
         if user_ids is not None:
             params["user_ids"] = ",".join(map(str, user_ids))
 
-        user_connection_list = await self._connection_api.v1_connection_list_get(
-            **params
-        )
+        user_connection_list = await self._connection_api.v1_connection_list_get(**params)
         return user_connection_list.value
 
     @retry
@@ -142,10 +129,7 @@ class OboConnectionService:
         :param user_id: The id of the user with whom we want to remove the connection.
 
         """
-        params = {
-            "uid": user_id,
-            "session_token": await self._auth_session.session_token,
-        }
+        params = {"uid": user_id, "session_token": await self._auth_session.session_token}
         await self._connection_api.v1_connection_user_uid_remove_post(**params)
 
 

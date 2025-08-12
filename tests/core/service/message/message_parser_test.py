@@ -37,8 +37,7 @@ def fixture_message_with_data():
 @pytest.fixture(name="message_with_invalid_data")
 def fixture_message_with_invalid_data():
     return create_v4_message(
-        '<div data-format="PresentationML" data-version="2.0"> \n',
-        "unparsable json data",
+        '<div data-format="PresentationML" data-version="2.0"> \n', "unparsable json data"
     )
 
 
@@ -55,9 +54,7 @@ def test_get_text_content_from_escaped_message_ampersand():
         '<div data-format="PresentationML" data-version="2.0"> \n'
         "This is some escaped text &amp;</div>"
     )
-    assert_message_has_text_content(
-        escaped_message_ampersand, "This is some escaped text &"
-    )
+    assert_message_has_text_content(escaped_message_ampersand, "This is some escaped text &")
 
 
 def test_get_text_content_from_escaped_message_lt():

@@ -1,8 +1,6 @@
 from symphony.bdk.gen.agent_api.messages_api import MessagesApi
 from symphony.bdk.gen.agent_model.v4_message import V4Message
-from symphony.bdk.gen.agent_model.v4_message_blast_response import (
-    V4MessageBlastResponse,
-)
+from symphony.bdk.gen.agent_model.v4_message_blast_response import V4MessageBlastResponse
 from symphony.bdk.gen.api_client import Endpoint
 from symphony.bdk.gen.model_utils import file_type
 
@@ -80,10 +78,7 @@ class MultiAttachmentsMessagesApi(MessagesApi):
                     "sids": "csv",
                 },
             },
-            headers_map={
-                "accept": ["application/json"],
-                "content_type": ["multipart/form-data"],
-            },
+            headers_map={"accept": ["application/json"], "content_type": ["multipart/form-data"]},
             api_client=api_client,
         )
         self.v4_stream_sid_multi_attachment_message_create_post_endpoint = Endpoint(
@@ -149,16 +144,11 @@ class MultiAttachmentsMessagesApi(MessagesApi):
                 },
                 "collection_format_map": {},
             },
-            headers_map={
-                "accept": ["application/json"],
-                "content_type": ["multipart/form-data"],
-            },
+            headers_map={"accept": ["application/json"], "content_type": ["multipart/form-data"]},
             api_client=api_client,
         )
 
-    def v4_stream_sid_multi_attachment_message_create_post(
-        self, sid, session_token, **kwargs
-    ):
+    def v4_stream_sid_multi_attachment_message_create_post(self, sid, session_token, **kwargs):
         """Post a message to one existing stream.  # noqa: E501
 
         Post a new message to the given stream. The stream can be a chatroom, an IM or a multiparty IM.  You may include an attachment on the message.  The message can be provided as MessageMLV2 or PresentationML. Both formats support Freemarker templates.  The optional parameter \"data\" can be used to provide a JSON payload containing entity data. If the message contains explicit references to entity data (in \"data-entity-id\" element attributes), this parameter is required.  If the message is in MessageML and fails schema validation a client error results  If the message is sent then 200 is returned.  Regarding authentication, you must either use the sessionToken which was created for delegated app access or both the sessionToken and keyManagerToken together.   # noqa: E501
@@ -290,6 +280,4 @@ class MultiAttachmentsMessagesApi(MessagesApi):
         kwargs["_host_index"] = kwargs.get("_host_index")
         kwargs["session_token"] = session_token
         kwargs["sids"] = sids
-        return self.v4_multi_attachment_message_blast_post_endpoint.call_with_http_info(
-            **kwargs
-        )
+        return self.v4_multi_attachment_message_blast_post_endpoint.call_with_http_info(**kwargs)

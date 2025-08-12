@@ -41,9 +41,7 @@ class Message:
         self._data = "" if data is None else json.dumps(data)
         self._version = version
         self._silent = silent
-        self._attachments, self._previews = self._get_attachments_and_previews(
-            attachments
-        )
+        self._attachments, self._previews = self._get_attachments_and_previews(attachments)
 
     @property
     def content(self) -> str:
