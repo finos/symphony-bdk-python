@@ -20,9 +20,7 @@ async def run():
         streams = bdk.streams()
 
         await streams.create_im(13056700579872)
-        await streams.create_room(
-            V3RoomAttributes(name="New fancy room", description="test room")
-        )
+        await streams.create_room(V3RoomAttributes(name="New fancy room", description="test room"))
 
         logging.debug(await streams.get_stream(stream_id))
         await streams.add_member_to_room(13056700579859, stream_id)

@@ -78,9 +78,7 @@ class OboMessageService:
         message_object = (
             message
             if isinstance(message, Message)
-            else Message(
-                content=message, data=data, version=version, attachments=attachment
-            )
+            else Message(content=message, data=data, version=version, attachments=attachment)
         )
         return await self._send_message(
             stream_id,
@@ -125,17 +123,11 @@ class OboMessageService:
             "version": version,
         }
         if attachment is not None:
-            params["attachment"] = (
-                attachment if isinstance(attachment, list) else [attachment]
-            )
+            params["attachment"] = attachment if isinstance(attachment, list) else [attachment]
         if preview is not None:
             params["preview"] = preview if isinstance(preview, list) else [preview]
 
-        return (
-            await self._messages_api.v4_stream_sid_multi_attachment_message_create_post(
-                **params
-            )
-        )
+        return await self._messages_api.v4_stream_sid_multi_attachment_message_create_post(**params)
 
     @retry
     async def suppress_message(self, message_id: str) -> MessageSuppressionResponse:
@@ -238,9 +230,7 @@ class OboMessageService:
         message_object = (
             message
             if isinstance(message, Message)
-            else Message(
-                content=message, data=data, version=version, attachments=attachment
-            )
+            else Message(content=message, data=data, version=version, attachments=attachment)
         )
         return await self._blast_message(
             stream_ids,
@@ -285,9 +275,7 @@ class OboMessageService:
             "version": version,
         }
         if attachment is not None:
-            params["attachment"] = (
-                attachment if isinstance(attachment, list) else [attachment]
-            )
+            params["attachment"] = attachment if isinstance(attachment, list) else [attachment]
         if preview is not None:
             params["preview"] = preview if isinstance(preview, list) else [preview]
 
@@ -309,9 +297,7 @@ class MessageService(OboMessageService):
         auth_session: AuthSession,
         retry_config: BdkRetryConfig,
     ):
-        super().__init__(
-            messages_api, message_suppression_api, pod_api, auth_session, retry_config
-        )
+        super().__init__(messages_api, message_suppression_api, pod_api, auth_session, retry_config)
         self._message_api = message_api
         self._message_suppression_api = message_suppression_api
         self._streams_api = streams_api
@@ -345,9 +331,7 @@ class MessageService(OboMessageService):
         return message_list.value
 
     @retry
-    async def import_messages(
-        self, messages: List[V4ImportedMessage]
-    ) -> [V4ImportResponse]:
+    async def import_messages(self, messages: List[V4ImportedMessage]) -> [V4ImportResponse]:
         """Imports a list of messages to Symphony.
         See: `Import Message <https://developers.symphony.com/restapi/reference/import-message-v4>`_
 
@@ -364,9 +348,7 @@ class MessageService(OboMessageService):
         import_response_list = await self._messages_api.v4_message_import_post(**params)
         return import_response_list.value
 
-    async def get_attachment(
-        self, stream_id: str, message_id: str, attachment_id: str
-    ) -> str:
+    async def get_attachment(self, stream_id: str, message_id: str, attachment_id: str) -> str:
         """Downloads the attachment body by the stream ID, message ID and attachment ID.
         See: `Attachment <https://developers.symphony.com/restapi/reference/attachment>`_
 
@@ -451,15 +433,11 @@ class MessageService(OboMessageService):
             params["since"] = since
         if to is not None:
             params["to"] = to
-        attachment_list = await self._streams_api.v1_streams_sid_attachments_get(
-            **params
-        )
+        attachment_list = await self._streams_api.v1_streams_sid_attachments_get(**params)
         return attachment_list.value
 
     @retry
-    async def list_message_receipts(
-        self, message_id: str
-    ) -> MessageReceiptDetailResponse:
+    async def list_message_receipts(self, message_id: str) -> MessageReceiptDetailResponse:
         """Fetches receipts details from a specific message.
         See: `List Message Receipts <https://developers.symphony.com/restapi/reference/list-message-receipts>`_
 
@@ -472,14 +450,10 @@ class MessageService(OboMessageService):
             "message_id": message_id,
             "session_token": await self._auth_session.session_token,
         }
-        return await self._default_api.v1_admin_messages_message_id_receipts_get(
-            **params
-        )
+        return await self._default_api.v1_admin_messages_message_id_receipts_get(**params)
 
     @retry
-    async def get_message_relationships(
-        self, message_id: str
-    ) -> MessageMetadataResponse:
+    async def get_message_relationships(self, message_id: str) -> MessageMetadataResponse:
         """Gets the message metadata relationship.
         This API allows users to track the relationship between a message and all the forwards and replies of that
         message.

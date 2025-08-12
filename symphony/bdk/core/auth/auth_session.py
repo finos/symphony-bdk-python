@@ -79,9 +79,7 @@ class AuthSession:
             return ""
 
         if self._key_manager_token is None:
-            self._key_manager_token = (
-                await self._authenticator.retrieve_key_manager_token()
-            )
+            self._key_manager_token = await self._authenticator.retrieve_key_manager_token()
         return self._key_manager_token
 
     @session_token.setter
@@ -125,8 +123,7 @@ class OboAuthSession(AuthSession):
         super().__init__(authenticator)
         if user_id is not None and username is not None:
             raise AuthInitializationError(
-                "Username and user id for OBO authentication should not be defined at "
-                "a same time."
+                "Username and user id for OBO authentication should not be defined at a same time."
             )
         if user_id is None and username is None:
             raise AuthInitializationError(
@@ -138,16 +135,12 @@ class OboAuthSession(AuthSession):
     async def refresh(self):
         """Trigger re-authentication to refresh the OBO session token."""
         if self.user_id is not None:
-            self._session_token = (
-                await self._authenticator.retrieve_obo_session_token_by_user_id(
-                    self.user_id
-                )
+            self._session_token = await self._authenticator.retrieve_obo_session_token_by_user_id(
+                self.user_id
             )
         if self.username is not None:
-            self._session_token = (
-                await self._authenticator.retrieve_obo_session_token_by_username(
-                    self.username
-                )
+            self._session_token = await self._authenticator.retrieve_obo_session_token_by_username(
+                self.username
             )
 
     @property
@@ -188,9 +181,7 @@ class AppAuthSession:
 
         :return: None
         """
-        app_tokens = await self._authenticator.authenticate_and_retrieve_tokens(
-            self._app_token
-        )
+        app_tokens = await self._authenticator.authenticate_and_retrieve_tokens(self._app_token)
         self._symphony_token = app_tokens.symphony_token
         self._app_token = app_tokens.app_token
         self._expire_at = app_tokens.expire_at

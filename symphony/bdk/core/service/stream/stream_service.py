@@ -191,17 +191,13 @@ class OboStreamService:
         """
 
         async def search_rooms_one_page(skip, limit):
-            result = await self.search_rooms(
-                query, skip, limit, include_non_discoverable
-            )
+            result = await self.search_rooms(query, skip, limit, include_non_discoverable)
             return result.rooms if result.rooms else None
 
         return offset_based_pagination(search_rooms_one_page, chunk_size, max_number)
 
     @retry
-    async def update_room(
-        self, room_id: str, room_attributes: V3RoomAttributes
-    ) -> V3RoomDetail:
+    async def update_room(self, room_id: str, room_attributes: V3RoomAttributes) -> V3RoomDetail:
         """Updates the attributes of an existing chatroom.
         Wraps the `Update Room V3 <https://developers.symphony.com/restapi/reference/update-room-v3>`_ endpoint.
 
@@ -411,9 +407,7 @@ class StreamService(OboStreamService):
             result = await self.list_streams_admin(stream_filter, skip, limit)
             return result.streams.value if result.streams else None
 
-        return offset_based_pagination(
-            list_streams_admin_one_page, chunk_size, max_number
-        )
+        return offset_based_pagination(list_streams_admin_one_page, chunk_size, max_number)
 
     @retry
     async def list_user_streams_admin(
@@ -498,9 +492,7 @@ class StreamService(OboStreamService):
             members = await self.list_stream_members(stream_id, skip, limit)
             return members.members.value if members.members else None
 
-        return offset_based_pagination(
-            list_stream_members_one_page, chunk_size, max_number
-        )
+        return offset_based_pagination(list_stream_members_one_page, chunk_size, max_number)
 
     @retry
     async def list_room_members(self, room_id: str) -> MembershipList:
