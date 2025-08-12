@@ -1,11 +1,10 @@
-"""Module which handles the storage of valid extension app tokens.
-"""
+"""Module which handles the storage of valid extension app tokens."""
+
 from abc import ABC, abstractmethod
 
 
 class TokensRepository(ABC):
-    """Base abstract class to store and retrieve extension app tokens.
-    """
+    """Base abstract class to store and retrieve extension app tokens."""
 
     @abstractmethod
     async def save(self, app_token: str, symphony_token: str) -> None:
@@ -26,8 +25,8 @@ class TokensRepository(ABC):
 
 
 class InMemoryTokensRepository(TokensRepository):
-    """Class implementing an in-memory TokensRepository.
-    """
+    """Class implementing an in-memory TokensRepository."""
+
     def __init__(self):
         self._tokens = {}
 

@@ -1,5 +1,5 @@
-"""Module responsible for managing the trace ID sent as X-Trace-Id header and logged under the `trace_id` variable
-"""
+"""Module responsible for managing the trace ID sent as X-Trace-Id header and logged under the `trace_id` variable"""
+
 import logging
 import random
 import string
@@ -49,8 +49,7 @@ def add_x_trace_id(func):
 
 
 class DistributedTracingContext:
-    """Class to manage the tracing id context.
-    """
+    """Class to manage the tracing id context."""
 
     _trace_id_context = ContextVar("_trace_id_context")
     _is_trace_id_set_by_user = False

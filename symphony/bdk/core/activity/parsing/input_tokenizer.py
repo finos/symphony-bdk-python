@@ -23,7 +23,7 @@ class InputTokenizer:
         :param message: message to be tokenized.
         """
         self._document = fromstring(message.message)
-        json_data = message.data if hasattr(message, 'data') and message.data else "{}"
+        json_data = message.data if hasattr(message, "data") and message.data else "{}"
         self._data_node = json.loads(json_data)
         self._buffer = ""
         self._tokens = []
@@ -43,7 +43,7 @@ class InputTokenizer:
         if self._is_entity_node(root):
             self._parse_buffer()
             entity_id = root.attrib[InputTokenizer.data_entity_id]
-            entity_type = self._data_node[entity_id]['type']
+            entity_type = self._data_node[entity_id]["type"]
             if self._is_entity_type_supported(entity_type):
                 self._parse_entity_node(entity_id, root)
             else:
@@ -91,14 +91,22 @@ class InputTokenizer:
         :param root: root of the xml document
         :return: Whether the node is a known entity.
         """
-        if root.tag == "span" and "class" in root.attrib and root.attrib["class"] == "entity" \
-                and InputTokenizer.data_entity_id in root.attrib:
+        if (
+            root.tag == "span"
+            and "class" in root.attrib
+            and root.attrib["class"] == "entity"
+            and InputTokenizer.data_entity_id in root.attrib
+        ):
             return root.attrib[InputTokenizer.data_entity_id] in self._data_node
         return False
 
     @staticmethod
     def _is_entity_type_supported(entity_type):
-        return entity_type in ["org.symphonyoss.taxonomy", "org.symphonyoss.fin.security", "com.symphony.user.mention"]
+        return entity_type in [
+            "org.symphonyoss.taxonomy",
+            "org.symphonyoss.fin.security",
+            "com.symphony.user.mention",
+        ]
 
     @property
     def tokens(self):

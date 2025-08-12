@@ -1,13 +1,15 @@
 """This module takes care of creating generators from paginated endpoints, so that user do not have to care about
 making several calls to the same endpoint with the correct pagination values.
 """
-from typing import AsyncGenerator, TypeVar, Callable, Awaitable, Tuple
 
-T = TypeVar('T')
+from typing import AsyncGenerator, Awaitable, Callable, Tuple, TypeVar
+
+T = TypeVar("T")
 
 
-async def offset_based_pagination(func: Callable[[int, int], Awaitable[T]],
-                                  chunk_size=50, max_number=None) -> AsyncGenerator[T, None]:
+async def offset_based_pagination(
+    func: Callable[[int, int], Awaitable[T]], chunk_size=50, max_number=None
+) -> AsyncGenerator[T, None]:
     """Creates an asynchronous generator from a paginated endpoint. The generator makes the call to the underlying
     endpoint `func` until the `max_number` of items is reached or results are exhausted (i.e. `func` is None or empty).
 
@@ -42,8 +44,9 @@ async def offset_based_pagination(func: Callable[[int, int], Awaitable[T]],
         chunk = await func(skip, chunk_size)
 
 
-async def cursor_based_pagination(func: Callable[[int, str], Awaitable[Tuple[T, str]]],
-                                  chunk_size=100, max_number=None) -> AsyncGenerator[T, None]:
+async def cursor_based_pagination(
+    func: Callable[[int, str], Awaitable[Tuple[T, str]]], chunk_size=100, max_number=None
+) -> AsyncGenerator[T, None]:
     """Creates an asynchronous generator from a cursor based endpoint. The generator makes the call to the underlying
     endpoint `func` until the `max_number` of items is reached or results are exhausted (i.e. cursor returned by `func`
     is None).

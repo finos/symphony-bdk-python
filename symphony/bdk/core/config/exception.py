@@ -1,10 +1,8 @@
-"""Module containing all configuration related exception.
-"""
+"""Module containing all configuration related exception."""
 
 
 class BdkConfigError(Exception):
-    """Exception class raised when configuration is invalid.
-    """
+    """Exception class raised when configuration is invalid."""
 
 
 class BotNotConfiguredError(Exception):

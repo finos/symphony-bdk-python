@@ -1,7 +1,6 @@
 import re
 from datetime import datetime, timezone
 
-from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.auth.jwt_helper import generate_expiration_time
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.core.retry import retry
@@ -14,9 +13,7 @@ VERSION_REGEXP = r"Agent-(\d+)\.(\d+)\..*"
 
 
 class AgentVersionService:
-    """Service class has one purpose only. It checks if version of agents supports simplified key delivery mechanism
-
-    """
+    """Service class has one purpose only. It checks if version of agents supports simplified key delivery mechanism"""
 
     def __init__(self, signals_api: SignalsApi, retry_config: BdkRetryConfig):
         self._signals_api = signals_api
@@ -25,7 +22,7 @@ class AgentVersionService:
         self._expire_at = -1
 
     async def is_skd_supported(self) -> bool:
-        """ AgentVersionService stores cached version  flag.
+        """AgentVersionService stores cached version  flag.
         Caching interval is the same as in to session token caching.
         Once cache is expired it calls agent info api to update version.
 
@@ -33,14 +30,12 @@ class AgentVersionService:
         """
         if (
             self._is_skd_supported is not None
-            and self._expire_at
-            > datetime.now(timezone.utc).timestamp()
+            and self._expire_at > datetime.now(timezone.utc).timestamp()
         ):
             return self._is_skd_supported
         self._expire_at = generate_expiration_time()
         self._is_skd_supported = await self._get_agent_skd_support()
         return self._is_skd_supported
-
 
     @retry
     async def _get_agent_skd_support(self) -> bool:

@@ -8,7 +8,7 @@ from symphony.bdk.core.config.model.bdk_config import BdkConfig
 
 
 class BdkConfigLoader:
-    """ Config loader class
+    """Config loader class
 
     Provide methods to load a JSON or YAML configuration
     from an absolute path or `$HOME/.symphony``
@@ -54,7 +54,7 @@ class BdkConfigLoader:
 
 
 class BdkConfigParser:
-    """ Config Parser class
+    """Config Parser class
 
     Provide methods to Deserialize a configuration content
     as a ``str`` in a JSON or YAML format to a BdkConfig object.

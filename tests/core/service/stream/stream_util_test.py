@@ -1,4 +1,7 @@
-from symphony.bdk.core.service.stream.stream_util import to_url_safe_stream_id, from_url_safe_stream_id
+from symphony.bdk.core.service.stream.stream_util import (
+    from_url_safe_stream_id,
+    to_url_safe_stream_id,
+)
 
 
 def test_to_url_safe_stream_id():

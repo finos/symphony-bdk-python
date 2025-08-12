@@ -1,12 +1,10 @@
-"""Module containing session handle classes.
+"""Module containing session handle classes."""
 
-"""
-from datetime import datetime, timezone
 import logging
+from datetime import datetime, timezone
 
 from symphony.bdk.core.auth.exception import AuthInitializationError
 from symphony.bdk.core.auth.jwt_helper import extract_token_claims
-
 
 logger = logging.getLogger(__name__)
 
@@ -32,8 +30,7 @@ class AuthSession:
         self._expire_at = -1
 
     async def refresh(self):
-        """Trigger re-authentication to refresh the tokens.
-        """
+        """Trigger re-authentication to refresh the tokens."""
         logger.debug("Authenticate")
         self._session_token = await self._authenticator.retrieve_session_token()
         if await self.skd_enabled:
@@ -103,12 +100,10 @@ class AuthSession:
 
     @property
     async def skd_enabled(self):
-
         token_data = extract_token_claims(await self.session_token)
         if not token_data.get(SKD_FLAG_NAME, False):
             return False
         return await self._authenticator.agent_version_service.is_skd_supported()
-
 
 
 class OboAuthSession(AuthSession):
@@ -127,21 +122,26 @@ class OboAuthSession(AuthSession):
         """
         super().__init__(authenticator)
         if user_id is not None and username is not None:
-            raise AuthInitializationError("Username and user id for OBO authentication should not be defined at "
-                                          "a same time.")
+            raise AuthInitializationError(
+                "Username and user id for OBO authentication should not be defined at a same time."
+            )
         if user_id is None and username is None:
-            raise AuthInitializationError("At least username or user id should be defined for "
-                                          "OBO authentication.")
+            raise AuthInitializationError(
+                "At least username or user id should be defined for OBO authentication."
+            )
         self.user_id = user_id
         self.username = username
 
     async def refresh(self):
-        """Trigger re-authentication to refresh the OBO session token.
-        """
+        """Trigger re-authentication to refresh the OBO session token."""
         if self.user_id is not None:
-            self._session_token = await self._authenticator.retrieve_obo_session_token_by_user_id(self.user_id)
+            self._session_token = await self._authenticator.retrieve_obo_session_token_by_user_id(
+                self.user_id
+            )
         if self.username is not None:
-            self._session_token = await self._authenticator.retrieve_obo_session_token_by_username(self.username)
+            self._session_token = await self._authenticator.retrieve_obo_session_token_by_username(
+                self.username
+            )
 
     @property
     async def session_token(self):

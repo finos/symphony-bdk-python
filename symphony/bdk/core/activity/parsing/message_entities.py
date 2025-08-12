@@ -1,5 +1,4 @@
-"""This module gathers all entities that we can find in a message.
-"""
+"""This module gathers all entities that we can find in a message."""
 
 
 class Cashtag:
@@ -67,7 +66,9 @@ class Mention:
         return self._user_id
 
     def __eq__(self, o: object) -> bool:
-        return isinstance(o, Mention) \
-               and self._text == o._text \
-               and self._user_display_name == o._user_display_name \
-               and self._user_id == o._user_id
+        return (
+            isinstance(o, Mention)
+            and self._text == o._text
+            and self._user_display_name == o._user_display_name
+            and self._user_id == o._user_id
+        )

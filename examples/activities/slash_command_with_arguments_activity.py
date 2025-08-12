@@ -16,7 +16,9 @@ async def run():
         @activities.slash("/echo {@mention_argument}")
         async def on_echo_mention(context: CommandContext):
             mentioned_user = context.arguments.get_mention("mention_argument")
-            message = f"Mentioned user: {mentioned_user.user_display_name}, id: {mentioned_user.user_id}"
+            message = (
+                f"Mentioned user: {mentioned_user.user_display_name}, id: {mentioned_user.user_id}"
+            )
 
             await messages.send_message(context.stream_id, f"<messageML>{message}</messageML>")
 
@@ -36,7 +38,6 @@ async def run():
 
         @activities.slash("/echo {first_string_argument} {second_string_argument}")
         async def on_echo_string_arguments(context: CommandContext):
-
             # Get string argument with get_string
             first_string_argument = context.arguments.get_string("first_string_argument")
 
@@ -52,11 +53,12 @@ async def run():
         await bdk.datafeed().start()
 
 
-logging.config.fileConfig(Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False)
+logging.config.fileConfig(
+    Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False
+)
 
 try:
     logging.info("Running activity example...")
     asyncio.run(run())
 except KeyboardInterrupt:
     logging.info("Ending activity example")
-

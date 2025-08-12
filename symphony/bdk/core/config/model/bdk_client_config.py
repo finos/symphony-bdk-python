@@ -1,4 +1,4 @@
-from symphony.bdk.core.config.model.bdk_server_config import BdkServerConfig, BdkProxyConfig
+from symphony.bdk.core.config.model.bdk_server_config import BdkProxyConfig, BdkServerConfig
 
 
 class BdkClientConfig(BdkServerConfig):

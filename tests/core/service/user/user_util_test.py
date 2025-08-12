@@ -1,6 +1,6 @@
 import pytest
 
-from symphony.bdk.core.service.user.user_util import extract_tenant_id, NumberUtil
+from symphony.bdk.core.service.user.user_util import NumberUtil, extract_tenant_id
 
 
 def test_extract_tenant_id():

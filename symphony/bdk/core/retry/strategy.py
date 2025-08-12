@@ -1,5 +1,6 @@
-from aiohttp import ClientConnectionError
 from asyncio import TimeoutError
+
+from aiohttp import ClientConnectionError
 from tenacity import RetryCallState
 
 from symphony.bdk.core.auth.exception import AuthUnauthorizedError
@@ -111,7 +112,9 @@ async def read_datafeed_retry(retry_state: RetryCallState):
         exception = retry_state.outcome.exception()
         if is_network_or_minor_error_or_client(exception):
             if is_client_error(exception):
-                datafeed_service = retry_state.args[0]  # datafeed_service is an AbstractDataFeedLoop instance
+                datafeed_service = retry_state.args[
+                    0
+                ]  # datafeed_service is an AbstractDataFeedLoop instance
                 await datafeed_service.recreate_datafeed()
             elif is_unauthorized(exception):
                 service_auth_session = retry_state.args[0]._auth_session

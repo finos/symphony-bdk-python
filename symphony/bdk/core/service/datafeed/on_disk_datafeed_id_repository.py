@@ -2,6 +2,7 @@ import logging
 import os
 from abc import ABC, abstractmethod
 from pathlib import Path
+
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
 
 logger = logging.getLogger(__name__)
@@ -30,6 +31,7 @@ class DatafeedIdRepository(ABC):
 
 class OnDiskDatafeedIdRepository(DatafeedIdRepository):
     """Implementation of DatafeedIdRepository interface for persisting a datafeed id on disk."""
+
     DATAFEED_ID_FILE = "datafeed.id"
 
     def __init__(self, config: BdkConfig):
@@ -42,8 +44,10 @@ class OnDiskDatafeedIdRepository(DatafeedIdRepository):
     def read(self) -> str:
         logger.debug("Retrieving datafeed id from file %s", self.datafeed_id_file_path.absolute())
         if not os.path.exists(self.datafeed_id_file_path):
-            logger.debug("Could not retrieve datafeed id from file %s: file not found",
-                          self.datafeed_id_file_path.absolute())
+            logger.debug(
+                "Could not retrieve datafeed id from file %s: file not found",
+                self.datafeed_id_file_path.absolute(),
+            )
             return None
 
         return self._read_in_file()
@@ -56,8 +60,10 @@ class OnDiskDatafeedIdRepository(DatafeedIdRepository):
     def _read_in_line(self, line):
         index = line.find("@")
         if index == -1:
-            logger.debug("Could not retrieve datafeed id from file %s: file without datafeed id information",
-                          self.datafeed_id_file_path.absolute())
+            logger.debug(
+                "Could not retrieve datafeed id from file %s: file without datafeed id information",
+                self.datafeed_id_file_path.absolute(),
+            )
             return None
         datafeed_id = line[0:index]
         logger.debug("Retrieved datafeed id: %s", datafeed_id)

@@ -1,16 +1,21 @@
-from typing import Union, List, Tuple, IO, AsyncGenerator
+from typing import IO, AsyncGenerator, List, Tuple, Union
 
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
+from symphony.bdk.core.retry import retry
 from symphony.bdk.core.service.message.model import Message
-from symphony.bdk.core.service.message.multi_attachments_messages_api import MultiAttachmentsMessagesApi
+from symphony.bdk.core.service.message.multi_attachments_messages_api import (
+    MultiAttachmentsMessagesApi,
+)
 from symphony.bdk.core.service.pagination import offset_based_pagination
 from symphony.bdk.gen.agent_api.attachments_api import AttachmentsApi
 from symphony.bdk.gen.agent_model.message_search_query import MessageSearchQuery
 from symphony.bdk.gen.agent_model.v4_import_response import V4ImportResponse
 from symphony.bdk.gen.agent_model.v4_imported_message import V4ImportedMessage
 from symphony.bdk.gen.agent_model.v4_message import V4Message
-from symphony.bdk.gen.agent_model.v4_message_blast_response import V4MessageBlastResponse
+from symphony.bdk.gen.agent_model.v4_message_blast_response import (
+    V4MessageBlastResponse,
+)
 from symphony.bdk.gen.agent_model.v4_message_import_list import V4MessageImportList
 from symphony.bdk.gen.pod_api.default_api import DefaultApi
 from symphony.bdk.gen.pod_api.message_api import MessageApi
@@ -18,19 +23,27 @@ from symphony.bdk.gen.pod_api.message_suppression_api import MessageSuppressionA
 from symphony.bdk.gen.pod_api.pod_api import PodApi
 from symphony.bdk.gen.pod_api.streams_api import StreamsApi
 from symphony.bdk.gen.pod_model.message_metadata_response import MessageMetadataResponse
-from symphony.bdk.gen.pod_model.message_receipt_detail_response import MessageReceiptDetailResponse
+from symphony.bdk.gen.pod_model.message_receipt_detail_response import (
+    MessageReceiptDetailResponse,
+)
 from symphony.bdk.gen.pod_model.message_status import MessageStatus
-from symphony.bdk.gen.pod_model.message_suppression_response import MessageSuppressionResponse
+from symphony.bdk.gen.pod_model.message_suppression_response import (
+    MessageSuppressionResponse,
+)
 from symphony.bdk.gen.pod_model.stream_attachment_item import StreamAttachmentItem
-
-from symphony.bdk.core.retry import retry
 
 
 class OboMessageService:
     """Class exposing OBO enabled endpoints for message management, e.g. send a message."""
 
-    def __init__(self, messages_api: MultiAttachmentsMessagesApi, message_suppression_api: MessageSuppressionApi,
-                pod_api: PodApi, auth_session: AuthSession, retry_config: BdkRetryConfig):
+    def __init__(
+        self,
+        messages_api: MultiAttachmentsMessagesApi,
+        message_suppression_api: MessageSuppressionApi,
+        pod_api: PodApi,
+        auth_session: AuthSession,
+        retry_config: BdkRetryConfig,
+    ):
         self._messages_api = messages_api
         self._message_suppression_api = message_suppression_api
         self._pod_api = pod_api
@@ -38,12 +51,12 @@ class OboMessageService:
         self._retry_config = retry_config
 
     async def send_message(
-            self,
-            stream_id: str,
-            message: Union[str, Message],
-            data=None,
-            version: str = "",
-            attachment: List[Union[IO, Tuple[IO, IO]]] = None
+        self,
+        stream_id: str,
+        message: Union[str, Message],
+        data=None,
+        version: str = "",
+        attachment: List[Union[IO, Tuple[IO, IO]]] = None,
     ) -> V4Message:
         """Send a message to an existing stream.
         See: `Create Message <https://developers.symphony.com/restapi/reference/create-message-v4>`_
@@ -62,20 +75,29 @@ class OboMessageService:
 
         :return: a V4Message object containing the details of the sent message.
         """
-        message_object = message if isinstance(message, Message) else Message(content=message, data=data,
-                                                                              version=version, attachments=attachment)
-        return await self._send_message(stream_id, message_object.content, message_object.data, message_object.version,
-                                        message_object.attachments, message_object.previews)
+        message_object = (
+            message
+            if isinstance(message, Message)
+            else Message(content=message, data=data, version=version, attachments=attachment)
+        )
+        return await self._send_message(
+            stream_id,
+            message_object.content,
+            message_object.data,
+            message_object.version,
+            message_object.attachments,
+            message_object.previews,
+        )
 
     @retry
     async def _send_message(
-            self,
-            stream_id: str,
-            message: str,
-            data: str = "",
-            version: str = "",
-            attachment: List[IO] = None,
-            preview: List[IO] = None
+        self,
+        stream_id: str,
+        message: str,
+        data: str = "",
+        version: str = "",
+        attachment: List[IO] = None,
+        preview: List[IO] = None,
     ) -> V4Message:
         """Send a message to an existing stream.
         See: `Create Message <https://developers.symphony.com/restapi/reference/create-message-v4>`_
@@ -98,7 +120,7 @@ class OboMessageService:
             "key_manager_token": await self._auth_session.key_manager_token,
             "message": message,
             "data": data,
-            "version": version
+            "version": version,
         }
         if attachment is not None:
             params["attachment"] = attachment if isinstance(attachment, list) else [attachment]
@@ -108,10 +130,7 @@ class OboMessageService:
         return await self._messages_api.v4_stream_sid_multi_attachment_message_create_post(**params)
 
     @retry
-    async def suppress_message(
-            self,
-            message_id: str
-    ) -> MessageSuppressionResponse:
+    async def suppress_message(self, message_id: str) -> MessageSuppressionResponse:
         """Suppresses a message, preventing its contents from being displayed to users.
         See: `Suppress Message <https://developers.symphony.com/restapi/reference/suppress-message>`_
 
@@ -122,13 +141,22 @@ class OboMessageService:
         """
         params = {
             "id": message_id,
-            "session_token": await self._auth_session.session_token
+            "session_token": await self._auth_session.session_token,
         }
-        return await self._message_suppression_api.v1_admin_messagesuppression_id_suppress_post(**params)
+        return await self._message_suppression_api.v1_admin_messagesuppression_id_suppress_post(
+            **params
+        )
 
     @retry
-    async def update_message(self, stream_id: str, message_id: str, message: Union[str, Message], data=None,
-                             version: str = "", silent=True) -> V4Message:
+    async def update_message(
+        self,
+        stream_id: str,
+        message_id: str,
+        message: Union[str, Message],
+        data=None,
+        version: str = "",
+        silent=True,
+    ) -> V4Message:
         """Update an existing message. The existing message must be a valid social message, that has not been deleted.
         See: `Update Message <https://developers.symphony.com/restapi/reference/update-message-v4>`_
 
@@ -145,8 +173,11 @@ class OboMessageService:
 
         :return: a V4Message object containing the details of the updated message.
         """
-        message_object = message if isinstance(message, Message) else Message(content=message, data=data, silent=silent,
-                                                                              version=version)
+        message_object = (
+            message
+            if isinstance(message, Message)
+            else Message(content=message, data=data, silent=silent, version=version)
+        )
 
         params = {
             "sid": stream_id,
@@ -156,7 +187,7 @@ class OboMessageService:
             "message": message_object.content,
             "data": message_object.data,
             "version": message_object.version,
-            "silent": str(message_object.silent)
+            "silent": str(message_object.silent),
         }
         return await self._messages_api.v4_stream_sid_message_mid_update_post(**params)
 
@@ -168,19 +199,17 @@ class OboMessageService:
         :return: a list of String containing all allowed file extensions for attachments.
 
         """
-        params = {
-            "session_token": await self._auth_session.session_token
-        }
+        params = {"session_token": await self._auth_session.session_token}
         type_list = await self._pod_api.v1_files_allowed_types_get(**params)
         return type_list.value
-    
+
     async def blast_message(
-            self,
-            stream_ids: List[str],
-            message: Union[str, Message],
-            data=None,
-            version: str = "",
-            attachment: List[Union[IO, Tuple[IO, IO]]] = None
+        self,
+        stream_ids: List[str],
+        message: Union[str, Message],
+        data=None,
+        version: str = "",
+        attachment: List[Union[IO, Tuple[IO, IO]]] = None,
     ) -> V4MessageBlastResponse:
         """Send a message to multiple existing streams.
         See: `Blast Message <https://developers.symphony.com/restapi/reference/blast-message>`_
@@ -198,20 +227,29 @@ class OboMessageService:
           The limit is set to 30Mb total size; also, it is recommended not to exceed 25 files.
         :return:
         """
-        message_object = message if isinstance(message, Message) else Message(content=message, data=data,
-                                                                              version=version, attachments=attachment)
-        return await self._blast_message(stream_ids, message_object.content, message_object.data,
-                                         message_object.version, message_object.attachments, message_object.previews)
-        
+        message_object = (
+            message
+            if isinstance(message, Message)
+            else Message(content=message, data=data, version=version, attachments=attachment)
+        )
+        return await self._blast_message(
+            stream_ids,
+            message_object.content,
+            message_object.data,
+            message_object.version,
+            message_object.attachments,
+            message_object.previews,
+        )
+
     @retry
     async def _blast_message(
-            self,
-            stream_ids: List[str],
-            message: str,
-            data: str = "",
-            version: str = "",
-            attachment: List[IO] = None,
-            preview: List[IO] = None
+        self,
+        stream_ids: List[str],
+        message: str,
+        data: str = "",
+        version: str = "",
+        attachment: List[IO] = None,
+        preview: List[IO] = None,
     ) -> V4MessageBlastResponse:
         """Send a message to multiple existing streams.
         See: `Blast Message <https://developers.symphony.com/restapi/reference/blast-message>`_
@@ -234,7 +272,7 @@ class OboMessageService:
             "key_manager_token": await self._auth_session.key_manager_token,
             "message": message,
             "data": data,
-            "version": version
+            "version": version,
         }
         if attachment is not None:
             params["attachment"] = attachment if isinstance(attachment, list) else [attachment]
@@ -245,18 +283,20 @@ class OboMessageService:
 
 
 class MessageService(OboMessageService):
-    """Service class for managing messages.
-    """
+    """Service class for managing messages."""
 
-    def __init__(self, messages_api: MultiAttachmentsMessagesApi,
-                 message_api: MessageApi,
-                 message_suppression_api: MessageSuppressionApi,
-                 streams_api: StreamsApi,
-                 pod_api: PodApi,
-                 attachment_api: AttachmentsApi,
-                 default_api: DefaultApi,
-                 auth_session: AuthSession,
-                 retry_config: BdkRetryConfig):
+    def __init__(
+        self,
+        messages_api: MultiAttachmentsMessagesApi,
+        message_api: MessageApi,
+        message_suppression_api: MessageSuppressionApi,
+        streams_api: StreamsApi,
+        pod_api: PodApi,
+        attachment_api: AttachmentsApi,
+        default_api: DefaultApi,
+        auth_session: AuthSession,
+        retry_config: BdkRetryConfig,
+    ):
         super().__init__(messages_api, message_suppression_api, pod_api, auth_session, retry_config)
         self._message_api = message_api
         self._message_suppression_api = message_suppression_api
@@ -266,11 +306,7 @@ class MessageService(OboMessageService):
 
     @retry
     async def list_messages(
-            self,
-            stream_id: str,
-            since: int = 0,
-            skip: int = 0,
-            limit: int = 50
+        self, stream_id: str, since: int = 0, skip: int = 0, limit: int = 50
     ) -> [V4Message]:
         """Get messages from an existing stream. Additionally returns any attachments associated with the message.
         See: `Messages <https://developers.symphony.com/restapi/reference/messages-v4>`_
@@ -289,16 +325,13 @@ class MessageService(OboMessageService):
             "session_token": await self._auth_session.session_token,
             "key_manager_token": await self._auth_session.key_manager_token,
             "skip": skip,
-            "limit": limit
+            "limit": limit,
         }
         message_list = await self._messages_api.v4_stream_sid_message_get(**params)
         return message_list.value
 
     @retry
-    async def import_messages(
-            self,
-            messages: List[V4ImportedMessage]
-    ) -> [V4ImportResponse]:
+    async def import_messages(self, messages: List[V4ImportedMessage]) -> [V4ImportResponse]:
         """Imports a list of messages to Symphony.
         See: `Import Message <https://developers.symphony.com/restapi/reference/import-message-v4>`_
 
@@ -310,17 +343,12 @@ class MessageService(OboMessageService):
         params = {
             "message_list": V4MessageImportList(value=messages),
             "session_token": await self._auth_session.session_token,
-            "key_manager_token": await self._auth_session.key_manager_token
+            "key_manager_token": await self._auth_session.key_manager_token,
         }
         import_response_list = await self._messages_api.v4_message_import_post(**params)
         return import_response_list.value
 
-    async def get_attachment(
-            self,
-            stream_id: str,
-            message_id: str,
-            attachment_id: str
-    ) -> str:
+    async def get_attachment(self, stream_id: str, message_id: str, attachment_id: str) -> str:
         """Downloads the attachment body by the stream ID, message ID and attachment ID.
         See: `Attachment <https://developers.symphony.com/restapi/reference/attachment>`_
 
@@ -336,14 +364,11 @@ class MessageService(OboMessageService):
             "file_id": attachment_id,
             "message_id": message_id,
             "session_token": await self._auth_session.session_token,
-            "key_manager_token": await self._auth_session.key_manager_token
+            "key_manager_token": await self._auth_session.key_manager_token,
         }
         return await self._attachment_api.v1_stream_sid_attachment_get(**params)
 
-    async def get_message_status(
-            self,
-            message_id: str
-    ) -> MessageStatus:
+    async def get_message_status(self, message_id: str) -> MessageStatus:
         """Get the status of a particular message, i.e the list of users who the message was sent to,
         delivered to and the list of users who read the message.
         See: `Message Status <https://developers.symphony.com/restapi/reference/message-status>`_
@@ -355,15 +380,12 @@ class MessageService(OboMessageService):
         """
         params = {
             "mid": message_id,
-            "session_token": await self._auth_session.session_token
+            "session_token": await self._auth_session.session_token,
         }
         return await self._message_api.v1_message_mid_status_get(**params)
 
     @retry
-    async def get_message(
-            self,
-            message_id: str
-    ) -> V4Message:
+    async def get_message(self, message_id: str) -> V4Message:
         """Retrieves the details of a message given its message ID.
         See: `Get Message <https://developers.symphony.com/restapi/reference/get-message-v1>`_
 
@@ -375,18 +397,18 @@ class MessageService(OboMessageService):
         params = {
             "id": message_id,
             "session_token": await self._auth_session.session_token,
-            "key_manager_token": await self._auth_session.key_manager_token
+            "key_manager_token": await self._auth_session.key_manager_token,
         }
         return await self._messages_api.v1_message_id_get(**params)
 
     @retry
     async def list_attachments(
-            self,
-            stream_id: str,
-            since: int = None,
-            to: int = None,
-            limit: int = 50,
-            sort_dir: str = "ASC"
+        self,
+        stream_id: str,
+        since: int = None,
+        to: int = None,
+        limit: int = 50,
+        sort_dir: str = "ASC",
     ) -> List[StreamAttachmentItem]:
         """List attachments in a particular stream.
         See: `List Attachments <https://developers.symphony.com/restapi/reference/list-attachments>`_
@@ -405,7 +427,7 @@ class MessageService(OboMessageService):
             "sid": stream_id,
             "session_token": await self._auth_session.session_token,
             "limit": limit,
-            "sort_dir": sort_dir
+            "sort_dir": sort_dir,
         }
         if since is not None:
             params["since"] = since
@@ -415,10 +437,7 @@ class MessageService(OboMessageService):
         return attachment_list.value
 
     @retry
-    async def list_message_receipts(
-            self,
-            message_id: str
-    ) -> MessageReceiptDetailResponse:
+    async def list_message_receipts(self, message_id: str) -> MessageReceiptDetailResponse:
         """Fetches receipts details from a specific message.
         See: `List Message Receipts <https://developers.symphony.com/restapi/reference/list-message-receipts>`_
 
@@ -429,15 +448,12 @@ class MessageService(OboMessageService):
         """
         params = {
             "message_id": message_id,
-            "session_token": await self._auth_session.session_token
+            "session_token": await self._auth_session.session_token,
         }
         return await self._default_api.v1_admin_messages_message_id_receipts_get(**params)
 
     @retry
-    async def get_message_relationships(
-            self,
-            message_id: str
-    ) -> MessageMetadataResponse:
+    async def get_message_relationships(self, message_id: str) -> MessageMetadataResponse:
         """Gets the message metadata relationship.
         This API allows users to track the relationship between a message and all the forwards and replies of that
         message.
@@ -451,13 +467,20 @@ class MessageService(OboMessageService):
         params = {
             "message_id": message_id,
             "session_token": await self._auth_session.session_token,
-            "user_agent": ""
+            "user_agent": "",
         }
-        return await self._default_api.v1_admin_messages_message_id_metadata_relationships_get(**params)
+        return await self._default_api.v1_admin_messages_message_id_metadata_relationships_get(
+            **params
+        )
 
     @retry
-    async def search_messages(self, query: MessageSearchQuery, sort_dir: str = "desc", skip: int = 0,
-                              limit: int = 50) -> List[V4Message]:
+    async def search_messages(
+        self,
+        query: MessageSearchQuery,
+        sort_dir: str = "desc",
+        skip: int = 0,
+        limit: int = 50,
+    ) -> List[V4Message]:
         """Searches for messages in the context of a specified user, given an argument-based query and pagination
         attributes (skip and limit parameters).
         See: `Message Search (using POST) <https://developers.symphony.com/restapi/reference/message-search-post>`_
@@ -475,13 +498,18 @@ class MessageService(OboMessageService):
             "query": query,
             "sort_dir": sort_dir,
             "skip": skip,
-            "limit": limit
+            "limit": limit,
         }
         message_list = await self._messages_api.v1_message_search_post(**params)
         return message_list.value  # endpoint returns empty list when no values found
 
-    async def search_all_messages(self, query: MessageSearchQuery, sort_dir: str = "desc", chunk_size: int = 50,
-                                  max_number: int = None) -> AsyncGenerator[V4Message, None]:
+    async def search_all_messages(
+        self,
+        query: MessageSearchQuery,
+        sort_dir: str = "desc",
+        chunk_size: int = 50,
+        max_number: int = None,
+    ) -> AsyncGenerator[V4Message, None]:
         """Searches for messages in the context of a specified user, given an argument-based query.
         See: `Message Search (using POST) <https://developers.symphony.com/restapi/reference/message-search-post>`_
 
@@ -500,11 +528,19 @@ class MessageService(OboMessageService):
     @staticmethod
     def _validate_message_search_query(query: MessageSearchQuery):
         # Check streamType value among accepted ones if specified
-        if query.stream_type is not None and query.stream_type not in ["CHAT", "IM", "MIM", "ROOM", "POST"]:
-            raise ValueError(f"Wrong stream type {query.stream_type}. "
-                             f"Accepted values are: CHAT (1-1 instant messages and multi-party instant messages), "
-                             f"IM (1-1 instant message), MIM (multi-party instant message), "
-                             f"ROOM or POST (user profile wall posts)")
+        if query.stream_type is not None and query.stream_type not in [
+            "CHAT",
+            "IM",
+            "MIM",
+            "ROOM",
+            "POST",
+        ]:
+            raise ValueError(
+                f"Wrong stream type {query.stream_type}. "
+                f"Accepted values are: CHAT (1-1 instant messages and multi-party instant messages), "
+                f"IM (1-1 instant message), MIM (multi-party instant message), "
+                f"ROOM or POST (user profile wall posts)"
+            )
 
         # Text queries require streamId to be provided
         if query.text is not None and query.stream_id is None:

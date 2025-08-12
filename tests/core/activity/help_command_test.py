@@ -2,7 +2,7 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from symphony.bdk.core.activity.command import SlashCommandActivity, CommandContext
+from symphony.bdk.core.activity.command import CommandContext, SlashCommandActivity
 from symphony.bdk.core.activity.help_command import HelpCommand
 from symphony.bdk.core.activity.registry import ActivityRegistry
 from symphony.bdk.core.service.message.message_service import MessageService
@@ -40,24 +40,33 @@ def fixture_bdk(activity_registry):
 
 @pytest.fixture(name="command_context")
 def fixture_command_context():
-    message_content = f"<div data-format=\"PresentationML\" data-version=\"2.0\" class=\"wysiwyg\">" \
-                      f"<p>" \
-                      f"<div>" \
-                      f"<p>" \
-                      f"<span class=\"entity\" data-entity-id=\"0\">@bot_name </span>" \
-                      f" /help</p></div></p></div>"
-    data = f"{{\"0\":{{\"id\":[{{\"type\":\"com.symphony.user.userId\",\"value\":\"{BOT_USER_ID}\"}}]," \
-           f"\"type\":\"com.symphony.user.mention\"}}}}"
-    message_sent = V4MessageSent(message=V4Message(attachments=[],
-                                                   message_id="message_id",
-                                                   message=message_content,
-                                                   data=data,
-                                                   stream=V4Stream(stream_id=STREAM_ID)))
+    message_content = (
+        '<div data-format="PresentationML" data-version="2.0" class="wysiwyg">'
+        "<p>"
+        "<div>"
+        "<p>"
+        '<span class="entity" data-entity-id="0">@bot_name </span>'
+        " /help</p></div></p></div>"
+    )
+    data = (
+        f'{{"0":{{"id":[{{"type":"com.symphony.user.userId","value":"{BOT_USER_ID}"}}],'
+        f'"type":"com.symphony.user.mention"}}}}'
+    )
+    message_sent = V4MessageSent(
+        message=V4Message(
+            attachments=[],
+            message_id="message_id",
+            message=message_content,
+            data=data,
+            stream=V4Stream(stream_id=STREAM_ID),
+        )
+    )
     return CommandContext(
         initiator=V4Initiator(),
         source_event=message_sent,
         bot_display_name="bot_name",
-        bot_user_id=BOT_USER_ID)
+        bot_user_id=BOT_USER_ID,
+    )
 
 
 @pytest.fixture(name="help_command")
@@ -81,13 +90,17 @@ async def test_help_command(bdk, activity_registry, help_command, command_contex
     assert isinstance(help_activity, HelpCommand)
     assert help_activity.matches(command_context)
     await help_activity.on_activity(command_context)
-    message = "<messageML><ul><li>/hello -  (mention required)</li>" \
-              "<li>/help - List available commands (mention required)</li></ul></messageML>"
+    message = (
+        "<messageML><ul><li>/hello -  (mention required)</li>"
+        "<li>/help - List available commands (mention required)</li></ul></messageML>"
+    )
     bdk.messages().send_message.assert_called_once_with(STREAM_ID, message)
 
 
 @pytest.mark.asyncio
-async def test_help_command_no_other_commands_found(bdk, activity_registry, help_command, command_context):
+async def test_help_command_no_other_commands_found(
+    bdk, activity_registry, help_command, command_context
+):
     activity_registry.register(help_command)
 
     assert len(activity_registry.activity_list) == 1
@@ -100,7 +113,9 @@ async def test_help_command_no_other_commands_found(bdk, activity_registry, help
 
 
 @pytest.mark.asyncio
-async def test_override_help_command_with_slash_help(bdk, activity_registry, help_command, command_context):
+async def test_override_help_command_with_slash_help(
+    bdk, activity_registry, help_command, command_context
+):
     listener = AsyncMock()
 
     activity_registry.slash("/help")(listener)
@@ -116,7 +131,9 @@ async def test_override_help_command_with_slash_help(bdk, activity_registry, hel
 
 
 @pytest.mark.asyncio
-async def test_override_slash_help_with_help_command(bdk, activity_registry, help_command, command_context):
+async def test_override_slash_help_with_help_command(
+    bdk, activity_registry, help_command, command_context
+):
     listener = AsyncMock()
 
     activity_registry.register(help_command)

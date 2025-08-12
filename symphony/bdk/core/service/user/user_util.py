@@ -4,6 +4,7 @@ The tenant ID is stored in the 27 highest bits (minus the sign bit which is unus
 positive value) which allows for 134 million pods.
 This leaves 36 lowest bits for the user ID, which allows 68.7 billion users per tenant.
 """
+
 TENANT_ID_BIT_LENGTH = 27
 SUBTENANT_ID_BIT_LENGTH = 36
 TENANT_ID_INDEX = 1
@@ -20,8 +21,7 @@ def extract_tenant_id(user_id: int):
 
 
 class NumberUtil:
-    """Used to compute the segments bases in the input sizes
-    """
+    """Used to compute the segments bases in the input sizes"""
 
     def __init__(self, sizes: []):
         self._segments = []
@@ -38,15 +38,13 @@ class NumberUtil:
             raise ValueError("total size is larger than the bit-count of 64")
 
     def extract(self, value: int, index: int):
-        """Extract the tenant_id given the user_id and the index
-        """
+        """Extract the tenant_id given the user_id and the index"""
         segment = self._segments[index]
         return value >> segment._shift & segment._mask
 
 
 class Segment:
-    """Helper class to initialize a Segment
-    """
+    """Helper class to initialize a Segment"""
 
     def __init__(self, size: int, shift: int):
         mask = 0

@@ -1,5 +1,4 @@
-"""This module gathers all token classes that we can use for {@link SlashCommandPattern}
-"""
+"""This module gathers all token classes that we can use for {@link SlashCommandPattern}"""
 
 import re
 from abc import ABC, abstractmethod
@@ -151,5 +150,7 @@ class MatchingUserIdMentionToken(AbstractCommandToken):
         return isinstance(token, Mention) and token.user_id == self._matching_user_id_supplier()
 
     def __eq__(self, o: object) -> bool:
-        return isinstance(o, MatchingUserIdMentionToken) and \
-               self._matching_user_id_supplier() == o._matching_user_id_supplier()
+        return (
+            isinstance(o, MatchingUserIdMentionToken)
+            and self._matching_user_id_supplier() == o._matching_user_id_supplier()
+        )

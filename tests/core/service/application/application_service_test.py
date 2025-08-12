@@ -1,4 +1,4 @@
-from unittest.mock import MagicMock, AsyncMock
+from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
@@ -37,21 +37,23 @@ def fixture_app_entitlement_api():
 
 @pytest.fixture(name="application_service")
 def fixture_application_service(application_api, app_entitlement_api, auth_session):
-    service = ApplicationService(application_api, app_entitlement_api, auth_session, minimal_retry_config())
+    service = ApplicationService(
+        application_api, app_entitlement_api, auth_session, minimal_retry_config()
+    )
     return service
 
 
 @pytest.mark.asyncio
 async def test_create_application(application_api, application_service):
     application_api.v1_admin_app_create_post = AsyncMock()
-    application_api.v1_admin_app_create_post.return_value = \
-        get_deserialized_object_from_resource(ApplicationDetail, "application/create_application.json")
+    application_api.v1_admin_app_create_post.return_value = get_deserialized_object_from_resource(
+        ApplicationDetail, "application/create_application.json"
+    )
 
     application_detail = await application_service.create_application(ApplicationDetail())
 
     application_api.v1_admin_app_create_post.assert_called_with(
-        session_token="session_token",
-        application_detail=ApplicationDetail()
+        session_token="session_token", application_detail=ApplicationDetail()
     )
 
     assert application_detail.application_info.app_id == "my-test-app"
@@ -61,15 +63,18 @@ async def test_create_application(application_api, application_service):
 @pytest.mark.asyncio
 async def test_update_application(application_api, application_service):
     application_api.v1_admin_app_id_update_post = AsyncMock()
-    application_api.v1_admin_app_id_update_post.return_value = \
-        get_deserialized_object_from_resource(ApplicationDetail, "application/update_application.json")
+    application_api.v1_admin_app_id_update_post.return_value = (
+        get_deserialized_object_from_resource(
+            ApplicationDetail, "application/update_application.json"
+        )
+    )
 
-    application_detail = await application_service.update_application("my-test-app", ApplicationDetail())
+    application_detail = await application_service.update_application(
+        "my-test-app", ApplicationDetail()
+    )
 
     application_api.v1_admin_app_id_update_post.assert_called_with(
-        session_token="session_token",
-        id="my-test-app",
-        application_detail=ApplicationDetail()
+        session_token="session_token", id="my-test-app", application_detail=ApplicationDetail()
     )
 
     assert application_detail.application_info.app_id == "my-test-app"
@@ -83,22 +88,21 @@ async def test_delete_application(application_api, application_service):
     await application_service.delete_application("my-test-app")
 
     application_api.v1_admin_app_id_delete_post.assert_called_with(
-        session_token="session_token",
-        id="my-test-app"
+        session_token="session_token", id="my-test-app"
     )
 
 
 @pytest.mark.asyncio
 async def test_get_application(application_api, application_service):
     application_api.v1_admin_app_id_get_get = AsyncMock()
-    application_api.v1_admin_app_id_get_get.return_value = \
-        get_deserialized_object_from_resource(ApplicationDetail, "application/get_application.json")
+    application_api.v1_admin_app_id_get_get.return_value = get_deserialized_object_from_resource(
+        ApplicationDetail, "application/get_application.json"
+    )
 
     application_detail = await application_service.get_application("my-test-app")
 
     application_api.v1_admin_app_id_get_get.assert_called_with(
-        session_token="session_token",
-        id="my-test-app"
+        session_token="session_token", id="my-test-app"
     )
 
     assert application_detail.application_info.app_id == "my-test-app"
@@ -108,8 +112,11 @@ async def test_get_application(application_api, application_service):
 @pytest.mark.asyncio
 async def test_list_application_entitlements(app_entitlement_api, application_service):
     app_entitlement_api.v1_admin_app_entitlement_list_get = AsyncMock()
-    app_entitlement_api.v1_admin_app_entitlement_list_get.return_value = \
-        get_deserialized_object_from_resource(PodAppEntitlementList, "application/list_app_entitlements.json")
+    app_entitlement_api.v1_admin_app_entitlement_list_get.return_value = (
+        get_deserialized_object_from_resource(
+            PodAppEntitlementList, "application/list_app_entitlements.json"
+        )
+    )
 
     pod_app_entitlements = await application_service.list_application_entitlements()
 
@@ -124,21 +131,25 @@ async def test_list_application_entitlements(app_entitlement_api, application_se
 @pytest.mark.asyncio
 async def test_update_application_entitlements(app_entitlement_api, application_service):
     app_entitlement_api.v1_admin_app_entitlement_list_post = AsyncMock()
-    app_entitlement_api.v1_admin_app_entitlement_list_post.return_value = \
-        get_deserialized_object_from_resource(PodAppEntitlementList, "application/update_app_entitlements.json")
+    app_entitlement_api.v1_admin_app_entitlement_list_post.return_value = (
+        get_deserialized_object_from_resource(
+            PodAppEntitlementList, "application/update_app_entitlements.json"
+        )
+    )
 
     pod_app_entitlement = PodAppEntitlement(
         app_id="rsa-app-auth-example",
         app_name="App Auth RSA Example",
         enable=True,
         listed=True,
-        install=False
+        install=False,
     )
-    pod_app_entitlements = await application_service.update_application_entitlements([pod_app_entitlement])
+    pod_app_entitlements = await application_service.update_application_entitlements(
+        [pod_app_entitlement]
+    )
 
     app_entitlement_api.v1_admin_app_entitlement_list_post.assert_called_with(
-        session_token="session_token",
-        payload=PodAppEntitlementList(value=[pod_app_entitlement])
+        session_token="session_token", payload=PodAppEntitlementList(value=[pod_app_entitlement])
     )
 
     assert len(pod_app_entitlements) == 1
@@ -148,14 +159,16 @@ async def test_update_application_entitlements(app_entitlement_api, application_
 @pytest.mark.asyncio
 async def test_list_user_applications(app_entitlement_api, application_service):
     app_entitlement_api.v1_admin_user_uid_app_entitlement_list_get = AsyncMock()
-    app_entitlement_api.v1_admin_user_uid_app_entitlement_list_get.return_value = \
-        get_deserialized_object_from_resource(UserAppEntitlementList, "application/list_user_apps.json")
+    app_entitlement_api.v1_admin_user_uid_app_entitlement_list_get.return_value = (
+        get_deserialized_object_from_resource(
+            UserAppEntitlementList, "application/list_user_apps.json"
+        )
+    )
 
     user_app_entitlements = await application_service.list_user_applications(1234)
 
     app_entitlement_api.v1_admin_user_uid_app_entitlement_list_get.assert_called_with(
-        session_token="session_token",
-        uid=1234
+        session_token="session_token", uid=1234
     )
 
     assert len(user_app_entitlements) == 3
@@ -165,44 +178,49 @@ async def test_list_user_applications(app_entitlement_api, application_service):
 @pytest.mark.asyncio
 async def test_update_user_applications(app_entitlement_api, application_service):
     app_entitlement_api.v1_admin_user_uid_app_entitlement_list_post = AsyncMock()
-    app_entitlement_api.v1_admin_user_uid_app_entitlement_list_post.return_value = \
-        get_deserialized_object_from_resource(UserAppEntitlementList, "application/list_user_apps.json")
-
-    user_app_entitlement = UserAppEntitlement(
-        app_id="djApp",
-        listed=True,
-        install=False
+    app_entitlement_api.v1_admin_user_uid_app_entitlement_list_post.return_value = (
+        get_deserialized_object_from_resource(
+            UserAppEntitlementList, "application/list_user_apps.json"
+        )
     )
 
-    user_app_entitlements = await application_service.update_user_applications(1234, [user_app_entitlement])
+    user_app_entitlement = UserAppEntitlement(app_id="djApp", listed=True, install=False)
+
+    user_app_entitlements = await application_service.update_user_applications(
+        1234, [user_app_entitlement]
+    )
 
     app_entitlement_api.v1_admin_user_uid_app_entitlement_list_post.assert_called_with(
         session_token="session_token",
         uid=1234,
-        payload=UserAppEntitlementList(value=[user_app_entitlement])
+        payload=UserAppEntitlementList(value=[user_app_entitlement]),
     )
 
     assert len(user_app_entitlements) == 3
     assert user_app_entitlements[0].app_id == "djApp"
 
+
 @pytest.mark.asyncio
 async def test_patch_user_applications(app_entitlement_api, application_service):
     app_entitlement_api.v1_admin_user_uid_app_entitlement_list_patch = AsyncMock()
-    app_entitlement_api.v1_admin_user_uid_app_entitlement_list_patch.return_value = \
-        get_deserialized_object_from_resource(UserAppEntitlementList, "application/list_user_apps.json")
-
-    user_app_entitlement_patch = UserAppEntitlementPatch(
-        app_id="djApp",
-        listed="KEEP",
-        install="KEEP"
+    app_entitlement_api.v1_admin_user_uid_app_entitlement_list_patch.return_value = (
+        get_deserialized_object_from_resource(
+            UserAppEntitlementList, "application/list_user_apps.json"
+        )
     )
 
-    user_app_patched_entitlements = await application_service.patch_user_applications(1234, [user_app_entitlement_patch])
+    user_app_entitlement_patch = UserAppEntitlementPatch(
+        app_id="djApp", listed="KEEP", install="KEEP"
+    )
+
+    user_app_patched_entitlements = await application_service.patch_user_applications(
+        1234, [user_app_entitlement_patch]
+    )
 
     app_entitlement_api.v1_admin_user_uid_app_entitlement_list_patch.assert_called_with(
         session_token="session_token",
         uid=1234,
-        payload=UserAppEntitlementsPatchList(value=[user_app_entitlement_patch])
+        payload=UserAppEntitlementsPatchList(value=[user_app_entitlement_patch]),
     )
 
     assert len(user_app_patched_entitlements) == 3

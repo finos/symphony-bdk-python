@@ -1,2 +1,1 @@
-"""Package containing configuration-related modules
-"""
+"""Package containing configuration-related modules"""

@@ -2,7 +2,10 @@ import asyncio
 import logging.config
 from pathlib import Path
 
-from symphony.bdk.core.activity.user_joined_room import UserJoinedRoomActivity, UserJoinedRoomContext
+from symphony.bdk.core.activity.user_joined_room import (
+    UserJoinedRoomActivity,
+    UserJoinedRoomContext,
+)
 from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.service.message.message_service import MessageService
 from symphony.bdk.core.symphony_bdk import SymphonyBdk
@@ -23,11 +26,14 @@ class JoinRoomActivity(UserJoinedRoomActivity):
         return True
 
     async def on_activity(self, context: UserJoinedRoomContext):
-        await self._messages.send_message(context.stream_id,
-                                          "<messageML>Welcome to the room</messageML>")
+        await self._messages.send_message(
+            context.stream_id, "<messageML>Welcome to the room</messageML>"
+        )
 
 
-logging.config.fileConfig(Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False)
+logging.config.fileConfig(
+    Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False
+)
 
 try:
     logging.info("Running activity example...")

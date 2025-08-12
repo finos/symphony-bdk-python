@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
-from typing import TypeVar, Generic
+from typing import Generic, TypeVar
 
 from symphony.bdk.gen.agent_model.v4_initiator import V4Initiator
 
-C = TypeVar('C')  # Context type
-E = TypeVar('E')  # Event type
+C = TypeVar("C")  # Context type
+E = TypeVar("E")  # Event type
 
 
 class ActivityContext(Generic[E]):
@@ -60,7 +60,7 @@ class AbstractActivity(ABC, Generic[C]):
         """
 
     def before_matcher(self, context: C):
-        """ This callback can be used to prepare :py:class:`ActivityContext` before actually processing the `matches`
+        """This callback can be used to prepare :py:class:`ActivityContext` before actually processing the `matches`
         method.
 
         :param context: an instance of :py:class:`ActivityContext`

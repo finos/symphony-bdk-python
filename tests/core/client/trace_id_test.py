@@ -3,7 +3,12 @@ from unittest.mock import AsyncMock
 
 import pytest
 
-from symphony.bdk.core.client.trace_id import DistributedTracingContext, add_x_trace_id, TRACE_ID_LENGTH, X_TRACE_ID
+from symphony.bdk.core.client.trace_id import (
+    TRACE_ID_LENGTH,
+    X_TRACE_ID,
+    DistributedTracingContext,
+    add_x_trace_id,
+)
 
 
 def setup_function():

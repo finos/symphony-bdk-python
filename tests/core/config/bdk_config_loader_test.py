@@ -20,7 +20,9 @@ def fixture_global_config_path(request):
     return get_config_resource_filepath(request.param)
 
 
-@pytest.fixture(name="wrong_path", params=["/wrong_path/config.json", "/wrong_path/wrong_extension.something"])
+@pytest.fixture(
+    name="wrong_path", params=["/wrong_path/config.json", "/wrong_path/wrong_extension.something"]
+)
 def fixture_wrong_path(request):
     return request.param
 
@@ -43,8 +45,10 @@ def test_load_from_file_not_found(wrong_path):
         BdkConfigLoader.load_from_file(wrong_path)
 
 
-@pytest.mark.skipif(os.environ.get("CI") == "true",
-                    reason="GitHub actions does not allow to create file in the home directory")
+@pytest.mark.skipif(
+    os.environ.get("CI") == "true",
+    reason="GitHub actions does not allow to create file in the home directory",
+)
 def test_load_from_symphony_directory(simple_config_path):
     tmp_config_filename = str(uuid.uuid4()) + "-config.yaml"
     tmp_config_path = Path.home() / ".symphony" / tmp_config_filename
@@ -95,7 +99,9 @@ def test_load_client_global_config(global_config_path):
 
 
 def test_load_proxy_defined_at_global_level():
-    config = BdkConfigLoader.load_from_file(get_config_resource_filepath("config_global_proxy.yaml"))
+    config = BdkConfigLoader.load_from_file(
+        get_config_resource_filepath("config_global_proxy.yaml")
+    )
 
     assert config.proxy.host == "proxy.symphony.com"
     assert config.proxy.port == 1234
@@ -109,7 +115,9 @@ def test_load_proxy_defined_at_global_level():
 
 
 def test_load_proxy_defined_at_global_and_child_level():
-    config = BdkConfigLoader.load_from_file(get_config_resource_filepath("config_proxy_global_child.yaml"))
+    config = BdkConfigLoader.load_from_file(
+        get_config_resource_filepath("config_proxy_global_child.yaml")
+    )
 
     assert config.proxy.host == "proxy.symphony.com"
     assert config.proxy.port == 1234
@@ -127,7 +135,9 @@ def test_load_proxy_defined_at_global_and_child_level():
 
 
 def test_load_proxy_defined_at_child_level_only():
-    config = BdkConfigLoader.load_from_file(get_config_resource_filepath("config_proxy_child_only.yaml"))
+    config = BdkConfigLoader.load_from_file(
+        get_config_resource_filepath("config_proxy_child_only.yaml")
+    )
 
     assert config.proxy is None
     assert config.pod.proxy is None
@@ -141,22 +151,32 @@ def test_load_proxy_defined_at_child_level_only():
 
 
 def test_load_default_headers_defined_at_child_level_only():
-    config = BdkConfigLoader.load_from_file(get_config_resource_filepath("config_headers_child_only.yaml"))
+    config = BdkConfigLoader.load_from_file(
+        get_config_resource_filepath("config_headers_child_only.yaml")
+    )
 
     assert config.default_headers is None
     assert config.pod.default_headers is None
     assert config.key_manager.default_headers is None
     assert config.session_auth.default_headers is None
-    assert config.agent.default_headers == {"user-agent": "custom-user-agent", "header-key": "header-value"}
+    assert config.agent.default_headers == {
+        "user-agent": "custom-user-agent",
+        "header-key": "header-value",
+    }
 
 
 def test_load_default_headers_defined_at_global_and_child_level():
     global_headers = {"user-agent": "global-user-agent", "header-key": "global-header-value"}
 
-    config = BdkConfigLoader.load_from_file(get_config_resource_filepath("config_headers_global_child.yaml"))
+    config = BdkConfigLoader.load_from_file(
+        get_config_resource_filepath("config_headers_global_child.yaml")
+    )
 
     assert config.default_headers == global_headers
     assert config.pod.default_headers == global_headers
     assert config.key_manager.default_headers == global_headers
     assert config.session_auth.default_headers == global_headers
-    assert config.agent.default_headers == {"user-agent": "agent-user-agent", "header-key": "agent-header-value"}
+    assert config.agent.default_headers == {
+        "user-agent": "agent-user-agent",
+        "header-key": "agent-header-value",
+    }

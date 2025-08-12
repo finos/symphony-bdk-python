@@ -1,17 +1,23 @@
+# ruff: noqa
 import asyncio
-from unittest.mock import MagicMock, AsyncMock, call
+from unittest.mock import AsyncMock, MagicMock, call
 
 import pytest
 
-from tests.core.service.datafeed.test_fixtures import fixture_initiator_username, fixture_session_service, \
-    fixture_auth_session
+from tests.core.service.datafeed.test_fixtures import (
+    fixture_initiator_username,
+    fixture_session_service,
+    fixture_auth_session,
+)
 
 from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.config.model.bdk_datafeed_config import BdkDatafeedConfig
 from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import RealTimeEvent
 from symphony.bdk.core.service.datafeed.datafeed_loop_v1 import DatafeedLoopV1
 from symphony.bdk.core.service.datafeed.exception import EventError
-from symphony.bdk.core.service.datafeed.real_time_event_listener import RealTimeEventListener
+from symphony.bdk.core.service.datafeed.real_time_event_listener import (
+    RealTimeEventListener,
+)
 from symphony.bdk.gen.agent_api.datafeed_api import DatafeedApi
 from symphony.bdk.gen.agent_model.datafeed import Datafeed
 from symphony.bdk.gen.agent_model.v4_event import V4Event
@@ -21,9 +27,13 @@ from symphony.bdk.gen.agent_model.v4_payload import V4Payload
 from symphony.bdk.gen.api_client import ApiClient
 from symphony.bdk.gen.exceptions import ApiException
 from tests.core.config import minimal_retry_config_with_attempts
-from tests.core.test.in_memory_datafeed_id_repository import InMemoryDatafeedIdRepository
-from tests.utils.resource_utils import get_config_resource_filepath
-from tests.utils.resource_utils import get_resource_content
+from tests.core.test.in_memory_datafeed_id_repository import (
+    InMemoryDatafeedIdRepository,
+)
+from tests.utils.resource_utils import (
+    get_config_resource_filepath,
+    get_resource_content,
+)
 
 SLEEP_SECONDS = 0.0001
 
@@ -54,9 +64,11 @@ def fixture_datafeed_api():
 
 @pytest.fixture(name="message_sent")
 def fixture_message_sent(initiator_username):
-    return V4Event(type=RealTimeEvent.MESSAGESENT.name,
-                   payload=V4Payload(message_sent=V4MessageSent()),
-                   initiator=initiator_username)
+    return V4Event(
+        type=RealTimeEvent.MESSAGESENT.name,
+        payload=V4Payload(message_sent=V4MessageSent()),
+        initiator=initiator_username,
+    )
 
 
 @pytest.fixture(name="message_sent_event")
@@ -83,16 +95,23 @@ def fixture_read_df_loop_side_effect(message_sent):
 
 
 @pytest.fixture(name="datafeed_loop_v1")
-def fixture_datafeed_loop_v1(datafeed_api, session_service, auth_session, config, datafeed_repository):
-    df_loop = auto_stopping_datafeed_loop_v1(datafeed_api, session_service, auth_session, config, datafeed_repository)
+def fixture_datafeed_loop_v1(
+    datafeed_api, session_service, auth_session, config, datafeed_repository
+):
+    df_loop = auto_stopping_datafeed_loop_v1(
+        datafeed_api, session_service, auth_session, config, datafeed_repository
+    )
     df_loop._retry_config = minimal_retry_config_with_attempts(1)
     return df_loop
 
 
 @pytest.fixture(name="mock_datafeed_loop_v1")
-def fixture_mock_datafeed_loop_v1_(datafeed_api, session_service, config, datafeed_repository,
-                                   read_df_loop_side_effect):
-    datafeed_loop = DatafeedLoopV1(datafeed_api, session_service, None, config, repository=datafeed_repository)
+def fixture_mock_datafeed_loop_v1_(
+    datafeed_api, session_service, config, datafeed_repository, read_df_loop_side_effect
+):
+    datafeed_loop = DatafeedLoopV1(
+        datafeed_api, session_service, None, config, repository=datafeed_repository
+    )
     datafeed_loop._prepare_datafeed = AsyncMock()
     datafeed_loop.recreate_datafeed = AsyncMock()
     datafeed_loop._read_datafeed = AsyncMock(side_effect=read_df_loop_side_effect)
@@ -100,11 +119,14 @@ def fixture_mock_datafeed_loop_v1_(datafeed_api, session_service, config, datafe
     return datafeed_loop
 
 
-def auto_stopping_datafeed_loop_v1(datafeed_api, session_service, auth_session, config, repository=None):
-    datafeed_loop = DatafeedLoopV1(datafeed_api, session_service, auth_session, config, repository)
+def auto_stopping_datafeed_loop_v1(
+    datafeed_api, session_service, auth_session, config, repository=None
+):
+    datafeed_loop = DatafeedLoopV1(
+        datafeed_api, session_service, auth_session, config, repository
+    )
 
     class RealTimeEventListenerImpl(RealTimeEventListener):
-
         async def on_message_sent(self, initiator: V4Initiator, event: V4MessageSent):
             await datafeed_loop.stop()
 
@@ -113,7 +135,9 @@ def auto_stopping_datafeed_loop_v1(datafeed_api, session_service, auth_session, 
 
 
 @pytest.mark.asyncio
-async def test_start(datafeed_loop_v1, datafeed_api, session_service, read_df_side_effect):
+async def test_start(
+    datafeed_loop_v1, datafeed_api, session_service, read_df_side_effect
+):
     datafeed_api.v4_datafeed_create_post.return_value = Datafeed(id="test_id")
     datafeed_api.v4_datafeed_id_read_get.side_effect = read_df_side_effect
 
@@ -128,9 +152,13 @@ async def test_start(datafeed_loop_v1, datafeed_api, session_service, read_df_si
 
 
 @pytest.mark.asyncio
-async def test_start_already_started_datafeed_v1_loop_should_throw_error(datafeed_loop_v1):
+async def test_start_already_started_datafeed_v1_loop_should_throw_error(
+    datafeed_loop_v1,
+):
     datafeed_loop_v1._running = True
-    with pytest.raises(RuntimeError, match="The datafeed service V1 is already started"):
+    with pytest.raises(
+        RuntimeError, match="The datafeed service V1 is already started"
+    ):
         await datafeed_loop_v1.start()
 
 
@@ -156,7 +184,9 @@ async def test_read_datafeed_empty_list(datafeed_loop_v1, datafeed_api):
 
 
 @pytest.mark.asyncio
-async def test_read_datafeed_non_empty_list(datafeed_loop_v1, datafeed_api, message_sent):
+async def test_read_datafeed_non_empty_list(
+    datafeed_loop_v1, datafeed_api, message_sent
+):
     events = [message_sent]
     datafeed_api.v4_datafeed_id_read_get.return_value = EventsMock(events)
 
@@ -164,45 +194,61 @@ async def test_read_datafeed_non_empty_list(datafeed_loop_v1, datafeed_api, mess
 
 
 @pytest.mark.asyncio
-async def test_datafeed_is_reused(datafeed_repository, datafeed_api, session_service, auth_session, config,
-                                  read_df_side_effect):
+async def test_datafeed_is_reused(
+    datafeed_repository,
+    datafeed_api,
+    session_service,
+    auth_session,
+    config,
+    read_df_side_effect,
+):
     datafeed_repository.write("persisted_id")
-    datafeed_loop = auto_stopping_datafeed_loop_v1(datafeed_api, session_service, auth_session, config,
-                                                   datafeed_repository)
+    datafeed_loop = auto_stopping_datafeed_loop_v1(
+        datafeed_api, session_service, auth_session, config, datafeed_repository
+    )
 
     datafeed_api.v4_datafeed_id_read_get.side_effect = read_df_side_effect
 
     await datafeed_loop.start()
 
     datafeed_api.v4_datafeed_create_post.assert_not_called()
-    datafeed_api.v4_datafeed_id_read_get.assert_called_with(id="persisted_id",
-                                                            session_token="session_token",
-                                                            key_manager_token="km_token")
+    datafeed_api.v4_datafeed_id_read_get.assert_called_with(
+        id="persisted_id", session_token="session_token", key_manager_token="km_token"
+    )
 
 
 @pytest.mark.asyncio
-async def test_start_recreate_datafeed_error(datafeed_repository, datafeed_api, session_service, auth_session, config):
+async def test_start_recreate_datafeed_error(
+    datafeed_repository, datafeed_api, session_service, auth_session, config
+):
     datafeed_repository.write("persisted_id")
-    datafeed_loop = auto_stopping_datafeed_loop_v1(datafeed_api, session_service, auth_session, config,
-                                                   datafeed_repository)
+    datafeed_loop = auto_stopping_datafeed_loop_v1(
+        datafeed_api, session_service, auth_session, config, datafeed_repository
+    )
 
-    datafeed_api.v4_datafeed_id_read_get.side_effect = ApiException(400, "Expired Datafeed id")
-    datafeed_api.v4_datafeed_create_post.side_effect = ApiException(400, "Unhandled exception")
+    datafeed_api.v4_datafeed_id_read_get.side_effect = ApiException(
+        400, "Expired Datafeed id"
+    )
+    datafeed_api.v4_datafeed_create_post.side_effect = ApiException(
+        400, "Unhandled exception"
+    )
 
     with pytest.raises(ApiException):
         await datafeed_loop.start()
 
-    datafeed_api.v4_datafeed_id_read_get.assert_called_once_with(id="persisted_id",
-                                                                 session_token="session_token",
-                                                                 key_manager_token="km_token")
+    datafeed_api.v4_datafeed_id_read_get.assert_called_once_with(
+        id="persisted_id", session_token="session_token", key_manager_token="km_token"
+    )
 
-    datafeed_api.v4_datafeed_create_post.assert_called_once_with(session_token="session_token",
-                                                                 key_manager_token="km_token")
+    datafeed_api.v4_datafeed_create_post.assert_called_once_with(
+        session_token="session_token", key_manager_token="km_token"
+    )
 
 
 @pytest.mark.asyncio
-async def test_retrieve_datafeed_from_datafeed_file(tmpdir, datafeed_api, session_service, auth_session, config,
-                                                    read_df_side_effect):
+async def test_retrieve_datafeed_from_datafeed_file(
+    tmpdir, datafeed_api, session_service, auth_session, config, read_df_side_effect
+):
     datafeed_file_content = get_resource_content("datafeed/datafeedId")
     datafeed_file_path = tmpdir.join("datafeed.id")
     datafeed_file_path.write(datafeed_file_content)
@@ -210,7 +256,9 @@ async def test_retrieve_datafeed_from_datafeed_file(tmpdir, datafeed_api, sessio
     datafeed_config = BdkDatafeedConfig({"idFilePath": str(datafeed_file_path)})
     config.datafeed = datafeed_config
 
-    datafeed_loop = auto_stopping_datafeed_loop_v1(datafeed_api, session_service, auth_session, config)
+    datafeed_loop = auto_stopping_datafeed_loop_v1(
+        datafeed_api, session_service, auth_session, config
+    )
     datafeed_api.v4_datafeed_id_read_get.side_effect = read_df_side_effect
     await datafeed_loop.start()
 
@@ -218,8 +266,9 @@ async def test_retrieve_datafeed_from_datafeed_file(tmpdir, datafeed_api, sessio
 
 
 @pytest.mark.asyncio
-async def test_retrieve_datafeed_from_invalid_datafeed_dir(tmpdir, datafeed_api, session_service, auth_session, config,
-                                                           read_df_side_effect):
+async def test_retrieve_datafeed_from_invalid_datafeed_dir(
+    tmpdir, datafeed_api, session_service, auth_session, config, read_df_side_effect
+):
     datafeed_id_file_content = get_resource_content("datafeed/datafeedId")
     datafeed_id_file_path = tmpdir.join("datafeed.id")
     datafeed_id_file_path.write(datafeed_id_file_content)
@@ -227,7 +276,9 @@ async def test_retrieve_datafeed_from_invalid_datafeed_dir(tmpdir, datafeed_api,
     datafeed_config = BdkDatafeedConfig({"idFilePath": str(tmpdir)})
     config.datafeed = datafeed_config
 
-    datafeed_loop = auto_stopping_datafeed_loop_v1(datafeed_api, session_service, auth_session, config)
+    datafeed_loop = auto_stopping_datafeed_loop_v1(
+        datafeed_api, session_service, auth_session, config
+    )
     datafeed_api.v4_datafeed_id_read_get.side_effect = read_df_side_effect
     await datafeed_loop.start()
 
@@ -235,23 +286,31 @@ async def test_retrieve_datafeed_from_invalid_datafeed_dir(tmpdir, datafeed_api,
 
 
 @pytest.mark.asyncio
-async def test_retrieve_datafeed_id_from_unknown_path(datafeed_api, session_service, auth_session, config):
+async def test_retrieve_datafeed_id_from_unknown_path(
+    datafeed_api, session_service, auth_session, config
+):
     datafeed_config = BdkDatafeedConfig({"idFilePath": "unknown_path"})
     config.datafeed = datafeed_config
 
-    datafeed_loop = auto_stopping_datafeed_loop_v1(datafeed_api, session_service, auth_session, config)
+    datafeed_loop = auto_stopping_datafeed_loop_v1(
+        datafeed_api, session_service, auth_session, config
+    )
 
     assert datafeed_loop._datafeed_id is None
 
 
 @pytest.mark.asyncio
-async def test_retrieve_datafeed_id_from_empty_file(tmpdir, datafeed_api, session_service, auth_session, config):
+async def test_retrieve_datafeed_id_from_empty_file(
+    tmpdir, datafeed_api, session_service, auth_session, config
+):
     datafeed_file_path = tmpdir.join("datafeed.id")
 
     datafeed_config = BdkDatafeedConfig({"idFilePath": str(datafeed_file_path)})
     config.datafeed = datafeed_config
 
-    datafeed_loop = auto_stopping_datafeed_loop_v1(datafeed_api, auth_session, session_service, config)
+    datafeed_loop = auto_stopping_datafeed_loop_v1(
+        datafeed_api, auth_session, session_service, config
+    )
 
     assert datafeed_loop._datafeed_id is None
 
@@ -276,7 +335,6 @@ async def test_no_listener_task(mock_datafeed_loop_v1):
 @pytest.mark.asyncio
 async def test_listener_called(mock_datafeed_loop_v1, message_sent, initiator_username):
     class RealTimeEventListenerImpl(RealTimeEventListener):
-
         async def on_message_sent(self, initiator: V4Initiator, event: V4MessageSent):
             await mock_datafeed_loop_v1.stop()
 
@@ -285,11 +343,15 @@ async def test_listener_called(mock_datafeed_loop_v1, message_sent, initiator_us
 
     await mock_datafeed_loop_v1.start()
 
-    listener.on_message_sent.assert_called_once_with(initiator_username, message_sent.payload.message_sent)
+    listener.on_message_sent.assert_called_once_with(
+        initiator_username, message_sent.payload.message_sent
+    )
 
 
 @pytest.mark.asyncio
-async def test_exception_in_listener_ignored(mock_datafeed_loop_v1, message_sent, initiator_username):
+async def test_exception_in_listener_ignored(
+    mock_datafeed_loop_v1, message_sent, initiator_username
+):
     class RealTimeEventListenerImpl(RealTimeEventListener):
         count = 0
 
@@ -309,7 +371,9 @@ async def test_exception_in_listener_ignored(mock_datafeed_loop_v1, message_sent
 
 
 @pytest.mark.asyncio
-async def test_event_error_in_listener_ignored(mock_datafeed_loop_v1, message_sent, initiator_username):
+async def test_event_error_in_listener_ignored(
+    mock_datafeed_loop_v1, message_sent, initiator_username
+):
     class RealTimeEventListenerImpl(RealTimeEventListener):
         count = 0
 
@@ -329,7 +393,9 @@ async def test_event_error_in_listener_ignored(mock_datafeed_loop_v1, message_se
 
 
 @pytest.mark.asyncio
-async def test_events_concurrency_within_same_read_df_chunk(mock_datafeed_loop_v1, message_sent):
+async def test_events_concurrency_within_same_read_df_chunk(
+    mock_datafeed_loop_v1, message_sent
+):
     class QueueListener(RealTimeEventListener):
         def __init__(self):
             self.queue = asyncio.Queue()

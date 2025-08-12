@@ -1,6 +1,6 @@
 import pytest
 
-from symphony.bdk.gen import rest, Configuration
+from symphony.bdk.gen import Configuration, rest
 
 
 @pytest.mark.asyncio

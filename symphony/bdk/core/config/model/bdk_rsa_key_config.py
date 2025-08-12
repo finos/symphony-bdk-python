@@ -1,6 +1,6 @@
 class BdkRsaKeyConfig:
-    """Class containing the bot's RSA Key configuration
-    """
+    """Class containing the bot's RSA Key configuration"""
+
     def __init__(self, path=None, content=""):
         self._path = path
         self._content = content
@@ -33,7 +33,7 @@ class BdkRsaKeyConfig:
         self._content = None
 
     def is_configured(self) -> bool:
-        """"Check if the RSA authentication is configured or not
+        """ "Check if the RSA authentication is configured or not
 
         :return: true if the RSA authentication is configured
         """
@@ -53,8 +53,7 @@ class BdkRsaKeyConfig:
 
         :return: private key content as string.
         """
-        return self._load_key_from_path() \
-            if self._path is not None else self._content
+        return self._load_key_from_path() if self._path is not None else self._content
 
     def _load_key_from_path(self):
         with open(self._path, "r") as file:

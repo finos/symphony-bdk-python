@@ -14,7 +14,12 @@ def test_empty_datahose_config():
 
 def test_datahose_config_with_retry():
     config_with_tag = {"tag": "TAG", "eventTypes": ["SOCIALMESSAGE", "CREATE_ROOM"]}
-    config_retry = {"maxAttempts": 10, "multiplier": 1.51, "maxIntervalMillis": 10000, "initialIntervalMillis": 2000}
+    config_retry = {
+        "maxAttempts": 10,
+        "multiplier": 1.51,
+        "maxIntervalMillis": 10000,
+        "initialIntervalMillis": 2000,
+    }
     config_with_tag["retry"] = config_retry
 
     datahose_config = BdkDatahoseConfig(config_with_tag)

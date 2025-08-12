@@ -7,9 +7,9 @@ from jwt import InvalidAudienceError
 from symphony.bdk.core.auth.exception import AuthInitializationError
 from symphony.bdk.core.auth.jwt_helper import (
     create_signed_jwt,
-    validate_jwt,
     create_signed_jwt_with_claims,
     extract_token_claims,
+    validate_jwt,
 )
 from symphony.bdk.core.config.model.bdk_rsa_key_config import BdkRsaKeyConfig
 

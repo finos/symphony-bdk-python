@@ -26,7 +26,9 @@ class HelloCommandActivity(CommandActivity):
         await self._messages.send_message(context.stream_id, "<messageML>Hello, World!</messageML>")
 
 
-logging.config.fileConfig(Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False)
+logging.config.fileConfig(
+    Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False
+)
 
 try:
     logging.info("Running activity example...")

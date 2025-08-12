@@ -3,10 +3,13 @@ from unittest.mock import MagicMock, Mock
 import pytest
 
 from symphony.bdk.core.auth.authenticator_factory import AuthenticatorFactory
-from symphony.bdk.core.auth.bot_authenticator import BotAuthenticatorRsa, BotAuthenticatorCert
+from symphony.bdk.core.auth.bot_authenticator import BotAuthenticatorCert, BotAuthenticatorRsa
 from symphony.bdk.core.auth.exception import AuthInitializationError
-from symphony.bdk.core.auth.ext_app_authenticator import ExtensionAppAuthenticatorRsa, ExtensionAppAuthenticatorCert
-from symphony.bdk.core.auth.obo_authenticator import OboAuthenticatorRsa, OboAuthenticatorCert
+from symphony.bdk.core.auth.ext_app_authenticator import (
+    ExtensionAppAuthenticatorCert,
+    ExtensionAppAuthenticatorRsa,
+)
+from symphony.bdk.core.auth.obo_authenticator import OboAuthenticatorCert, OboAuthenticatorRsa
 from symphony.bdk.core.client.api_client_factory import ApiClientFactory
 from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.config.model.bdk_authentication_config import BdkAuthenticationConfig

@@ -1,10 +1,10 @@
-"""This module handles pre-processing for an outgoing message in order to have a valid messageML format.
-"""
+"""This module handles pre-processing for an outgoing message in order to have a valid messageML format."""
+
 import re
 
 
 def escape_special_chars(raw_text: str) -> str:
-    """ Replace all special characters placed within the messageML that must be HTML-escaped
+    """Replace all special characters placed within the messageML that must be HTML-escaped
     to have a valid MessageML format.
 
     :param raw_text: text to be parsed
@@ -14,7 +14,7 @@ def escape_special_chars(raw_text: str) -> str:
     parsed_text = ""
     matches = re.finditer(_pattern(), raw_text)
     for match in matches:
-        parsed_text += raw_text[current_parsed_index:match.start()] + _replacement(match.group(0))
+        parsed_text += raw_text[current_parsed_index : match.start()] + _replacement(match.group(0))
         current_parsed_index = match.end()
     return parsed_text + raw_text[current_parsed_index:]
 
@@ -32,7 +32,7 @@ _special_chars_dict = {
     "<": "&lt;",
     ">": "&gt;",
     "'": "&apos;",
-    "\"": "&quot;",
+    '"': "&quot;",
     "#": "&#35;",
     "\\$": "&#36;",
     "%": "&#37;",
@@ -47,5 +47,5 @@ _special_chars_dict = {
     "\\]": "&#93;",
     "`": "&#96;",
     "\\{": "&#123;",
-    "\\}": "&#125;"
+    "\\}": "&#125;",
 }

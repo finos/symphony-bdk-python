@@ -1,5 +1,4 @@
-from unittest.mock import AsyncMock, Mock
-from unittest.mock import patch
+from unittest.mock import AsyncMock, Mock, patch
 
 import pytest
 
@@ -8,7 +7,7 @@ from symphony.bdk.core.auth.bot_authenticator import BotAuthenticatorRsa
 from symphony.bdk.core.auth.exception import AuthInitializationError
 from symphony.bdk.core.auth.obo_authenticator import OboAuthenticatorRsa
 from symphony.bdk.core.client.api_client_factory import ApiClientFactory
-from symphony.bdk.core.config.exception import BotNotConfiguredError, BdkConfigError
+from symphony.bdk.core.config.exception import BdkConfigError, BotNotConfiguredError
 from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
 from symphony.bdk.core.extension import ExtensionService
@@ -33,7 +32,9 @@ def fixture_invalid_app_id_config():
 
 @pytest.fixture(name="obo_only_config")
 def fixture_obo_only_config():
-    return BdkConfig(host="acme.symphony.com", app={"appId": "app", "privateKey": {"path": "/path/to/key.pem"}})
+    return BdkConfig(
+        host="acme.symphony.com", app={"appId": "app", "privateKey": {"path": "/path/to/key.pem"}}
+    )
 
 
 @pytest.fixture(name="mock_obo_session")
@@ -46,7 +47,9 @@ def fixture_mock_obo_session():
 
 @pytest.mark.asyncio
 async def test_bot_session(config):
-    with patch("symphony.bdk.core.auth.bot_authenticator.create_signed_jwt", return_value="privateKey"):
+    with patch(
+        "symphony.bdk.core.auth.bot_authenticator.create_signed_jwt", return_value="privateKey"
+    ):
         bot_authenticator = AsyncMock(BotAuthenticatorRsa)
         bot_authenticator.retrieve_session_token.return_value = "session_token"
         bot_authenticator.retrieve_key_manager_token.return_value = "km_token"
@@ -125,8 +128,10 @@ async def test_obo_with_username(config):
 
 @pytest.mark.asyncio
 async def test_obo_with_user_id_and_username(config):
-    with patch.object(OboAuthenticatorRsa, "authenticate_by_username") as authenticate_by_username, \
-            patch.object(OboAuthenticatorRsa, "authenticate_by_user_id") as authenticate_by_user_id:
+    with (
+        patch.object(OboAuthenticatorRsa, "authenticate_by_username") as authenticate_by_username,
+        patch.object(OboAuthenticatorRsa, "authenticate_by_user_id") as authenticate_by_user_id,
+    ):
         authenticate_by_user_id.return_value = Mock(OboAuthSession)
         user_id = 12345
 
@@ -186,7 +191,9 @@ async def test_ext_app_authenticator(obo_only_config):
     async with SymphonyBdk(obo_only_config) as symphony_bdk:
         authenticator = symphony_bdk.app_authenticator()
         assert authenticator is not None
-        assert symphony_bdk.app_authenticator() == authenticator  # test same instance is always returned
+        assert (
+            symphony_bdk.app_authenticator() == authenticator
+        )  # test same instance is always returned
 
 
 @pytest.mark.asyncio

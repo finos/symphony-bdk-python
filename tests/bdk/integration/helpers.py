@@ -1,15 +1,14 @@
 import asyncio
 import os
 import re
+from pathlib import Path
 
 import pytest
 import pytest_asyncio
 import yaml
-from pathlib import Path
 
 from symphony.bdk.core.config.loader import BdkConfigLoader
-from symphony.bdk.core.service.datafeed.real_time_event_listener import \
-    RealTimeEventListener
+from symphony.bdk.core.service.datafeed.real_time_event_listener import RealTimeEventListener
 from symphony.bdk.core.symphony_bdk import SymphonyBdk
 from symphony.bdk.gen.agent_model.v4_initiator import V4Initiator
 from symphony.bdk.gen.agent_model.v4_message_sent import V4MessageSent
@@ -61,16 +60,12 @@ async def bdk(messenger_bot_config):
 
 async def send_messages(messages, stream_id, since, uuid):
     for i in range(NUMBER_OF_MESSAGES):
-        await messages.send_message(
-            stream_id, f"<messageML><b>{uuid}-{i}-{since}</b></messageML>"
-        )
+        await messages.send_message(stream_id, f"<messageML><b>{uuid}-{i}-{since}</b></messageML>")
 
 
 async def get_test_messages(bdk, since, uuid):
     messages = await bdk.messages().list_messages(STREAM_ID, since=since)
-    cleaned_messages_text = [
-        re.sub(r"<[^>]+>", " ", msg["message"]).strip() for msg in messages
-    ]
+    cleaned_messages_text = [re.sub(r"<[^>]+>", " ", msg["message"]).strip() for msg in messages]
     return list(
         filter(
             lambda msg: msg.startswith(uuid),

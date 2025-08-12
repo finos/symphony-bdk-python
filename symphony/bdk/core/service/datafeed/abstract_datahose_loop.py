@@ -9,8 +9,8 @@ logger = logging.getLogger(__name__)
 class AbstractDatahoseLoop(ABC):
     """Base class for implementing the datahose services.
 
-        A datahose service can help a bot to get all the received real-time events that are set
-        as filters in the configuration.
+    A datahose service can help a bot to get all the received real-time events that are set
+    as filters in the configuration.
     """
 
     @abstractmethod

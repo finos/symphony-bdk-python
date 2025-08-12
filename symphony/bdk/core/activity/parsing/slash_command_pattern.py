@@ -1,7 +1,13 @@
 import re
 
-from symphony.bdk.core.activity.parsing.command_token import StaticCommandToken, StringArgumentCommandToken, \
-    HashArgumentCommandToken, CashArgumentCommandToken, MentionArgumentCommandToken, ArgumentCommandToken
+from symphony.bdk.core.activity.parsing.command_token import (
+    ArgumentCommandToken,
+    CashArgumentCommandToken,
+    HashArgumentCommandToken,
+    MentionArgumentCommandToken,
+    StaticCommandToken,
+    StringArgumentCommandToken,
+)
 from symphony.bdk.core.activity.parsing.input_tokenizer import InputTokenizer
 from symphony.bdk.core.activity.parsing.match_result import MatchResult
 from symphony.bdk.gen.agent_model.v4_message import V4Message
@@ -23,10 +29,15 @@ class SlashCommandPattern:
     whitespace_pattern = re.compile(r"\s+")
 
     def __init__(self, pattern: str):
-        self._tokens = [self.create_token(pattern) for pattern in
-                        re.split(SlashCommandPattern.whitespace_pattern, pattern) if pattern]
+        self._tokens = [
+            self.create_token(pattern)
+            for pattern in re.split(SlashCommandPattern.whitespace_pattern, pattern)
+            if pattern
+        ]
 
-        filtered_tokens_arg_names = list(filter(lambda a: a is not None, map(self.get_arg_name, self._tokens)))
+        filtered_tokens_arg_names = list(
+            filter(lambda a: a is not None, map(self.get_arg_name, self._tokens))
+        )
         if not len(set(filtered_tokens_arg_names)) == len(filtered_tokens_arg_names):
             raise ValueError("Argument names must be unique")
 
@@ -67,7 +78,11 @@ class SlashCommandPattern:
         """
         input_tokenizer = InputTokenizer(message)
         input_tokens = input_tokenizer.tokens
-        return MatchResult(True, self.get_arguments(input_tokens)) if self.matches(input_tokens) else MatchResult(False)
+        return (
+            MatchResult(True, self.get_arguments(input_tokens))
+            if self.matches(input_tokens)
+            else MatchResult(False)
+        )
 
     def matches(self, input_tokens):
         """

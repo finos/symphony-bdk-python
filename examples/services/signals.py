@@ -13,17 +13,23 @@ async def run():
     async with SymphonyBdk(config) as bdk:
         signal_service = bdk.signals()
 
-        logging.info('Creating new signal.')
+        logging.info("Creating new signal.")
         signal = await signal_service.create_signal(
-            BaseSignal(name="Testing signal", query="HASHTAG:hashtag", visible_on_profile=False, company_wide=False))
+            BaseSignal(
+                name="Testing signal",
+                query="HASHTAG:hashtag",
+                visible_on_profile=False,
+                company_wide=False,
+            )
+        )
         logging.info(signal)
 
         logging.info(await signal_service.get_signal(signal.id))
 
-        logging.info('Add a subscriber to the signal.')
+        logging.info("Add a subscriber to the signal.")
         await signal_service.subscribe_users_to_signal(signal.id, True, [13056700580913])
 
-        logging.info('Unsubscribe added user to the signal.')
+        logging.info("Unsubscribe added user to the signal.")
         await signal_service.unsubscribe_users_to_signal(signal.id, [13056700580913])
 
         logging.info("Listing all signals")
@@ -37,6 +43,8 @@ async def run():
         logging.info(await signal_service.delete_signal(signal.id))
 
 
-logging.config.fileConfig(Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False)
+logging.config.fileConfig(
+    Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False
+)
 
 asyncio.run(run())

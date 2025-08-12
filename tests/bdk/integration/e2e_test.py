@@ -1,3 +1,4 @@
+# ruff: noqa
 import asyncio
 from datetime import datetime, timedelta
 from uuid import uuid4
@@ -8,32 +9,39 @@ import pytest_asyncio
 from symphony.bdk.core.config.loader import BdkConfigLoader
 from symphony.bdk.core.symphony_bdk import SymphonyBdk
 from symphony.bdk.gen.pod_model.v3_room_attributes import V3RoomAttributes
-from tests.bdk.integration.helpers import (BOT_USER_ID, FEED_BOT_USERNAME,
-                                           MSG_BOT_USERNAME, STREAM_ID,
-                                           SYMPHONY_HOST, TEST_RSA_KEY,
-                                           TEST_USER_ID, MessageListener,
-                                           datafeed_bot_config,
-                                           get_test_messages,
-                                           messenger_bot_config, send_messages)
+from tests.bdk.integration.helpers import (
+    BOT_USER_ID,
+    FEED_BOT_USERNAME,
+    MSG_BOT_USERNAME,
+    STREAM_ID,
+    SYMPHONY_HOST,
+    TEST_RSA_KEY,
+    TEST_USER_ID,
+    MessageListener,
+    datafeed_bot_config,
+    get_test_messages,
+    messenger_bot_config,
+    send_messages,
+)
 
-pytestmark =[
+pytestmark = [
     pytest.mark.asyncio,
     pytest.mark.e2e,
- pytest.mark.skipif(
-    not all(
-        [
-            STREAM_ID,
-            MSG_BOT_USERNAME,
-            FEED_BOT_USERNAME,
-            SYMPHONY_HOST,
-            TEST_RSA_KEY,
-            TEST_USER_ID,
-            BOT_USER_ID,
-        ]
+    pytest.mark.skipif(
+        not all(
+            [
+                STREAM_ID,
+                MSG_BOT_USERNAME,
+                FEED_BOT_USERNAME,
+                SYMPHONY_HOST,
+                TEST_RSA_KEY,
+                TEST_USER_ID,
+                BOT_USER_ID,
+            ]
+        ),
+        reason="Required environment variables for integration tests are not set "
+        "(STREAM_ID, MSG_BOT_USERNAME, FEED_BOT_USERNAME, SYMPHONY_HOST, TEST_RSA_KEY, TEST_USER_ID, BOT_USER_ID)",
     ),
-    reason="Required environment variables for integration tests are not set "
-    "(STREAM_ID, MSG_BOT_USERNAME, FEED_BOT_USERNAME, SYMPHONY_HOST, TEST_RSA_KEY, TEST_USER_ID, BOT_USER_ID)",
-)
 ]
 NUMBER_OF_MESSAGES = 3
 

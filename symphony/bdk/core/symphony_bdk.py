@@ -1,5 +1,5 @@
-"""Module containing SymphonyBdk class which acts as en entry point for all BDK services.
-"""
+"""Module containing SymphonyBdk class which acts as en entry point for all BDK services."""
+
 import functools
 import logging
 
@@ -9,7 +9,7 @@ from symphony.bdk.core.auth.authenticator_factory import AuthenticatorFactory
 from symphony.bdk.core.auth.exception import AuthInitializationError
 from symphony.bdk.core.auth.ext_app_authenticator import ExtensionAppAuthenticator
 from symphony.bdk.core.client.api_client_factory import ApiClientFactory
-from symphony.bdk.core.config.exception import BotNotConfiguredError, BdkConfigError
+from symphony.bdk.core.config.exception import BdkConfigError, BotNotConfiguredError
 from symphony.bdk.core.extension import ExtensionService
 from symphony.bdk.core.service.application.application_service import ApplicationService
 from symphony.bdk.core.service.connection.connection_service import ConnectionService
@@ -55,6 +55,7 @@ def app_service(func):
     :return: the value returned by the decorated function with the passed arguments.
     :raise: BdkConfigError if the app is not configured.
     """
+
     @functools.wraps(func)
     def check_if_app_configured_and_call_function(*args, **kwds):
         symphony_bdk = args[0]
@@ -66,8 +67,7 @@ def app_service(func):
 
 
 class SymphonyBdk:
-    """BDK entry point
-    """
+    """BDK entry point"""
 
     async def __aenter__(self):
         return self
@@ -80,7 +80,9 @@ class SymphonyBdk:
         self._api_client_factory = ApiClientFactory(config)
         self._pod_client = self._api_client_factory.get_pod_client()
         self._agent_client = self._api_client_factory.get_agent_client()
-        self._authenticator_factory = AuthenticatorFactory(config, api_client_factory=self._api_client_factory)
+        self._authenticator_factory = AuthenticatorFactory(
+            config, api_client_factory=self._api_client_factory
+        )
 
         self._bot_session = None
         self._ext_app_authenticator = None
@@ -101,13 +103,17 @@ class SymphonyBdk:
         if self._config.bot.is_authentication_configured():
             self._initialize_bot_services()
         else:
-            logging.info("Bot (service account) credentials have not been configured."
-                         "You can however use services in OBO mode if app authentication is configured.")
+            logging.info(
+                "Bot (service account) credentials have not been configured."
+                "You can however use services in OBO mode if app authentication is configured."
+            )
 
     def _initialize_bot_services(self):
         bot_authenticator = self._authenticator_factory.get_bot_authenticator()
         self._bot_session = AuthSession(bot_authenticator)
-        self._service_factory = ServiceFactory(self._api_client_factory, self._bot_session, self._config)
+        self._service_factory = ServiceFactory(
+            self._api_client_factory, self._bot_session, self._config
+        )
         self._user_service = self._service_factory.get_user_service()
         self._message_service = self._service_factory.get_message_service()
         self._connection_service = self._service_factory.get_connection_service()
@@ -123,7 +129,9 @@ class SymphonyBdk:
         self._activity_registry = ActivityRegistry(self._session_service)
         self._datafeed_loop.subscribe(self._activity_registry)
         # initialises extension service and register decorated extensions
-        self._extension_service = ExtensionService(self._api_client_factory, self._bot_session, self._config)
+        self._extension_service = ExtensionService(
+            self._api_client_factory, self._bot_session, self._config
+        )
         bot_authenticator.agent_version_service = self._service_factory.get_agent_version_service()
 
     @bot_service
@@ -142,7 +150,9 @@ class SymphonyBdk:
         :return: a new instance of :class:`symphony.bdk.core.auth.ext_app_authenticator.ExtensionAppAuthenticator`
         """
         if self._ext_app_authenticator is None:
-            self._ext_app_authenticator = self._authenticator_factory.get_extension_app_authenticator()
+            self._ext_app_authenticator = (
+                self._authenticator_factory.get_extension_app_authenticator()
+            )
         return self._ext_app_authenticator
 
     @app_service
@@ -152,11 +162,16 @@ class SymphonyBdk:
         :return: The obo authentication session
         """
         if user_id is not None:
-            return self._authenticator_factory.get_obo_authenticator().authenticate_by_user_id(user_id)
+            return self._authenticator_factory.get_obo_authenticator().authenticate_by_user_id(
+                user_id
+            )
         if username is not None:
-            return self._authenticator_factory.get_obo_authenticator().authenticate_by_username(username)
-        raise AuthInitializationError("At least user_id or username should be given to OBO authenticate the "
-                                      "extension app")
+            return self._authenticator_factory.get_obo_authenticator().authenticate_by_username(
+                username
+            )
+        raise AuthInitializationError(
+            "At least user_id or username should be given to OBO authenticate the extension app"
+        )
 
     @app_service
     def obo_services(self, obo_session: OboAuthSession) -> OboServices:
@@ -272,6 +287,5 @@ class SymphonyBdk:
         return self._extension_service
 
     async def close_clients(self):
-        """Close all the existing api clients created by the api client factory.
-        """
+        """Close all the existing api clients created by the api client factory."""
         await self._api_client_factory.close_clients()

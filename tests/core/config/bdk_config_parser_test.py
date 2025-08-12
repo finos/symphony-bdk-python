@@ -2,7 +2,6 @@ import pytest
 
 from symphony.bdk.core.config.exception import BdkConfigError
 from symphony.bdk.core.config.loader import BdkConfigParser
-
 from tests.utils.resource_utils import get_config_resource_filepath
 
 

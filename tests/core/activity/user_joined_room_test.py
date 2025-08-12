@@ -1,11 +1,13 @@
 import pytest
-from symphony.bdk.gen.agent_model.v4_user import V4User
 
+from symphony.bdk.core.activity.user_joined_room import (
+    UserJoinedRoomActivity,
+    UserJoinedRoomContext,
+)
 from symphony.bdk.gen.agent_model.v4_initiator import V4Initiator
 from symphony.bdk.gen.agent_model.v4_stream import V4Stream
+from symphony.bdk.gen.agent_model.v4_user import V4User
 from symphony.bdk.gen.agent_model.v4_user_joined_room import V4UserJoinedRoom
-
-from symphony.bdk.core.activity.user_joined_room import UserJoinedRoomActivity, UserJoinedRoomContext
 
 
 @pytest.fixture(name="activity")
@@ -18,9 +20,10 @@ def fixture_activty():
 
 @pytest.fixture(name="context")
 def fixture_context():
-    return UserJoinedRoomContext(V4Initiator(),
-                                 V4UserJoinedRoom(stream=V4Stream(stream_id="12345678"),
-                                                  affected_user=V4User(user_id=0)))
+    return UserJoinedRoomContext(
+        V4Initiator(),
+        V4UserJoinedRoom(stream=V4Stream(stream_id="12345678"), affected_user=V4User(user_id=0)),
+    )
 
 
 def test_matcher(activity, context):

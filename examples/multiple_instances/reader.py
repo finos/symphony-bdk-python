@@ -1,6 +1,7 @@
 """A simple bot (named benchmark-reader), reading a datafeed and replying to a message with the same content.
 The goal is to run multiple instances of it, hence it adds a unique id and uses a random color in the reply.
 """
+
 import asyncio
 import logging.config
 import uuid
@@ -20,12 +21,11 @@ from symphony.bdk.gen.agent_model.v4_message_sent import V4MessageSent
 
 
 class EventListener(RealTimeEventListener):
-
     def __init__(self, messages: MessageService, hz_client: HazelcastClient):
         self._messages = messages
         self._client = hz_client
         self._id = str(uuid.uuid4())
-        self._color = hex(randrange(0xffffff + 1))[2:]  # substring to remove leading "0x"
+        self._color = hex(randrange(0xFFFFFF + 1))[2:]  # substring to remove leading "0x"
 
     async def on_message_sent(self, initiator: V4Initiator, event: V4MessageSent):
         lock = self._client.cp_subsystem.get_lock(event.message.stream.stream_id).blocking()
@@ -52,7 +52,7 @@ class EventListener(RealTimeEventListener):
         processed_events.put(message.message_id, message_number, 60)
 
     async def _send_reply_message(self, stream_id, text_message):
-        reply_message = f"<messageML><span style=\"color: #{self._color};\">{text_message} <b>{self._id}</b></span></messageML>"
+        reply_message = f'<messageML><span style="color: #{self._color};">{text_message} <b>{self._id}</b></span></messageML>'
         await self._messages.send_message(stream_id, reply_message)
 
 
@@ -64,7 +64,9 @@ async def run(hz_client):
         await datafeed.start()
 
 
-logging.config.fileConfig(Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False)
+logging.config.fileConfig(
+    Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False
+)
 
 if __name__ == "__main__":
     client = hazelcast.HazelcastClient()

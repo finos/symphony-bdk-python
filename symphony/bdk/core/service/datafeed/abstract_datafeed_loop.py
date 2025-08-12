@@ -1,5 +1,5 @@
-"""This module gathers all base classes related to the datafeed loop and real time events.
-"""
+"""This module gathers all base classes related to the datafeed loop and real time events."""
+
 import asyncio
 import logging
 from abc import ABC, abstractmethod
@@ -21,8 +21,8 @@ event_listener_context = ContextVar("event_listener_context", default="main-task
 
 
 class DatafeedVersion(Enum):
-    """Enum of all possible datafeed versions.
-    """
+    """Enum of all possible datafeed versions."""
+
     V1 = "v1"
     V2 = "v2"
 
@@ -36,6 +36,7 @@ class RealTimeEvent(Enum):
     First element in enum value corresponds to the listener method who should be called when given event is received.
     Second element in enum value corresponds to the field name of event in the received payload.
     """
+
     MESSAGESENT = ("on_message_sent", "message_sent")
     SHAREDPOST = ("on_shared_post", "shared_post")
     INSTANTMESSAGECREATED = ("on_instant_message_created", "instant_message_created")
@@ -46,7 +47,10 @@ class RealTimeEvent(Enum):
     USERREQUESTEDTOJOINROOM = ("on_user_requested_to_join_room", "user_requested_to_join_room")
     USERJOINEDROOM = ("on_user_joined_room", "user_joined_room")
     USERLEFTROOM = ("on_user_left_room", "user_left_room")
-    ROOMMEMBERPROMOTEDTOOWNER = ("on_room_member_promoted_to_owner", "room_member_promoted_to_owner")
+    ROOMMEMBERPROMOTEDTOOWNER = (
+        "on_room_member_promoted_to_owner",
+        "room_member_promoted_to_owner",
+    )
     ROOMMEMBERDEMOTEDFROMOWNER = ("on_room_demoted_from_owner", "room_member_demoted_from_owner")
     CONNECTIONREQUESTED = ("on_connection_requested", "connection_requested")
     CONNECTIONACCEPTED = ("on_connection_accepted", "connection_accepted")
@@ -66,8 +70,13 @@ class AbstractDatafeedLoop(ABC):
     event by the subscribed listeners.
     """
 
-    def __init__(self, datafeed_api: DatafeedApi, session_service: SessionService, auth_session: AuthSession,
-                 config: BdkConfig):
+    def __init__(
+        self,
+        datafeed_api: DatafeedApi,
+        session_service: SessionService,
+        auth_session: AuthSession,
+        config: BdkConfig,
+    ):
         """
 
         :param datafeed_api: DatafeedApi to request the service

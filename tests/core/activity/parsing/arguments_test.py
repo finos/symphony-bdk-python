@@ -1,15 +1,17 @@
 import pytest
 
 from symphony.bdk.core.activity.parsing.arguments import Arguments
-from symphony.bdk.core.activity.parsing.message_entities import Mention, Hashtag, Cashtag
+from symphony.bdk.core.activity.parsing.message_entities import Cashtag, Hashtag, Mention
 
 
 @pytest.fixture(name="arguments_dict")
 def fixture_arguments_dict():
-    return {"string_arg": "string_arg_value",
-            "mention_arg": Mention("@Jane Dow", 12345),
-            "hashtag_arg": Hashtag("#my_hashtag", "my_hashtag"),
-            "cashtag_arg": Cashtag("$my_cashtag", "my_cashtag")}
+    return {
+        "string_arg": "string_arg_value",
+        "mention_arg": Mention("@Jane Dow", 12345),
+        "hashtag_arg": Hashtag("#my_hashtag", "my_hashtag"),
+        "cashtag_arg": Cashtag("$my_cashtag", "my_cashtag"),
+    }
 
 
 @pytest.fixture(name="arguments")
@@ -18,7 +20,9 @@ def fixture_arguments(arguments_dict):
 
 
 def test_get_argument_names(arguments):
-    assert ["string_arg", "mention_arg", "hashtag_arg", "cashtag_arg"] == list(arguments.get_argument_names())
+    assert ["string_arg", "mention_arg", "hashtag_arg", "cashtag_arg"] == list(
+        arguments.get_argument_names()
+    )
 
 
 def test_get_argument(arguments):

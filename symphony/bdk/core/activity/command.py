@@ -14,11 +14,15 @@ logger = logging.getLogger(__name__)
 
 
 class CommandContext(ActivityContext[V4MessageSent]):
-    """Default implementation of the :py:class:`ActivityContext` handled by the :py:class:`CommandActivity`.
-    """
+    """Default implementation of the :py:class:`ActivityContext` handled by the :py:class:`CommandActivity`."""
 
-    def __init__(self, initiator: V4Initiator, source_event: V4MessageSent, bot_display_name: str,
-                 bot_user_id: int = None):
+    def __init__(
+        self,
+        initiator: V4Initiator,
+        source_event: V4MessageSent,
+        bot_display_name: str,
+        bot_user_id: int = None,
+    ):
         self._message_id = source_event.message.message_id
         self._stream_id = source_event.message.stream.stream_id
         self._bot_display_name = bot_display_name
@@ -56,8 +60,7 @@ class CommandContext(ActivityContext[V4MessageSent]):
 
 
 class CommandActivity(AbstractActivity[CommandContext]):
-    """A command activity corresponds to any message sent in a chat where the bot is part of.
-    """
+    """A command activity corresponds to any message sent in a chat where the bot is part of."""
 
     def __init__(self):
         self._bot_user_id = None
@@ -103,15 +106,20 @@ class SlashCommandActivity(CommandActivity):
 
         if self._requires_mention_bot:
             # The user id will be loaded in runtime in a lazy way
-            self._command_pattern.prepend_token(MatchingUserIdMentionToken(lambda: self.bot_user_id))
+            self._command_pattern.prepend_token(
+                MatchingUserIdMentionToken(lambda: self.bot_user_id)
+            )
 
     @property
     def name(self) -> str:
         return self._name
 
     def build_command_description(self) -> str:
-        return self._description + " (mention required)" if self._requires_mention_bot \
+        return (
+            self._description + " (mention required)"
+            if self._requires_mention_bot
             else self._description + " (mention not required)"
+        )
 
     def matches(self, context: CommandContext) -> bool:
         match_result = self._command_pattern.get_match_result(context.source_event.message)

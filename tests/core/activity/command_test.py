@@ -44,12 +44,16 @@ def create_message_sent(message):
 
 def create_message_sent_with_data(content, data="{}"):
     return V4MessageSent(
-        message=V4Message(attachments=[],
-                          message_id=MESSAGE_ID,
-                          message="<div data-format=\"PresentationML\" data-version=\"2.0\" class=\"wysiwyg\"><p>"
-                                  + content + "</p></div>",
-                          stream=V4Stream(stream_id=STREAM_ID),
-                          data=data))
+        message=V4Message(
+            attachments=[],
+            message_id=MESSAGE_ID,
+            message='<div data-format="PresentationML" data-version="2.0" class="wysiwyg"><p>'
+            + content
+            + "</p></div>",
+            stream=V4Stream(stream_id=STREAM_ID),
+            data=data,
+        )
+    )
 
 
 def test_matcher(activity, message_sent):
@@ -103,26 +107,32 @@ def test_slash_command_matches_with_bot_mention():
 
     context = create_command_context(
         create_message_sent_with_data(
-            content=f"<div><p><span class=\"entity\" data-entity-id=\"0\">"
-                    f"@{BOT_NAME}</span>{command}</p></div>",
-            data=f"{{\"0\":{{\"id\":[{{\"type\":\"com.symphony.user.userId\",\"value\":\"{BOT_USER_ID}\"}}],"
-                    "\"type\":\"com.symphony.user.mention\"}}"))
+            content=f'<div><p><span class="entity" data-entity-id="0">'
+            f"@{BOT_NAME}</span>{command}</p></div>",
+            data=f'{{"0":{{"id":[{{"type":"com.symphony.user.userId","value":"{BOT_USER_ID}"}}],'
+            '"type":"com.symphony.user.mention"}}',
+        )
+    )
     assert slash_command.matches(context)
 
     context = create_command_context(
         create_message_sent_with_data(
-            content=f"<div><p><span class=\"entity\" data-entity-id=\"0\">"
-                    f"@{BOT_NAME}</span>{other_command}</p></div>",
-            data=f"{{\"0\":{{\"id\":[{{\"type\":\"com.symphony.user.userId\",\"value\":\"{BOT_USER_ID}\"}}],"
-                    "\"type\":\"com.symphony.user.mention\"}}"))
+            content=f'<div><p><span class="entity" data-entity-id="0">'
+            f"@{BOT_NAME}</span>{other_command}</p></div>",
+            data=f'{{"0":{{"id":[{{"type":"com.symphony.user.userId","value":"{BOT_USER_ID}"}}],'
+            '"type":"com.symphony.user.mention"}}',
+        )
+    )
     assert not slash_command.matches(context)
 
     context = create_command_context(
         create_message_sent_with_data(
-            content=f"<div><p><span class=\"entity\" data-entity-id=\"0\">"
-                    f"@other_bot_name</span>{other_command}</p></div>",
-            data=f"{{\"0\":{{\"id\":[{{\"type\":\"com.symphony.user.userId\",\"value\":\"{other_bot_user_id}\"}}],"
-                    "\"type\":\"com.symphony.user.mention\"}}"))
+            content=f'<div><p><span class="entity" data-entity-id="0">'
+            f"@other_bot_name</span>{other_command}</p></div>",
+            data=f'{{"0":{{"id":[{{"type":"com.symphony.user.userId","value":"{other_bot_user_id}"}}],'
+            '"type":"com.symphony.user.mention"}}',
+        )
+    )
     assert not slash_command.matches(context)
 
 
@@ -132,23 +142,23 @@ def test_slash_command_matches_without_bot_mention():
     slash_command = SlashCommandActivity(command, False, AsyncMock())
 
     context = create_command_context(
-        create_message_sent_with_data(
-            content=f"<div><p>{command}</p></div>",
-            data="{}"))
+        create_message_sent_with_data(content=f"<div><p>{command}</p></div>", data="{}")
+    )
     assert slash_command.matches(context)
 
     context = create_command_context(
         create_message_sent_with_data(
-            content=f"<div><p><span class=\"entity\" data-entity-id=\"0\">"
-                    f"@{BOT_NAME}</span>{command}</p></div>",
-            data=f"{{\"0\":{{\"id\":[{{\"type\":\"com.symphony.user.userId\",\"value\":\"{BOT_USER_ID}\"}}],"
-                    "\"type\":\"com.symphony.user.mention\"}}"))
+            content=f'<div><p><span class="entity" data-entity-id="0">'
+            f"@{BOT_NAME}</span>{command}</p></div>",
+            data=f'{{"0":{{"id":[{{"type":"com.symphony.user.userId","value":"{BOT_USER_ID}"}}],'
+            '"type":"com.symphony.user.mention"}}',
+        )
+    )
     assert not slash_command.matches(context)
 
     context = create_command_context(
-        create_message_sent_with_data(
-            content=f"<div><p>{other_command}</p></div>",
-            data="{}"))
+        create_message_sent_with_data(content=f"<div><p>{other_command}</p></div>", data="{}")
+    )
     assert not slash_command.matches(context)
 
 

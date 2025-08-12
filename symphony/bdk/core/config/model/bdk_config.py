@@ -1,25 +1,29 @@
 from symphony.bdk.core.config.model.bdk_app_config import BdkAppConfig
 from symphony.bdk.core.config.model.bdk_bot_config import BdkBotConfig
 from symphony.bdk.core.config.model.bdk_client_config import BdkClientConfig
+from symphony.bdk.core.config.model.bdk_datafeed_config import BdkDatafeedConfig
+from symphony.bdk.core.config.model.bdk_datahose_config import BdkDatahoseConfig
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.core.config.model.bdk_server_config import BdkServerConfig
 from symphony.bdk.core.config.model.bdk_ssl_config import BdkSslConfig
-from symphony.bdk.core.config.model.bdk_datafeed_config import BdkDatafeedConfig
-from symphony.bdk.core.config.model.bdk_datahose_config import BdkDatahoseConfig
 
 
 class BdkConfig(BdkServerConfig):
-    """Class containing the whole BDK configuration.
-    """
+    """Class containing the whole BDK configuration."""
 
     def __init__(self, **config):
         """
 
         :param config: the dict containing the server configuration parameters.
         """
-        super().__init__(scheme=config.get("scheme"), host=config.get("host"), port=config.get("port"),
-                         context=config.get("context"), proxy=config.get("proxy"),
-                         default_headers=config.get("defaultHeaders"))
+        super().__init__(
+            scheme=config.get("scheme"),
+            host=config.get("host"),
+            port=config.get("port"),
+            context=config.get("context"),
+            proxy=config.get("proxy"),
+            default_headers=config.get("defaultHeaders"),
+        )
         self.agent = BdkClientConfig(self, config.get("agent"))
         self.pod = BdkClientConfig(self, config.get("pod"))
         self.key_manager = BdkClientConfig(self, config.get("keyManager"))

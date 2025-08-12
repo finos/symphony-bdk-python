@@ -1,4 +1,4 @@
-from symphony.bdk.core.activity.parsing.message_entities import Mention, Hashtag, Cashtag
+from symphony.bdk.core.activity.parsing.message_entities import Cashtag, Hashtag, Mention
 
 
 class Arguments:

@@ -15,9 +15,12 @@ def fixture_activity():
 
 @pytest.fixture(name="context")
 def fixture_context():
-    return FormReplyContext(V4Initiator(), V4SymphonyElementsAction(form_id="test_form",
-                                                                    form_message_id="message_id",
-                                                                    form_values={"key": "value"}))
+    return FormReplyContext(
+        V4Initiator(),
+        V4SymphonyElementsAction(
+            form_id="test_form", form_message_id="message_id", form_values={"key": "value"}
+        ),
+    )
 
 
 def test_matcher(activity, context):

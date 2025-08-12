@@ -1,5 +1,4 @@
 from symphony.bdk.core.retry import AsyncRetrying
-
 from symphony.bdk.gen import ApiException
 
 

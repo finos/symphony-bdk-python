@@ -1,6 +1,6 @@
 import logging
 import time
-from abc import abstractmethod, ABC
+from abc import ABC, abstractmethod
 
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
@@ -15,11 +15,15 @@ logger = logging.getLogger(__name__)
 
 
 class AbstractAckIdEventLoop(AbstractDatafeedLoop, ABC):
-    """Base class for implementing datafeed types that relies on an ackId.
-    """
+    """Base class for implementing datafeed types that relies on an ackId."""
 
-    def __init__(self, datafeed_api: DatafeedApi, session_service: SessionService, auth_session: AuthSession,
-                 config: BdkConfig):
+    def __init__(
+        self,
+        datafeed_api: DatafeedApi,
+        session_service: SessionService,
+        auth_session: AuthSession,
+        config: BdkConfig,
+    ):
         """
 
         :param datafeed_api: DatafeedApi to request the service
@@ -45,10 +49,12 @@ class AbstractAckIdEventLoop(AbstractDatafeedLoop, ABC):
         elapsed = time.time() - start
 
         if elapsed > EVENT_PROCESSING_MAX_DURATION_SECONDS:
-            logging.warning("Events processing took longer than %s seconds, "
-                            "this might lead to events being re-queued in datafeed and re-dispatched. "
-                            "You might want to consider processing the event in a separated asyncio task if needed.",
-                            EVENT_PROCESSING_MAX_DURATION_SECONDS)
+            logging.warning(
+                "Events processing took longer than %s seconds, "
+                "this might lead to events being re-queued in datafeed and re-dispatched. "
+                "You might want to consider processing the event in a separated asyncio task if needed.",
+                EVENT_PROCESSING_MAX_DURATION_SECONDS,
+            )
 
         return await self._are_tasks_successful(done_tasks)
 
@@ -58,13 +64,17 @@ class AbstractAckIdEventLoop(AbstractDatafeedLoop, ABC):
             exception = task.exception()
             if exception:
                 if isinstance(exception, EventError):
-                    logger.warning("Failed to process events inside %s, "
-                                   "will not update ack id, events will be re-queued",
-                                   task.get_name(),
-                                   exc_info=exception)
+                    logger.warning(
+                        "Failed to process events inside %s, "
+                        "will not update ack id, events will be re-queued",
+                        task.get_name(),
+                        exc_info=exception,
+                    )
                     success = False
                 else:
-                    logging.debug("Exception occurred inside %s", task.get_name(), exc_info=exception)
+                    logging.debug(
+                        "Exception occurred inside %s", task.get_name(), exc_info=exception
+                    )
         return success
 
     @abstractmethod

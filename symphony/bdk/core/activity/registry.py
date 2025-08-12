@@ -1,16 +1,18 @@
 import logging
 
-from symphony.bdk.gen.agent_model.v4_user_joined_room import V4UserJoinedRoom
-
 from symphony.bdk.core.activity.api import AbstractActivity
 from symphony.bdk.core.activity.command import CommandActivity, CommandContext, SlashCommandActivity
-from symphony.bdk.core.activity.form import FormReplyContext, FormReplyActivity
-from symphony.bdk.core.activity.user_joined_room import UserJoinedRoomContext, UserJoinedRoomActivity
+from symphony.bdk.core.activity.form import FormReplyActivity, FormReplyContext
+from symphony.bdk.core.activity.user_joined_room import (
+    UserJoinedRoomActivity,
+    UserJoinedRoomContext,
+)
 from symphony.bdk.core.service.datafeed.real_time_event_listener import RealTimeEventListener
 from symphony.bdk.core.service.session.session_service import SessionService
 from symphony.bdk.gen.agent_model.v4_initiator import V4Initiator
 from symphony.bdk.gen.agent_model.v4_message_sent import V4MessageSent
 from symphony.bdk.gen.agent_model.v4_symphony_elements_action import V4SymphonyElementsAction
+from symphony.bdk.gen.agent_model.v4_user_joined_room import V4UserJoinedRoom
 
 logger = logging.getLogger(__name__)
 
@@ -22,6 +24,7 @@ def _initialize_display_name(func):
     :param func: the function to be decorated
     :return: the decorated function
     """
+
     async def decorator(*args, **kwargs):
         registry = args[0]
         await registry.fetch_bot_info()
@@ -59,7 +62,9 @@ class ActivityRegistry(RealTimeEventListener):
         for act in self._activity_list:
             if act == activity:
                 self._activity_list.remove(act)
-                logger.debug("Activity '%s' has been removed/unsubscribed in order to be replaced", act)
+                logger.debug(
+                    "Activity '%s' has been removed/unsubscribed in order to be replaced", act
+                )
 
     def slash(self, command: str, mention_bot: bool = True, description: str = ""):
         """Decorator around a listener callback coroutine which takes a
@@ -72,8 +77,11 @@ class ActivityRegistry(RealTimeEventListener):
         :param description: command description
         :return: None
         """
+
         def decorator(func):
-            logger.debug("Registering slash command with command=%s, mention_bot=%s", command, mention_bot)
+            logger.debug(
+                "Registering slash command with command=%s, mention_bot=%s", command, mention_bot
+            )
             self.register(SlashCommandActivity(command, mention_bot, func, description))
             return func
 
@@ -89,7 +97,9 @@ class ActivityRegistry(RealTimeEventListener):
                     await act.on_activity(context)
 
     @_initialize_display_name
-    async def on_symphony_elements_action(self, initiator: V4Initiator, event: V4SymphonyElementsAction):
+    async def on_symphony_elements_action(
+        self, initiator: V4Initiator, event: V4SymphonyElementsAction
+    ):
         context = FormReplyContext(initiator, event)
         for act in self._activity_list:
             if isinstance(act, FormReplyActivity):

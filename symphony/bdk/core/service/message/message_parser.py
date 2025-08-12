@@ -2,14 +2,14 @@
 extracting entities like Mentions, Hashtags, Cashtags, Emojis and extracting text content from presentationML
 contained in the message.
 """
-import json
-import html
 
+import html
+import json
 from enum import Enum
 from json import JSONDecodeError
 from typing import Dict
 
-from defusedxml.ElementTree import fromstring, tostring, ParseError
+from defusedxml.ElementTree import ParseError, fromstring, tostring
 
 from symphony.bdk.core.service.exception import MessageParserError
 from symphony.bdk.gen.agent_model.v4_message import V4Message
@@ -25,11 +25,13 @@ def get_text_content_from_message(message: V4Message) -> str:
         escaped_text_content = tostring(fromstring(message.message), method="text").decode().strip()
         return html.unescape(escaped_text_content)
     except ParseError as exc:
-        raise MessageParserError("Unable to parse the PresentationML, it is not in the correct format.") from exc
+        raise MessageParserError(
+            "Unable to parse the PresentationML, it is not in the correct format."
+        ) from exc
 
 
 def get_mentions(message: V4Message) -> [int]:
-    """ Parse data inside an incoming message and returns a list containing the user ids corresponding
+    """Parse data inside an incoming message and returns a list containing the user ids corresponding
     to the users mentioned
 
     :param message: incoming V4 message to be parsed
@@ -40,7 +42,7 @@ def get_mentions(message: V4Message) -> [int]:
 
 
 def get_hashtags(message: V4Message) -> [str]:
-    """ Parse data inside an incoming message and returns a list containing the text of the hashtags found
+    """Parse data inside an incoming message and returns a list containing the text of the hashtags found
 
     :param message: message incoming V4 message to be parsed
     :return: list of hashtags contained in the message
@@ -49,7 +51,7 @@ def get_hashtags(message: V4Message) -> [str]:
 
 
 def get_cashtags(message: V4Message) -> [str]:
-    """ Parse data inside an incoming message and returns a list containing the text of the cashtags found
+    """Parse data inside an incoming message and returns a list containing the text of the cashtags found
 
     :param message: message incoming V4 message to be parsed
     :return: list of cashtags contained in the message
@@ -58,7 +60,7 @@ def get_cashtags(message: V4Message) -> [str]:
 
 
 def get_emojis(message: V4Message) -> Dict[str, str]:
-    """ Parse data inside an incoming message and returns a map containing the list of emojis found.
+    """Parse data inside an incoming message and returns a map containing the list of emojis found.
     Key of the map are the annotation used to identify the emoji and the values are the their unicode.
 
     :param message: message incoming V4 message to be parsed

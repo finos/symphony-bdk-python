@@ -19,13 +19,14 @@ async def run():
 
 
 class RealTimeEventListenerImpl(RealTimeEventListener):
-
     async def on_message_sent(self, initiator: V4Initiator, event: V4MessageSent):
         # We do not recommend logging full events in production as it could expose sensitive data
         logging.debug("Received event: %s", event)
 
 
-logging.config.fileConfig(Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False)
+logging.config.fileConfig(
+    Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False
+)
 
 
 try:

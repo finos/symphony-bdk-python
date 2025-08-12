@@ -1,4 +1,4 @@
-from unittest.mock import MagicMock, AsyncMock
+from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
@@ -36,17 +36,15 @@ def fixture_signal_service(signals_api, auth_session):
 @pytest.mark.asyncio
 async def test_list_signals(signals_api, signal_service):
     signals_api.v1_signals_list_get = AsyncMock()
-    signals_api.v1_signals_list_get.return_value = get_deserialized_object_from_resource(SignalList,
-                                                                                         "signal/list_signals.json")
+    signals_api.v1_signals_list_get.return_value = get_deserialized_object_from_resource(
+        SignalList, "signal/list_signals.json"
+    )
 
     signals = await signal_service.list_signals()
     signal_list = signals.value
 
     signals_api.v1_signals_list_get.assert_called_with(
-        skip=0,
-        limit=50,
-        session_token="session_token",
-        key_manager_token="km_token"
+        skip=0, limit=50, session_token="session_token", key_manager_token="km_token"
     )
 
     assert len(signal_list) == 2
@@ -56,17 +54,15 @@ async def test_list_signals(signals_api, signal_service):
 @pytest.mark.asyncio
 async def test_list_all_signals(signals_api, signal_service):
     signals_api.v1_signals_list_get = AsyncMock()
-    signals_api.v1_signals_list_get.return_value = get_deserialized_object_from_resource(SignalList,
-                                                                                         "signal/list_signals.json")
+    signals_api.v1_signals_list_get.return_value = get_deserialized_object_from_resource(
+        SignalList, "signal/list_signals.json"
+    )
 
     signal_list_gen = await signal_service.list_all_signals()
     signal_list = [s async for s in signal_list_gen]
 
     signals_api.v1_signals_list_get.assert_called_with(
-        skip=0,
-        limit=50,
-        session_token="session_token",
-        key_manager_token="km_token"
+        skip=0, limit=50, session_token="session_token", key_manager_token="km_token"
     )
 
     assert len(signal_list) == 2
@@ -76,17 +72,15 @@ async def test_list_all_signals(signals_api, signal_service):
 @pytest.mark.asyncio
 async def test_list_signals_with_skip_and_limit(signals_api, signal_service):
     signals_api.v1_signals_list_get = AsyncMock()
-    signals_api.v1_signals_list_get.return_value = \
-        get_deserialized_object_from_resource(SignalList, "signal/list_signals.json")
+    signals_api.v1_signals_list_get.return_value = get_deserialized_object_from_resource(
+        SignalList, "signal/list_signals.json"
+    )
 
     signal_list = await signal_service.list_signals(3, 30)
     signal_list = signal_list.value
 
     signals_api.v1_signals_list_get.assert_called_with(
-        skip=3,
-        limit=30,
-        session_token="session_token",
-        key_manager_token="km_token"
+        skip=3, limit=30, session_token="session_token", key_manager_token="km_token"
     )
 
     assert len(signal_list) == 2
@@ -96,15 +90,14 @@ async def test_list_signals_with_skip_and_limit(signals_api, signal_service):
 @pytest.mark.asyncio
 async def test_get_signal(signals_api, signal_service):
     signals_api.v1_signals_id_get_get = AsyncMock()
-    signals_api.v1_signals_id_get_get.return_value = \
-        get_deserialized_object_from_resource(Signal, "signal/create_signal.json")
+    signals_api.v1_signals_id_get_get.return_value = get_deserialized_object_from_resource(
+        Signal, "signal/create_signal.json"
+    )
 
     signal = await signal_service.get_signal("signal_id")
 
     signals_api.v1_signals_id_get_get.assert_called_with(
-        id="signal_id",
-        session_token="session_token",
-        key_manager_token="km_token"
+        id="signal_id", session_token="session_token", key_manager_token="km_token"
     )
 
     assert signal.id == "signal_id"
@@ -115,15 +108,14 @@ async def test_get_signal(signals_api, signal_service):
 @pytest.mark.asyncio
 async def test_create_signal(signals_api, signal_service):
     signals_api.v1_signals_create_post = AsyncMock()
-    signals_api.v1_signals_create_post.return_value = \
-        get_deserialized_object_from_resource(Signal, "signal/create_signal.json")
+    signals_api.v1_signals_create_post.return_value = get_deserialized_object_from_resource(
+        Signal, "signal/create_signal.json"
+    )
 
     signal = await signal_service.create_signal(BaseSignal())
 
     signals_api.v1_signals_create_post.assert_called_with(
-        signal=BaseSignal(),
-        session_token="session_token",
-        key_manager_token="km_token"
+        signal=BaseSignal(), session_token="session_token", key_manager_token="km_token"
     )
     assert signal.id == "signal_id"
     assert signal.name == "hash and cash"
@@ -133,8 +125,9 @@ async def test_create_signal(signals_api, signal_service):
 @pytest.mark.asyncio
 async def test_update_signal(signals_api, signal_service):
     signals_api.v1_signals_id_update_post = AsyncMock()
-    signals_api.v1_signals_id_update_post.return_value = \
-        get_deserialized_object_from_resource(Signal, "signal/update_signal.json")
+    signals_api.v1_signals_id_update_post.return_value = get_deserialized_object_from_resource(
+        Signal, "signal/update_signal.json"
+    )
 
     signal = await signal_service.update_signal("signal_id", BaseSignal())
 
@@ -142,7 +135,7 @@ async def test_update_signal(signals_api, signal_service):
         id="signal_id",
         signal=BaseSignal(),
         session_token="session_token",
-        key_manager_token="km_token"
+        key_manager_token="km_token",
     )
 
     assert signal.id == "signal_id"
@@ -156,28 +149,28 @@ async def test_delete_signal(signals_api, signal_service):
     await signal_service.delete_signal("signal_id")
 
     signals_api.v1_signals_id_delete_post.assert_called_with(
-        id="signal_id",
-        session_token="session_token",
-        key_manager_token="km_token"
+        id="signal_id", session_token="session_token", key_manager_token="km_token"
     )
 
 
 @pytest.mark.asyncio
 async def test_subscribe_users_to_signal(signals_api, signal_service):
     signals_api.v1_signals_id_subscribe_post = AsyncMock()
-    signals_api.v1_signals_id_subscribe_post.return_value = \
-        get_deserialized_object_from_resource(ChannelSubscriptionResponse, "signal/subscribe_signal.json")
+    signals_api.v1_signals_id_subscribe_post.return_value = get_deserialized_object_from_resource(
+        ChannelSubscriptionResponse, "signal/subscribe_signal.json"
+    )
     user_ids = [123, 465, 789]
 
     channel_subscription_response = await signal_service.subscribe_users_to_signal(
-        "signal_id", True, user_ids)
+        "signal_id", True, user_ids
+    )
 
     signals_api.v1_signals_id_subscribe_post.assert_called_with(
         id="signal_id",
         pushed=True,
         users=user_ids,
         session_token="session_token",
-        key_manager_token="km_token"
+        key_manager_token="km_token",
     )
 
     assert channel_subscription_response.requested_subscription == 3
@@ -187,18 +180,17 @@ async def test_subscribe_users_to_signal(signals_api, signal_service):
 @pytest.mark.asyncio
 async def test_unsubscribe_users_to_signal(signals_api, signal_service):
     signals_api.v1_signals_id_unsubscribe_post = AsyncMock()
-    signals_api.v1_signals_id_unsubscribe_post.return_value = \
-        get_deserialized_object_from_resource(ChannelSubscriptionResponse, "signal/subscribe_signal.json")
+    signals_api.v1_signals_id_unsubscribe_post.return_value = get_deserialized_object_from_resource(
+        ChannelSubscriptionResponse, "signal/subscribe_signal.json"
+    )
     user_ids = [123, 465, 789]
 
     channel_subscription_response = await signal_service.unsubscribe_users_to_signal(
-        "signal_id", user_ids)
+        "signal_id", user_ids
+    )
 
     signals_api.v1_signals_id_unsubscribe_post.assert_called_with(
-        id="signal_id",
-        users=user_ids,
-        session_token="session_token",
-        key_manager_token="km_token"
+        id="signal_id", users=user_ids, session_token="session_token", key_manager_token="km_token"
     )
 
     assert channel_subscription_response.requested_subscription == 3
@@ -208,8 +200,9 @@ async def test_unsubscribe_users_to_signal(signals_api, signal_service):
 @pytest.mark.asyncio
 async def test_list_subscribers(signals_api, signal_service):
     signals_api.v1_signals_id_subscribers_get = AsyncMock()
-    signals_api.v1_signals_id_subscribers_get.return_value = \
-        get_deserialized_object_from_resource(ChannelSubscriberResponse, "signal/list_subscribers.json")
+    signals_api.v1_signals_id_subscribers_get.return_value = get_deserialized_object_from_resource(
+        ChannelSubscriberResponse, "signal/list_subscribers.json"
+    )
 
     channel_subscribers = await signal_service.list_subscribers("signal_id")
 
@@ -218,7 +211,7 @@ async def test_list_subscribers(signals_api, signal_service):
         skip=0,
         limit=50,
         session_token="session_token",
-        key_manager_token="km_token"
+        key_manager_token="km_token",
     )
 
     assert channel_subscribers.total == 150
@@ -228,8 +221,9 @@ async def test_list_subscribers(signals_api, signal_service):
 @pytest.mark.asyncio
 async def test_list_subscribers_with_skip_and_limit(signals_api, signal_service):
     signals_api.v1_signals_id_subscribers_get = AsyncMock()
-    signals_api.v1_signals_id_subscribers_get.return_value = \
-        get_deserialized_object_from_resource(ChannelSubscriberResponse, "signal/list_subscribers.json")
+    signals_api.v1_signals_id_subscribers_get.return_value = get_deserialized_object_from_resource(
+        ChannelSubscriberResponse, "signal/list_subscribers.json"
+    )
 
     channel_subscribers = await signal_service.list_subscribers("signal_id", 1, 10)
 
@@ -238,7 +232,7 @@ async def test_list_subscribers_with_skip_and_limit(signals_api, signal_service)
         skip=1,
         limit=10,
         session_token="session_token",
-        key_manager_token="km_token"
+        key_manager_token="km_token",
     )
 
     assert channel_subscribers.total == 150
@@ -248,8 +242,9 @@ async def test_list_subscribers_with_skip_and_limit(signals_api, signal_service)
 @pytest.mark.asyncio
 async def test_list_all_subscribers(signals_api, signal_service):
     signals_api.v1_signals_id_subscribers_get = AsyncMock()
-    signals_api.v1_signals_id_subscribers_get.return_value = \
-        get_deserialized_object_from_resource(ChannelSubscriberResponse, "signal/list_subscribers.json")
+    signals_api.v1_signals_id_subscribers_get.return_value = get_deserialized_object_from_resource(
+        ChannelSubscriberResponse, "signal/list_subscribers.json"
+    )
 
     channel_subscribers_gen = await signal_service.list_all_subscribers("signal_id", chunk_size=10)
     subscribers = [s async for s in channel_subscribers_gen]
@@ -259,7 +254,7 @@ async def test_list_all_subscribers(signals_api, signal_service):
         skip=0,
         limit=10,
         session_token="session_token",
-        key_manager_token="km_token"
+        key_manager_token="km_token",
     )
 
     assert len(subscribers) == 3

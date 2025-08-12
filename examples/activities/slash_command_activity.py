@@ -22,7 +22,9 @@ async def run():
         await bdk.datafeed().start()
 
 
-logging.config.fileConfig(Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False)
+logging.config.fileConfig(
+    Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False
+)
 
 try:
     logging.info("Running activity example...")

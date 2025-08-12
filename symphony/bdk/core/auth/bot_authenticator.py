@@ -1,7 +1,7 @@
-"""Module containing BotAuthenticator classes.
-"""
-from typing import Optional, Tuple
+"""Module containing BotAuthenticator classes."""
+
 from abc import ABC, abstractmethod
+from typing import Optional, Tuple
 
 from symphony.bdk.core.auth.jwt_helper import create_signed_jwt, generate_expiration_time
 from symphony.bdk.core.config.model.bdk_bot_config import BdkBotConfig
@@ -17,11 +17,14 @@ from symphony.bdk.gen.login_model.token import Token
 
 
 class BotAuthenticator(ABC):
-    """Bot authentication service.
-    """
+    """Bot authentication service."""
 
-    def __init__(self, session_auth_client: ApiClient, key_manager_auth_client: ApiClient,
-                 retry_config: BdkRetryConfig):
+    def __init__(
+        self,
+        session_auth_client: ApiClient,
+        key_manager_auth_client: ApiClient,
+        retry_config: BdkRetryConfig,
+    ):
         self._session_auth_client = session_auth_client
         self._key_manager_auth_client = key_manager_auth_client
         self._retry_config = retry_config
@@ -40,9 +43,7 @@ class BotAuthenticator(ABC):
         :return: retrieved token object + expiration date.
         """
         expire_at = generate_expiration_time()
-        token = await self._authenticate_and_get_token_object(
-            self._session_auth_client, expire_at
-        )
+        token = await self._authenticate_and_get_token_object(self._session_auth_client, expire_at)
         return token, expire_at
 
     async def retrieve_key_manager_token(self) -> str:
@@ -70,13 +71,16 @@ class BotAuthenticator(ABC):
         self._agent_version_service = agent_version_service
 
 
-
 class BotAuthenticatorRsa(BotAuthenticator):
-    """Bot authenticator RSA implementation.
-    """
+    """Bot authenticator RSA implementation."""
 
-    def __init__(self, bot_config: BdkBotConfig, login_api_client: ApiClient, relay_api_client: ApiClient,
-                 retry_config: BdkRetryConfig):
+    def __init__(
+        self,
+        bot_config: BdkBotConfig,
+        login_api_client: ApiClient,
+        relay_api_client: ApiClient,
+        retry_config: BdkRetryConfig,
+    ):
         self._bot_config = bot_config
         super().__init__(login_api_client, relay_api_client, retry_config)
 
@@ -92,16 +96,13 @@ class BotAuthenticatorRsa(BotAuthenticator):
         """Calls pubkey auth endpoint with signed jwt token.
         :return: token object which might contain a few tokens inside
         """
-        jwt = create_signed_jwt(
-            self._bot_config.private_key, self._bot_config.username, expire_at
-        )
+        jwt = create_signed_jwt(self._bot_config.private_key, self._bot_config.username, expire_at)
         req = AuthenticateRequest(token=jwt)
         return await AuthenticationApi(api_client).pubkey_authenticate_post(req)
 
 
 class BotAuthenticatorCert(BotAuthenticator):
-    """Bot authenticator certificate implementation.
-    """
+    """Bot authenticator certificate implementation."""
 
     @retry(retry=authentication_retry)
     async def _authenticate_and_get_token(self, api_client: ApiClient) -> str:

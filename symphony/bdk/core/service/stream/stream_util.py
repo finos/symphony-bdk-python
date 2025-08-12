@@ -1,6 +1,7 @@
 """This module contains a set of util functions providing stream id conversion.
 It is possible to make conversion from the original stream id to the URLSafe encoded stream id and viceversa.
 """
+
 import base64
 
 

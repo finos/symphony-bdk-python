@@ -32,21 +32,27 @@ class ReplyFormReplyActivity(FormReplyActivity):
         self.messages = messages
 
     def matches(self, context: FormReplyContext) -> bool:
-        return context.form_id == "gif-category-form" \
-               and context.get_form_value("action") == "submit" \
-               and context.get_form_value("category")
+        return (
+            context.form_id == "gif-category-form"
+            and context.get_form_value("action") == "submit"
+            and context.get_form_value("category")
+        )
 
     async def on_activity(self, context: FormReplyContext):
         category = context.get_form_value("category")
-        await self.messages.send_message(context.source_event.stream.stream_id,
-                                         "<messageML> You just submitted this category: " + category + "</messageML>")
+        await self.messages.send_message(
+            context.source_event.stream.stream_id,
+            "<messageML> You just submitted this category: " + category + "</messageML>",
+        )
 
 
 def load_gif_elements_form():
     return (Path(__file__).parent.parent / "resources/gif.mml.xml").read_text(encoding="utf-8")
 
 
-logging.config.fileConfig(Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False)
+logging.config.fileConfig(
+    Path(__file__).parent.parent / "logging.conf", disable_existing_loggers=False
+)
 
 try:
     logging.info("Running activity example...")

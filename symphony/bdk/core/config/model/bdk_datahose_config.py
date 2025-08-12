@@ -6,8 +6,7 @@ RETRY = "retry"
 
 
 class BdkDatahoseConfig:
-    """Class holding datahose specific configuration.
-    """
+    """Class holding datahose specific configuration."""
 
     def __init__(self, config):
         """

@@ -1,4 +1,5 @@
-from unittest.mock import MagicMock, AsyncMock
+from unittest.mock import AsyncMock, MagicMock
+
 import pytest
 
 from symphony.bdk.core.auth.bot_authenticator import BotAuthenticatorCert
@@ -24,12 +25,7 @@ def fixture_mocked_api_client():
 
 @pytest.fixture(name="config")
 def fixture_config():
-    bot_config = {
-        "username": "test_bot",
-        "privateKey": {
-            "path": "path/to/private_key"
-        }
-    }
+    bot_config = {"username": "test_bot", "privateKey": {"path": "path/to/private_key"}}
     return BdkBotConfig(bot_config)
 
 
@@ -41,7 +37,9 @@ async def test_bot_session_cert(mocked_api_client):
     session_auth_client.call_api.return_value = Token(token="session_token")
     key_auth_client.call_api.return_value = Token(token="km_token")
 
-    bot_authenticator = BotAuthenticatorCert(session_auth_client, key_auth_client, minimal_retry_config())
+    bot_authenticator = BotAuthenticatorCert(
+        session_auth_client, key_auth_client, minimal_retry_config()
+    )
     session_token = await bot_authenticator.retrieve_session_token()
     km_token = await bot_authenticator.retrieve_key_manager_token()
 
@@ -57,7 +55,9 @@ async def test_api_exception_cert(mocked_api_client):
     session_auth_client.call_api.side_effect = ApiException(status=401)
     key_auth_client.call_api.side_effect = ApiException(status=401)
 
-    bot_authenticator = BotAuthenticatorCert(session_auth_client, key_auth_client, minimal_retry_config())
+    bot_authenticator = BotAuthenticatorCert(
+        session_auth_client, key_auth_client, minimal_retry_config()
+    )
 
     with pytest.raises(AuthUnauthorizedError):
         await bot_authenticator.retrieve_session_token()

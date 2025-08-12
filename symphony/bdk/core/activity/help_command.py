@@ -18,5 +18,6 @@ class HelpCommand(SlashCommandActivity):
         help_message = ""
         for act in activity_list:
             help_message += "<li>" + act.name + " - " + act.build_command_description() + "</li>"
-        await self._bdk.messages().send_message(context.stream_id,
-                                                "<messageML><ul>" + help_message + "</ul></messageML>")
+        await self._bdk.messages().send_message(
+            context.stream_id, "<messageML><ul>" + help_message + "</ul></messageML>"
+        )
