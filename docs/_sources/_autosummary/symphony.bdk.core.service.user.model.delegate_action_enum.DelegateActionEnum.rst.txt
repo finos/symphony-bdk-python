@@ -1,0 +1,26 @@
+symphony.bdk.core.service.user.model.delegate\_action\_enum.DelegateActionEnum
+==============================================================================
+
+.. currentmodule:: symphony.bdk.core.service.user.model.delegate_action_enum
+
+.. autoclass:: DelegateActionEnum
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~DelegateActionEnum.ADD
+      ~DelegateActionEnum.REMOVE
+   
+   

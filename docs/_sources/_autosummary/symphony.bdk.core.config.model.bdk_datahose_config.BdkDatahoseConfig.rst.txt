@@ -1,0 +1,25 @@
+symphony.bdk.core.config.model.bdk\_datahose\_config.BdkDatahoseConfig
+======================================================================
+
+.. currentmodule:: symphony.bdk.core.config.model.bdk_datahose_config
+
+.. autoclass:: BdkDatahoseConfig
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~BdkDatahoseConfig.__init__
+   
+   
+
+   
+   
+   

@@ -1,0 +1,26 @@
+symphony.bdk.core.service.version.agent\_version\_service.AgentVersionService
+=============================================================================
+
+.. currentmodule:: symphony.bdk.core.service.version.agent_version_service
+
+.. autoclass:: AgentVersionService
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~AgentVersionService.__init__
+      ~AgentVersionService.is_skd_supported
+   
+   
+
+   
+   
+   

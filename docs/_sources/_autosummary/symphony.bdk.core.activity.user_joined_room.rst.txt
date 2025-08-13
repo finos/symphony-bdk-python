@@ -1,0 +1,32 @@
+symphony.bdk.core.activity.user\_joined\_room
+=============================================
+
+.. automodule:: symphony.bdk.core.activity.user_joined_room
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      UserJoinedRoomActivity
+      UserJoinedRoomContext
+   
+   
+
+   
+   
+   
+
+
+

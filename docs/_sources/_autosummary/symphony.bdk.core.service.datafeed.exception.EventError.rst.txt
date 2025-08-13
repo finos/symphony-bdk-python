@@ -1,0 +1,6 @@
+symphony.bdk.core.service.datafeed.exception.EventError
+=======================================================
+
+.. currentmodule:: symphony.bdk.core.service.datafeed.exception
+
+.. autoexception:: EventError

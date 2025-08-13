@@ -1,0 +1,30 @@
+symphony.bdk.core.service.datafeed.exception
+============================================
+
+.. automodule:: symphony.bdk.core.service.datafeed.exception
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+      :toctree:
+   
+      EventError
+   
+   
+
+
+

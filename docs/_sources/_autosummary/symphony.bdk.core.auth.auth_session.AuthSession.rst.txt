@@ -1,0 +1,35 @@
+symphony.bdk.core.auth.auth\_session.AuthSession
+================================================
+
+.. currentmodule:: symphony.bdk.core.auth.auth_session
+
+.. autoclass:: AuthSession
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~AuthSession.__init__
+      ~AuthSession.refresh
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~AuthSession.auth_token
+      ~AuthSession.key_manager_token
+      ~AuthSession.session_token
+      ~AuthSession.skd_enabled
+   
+   

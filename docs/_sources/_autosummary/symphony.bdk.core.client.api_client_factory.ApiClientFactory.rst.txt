@@ -1,0 +1,34 @@
+symphony.bdk.core.client.api\_client\_factory.ApiClientFactory
+==============================================================
+
+.. currentmodule:: symphony.bdk.core.client.api_client_factory
+
+.. autoclass:: ApiClientFactory
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~ApiClientFactory.__init__
+      ~ApiClientFactory.close_clients
+      ~ApiClientFactory.get_agent_client
+      ~ApiClientFactory.get_app_session_auth_client
+      ~ApiClientFactory.get_client
+      ~ApiClientFactory.get_key_auth_client
+      ~ApiClientFactory.get_login_client
+      ~ApiClientFactory.get_pod_client
+      ~ApiClientFactory.get_relay_client
+      ~ApiClientFactory.get_session_auth_client
+   
+   
+
+   
+   
+   

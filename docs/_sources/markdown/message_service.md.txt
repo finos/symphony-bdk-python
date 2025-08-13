@@ -1,0 +1,51 @@
+# Message Service
+
+The Message Service is a component at the service layer of the BDK which aims to cover the Messages part of the [REST API documentation](https://developers.symphony.com/restapi/reference#messages-v4).
+More precisely:
+* [Get a message](https://rest-api.symphony.com/main/messages/get-message-v1)
+* [Get messages](https://rest-api.symphony.com/main/messages/messages-v4)
+* [Get message IDs by timestamp](https://rest-api.symphony.com/deprecated-endpoints/get-message-ids-by-timestamp)
+* [Search messages](https://rest-api.symphony.com/main/messages/message-search-post)
+* [Send message](https://rest-api.symphony.com/main/messages/create-message-v4)
+* [Update message](https://rest-api.symphony.com/main/messages/update-message-v4)
+* [Import messages](https://rest-api.symphony.com/main/messages/import-message-v4)
+* [Get attachment](https://rest-api.symphony.com/main/messages/attachment)
+* [List attachments](https://rest-api.symphony.com/main/messages/list-attachments)
+* [Get allowed attachment types](https://rest-api.symphony.com/main/messages/attachment-types)
+* [Suppress message](https://rest-api.symphony.com/main/messages/suppress-message)
+* [Get message status](https://rest-api.symphony.com/main/messages/message-status)
+* [Get message receipts](https://rest-api.symphony.com/main/messages/list-message-receipts)
+* [Get message relationships](https://rest-api.symphony.com/main/messages/message-metadata-relationship)
+
+## How to use
+The central component for the Message Service is the `MessageService` class.
+This class exposes the user-friendly service APIs which serve all the services mentioned above 
+and is accessible from the `SymphonyBdk` object by calling the `messages()` method:
+```python
+import asyncio
+
+from symphony.bdk.core.config.loader import BdkConfigLoader
+from symphony.bdk.core.service.message.model import Message
+from symphony.bdk.core.symphony_bdk import SymphonyBdk
+
+class MessageMain:
+
+    @staticmethod
+    async def run():
+        stream_id_1 = "stream-id-1"
+
+        bdk_config = BdkConfigLoader.load_from_file("path/to/config.yaml")
+    
+        async with SymphonyBdk(bdk_config) as bdk:
+            message_service = bdk.messages()
+            with open("/path/to/attachment1", "rb") as file1, \
+                    open("/path/to/attachment2", "rb") as file2:
+                await message_service.send_message(
+                    stream_id_1,
+                    Message(content="<messageML>Hello, World!</messageML>", attachments=[file1, file2])
+                )
+
+
+if __name__ == "__main__":
+    asyncio.run(MessageMain.run())
+```

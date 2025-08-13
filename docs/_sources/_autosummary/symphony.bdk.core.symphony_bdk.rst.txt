@@ -1,0 +1,39 @@
+symphony.bdk.core.symphony\_bdk
+===============================
+
+.. automodule:: symphony.bdk.core.symphony_bdk
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      app_service
+      bot_service
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      SymphonyBdk
+   
+   
+
+   
+   
+   
+
+
+

@@ -1,0 +1,35 @@
+symphony.bdk.core.extension
+===========================
+
+.. automodule:: symphony.bdk.core.extension
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      BdkApiClientFactoryAware
+      BdkAuthenticationAware
+      BdkConfigAware
+      BdkExtensionServiceProvider
+      ExtensionService
+   
+   
+
+   
+   
+   
+
+
+

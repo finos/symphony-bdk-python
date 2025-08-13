@@ -1,0 +1,39 @@
+symphony.bdk.core.service.user.user\_util
+=========================================
+
+.. automodule:: symphony.bdk.core.service.user.user_util
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      extract_tenant_id
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      NumberUtil
+      Segment
+   
+   
+
+   
+   
+   
+
+
+

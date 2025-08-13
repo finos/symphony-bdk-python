@@ -1,0 +1,38 @@
+symphony.bdk.core.activity
+==========================
+
+.. automodule:: symphony.bdk.core.activity
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   symphony.bdk.core.activity.api
+   symphony.bdk.core.activity.command
+   symphony.bdk.core.activity.exception
+   symphony.bdk.core.activity.form
+   symphony.bdk.core.activity.help_command
+   symphony.bdk.core.activity.registry
+   symphony.bdk.core.activity.user_joined_room
+

@@ -1,0 +1,26 @@
+symphony.bdk.core.service.session.session\_service.OboSessionService
+====================================================================
+
+.. currentmodule:: symphony.bdk.core.service.session.session_service
+
+.. autoclass:: OboSessionService
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~OboSessionService.__init__
+      ~OboSessionService.get_session
+   
+   
+
+   
+   
+   

@@ -1,0 +1,33 @@
+symphony.bdk.core.auth.ext\_app\_authenticator
+==============================================
+
+.. automodule:: symphony.bdk.core.auth.ext_app_authenticator
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      ExtensionAppAuthenticator
+      ExtensionAppAuthenticatorCert
+      ExtensionAppAuthenticatorRsa
+   
+   
+
+   
+   
+   
+
+
+

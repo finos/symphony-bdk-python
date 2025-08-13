@@ -1,0 +1,35 @@
+symphony.bdk.core.config.model.bdk\_server\_config.BdkServerConfig
+==================================================================
+
+.. currentmodule:: symphony.bdk.core.config.model.bdk_server_config
+
+.. autoclass:: BdkServerConfig
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~BdkServerConfig.__init__
+      ~BdkServerConfig.get_base_path
+      ~BdkServerConfig.get_formatted_context
+      ~BdkServerConfig.get_port_as_string
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~BdkServerConfig.DEFAULT_HTTPS_PORT
+      ~BdkServerConfig.DEFAULT_SCHEME
+   
+   

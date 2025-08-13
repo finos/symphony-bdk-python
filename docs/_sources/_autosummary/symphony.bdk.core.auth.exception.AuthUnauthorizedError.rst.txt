@@ -1,0 +1,6 @@
+symphony.bdk.core.auth.exception.AuthUnauthorizedError
+======================================================
+
+.. currentmodule:: symphony.bdk.core.auth.exception
+
+.. autoexception:: AuthUnauthorizedError

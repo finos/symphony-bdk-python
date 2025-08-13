@@ -1,0 +1,30 @@
+symphony.bdk.core.service.message.messageml\_util
+=================================================
+
+.. automodule:: symphony.bdk.core.service.message.messageml_util
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      escape_special_chars
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

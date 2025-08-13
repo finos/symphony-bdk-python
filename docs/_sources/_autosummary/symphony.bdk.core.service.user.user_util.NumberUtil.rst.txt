@@ -1,0 +1,26 @@
+symphony.bdk.core.service.user.user\_util.NumberUtil
+====================================================
+
+.. currentmodule:: symphony.bdk.core.service.user.user_util
+
+.. autoclass:: NumberUtil
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~NumberUtil.__init__
+      ~NumberUtil.extract
+   
+   
+
+   
+   
+   

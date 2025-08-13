@@ -1,0 +1,38 @@
+symphony.bdk.core.activity.command.CommandContext
+=================================================
+
+.. currentmodule:: symphony.bdk.core.activity.command
+
+.. autoclass:: CommandContext
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~CommandContext.__init__
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~CommandContext.arguments
+      ~CommandContext.bot_display_name
+      ~CommandContext.bot_user_id
+      ~CommandContext.initiator
+      ~CommandContext.message_id
+      ~CommandContext.source_event
+      ~CommandContext.stream_id
+      ~CommandContext.text_content
+   
+   

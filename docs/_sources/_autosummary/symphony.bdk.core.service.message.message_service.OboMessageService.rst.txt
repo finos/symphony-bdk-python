@@ -1,0 +1,30 @@
+symphony.bdk.core.service.message.message\_service.OboMessageService
+====================================================================
+
+.. currentmodule:: symphony.bdk.core.service.message.message_service
+
+.. autoclass:: OboMessageService
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~OboMessageService.__init__
+      ~OboMessageService.blast_message
+      ~OboMessageService.get_attachment_types
+      ~OboMessageService.send_message
+      ~OboMessageService.suppress_message
+      ~OboMessageService.update_message
+   
+   
+
+   
+   
+   

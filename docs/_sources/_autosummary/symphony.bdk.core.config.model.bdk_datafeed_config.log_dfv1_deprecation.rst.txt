@@ -1,0 +1,6 @@
+symphony.bdk.core.config.model.bdk\_datafeed\_config.log\_dfv1\_deprecation
+===========================================================================
+
+.. currentmodule:: symphony.bdk.core.config.model.bdk_datafeed_config
+
+.. autofunction:: log_dfv1_deprecation

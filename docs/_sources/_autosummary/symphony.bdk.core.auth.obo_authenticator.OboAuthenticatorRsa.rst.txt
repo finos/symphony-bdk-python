@@ -1,0 +1,35 @@
+symphony.bdk.core.auth.obo\_authenticator.OboAuthenticatorRsa
+=============================================================
+
+.. currentmodule:: symphony.bdk.core.auth.obo_authenticator
+
+.. autoclass:: OboAuthenticatorRsa
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~OboAuthenticatorRsa.__init__
+      ~OboAuthenticatorRsa.authenticate_by_user_id
+      ~OboAuthenticatorRsa.authenticate_by_username
+      ~OboAuthenticatorRsa.retrieve_obo_session_token_by_user_id
+      ~OboAuthenticatorRsa.retrieve_obo_session_token_by_username
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~OboAuthenticatorRsa.unauthorized_message
+   
+   

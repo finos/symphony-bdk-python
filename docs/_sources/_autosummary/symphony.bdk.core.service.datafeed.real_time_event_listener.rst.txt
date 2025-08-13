@@ -1,0 +1,31 @@
+symphony.bdk.core.service.datafeed.real\_time\_event\_listener
+==============================================================
+
+.. automodule:: symphony.bdk.core.service.datafeed.real_time_event_listener
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      RealTimeEventListener
+   
+   
+
+   
+   
+   
+
+
+

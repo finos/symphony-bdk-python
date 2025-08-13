@@ -1,0 +1,32 @@
+symphony.bdk.core.activity.form
+===============================
+
+.. automodule:: symphony.bdk.core.activity.form
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      FormReplyActivity
+      FormReplyContext
+   
+   
+
+   
+   
+   
+
+
+
