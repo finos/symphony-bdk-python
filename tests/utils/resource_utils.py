@@ -1,8 +1,7 @@
 import json
 from pathlib import Path
 
-from symphony.bdk.gen.api_client import validate_and_convert_types
-from symphony.bdk.gen.configuration import Configuration
+from typing import get_origin, get_args, List
 
 
 def get_resource_filepath(relative_path, as_text=True):
@@ -23,25 +22,51 @@ def get_deserialized_object_from_resource(return_type, resource_path):
 
 
 def deserialize_object(model, payload):
-    """Deserializes the passed payload to an instance of the specified model
-    Disregards unknown fields is
+    """Deserializes the passed payload to an instance of the specified model.
 
-    :param model: OpenApi generated model
-    :param payload: json payload to be deserialized
+    :param model: The model to deserialize to (Pydantic model, primitive type, or List[...] of those).
+    :param payload: JSON payload to be deserialized.
     :return: Instance of the model
     """
-    try:
-        test_data = json.loads(payload)
-    except json.JSONDecodeError:
-        test_data = payload
-    return validate_and_convert_types(
-        input_value=test_data,
-        required_types_mixed=(model,),
-        path_to_item=["test_data"],
-        spec_property_naming=True,
-        _check_type=True,
-        configuration=Configuration(discard_unknown_keys=True),
-    )
+    # If the model is a List[...] type
+    origin = get_origin(model)
+    if origin in (list, List):
+        (inner_model,) = get_args(model)
+
+        # Ensure payload is parsed JSON list
+        if isinstance(payload, str):
+            try:
+                data = json.loads(payload)
+            except json.JSONDecodeError:
+                raise ValueError("Expected JSON array for List[...] model")
+        else:
+            data = payload
+
+        if not isinstance(data, list):
+            raise ValueError(f"Expected list for {model}, got {type(data)}")
+
+        return [
+            deserialize_object(inner_model, item)  # recursively call
+            for item in data
+        ]
+
+    # Handle single objects (Pydantic models)
+    if hasattr(model, "from_json"):
+        if isinstance(payload, str):
+            return model.from_json(payload)
+        else:
+            return model.model_validate(payload)  # Pydantic v2 compatibility
+
+    # Fallback for primitive types
+    if isinstance(payload, str):
+        try:
+            data = json.loads(payload)
+        except json.JSONDecodeError:
+            data = payload
+    else:
+        data = payload
+
+    return model(data)
 
 
 def get_config_resource_filepath(relative_path):

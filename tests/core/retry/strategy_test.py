@@ -7,7 +7,7 @@ import pytest
 import symphony.bdk.core.retry.strategy as strategy
 from symphony.bdk.core.auth.exception import AuthUnauthorizedError
 from symphony.bdk.core.retry import retry
-from symphony.bdk.gen import ApiException
+from symphony.bdk.gen.rest import ApiException
 from tests.core.config import minimal_retry_config_with_attempts
 from tests.core.retry import FixedChainedExceptions, NoApiExceptionAfterCount
 

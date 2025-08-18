@@ -17,7 +17,8 @@ from symphony.bdk.core.service.datafeed.exception import EventError
 from symphony.bdk.core.service.datafeed.real_time_event_listener import (
     RealTimeEventListener,
 )
-from symphony.bdk.gen import ApiClient, ApiException
+from symphony.bdk.gen.rest import ApiException
+from symphony.bdk.gen.api_client import ApiClient
 from symphony.bdk.gen.agent_api.datafeed_api import DatafeedApi
 from symphony.bdk.gen.agent_model.ack_id import AckId
 from symphony.bdk.gen.agent_model.v4_event import V4Event

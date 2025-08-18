@@ -4,7 +4,7 @@ import pytest
 
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.service.presence.presence_service import PresenceService, PresenceStatus
-from symphony.bdk.gen import ApiException
+from symphony.bdk.gen.rest import ApiException
 from symphony.bdk.gen.pod_api.presence_api import PresenceApi
 from symphony.bdk.gen.pod_model.string_id import StringId
 from symphony.bdk.gen.pod_model.v2_presence import V2Presence
