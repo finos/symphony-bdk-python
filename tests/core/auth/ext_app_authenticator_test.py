@@ -8,7 +8,7 @@ from symphony.bdk.core.auth.ext_app_authenticator import (
     ExtensionAppAuthenticatorRsa,
 )
 from symphony.bdk.core.config.model.bdk_rsa_key_config import BdkRsaKeyConfig
-from symphony.bdk.gen import ApiException
+from symphony.bdk.gen.rest import ApiException
 from symphony.bdk.gen.auth_model.extension_app_authenticate_request import (
     ExtensionAppAuthenticateRequest,
 )
