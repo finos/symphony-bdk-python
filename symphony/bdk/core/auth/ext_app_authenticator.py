@@ -131,7 +131,7 @@ class ExtensionAppAuthenticatorRsa(ExtensionAppAuthenticator):
         )
 
         return await self._authentication_api.v1_pubkey_app_authenticate_extension_app_post(
-            authentication_request
+            authenticate_request=authentication_request
         )
 
     @retry(retry=authentication_retry)
