@@ -12,6 +12,9 @@ from symphony.bdk.gen.rest import ApiException
 from symphony.bdk.gen.auth_model.extension_app_authenticate_request import (
     ExtensionAppAuthenticateRequest,
 )
+from symphony.bdk.gen.login_model.authenticate_extension_app_request import (
+    AuthenticateExtensionAppRequest,
+)
 from symphony.bdk.gen.login_model.extension_app_tokens import ExtensionAppTokens
 from symphony.bdk.gen.pod_model.pod_certificate import PodCertificate
 from tests.core.config import minimal_retry_config
@@ -100,13 +103,10 @@ async def test_authenticate_and_retrieve_tokens():
         )
 
         mock_create_jwt.assert_called_once_with(key_config, app_id)
-        mock_authentication_api.v1_pubkey_app_authenticate_extension_app_post.assert_called_once()
-
-        call_args = (
-            mock_authentication_api.v1_pubkey_app_authenticate_extension_app_post.call_args.args[0]
+        expected_request = AuthenticateExtensionAppRequest(app_token=app_token, auth_token=signed_jwt)
+        mock_authentication_api.v1_pubkey_app_authenticate_extension_app_post.assert_called_once_with(
+            authenticate_request=expected_request
         )
-        assert call_args.app_token == app_token
-        assert call_args.auth_token == signed_jwt
 
 
 @pytest.mark.asyncio
