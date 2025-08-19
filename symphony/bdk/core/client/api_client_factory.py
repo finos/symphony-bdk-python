@@ -129,7 +129,7 @@ class ApiClientFactory:
 
     def _get_client_config(self, context, server_config):
         configuration = Configuration(
-            host=(server_config.get_base_path() + context), discard_unknown_keys=True
+            host=(server_config.get_base_path() + context)
         )
         configuration.verify_ssl = True
         configuration.ssl_ca_cert = self._config.ssl.trust_store_path
