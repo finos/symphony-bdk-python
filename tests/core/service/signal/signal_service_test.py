@@ -1,3 +1,4 @@
+from typing import List
 from unittest.mock import AsyncMock, MagicMock
 
 import pytest
@@ -9,7 +10,6 @@ from symphony.bdk.gen.agent_model.base_signal import BaseSignal
 from symphony.bdk.gen.agent_model.channel_subscriber_response import ChannelSubscriberResponse
 from symphony.bdk.gen.agent_model.channel_subscription_response import ChannelSubscriptionResponse
 from symphony.bdk.gen.agent_model.signal import Signal
-from symphony.bdk.gen.agent_model.signal_list import SignalList
 from tests.core.config import minimal_retry_config
 from tests.utils.resource_utils import get_deserialized_object_from_resource
 
@@ -37,25 +37,24 @@ def fixture_signal_service(signals_api, auth_session):
 async def test_list_signals(signals_api, signal_service):
     signals_api.v1_signals_list_get = AsyncMock()
     signals_api.v1_signals_list_get.return_value = get_deserialized_object_from_resource(
-        SignalList, "signal/list_signals.json"
+        List[Signal], "signal/list_signals.json"
     )
 
     signals = await signal_service.list_signals()
-    signal_list = signals.value
 
     signals_api.v1_signals_list_get.assert_called_with(
         skip=0, limit=50, session_token="session_token", key_manager_token="km_token"
     )
 
-    assert len(signal_list) == 2
-    assert signal_list[0].id == "signal_id1"
+    assert len(signals) == 2
+    assert signals[0].id == "signal_id1"
 
 
 @pytest.mark.asyncio
 async def test_list_all_signals(signals_api, signal_service):
     signals_api.v1_signals_list_get = AsyncMock()
     signals_api.v1_signals_list_get.return_value = get_deserialized_object_from_resource(
-        SignalList, "signal/list_signals.json"
+        List[Signal], "signal/list_signals.json"
     )
 
     signal_list_gen = await signal_service.list_all_signals()
@@ -73,11 +72,10 @@ async def test_list_all_signals(signals_api, signal_service):
 async def test_list_signals_with_skip_and_limit(signals_api, signal_service):
     signals_api.v1_signals_list_get = AsyncMock()
     signals_api.v1_signals_list_get.return_value = get_deserialized_object_from_resource(
-        SignalList, "signal/list_signals.json"
+        List[Signal], "signal/list_signals.json"
     )
 
     signal_list = await signal_service.list_signals(3, 30)
-    signal_list = signal_list.value
 
     signals_api.v1_signals_list_get.assert_called_with(
         skip=3, limit=30, session_token="session_token", key_manager_token="km_token"

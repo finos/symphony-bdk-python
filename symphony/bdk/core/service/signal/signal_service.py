@@ -1,4 +1,4 @@
-from typing import AsyncGenerator
+from typing import AsyncGenerator, List
 
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
@@ -10,7 +10,6 @@ from symphony.bdk.gen.agent_model.channel_subscriber import ChannelSubscriber
 from symphony.bdk.gen.agent_model.channel_subscriber_response import ChannelSubscriberResponse
 from symphony.bdk.gen.agent_model.channel_subscription_response import ChannelSubscriptionResponse
 from symphony.bdk.gen.agent_model.signal import Signal
-from symphony.bdk.gen.agent_model.signal_list import SignalList
 
 
 class OboSignalService:
@@ -35,7 +34,7 @@ class OboSignalService:
         self._retry_config = retry_config
 
     @retry
-    async def list_signals(self, skip: int = 0, limit: int = 50) -> SignalList:
+    async def list_signals(self, skip: int = 0, limit: int = 50) -> List[Signal]:
         """Lists signals on behalf of the user. The response includes signals that the user has created and
         public signals to which they have subscribed.
 
@@ -68,7 +67,7 @@ class OboSignalService:
 
         async def list_signals_one_page(skip, limit):
             result = await self.list_signals(skip, limit)
-            return result.value if result else None
+            return result if result else None
 
         return offset_based_pagination(list_signals_one_page, chunk_size, max_number)
 
