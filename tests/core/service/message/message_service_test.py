@@ -1,4 +1,5 @@
 import json
+from typing import List
 from unittest.mock import AsyncMock, MagicMock
 
 import pytest
@@ -11,11 +12,10 @@ from symphony.bdk.core.service.message.multi_attachments_messages_api import (
 )
 from symphony.bdk.gen.agent_api.attachments_api import AttachmentsApi
 from symphony.bdk.gen.agent_model.message_search_query import MessageSearchQuery
-from symphony.bdk.gen.agent_model.v4_import_response_list import V4ImportResponseList
+from symphony.bdk.gen.agent_model.v4_import_response import V4ImportResponse
 from symphony.bdk.gen.agent_model.v4_imported_message import V4ImportedMessage
 from symphony.bdk.gen.agent_model.v4_message import V4Message
 from symphony.bdk.gen.agent_model.v4_message_blast_response import V4MessageBlastResponse
-from symphony.bdk.gen.agent_model.v4_message_list import V4MessageList
 from symphony.bdk.gen.api_client import ApiClient, Configuration
 from symphony.bdk.gen.pod_api.default_api import DefaultApi
 from symphony.bdk.gen.pod_api.message_api import MessageApi
@@ -26,8 +26,7 @@ from symphony.bdk.gen.pod_model.message_metadata_response import MessageMetadata
 from symphony.bdk.gen.pod_model.message_receipt_detail_response import MessageReceiptDetailResponse
 from symphony.bdk.gen.pod_model.message_status import MessageStatus
 from symphony.bdk.gen.pod_model.message_suppression_response import MessageSuppressionResponse
-from symphony.bdk.gen.pod_model.stream_attachment_response import StreamAttachmentResponse
-from symphony.bdk.gen.pod_model.string_list import StringList
+from symphony.bdk.gen.pod_model.stream_attachment_item import StreamAttachmentItem
 from tests.core.config import minimal_retry_config
 from tests.utils.resource_utils import deserialize_object, get_deserialized_object_from_resource
 
@@ -67,7 +66,7 @@ def fixture_message_service(mocked_api_client, auth_session):
 @pytest.mark.asyncio
 async def test_list_messages(mocked_api_client, message_service):
     mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
-        V4MessageList, "message_response/list_messages.json"
+        List[V4Message], "message_response/list_messages.json"
     )
     messages_list = await message_service.list_messages("stream_id")
 
@@ -247,7 +246,7 @@ async def test_blast_complex_message(message_service):
 @pytest.mark.asyncio
 async def test_import_message(mocked_api_client, message_service):
     mocked_api_client.call_api.return_value = deserialize_object(
-        V4ImportResponseList,
+        List[V4ImportResponse],
         "["
         "   {"
         '       "messageId": "FjSY1y3L",  '
@@ -310,7 +309,7 @@ async def test_get_message_status(mocked_api_client, message_service):
 @pytest.mark.asyncio
 async def test_get_attachment_types(mocked_api_client, message_service):
     mocked_api_client.call_api.return_value = deserialize_object(
-        StringList, '[   ".bmp",   ".doc",   ".png",   ".mpeg"]'
+        List[str], '[   ".bmp",   ".doc",   ".png",   ".mpeg"]'
     )
 
     attachment_types = await message_service.get_attachment_types()
@@ -335,7 +334,7 @@ async def test_get_message(mocked_api_client, message_service):
 @pytest.mark.asyncio
 async def test_list_attachments(mocked_api_client, message_service):
     mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
-        StreamAttachmentResponse, "message_response/list_attachments.json"
+        List[StreamAttachmentItem], "message_response/list_attachments.json"
     )
 
     attachments = await message_service.list_attachments("stream_id")
@@ -376,7 +375,7 @@ async def test_get_message_relationships(mocked_api_client, message_service):
 @pytest.mark.asyncio
 async def test_search_messages_with_hashtag(mocked_api_client, message_service):
     mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
-        V4MessageList, "message_response/list_messages.json"
+        List[V4Message], "message_response/list_messages.json"
     )
 
     messages = await message_service.search_messages(MessageSearchQuery(hashtag="tag"))
@@ -390,7 +389,7 @@ async def test_search_messages_with_valid_stream_type(
     mocked_api_client, message_service, stream_type
 ):
     mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
-        V4MessageList, "message_response/list_messages.json"
+        List[V4Message], "message_response/list_messages.json"
     )
 
     messages = await message_service.search_messages(MessageSearchQuery(stream_type=stream_type))
@@ -401,7 +400,7 @@ async def test_search_messages_with_valid_stream_type(
 @pytest.mark.asyncio
 async def test_search_messages_with_invalid_stream_type(mocked_api_client, message_service):
     mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
-        V4MessageList, "message_response/list_messages.json"
+        List[V4Message], "message_response/list_messages.json"
     )
 
     with pytest.raises(ValueError):
@@ -411,7 +410,7 @@ async def test_search_messages_with_invalid_stream_type(mocked_api_client, messa
 @pytest.mark.asyncio
 async def test_search_messages_with_text_and_sid(mocked_api_client, message_service):
     mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
-        V4MessageList, "message_response/list_messages.json"
+        List[V4Message], "message_response/list_messages.json"
     )
 
     messages = await message_service.search_messages(
@@ -424,7 +423,7 @@ async def test_search_messages_with_text_and_sid(mocked_api_client, message_serv
 @pytest.mark.asyncio
 async def test_search_messages_with_text_and_no_sid(mocked_api_client, message_service):
     mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
-        V4MessageList, "message_response/list_messages.json"
+        List[V4Message], "message_response/list_messages.json"
     )
 
     with pytest.raises(ValueError):
@@ -437,7 +436,7 @@ async def test_search_messages_with_stream_type_text_and_sid(
     mocked_api_client, message_service, stream_type
 ):
     mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
-        V4MessageList, "message_response/list_messages.json"
+        List[V4Message], "message_response/list_messages.json"
     )
 
     messages = await message_service.search_messages(
@@ -453,7 +452,7 @@ async def test_search_messages_with_stream_type_text_and_no_sid(
     mocked_api_client, message_service, stream_type
 ):
     mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
-        V4MessageList, "message_response/list_messages.json"
+        List[V4Message], "message_response/list_messages.json"
     )
 
     with pytest.raises(ValueError):
@@ -465,8 +464,8 @@ async def test_search_messages_with_stream_type_text_and_no_sid(
 @pytest.mark.asyncio
 async def test_search_all_messages(mocked_api_client, message_service):
     mocked_api_client.call_api.side_effect = [
-        get_deserialized_object_from_resource(V4MessageList, "message_response/list_messages.json"),
-        V4MessageList(value=[]),
+        get_deserialized_object_from_resource(List[V4Message], "message_response/list_messages.json"),
+        [],
     ]
     chunk_size = 1
 
