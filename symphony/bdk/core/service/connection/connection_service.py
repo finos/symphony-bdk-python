@@ -1,3 +1,5 @@
+from typing import List
+
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.core.retry import retry
@@ -42,8 +44,8 @@ class OboConnectionService:
 
     @retry
     async def list_connections(
-        self, status: ConnectionStatus = ConnectionStatus.ALL, user_ids: [int] = None
-    ) -> [UserConnection]:
+        self, status: ConnectionStatus = ConnectionStatus.ALL, user_ids: List[int] = None
+    ) -> List[UserConnection]:
         """
         List all connection statuses of the requesting user with external or specified users.
         See: `List Connections <https://developers.symphony.com/restapi/reference/list-connections>`_
@@ -64,7 +66,7 @@ class OboConnectionService:
             params["user_ids"] = ",".join(map(str, user_ids))
 
         user_connection_list = await self._connection_api.v1_connection_list_get(**params)
-        return user_connection_list.value
+        return user_connection_list
 
     @retry
     async def create_connection(self, user_id: int) -> UserConnection:
