@@ -23,6 +23,9 @@ from symphony.bdk.gen.group_model.upload_avatar import UploadAvatar
 from symphony.bdk.gen.login_api.authentication_api import AuthenticationApi
 
 
+X_SYMPHONY_HOST = "localhost"
+
+
 async def refresh_bearer_token_if_unauthorized(retry_state):
     """Function used by the retry decorator to refresh the bearer token if conditions apply
 
@@ -86,7 +89,7 @@ class SymphonyGroupService:
         :param create_group: the details of the group to be created
         :return: the created group
         """
-        return await self._group_api.insert_group(x_symphony_host="", create_group=create_group)
+        return await self._group_api.insert_group(x_symphony_host=X_SYMPHONY_HOST, create_group=create_group)
 
     @retry(retry=refresh_bearer_token_if_unauthorized)
     async def list_groups(
@@ -108,7 +111,7 @@ class SymphonyGroupService:
         :param sort_order: sorting direction of items (ordered by creation date)
         :return: the list of matching groups
         """
-        kwargs = dict(x_symphony_host="", type_id="SDL")
+        kwargs = dict(x_symphony_host=X_SYMPHONY_HOST, type_id="SDL")
         if status is not None:
             kwargs["status"] = status
         if before is not None:
@@ -153,7 +156,7 @@ class SymphonyGroupService:
         :return: the updated group
         """
         return await self._group_api.update_group(
-            x_symphony_host="", if_match=if_match, group_id=group_id, update_group=update_group
+            x_symphony_host=X_SYMPHONY_HOST, if_match=if_match, group_id=group_id, update_group=update_group
         )
 
     @retry(retry=refresh_bearer_token_if_unauthorized)
@@ -168,7 +171,7 @@ class SymphonyGroupService:
         """
         upload_avatar = UploadAvatar(image=image)
         return await self._group_api.update_avatar(
-            x_symphony_host="", group_id=group_id, upload_avatar=upload_avatar
+            x_symphony_host=X_SYMPHONY_HOST, group_id=group_id, upload_avatar=upload_avatar
         )
 
     @retry(retry=refresh_bearer_token_if_unauthorized)
@@ -179,7 +182,7 @@ class SymphonyGroupService:
         :param group_id: the ID of the group to retrieve
         :return: the group details
         """
-        return await self._group_api.get_group(x_symphony_host="", group_id=group_id)
+        return await self._group_api.get_group(x_symphony_host=X_SYMPHONY_HOST, group_id=group_id)
 
     @retry(retry=refresh_bearer_token_if_unauthorized)
     async def add_member_to_group(self, group_id: str, user_id: int) -> ReadGroup:
@@ -192,7 +195,7 @@ class SymphonyGroupService:
         """
         member = Member(member_id=user_id, member_tenant=extract_tenant_id(user_id))
         return await self._group_api.add_member_to_group(
-            x_symphony_host="", group_id=group_id, add_member=AddMember(member=member)
+            x_symphony_host=X_SYMPHONY_HOST, group_id=group_id, add_member=AddMember(member=member)
         )
 
 
@@ -209,7 +212,7 @@ class OAuthSession:
     async def refresh(self):
         """Refreshes internal Bearer authentication token from the bot sessionToken."""
         jwt_token = await self._authentication_api.idm_tokens_post(
-            await self._auth_session.session_token, scope="profile-manager"
+            session_token=await self._auth_session.session_token, scope="profile-manager"
         )
         self._bearer_token = jwt_token.access_token
 
