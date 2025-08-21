@@ -69,9 +69,9 @@ async def test_close_custom_host_configured(config):
     client_factory = ApiClientFactory(config)
 
     client_factory.get_client(custom_path)
-    assert client_factory._custom_clients[0].rest_client.closed is False
+    assert client_factory._custom_clients[0].rest_client.pool_manager.closed is False
     await client_factory.close_clients()
-    assert client_factory._custom_clients[0].rest_client.closed is True
+    assert client_factory._custom_clients[0].rest_client.pool_manager.closed is True
 
 
 @pytest.mark.asyncio
