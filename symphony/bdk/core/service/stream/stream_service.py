@@ -1,5 +1,6 @@
-from typing import AsyncGenerator
+from typing import AsyncGenerator, List
 
+from symphony.bdk.core.service.stream.stream_util import to_url_safe_stream_id
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.core.retry import retry
@@ -9,14 +10,12 @@ from symphony.bdk.gen.agent_model.share_content import ShareContent
 from symphony.bdk.gen.agent_model.v2_message import V2Message
 from symphony.bdk.gen.pod_api.room_membership_api import RoomMembershipApi
 from symphony.bdk.gen.pod_api.streams_api import StreamsApi
-from symphony.bdk.gen.pod_model.membership_list import MembershipList
+from symphony.bdk.gen.pod_model.member_info import MemberInfo
 from symphony.bdk.gen.pod_model.room_detail import RoomDetail
 from symphony.bdk.gen.pod_model.stream import Stream
 from symphony.bdk.gen.pod_model.stream_attributes import StreamAttributes
 from symphony.bdk.gen.pod_model.stream_filter import StreamFilter
-from symphony.bdk.gen.pod_model.stream_list import StreamList
 from symphony.bdk.gen.pod_model.user_id import UserId
-from symphony.bdk.gen.pod_model.user_id_list import UserIdList
 from symphony.bdk.gen.pod_model.v1_im_attributes import V1IMAttributes
 from symphony.bdk.gen.pod_model.v1_im_detail import V1IMDetail
 from symphony.bdk.gen.pod_model.v2_admin_stream_filter import V2AdminStreamFilter
@@ -66,7 +65,7 @@ class OboStreamService:
         :return: the created stream.
         """
         return await self._streams_api.v1_im_create_post(
-            uid_list=UserIdList(value=[user_id]),
+            uid_list=[user_id],
             session_token=await self._auth_session.session_token,
         )
 
@@ -93,7 +92,7 @@ class OboStreamService:
         :return: the information about the given stream.
         """
         return await self._streams_api.v2_streams_sid_info_get(
-            sid=stream_id, session_token=await self._auth_session.session_token
+            sid=to_url_safe_stream_id(stream_id), session_token=await self._auth_session.session_token
         )
 
     @retry
@@ -111,7 +110,7 @@ class OboStreamService:
     @retry
     async def list_streams(
         self, stream_filter: StreamFilter, skip: int = 0, limit: int = 50
-    ) -> StreamList:
+    ) -> List[StreamAttributes]:
         """Returns a list of all the streams of which the requesting user is a member,
         sorted by creation date (ascending - oldest to newest).
         Wraps the `List User Streams <https://developers.symphony.com/restapi/reference/list-user-streams>`_ endpoint.
@@ -144,7 +143,7 @@ class OboStreamService:
 
         async def list_streams_one_page(skip, limit):
             result = await self.list_streams(stream_filter, skip, limit)
-            return result.value if result else None
+            return result if result else None
 
         return offset_based_pagination(list_streams_one_page, chunk_size, max_number)
 
@@ -336,7 +335,7 @@ class StreamService(OboStreamService):
         )
 
     @retry
-    async def create_im_admin(self, user_ids: [int]) -> Stream:
+    async def create_im_admin(self, user_ids: List[int]) -> Stream:
         """Create a new single or multi party instant message conversation.
         At least two user IDs must be provided or an error response will be sent.
         The caller is not included in the members of the created chat.
@@ -352,7 +351,7 @@ class StreamService(OboStreamService):
         :return: the created IM or MIM.
         """
         return await self._streams_api.v1_admin_im_create_post(
-            uid_list=UserIdList(value=user_ids),
+            uid_list=user_ids,
             session_token=await self._auth_session.session_token,
         )
 
@@ -405,7 +404,7 @@ class StreamService(OboStreamService):
 
         async def list_streams_admin_one_page(skip, limit):
             result = await self.list_streams_admin(stream_filter, skip, limit)
-            return result.streams.value if result.streams else None
+            return result.streams if result.streams else None
 
         return offset_based_pagination(list_streams_admin_one_page, chunk_size, max_number)
 
@@ -416,7 +415,7 @@ class StreamService(OboStreamService):
         stream_filter: StreamFilter = None,
         skip: int = 0,
         limit: int = 50,
-    ) -> StreamList:
+    ) -> List[StreamAttributes]:
         """Retrieve a list of all streams of which a user is a member.
         Wraps the `User Streams <https://developers.symphony.com/restapi/v20.16/reference#user-streams>`_ endpoint.
 
@@ -453,7 +452,7 @@ class StreamService(OboStreamService):
 
         async def list_streams_one_page(skip, limit):
             result = await self.list_user_streams_admin(uid, stream_filter, skip, limit)
-            return result.value if result else None
+            return result if result else None
 
         return offset_based_pagination(list_streams_one_page, chunk_size, max_number)
 
@@ -490,12 +489,12 @@ class StreamService(OboStreamService):
 
         async def list_stream_members_one_page(skip, limit):
             members = await self.list_stream_members(stream_id, skip, limit)
-            return members.members.value if members.members else None
+            return members.members if members.members else None
 
         return offset_based_pagination(list_stream_members_one_page, chunk_size, max_number)
 
     @retry
-    async def list_room_members(self, room_id: str) -> MembershipList:
+    async def list_room_members(self, room_id: str) -> List[MemberInfo]:
         """Lists the current members of an existing room.
         Wraps the `Room Members <https://developers.symphony.com/restapi/reference#room-members>`_ endpoint.
 

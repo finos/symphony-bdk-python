@@ -160,7 +160,7 @@ class ApiClientFactory:
         if X_TRACE_ID.lower() not in (
             header_name.lower() for header_name in default_headers.keys()
         ):
-            client._ApiClient__call_api = add_x_trace_id(client._ApiClient__call_api)
+            client.call_api = add_x_trace_id(client.call_api)
 
     @staticmethod
     def _configure_proxy(server_config, configuration):
