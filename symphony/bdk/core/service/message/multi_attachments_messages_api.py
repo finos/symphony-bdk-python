@@ -19,28 +19,41 @@ class MultiAttachmentsMessagesApi(MessagesApi):
 
     @validate_call(config=ConfigDict(arbitrary_types_allowed=True))
     async def v4_stream_sid_multi_attachment_message_create_post(
-            self,
-            sid: Annotated[StrictStr, Field(description="Stream ID")],
-            session_token: Annotated[StrictStr, Field(description="Authorization token used to make delegated calls.")],
-            key_manager_token: Annotated[Optional[StrictStr], Field(description="Key Manager authentication token.")] = None,
-            message: Annotated[Optional[StrictStr], Field(description="The message payload in MessageML.")] = None,
-            data: Annotated[Optional[StrictStr], Field(description="Optional message data in EntityJSON.")] = None,
-            version: Annotated[Optional[StrictStr], Field(
-                description='Optional message version in the format "major.minor". If empty, defaults to the latest supported version. ')] = None,
-            attachment: Annotated[Optional[List[io.IOBase]], Field(description="Optional file attachment.")] = None,
-            preview: Annotated[Optional[List[io.IOBase]], Field(description="Optional attachment preview.")] = None,
-            _request_timeout: Union[
-                None,
-                Annotated[StrictFloat, Field(gt=0)],
-                Tuple[
-                    Annotated[StrictFloat, Field(gt=0)],
-                    Annotated[StrictFloat, Field(gt=0)]
-                ]
-            ] = None,
-            _request_auth: Optional[Dict[StrictStr, Any]] = None,
-            _content_type: Optional[StrictStr] = None,
-            _headers: Optional[Dict[StrictStr, Any]] = None,
-            _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+        self,
+        sid: Annotated[StrictStr, Field(description="Stream ID")],
+        session_token: Annotated[
+            StrictStr, Field(description="Authorization token used to make delegated calls.")
+        ],
+        key_manager_token: Annotated[
+            Optional[StrictStr], Field(description="Key Manager authentication token.")
+        ] = None,
+        message: Annotated[
+            Optional[StrictStr], Field(description="The message payload in MessageML.")
+        ] = None,
+        data: Annotated[
+            Optional[StrictStr], Field(description="Optional message data in EntityJSON.")
+        ] = None,
+        version: Annotated[
+            Optional[StrictStr],
+            Field(
+                description='Optional message version in the format "major.minor". If empty, defaults to the latest supported version. '
+            ),
+        ] = None,
+        attachment: Annotated[
+            Optional[List[io.IOBase]], Field(description="Optional file attachment.")
+        ] = None,
+        preview: Annotated[
+            Optional[List[io.IOBase]], Field(description="Optional attachment preview.")
+        ] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]],
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> V4Message:
         """Post a message to one existing stream."""
         _param = self._v4_stream_sid_multi_attachment_message_create_post_serialize(
@@ -55,19 +68,38 @@ class MultiAttachmentsMessagesApi(MessagesApi):
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index
+            _host_index=_host_index,
         )
 
-        _response_types_map: Dict[str, Optional[str]] = {'200': "V4Message", '400': "Error", '401': "Error",
-                                                         '403': "Error", '500': "Error"}
+        _response_types_map: Dict[str, Optional[str]] = {
+            "200": "V4Message",
+            "400": "Error",
+            "401": "Error",
+            "403": "Error",
+            "500": "Error",
+        }
         response_data = await self.api_client.call_api(*_param, _request_timeout=_request_timeout)
         await response_data.read()
-        return self.api_client.response_deserialize(response_data=response_data,
-                                                    response_types_map=_response_types_map, ).data
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
 
     def _v4_stream_sid_multi_attachment_message_create_post_serialize(
-            self, sid, session_token, key_manager_token, message, data, version, attachment, preview, _request_auth,
-            _content_type, _headers, _host_index) -> RequestSerialized:
+        self,
+        sid,
+        session_token,
+        key_manager_token,
+        message,
+        data,
+        version,
+        attachment,
+        preview,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
         _host = None
         _collection_formats: Dict[str, str] = {}
         _path_params: Dict[str, str] = {}
@@ -78,70 +110,93 @@ class MultiAttachmentsMessagesApi(MessagesApi):
         _body_params: Optional[bytes] = None
 
         if sid is not None:
-            _path_params['sid'] = sid
+            _path_params["sid"] = sid
         if session_token is not None:
-            _header_params['sessionToken'] = session_token
+            _header_params["sessionToken"] = session_token
         if key_manager_token is not None:
-            _header_params['keyManagerToken'] = key_manager_token
+            _header_params["keyManagerToken"] = key_manager_token
         if message is not None:
-            _form_params.append(('message', message))
+            _form_params.append(("message", message))
         if data is not None:
-            _form_params.append(('data', data))
+            _form_params.append(("data", data))
         if version is not None:
-            _form_params.append(('version', version))
+            _form_params.append(("version", version))
         if attachment:
             for att_file in attachment:
                 filename = os.path.basename(att_file.name)
                 filedata = att_file.read()
-                mimetype = mimetypes.guess_type(filename)[0] or 'application/octet-stream'
-                _form_params.append(('attachment', (filename, filedata, mimetype)))
+                mimetype = mimetypes.guess_type(filename)[0] or "application/octet-stream"
+                _form_params.append(("attachment", (filename, filedata, mimetype)))
         if preview:
             for prev_file in preview:
                 filename = os.path.basename(prev_file.name)
                 filedata = prev_file.read()
-                mimetype = mimetypes.guess_type(filename)[0] or 'application/octet-stream'
-                _form_params.append(('preview', (filename, filedata, mimetype)))
+                mimetype = mimetypes.guess_type(filename)[0] or "application/octet-stream"
+                _form_params.append(("preview", (filename, filedata, mimetype)))
 
-        if 'Accept' not in _header_params:
-            _header_params['Accept'] = self.api_client.select_header_accept(['application/json'])
+        if "Accept" not in _header_params:
+            _header_params["Accept"] = self.api_client.select_header_accept(["application/json"])
         if _content_type:
-            _header_params['Content-Type'] = _content_type
+            _header_params["Content-Type"] = _content_type
         else:
-            _default_content_type = self.api_client.select_header_content_type(['multipart/form-data'])
+            _default_content_type = self.api_client.select_header_content_type(
+                ["multipart/form-data"]
+            )
             if _default_content_type is not None:
-                _header_params['Content-Type'] = _default_content_type
+                _header_params["Content-Type"] = _default_content_type
 
-        return self.api_client.param_serialize(method='POST', resource_path='/v4/stream/{sid}/message/create',
-                                             path_params=_path_params, query_params=_query_params,
-                                             header_params=_header_params, body=_body_params,
-                                             post_params=_form_params, files=_files, auth_settings=[],
-                                             collection_formats=_collection_formats, _host=_host,
-                                             _request_auth=_request_auth)
+        return self.api_client.param_serialize(
+            method="POST",
+            resource_path="/v4/stream/{sid}/message/create",
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=[],
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth,
+        )
 
     @validate_call(config=ConfigDict(arbitrary_types_allowed=True))
     async def v4_multi_attachment_message_blast_post(
-            self,
-            session_token: Annotated[StrictStr, Field(description="Authorization token used to make delegated calls.")],
-            sids: Annotated[List[StrictStr], Field(description="A comma-separated list of Stream IDs")],
-            key_manager_token: Annotated[Optional[StrictStr], Field(description="Key Manager authentication token.")] = None,
-            message: Annotated[Optional[StrictStr], Field(description="The message payload in MessageML.")] = None,
-            data: Annotated[Optional[StrictStr], Field(description="Optional message data in EntityJSON.")] = None,
-            version: Annotated[Optional[StrictStr], Field(
-                description='Optional message version in the format "major.minor". If empty, defaults to the latest supported version. ')] = None,
-            attachment: Annotated[Optional[List[io.IOBase]], Field(description="Optional file attachment.")] = None,
-            preview: Annotated[Optional[List[io.IOBase]], Field(description="Optional attachment preview.")] = None,
-            _request_timeout: Union[
-                None,
-                Annotated[StrictFloat, Field(gt=0)],
-                Tuple[
-                    Annotated[StrictFloat, Field(gt=0)],
-                    Annotated[StrictFloat, Field(gt=0)]
-                ]
-            ] = None,
-            _request_auth: Optional[Dict[StrictStr, Any]] = None,
-            _content_type: Optional[StrictStr] = None,
-            _headers: Optional[Dict[StrictStr, Any]] = None,
-            _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+        self,
+        session_token: Annotated[
+            StrictStr, Field(description="Authorization token used to make delegated calls.")
+        ],
+        sids: Annotated[List[StrictStr], Field(description="A comma-separated list of Stream IDs")],
+        key_manager_token: Annotated[
+            Optional[StrictStr], Field(description="Key Manager authentication token.")
+        ] = None,
+        message: Annotated[
+            Optional[StrictStr], Field(description="The message payload in MessageML.")
+        ] = None,
+        data: Annotated[
+            Optional[StrictStr], Field(description="Optional message data in EntityJSON.")
+        ] = None,
+        version: Annotated[
+            Optional[StrictStr],
+            Field(
+                description='Optional message version in the format "major.minor". If empty, defaults to the latest supported version. '
+            ),
+        ] = None,
+        attachment: Annotated[
+            Optional[List[io.IOBase]], Field(description="Optional file attachment.")
+        ] = None,
+        preview: Annotated[
+            Optional[List[io.IOBase]], Field(description="Optional attachment preview.")
+        ] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[Annotated[StrictFloat, Field(gt=0)], Annotated[StrictFloat, Field(gt=0)]],
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
     ) -> V4MessageBlastResponse:
         """Post a message to multiple existing streams."""
         _param = self._v4_multi_attachment_message_blast_post_serialize(
@@ -156,21 +211,40 @@ class MultiAttachmentsMessagesApi(MessagesApi):
             _request_auth=_request_auth,
             _content_type=_content_type,
             _headers=_headers,
-            _host_index=_host_index
+            _host_index=_host_index,
         )
 
-        _response_types_map: Dict[str, Optional[str]] = {'200': "V4MessageBlastResponse", '400': "Error",
-                                                         '401': "Error", '403': "Error", '500': "Error"}
+        _response_types_map: Dict[str, Optional[str]] = {
+            "200": "V4MessageBlastResponse",
+            "400": "Error",
+            "401": "Error",
+            "403": "Error",
+            "500": "Error",
+        }
         response_data = await self.api_client.call_api(*_param, _request_timeout=_request_timeout)
         await response_data.read()
-        return self.api_client.response_deserialize(response_data=response_data,
-                                                    response_types_map=_response_types_map, ).data
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
 
     def _v4_multi_attachment_message_blast_post_serialize(
-            self, session_token, sids, key_manager_token, message, data, version, attachment, preview, _request_auth,
-            _content_type, _headers, _host_index) -> RequestSerialized:
+        self,
+        session_token,
+        sids,
+        key_manager_token,
+        message,
+        data,
+        version,
+        attachment,
+        preview,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
         _host = None
-        _collection_formats: Dict[str, str] = {'sids': 'csv'}
+        _collection_formats: Dict[str, str] = {"sids": "csv"}
         _path_params: Dict[str, str] = {}
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
@@ -179,42 +253,52 @@ class MultiAttachmentsMessagesApi(MessagesApi):
         _body_params: Optional[bytes] = None
 
         if session_token is not None:
-            _header_params['sessionToken'] = session_token
+            _header_params["sessionToken"] = session_token
         if key_manager_token is not None:
-            _header_params['keyManagerToken'] = key_manager_token
+            _header_params["keyManagerToken"] = key_manager_token
         if sids is not None:
-            _form_params.append(('sids', sids))
+            _form_params.append(("sids", sids))
         if message is not None:
-            _form_params.append(('message', message))
+            _form_params.append(("message", message))
         if data is not None:
-            _form_params.append(('data', data))
+            _form_params.append(("data", data))
         if version is not None:
-            _form_params.append(('version', version))
+            _form_params.append(("version", version))
         if attachment:
             for att_file in attachment:
                 filename = os.path.basename(att_file.name)
                 filedata = att_file.read()
-                mimetype = mimetypes.guess_type(filename)[0] or 'application/octet-stream'
-                _form_params.append(('attachment', (filename, filedata, mimetype)))
+                mimetype = mimetypes.guess_type(filename)[0] or "application/octet-stream"
+                _form_params.append(("attachment", (filename, filedata, mimetype)))
         if preview:
             for prev_file in preview:
                 filename = os.path.basename(prev_file.name)
                 filedata = prev_file.read()
-                mimetype = mimetypes.guess_type(filename)[0] or 'application/octet-stream'
-                _form_params.append(('preview', (filename, filedata, mimetype)))
+                mimetype = mimetypes.guess_type(filename)[0] or "application/octet-stream"
+                _form_params.append(("preview", (filename, filedata, mimetype)))
 
-        if 'Accept' not in _header_params:
-            _header_params['Accept'] = self.api_client.select_header_accept(['application/json'])
+        if "Accept" not in _header_params:
+            _header_params["Accept"] = self.api_client.select_header_accept(["application/json"])
         if _content_type:
-            _header_params['Content-Type'] = _content_type
+            _header_params["Content-Type"] = _content_type
         else:
-            _default_content_type = self.api_client.select_header_content_type(['multipart/form-data'])
+            _default_content_type = self.api_client.select_header_content_type(
+                ["multipart/form-data"]
+            )
             if _default_content_type is not None:
-                _header_params['Content-Type'] = _default_content_type
+                _header_params["Content-Type"] = _default_content_type
 
-        return self.api_client.param_serialize(method='POST', resource_path='/v4/message/blast',
-                                             path_params=_path_params, query_params=_query_params,
-                                             header_params=_header_params, body=_body_params,
-                                             post_params=_form_params, files=_files, auth_settings=[],
-                                             collection_formats=_collection_formats, _host=_host,
-                                             _request_auth=_request_auth)
+        return self.api_client.param_serialize(
+            method="POST",
+            resource_path="/v4/message/blast",
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=[],
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth,
+        )

@@ -115,7 +115,9 @@ class OboUserService:
         return await self._users_api.v3_users_get(**params)
 
     @retry
-    async def list_users_by_usernames(self, usernames: List[str], active: bool = None) -> V2UserList:
+    async def list_users_by_usernames(
+        self, usernames: List[str], active: bool = None
+    ) -> V2UserList:
         """Search users by usernames.
         See : `Users Lookup v3 <https://developers.symphony.com/restapi/reference/users-lookup-v3>`_
 
