@@ -1,6 +1,6 @@
 import json
 from typing import List
-from unittest.mock import AsyncMock, MagicMock
+from unittest.mock import AsyncMock, MagicMock, PropertyMock
 
 import pytest
 
@@ -33,9 +33,20 @@ from tests.utils.resource_utils import deserialize_object, get_deserialized_obje
 
 @pytest.fixture(name="auth_session")
 def fixture_auth_session():
-    auth_session = AuthSession(None)
-    auth_session.session_token = "session_token"
-    auth_session.key_manager_token = "km_token"
+    auth_session = MagicMock(spec=AuthSession)
+
+    async def get_session_token():
+        return "session_token"
+
+    async def get_km_token():
+        return "km_token"
+
+    # The session_token and key_manager_token properties on the real AuthSession
+    # return a coroutine. We need to mock them to return a new coroutine on each
+    # access to avoid "cannot reuse already awaited coroutine" errors in paginated calls.
+    type(auth_session).session_token = PropertyMock(side_effect=get_session_token)
+    type(auth_session).key_manager_token = PropertyMock(side_effect=get_km_token)
+
     return auth_session
 
 
@@ -64,23 +75,46 @@ def fixture_message_service(mocked_api_client, auth_session):
 
 
 @pytest.mark.asyncio
-async def test_list_messages(mocked_api_client, message_service):
-    mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
+async def test_list_messages(message_service):
+    return_object = get_deserialized_object_from_resource(
         List[V4Message], "message_response/list_messages.json"
     )
-    messages_list = await message_service.list_messages("stream_id")
+    messages_api = message_service._messages_api
+    messages_api.v4_stream_sid_message_get = AsyncMock(return_value=return_object)
 
+    stream_id = "stream_id"
+    messages_list = await message_service.list_messages(stream_id)
+
+    messages_api.v4_stream_sid_message_get.assert_called_once_with(
+        sid=stream_id,
+        since=0,
+        session_token="session_token",
+        key_manager_token="km_token",
+        skip=0,
+        limit=50,
+    )
     assert len(messages_list) == 1
     assert messages_list[0].message_id == "test-message1"
 
 
 @pytest.mark.asyncio
-async def test_send_message(mocked_api_client, message_service):
-    mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
+async def test_send_message(message_service):
+    return_object = get_deserialized_object_from_resource(
         V4Message, "message_response/message.json"
     )
-    message = await message_service.send_message("stream_id", "test_message")
+    messages_api = message_service._messages_api
+    messages_api.v4_stream_sid_multi_attachment_message_create_post = AsyncMock(return_value=return_object)
 
+    stream_id = "stream_id"
+    message_content = "test_message"
+    message = await message_service.send_message(stream_id, message_content)
+
+    messages_api.v4_stream_sid_multi_attachment_message_create_post.assert_called_once()
+    call_kwargs = messages_api.v4_stream_sid_multi_attachment_message_create_post.call_args.kwargs
+    assert call_kwargs["sid"] == stream_id
+    assert call_kwargs["message"] == f"<messageML>{message_content}</messageML>"
+    assert call_kwargs["session_token"] == "session_token"
+    assert call_kwargs["key_manager_token"] == "km_token"
     assert message.message_id == "-AANBHKtUC-2q6_0WSjBGX___pHnSfBKdA"
     assert message.user.user_id == 7078106482890
 
@@ -159,14 +193,29 @@ async def test_send_complex_message(message_service):
 
 
 @pytest.mark.asyncio
-async def test_blast_message(mocked_api_client, message_service):
-    mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
-        V4MessageBlastResponse, "message_response/blast_message.json"
+async def test_blast_message(message_service):
+    # Construct the return object manually to avoid deserialization errors from the JSON file.
+    return_object = V4MessageBlastResponse(
+        messages=[
+            V4Message(message_id="-AANBHKtUC-2q6_0WSjBGX___pHnSfBKdA-1"),
+            V4Message(message_id="-AANBHKtUC-2q6_0WSjBGX___pHnSfBKdA-2"),
+        ],
+        errors={}
     )
+    # Correctly mock the high-level API method
+    messages_api = message_service._messages_api
+    messages_api.v4_multi_attachment_message_blast_post = AsyncMock(return_value=return_object)
+
+    stream_ids = ["stream_id1", "stream_id2"]
+    message_content = "test_message"
     blast_message = await message_service.blast_message(
-        ["stream_id1", "stream_id2"], "test_message"
+        stream_ids, message_content
     )
 
+    messages_api.v4_multi_attachment_message_blast_post.assert_called_once()
+    call_kwargs = messages_api.v4_multi_attachment_message_blast_post.call_args.kwargs
+    assert call_kwargs["sids"] == stream_ids
+    assert call_kwargs["message"] == f"<messageML>{message_content}</messageML>"
     assert len(blast_message.messages) == 2
     assert blast_message.messages[0].message_id == "-AANBHKtUC-2q6_0WSjBGX___pHnSfBKdA-1"
     assert blast_message.messages[1].message_id == "-AANBHKtUC-2q6_0WSjBGX___pHnSfBKdA-2"
@@ -244,8 +293,8 @@ async def test_blast_complex_message(message_service):
 
 
 @pytest.mark.asyncio
-async def test_import_message(mocked_api_client, message_service):
-    mocked_api_client.call_api.return_value = deserialize_object(
+async def test_import_message(message_service):
+    return_object = deserialize_object(
         List[V4ImportResponse],
         "["
         "   {"
@@ -255,6 +304,7 @@ async def test_import_message(mocked_api_client, message_service):
         "   }"
         "]",
     )
+    message_service._messages_api.v4_message_import_post = AsyncMock(return_value=return_object)
 
     import_response = await message_service.import_messages(
         [
@@ -274,8 +324,8 @@ async def test_import_message(mocked_api_client, message_service):
 
 
 @pytest.mark.asyncio
-async def test_get_attachment(mocked_api_client, message_service):
-    mocked_api_client.call_api.return_value = "attachment-string"
+async def test_get_attachment(message_service):
+    message_service._attachment_api.v1_stream_sid_attachment_get = AsyncMock(return_value="attachment-string")
 
     attachment = await message_service.get_attachment("stream-id", "message-id", "attachment-id")
 
@@ -283,10 +333,12 @@ async def test_get_attachment(mocked_api_client, message_service):
 
 
 @pytest.mark.asyncio
-async def test_suppress_message(mocked_api_client, message_service):
-    mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
+async def test_suppress_message(message_service):
+    return_object = get_deserialized_object_from_resource(
         MessageSuppressionResponse, "message_response/supress_message.json"
     )
+    message_service._message_suppression_api.v1_admin_messagesuppression_id_suppress_post = AsyncMock(
+        return_value=return_object)
     suppress_response = await message_service.suppress_message("test-message-id")
 
     assert suppress_response.message_id == "test-message-id"
@@ -294,11 +346,11 @@ async def test_suppress_message(mocked_api_client, message_service):
 
 
 @pytest.mark.asyncio
-async def test_get_message_status(mocked_api_client, message_service):
-    mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
+async def test_get_message_status(message_service):
+    return_object = get_deserialized_object_from_resource(
         MessageStatus, "message_response/message_status.json"
     )
-
+    message_service._message_api.v1_message_mid_status_get = AsyncMock(return_value=return_object)
     message_status = await message_service.get_message_status("test-message-id")
 
     assert message_status.author.user_id == "7078106103901"
@@ -307,10 +359,11 @@ async def test_get_message_status(mocked_api_client, message_service):
 
 
 @pytest.mark.asyncio
-async def test_get_attachment_types(mocked_api_client, message_service):
-    mocked_api_client.call_api.return_value = deserialize_object(
+async def test_get_attachment_types(message_service):
+    return_object = deserialize_object(
         List[str], '[   ".bmp",   ".doc",   ".png",   ".mpeg"]'
     )
+    message_service._pod_api.v1_files_allowed_types_get = AsyncMock(return_value=return_object)
 
     attachment_types = await message_service.get_attachment_types()
 
@@ -319,11 +372,11 @@ async def test_get_attachment_types(mocked_api_client, message_service):
 
 
 @pytest.mark.asyncio
-async def test_get_message(mocked_api_client, message_service):
-    mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
+async def test_get_message(message_service):
+    return_object = get_deserialized_object_from_resource(
         V4Message, "message_response/message.json"
     )
-
+    message_service._messages_api.v1_message_id_get = AsyncMock(return_value=return_object)
     message = await message_service.get_message("-AANBHKtUC-2q6_0WSjBGX___pHnSfBKdA")
 
     assert message.message_id == "-AANBHKtUC-2q6_0WSjBGX___pHnSfBKdA"
@@ -332,11 +385,11 @@ async def test_get_message(mocked_api_client, message_service):
 
 
 @pytest.mark.asyncio
-async def test_list_attachments(mocked_api_client, message_service):
-    mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
+async def test_list_attachments(message_service):
+    return_object = get_deserialized_object_from_resource(
         List[StreamAttachmentItem], "message_response/list_attachments.json"
     )
-
+    message_service._streams_api.v1_streams_sid_attachments_get = AsyncMock(return_value=return_object)
     attachments = await message_service.list_attachments("stream_id")
 
     assert len(attachments) == 2
@@ -345,11 +398,11 @@ async def test_list_attachments(mocked_api_client, message_service):
 
 
 @pytest.mark.asyncio
-async def test_message_receipts(mocked_api_client, message_service):
-    mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
+async def test_message_receipts(message_service):
+    return_object = get_deserialized_object_from_resource(
         MessageReceiptDetailResponse, "message_response/message_receipts.json"
     )
-
+    message_service._default_api.v1_admin_messages_message_id_receipts_get = AsyncMock(return_value=return_object)
     message_receipts = await message_service.list_message_receipts("test-message-id")
 
     assert message_receipts.creator.id == 7215545058329
@@ -358,11 +411,12 @@ async def test_message_receipts(mocked_api_client, message_service):
 
 
 @pytest.mark.asyncio
-async def test_get_message_relationships(mocked_api_client, message_service):
-    mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
+async def test_get_message_relationships(message_service):
+    return_object = get_deserialized_object_from_resource(
         MessageMetadataResponse, "message_response/message_relationships.json"
     )
-
+    message_service._default_api.v1_admin_messages_message_id_metadata_relationships_get = AsyncMock(
+        return_value=return_object)
     message_relationships = await message_service.get_message_relationships(
         "TYgOZ65dVsu3SeK7u2YdfH///o6fzBu"
     )
@@ -373,12 +427,19 @@ async def test_get_message_relationships(mocked_api_client, message_service):
 
 
 @pytest.mark.asyncio
-async def test_search_messages_with_hashtag(mocked_api_client, message_service):
-    mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
+async def test_search_messages_with_hashtag(message_service):
+    return_object = get_deserialized_object_from_resource(
         List[V4Message], "message_response/list_messages.json"
     )
+    messages_api = message_service._messages_api
+    messages_api.v1_message_search_post = AsyncMock(return_value=return_object)
 
-    messages = await message_service.search_messages(MessageSearchQuery(hashtag="tag"))
+    query = MessageSearchQuery(hashtag="tag")
+    messages = await message_service.search_messages(query)
+
+    messages_api.v1_message_search_post.assert_called_once()
+    call_kwargs = messages_api.v1_message_search_post.call_args.kwargs
+    assert call_kwargs["query"] == query
     assert len(messages) == 1
     assert messages[0].message_id == "test-message1"
 
@@ -386,46 +447,50 @@ async def test_search_messages_with_hashtag(mocked_api_client, message_service):
 @pytest.mark.asyncio
 @pytest.mark.parametrize("stream_type", ["CHAT", "IM", "MIM", "ROOM", "POST"])
 async def test_search_messages_with_valid_stream_type(
-    mocked_api_client, message_service, stream_type
+    message_service, stream_type
 ):
-    mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
+    return_object = get_deserialized_object_from_resource(
         List[V4Message], "message_response/list_messages.json"
     )
+    messages_api = message_service._messages_api
+    messages_api.v1_message_search_post = AsyncMock(return_value=return_object)
 
-    messages = await message_service.search_messages(MessageSearchQuery(stream_type=stream_type))
+    query = MessageSearchQuery(stream_type=stream_type)
+    messages = await message_service.search_messages(query)
+
+    messages_api.v1_message_search_post.assert_called_once()
+    call_kwargs = messages_api.v1_message_search_post.call_args.kwargs
+    assert call_kwargs["query"] == query
     assert len(messages) == 1
     assert messages[0].message_id == "test-message1"
 
 
 @pytest.mark.asyncio
-async def test_search_messages_with_invalid_stream_type(mocked_api_client, message_service):
-    mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
-        List[V4Message], "message_response/list_messages.json"
-    )
-
+async def test_search_messages_with_invalid_stream_type(message_service):
     with pytest.raises(ValueError):
         await message_service.search_messages(MessageSearchQuery(stream_type="invalid"))
 
 
 @pytest.mark.asyncio
-async def test_search_messages_with_text_and_sid(mocked_api_client, message_service):
-    mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
+async def test_search_messages_with_text_and_sid(message_service):
+    return_object = get_deserialized_object_from_resource(
         List[V4Message], "message_response/list_messages.json"
     )
+    messages_api = message_service._messages_api
+    messages_api.v1_message_search_post = AsyncMock(return_value=return_object)
 
-    messages = await message_service.search_messages(
-        MessageSearchQuery(text="some text", stream_id="sid")
-    )
+    query = MessageSearchQuery(text="some text", stream_id="sid")
+    messages = await message_service.search_messages(query)
+
+    messages_api.v1_message_search_post.assert_called_once()
+    call_kwargs = messages_api.v1_message_search_post.call_args.kwargs
+    assert call_kwargs["query"] == query
     assert len(messages) == 1
     assert messages[0].message_id == "test-message1"
 
 
 @pytest.mark.asyncio
-async def test_search_messages_with_text_and_no_sid(mocked_api_client, message_service):
-    mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
-        List[V4Message], "message_response/list_messages.json"
-    )
-
+async def test_search_messages_with_text_and_no_sid(message_service):
     with pytest.raises(ValueError):
         await message_service.search_messages(MessageSearchQuery(text="some text"))
 
@@ -433,15 +498,20 @@ async def test_search_messages_with_text_and_no_sid(mocked_api_client, message_s
 @pytest.mark.asyncio
 @pytest.mark.parametrize("stream_type", ["CHAT", "IM", "MIM", "ROOM", "POST"])
 async def test_search_messages_with_stream_type_text_and_sid(
-    mocked_api_client, message_service, stream_type
+    message_service, stream_type
 ):
-    mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
+    return_object = get_deserialized_object_from_resource(
         List[V4Message], "message_response/list_messages.json"
     )
+    messages_api = message_service._messages_api
+    messages_api.v1_message_search_post = AsyncMock(return_value=return_object)
 
-    messages = await message_service.search_messages(
-        MessageSearchQuery(text="some text", stream_id="sid", stream_type=stream_type)
-    )
+    query = MessageSearchQuery(text="some text", stream_id="sid", stream_type=stream_type)
+    messages = await message_service.search_messages(query)
+
+    messages_api.v1_message_search_post.assert_called_once()
+    call_kwargs = messages_api.v1_message_search_post.call_args.kwargs
+    assert call_kwargs["query"] == query
     assert len(messages) == 1
     assert messages[0].message_id == "test-message1"
 
@@ -449,12 +519,8 @@ async def test_search_messages_with_stream_type_text_and_sid(
 @pytest.mark.asyncio
 @pytest.mark.parametrize("stream_type", ["CHAT", "IM", "MIM", "ROOM", "POST"])
 async def test_search_messages_with_stream_type_text_and_no_sid(
-    mocked_api_client, message_service, stream_type
+    message_service, stream_type
 ):
-    mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
-        List[V4Message], "message_response/list_messages.json"
-    )
-
     with pytest.raises(ValueError):
         await message_service.search_messages(
             MessageSearchQuery(text="some text", stream_type=stream_type)
@@ -462,11 +528,12 @@ async def test_search_messages_with_stream_type_text_and_no_sid(
 
 
 @pytest.mark.asyncio
-async def test_search_all_messages(mocked_api_client, message_service):
-    mocked_api_client.call_api.side_effect = [
+async def test_search_all_messages(message_service):
+    messages_api = message_service._messages_api
+    messages_api.v1_message_search_post = AsyncMock(side_effect=[
         get_deserialized_object_from_resource(List[V4Message], "message_response/list_messages.json"),
         [],
-    ]
+    ])
     chunk_size = 1
 
     message_generator = await message_service.search_all_messages(
@@ -476,14 +543,15 @@ async def test_search_all_messages(mocked_api_client, message_service):
     assert len(messages) == 1
     assert messages[0].message_id == "test-message1"
 
-    assert mocked_api_client.call_api.call_count == 2
+    assert messages_api.v1_message_search_post.call_count == 2
 
 
 @pytest.mark.asyncio
-async def test_update_message(mocked_api_client, message_service):
-    mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
+async def test_update_message(message_service):
+    return_object = get_deserialized_object_from_resource(
         V4Message, "message_response/update_message.json"
     )
+    message_service._messages_api.v4_stream_sid_message_mid_update_post = AsyncMock(return_value=return_object)
     message = await message_service.update_message(
         "stream_id", "message_id", "test_message", "data", "version"
     )
