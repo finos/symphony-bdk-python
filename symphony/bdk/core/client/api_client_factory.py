@@ -128,9 +128,7 @@ class ApiClientFactory:
         return ApiClientFactory._get_api_client_from_config(configuration, server_config)
 
     def _get_client_config(self, context, server_config):
-        configuration = Configuration(
-            host=(server_config.get_base_path() + context)
-        )
+        configuration = Configuration(host=(server_config.get_base_path() + context))
         configuration.verify_ssl = True
         configuration.ssl_ca_cert = self._config.ssl.trust_store_path
         if server_config.proxy is not None:

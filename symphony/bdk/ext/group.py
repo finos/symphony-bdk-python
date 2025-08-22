@@ -89,7 +89,9 @@ class SymphonyGroupService:
         :param create_group: the details of the group to be created
         :return: the created group
         """
-        return await self._group_api.insert_group(x_symphony_host=X_SYMPHONY_HOST, create_group=create_group)
+        return await self._group_api.insert_group(
+            x_symphony_host=X_SYMPHONY_HOST, create_group=create_group
+        )
 
     @retry(retry=refresh_bearer_token_if_unauthorized)
     async def list_groups(
@@ -156,7 +158,10 @@ class SymphonyGroupService:
         :return: the updated group
         """
         return await self._group_api.update_group(
-            x_symphony_host=X_SYMPHONY_HOST, if_match=if_match, group_id=group_id, update_group=update_group
+            x_symphony_host=X_SYMPHONY_HOST,
+            if_match=if_match,
+            group_id=group_id,
+            update_group=update_group,
         )
 
     @retry(retry=refresh_bearer_token_if_unauthorized)

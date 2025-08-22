@@ -92,7 +92,8 @@ class OboStreamService:
         :return: the information about the given stream.
         """
         return await self._streams_api.v2_streams_sid_info_get(
-            sid=to_url_safe_stream_id(stream_id), session_token=await self._auth_session.session_token
+            sid=to_url_safe_stream_id(stream_id),
+            session_token=await self._auth_session.session_token,
         )
 
     @retry
