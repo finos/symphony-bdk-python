@@ -65,7 +65,7 @@ async def send_messages(messages, stream_id, since, uuid):
 
 async def get_test_messages(bdk, since, uuid):
     messages = await bdk.messages().list_messages(STREAM_ID, since=since)
-    cleaned_messages_text = [re.sub(r"<[^>]+>", " ", msg["message"]).strip() for msg in messages]
+    cleaned_messages_text = [re.sub(r"<[^>]+>", " ", msg.message.rstrip()) for msg in messages]
     return list(
         filter(
             lambda msg: msg.startswith(uuid),

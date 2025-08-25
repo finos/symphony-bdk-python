@@ -7,7 +7,7 @@ import html
 import json
 from enum import Enum
 from json import JSONDecodeError
-from typing import Dict
+from typing import Dict, List
 
 from defusedxml.ElementTree import ParseError, fromstring, tostring
 
@@ -30,7 +30,7 @@ def get_text_content_from_message(message: V4Message) -> str:
         ) from exc
 
 
-def get_mentions(message: V4Message) -> [int]:
+def get_mentions(message: V4Message) -> List[int]:
     """Parse data inside an incoming message and returns a list containing the user ids corresponding
     to the users mentioned
 
@@ -41,7 +41,7 @@ def get_mentions(message: V4Message) -> [int]:
     return [int(user_id) for user_id in mentions_list]
 
 
-def get_hashtags(message: V4Message) -> [str]:
+def get_hashtags(message: V4Message) -> List[str]:
     """Parse data inside an incoming message and returns a list containing the text of the hashtags found
 
     :param message: message incoming V4 message to be parsed
@@ -50,7 +50,7 @@ def get_hashtags(message: V4Message) -> [str]:
     return _get_tags(message, _EntityTypeEnum.HASHTAG)
 
 
-def get_cashtags(message: V4Message) -> [str]:
+def get_cashtags(message: V4Message) -> List[str]:
     """Parse data inside an incoming message and returns a list containing the text of the cashtags found
 
     :param message: message incoming V4 message to be parsed
