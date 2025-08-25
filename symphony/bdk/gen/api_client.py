@@ -28,7 +28,7 @@ from pydantic import SecretStr
 
 from symphony.bdk.gen.configuration import Configuration
 from symphony.bdk.gen.api_response import ApiResponse, T as ApiResponseT
-
+import symphony.bdk.gen.models
 from symphony.bdk.gen import rest
 from symphony.bdk.gen.exceptions import (
     ApiValueError,
@@ -452,8 +452,7 @@ class ApiClient:
             if klass in self.NATIVE_TYPES_MAPPING:
                 klass = self.NATIVE_TYPES_MAPPING[klass]
             else:
-                pass
-                # klass = getattr(symphony.bdk.gen.models, klass)
+                klass = getattr(symphony.bdk.gen.models, klass)
 
         if klass in self.PRIMITIVE_TYPES:
             return self.__deserialize_primitive(data, klass)
