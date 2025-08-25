@@ -8,98 +8,116 @@ commit_hash=b63d67cc0ed7c5a3962e72f21001df4d2ed482f2
 api_spec_base_url=https://raw.githubusercontent.com/symphonyoss/symphony-api-spec/${commit_hash}
 echo $api_spec_base_url
 
-#local_api_spec_base_url=./local
-
 # This function accepts the following parameters (in order):
 # - name of the module we want to generate
 # - uri of the file to be used for generation
 # - uri of the support file needed for the generation
 download_and_generate_files() {
-  name=$1
-  file_url=$2
-  file_name=${file_url##*/}
-  support_file_url=$3
-  support_file_name=${support_file_url##*/}
+    name=$1
+    file_url=$2
+    file_name=${file_url##*/}
+    support_file_url=$3
+    support_file_name=${support_file_url##*/}
 
-  download_files ${file_url} ${file_name} ${support_file_url} ${support_file_name}
-  generate_files ${name} ${file_name}
-  cleanup_files ${file_name} ${support_file_name}
+    download_files "${file_url}" "${file_name}" "${support_file_url}" "${support_file_name}"
+    generate_files "${name}" "${file_name}"
+    cleanup_files "${file_name}" "${support_file_name}"
 }
 
 download_files() {
-  # download files
-  file_url=$1
-  file_name=$2
-  support_file_url=$3
-  support_file_name=$4
+    file_url=$1
+    file_name=$2
+    support_file_url=$3
+    support_file_name=$4
 
-  cd $code_gen_dir
-  curl $file_url -o $file_name
-  if [ ! -z "${support_file_name}" ]
-  then
-    curl $support_file_url -o $support_file_name
-  fi
+    cd "$code_gen_dir"
+    curl -s "$file_url" -o "$file_name"
+    if [ -n "$support_file_name" ]; then
+        curl -s "$support_file_url" -o "$support_file_name"
+    fi
 }
 
 generate_files() {
+    name=$1
+    file_name=$2
 
-  name=$1
-  file_name=$2
+    # Generate files
+    java -jar openapi-generator-cli.jar generate -g python -i "$file_name" --library asyncio --package-name symphony.bdk.gen -o output
 
-  # Generate files
-  java -jar openapi-generator-cli.jar generate -g python -i $file_name --library asyncio --package-name symphony.bdk.gen -o output
+    # Define source and destination directories
+    new_api_dir="$code_gen_dir/output/symphony/bdk/gen/api/"
+    new_models_dir="$code_gen_dir/output/symphony/bdk/gen/models/"
+    final_models_dir="$project_root/symphony/bdk/gen/${name}_model/"
+    final_api_dir="$project_root/symphony/bdk/gen/${name}_api/"
+    final_main_models_dir="$project_root/symphony/bdk/gen/models/"
 
-  # Define source and destination directories
-  new_api_dir=$code_gen_dir/output/symphony/bdk/gen/api/
-  new_models_dir=$code_gen_dir/output/symphony/bdk/gen/models/
+    # Update and copy API files
+    echo "Updating and copying API files..."
+    mkdir -p "$final_api_dir"
+    cd "$new_api_dir"
+    # This sed command is crucial to fix internal API imports
+    sed -i "s/symphony\.bdk\.gen\.models\./symphony\.bdk\.gen\.${name}_model\./g" *.py
+    sed -i "s/ api\./ ${name}_api\./g" *.py
+    rm __init__.py
+    cp *.py "$final_api_dir"
 
-  # Update and copy API files
-  echo "Updating and copying API files..."
-  cd $new_api_dir
-  # This sed command is now different because the model directory is named 'models'
-  sed -i "s/symphony\.bdk\.gen\.models\./symphony\.bdk\.gen\.${name}_model\./g" *.py
-  # This next sed is likely still correct if the API files refer to each other as 'api'
-  sed -i "s/ api\./ ${name}_api\./g" *.py
-  rm __init__.py
-  cp *.py $project_root/symphony/bdk/gen/${name}_api
+    # Update and copy model files
+    echo "Updating and copying Model files..."
+    mkdir -p "$final_models_dir"
+    cd "$new_models_dir"
+    # This sed command is crucial to fix internal model imports
+    sed -i "s/symphony\.bdk\.gen\.models\./symphony\.bdk\.gen\.${name}_model\./g" *.py
 
-  # Update and copy model files
-  echo "Updating and copying Model files..."
-  cd $new_models_dir
-  # Update internal imports from 'models' to 'model'
-  sed -i "s/symphony\.bdk\.gen\.models\./symphony\.bdk\.gen\.${name}_model\./g" *.py
+    # Capture the imports from the generated __init__.py
+    # and append to the main __init__.py file with correct path
+    awk '/^from symphony\.bdk\.gen\.models\./' __init__.py | sed "s/symphony\.bdk\.gen\.models/symphony\.bdk\.gen\.${name}_model/" >> "$final_main_models_dir/__init__.py"
 
-  rm __init__.py
-  cp *.py $project_root/symphony/bdk/gen/${name}_model
+    # Copy the actual model files and remove the generated __init__.py
+    rm __init__.py
+    cp *.py "$final_models_dir"
 
-  # The rest of the files
-  cd $code_gen_dir/output/symphony/bdk/gen
-  cp rest.py $project_root/symphony/bdk/gen/rest.py
+    # The rest of the files
+    cd "$code_gen_dir/output/symphony/bdk/gen"
+    cp rest.py "$project_root/symphony/bdk/gen/rest.py"
+    cp api_client.py "$project_root/symphony/bdk/gen/api_client.py"
 
-  # Clean up
-  cd $code_gen_dir
-  rm -r output
+    # Clean up
+    cd "$code_gen_dir"
+    rm -r output
 }
 
 cleanup_files() {
-  file_name=$1
-  support_file_name=$2
+    file_name=$1
+    support_file_name=$2
 
-  # remove downloaded files
-  cd $code_gen_dir
-  rm -r output
-  rm $file_name
-  if [ ! -z "${support_file_name}" ]
-  then
-    rm $support_file_name
-  fi
+    # remove downloaded files
+    cd "$code_gen_dir"
+    rm "$file_name"
+    if [ -n "$support_file_name" ]; then
+        rm "$support_file_name"
+    fi
 }
 
+main() {
+    # Prepare the target directory for the models
+    rm -rf "$project_root/symphony/bdk/gen/models"
+    mkdir -p "$project_root/symphony/bdk/gen/models"
 
-generate_files agent ${api_spec_base_url}/agent/agent-api-public-deprecated.yaml
-generate_files auth ${api_spec_base_url}/authenticator/authenticator-api-public-deprecated.yaml
-generate_files login ${api_spec_base_url}/login/login-api-public.yaml
-generate_files pod ${api_spec_base_url}/pod/pod-api-public.yaml
-generate_files group ${api_spec_base_url}/profile-manager/profile-manager-api.yaml ${api_spec_base_url}/profile-manager/symphony-common-definitions.yaml
+    # Add initial header to the main __init__.py
+    echo "# coding: utf-8" > "$project_root/symphony/bdk/gen/models/__init__.py"
+    echo "" >> "$project_root/symphony/bdk/gen/models/__init__.py"
+    echo "# This file is auto-generated by a script. Do not edit manually." >> "$project_root/symphony/bdk/gen/models/__init__.py"
+    echo "" >> "$project_root/symphony/bdk/gen/models/__init__.py"
 
-#generate_files agent ${local_api_spec_base_url}/agent-api-public-deprecated.yaml
+    # Add an explanatory comment to the final __init__.py
+    echo "# The following imports are from the auto-generated models." >> "$project_root/symphony/bdk/gen/models/__init__.py"
+    echo "" >> "$project_root/symphony/bdk/gen/models/__init__.py"
+
+    download_and_generate_files agent "${api_spec_base_url}/agent/agent-api-public-deprecated.yaml"
+    download_and_generate_files auth "${api_spec_base_url}/authenticator/authenticator-api-public-deprecated.yaml"
+    download_and_generate_files login "${api_spec_base_url}/login/login-api-public.yaml"
+    download_and_generate_files pod "${api_spec_base_url}/pod/pod-api-public.yaml"
+    download_and_generate_files group "${api_spec_base_url}/profile-manager/profile-manager-api.yaml" "${api_spec_base_url}/profile-manager/symphony-common-definitions.yaml"
+}
+
+main
