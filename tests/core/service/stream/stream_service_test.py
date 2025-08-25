@@ -1,3 +1,4 @@
+from typing import List
 from unittest.mock import AsyncMock, MagicMock, Mock
 
 import pytest
@@ -10,13 +11,12 @@ from symphony.bdk.gen.agent_model.share_content import ShareContent
 from symphony.bdk.gen.agent_model.v2_message import V2Message
 from symphony.bdk.gen.pod_api.room_membership_api import RoomMembershipApi
 from symphony.bdk.gen.pod_api.streams_api import StreamsApi
-from symphony.bdk.gen.pod_model.membership_list import MembershipList
+from symphony.bdk.gen.pod_model.member_info import MemberInfo
 from symphony.bdk.gen.pod_model.room_detail import RoomDetail
 from symphony.bdk.gen.pod_model.stream import Stream
+from symphony.bdk.gen.pod_model.stream_attributes import StreamAttributes
 from symphony.bdk.gen.pod_model.stream_filter import StreamFilter
-from symphony.bdk.gen.pod_model.stream_list import StreamList
 from symphony.bdk.gen.pod_model.user_id import UserId
-from symphony.bdk.gen.pod_model.user_id_list import UserIdList
 from symphony.bdk.gen.pod_model.v1_im_attributes import V1IMAttributes
 from symphony.bdk.gen.pod_model.v1_im_detail import V1IMDetail
 from symphony.bdk.gen.pod_model.v2_admin_stream_filter import V2AdminStreamFilter
@@ -78,15 +78,18 @@ def fixture_stream_service(streams_api, room_membership_api, share_api, auth_ses
 
 @pytest.mark.asyncio
 async def test_get_stream(mocked_api_client, stream_service, streams_api):
-    mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
+    return_object = get_deserialized_object_from_resource(
         V2StreamAttributes, "stream/get_stream.json"
     )
+    streams_api.v2_streams_sid_info_get = AsyncMock(return_value=return_object)
 
-    stream_id = "stream_id"
+    # Test with a stream id that is not url-safe to verify it is converted
+    stream_id = "XlU3OH9eVMzq+yss7M/xyn///oxwgbtGbQ=="
+    url_safe_stream_id = "XlU3OH9eVMzq-yss7M_xyn___oxwgbtGbQ"
     stream_attributes = await stream_service.get_stream(stream_id)
 
     streams_api.v2_streams_sid_info_get.assert_called_once_with(
-        sid=stream_id, session_token=SESSION_TOKEN
+        sid=url_safe_stream_id, session_token=SESSION_TOKEN
     )
     assert stream_attributes.id == "ubaSiuUsc_j-_lVQ8vhAz3___opSJdJZdA"
     assert stream_attributes.room_attributes.name == "New room name"
@@ -95,9 +98,10 @@ async def test_get_stream(mocked_api_client, stream_service, streams_api):
 
 @pytest.mark.asyncio
 async def test_list_streams(mocked_api_client, stream_service, streams_api):
-    mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
-        StreamList, "stream/list_streams.json"
+    return_object = get_deserialized_object_from_resource(
+        List[StreamAttributes], "stream/list_streams.json"
     )
+    streams_api.v1_streams_list_post = AsyncMock(return_value=return_object)
 
     stream_filter = StreamFilter()
     skip = 1
@@ -108,19 +112,20 @@ async def test_list_streams(mocked_api_client, stream_service, streams_api):
     streams_api.v1_streams_list_post.assert_called_once_with(
         filter=stream_filter, skip=skip, limit=limit, session_token=SESSION_TOKEN
     )
-    assert len(streams.value) == 2
-    assert streams.value[0].id == "ouAS1QXEHtIhXdZq4NzJBX___oscpQFcdA"
-    assert streams.value[0].room_attributes.name == "Room APP-3033"
-    assert streams.value[1].id == "z22OMRPxSdRFBfH_oojGkn___orihaxrdA"
-    assert streams.value[1].room_attributes.name == "Test BDK"
+    assert len(streams) == 2
+    assert streams[0].id == "ouAS1QXEHtIhXdZq4NzJBX___oscpQFcdA"
+    assert streams[0].room_attributes.name == "Room APP-3033"
+    assert streams[1].id == "z22OMRPxSdRFBfH_oojGkn___orihaxrdA"
+    assert streams[1].room_attributes.name == "Test BDK"
 
 
 @pytest.mark.asyncio
 async def test_list_all_streams(mocked_api_client, stream_service, streams_api):
-    mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
-        StreamList, "stream/list_streams.json"
+    return_object = get_deserialized_object_from_resource(
+        List[StreamAttributes], "stream/list_streams.json"
     )
-
+    streams_api.v1_streams_list_post = AsyncMock(return_value=return_object)
+    
     stream_filter = StreamFilter()
     limit = 4
 
@@ -165,10 +170,11 @@ async def test_remove_member_from_room(stream_service, room_membership_api):
 
 @pytest.mark.asyncio
 async def test_share(mocked_api_client, stream_service, share_api):
-    mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
+    return_object = get_deserialized_object_from_resource(
         V2Message, "stream/share_article.json"
     )
-
+    share_api.v3_stream_sid_share_post = AsyncMock(return_value=return_object)
+ 
     stream_id = "stream_id"
     share_content = ShareContent()
     message = await stream_service.share(stream_id, share_content)
@@ -211,25 +217,27 @@ async def test_demote_owner(stream_service, room_membership_api):
 
 @pytest.mark.asyncio
 async def test_create_im(mocked_api_client, stream_service, streams_api):
-    mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
+    return_object = get_deserialized_object_from_resource(
         Stream, "stream/create_im.json"
     )
-
+    streams_api.v1_im_create_post = AsyncMock(return_value=return_object)
+ 
     user_id = 12334
     stream = await stream_service.create_im(user_id)
 
     streams_api.v1_im_create_post.assert_called_once_with(
-        uid_list=UserIdList(value=[user_id]), session_token=SESSION_TOKEN
+        uid_list=[user_id], session_token=SESSION_TOKEN
     )
     assert stream.id == "-M8s5WG7K8lAP7cpIiuyTH___oh4zK8EdA"
 
 
 @pytest.mark.asyncio
 async def test_create_room(mocked_api_client, stream_service, streams_api):
-    mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
+    return_object = get_deserialized_object_from_resource(
         V3RoomDetail, "stream/create_room.json"
     )
-
+    streams_api.v3_room_create_post = AsyncMock(return_value=return_object)
+ 
     room_attributes = V3RoomAttributes()
     room_details = await stream_service.create_room(room_attributes)
 
@@ -242,10 +250,11 @@ async def test_create_room(mocked_api_client, stream_service, streams_api):
 
 @pytest.mark.asyncio
 async def test_search_rooms(mocked_api_client, stream_service, streams_api):
-    mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
+    return_object = get_deserialized_object_from_resource(
         V3RoomSearchResults, "stream/search_rooms.json"
     )
-
+    streams_api.v3_room_search_post = AsyncMock(return_value=return_object)
+ 
     search_criteria = V2RoomSearchCriteria(query="query")
     skip = 1
     limit = 2
@@ -265,10 +274,11 @@ async def test_search_rooms(mocked_api_client, stream_service, streams_api):
 
 @pytest.mark.asyncio
 async def test_search_all_rooms(mocked_api_client, stream_service, streams_api):
-    mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
+    return_object = get_deserialized_object_from_resource(
         V3RoomSearchResults, "stream/search_rooms.json"
     )
-
+    streams_api.v3_room_search_post = AsyncMock(return_value=return_object)
+ 
     search_criteria = V2RoomSearchCriteria(query="query")
     chunk_size = 3
 
@@ -288,10 +298,11 @@ async def test_search_all_rooms(mocked_api_client, stream_service, streams_api):
 
 @pytest.mark.asyncio
 async def test_get_room_info(mocked_api_client, stream_service, streams_api):
-    mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
+    return_object = get_deserialized_object_from_resource(
         V3RoomDetail, "stream/get_room_info.json"
     )
-
+    streams_api.v3_room_id_info_get = AsyncMock(return_value=return_object)
+ 
     room_id = "room_id"
     room_detail = await stream_service.get_room_info(room_id)
 
@@ -304,9 +315,10 @@ async def test_get_room_info(mocked_api_client, stream_service, streams_api):
 
 @pytest.mark.asyncio
 async def test_get_im_info(mocked_api_client, stream_service, streams_api):
-    mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
+    return_object = get_deserialized_object_from_resource(
         V1IMDetail, "stream/get_im_info.json"
     )
+    streams_api.v1_im_id_info_get = AsyncMock(return_value=return_object)
 
     im_id = "im_id"
     im_details = await stream_service.get_im_info(im_id)
@@ -323,9 +335,10 @@ async def test_get_im_info(mocked_api_client, stream_service, streams_api):
 
 @pytest.mark.asyncio
 async def test_set_room_active(mocked_api_client, stream_service, streams_api):
-    mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
+    return_object = get_deserialized_object_from_resource(
         RoomDetail, "stream/deactivate_room.json"
     )
+    streams_api.v1_room_id_set_active_post = AsyncMock(return_value=return_object)
 
     room_id = "room_id"
     active = False
@@ -339,9 +352,10 @@ async def test_set_room_active(mocked_api_client, stream_service, streams_api):
 
 @pytest.mark.asyncio
 async def test_update_room(mocked_api_client, stream_service, streams_api):
-    mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
+    return_object = get_deserialized_object_from_resource(
         V3RoomDetail, "stream/update_room.json"
     )
+    streams_api.v3_room_id_update_post = AsyncMock(return_value=return_object)
 
     room_id = "room_id"
     room_attributes = V3RoomAttributes()
@@ -356,9 +370,10 @@ async def test_update_room(mocked_api_client, stream_service, streams_api):
 
 @pytest.mark.asyncio
 async def test_update_im(mocked_api_client, stream_service, streams_api):
-    mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
+    return_object = get_deserialized_object_from_resource(
         V1IMDetail, "stream/get_im_info.json"
     )
+    streams_api.v1_im_id_update_post = AsyncMock(return_value=return_object)
 
     im_id = "im_id"
     im_attributes = V1IMAttributes()
@@ -376,24 +391,26 @@ async def test_update_im(mocked_api_client, stream_service, streams_api):
 
 @pytest.mark.asyncio
 async def test_create_im_admin(mocked_api_client, stream_service, streams_api):
-    mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
+    return_object = get_deserialized_object_from_resource(
         Stream, "stream/create_im.json"
     )
+    streams_api.v1_admin_im_create_post = AsyncMock(return_value=return_object)
 
     user_ids = [12334]
     stream = await stream_service.create_im_admin(user_ids)
 
     streams_api.v1_admin_im_create_post.assert_called_once_with(
-        uid_list=UserIdList(value=user_ids), session_token=SESSION_TOKEN
+        uid_list=user_ids, session_token=SESSION_TOKEN
     )
     assert stream.id == "-M8s5WG7K8lAP7cpIiuyTH___oh4zK8EdA"
 
 
 @pytest.mark.asyncio
 async def test_set_room_active_admin(mocked_api_client, stream_service, streams_api):
-    mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
+    return_object = get_deserialized_object_from_resource(
         RoomDetail, "stream/deactivate_room.json"
     )
+    streams_api.v1_admin_room_id_set_active_post = AsyncMock(return_value=return_object)
 
     room_id = "room_id"
     active = False
@@ -407,9 +424,10 @@ async def test_set_room_active_admin(mocked_api_client, stream_service, streams_
 
 @pytest.mark.asyncio
 async def test_list_streams_admin(mocked_api_client, stream_service, streams_api):
-    mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
+    return_object = get_deserialized_object_from_resource(
         V2AdminStreamList, "stream/list_streams_admin.json"
     )
+    streams_api.v2_admin_streams_list_post = AsyncMock(return_value=return_object)
 
     stream_filter = V2AdminStreamFilter()
     skip = 1
@@ -420,16 +438,17 @@ async def test_list_streams_admin(mocked_api_client, stream_service, streams_api
         filter=stream_filter, skip=skip, limit=limit, session_token=SESSION_TOKEN
     )
     assert streams.limit == 2
-    assert len(streams.streams.value) == 2
-    assert streams.streams.value[0].id == "hpRd80zAUnLv3NMhLVF3Ln___o3ULKRDdA"
-    assert streams.streams.value[1].id == "6hEzTqQjVPLLE9KgXLvsKn___o3TtL3ddA"
+    assert len(streams.streams) == 2
+    assert streams.streams[0].id == "hpRd80zAUnLv3NMhLVF3Ln___o3ULKRDdA"
+    assert streams.streams[1].id == "6hEzTqQjVPLLE9KgXLvsKn___o3TtL3ddA"
 
 
 @pytest.mark.asyncio
 async def test_list_all_streams_admin(mocked_api_client, stream_service, streams_api):
-    mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
+    return_object = get_deserialized_object_from_resource(
         V2AdminStreamList, "stream/list_streams_admin.json"
     )
+    streams_api.v2_admin_streams_list_post = AsyncMock(return_value=return_object)
 
     stream_filter = V2AdminStreamFilter()
     limit = 10
@@ -447,9 +466,10 @@ async def test_list_all_streams_admin(mocked_api_client, stream_service, streams
 
 @pytest.mark.asyncio
 async def test_list_stream_members(mocked_api_client, stream_service, streams_api):
-    mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
+    return_object = get_deserialized_object_from_resource(
         V2MembershipList, "stream/list_stream_members.json"
     )
+    streams_api.v1_admin_stream_id_membership_list_get = AsyncMock(return_value=return_object)
 
     stream_id = "stream_id"
     skip = 1
@@ -460,16 +480,17 @@ async def test_list_stream_members(mocked_api_client, stream_service, streams_ap
         id=stream_id, skip=skip, limit=limit, session_token=SESSION_TOKEN
     )
     assert members.count == 2
-    assert len(members.members.value) == 2
-    assert members.members.value[0].user.user_id == 13056700579872
-    assert members.members.value[1].user.user_id == 13056700579891
+    assert len(members.members) == 2
+    assert members.members[0].user.user_id == 13056700579872
+    assert members.members[1].user.user_id == 13056700579891
 
 
 @pytest.mark.asyncio
 async def test_list_all_stream_members(mocked_api_client, stream_service, streams_api):
-    mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
+    return_object = get_deserialized_object_from_resource(
         V2MembershipList, "stream/list_stream_members.json"
     )
+    streams_api.v1_admin_stream_id_membership_list_get = AsyncMock(return_value=return_object)
 
     stream_id = "stream_id"
     limit = 5
@@ -488,13 +509,13 @@ async def test_list_all_stream_members(mocked_api_client, stream_service, stream
 async def test_list_room_members(
     mocked_api_client, stream_service, room_membership_api
 ):
-    mocked_api_client.call_api.return_value = get_deserialized_object_from_resource(
-        MembershipList, "stream/list_room_members.json"
+    return_object = get_deserialized_object_from_resource(
+        List[MemberInfo], "stream/list_room_members.json"
     )
+    room_membership_api.v2_room_id_membership_list_get = AsyncMock(return_value=return_object)
 
     room_id = "room_id"
     members = await stream_service.list_room_members(room_id)
-    members = members.value
 
     room_membership_api.v2_room_id_membership_list_get.assert_called_once_with(
         id=room_id, session_token=SESSION_TOKEN

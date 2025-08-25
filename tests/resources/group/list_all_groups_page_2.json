@@ -2,8 +2,8 @@
   "data": [
     {
       "name": "SDl test 2",
-      "owner_id": 123,
-      "owner_type": "TENANT",
+      "ownerId": 123,
+      "ownerType": "TENANT",
       "profile": {
         "display_name": "Demo Group 00",
         "email": "email@sdl.symphony.com",
@@ -15,8 +15,8 @@
     },
     {
       "name": "SDl test 3",
-      "owner_id": 124,
-      "owner_type": "TENANT",
+      "ownerId": 124,
+      "ownerType": "TENANT",
       "profile": {
         "display_name": "Demo Group 01",
         "email": "email@sdl.symphony.com",

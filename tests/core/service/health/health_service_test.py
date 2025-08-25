@@ -3,7 +3,7 @@ from unittest.mock import AsyncMock, MagicMock
 import pytest
 
 from symphony.bdk.core.service.health.health_service import HealthService
-from symphony.bdk.gen import ApiException
+from symphony.bdk.gen.rest import ApiException
 from symphony.bdk.gen.agent_api.signals_api import SignalsApi
 from symphony.bdk.gen.agent_api.system_api import SystemApi
 from symphony.bdk.gen.agent_model.agent_info import AgentInfo
