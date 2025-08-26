@@ -26,7 +26,7 @@ from symphony.bdk.gen.pod_model.role_detail import RoleDetail
 from symphony.bdk.gen.pod_model.service_account_manifest import ServiceAccountManifest
 from symphony.bdk.gen.pod_model.string_id import StringId
 from symphony.bdk.gen.pod_model.user_filter import UserFilter
-from symphony.bdk.gen.pod_model.user_id import UserId
+from symphony.bdk.gen.pod_model.user_detail import UserDetail
 from symphony.bdk.gen.pod_model.user_search_query import UserSearchQuery
 from symphony.bdk.gen.pod_model.user_search_results import UserSearchResults
 from symphony.bdk.gen.pod_model.user_status import UserStatus
@@ -259,7 +259,7 @@ class UserService(OboUserService):
         """Retrieve user details of a particular user.
         See: 'Get User v2 <https://developers.symphony.com/restapi/reference/get-user-v2>'_
 
-        :param user_id: User Id
+        :param user_id: User id
         :return: Details of the user.
         """
         params = {"uid": user_id, "session_token": await self._auth_session.session_token}
@@ -300,7 +300,7 @@ class UserService(OboUserService):
     @retry
     async def list_user_details_by_filter(
         self, user_filter: UserFilter, skip: int = 0, limit: int = 50
-    ) -> List[V2UserDetail]:
+    ) -> List[UserDetail]:
         """Retrieve a list of users in the company (pod) by a filter.
         See: `Find Users V1 <https://developers.symphony.com/restapi/reference/find-users>`_
 
@@ -322,7 +322,7 @@ class UserService(OboUserService):
         self, user_filter: UserFilter, chunk_size: int = 50, max_number: int = None
     ) -> AsyncGenerator[V2UserDetail, None]:
         """Retrieve an asynchronous generator of users in the company (pod) by a filter.
-        Same as :func:`~list_user_details_by_filter` but returns an generator which performs the paginated
+        Same as :func:`~list_user_details_by_filter` but returns a generator which performs the paginated
         calls with the correct skip and limit values.
         See: `Find Users V1 <https://developers.symphony.com/restapi/reference/find-users>`_
 
@@ -465,7 +465,7 @@ class UserService(OboUserService):
         See: `Update User Delegates <https://developers.symphony.com/restapi/reference/update-delegates>`_
 
         :param user_id:             User id.
-        :param delegate_user_id:    Delegated user Id to be assigned
+        :param delegate_user_id:    Delegated user id to be assigned
         :param action:              Action to be performed
         """
         params = {
@@ -630,7 +630,7 @@ class UserService(OboUserService):
         """Updates an existing user.
         See: `Update User v2 <https://developers.symphony.com/restapi/reference/update-user-v2>`_
 
-        :param user_id: User Id
+        :param user_id: User id
         :param payload: User's new attributes for update.
         :return: User with the updated user details.
         """
@@ -783,7 +783,7 @@ class UserService(OboUserService):
         """
         await self._user_api.v1_user_manifest_own_post(
             session_token=await self._auth_session.session_token,
-            manifest=ServiceAccountManifest(manifest_data),
+            manifest=ServiceAccountManifest(manifest=manifest_data),
         )
 
     async def update_manifest_from_file(self) -> None:
