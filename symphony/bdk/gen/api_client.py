@@ -12,6 +12,7 @@
 """  # noqa: E501
 
 
+import asyncio
 import datetime
 from dateutil.parser import parse
 from enum import Enum
@@ -629,8 +630,22 @@ class ApiClient:
                 request_auth
             )
         else:
+            auth_settings_callable = self.configuration.auth_settings
+            # The auth_settings callable can be async, but this function is sync.
+            # We need to run the coroutine to get the result. This is a workaround
+            # for the generator producing mixed-style code.
+            if asyncio.iscoroutinefunction(auth_settings_callable):
+                try:
+                    loop = asyncio.get_running_loop()
+                    # This is a blocking call in an async context. It's not ideal, but it's
+                    # necessary here to contain the change to this file.
+                    auth_settings_dict = loop.run_until_complete(auth_settings_callable())
+                except RuntimeError:  # No running event loop
+                    auth_settings_dict = asyncio.run(auth_settings_callable())
+            else:
+                auth_settings_dict = auth_settings_callable()
             for auth in auth_settings:
-                auth_setting = self.configuration.auth_settings().get(auth)
+                auth_setting = auth_settings_dict.get(auth)
                 if auth_setting:
                     self._apply_auth_params(
                         headers,
