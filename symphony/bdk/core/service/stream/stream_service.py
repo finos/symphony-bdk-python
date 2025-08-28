@@ -1,6 +1,5 @@
 from typing import AsyncGenerator, List
 
-from symphony.bdk.core.service.stream.stream_util import to_url_safe_stream_id
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.core.retry import retry
@@ -92,8 +91,7 @@ class OboStreamService:
         :return: the information about the given stream.
         """
         return await self._streams_api.v2_streams_sid_info_get(
-            sid=to_url_safe_stream_id(stream_id),
-            session_token=await self._auth_session.session_token,
+            sid=stream_id, session_token=await self._auth_session.session_token
         )
 
     @retry
