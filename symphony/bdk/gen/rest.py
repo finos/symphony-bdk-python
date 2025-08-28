@@ -183,6 +183,9 @@ class RESTClientObject:
                             filename=v[0],
                             content_type=v[2]
                         )
+                    elif isinstance(v, tuple) and len(v) == 2:
+                        # needed because of multipart form data payload while sending messages with attachment
+                        data.add_field(k, v[0], content_type=v[1])
                     else:
                         data.add_field(k, v)
                 args["data"] = data
