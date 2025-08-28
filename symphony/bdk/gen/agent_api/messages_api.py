@@ -17,7 +17,7 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
 from pydantic import Field, StrictBytes, StrictInt, StrictStr
-from typing import List, Optional, Union
+from typing import List, Optional, Tuple, Union
 from typing_extensions import Annotated
 from symphony.bdk.gen.agent_model.import_response import ImportResponse
 from symphony.bdk.gen.agent_model.imported_message import ImportedMessage
@@ -305,7 +305,9 @@ class MessagesApi:
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -609,7 +611,9 @@ class MessagesApi:
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -990,7 +994,9 @@ class MessagesApi:
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -1380,7 +1386,9 @@ class MessagesApi:
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -1729,7 +1737,9 @@ class MessagesApi:
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -2089,7 +2099,9 @@ class MessagesApi:
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -2405,7 +2417,9 @@ class MessagesApi:
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -2734,7 +2748,9 @@ class MessagesApi:
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -3094,7 +3110,9 @@ class MessagesApi:
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -3422,7 +3440,9 @@ class MessagesApi:
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -3493,8 +3513,8 @@ class MessagesApi:
         message: Annotated[Optional[StrictStr], Field(description="The message payload in MessageML.")] = None,
         data: Annotated[Optional[StrictStr], Field(description="Optional message data in EntityJSON.")] = None,
         version: Annotated[Optional[StrictStr], Field(description="Optional message version in the format \\\"major.minor\\\". If empty, defaults to the latest supported version. ")] = None,
-        attachment: Annotated[Optional[Union[StrictBytes, StrictStr]], Field(description="Optional file attachment.")] = None,
-        preview: Annotated[Optional[Union[StrictBytes, StrictStr]], Field(description="Optional attachment preview.")] = None,
+        attachment: Annotated[Optional[Union[StrictBytes, StrictStr, Tuple[StrictStr, StrictBytes]]], Field(description="Optional file attachment.")] = None,
+        preview: Annotated[Optional[Union[StrictBytes, StrictStr, Tuple[StrictStr, StrictBytes]]], Field(description="Optional attachment preview.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -3593,8 +3613,8 @@ class MessagesApi:
         message: Annotated[Optional[StrictStr], Field(description="The message payload in MessageML.")] = None,
         data: Annotated[Optional[StrictStr], Field(description="Optional message data in EntityJSON.")] = None,
         version: Annotated[Optional[StrictStr], Field(description="Optional message version in the format \\\"major.minor\\\". If empty, defaults to the latest supported version. ")] = None,
-        attachment: Annotated[Optional[Union[StrictBytes, StrictStr]], Field(description="Optional file attachment.")] = None,
-        preview: Annotated[Optional[Union[StrictBytes, StrictStr]], Field(description="Optional attachment preview.")] = None,
+        attachment: Annotated[Optional[Union[StrictBytes, StrictStr, Tuple[StrictStr, StrictBytes]]], Field(description="Optional file attachment.")] = None,
+        preview: Annotated[Optional[Union[StrictBytes, StrictStr, Tuple[StrictStr, StrictBytes]]], Field(description="Optional attachment preview.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -3693,8 +3713,8 @@ class MessagesApi:
         message: Annotated[Optional[StrictStr], Field(description="The message payload in MessageML.")] = None,
         data: Annotated[Optional[StrictStr], Field(description="Optional message data in EntityJSON.")] = None,
         version: Annotated[Optional[StrictStr], Field(description="Optional message version in the format \\\"major.minor\\\". If empty, defaults to the latest supported version. ")] = None,
-        attachment: Annotated[Optional[Union[StrictBytes, StrictStr]], Field(description="Optional file attachment.")] = None,
-        preview: Annotated[Optional[Union[StrictBytes, StrictStr]], Field(description="Optional attachment preview.")] = None,
+        attachment: Annotated[Optional[Union[StrictBytes, StrictStr, Tuple[StrictStr, StrictBytes]]], Field(description="Optional file attachment.")] = None,
+        preview: Annotated[Optional[Union[StrictBytes, StrictStr, Tuple[StrictStr, StrictBytes]]], Field(description="Optional attachment preview.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -3806,7 +3826,9 @@ class MessagesApi:
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -4130,7 +4152,9 @@ class MessagesApi:
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -4199,8 +4223,8 @@ class MessagesApi:
         message: Annotated[Optional[StrictStr], Field(description="The message payload in MessageML.")] = None,
         data: Annotated[Optional[StrictStr], Field(description="Optional message data in EntityJSON.")] = None,
         version: Annotated[Optional[StrictStr], Field(description="Optional message version in the format \\\"major.minor\\\". If empty, defaults to the latest supported version. ")] = None,
-        attachment: Annotated[Optional[Union[StrictBytes, StrictStr]], Field(description="Optional file attachment.")] = None,
-        preview: Annotated[Optional[Union[StrictBytes, StrictStr]], Field(description="Optional attachment preview.")] = None,
+        attachment: Annotated[Optional[Union[StrictBytes, StrictStr, Tuple[StrictStr, StrictBytes]]], Field(description="Optional file attachment.")] = None,
+        preview: Annotated[Optional[Union[StrictBytes, StrictStr, Tuple[StrictStr, StrictBytes]]], Field(description="Optional attachment preview.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -4299,8 +4323,8 @@ class MessagesApi:
         message: Annotated[Optional[StrictStr], Field(description="The message payload in MessageML.")] = None,
         data: Annotated[Optional[StrictStr], Field(description="Optional message data in EntityJSON.")] = None,
         version: Annotated[Optional[StrictStr], Field(description="Optional message version in the format \\\"major.minor\\\". If empty, defaults to the latest supported version. ")] = None,
-        attachment: Annotated[Optional[Union[StrictBytes, StrictStr]], Field(description="Optional file attachment.")] = None,
-        preview: Annotated[Optional[Union[StrictBytes, StrictStr]], Field(description="Optional attachment preview.")] = None,
+        attachment: Annotated[Optional[Union[StrictBytes, StrictStr, Tuple[StrictStr, StrictBytes]]], Field(description="Optional file attachment.")] = None,
+        preview: Annotated[Optional[Union[StrictBytes, StrictStr, Tuple[StrictStr, StrictBytes]]], Field(description="Optional attachment preview.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -4399,8 +4423,8 @@ class MessagesApi:
         message: Annotated[Optional[StrictStr], Field(description="The message payload in MessageML.")] = None,
         data: Annotated[Optional[StrictStr], Field(description="Optional message data in EntityJSON.")] = None,
         version: Annotated[Optional[StrictStr], Field(description="Optional message version in the format \\\"major.minor\\\". If empty, defaults to the latest supported version. ")] = None,
-        attachment: Annotated[Optional[Union[StrictBytes, StrictStr]], Field(description="Optional file attachment.")] = None,
-        preview: Annotated[Optional[Union[StrictBytes, StrictStr]], Field(description="Optional attachment preview.")] = None,
+        attachment: Annotated[Optional[Union[StrictBytes, StrictStr, Tuple[StrictStr, StrictBytes]]], Field(description="Optional file attachment.")] = None,
+        preview: Annotated[Optional[Union[StrictBytes, StrictStr, Tuple[StrictStr, StrictBytes]]], Field(description="Optional attachment preview.")] = None,
         _request_timeout: Union[
             None,
             Annotated[StrictFloat, Field(gt=0)],
@@ -4511,7 +4535,9 @@ class MessagesApi:
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -4876,7 +4902,9 @@ class MessagesApi:
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -4945,8 +4973,8 @@ class MessagesApi:
         message: Annotated[Optional[StrictStr], Field(description="The message payload in MessageML.")] = None,
         data: Annotated[Optional[StrictStr], Field(description="Optional message data in EntityJSON.")] = None,
         version: Annotated[Optional[StrictStr], Field(description="Optional message version in the format \\\"major.minor\\\". If empty, defaults to the latest supported version. ")] = None,
-        attachment: Annotated[Optional[Union[StrictBytes, StrictStr]], Field(description="Optional file attachment.")] = None,
-        preview: Annotated[Optional[Union[StrictBytes, StrictStr]], Field(description="Optional attachment preview.")] = None,
+        attachment: Annotated[Optional[Union[StrictBytes, StrictStr, Tuple[StrictStr, StrictBytes]]], Field(description="Optional file attachment.")] = None,
+        preview: Annotated[Optional[Union[StrictBytes, StrictStr, Tuple[StrictStr, StrictBytes]]], Field(description="Optional attachment preview.")] = None,
         silent: Annotated[Optional[StrictStr], Field(description="Optional boolean field that will determine if the user/s should receive the message as read or not (true by default) ")] = None,
         _request_timeout: Union[
             None,
@@ -5053,8 +5081,8 @@ class MessagesApi:
         message: Annotated[Optional[StrictStr], Field(description="The message payload in MessageML.")] = None,
         data: Annotated[Optional[StrictStr], Field(description="Optional message data in EntityJSON.")] = None,
         version: Annotated[Optional[StrictStr], Field(description="Optional message version in the format \\\"major.minor\\\". If empty, defaults to the latest supported version. ")] = None,
-        attachment: Annotated[Optional[Union[StrictBytes, StrictStr]], Field(description="Optional file attachment.")] = None,
-        preview: Annotated[Optional[Union[StrictBytes, StrictStr]], Field(description="Optional attachment preview.")] = None,
+        attachment: Annotated[Optional[Union[StrictBytes, StrictStr, Tuple[StrictStr, StrictBytes]]], Field(description="Optional file attachment.")] = None,
+        preview: Annotated[Optional[Union[StrictBytes, StrictStr, Tuple[StrictStr, StrictBytes]]], Field(description="Optional attachment preview.")] = None,
         silent: Annotated[Optional[StrictStr], Field(description="Optional boolean field that will determine if the user/s should receive the message as read or not (true by default) ")] = None,
         _request_timeout: Union[
             None,
@@ -5161,8 +5189,8 @@ class MessagesApi:
         message: Annotated[Optional[StrictStr], Field(description="The message payload in MessageML.")] = None,
         data: Annotated[Optional[StrictStr], Field(description="Optional message data in EntityJSON.")] = None,
         version: Annotated[Optional[StrictStr], Field(description="Optional message version in the format \\\"major.minor\\\". If empty, defaults to the latest supported version. ")] = None,
-        attachment: Annotated[Optional[Union[StrictBytes, StrictStr]], Field(description="Optional file attachment.")] = None,
-        preview: Annotated[Optional[Union[StrictBytes, StrictStr]], Field(description="Optional attachment preview.")] = None,
+        attachment: Annotated[Optional[Union[StrictBytes, StrictStr, Tuple[StrictStr, StrictBytes]]], Field(description="Optional file attachment.")] = None,
+        preview: Annotated[Optional[Union[StrictBytes, StrictStr, Tuple[StrictStr, StrictBytes]]], Field(description="Optional attachment preview.")] = None,
         silent: Annotated[Optional[StrictStr], Field(description="Optional boolean field that will determine if the user/s should receive the message as read or not (true by default) ")] = None,
         _request_timeout: Union[
             None,
@@ -5282,7 +5310,9 @@ class MessagesApi:
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters

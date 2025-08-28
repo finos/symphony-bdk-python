@@ -17,7 +17,7 @@ from typing import Any, Dict, List, Optional, Tuple, Union
 from typing_extensions import Annotated
 
 from pydantic import Field, StrictBytes, StrictStr
-from typing import Optional, Union
+from typing import Optional, Tuple, Union
 from typing_extensions import Annotated
 from symphony.bdk.gen.agent_model.attachment_info import AttachmentInfo
 
@@ -44,7 +44,7 @@ class AttachmentsApi:
         self,
         sid: Annotated[StrictStr, Field(description="Stream ID")],
         session_token: Annotated[StrictStr, Field(description="Session authentication token.")],
-        file: Annotated[Union[StrictBytes, StrictStr], Field(description="The attachment body.")],
+        file: Annotated[Union[StrictBytes, StrictStr, Tuple[StrictStr, StrictBytes]], Field(description="The attachment body.")],
         key_manager_token: Annotated[Optional[StrictStr], Field(description="Key Manager authentication token.")] = None,
         _request_timeout: Union[
             None,
@@ -129,7 +129,7 @@ class AttachmentsApi:
         self,
         sid: Annotated[StrictStr, Field(description="Stream ID")],
         session_token: Annotated[StrictStr, Field(description="Session authentication token.")],
-        file: Annotated[Union[StrictBytes, StrictStr], Field(description="The attachment body.")],
+        file: Annotated[Union[StrictBytes, StrictStr, Tuple[StrictStr, StrictBytes]], Field(description="The attachment body.")],
         key_manager_token: Annotated[Optional[StrictStr], Field(description="Key Manager authentication token.")] = None,
         _request_timeout: Union[
             None,
@@ -214,7 +214,7 @@ class AttachmentsApi:
         self,
         sid: Annotated[StrictStr, Field(description="Stream ID")],
         session_token: Annotated[StrictStr, Field(description="Session authentication token.")],
-        file: Annotated[Union[StrictBytes, StrictStr], Field(description="The attachment body.")],
+        file: Annotated[Union[StrictBytes, StrictStr, Tuple[StrictStr, StrictBytes]], Field(description="The attachment body.")],
         key_manager_token: Annotated[Optional[StrictStr], Field(description="Key Manager authentication token.")] = None,
         _request_timeout: Union[
             None,
@@ -311,7 +311,9 @@ class AttachmentsApi:
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -652,7 +654,9 @@ class AttachmentsApi:
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
@@ -712,7 +716,7 @@ class AttachmentsApi:
         self,
         sid: Annotated[StrictStr, Field(description="Stream ID")],
         session_token: Annotated[StrictStr, Field(description="Session authentication token.")],
-        file: Annotated[Union[StrictBytes, StrictStr], Field(description="The attachment body.")],
+        file: Annotated[Union[StrictBytes, StrictStr, Tuple[StrictStr, StrictBytes]], Field(description="The attachment body.")],
         key_manager_token: Annotated[Optional[StrictStr], Field(description="Key Manager authentication token.")] = None,
         _request_timeout: Union[
             None,
@@ -797,7 +801,7 @@ class AttachmentsApi:
         self,
         sid: Annotated[StrictStr, Field(description="Stream ID")],
         session_token: Annotated[StrictStr, Field(description="Session authentication token.")],
-        file: Annotated[Union[StrictBytes, StrictStr], Field(description="The attachment body.")],
+        file: Annotated[Union[StrictBytes, StrictStr, Tuple[StrictStr, StrictBytes]], Field(description="The attachment body.")],
         key_manager_token: Annotated[Optional[StrictStr], Field(description="Key Manager authentication token.")] = None,
         _request_timeout: Union[
             None,
@@ -882,7 +886,7 @@ class AttachmentsApi:
         self,
         sid: Annotated[StrictStr, Field(description="Stream ID")],
         session_token: Annotated[StrictStr, Field(description="Session authentication token.")],
-        file: Annotated[Union[StrictBytes, StrictStr], Field(description="The attachment body.")],
+        file: Annotated[Union[StrictBytes, StrictStr, Tuple[StrictStr, StrictBytes]], Field(description="The attachment body.")],
         key_manager_token: Annotated[Optional[StrictStr], Field(description="Key Manager authentication token.")] = None,
         _request_timeout: Union[
             None,
@@ -979,7 +983,9 @@ class AttachmentsApi:
         _query_params: List[Tuple[str, str]] = []
         _header_params: Dict[str, Optional[str]] = _headers or {}
         _form_params: List[Tuple[str, str]] = []
-        _files: Dict[str, Union[str, bytes]] = {}
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
         _body_params: Optional[bytes] = None
 
         # process the path parameters
