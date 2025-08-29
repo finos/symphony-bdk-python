@@ -1,7 +1,7 @@
 import base64
 import json
 from pathlib import Path
-from typing import AsyncGenerator, Union, List
+from typing import AsyncGenerator, List, Union
 
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
@@ -25,8 +25,8 @@ from symphony.bdk.gen.pod_model.following_list_response import FollowingListResp
 from symphony.bdk.gen.pod_model.role_detail import RoleDetail
 from symphony.bdk.gen.pod_model.service_account_manifest import ServiceAccountManifest
 from symphony.bdk.gen.pod_model.string_id import StringId
-from symphony.bdk.gen.pod_model.user_filter import UserFilter
 from symphony.bdk.gen.pod_model.user_detail import UserDetail
+from symphony.bdk.gen.pod_model.user_filter import UserFilter
 from symphony.bdk.gen.pod_model.user_search_query import UserSearchQuery
 from symphony.bdk.gen.pod_model.user_search_results import UserSearchResults
 from symphony.bdk.gen.pod_model.user_status import UserStatus

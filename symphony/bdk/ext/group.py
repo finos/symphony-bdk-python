@@ -22,7 +22,6 @@ from symphony.bdk.gen.group_model.update_group import UpdateGroup
 from symphony.bdk.gen.group_model.upload_avatar import UploadAvatar
 from symphony.bdk.gen.login_api.authentication_api import AuthenticationApi
 
-
 X_SYMPHONY_HOST = "localhost"
 
 
