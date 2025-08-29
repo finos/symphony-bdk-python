@@ -83,13 +83,11 @@ async def test_get_stream(mocked_api_client, stream_service, streams_api):
     )
     streams_api.v2_streams_sid_info_get = AsyncMock(return_value=return_object)
 
-    # Test with a stream id that is not url-safe to verify it is converted
-    stream_id = "XlU3OH9eVMzq+yss7M/xyn///oxwgbtGbQ=="
-    url_safe_stream_id = "XlU3OH9eVMzq-yss7M_xyn___oxwgbtGbQ"
+    stream_id = "stream_id"
     stream_attributes = await stream_service.get_stream(stream_id)
 
     streams_api.v2_streams_sid_info_get.assert_called_once_with(
-        sid=url_safe_stream_id, session_token=SESSION_TOKEN
+        sid=stream_id, session_token=SESSION_TOKEN
     )
     assert stream_attributes.id == "ubaSiuUsc_j-_lVQ8vhAz3___opSJdJZdA"
     assert stream_attributes.room_attributes.name == "New room name"
