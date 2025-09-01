@@ -74,6 +74,7 @@ generate_files() {
     cp *.py "$final_models_dir"
 
     # The rest of the files
+    # Here we have more files generated that are not updated because they require changes(EX. api_client)
     cd "$code_gen_dir/output/symphony/bdk/gen"
     cp rest.py "$project_root/symphony/bdk/gen/rest.py"
 
