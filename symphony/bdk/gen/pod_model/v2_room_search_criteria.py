@@ -29,6 +29,7 @@ class V2RoomSearchCriteria(BaseModel):
     """ # noqa: E501
     query: StrictStr = Field(description="The search query. Matches the room name and description.")
     labels: Optional[List[StrictStr]] = Field(default=None, description="A list of room tag labels whose values will be queried.")
+    search_fields: Optional[List[StrictStr]] = Field(default=None, description="The room fields on which to search. Parameter introduced in sbe-25.10.0", alias="searchFields")
     active: Optional[StrictBool] = Field(default=None, description="Restrict the search to active/inactive rooms. If unspecified, search all rooms.")
     private: Optional[StrictBool] = Field(default=None, description="Restrict the search to private rooms. If unspecified, search all rooms.")
     owner: Optional[UserId] = None
@@ -36,7 +37,7 @@ class V2RoomSearchCriteria(BaseModel):
     member: Optional[UserId] = None
     sort_order: Optional[StrictStr] = Field(default=None, description="Sort algorithm to be used. Supports two values: \"BASIC\" (legacy algorithm) and \"RELEVANCE\" (enhanced algorithm). ", alias="sortOrder")
     sub_type: Optional[StrictStr] = Field(default=None, description="Restrict the search to the specific room subtype. Valid values are: EMAIL", alias="subType")
-    __properties: ClassVar[List[str]] = ["query", "labels", "active", "private", "owner", "creator", "member", "sortOrder", "subType"]
+    __properties: ClassVar[List[str]] = ["query", "labels", "searchFields", "active", "private", "owner", "creator", "member", "sortOrder", "subType"]
 
     @field_validator('sort_order')
     def sort_order_validate_enum(cls, value):
@@ -110,6 +111,7 @@ class V2RoomSearchCriteria(BaseModel):
         _obj = cls.model_validate({
             "query": obj.get("query"),
             "labels": obj.get("labels"),
+            "searchFields": obj.get("searchFields"),
             "active": obj.get("active"),
             "private": obj.get("private"),
             "owner": UserId.from_dict(obj["owner"]) if obj.get("owner") is not None else None,
