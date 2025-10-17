@@ -4,7 +4,7 @@ import pytest
 import tenacity
 
 from symphony.bdk.core.retry import retry
-from symphony.bdk.gen import ApiException
+from symphony.bdk.gen.rest import ApiException
 from tests.core.config import minimal_retry_config_with_attempts
 from tests.core.retry import NoApiExceptionAfterCount, NoIOErrorAfterCount, retry_test_decorator
 

@@ -37,12 +37,6 @@ from tests.utils.resource_utils import (
 
 SLEEP_SECONDS = 0.0001
 
-
-class EventsMock:
-    def __init__(self, events):
-        self.value = events
-
-
 @pytest.fixture(name="config")
 def fixture_config():
     return BdkConfigLoader.load_from_file(get_config_resource_filepath("config.yaml"))
@@ -73,7 +67,7 @@ def fixture_message_sent(initiator_username):
 
 @pytest.fixture(name="message_sent_event")
 def fixture_message_sent_event(message_sent):
-    return EventsMock([message_sent])
+    return [message_sent]
 
 
 @pytest.fixture(name="read_df_side_effect")
@@ -170,15 +164,8 @@ async def test_read_datafeed_none_list(datafeed_loop_v1, datafeed_api):
 
 
 @pytest.mark.asyncio
-async def test_read_datafeed_no_value(datafeed_loop_v1, datafeed_api):
-    datafeed_api.v4_datafeed_id_read_get.return_value = EventsMock(None)
-
-    assert await datafeed_loop_v1._read_datafeed() == []
-
-
-@pytest.mark.asyncio
 async def test_read_datafeed_empty_list(datafeed_loop_v1, datafeed_api):
-    datafeed_api.v4_datafeed_id_read_get.return_value = EventsMock([])
+    datafeed_api.v4_datafeed_id_read_get.return_value = []
 
     assert await datafeed_loop_v1._read_datafeed() == []
 
@@ -188,7 +175,7 @@ async def test_read_datafeed_non_empty_list(
     datafeed_loop_v1, datafeed_api, message_sent
 ):
     events = [message_sent]
-    datafeed_api.v4_datafeed_id_read_get.return_value = EventsMock(events)
+    datafeed_api.v4_datafeed_id_read_get.return_value = events
 
     assert await datafeed_loop_v1._read_datafeed() == events
 

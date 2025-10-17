@@ -30,6 +30,7 @@ from symphony.bdk.core.service.version.agent_version_service import AgentVersion
 from symphony.bdk.gen.agent_api.attachments_api import AttachmentsApi
 from symphony.bdk.gen.agent_api.audit_trail_api import AuditTrailApi
 from symphony.bdk.gen.agent_api.datafeed_api import DatafeedApi
+from symphony.bdk.gen.agent_api.datahose_api import DatahoseApi
 from symphony.bdk.gen.agent_api.share_api import ShareApi
 from symphony.bdk.gen.agent_api.signals_api import SignalsApi
 from symphony.bdk.gen.agent_api.system_api import SystemApi as AgentSystemApi
@@ -175,7 +176,7 @@ class ServiceFactory:
         """
         if self._config.datahose is not None:
             return DatahoseLoop(
-                DatafeedApi(self._agent_client),
+                DatahoseApi(self._agent_client),
                 self._session_service,
                 self._auth_session,
                 self._config,

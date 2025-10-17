@@ -1,5 +1,6 @@
 import base64
 import json
+from typing import List
 from unittest.mock import AsyncMock, MagicMock, mock_open, patch
 
 import pytest
@@ -13,22 +14,20 @@ from symphony.bdk.gen.agent_model.v1_audit_trail_initiator_list import V1AuditTr
 from symphony.bdk.gen.pod_api.system_api import SystemApi
 from symphony.bdk.gen.pod_api.user_api import UserApi
 from symphony.bdk.gen.pod_api.users_api import UsersApi
-from symphony.bdk.gen.pod_model.avatar_list import AvatarList
+from symphony.bdk.gen.pod_model.avatar import Avatar
 from symphony.bdk.gen.pod_model.avatar_update import AvatarUpdate
 from symphony.bdk.gen.pod_model.delegate_action import DelegateAction
 from symphony.bdk.gen.pod_model.disclaimer import Disclaimer
 from symphony.bdk.gen.pod_model.feature import Feature
-from symphony.bdk.gen.pod_model.feature_list import FeatureList
+from symphony.bdk.gen.pod_model.user_id import UserId
 from symphony.bdk.gen.pod_model.followers_list import FollowersList
 from symphony.bdk.gen.pod_model.followers_list_response import FollowersListResponse
 from symphony.bdk.gen.pod_model.following_list_response import FollowingListResponse
-from symphony.bdk.gen.pod_model.integer_list import IntegerList
-from symphony.bdk.gen.pod_model.role_detail_list import RoleDetailList
+from symphony.bdk.gen.pod_model.role_detail import RoleDetail
 from symphony.bdk.gen.pod_model.service_account_manifest import ServiceAccountManifest
 from symphony.bdk.gen.pod_model.string_id import StringId
-from symphony.bdk.gen.pod_model.user_detail_list import UserDetailList
+from symphony.bdk.gen.pod_model.user_detail import UserDetail
 from symphony.bdk.gen.pod_model.user_filter import UserFilter
-from symphony.bdk.gen.pod_model.user_id_list import UserIdList
 from symphony.bdk.gen.pod_model.user_search_filter import UserSearchFilter
 from symphony.bdk.gen.pod_model.user_search_query import UserSearchQuery
 from symphony.bdk.gen.pod_model.user_search_results import UserSearchResults
@@ -37,7 +36,6 @@ from symphony.bdk.gen.pod_model.user_suspension import UserSuspension
 from symphony.bdk.gen.pod_model.v2_user_attributes import V2UserAttributes
 from symphony.bdk.gen.pod_model.v2_user_create import V2UserCreate
 from symphony.bdk.gen.pod_model.v2_user_detail import V2UserDetail
-from symphony.bdk.gen.pod_model.v2_user_detail_list import V2UserDetailList
 from symphony.bdk.gen.pod_model.v2_user_list import V2UserList
 from tests.core.config import minimal_retry_config
 from tests.utils.resource_utils import (
@@ -191,7 +189,7 @@ async def test_follow_user(user_api, user_service):
 
     user_api.v1_user_uid_follow_post.assert_called_with(
         uid=12345,
-        uid_list=FollowersList(followers=UserIdList(value=[1234, 2345])),
+        uid_list=FollowersList(followers=[1234, 2345]),
         session_token="session_token",
     )
 
@@ -204,7 +202,7 @@ async def test_unfollow_user(user_api, user_service):
 
     user_api.v1_user_uid_unfollow_post.assert_called_with(
         uid=12345,
-        uid_list=FollowersList(followers=UserIdList(value=[1234, 2345])),
+        uid_list=FollowersList(followers=[1234, 2345]),
         session_token="session_token",
     )
 
@@ -224,14 +222,14 @@ async def test_get_user_detail(user_api, user_service):
 
     assert user_detail.user_attributes.user_name == "johndoe"
     assert user_detail.user_system_info.status == "ENABLED"
-    assert len(user_detail.roles.value) == 6
+    assert len(user_detail.roles) == 6
 
 
 @pytest.mark.asyncio
 async def test_list_user_details(user_api, user_service):
     user_api.v2_admin_user_list_get = AsyncMock()
     user_api.v2_admin_user_list_get.return_value = get_deserialized_object_from_resource(
-        V2UserDetailList, "user/list_user_detail.json"
+        List[V2UserDetail], "user/list_user_detail.json"
     )
 
     user_detail_list = await user_service.list_user_details()
@@ -249,7 +247,7 @@ async def test_list_user_details(user_api, user_service):
 async def test_list_all_user_details(user_api, user_service):
     user_api.v2_admin_user_list_get = AsyncMock()
     user_api.v2_admin_user_list_get.return_value = get_deserialized_object_from_resource(
-        V2UserDetailList, "user/list_user_detail.json"
+        List[V2UserDetail], "user/list_user_detail.json"
     )
 
     gen = await user_service.list_all_user_details()
@@ -268,7 +266,7 @@ async def test_list_all_user_details(user_api, user_service):
 async def test_list_user_details_by_filter(user_api, user_service):
     user_api.v1_admin_user_find_post = AsyncMock()
     user_api.v1_admin_user_find_post.return_value = get_deserialized_object_from_resource(
-        UserDetailList, "user/list_user_by_filter.json"
+        List[UserDetail], "user/list_user_by_filter.json"
     )
     user_filter = UserFilter(status="ENABLED", role="INDIVIDUAL")
 
@@ -287,7 +285,7 @@ async def test_list_user_details_by_filter(user_api, user_service):
 async def test_list_all_user_details_by_filter(user_api, user_service):
     user_api.v1_admin_user_find_post = AsyncMock()
     user_api.v1_admin_user_find_post.return_value = get_deserialized_object_from_resource(
-        UserDetailList, "user/list_user_by_filter.json"
+        List[UserDetail], "user/list_user_by_filter.json"
     )
     user_filter = UserFilter(status="ENABLED")
 
@@ -315,15 +313,15 @@ async def test_add_role(user_api, user_service):
 
 
 @pytest.mark.asyncio
-async def test_list_roles(system_api, user_service):
-    system_api.v1_admin_system_roles_list_get = AsyncMock()
-    system_api.v1_admin_system_roles_list_get.return_value = get_deserialized_object_from_resource(
-        RoleDetailList, "user/list_roles.json"
+async def test_list_roles(user_api, user_service):
+    user_api.v1_admin_system_roles_list_get = AsyncMock()
+    user_api.v1_admin_system_roles_list_get.return_value = get_deserialized_object_from_resource(
+        List[RoleDetail], "user/list_roles.json"
     )
 
     role_list = await user_service.list_roles()
 
-    system_api.v1_admin_system_roles_list_get.assert_called_with(session_token="session_token")
+    user_api.v1_admin_system_roles_list_get.assert_called_with(session_token="session_token")
 
     assert len(role_list) == 12
     assert role_list[0].id == "CONTENT_MANAGEMENT"
@@ -345,7 +343,7 @@ async def test_remove_role(user_api, user_service):
 async def test_get_avatar(user_api, user_service):
     user_api.v1_admin_user_uid_avatar_get = AsyncMock()
     user_api.v1_admin_user_uid_avatar_get.return_value = get_deserialized_object_from_resource(
-        AvatarList, "user/list_avatar.json"
+        List[Avatar], "user/list_avatar.json"
     )
 
     avatar_list = await user_service.get_avatar(1234)
@@ -425,7 +423,7 @@ async def test_add_disclaimer(user_api, user_service):
 async def test_get_delegates(user_api, user_service):
     user_api.v1_admin_user_uid_delegates_get = AsyncMock()
     user_api.v1_admin_user_uid_delegates_get.return_value = deserialize_object(
-        IntegerList, "[7215545078461]"
+        List[int], "[7215545078461]"
     )
 
     delegate_list = await user_service.get_delegates(1234)
@@ -455,7 +453,7 @@ async def test_update_delegates(user_api, user_service):
 async def test_get_feature_entitlements(user_api, user_service):
     user_api.v1_admin_user_uid_features_get = AsyncMock()
     user_api.v1_admin_user_uid_features_get.return_value = deserialize_object(
-        FeatureList,
+        List[Feature],
         payload="["
         "   {"
         '       "entitlment": "canCreatePublicRoom",'
@@ -486,7 +484,7 @@ async def test_update_feature_entitlements(user_api, user_service):
     await user_service.update_feature_entitlements(1234, [feature])
 
     user_api.v1_admin_user_uid_features_update_post.assert_called_with(
-        uid=1234, payload=FeatureList(value=[feature]), session_token="session_token"
+        uid=1234, payload=[feature], session_token="session_token"
     )
 
 
@@ -610,7 +608,7 @@ async def test_create(user_api, user_service):
 
     assert user_detail.user_attributes.user_name == "johndoe"
     assert user_detail.user_system_info.status == "ENABLED"
-    assert len(user_detail.roles.value) == 6
+    assert len(user_detail.roles) == 6
 
 
 @pytest.mark.asyncio
@@ -630,7 +628,7 @@ async def test_update(user_api, user_service):
 
     assert user_detail.user_attributes.user_name == "johndoe"
     assert user_detail.user_system_info.status == "ENABLED"
-    assert len(user_detail.roles.value) == 6
+    assert len(user_detail.roles) == 6
 
 
 @pytest.mark.asyncio
@@ -659,7 +657,7 @@ async def test_list_audit_trail(audit_trail_api, user_service):
     )
 
     assert len(audit_trail_initiator_list.items) == 2
-    assert audit_trail_initiator_list.items[0].initiator_id == 1353716993
+    assert audit_trail_initiator_list.items[0].initiator_id == "1353716993"
 
 
 @pytest.mark.asyncio
@@ -692,8 +690,8 @@ async def test_list_all_user_audit_trail(audit_trail_api, user_service):
     )
 
     assert len(audit_trail_list) == 2
-    assert audit_trail_list[0]["action_name"] == "profileInfoUpdate"
-    assert audit_trail_list[1]["action_name"] == "userAppEntitlementInstall"
+    assert audit_trail_list[0].action_name == "profileInfoUpdate"
+    assert audit_trail_list[1].action_name == "userAppEntitlementInstall"
 
 
 @pytest.mark.asyncio
@@ -726,10 +724,10 @@ async def test_list_all_user_audit_trail_2_pages(audit_trail_api, user_service):
     assert audit_trail_api.v1_audittrail_privilegeduser_get.call_count == 2
     assert kwargs["after"] == "2"
     assert len(audit_trail_list) == 4
-    assert audit_trail_list[0]["action_name"] == "profileInfoUpdate-2"
-    assert audit_trail_list[1]["action_name"] == "userAppEntitlementInstall-2"
-    assert audit_trail_list[2]["action_name"] == "profileInfoUpdate"
-    assert audit_trail_list[3]["action_name"] == "userAppEntitlementInstall"
+    assert audit_trail_list[0].action_name == "profileInfoUpdate-2"
+    assert audit_trail_list[1].action_name == "userAppEntitlementInstall-2"
+    assert audit_trail_list[2].action_name == "profileInfoUpdate"
+    assert audit_trail_list[3].action_name == "userAppEntitlementInstall"
 
 
 @pytest.mark.asyncio
@@ -805,5 +803,5 @@ async def test_update_manifest_file(user_api, user_service):
 
         user_api.v1_user_manifest_own_post.assert_called_once_with(
             session_token="session_token",
-            manifest=ServiceAccountManifest(json.dumps(expected_manifest_data)),
+            manifest=ServiceAccountManifest(manifest=json.dumps(expected_manifest_data)),
         )

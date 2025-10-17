@@ -1,6 +1,7 @@
 import logging
 import time
 from abc import ABC, abstractmethod
+from typing import Union
 
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.config.model.bdk_config import BdkConfig
@@ -8,6 +9,7 @@ from symphony.bdk.core.service.datafeed.abstract_datafeed_loop import AbstractDa
 from symphony.bdk.core.service.datafeed.exception import EventError
 from symphony.bdk.core.service.session.session_service import SessionService
 from symphony.bdk.gen.agent_api.datafeed_api import DatafeedApi
+from symphony.bdk.gen.agent_api.datahose_api import DatahoseApi
 
 EVENT_PROCESSING_MAX_DURATION_SECONDS = 30
 
@@ -19,14 +21,14 @@ class AbstractAckIdEventLoop(AbstractDatafeedLoop, ABC):
 
     def __init__(
         self,
-        datafeed_api: DatafeedApi,
+        datafeed_api: Union[DatafeedApi, DatahoseApi],
         session_service: SessionService,
         auth_session: AuthSession,
         config: BdkConfig,
     ):
         """
 
-        :param datafeed_api: DatafeedApi to request the service
+        :param datafeed_api: DatafeedApi or DatahoseApi to request the service
         :param session_service: the SessionService to get user session information
         :param auth_session: the AuthSession instance used to get session and key manager tokens
         :param config: the bot configuration

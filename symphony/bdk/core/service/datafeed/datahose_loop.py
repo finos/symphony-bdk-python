@@ -7,7 +7,7 @@ from symphony.bdk.core.retry.strategy import read_datahose_retry
 from symphony.bdk.core.service.datafeed.abstract_ackId_event_loop import AbstractAckIdEventLoop
 from symphony.bdk.core.service.datafeed.abstract_datahose_loop import AbstractDatahoseLoop
 from symphony.bdk.core.service.session.session_service import SessionService
-from symphony.bdk.gen.agent_api.datafeed_api import DatafeedApi
+from symphony.bdk.gen.agent_api.datahose_api import DatahoseApi
 from symphony.bdk.gen.agent_model.v5_events_read_body import V5EventsReadBody
 
 # DFv2 API authorizes a maximum length for the tag parameter
@@ -30,12 +30,12 @@ class DatahoseLoop(AbstractAckIdEventLoop, AbstractDatahoseLoop):
 
     def __init__(
         self,
-        datafeed_api: DatafeedApi,
+        datahose_api: DatahoseApi,
         session_service: SessionService,
         auth_session: AuthSession,
         config: BdkConfig,
     ):
-        super().__init__(datafeed_api, session_service, auth_session, config)
+        super().__init__(datahose_api, session_service, auth_session, config)
         if config.datahose is not None:
             not_truncated_tag = (
                 config.datahose.tag

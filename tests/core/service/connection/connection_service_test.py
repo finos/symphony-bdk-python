@@ -1,3 +1,4 @@
+from typing import List
 from unittest.mock import AsyncMock, MagicMock
 
 import pytest
@@ -7,7 +8,6 @@ from symphony.bdk.core.service.connection.connection_service import ConnectionSe
 from symphony.bdk.core.service.connection.model.connection_status import ConnectionStatus
 from symphony.bdk.gen.pod_api.connection_api import ConnectionApi
 from symphony.bdk.gen.pod_model.user_connection import UserConnection
-from symphony.bdk.gen.pod_model.user_connection_list import UserConnectionList
 from symphony.bdk.gen.pod_model.user_connection_request import UserConnectionRequest
 from tests.core.config import minimal_retry_config
 from tests.utils.resource_utils import deserialize_object
@@ -52,7 +52,7 @@ async def test_get_connection(connection_api, connection_service):
 async def test_list_connections(connection_api, connection_service):
     connection_api.v1_connection_list_get = AsyncMock()
     connection_api.v1_connection_list_get.return_value = deserialize_object(
-        UserConnectionList,
+        List[UserConnection],
         "["
         "   {"
         '       "userId": 7078106126503,'

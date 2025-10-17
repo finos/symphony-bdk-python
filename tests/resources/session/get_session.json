@@ -1,9 +1,9 @@
 {
   "id": 7696581394433,
-  "email_address": "admin@symphony.com",
-  "first_name": "Symphony",
-  "last_name": "Admin",
-  "display_name": "Symphony Admin",
+  "emailAddress": "admin@symphony.com",
+  "firstName": "Symphony",
+  "lastName": "Admin",
+  "displayName": "Symphony Admin",
   "title": "Administrator",
   "company": "Acme",
   "username": "admin@symphony.com",
