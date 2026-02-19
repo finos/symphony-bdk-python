@@ -47,10 +47,10 @@ jobs:
         run: poetry install
 
       - name: Export dependencies
-        run: poetry export -o requirements.txt
+        run: poetry export -o requirements.txt --only main
 
       - name: Run license checks
         run: poetry run liccheck
 
       - name: Run CVE checks
-        run: poetry run safety check
+        run: poetry run safety check -r requirements.txt

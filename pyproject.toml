@@ -19,7 +19,7 @@ urllib3 = ">=2.5.0,<3"
 aiohttp = "^3.12.14"
 pyyaml = "^6.0"
 PyJWT = "^2.10.0"
-cryptography = "^44.0.1"
+cryptography = "^46.0.0"
 tenacity = "^8.0.1"
 defusedxml = "^0.7.1"
 docutils = "0.16"
@@ -71,7 +71,9 @@ authorized_licenses = [
     "MIT",
     "Apache Software",
     "Apache-2.0",
-    "Python Software Foundation"
+    "Python Software Foundation",
+    "Apache-2.0 AND MIT",
+    "PSF-2.0"
 ]
 
 
