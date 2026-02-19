@@ -69,7 +69,9 @@ authorized_licenses = [
     "MIT",
     "Apache Software",
     "Apache-2.0",
-    "Python Software Foundation"
+    "Python Software Foundation",
+    "Apache-2.0 AND MIT",
+    "PSF-2.0"
 ]
 
 
