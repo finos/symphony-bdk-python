@@ -53,4 +53,4 @@ jobs:
         run: poetry run liccheck
 
       - name: Run CVE checks
-        run: poetry run safety check
+        run: poetry run safety check -r requirements.txt
