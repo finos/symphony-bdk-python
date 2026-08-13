@@ -4,15 +4,15 @@ This file lists the maintainers of this repository.
 
 ## Current maintainers
 
-| GitHub Username | Name | Organization | Email |
-|----------------|------|--------------|-------|
-| @Yannick-Malins | Yannick | @SymphonyOSF | *please add email* |
-| @benoit-sy | Benoit Charbonnier | *please add organization* | *please add email* |
-| @broHeryk | *please add name* | *please add organization* | *please add email* |
-| @catalinsymphony | Catalin Ghimici | *please add organization* | *please add email* |
-| @sbenmoussati | Salah Benmoussati | *please add organization* | *please add email* |
-| @thibauult | Thibault Pensec | @SymphonyOSF  | *please add email* |
-| @vladokrsymphony | Vlado Kragujevski | *please add organization* | *please add email* |
+| GitHub Username | Name | Organization | Email (optional) |
+|----------------|------|--------------|------------------|
+| @Yannick-Malins | Yannick | @SymphonyOSF |  |
+| @benoit-sy | Benoit Charbonnier | *please add organization* |  |
+| @broHeryk | *please add name* | *please add organization* |  |
+| @catalinsymphony | Catalin Ghimici | *please add organization* |  |
+| @sbenmoussati | Salah Benmoussati | *please add organization* |  |
+| @thibauult | Thibault Pensec | @SymphonyOSF  |  |
+| @vladokrsymphony | Vlado Kragujevski | *please add organization* |  |
 
 For information about maintainer responsibilities and resources, see the [FINOS Maintainers Cheatsheet](https://community.finos.org/docs/finos-maintainers-cheatsheet).
 
