@@ -13,6 +13,7 @@ This file lists the maintainers of this repository.
 | @sbenmoussati | Salah Benmoussati | @SymphonyOSF |  |
 | @thibauult | Thibault Pensec | @SymphonyOSF  |  |
 | @vladokrsymphony | Vlado Kragujevski | @SymphonyOSF |  |
+| @symphony-enrico | Enrico Molino | @SymphonyOSF |  |
 
 For information about maintainer responsibilities and resources, see the [FINOS Maintainers Cheatsheet](https://community.finos.org/docs/finos-maintainers-cheatsheet).
 
