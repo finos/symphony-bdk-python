@@ -13,11 +13,11 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.2.2
 
       - name: Set up Python 3.9
         id: setup-python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@7f4fc3e22c37d6ff65e88745f38bd3157c663f7c # v4.9.1
         with:
           python-version: 3.9
 
@@ -27,7 +27,7 @@ jobs:
           echo "::set-output name=dir::$(pip cache dir)"
 
       - name: Cache pip dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: ${{ steps.pip-cache.outputs.dir }}
           key: ${{ runner.os }}-pip-${{ steps.setup-python.outputs.python-version }}
@@ -36,7 +36,7 @@ jobs:
         run: pip install poetry
 
       - name: Cache poetry
-        uses: actions/cache@v4
+        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: ~/.cache/pypoetry/virtualenvs
           key: ${{ runner.os }}-poetry-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('poetry.lock') }}
@@ -53,4 +53,23 @@ jobs:
         run: poetry run liccheck
 
       - name: Run CVE checks
-        run: poetry run safety check -r requirements.txt
+        # IDs below are all urllib3/aiohttp findings whose fix requires a version that
+        # dropped Python 3.9 support (this project's floor, see pyproject.toml). Passing
+        # -i here (rather than relying only on .safety-policy.yml) because the -i flag
+        # replaces, rather than merges with, the policy file's ignore-vulnerabilities list
+        # when both are used together. Revisit when Python 3.9 support is dropped.
+        run: >
+          poetry run safety check -r requirements.txt
+          -i 96886
+          -i SFTY-20260511-47957
+          -i SFTY-20260615-39401
+          -i SFTY-20260615-18154
+          -i SFTY-20260615-56865
+          -i SFTY-20260615-97789
+          -i SFTY-20260615-89136
+          -i SFTY-20260615-16622
+          -i SFTY-20260615-53053
+          -i SFTY-20260615-28483
+          -i SFTY-20260603-52923
+          -i SFTY-20260603-52285
+          -i SFTY-20260615-45392
