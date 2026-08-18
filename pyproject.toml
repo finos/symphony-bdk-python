@@ -69,6 +69,7 @@ fail_under = 90.0
 [tool.liccheck]
 authorized_licenses = [
     "BSD",
+    "BSD-3-Clause",
     "GNU Library or Lesser General Public License (LGPL)",
     "MIT",
     "Apache Software",
