@@ -1,6 +1,6 @@
 from asyncio import TimeoutError
 
-from aiohttp import ClientConnectionError
+from aiohttp import ClientConnectionError, ClientPayloadError
 from tenacity import RetryCallState
 
 from symphony.bdk.core.auth.exception import AuthUnauthorizedError
@@ -16,12 +16,13 @@ def is_client_error(exception: Exception) -> bool:
 
 
 def is_client_timeout_error(exception: Exception):
-    """Checks if the exception is a client timeout error
+    """Checks if the exception is a client timeout or transient stream error
 
     :param exception: The exception to be checked
-    :return: True if checks the predicate, False otherwise
+    :return: True for connection errors, asyncio timeouts, and truncated/aborted
+             streaming payloads (ClientPayloadError), False otherwise
     """
-    return isinstance(exception, ClientConnectionError) or isinstance(exception, TimeoutError)
+    return isinstance(exception, (ClientConnectionError, ClientPayloadError, TimeoutError))
 
 
 def can_authentication_be_retried(exception: Exception) -> bool:

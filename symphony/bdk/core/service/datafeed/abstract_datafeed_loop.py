@@ -137,8 +137,16 @@ class AbstractDatafeedLoop(ABC):
 
     async def _run_loop(self):
         self._running = True
-        while self._running:
-            await self._run_loop_iteration()
+        try:
+            while self._running:
+                await self._run_loop_iteration()
+        finally:
+            # Allow the loop to be restarted after ANY exit (explicit stop,
+            # cancellation, or an exception escaping retry). Without this, _running
+            # stays True after an abnormal crash and a subsequent start() raises
+            # "already started" forever, turning a transient error into a permanent
+            # silent outage.
+            self._running = False
 
     @abstractmethod
     async def _run_loop_iteration(self):
