@@ -1,3 +1,4 @@
+from symphony.bdk.gen.agent_model.v4_generic_system_event import V4GenericSystemEvent
 from symphony.bdk.gen.agent_model.v4_connection_accepted import V4ConnectionAccepted
 from symphony.bdk.gen.agent_model.v4_connection_requested import V4ConnectionRequested
 from symphony.bdk.gen.agent_model.v4_event import V4Event
@@ -165,4 +166,21 @@ class RealTimeEventListener:
 
         :param initiator: Event initiator.
         :param event: Symphony Elements Action payload.
+        """
+
+    async def on_generic_system_event(
+        self, initiator: V4Initiator, event: V4GenericSystemEvent
+    ):
+        """
+        Called when a GENERICSYSTEMEVENT event is received.
+
+        Generic system events are platform-level notifications emitted by Symphony's internal Maestro event bus.
+        The ``event_subtype`` field on the payload identifies the specific event; ``parameters`` carries
+        subtype-specific data.
+
+        Bot developers should filter on ``event.event_subtype`` rather than relying solely on the outer
+        ``GENERICSYSTEMEVENT`` type.
+
+        :param initiator: Event initiator.
+        :param event: Generic system event payload (``V4GenericSystemEvent``).
         """
