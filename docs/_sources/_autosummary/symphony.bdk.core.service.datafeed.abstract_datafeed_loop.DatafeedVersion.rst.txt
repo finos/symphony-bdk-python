@@ -1,0 +1,26 @@
+symphony.bdk.core.service.datafeed.abstract\_datafeed\_loop.DatafeedVersion
+===========================================================================
+
+.. currentmodule:: symphony.bdk.core.service.datafeed.abstract_datafeed_loop
+
+.. autoclass:: DatafeedVersion
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~DatafeedVersion.V1
+      ~DatafeedVersion.V2
+   
+   

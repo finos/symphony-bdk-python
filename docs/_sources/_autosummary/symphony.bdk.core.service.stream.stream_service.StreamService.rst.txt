@@ -1,0 +1,51 @@
+symphony.bdk.core.service.stream.stream\_service.StreamService
+==============================================================
+
+.. currentmodule:: symphony.bdk.core.service.stream.stream_service
+
+.. autoclass:: StreamService
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~StreamService.__init__
+      ~StreamService.add_member_to_room
+      ~StreamService.create_im
+      ~StreamService.create_im_admin
+      ~StreamService.create_room
+      ~StreamService.demote_owner_to_room_participant
+      ~StreamService.get_im_info
+      ~StreamService.get_room_info
+      ~StreamService.get_stream
+      ~StreamService.list_all_stream_members
+      ~StreamService.list_all_streams
+      ~StreamService.list_all_streams_admin
+      ~StreamService.list_all_user_streams_admin
+      ~StreamService.list_room_members
+      ~StreamService.list_stream_members
+      ~StreamService.list_streams
+      ~StreamService.list_streams_admin
+      ~StreamService.list_user_streams_admin
+      ~StreamService.promote_user_to_room_owner
+      ~StreamService.remove_member_from_room
+      ~StreamService.search_all_rooms
+      ~StreamService.search_rooms
+      ~StreamService.set_room_active
+      ~StreamService.set_room_active_admin
+      ~StreamService.share
+      ~StreamService.update_im
+      ~StreamService.update_room
+   
+   
+
+   
+   
+   

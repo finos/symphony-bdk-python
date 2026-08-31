@@ -1,0 +1,35 @@
+symphony.bdk.core.service.signal.signal\_service.SignalService
+==============================================================
+
+.. currentmodule:: symphony.bdk.core.service.signal.signal_service
+
+.. autoclass:: SignalService
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~SignalService.__init__
+      ~SignalService.create_signal
+      ~SignalService.delete_signal
+      ~SignalService.get_signal
+      ~SignalService.list_all_signals
+      ~SignalService.list_all_subscribers
+      ~SignalService.list_signals
+      ~SignalService.list_subscribers
+      ~SignalService.subscribe_users_to_signal
+      ~SignalService.unsubscribe_users_to_signal
+      ~SignalService.update_signal
+   
+   
+
+   
+   
+   

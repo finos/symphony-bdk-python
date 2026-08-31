@@ -1,0 +1,36 @@
+symphony.bdk.core.service.message.model.Message
+===============================================
+
+.. currentmodule:: symphony.bdk.core.service.message.model
+
+.. autoclass:: Message
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Message.__init__
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Message.attachments
+      ~Message.content
+      ~Message.data
+      ~Message.previews
+      ~Message.silent
+      ~Message.version
+   
+   

@@ -1,0 +1,6 @@
+symphony.bdk.core.service.user.user\_util.extract\_tenant\_id
+=============================================================
+
+.. currentmodule:: symphony.bdk.core.service.user.user_util
+
+.. autofunction:: extract_tenant_id

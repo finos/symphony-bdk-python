@@ -1,0 +1,43 @@
+symphony.bdk.core.symphony\_bdk.SymphonyBdk
+===========================================
+
+.. currentmodule:: symphony.bdk.core.symphony_bdk
+
+.. autoclass:: SymphonyBdk
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~SymphonyBdk.__init__
+      ~SymphonyBdk.activities
+      ~SymphonyBdk.app_authenticator
+      ~SymphonyBdk.applications
+      ~SymphonyBdk.bot_session
+      ~SymphonyBdk.close_clients
+      ~SymphonyBdk.connections
+      ~SymphonyBdk.datafeed
+      ~SymphonyBdk.datahose
+      ~SymphonyBdk.extensions
+      ~SymphonyBdk.health
+      ~SymphonyBdk.messages
+      ~SymphonyBdk.obo
+      ~SymphonyBdk.obo_services
+      ~SymphonyBdk.presence
+      ~SymphonyBdk.sessions
+      ~SymphonyBdk.signals
+      ~SymphonyBdk.streams
+      ~SymphonyBdk.users
+   
+   
+
+   
+   
+   

@@ -1,0 +1,6 @@
+symphony.bdk.core.service.message.message\_parser.get\_mentions
+===============================================================
+
+.. currentmodule:: symphony.bdk.core.service.message.message_parser
+
+.. autofunction:: get_mentions

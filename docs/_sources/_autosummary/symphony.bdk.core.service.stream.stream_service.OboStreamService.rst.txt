@@ -1,0 +1,39 @@
+symphony.bdk.core.service.stream.stream\_service.OboStreamService
+=================================================================
+
+.. currentmodule:: symphony.bdk.core.service.stream.stream_service
+
+.. autoclass:: OboStreamService
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~OboStreamService.__init__
+      ~OboStreamService.add_member_to_room
+      ~OboStreamService.create_im
+      ~OboStreamService.create_room
+      ~OboStreamService.demote_owner_to_room_participant
+      ~OboStreamService.get_room_info
+      ~OboStreamService.get_stream
+      ~OboStreamService.list_all_streams
+      ~OboStreamService.list_streams
+      ~OboStreamService.promote_user_to_room_owner
+      ~OboStreamService.remove_member_from_room
+      ~OboStreamService.search_all_rooms
+      ~OboStreamService.search_rooms
+      ~OboStreamService.share
+      ~OboStreamService.update_room
+   
+   
+
+   
+   
+   

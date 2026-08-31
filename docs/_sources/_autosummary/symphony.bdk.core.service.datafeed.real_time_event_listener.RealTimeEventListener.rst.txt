@@ -1,0 +1,42 @@
+symphony.bdk.core.service.datafeed.real\_time\_event\_listener.RealTimeEventListener
+====================================================================================
+
+.. currentmodule:: symphony.bdk.core.service.datafeed.real_time_event_listener
+
+.. autoclass:: RealTimeEventListener
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~RealTimeEventListener.__init__
+      ~RealTimeEventListener.is_accepting_event
+      ~RealTimeEventListener.on_connection_accepted
+      ~RealTimeEventListener.on_connection_requested
+      ~RealTimeEventListener.on_instant_message_created
+      ~RealTimeEventListener.on_message_sent
+      ~RealTimeEventListener.on_message_suppressed
+      ~RealTimeEventListener.on_room_created
+      ~RealTimeEventListener.on_room_deactivated
+      ~RealTimeEventListener.on_room_demoted_from_owner
+      ~RealTimeEventListener.on_room_member_promoted_to_owner
+      ~RealTimeEventListener.on_room_reactivated
+      ~RealTimeEventListener.on_room_updated
+      ~RealTimeEventListener.on_shared_post
+      ~RealTimeEventListener.on_symphony_elements_action
+      ~RealTimeEventListener.on_user_joined_room
+      ~RealTimeEventListener.on_user_left_room
+      ~RealTimeEventListener.on_user_requested_to_join_room
+   
+   
+
+   
+   
+   

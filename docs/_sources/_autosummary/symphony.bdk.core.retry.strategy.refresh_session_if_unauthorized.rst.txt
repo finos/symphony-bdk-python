@@ -1,0 +1,6 @@
+symphony.bdk.core.retry.strategy.refresh\_session\_if\_unauthorized
+===================================================================
+
+.. currentmodule:: symphony.bdk.core.retry.strategy
+
+.. autofunction:: refresh_session_if_unauthorized

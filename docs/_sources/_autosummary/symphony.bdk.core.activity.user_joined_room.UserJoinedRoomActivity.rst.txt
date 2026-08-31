@@ -1,0 +1,28 @@
+symphony.bdk.core.activity.user\_joined\_room.UserJoinedRoomActivity
+====================================================================
+
+.. currentmodule:: symphony.bdk.core.activity.user_joined_room
+
+.. autoclass:: UserJoinedRoomActivity
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~UserJoinedRoomActivity.__init__
+      ~UserJoinedRoomActivity.before_matcher
+      ~UserJoinedRoomActivity.matches
+      ~UserJoinedRoomActivity.on_activity
+   
+   
+
+   
+   
+   

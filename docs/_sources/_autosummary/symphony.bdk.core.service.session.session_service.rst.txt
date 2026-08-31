@@ -1,0 +1,32 @@
+symphony.bdk.core.service.session.session\_service
+==================================================
+
+.. automodule:: symphony.bdk.core.service.session.session_service
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      OboSessionService
+      SessionService
+   
+   
+
+   
+   
+   
+
+
+

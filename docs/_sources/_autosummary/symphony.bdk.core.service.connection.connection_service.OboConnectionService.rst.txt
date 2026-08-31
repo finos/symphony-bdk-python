@@ -1,0 +1,31 @@
+symphony.bdk.core.service.connection.connection\_service.OboConnectionService
+=============================================================================
+
+.. currentmodule:: symphony.bdk.core.service.connection.connection_service
+
+.. autoclass:: OboConnectionService
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~OboConnectionService.__init__
+      ~OboConnectionService.accept_connection
+      ~OboConnectionService.create_connection
+      ~OboConnectionService.get_connection
+      ~OboConnectionService.list_connections
+      ~OboConnectionService.reject_connection
+      ~OboConnectionService.remove_connection
+   
+   
+
+   
+   
+   

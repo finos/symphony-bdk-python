@@ -1,0 +1,32 @@
+symphony.bdk.core.service.datafeed.on\_disk\_datafeed\_id\_repository
+=====================================================================
+
+.. automodule:: symphony.bdk.core.service.datafeed.on_disk_datafeed_id_repository
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      DatafeedIdRepository
+      OnDiskDatafeedIdRepository
+   
+   
+
+   
+   
+   
+
+
+

@@ -1,0 +1,32 @@
+symphony.bdk.core.service.application
+=====================================
+
+.. automodule:: symphony.bdk.core.service.application
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   symphony.bdk.core.service.application.application_service
+

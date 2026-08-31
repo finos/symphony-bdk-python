@@ -1,0 +1,29 @@
+symphony.bdk.core.service.datafeed.abstract\_datahose\_loop.AbstractDatahoseLoop
+================================================================================
+
+.. currentmodule:: symphony.bdk.core.service.datafeed.abstract_datahose_loop
+
+.. autoclass:: AbstractDatahoseLoop
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~AbstractDatahoseLoop.__init__
+      ~AbstractDatahoseLoop.start
+      ~AbstractDatahoseLoop.stop
+      ~AbstractDatahoseLoop.subscribe
+      ~AbstractDatahoseLoop.unsubscribe
+   
+   
+
+   
+   
+   

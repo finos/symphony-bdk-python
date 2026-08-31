@@ -1,0 +1,6 @@
+symphony.bdk.core.service.exception.MessageCreationError
+========================================================
+
+.. currentmodule:: symphony.bdk.core.service.exception
+
+.. autoexception:: MessageCreationError

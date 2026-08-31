@@ -1,0 +1,6 @@
+symphony.bdk.core.service.pagination.offset\_based\_pagination
+==============================================================
+
+.. currentmodule:: symphony.bdk.core.service.pagination
+
+.. autofunction:: offset_based_pagination

@@ -1,0 +1,6 @@
+symphony.bdk.core.auth.exception.AuthInitializationError
+========================================================
+
+.. currentmodule:: symphony.bdk.core.auth.exception
+
+.. autoexception:: AuthInitializationError

@@ -1,0 +1,6 @@
+symphony.bdk.core.auth.jwt\_helper.extract\_token\_claims
+=========================================================
+
+.. currentmodule:: symphony.bdk.core.auth.jwt_helper
+
+.. autofunction:: extract_token_claims

@@ -1,0 +1,6 @@
+symphony.bdk.core.auth.jwt\_helper.generate\_expiration\_time
+=============================================================
+
+.. currentmodule:: symphony.bdk.core.auth.jwt_helper
+
+.. autofunction:: generate_expiration_time

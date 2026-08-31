@@ -1,0 +1,6 @@
+symphony.bdk.core.activity.exception.FatalActivityExecutionException
+====================================================================
+
+.. currentmodule:: symphony.bdk.core.activity.exception
+
+.. autoexception:: FatalActivityExecutionException

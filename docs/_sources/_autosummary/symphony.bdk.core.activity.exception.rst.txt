@@ -1,0 +1,30 @@
+symphony.bdk.core.activity.exception
+====================================
+
+.. automodule:: symphony.bdk.core.activity.exception
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+      :toctree:
+   
+      FatalActivityExecutionException
+   
+   
+
+
+
