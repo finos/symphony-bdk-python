@@ -74,8 +74,9 @@ async def test_bot_creates_stream_add_delete_user(bdk):
     test_user = int(TEST_USER_ID)
     # Given: Stream bdk creates a room
     streams = bdk.streams()
+    room_name = f"{str(uuid4())}-New fancy room"
     room_result = await streams.create_room(
-        V3RoomAttributes(name="New fancy room", description="test room")
+        V3RoomAttributes(name=room_name, description="test room")
     )
     room_id = room_result.room_system_info.id
     # When: user is added to the room
