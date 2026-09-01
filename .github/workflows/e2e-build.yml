@@ -1,7 +1,7 @@
 name: e2e test
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "release/3.x" ]
 
 jobs:
   e2e-test:
