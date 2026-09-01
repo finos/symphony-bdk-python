@@ -17,19 +17,18 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictBool
+from pydantic import BaseModel, ConfigDict, Field, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
-from typing_extensions import Annotated
 from typing import Optional, Set
 from typing_extensions import Self
 
-class V5DatafeedCreateBody(BaseModel):
+class SemanticSearchQuery(BaseModel):
     """
-    V5DatafeedCreateBody
+    SemanticSearchQuery
     """ # noqa: E501
-    tag: Optional[Annotated[str, Field(strict=True, max_length=100)]] = Field(default=None, description="A unique identifier to ensure uniqueness of the datafeed.")
-    include_invisible: Optional[StrictBool] = Field(default=None, description="Set to true to retrieve invisible rooms related events. Default is false.", alias="includeInvisible")
-    __properties: ClassVar[List[str]] = ["tag", "includeInvisible"]
+    text: Optional[StrictStr] = Field(default=None, description="The natural-language query to search for semantically.")
+    thread_id: Optional[StrictStr] = Field(default=None, description="Restrict the semantic search to this stream/thread.", alias="threadId")
+    __properties: ClassVar[List[str]] = ["text", "threadId"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -49,7 +48,7 @@ class V5DatafeedCreateBody(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of V5DatafeedCreateBody from a JSON string"""
+        """Create an instance of SemanticSearchQuery from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -74,7 +73,7 @@ class V5DatafeedCreateBody(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of V5DatafeedCreateBody from a dict"""
+        """Create an instance of SemanticSearchQuery from a dict"""
         if obj is None:
             return None
 
@@ -82,8 +81,8 @@ class V5DatafeedCreateBody(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "tag": obj.get("tag"),
-            "includeInvisible": obj.get("includeInvisible")
+            "text": obj.get("text"),
+            "threadId": obj.get("threadId")
         })
         return _obj
 

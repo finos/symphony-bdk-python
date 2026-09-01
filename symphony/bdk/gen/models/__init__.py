@@ -29,6 +29,7 @@ from symphony.bdk.gen.agent_model.room_member_promoted_to_owner_message import R
 from symphony.bdk.gen.agent_model.room_reactivated_message import RoomReactivatedMessage
 from symphony.bdk.gen.agent_model.room_tag import RoomTag
 from symphony.bdk.gen.agent_model.room_updated_message import RoomUpdatedMessage
+from symphony.bdk.gen.agent_model.semantic_search_query import SemanticSearchQuery
 from symphony.bdk.gen.agent_model.share_article import ShareArticle
 from symphony.bdk.gen.agent_model.share_content import ShareContent
 from symphony.bdk.gen.agent_model.signal import Signal

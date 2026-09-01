@@ -52,7 +52,8 @@ class V2UserAttributes(BaseModel):
     instrument: Optional[List[StrictStr]] = None
     current_key: Optional[V2UserKeyRequest] = Field(default=None, alias="currentKey")
     previous_key: Optional[V2UserKeyRequest] = Field(default=None, alias="previousKey")
-    __properties: ClassVar[List[str]] = ["emailAddress", "firstName", "lastName", "userName", "displayName", "companyName", "department", "division", "title", "workPhoneNumber", "mobilePhoneNumber", "twoFactorAuthPhone", "smsNumber", "accountType", "location", "recommendedLanguage", "jobFunction", "assetClasses", "industries", "marketCoverage", "responsibility", "function", "instrument", "currentKey", "previousKey"]
+    user_metadata: Optional[Dict[str, Dict[str, Any]]] = Field(default=None, description="Metadata map of key/values", alias="userMetadata")
+    __properties: ClassVar[List[str]] = ["emailAddress", "firstName", "lastName", "userName", "displayName", "companyName", "department", "division", "title", "workPhoneNumber", "mobilePhoneNumber", "twoFactorAuthPhone", "smsNumber", "accountType", "location", "recommendedLanguage", "jobFunction", "assetClasses", "industries", "marketCoverage", "responsibility", "function", "instrument", "currentKey", "previousKey", "userMetadata"]
 
     @field_validator('account_type')
     def account_type_validate_enum(cls, value):
@@ -145,7 +146,8 @@ class V2UserAttributes(BaseModel):
             "function": obj.get("function"),
             "instrument": obj.get("instrument"),
             "currentKey": V2UserKeyRequest.from_dict(obj["currentKey"]) if obj.get("currentKey") is not None else None,
-            "previousKey": V2UserKeyRequest.from_dict(obj["previousKey"]) if obj.get("previousKey") is not None else None
+            "previousKey": V2UserKeyRequest.from_dict(obj["previousKey"]) if obj.get("previousKey") is not None else None,
+            "userMetadata": obj.get("userMetadata")
         })
         return _obj
 
