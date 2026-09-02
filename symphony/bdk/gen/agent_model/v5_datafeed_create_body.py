@@ -17,7 +17,7 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, StrictBool
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
 from typing import Optional, Set
@@ -28,7 +28,8 @@ class V5DatafeedCreateBody(BaseModel):
     V5DatafeedCreateBody
     """ # noqa: E501
     tag: Optional[Annotated[str, Field(strict=True, max_length=100)]] = Field(default=None, description="A unique identifier to ensure uniqueness of the datafeed.")
-    __properties: ClassVar[List[str]] = ["tag"]
+    include_invisible: Optional[StrictBool] = Field(default=None, description="Set to true to retrieve invisible rooms related events. Default is false.", alias="includeInvisible")
+    __properties: ClassVar[List[str]] = ["tag", "includeInvisible"]
 
     model_config = ConfigDict(
         populate_by_name=True,
@@ -81,7 +82,8 @@ class V5DatafeedCreateBody(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "tag": obj.get("tag")
+            "tag": obj.get("tag"),
+            "includeInvisible": obj.get("includeInvisible")
         })
         return _obj
 

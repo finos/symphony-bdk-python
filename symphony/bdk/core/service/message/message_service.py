@@ -10,6 +10,7 @@ from symphony.bdk.core.service.message.multi_attachments_messages_api import (
 from symphony.bdk.core.service.pagination import offset_based_pagination
 from symphony.bdk.gen.agent_api.attachments_api import AttachmentsApi
 from symphony.bdk.gen.agent_model.message_search_query import MessageSearchQuery
+from symphony.bdk.gen.agent_model.semantic_search_query import SemanticSearchQuery
 from symphony.bdk.gen.agent_model.v4_import_response import V4ImportResponse
 from symphony.bdk.gen.agent_model.v4_imported_message import V4ImportedMessage
 from symphony.bdk.gen.agent_model.v4_message import V4Message
@@ -279,6 +280,36 @@ class OboMessageService:
             params["preview"] = preview if isinstance(preview, list) else [preview]
 
         return await self._messages_api.v4_multi_attachment_message_blast_post(**params)
+
+    @retry
+    async def search_messages_semantic(
+        self,
+        query: str,
+        stream_id: str = None,
+        skip: int = 0,
+        limit: int = 25,
+    ) -> List[V4Message]:
+        """Searches for messages using a natural-language semantic query.
+
+        Unlike the keyword-based :func:`MessageService.search_messages`, the query is interpreted by
+        meaning.
+
+        :param query: The natural-language search query.
+        :param stream_id: If provided, restricts the search to this stream/thread. If ``None``, every
+            stream accessible to the caller is searched.
+        :param skip: Number of messages to skip. Default: 0.
+        :param limit: Maximum number of messages to return. Default: 25.
+        :return: The list of matching messages.
+        """
+        search_query = SemanticSearchQuery(text=query, thread_id=stream_id)
+        params = {
+            "session_token": await self._auth_session.session_token,
+            "key_manager_token": await self._auth_session.key_manager_token,
+            "query": search_query,
+            "skip": skip,
+            "limit": limit,
+        }
+        return await self._messages_api.v4_message_search_semantic_post(**params)
 
 
 class MessageService(OboMessageService):

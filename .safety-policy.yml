@@ -9,4 +9,6 @@ security: # configuration for the `safety check` command
           #  expires: '2022-10-21' # datetime string - date this ignore will expire, best practice to use this variable
         70612:
             reason: The maintainer and multiple third parties believe that this vulnerability isn't valid because users shouldn't use untrusted templates without sandboxing.
+        96886:
+            reason: Fix requires urllib3>=2.7.0, which dropped Python 3.9 support. This project still supports Python 3.9 (see pyproject.toml), so the fixed version cannot be installed on that interpreter. Revisit when Python 3.9 support is dropped. NOTE this entry is superseded in CI, where -i flags on the safety check command are used instead for this and related IDs (see .github/workflows/security.yml) since -i replaces rather than merges with this list when both are passed.
     continue-on-vulnerability-error: False # Suppress non-zero exit codes when vulnerabilities are found. Enable this in pipelines and CI/CD processes if you want to pass builds that have vulnerabilities
