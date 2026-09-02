@@ -9,7 +9,7 @@ from symphony.bdk.core.symphony_bdk import SymphonyBdk
 from symphony.bdk.gen.agent_model.message_search_query import MessageSearchQuery
 from symphony.bdk.gen.agent_model.v4_imported_message import V4ImportedMessage
 from symphony.bdk.gen.agent_model.v4_imported_message_attachment import V4ImportedMessageAttachment
-
+from symphony.bdk.core.service.stream.stream_util import to_url_safe_stream_id
 
 async def run():
     stream_id_1 = "lRwCZlDbxWLd2BDP-1D_8n___o0f4ZkEdA"
@@ -60,6 +60,10 @@ async def run():
             attachments=[attachment],
         )
         await message_service.import_messages([msg])
+
+        results = await message_service.search_messages_semantic("greetings", limit=2)
+        for message in results:
+            logging.info(f"fround a message: {message.message}")
 
         logging.info("Obo example:")
         obo_auth_session = bdk.obo(username="username")
