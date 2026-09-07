@@ -144,6 +144,16 @@ class TestReadDatahoseStrategy:
         assert thing.call_count == 1
 
 
+def test_client_payload_error_is_classified_as_transient():
+    """A truncated/aborted streaming payload (ClientPayloadError) must be treated as a
+    transient error so the datafeed/datahose loops reconnect instead of crashing."""
+    err = aiohttp.ClientPayloadError("Response payload is not completed")
+
+    assert strategy.is_client_timeout_error(err) is True
+    assert strategy.is_network_or_minor_error(err) is True
+    assert strategy.is_network_or_minor_error_or_client(err) is True
+
+
 @pytest.mark.asyncio
 async def test_should_retry():
     strategies = [
