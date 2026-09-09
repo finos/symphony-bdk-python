@@ -24,7 +24,7 @@ class BdkConfigLoader:
         """
         config_path = Path(config_path)
         if config_path.exists():
-            config_content = config_path.read_text()
+            config_content = config_path.read_text(encoding="utf-8")
             return cls.load_from_content(config_content)
         raise BdkConfigError(f"Config file has not been found at: {config_path.absolute()}")
 
