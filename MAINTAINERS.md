@@ -15,6 +15,7 @@ This file lists the maintainers of this repository.
 | @vladokrsymphony | Vlado Kragujevski | @SymphonyOSF |  |
 | @symphony-enrico | Enrico Molino | @SymphonyOSF |  |
 | @matthewcummings | Matthew Cummings | @SymphonyOSF |  |
+| @sebastientosello | Sebastien Tosello | @SymphonyOSF |  |
 
 For information about maintainer responsibilities and resources, see the [FINOS Maintainers Cheatsheet](https://community.finos.org/docs/finos-maintainers-cheatsheet).
 
