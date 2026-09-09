@@ -1,7 +1,7 @@
 name: e2e test
 on:
   push:
-    branches: [ "main", "release/3.x" ]
+    branches: [ "main", "release/3.x", "SEARCH-3102-semantic-search-3x" ]
 
 jobs:
   e2e-test:
