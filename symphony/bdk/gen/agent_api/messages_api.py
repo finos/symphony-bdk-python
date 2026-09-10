@@ -24,6 +24,7 @@ from symphony.bdk.gen.agent_model.imported_message import ImportedMessage
 from symphony.bdk.gen.agent_model.message import Message
 from symphony.bdk.gen.agent_model.message_search_query import MessageSearchQuery
 from symphony.bdk.gen.agent_model.message_submission import MessageSubmission
+from symphony.bdk.gen.agent_model.semantic_search_query import SemanticSearchQuery
 from symphony.bdk.gen.agent_model.v2_base_message import V2BaseMessage
 from symphony.bdk.gen.agent_model.v2_import_response import V2ImportResponse
 from symphony.bdk.gen.agent_model.v2_imported_message import V2ImportedMessage
@@ -4215,6 +4216,358 @@ class MessagesApi:
 
 
     @validate_call
+    async def v4_message_search_semantic_post(
+        self,
+        session_token: Annotated[StrictStr, Field(description="Session authentication token.")],
+        query: Annotated[SemanticSearchQuery, Field(description="The semantic search query.")],
+        skip: Annotated[Optional[StrictInt], Field(description="No. of results to skip.")] = None,
+        limit: Annotated[Optional[StrictInt], Field(description="Max no. of results to return. If no value is provided, 25 is the default.")] = None,
+        key_manager_token: Annotated[Optional[StrictStr], Field(description="Key Manager authentication token.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> List[V4Message]:
+        """Semantic search for messages
+
+        Disclaimer : Internal use only. This is not officially supported yet. Search messages semantically according to the natural-language query provided in the request body. The \"text\" field holds the query and the optional \"threadId\" field restricts the search to a single stream. 
+
+        :param session_token: Session authentication token. (required)
+        :type session_token: str
+        :param query: The semantic search query. (required)
+        :type query: SemanticSearchQuery
+        :param skip: No. of results to skip.
+        :type skip: int
+        :param limit: Max no. of results to return. If no value is provided, 25 is the default.
+        :type limit: int
+        :param key_manager_token: Key Manager authentication token.
+        :type key_manager_token: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._v4_message_search_semantic_post_serialize(
+            session_token=session_token,
+            query=query,
+            skip=skip,
+            limit=limit,
+            key_manager_token=key_manager_token,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "List[V4Message]",
+            '204': None,
+            '400': "V2Error",
+            '401': "V2Error",
+            '403': "V2Error",
+            '500': "V2Error",
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        await response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        ).data
+
+
+    @validate_call
+    async def v4_message_search_semantic_post_with_http_info(
+        self,
+        session_token: Annotated[StrictStr, Field(description="Session authentication token.")],
+        query: Annotated[SemanticSearchQuery, Field(description="The semantic search query.")],
+        skip: Annotated[Optional[StrictInt], Field(description="No. of results to skip.")] = None,
+        limit: Annotated[Optional[StrictInt], Field(description="Max no. of results to return. If no value is provided, 25 is the default.")] = None,
+        key_manager_token: Annotated[Optional[StrictStr], Field(description="Key Manager authentication token.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> ApiResponse[List[V4Message]]:
+        """Semantic search for messages
+
+        Disclaimer : Internal use only. This is not officially supported yet. Search messages semantically according to the natural-language query provided in the request body. The \"text\" field holds the query and the optional \"threadId\" field restricts the search to a single stream. 
+
+        :param session_token: Session authentication token. (required)
+        :type session_token: str
+        :param query: The semantic search query. (required)
+        :type query: SemanticSearchQuery
+        :param skip: No. of results to skip.
+        :type skip: int
+        :param limit: Max no. of results to return. If no value is provided, 25 is the default.
+        :type limit: int
+        :param key_manager_token: Key Manager authentication token.
+        :type key_manager_token: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._v4_message_search_semantic_post_serialize(
+            session_token=session_token,
+            query=query,
+            skip=skip,
+            limit=limit,
+            key_manager_token=key_manager_token,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "List[V4Message]",
+            '204': None,
+            '400': "V2Error",
+            '401': "V2Error",
+            '403': "V2Error",
+            '500': "V2Error",
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        await response_data.read()
+        return self.api_client.response_deserialize(
+            response_data=response_data,
+            response_types_map=_response_types_map,
+        )
+
+
+    @validate_call
+    async def v4_message_search_semantic_post_without_preload_content(
+        self,
+        session_token: Annotated[StrictStr, Field(description="Session authentication token.")],
+        query: Annotated[SemanticSearchQuery, Field(description="The semantic search query.")],
+        skip: Annotated[Optional[StrictInt], Field(description="No. of results to skip.")] = None,
+        limit: Annotated[Optional[StrictInt], Field(description="Max no. of results to return. If no value is provided, 25 is the default.")] = None,
+        key_manager_token: Annotated[Optional[StrictStr], Field(description="Key Manager authentication token.")] = None,
+        _request_timeout: Union[
+            None,
+            Annotated[StrictFloat, Field(gt=0)],
+            Tuple[
+                Annotated[StrictFloat, Field(gt=0)],
+                Annotated[StrictFloat, Field(gt=0)]
+            ]
+        ] = None,
+        _request_auth: Optional[Dict[StrictStr, Any]] = None,
+        _content_type: Optional[StrictStr] = None,
+        _headers: Optional[Dict[StrictStr, Any]] = None,
+        _host_index: Annotated[StrictInt, Field(ge=0, le=0)] = 0,
+    ) -> RESTResponseType:
+        """Semantic search for messages
+
+        Disclaimer : Internal use only. This is not officially supported yet. Search messages semantically according to the natural-language query provided in the request body. The \"text\" field holds the query and the optional \"threadId\" field restricts the search to a single stream. 
+
+        :param session_token: Session authentication token. (required)
+        :type session_token: str
+        :param query: The semantic search query. (required)
+        :type query: SemanticSearchQuery
+        :param skip: No. of results to skip.
+        :type skip: int
+        :param limit: Max no. of results to return. If no value is provided, 25 is the default.
+        :type limit: int
+        :param key_manager_token: Key Manager authentication token.
+        :type key_manager_token: str
+        :param _request_timeout: timeout setting for this request. If one
+                                 number provided, it will be total request
+                                 timeout. It can also be a pair (tuple) of
+                                 (connection, read) timeouts.
+        :type _request_timeout: int, tuple(int, int), optional
+        :param _request_auth: set to override the auth_settings for an a single
+                              request; this effectively ignores the
+                              authentication in the spec for a single request.
+        :type _request_auth: dict, optional
+        :param _content_type: force content-type for the request.
+        :type _content_type: str, Optional
+        :param _headers: set to override the headers for a single
+                         request; this effectively ignores the headers
+                         in the spec for a single request.
+        :type _headers: dict, optional
+        :param _host_index: set to override the host_index for a single
+                            request; this effectively ignores the host_index
+                            in the spec for a single request.
+        :type _host_index: int, optional
+        :return: Returns the result object.
+        """ # noqa: E501
+
+        _param = self._v4_message_search_semantic_post_serialize(
+            session_token=session_token,
+            query=query,
+            skip=skip,
+            limit=limit,
+            key_manager_token=key_manager_token,
+            _request_auth=_request_auth,
+            _content_type=_content_type,
+            _headers=_headers,
+            _host_index=_host_index
+        )
+
+        _response_types_map: Dict[str, Optional[str]] = {
+            '200': "List[V4Message]",
+            '204': None,
+            '400': "V2Error",
+            '401': "V2Error",
+            '403': "V2Error",
+            '500': "V2Error",
+        }
+        response_data = await self.api_client.call_api(
+            *_param,
+            _request_timeout=_request_timeout
+        )
+        return response_data.response
+
+
+    def _v4_message_search_semantic_post_serialize(
+        self,
+        session_token,
+        query,
+        skip,
+        limit,
+        key_manager_token,
+        _request_auth,
+        _content_type,
+        _headers,
+        _host_index,
+    ) -> RequestSerialized:
+
+        _host = None
+
+        _collection_formats: Dict[str, str] = {
+        }
+
+        _path_params: Dict[str, str] = {}
+        _query_params: List[Tuple[str, str]] = []
+        _header_params: Dict[str, Optional[str]] = _headers or {}
+        _form_params: List[Tuple[str, str]] = []
+        _files: Dict[
+            str, Union[str, bytes, List[str], List[bytes], List[Tuple[str, bytes]]]
+        ] = {}
+        _body_params: Optional[bytes] = None
+
+        # process the path parameters
+        # process the query parameters
+        if skip is not None:
+            
+            _query_params.append(('skip', skip))
+            
+        if limit is not None:
+            
+            _query_params.append(('limit', limit))
+            
+        # process the header parameters
+        if session_token is not None:
+            _header_params['sessionToken'] = session_token
+        if key_manager_token is not None:
+            _header_params['keyManagerToken'] = key_manager_token
+        # process the form parameters
+        # process the body parameter
+        if query is not None:
+            _body_params = query
+
+
+        # set the HTTP header `Accept`
+        if 'Accept' not in _header_params:
+            _header_params['Accept'] = self.api_client.select_header_accept(
+                [
+                    'application/json'
+                ]
+            )
+
+        # set the HTTP header `Content-Type`
+        if _content_type:
+            _header_params['Content-Type'] = _content_type
+        else:
+            _default_content_type = (
+                self.api_client.select_header_content_type(
+                    [
+                        'application/json'
+                    ]
+                )
+            )
+            if _default_content_type is not None:
+                _header_params['Content-Type'] = _default_content_type
+
+        # authentication setting
+        _auth_settings: List[str] = [
+        ]
+
+        return self.api_client.param_serialize(
+            method='POST',
+            resource_path='/v4/message/search/semantic',
+            path_params=_path_params,
+            query_params=_query_params,
+            header_params=_header_params,
+            body=_body_params,
+            post_params=_form_params,
+            files=_files,
+            auth_settings=_auth_settings,
+            collection_formats=_collection_formats,
+            _host=_host,
+            _request_auth=_request_auth
+        )
+
+
+
+
+    @validate_call
     async def v4_stream_sid_message_create_post(
         self,
         sid: Annotated[StrictStr, Field(description="Stream ID")],
@@ -4613,6 +4966,7 @@ class MessagesApi:
         sid: Annotated[StrictStr, Field(description="Stream ID")],
         since: Annotated[StrictInt, Field(description="Timestamp of first required message.  This is a long integer value representing milliseconds since Jan 1 1970 ")],
         session_token: Annotated[StrictStr, Field(description="Session authentication token.")],
+        until: Annotated[Optional[StrictInt], Field(description="Timestamp of last required message.  This is a long integer value representing milliseconds since Jan 1 1970 ")] = None,
         skip: Annotated[Optional[StrictInt], Field(description="No. of messages to skip.")] = None,
         limit: Annotated[Optional[StrictInt], Field(description="Max No. of messages to return. If no value is provided, 50 is the default. The maximum supported value is 500. ")] = None,
         key_manager_token: Annotated[Optional[StrictStr], Field(description="Key Manager authentication token.")] = None,
@@ -4639,6 +4993,8 @@ class MessagesApi:
         :type since: int
         :param session_token: Session authentication token. (required)
         :type session_token: str
+        :param until: Timestamp of last required message.  This is a long integer value representing milliseconds since Jan 1 1970 
+        :type until: int
         :param skip: No. of messages to skip.
         :type skip: int
         :param limit: Max No. of messages to return. If no value is provided, 50 is the default. The maximum supported value is 500. 
@@ -4671,6 +5027,7 @@ class MessagesApi:
             sid=sid,
             since=since,
             session_token=session_token,
+            until=until,
             skip=skip,
             limit=limit,
             key_manager_token=key_manager_token,
@@ -4705,6 +5062,7 @@ class MessagesApi:
         sid: Annotated[StrictStr, Field(description="Stream ID")],
         since: Annotated[StrictInt, Field(description="Timestamp of first required message.  This is a long integer value representing milliseconds since Jan 1 1970 ")],
         session_token: Annotated[StrictStr, Field(description="Session authentication token.")],
+        until: Annotated[Optional[StrictInt], Field(description="Timestamp of last required message.  This is a long integer value representing milliseconds since Jan 1 1970 ")] = None,
         skip: Annotated[Optional[StrictInt], Field(description="No. of messages to skip.")] = None,
         limit: Annotated[Optional[StrictInt], Field(description="Max No. of messages to return. If no value is provided, 50 is the default. The maximum supported value is 500. ")] = None,
         key_manager_token: Annotated[Optional[StrictStr], Field(description="Key Manager authentication token.")] = None,
@@ -4731,6 +5089,8 @@ class MessagesApi:
         :type since: int
         :param session_token: Session authentication token. (required)
         :type session_token: str
+        :param until: Timestamp of last required message.  This is a long integer value representing milliseconds since Jan 1 1970 
+        :type until: int
         :param skip: No. of messages to skip.
         :type skip: int
         :param limit: Max No. of messages to return. If no value is provided, 50 is the default. The maximum supported value is 500. 
@@ -4763,6 +5123,7 @@ class MessagesApi:
             sid=sid,
             since=since,
             session_token=session_token,
+            until=until,
             skip=skip,
             limit=limit,
             key_manager_token=key_manager_token,
@@ -4797,6 +5158,7 @@ class MessagesApi:
         sid: Annotated[StrictStr, Field(description="Stream ID")],
         since: Annotated[StrictInt, Field(description="Timestamp of first required message.  This is a long integer value representing milliseconds since Jan 1 1970 ")],
         session_token: Annotated[StrictStr, Field(description="Session authentication token.")],
+        until: Annotated[Optional[StrictInt], Field(description="Timestamp of last required message.  This is a long integer value representing milliseconds since Jan 1 1970 ")] = None,
         skip: Annotated[Optional[StrictInt], Field(description="No. of messages to skip.")] = None,
         limit: Annotated[Optional[StrictInt], Field(description="Max No. of messages to return. If no value is provided, 50 is the default. The maximum supported value is 500. ")] = None,
         key_manager_token: Annotated[Optional[StrictStr], Field(description="Key Manager authentication token.")] = None,
@@ -4823,6 +5185,8 @@ class MessagesApi:
         :type since: int
         :param session_token: Session authentication token. (required)
         :type session_token: str
+        :param until: Timestamp of last required message.  This is a long integer value representing milliseconds since Jan 1 1970 
+        :type until: int
         :param skip: No. of messages to skip.
         :type skip: int
         :param limit: Max No. of messages to return. If no value is provided, 50 is the default. The maximum supported value is 500. 
@@ -4855,6 +5219,7 @@ class MessagesApi:
             sid=sid,
             since=since,
             session_token=session_token,
+            until=until,
             skip=skip,
             limit=limit,
             key_manager_token=key_manager_token,
@@ -4884,6 +5249,7 @@ class MessagesApi:
         sid,
         since,
         session_token,
+        until,
         skip,
         limit,
         key_manager_token,
@@ -4914,6 +5280,10 @@ class MessagesApi:
         if since is not None:
             
             _query_params.append(('since', since))
+            
+        if until is not None:
+            
+            _query_params.append(('until', until))
             
         if skip is not None:
             

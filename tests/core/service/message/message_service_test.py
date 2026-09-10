@@ -445,6 +445,46 @@ async def test_search_messages_with_hashtag(message_service):
 
 
 @pytest.mark.asyncio
+async def test_search_messages_semantic(message_service):
+    return_object = get_deserialized_object_from_resource(
+        List[V4Message], "message_response/list_messages.json"
+    )
+    messages_api = message_service._messages_api
+    messages_api.v4_message_search_semantic_post = AsyncMock(return_value=return_object)
+
+    messages = await message_service.search_messages_semantic("find the budget discussion")
+
+    messages_api.v4_message_search_semantic_post.assert_called_once()
+    call_kwargs = messages_api.v4_message_search_semantic_post.call_args.kwargs
+    assert call_kwargs["query"].text == "find the budget discussion"
+    assert call_kwargs["query"].thread_id is None
+    assert call_kwargs["skip"] == 0
+    assert call_kwargs["limit"] == 25
+    assert len(messages) == 1
+    assert messages[0].message_id == "test-message1"
+
+
+@pytest.mark.asyncio
+async def test_search_messages_semantic_with_stream_and_pagination(message_service):
+    return_object = get_deserialized_object_from_resource(
+        List[V4Message], "message_response/list_messages.json"
+    )
+    messages_api = message_service._messages_api
+    messages_api.v4_message_search_semantic_post = AsyncMock(return_value=return_object)
+
+    messages = await message_service.search_messages_semantic(
+        "query", stream_id="stream-id", skip=10, limit=5
+    )
+
+    call_kwargs = messages_api.v4_message_search_semantic_post.call_args.kwargs
+    assert call_kwargs["query"].text == "query"
+    assert call_kwargs["query"].thread_id == "stream-id"
+    assert call_kwargs["skip"] == 10
+    assert call_kwargs["limit"] == 5
+    assert len(messages) == 1
+
+
+@pytest.mark.asyncio
 @pytest.mark.parametrize("stream_type", ["CHAT", "IM", "MIM", "ROOM", "POST"])
 async def test_search_messages_with_valid_stream_type(
     message_service, stream_type

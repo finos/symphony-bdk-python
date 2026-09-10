@@ -44,7 +44,8 @@ class UserV2(BaseModel):
     department: Optional[StrictStr] = Field(default=None, description="Note: only available if the application has the extended user or contact permission")
     division: Optional[StrictStr] = Field(default=None, description="Note: only available if the application has the extended user or contact permission")
     roles: Optional[List[StrictStr]] = None
-    __properties: ClassVar[List[str]] = ["id", "emailAddress", "firstName", "lastName", "displayName", "title", "company", "username", "location", "accountType", "avatars", "workPhoneNumber", "mobilePhoneNumber", "jobFunction", "department", "division", "roles"]
+    user_metadata: Optional[Dict[str, Dict[str, Any]]] = Field(default=None, description="Metadata map of key/values", alias="userMetadata")
+    __properties: ClassVar[List[str]] = ["id", "emailAddress", "firstName", "lastName", "displayName", "title", "company", "username", "location", "accountType", "avatars", "workPhoneNumber", "mobilePhoneNumber", "jobFunction", "department", "division", "roles", "userMetadata"]
 
     @field_validator('account_type')
     def account_type_validate_enum(cls, value):
@@ -130,7 +131,8 @@ class UserV2(BaseModel):
             "jobFunction": obj.get("jobFunction"),
             "department": obj.get("department"),
             "division": obj.get("division"),
-            "roles": obj.get("roles")
+            "roles": obj.get("roles"),
+            "userMetadata": obj.get("userMetadata")
         })
         return _obj
 
