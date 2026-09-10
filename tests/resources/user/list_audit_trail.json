@@ -12,15 +12,15 @@
 
           "oldValue": "[Content Management,Individual,User Provisioning]",
 
-          "date": 1551888601279,
+          "date": "1551888601279",
 
-          "initiatorId": 1353716993,
+          "initiatorId": "1353716993",
 
           "initiatorUsername": "admin@symphony.com",
 
           "initiatorEmailAddress": "admin@symphony.com",
 
-          "affectedId": 1353716999,
+          "affectedId": "1353716999",
 
           "affectedUsername": "test",
 
@@ -45,15 +45,15 @@
 
           "oldValue": "[Content Management,Individual,User Provisioning]",
 
-          "date": 1551888601279,
+          "date": "1551888601279",
 
-          "initiatorId": 1356993,
+          "initiatorId": "1356993",
 
           "initiatorUsername": "admin@symphony.com",
 
           "initiatorEmailAddress": "admin@symphony.com",
 
-          "affectedId": 1356999,
+          "affectedId": "1356999",
 
           "affectedUsername": "test.test",
 

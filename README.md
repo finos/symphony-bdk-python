@@ -70,8 +70,27 @@ _NOTE:_ Ensure you have an active Individual Contributor License Agreement (ICLA
 
 For further inquiries, email [help@finos.org](mailto:help@finos.org).
 
-
 ### Updating Generated Code
+
+Python BDK uses [OpenAPITools/openapi-generator](https://github.com/OpenAPITools/openapi-generator/) to generate code. 
+To update the generated code, follow these steps:
+
+1. Download desired version of openapi generator.
+     ```bash
+     cd api_client_generation
+     curl -L https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/7.14.0/openapi-generator-cli-7.14.0.jar      -o openapi-generator-cli.jar
+     ```
+2. Adjust the commit for which the code is generated(inside generate.sh script)
+3. Execute the generation script: 
+   ```bash
+   ./generate.sh
+   ```
+4. Commit and push the newly generated code along with the updated JAR file.
+
+Note: There are a few files that are not replaced(EX. api_client.py), those files require some modifications after code is generated.
+
+
+### OLD Updating Generated Code (Deprecated)
 
 Python BDK uses [OpenAPITools/openapi-generator](https://github.com/OpenAPITools/openapi-generator/) to generate code. 
 To update the generated code, follow these steps:

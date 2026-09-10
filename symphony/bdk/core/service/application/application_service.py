@@ -1,3 +1,5 @@
+from typing import List
+
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.config.model.bdk_retry_config import BdkRetryConfig
 from symphony.bdk.core.retry import retry
@@ -5,11 +7,8 @@ from symphony.bdk.gen.pod_api.app_entitlement_api import AppEntitlementApi
 from symphony.bdk.gen.pod_api.application_api import ApplicationApi
 from symphony.bdk.gen.pod_model.application_detail import ApplicationDetail
 from symphony.bdk.gen.pod_model.pod_app_entitlement import PodAppEntitlement
-from symphony.bdk.gen.pod_model.pod_app_entitlement_list import PodAppEntitlementList
 from symphony.bdk.gen.pod_model.user_app_entitlement import UserAppEntitlement
-from symphony.bdk.gen.pod_model.user_app_entitlement_list import UserAppEntitlementList
 from symphony.bdk.gen.pod_model.user_app_entitlement_patch import UserAppEntitlementPatch
-from symphony.bdk.gen.pod_model.user_app_entitlements_patch_list import UserAppEntitlementsPatchList
 
 
 class ApplicationService:
@@ -115,7 +114,7 @@ class ApplicationService:
         return await self._application_api.v1_admin_app_id_get_get(**params)
 
     @retry
-    async def list_application_entitlements(self) -> [PodAppEntitlement]:
+    async def list_application_entitlements(self) -> List[PodAppEntitlement]:
         """
         Get the list of application entitlements for the company.
 
@@ -128,12 +127,12 @@ class ApplicationService:
         pod_app_entitlement_list = (
             await self._app_entitlement_api.v1_admin_app_entitlement_list_get(**params)
         )
-        return pod_app_entitlement_list.value
+        return pod_app_entitlement_list
 
     @retry
     async def update_application_entitlements(
-        self, entitlements: [PodAppEntitlement]
-    ) -> [PodAppEntitlement]:
+        self, entitlements: List[PodAppEntitlement]
+    ) -> List[PodAppEntitlement]:
         """
         Update the list of application entitlements for the company.
 
@@ -145,16 +144,16 @@ class ApplicationService:
 
         """
         params = {
-            "payload": PodAppEntitlementList(value=entitlements),
+            "payload": entitlements,
             "session_token": await self._auth_session.session_token,
         }
         pod_app_entitlement_list = (
             await self._app_entitlement_api.v1_admin_app_entitlement_list_post(**params)
         )
-        return pod_app_entitlement_list.value
+        return pod_app_entitlement_list
 
     @retry
-    async def list_user_applications(self, user_id: int) -> [UserAppEntitlement]:
+    async def list_user_applications(self, user_id: int) -> List[UserAppEntitlement]:
         """
         Get the list of Symphony application entitlements for a particular user.
 
@@ -169,11 +168,11 @@ class ApplicationService:
         user_app_entitlement_list = (
             await self._app_entitlement_api.v1_admin_user_uid_app_entitlement_list_get(**params)
         )
-        return user_app_entitlement_list.value
+        return user_app_entitlement_list
 
     @retry
     async def update_user_applications(
-        self, user_id: int, user_app_entitlements: [UserAppEntitlement]
+        self, user_id: int, user_app_entitlements: List[UserAppEntitlement]
     ):
         """
         Update the application entitlements for a particular user.
@@ -188,17 +187,17 @@ class ApplicationService:
         """
         params = {
             "uid": user_id,
-            "payload": UserAppEntitlementList(value=user_app_entitlements),
+            "payload": user_app_entitlements,
             "session_token": await self._auth_session.session_token,
         }
         user_app_entitlement_list = (
             await self._app_entitlement_api.v1_admin_user_uid_app_entitlement_list_post(**params)
         )
-        return user_app_entitlement_list.value
+        return user_app_entitlement_list
 
     @retry
     async def patch_user_applications(
-        self, user_id: int, user_app_entitlements: [UserAppEntitlementPatch]
+        self, user_id: int, user_app_entitlements: List[UserAppEntitlementPatch]
     ):
         """
         Updates particular app entitlements for a particular user. Supports partial update.
@@ -213,10 +212,10 @@ class ApplicationService:
         """
         params = {
             "uid": user_id,
-            "payload": UserAppEntitlementsPatchList(value=user_app_entitlements),
+            "payload": user_app_entitlements,
             "session_token": await self._auth_session.session_token,
         }
         user_app_entitlements_list = (
             await self._app_entitlement_api.v1_admin_user_uid_app_entitlement_list_patch(**params)
         )
-        return user_app_entitlements_list.value
+        return user_app_entitlements_list

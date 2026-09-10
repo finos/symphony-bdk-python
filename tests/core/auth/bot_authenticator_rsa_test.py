@@ -31,21 +31,24 @@ def fixture_config():
 
 @pytest.mark.asyncio
 async def test_bot_session_rsa(config, mocked_api_client):
-    with (
-        patch(
-            "symphony.bdk.core.auth.bot_authenticator.create_signed_jwt", return_value="privateKey"
-        ),
-        patch(
-            "symphony.bdk.core.auth.bot_authenticator.generate_expiration_time", return_value=100
-        ),
-    ):
+    with patch("symphony.bdk.core.auth.bot_authenticator.create_signed_jwt", return_value="privateKey"), \
+         patch("symphony.bdk.core.auth.bot_authenticator.generate_expiration_time", return_value=100), \
+         patch("symphony.bdk.core.auth.bot_authenticator.AuthenticationApi") as auth_api_class_mock:
         login_api_client = mocked_api_client()
         relay_api_client = mocked_api_client()
 
-        login_api_client.call_api.return_value = Token(
+        auth_api_instance_mock = MagicMock()
+        auth_api_instance_mock.pubkey_authenticate_post = AsyncMock()
+        session_token_obj = Token(
             authorization_token="auth_token", token="session_token", name="sessionToken"
         )
-        relay_api_client.call_api.return_value = Token(token="km_token")
+        km_token_obj = Token(token="km_token")
+        auth_api_instance_mock.pubkey_authenticate_post.side_effect = [
+            session_token_obj,
+            km_token_obj,
+            session_token_obj,
+        ]
+        auth_api_class_mock.return_value = auth_api_instance_mock
 
         bot_authenticator = BotAuthenticatorRsa(
             config, login_api_client, relay_api_client, minimal_retry_config()
@@ -55,22 +58,20 @@ async def test_bot_session_rsa(config, mocked_api_client):
         auth_token, expire_at = await bot_authenticator.retrieve_session_token_object()
         assert session_token == "session_token"
         assert km_token == "km_token"
-        assert auth_token == Token(
-            authorization_token="auth_token", token="session_token", name="sessionToken"
-        )
+        assert auth_token == session_token_obj
         assert expire_at == 100
 
 
 @pytest.mark.asyncio
 async def test_api_exception_rsa(config, mocked_api_client):
-    with patch(
-        "symphony.bdk.core.auth.bot_authenticator.create_signed_jwt", return_value="privateKey"
-    ):
+    with patch("symphony.bdk.core.auth.bot_authenticator.create_signed_jwt", return_value="privateKey"), \
+         patch("symphony.bdk.core.auth.bot_authenticator.AuthenticationApi") as auth_api_class_mock:
         login_api_client = mocked_api_client()
         relay_api_client = mocked_api_client()
 
-        login_api_client.call_api.side_effect = ApiException(status=401)
-        relay_api_client.call_api.side_effect = ApiException(status=401)
+        auth_api_instance_mock = MagicMock()
+        auth_api_instance_mock.pubkey_authenticate_post = AsyncMock(side_effect=ApiException(status=401))
+        auth_api_class_mock.return_value = auth_api_instance_mock
 
         bot_authenticator = BotAuthenticatorRsa(
             config, login_api_client, relay_api_client, minimal_retry_config()
