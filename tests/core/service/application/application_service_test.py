@@ -1,3 +1,4 @@
+from typing import List
 from unittest.mock import AsyncMock, MagicMock
 
 import pytest
@@ -8,11 +9,8 @@ from symphony.bdk.gen.pod_api.app_entitlement_api import AppEntitlementApi
 from symphony.bdk.gen.pod_api.application_api import ApplicationApi
 from symphony.bdk.gen.pod_model.application_detail import ApplicationDetail
 from symphony.bdk.gen.pod_model.pod_app_entitlement import PodAppEntitlement
-from symphony.bdk.gen.pod_model.pod_app_entitlement_list import PodAppEntitlementList
 from symphony.bdk.gen.pod_model.user_app_entitlement import UserAppEntitlement
-from symphony.bdk.gen.pod_model.user_app_entitlement_list import UserAppEntitlementList
 from symphony.bdk.gen.pod_model.user_app_entitlement_patch import UserAppEntitlementPatch
-from symphony.bdk.gen.pod_model.user_app_entitlements_patch_list import UserAppEntitlementsPatchList
 from tests.core.config import minimal_retry_config
 from tests.utils.resource_utils import get_deserialized_object_from_resource
 
@@ -114,7 +112,7 @@ async def test_list_application_entitlements(app_entitlement_api, application_se
     app_entitlement_api.v1_admin_app_entitlement_list_get = AsyncMock()
     app_entitlement_api.v1_admin_app_entitlement_list_get.return_value = (
         get_deserialized_object_from_resource(
-            PodAppEntitlementList, "application/list_app_entitlements.json"
+            List[PodAppEntitlement], "application/list_app_entitlements.json"
         )
     )
 
@@ -133,7 +131,7 @@ async def test_update_application_entitlements(app_entitlement_api, application_
     app_entitlement_api.v1_admin_app_entitlement_list_post = AsyncMock()
     app_entitlement_api.v1_admin_app_entitlement_list_post.return_value = (
         get_deserialized_object_from_resource(
-            PodAppEntitlementList, "application/update_app_entitlements.json"
+            List[PodAppEntitlement], "application/update_app_entitlements.json"
         )
     )
 
@@ -149,7 +147,7 @@ async def test_update_application_entitlements(app_entitlement_api, application_
     )
 
     app_entitlement_api.v1_admin_app_entitlement_list_post.assert_called_with(
-        session_token="session_token", payload=PodAppEntitlementList(value=[pod_app_entitlement])
+        payload=[pod_app_entitlement], session_token="session_token"
     )
 
     assert len(pod_app_entitlements) == 1
@@ -161,7 +159,7 @@ async def test_list_user_applications(app_entitlement_api, application_service):
     app_entitlement_api.v1_admin_user_uid_app_entitlement_list_get = AsyncMock()
     app_entitlement_api.v1_admin_user_uid_app_entitlement_list_get.return_value = (
         get_deserialized_object_from_resource(
-            UserAppEntitlementList, "application/list_user_apps.json"
+            List[UserAppEntitlement], "application/list_user_apps.json"
         )
     )
 
@@ -180,7 +178,7 @@ async def test_update_user_applications(app_entitlement_api, application_service
     app_entitlement_api.v1_admin_user_uid_app_entitlement_list_post = AsyncMock()
     app_entitlement_api.v1_admin_user_uid_app_entitlement_list_post.return_value = (
         get_deserialized_object_from_resource(
-            UserAppEntitlementList, "application/list_user_apps.json"
+            List[UserAppEntitlement], "application/list_user_apps.json"
         )
     )
 
@@ -193,7 +191,7 @@ async def test_update_user_applications(app_entitlement_api, application_service
     app_entitlement_api.v1_admin_user_uid_app_entitlement_list_post.assert_called_with(
         session_token="session_token",
         uid=1234,
-        payload=UserAppEntitlementList(value=[user_app_entitlement]),
+        payload=[user_app_entitlement],
     )
 
     assert len(user_app_entitlements) == 3
@@ -205,7 +203,7 @@ async def test_patch_user_applications(app_entitlement_api, application_service)
     app_entitlement_api.v1_admin_user_uid_app_entitlement_list_patch = AsyncMock()
     app_entitlement_api.v1_admin_user_uid_app_entitlement_list_patch.return_value = (
         get_deserialized_object_from_resource(
-            UserAppEntitlementList, "application/list_user_apps.json"
+            List[UserAppEntitlementPatch], "application/list_user_apps_str.json"
         )
     )
 
@@ -220,7 +218,7 @@ async def test_patch_user_applications(app_entitlement_api, application_service)
     app_entitlement_api.v1_admin_user_uid_app_entitlement_list_patch.assert_called_with(
         session_token="session_token",
         uid=1234,
-        payload=UserAppEntitlementsPatchList(value=[user_app_entitlement_patch]),
+        payload=[user_app_entitlement_patch],
     )
 
     assert len(user_app_patched_entitlements) == 3

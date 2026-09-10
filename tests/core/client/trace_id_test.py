@@ -16,14 +16,14 @@ def setup_function():
 
 
 def assert_args_except_trace_id_kept_as_is(input_args, actual_args):
-    assert actual_args[0:3] == input_args[0:3]
+    assert actual_args[0:1] == input_args[0:1]
 
-    if len(actual_args) >= 4:
-        assert X_TRACE_ID in actual_args[4]
-        assert {k: actual_args[4][k] for k in actual_args[4].keys() - {X_TRACE_ID}} == input_args[4]
+    if len(actual_args) >= 2:
+        assert X_TRACE_ID in actual_args[2]
+        assert {k: actual_args[2][k] for k in actual_args[2].keys() - {X_TRACE_ID}} == input_args[2]
 
-    if len(actual_args) >= 5:
-        assert actual_args[5:] == input_args[5:]
+    if len(actual_args) >= 3:
+        assert actual_args[3:] == input_args[3:]
 
 
 def test_empty_tracing_context():
@@ -60,7 +60,7 @@ def test_clear_trace_id():
 
 @pytest.mark.asyncio
 async def test_add_x_trace_id_no_trace_id_set_args_length_too_short():
-    args = ["a", 2, "b", 3]
+    args = ["a"]
     func_return_value = "value"
 
     func = AsyncMock()
@@ -77,7 +77,7 @@ async def test_add_x_trace_id_no_trace_id_set_args_length_too_short():
 
 @pytest.mark.asyncio
 async def test_add_x_trace_id_no_trace_id_set_args_length_long_enough():
-    args = ["a", 2, "b", 3, {"key": "value"}, "c", 4]
+    args = ["a", 2, {"key": "value"}, "b", 3, "c", 4]
     func_return_value = "value"
 
     func = AsyncMock()
@@ -91,12 +91,12 @@ async def test_add_x_trace_id_no_trace_id_set_args_length_long_enough():
     actual_args = list(func.call_args.args)
 
     assert_args_except_trace_id_kept_as_is(args, actual_args)
-    assert len(actual_args[4][X_TRACE_ID]) == TRACE_ID_LENGTH
+    assert len(actual_args[2][X_TRACE_ID]) == TRACE_ID_LENGTH
 
 
 @pytest.mark.asyncio
 async def test_add_x_trace_id_trace_id_set_args_length_too_short():
-    args = ["a", 2, "b", 3]
+    args = ["a"]
     func_return_value = "value"
     trace_id = "trace-id"
 
@@ -114,7 +114,7 @@ async def test_add_x_trace_id_trace_id_set_args_length_too_short():
 
 @pytest.mark.asyncio
 async def test_add_x_trace_id_trace_id_set_args_length_long_enough():
-    args = ["a", 2, "b", 3, {"key": "value"}, "c", 4]
+    args = ["a", 2, {"key": "value"}, "b", 3, "c", 4]
     func_return_value = "value"
     trace_id = "trace-id"
 
@@ -130,12 +130,12 @@ async def test_add_x_trace_id_trace_id_set_args_length_long_enough():
     actual_args = list(func.call_args.args)
 
     assert_args_except_trace_id_kept_as_is(args, actual_args)
-    assert actual_args[4][X_TRACE_ID] == trace_id
+    assert actual_args[2][X_TRACE_ID] == trace_id
 
 
 @pytest.mark.asyncio
 async def test_add_x_trace_id_trace_id_set_several_calls():
-    args = ["a", 2, "b", 3, {"key": "value"}, "c", 4]
+    args = ["a", 2, {"key": "value"}, "b", 3,  "c", 4]
     trace_id = "trace-id"
 
     func = AsyncMock()
@@ -144,8 +144,8 @@ async def test_add_x_trace_id_trace_id_set_several_calls():
     await add_x_trace_id(func)(*deepcopy(args))
     await add_x_trace_id(func)(*deepcopy(args))
 
-    first_trace_id = func.call_args_list[0].args[4][X_TRACE_ID]
-    second_trace_id = func.call_args_list[1].args[4][X_TRACE_ID]
+    first_trace_id = func.call_args_list[0].args[2][X_TRACE_ID]
+    second_trace_id = func.call_args_list[1].args[2][X_TRACE_ID]
 
     assert first_trace_id == trace_id
     assert second_trace_id == trace_id
@@ -153,15 +153,15 @@ async def test_add_x_trace_id_trace_id_set_several_calls():
 
 @pytest.mark.asyncio
 async def test_add_x_trace_id_trace_id_not_set_several_calls():
-    args = ["a", 2, "b", 3, {"key": "value"}, "c", 4]
+    args = ["a", 2, {"key": "value"}, "b", 3, "c", 4]
 
     func = AsyncMock()
 
     await add_x_trace_id(func)(*deepcopy(args))
     await add_x_trace_id(func)(*deepcopy(args))
 
-    first_trace_id = func.call_args_list[0].args[4][X_TRACE_ID]
-    second_trace_id = func.call_args_list[1].args[4][X_TRACE_ID]
+    first_trace_id = func.call_args_list[0].args[2][X_TRACE_ID]
+    second_trace_id = func.call_args_list[1].args[2][X_TRACE_ID]
 
     assert first_trace_id != second_trace_id
     assert len(first_trace_id) == TRACE_ID_LENGTH

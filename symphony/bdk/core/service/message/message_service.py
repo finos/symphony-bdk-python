@@ -10,13 +10,13 @@ from symphony.bdk.core.service.message.multi_attachments_messages_api import (
 from symphony.bdk.core.service.pagination import offset_based_pagination
 from symphony.bdk.gen.agent_api.attachments_api import AttachmentsApi
 from symphony.bdk.gen.agent_model.message_search_query import MessageSearchQuery
+from symphony.bdk.gen.agent_model.semantic_search_query import SemanticSearchQuery
 from symphony.bdk.gen.agent_model.v4_import_response import V4ImportResponse
 from symphony.bdk.gen.agent_model.v4_imported_message import V4ImportedMessage
 from symphony.bdk.gen.agent_model.v4_message import V4Message
 from symphony.bdk.gen.agent_model.v4_message_blast_response import (
     V4MessageBlastResponse,
 )
-from symphony.bdk.gen.agent_model.v4_message_import_list import V4MessageImportList
 from symphony.bdk.gen.pod_api.default_api import DefaultApi
 from symphony.bdk.gen.pod_api.message_api import MessageApi
 from symphony.bdk.gen.pod_api.message_suppression_api import MessageSuppressionApi
@@ -201,7 +201,7 @@ class OboMessageService:
         """
         params = {"session_token": await self._auth_session.session_token}
         type_list = await self._pod_api.v1_files_allowed_types_get(**params)
-        return type_list.value
+        return type_list
 
     async def blast_message(
         self,
@@ -281,6 +281,36 @@ class OboMessageService:
 
         return await self._messages_api.v4_multi_attachment_message_blast_post(**params)
 
+    @retry
+    async def search_messages_semantic(
+        self,
+        query: str,
+        stream_id: str = None,
+        skip: int = 0,
+        limit: int = 25,
+    ) -> List[V4Message]:
+        """Searches for messages using a natural-language semantic query.
+
+        Unlike the keyword-based :func:`MessageService.search_messages`, the query is interpreted by
+        meaning.
+
+        :param query: The natural-language search query.
+        :param stream_id: If provided, restricts the search to this stream/thread. If ``None``, every
+            stream accessible to the caller is searched.
+        :param skip: Number of messages to skip. Default: 0.
+        :param limit: Maximum number of messages to return. Default: 25.
+        :return: The list of matching messages.
+        """
+        search_query = SemanticSearchQuery(text=query, thread_id=stream_id)
+        params = {
+            "session_token": await self._auth_session.session_token,
+            "key_manager_token": await self._auth_session.key_manager_token,
+            "query": search_query,
+            "skip": skip,
+            "limit": limit,
+        }
+        return await self._messages_api.v4_message_search_semantic_post(**params)
+
 
 class MessageService(OboMessageService):
     """Service class for managing messages."""
@@ -307,8 +337,8 @@ class MessageService(OboMessageService):
     @retry
     async def list_messages(
         self, stream_id: str, since: int = 0, skip: int = 0, limit: int = 50
-    ) -> [V4Message]:
-        """Get messages from an existing stream. Additionally returns any attachments associated with the message.
+    ) -> List[V4Message]:
+        """Get messages from an existing stream. Additionally, returns any attachments associated with the message.
         See: `Messages <https://developers.symphony.com/restapi/reference/messages-v4>`_
 
         :param stream_id: The stream where to look for messages
@@ -328,10 +358,10 @@ class MessageService(OboMessageService):
             "limit": limit,
         }
         message_list = await self._messages_api.v4_stream_sid_message_get(**params)
-        return message_list.value
+        return message_list
 
     @retry
-    async def import_messages(self, messages: List[V4ImportedMessage]) -> [V4ImportResponse]:
+    async def import_messages(self, messages: List[V4ImportedMessage]) -> List[V4ImportResponse]:
         """Imports a list of messages to Symphony.
         See: `Import Message <https://developers.symphony.com/restapi/reference/import-message-v4>`_
 
@@ -341,12 +371,12 @@ class MessageService(OboMessageService):
 
         """
         params = {
-            "message_list": V4MessageImportList(value=messages),
+            "message_list": messages,
             "session_token": await self._auth_session.session_token,
             "key_manager_token": await self._auth_session.key_manager_token,
         }
         import_response_list = await self._messages_api.v4_message_import_post(**params)
-        return import_response_list.value
+        return import_response_list
 
     async def get_attachment(self, stream_id: str, message_id: str, attachment_id: str) -> str:
         """Downloads the attachment body by the stream ID, message ID and attachment ID.
@@ -434,7 +464,7 @@ class MessageService(OboMessageService):
         if to is not None:
             params["to"] = to
         attachment_list = await self._streams_api.v1_streams_sid_attachments_get(**params)
-        return attachment_list.value
+        return attachment_list
 
     @retry
     async def list_message_receipts(self, message_id: str) -> MessageReceiptDetailResponse:
@@ -501,7 +531,7 @@ class MessageService(OboMessageService):
             "limit": limit,
         }
         message_list = await self._messages_api.v1_message_search_post(**params)
-        return message_list.value  # endpoint returns empty list when no values found
+        return message_list
 
     async def search_all_messages(
         self,

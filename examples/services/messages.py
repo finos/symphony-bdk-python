@@ -61,6 +61,10 @@ async def run():
         )
         await message_service.import_messages([msg])
 
+        results = await message_service.search_messages_semantic("greetings", limit=2)
+        for message in results:
+            logging.info(f"fround a message: {message.message}")
+
         logging.info("Obo example:")
         obo_auth_session = bdk.obo(username="username")
         async with bdk.obo_services(obo_auth_session) as obo_services:

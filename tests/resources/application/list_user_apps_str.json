@@ -1,0 +1,35 @@
+[
+  {
+    "appId": "djApp",
+    "appName": "Dow Jones",
+    "listed": "TRUE",
+    "install": "FALSE"
+  },
+  {
+    "appId": "spcapiq",
+    "appName": "S&P Capital IQ Data",
+    "listed": "TRUE",
+    "install": "FALSE"
+  },
+  {
+    "appId": "selerity",
+    "appName": "Selerity Context",
+    "listed": "TRUE",
+    "install": "TRUE",
+    "products": [
+      {
+        "appId": "selerity",
+        "name": "Standard",
+        "subscribed": true,
+        "type": "default"
+      },
+      {
+        "appId": "selerity",
+        "name": "Premium",
+        "sku": "AcDccU53SsY",
+        "subscribed": false,
+        "type": "premium"
+      }
+    ]
+  }
+]
