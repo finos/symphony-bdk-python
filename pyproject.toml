@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "symphony_bdk_python"
-version = "3.0.0"
+version = "3.0.0-beta"
 license = "Apache-2.0"
 description = "Symphony Bot Development Kit for Python"
 readme = "README.md"
@@ -76,9 +76,7 @@ authorized_licenses = [
     "MIT",
     "Apache Software",
     "Apache-2.0",
-    "Python Software Foundation",
-    "Apache-2.0 AND MIT",
-    "PSF-2.0"
+    "Python Software Foundation"
 ]
 
 
