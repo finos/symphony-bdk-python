@@ -1,0 +1,6 @@
+symphony.bdk.core.symphony\_bdk.bot\_service
+============================================
+
+.. currentmodule:: symphony.bdk.core.symphony_bdk
+
+.. autofunction:: bot_service

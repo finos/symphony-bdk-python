@@ -1,0 +1,36 @@
+symphony.bdk.core.service.message
+=================================
+
+.. automodule:: symphony.bdk.core.service.message
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   symphony.bdk.core.service.message.message_parser
+   symphony.bdk.core.service.message.message_service
+   symphony.bdk.core.service.message.messageml_util
+   symphony.bdk.core.service.message.model
+   symphony.bdk.core.service.message.multi_attachments_messages_api
+

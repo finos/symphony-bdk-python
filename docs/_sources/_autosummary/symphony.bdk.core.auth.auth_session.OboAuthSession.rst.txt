@@ -1,0 +1,35 @@
+symphony.bdk.core.auth.auth\_session.OboAuthSession
+===================================================
+
+.. currentmodule:: symphony.bdk.core.auth.auth_session
+
+.. autoclass:: OboAuthSession
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~OboAuthSession.__init__
+      ~OboAuthSession.refresh
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~OboAuthSession.auth_token
+      ~OboAuthSession.key_manager_token
+      ~OboAuthSession.session_token
+      ~OboAuthSession.skd_enabled
+   
+   

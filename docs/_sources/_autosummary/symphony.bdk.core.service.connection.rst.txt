@@ -1,0 +1,33 @@
+symphony.bdk.core.service.connection
+====================================
+
+.. automodule:: symphony.bdk.core.service.connection
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   symphony.bdk.core.service.connection.connection_service
+   symphony.bdk.core.service.connection.model
+

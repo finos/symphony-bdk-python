@@ -1,0 +1,35 @@
+symphony.bdk.core.config.model.bdk\_retry\_config.BdkRetryConfig
+================================================================
+
+.. currentmodule:: symphony.bdk.core.config.model.bdk_retry_config
+
+.. autoclass:: BdkRetryConfig
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~BdkRetryConfig.__init__
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~BdkRetryConfig.DEFAULT_INITIAL_INTERVAL
+      ~BdkRetryConfig.DEFAULT_MAX_ATTEMPTS
+      ~BdkRetryConfig.DEFAULT_MAX_INTERVAL
+      ~BdkRetryConfig.DEFAULT_MULTIPLIER
+      ~BdkRetryConfig.INFINITE_MAX_ATTEMPTS
+   
+   

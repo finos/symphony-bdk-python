@@ -1,0 +1,6 @@
+symphony.bdk.core.service.message.message\_parser.get\_emojis
+=============================================================
+
+.. currentmodule:: symphony.bdk.core.service.message.message_parser
+
+.. autofunction:: get_emojis

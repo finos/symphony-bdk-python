@@ -1,0 +1,28 @@
+symphony.bdk.core.auth.authenticator\_factory.AuthenticatorFactory
+==================================================================
+
+.. currentmodule:: symphony.bdk.core.auth.authenticator_factory
+
+.. autoclass:: AuthenticatorFactory
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~AuthenticatorFactory.__init__
+      ~AuthenticatorFactory.get_bot_authenticator
+      ~AuthenticatorFactory.get_extension_app_authenticator
+      ~AuthenticatorFactory.get_obo_authenticator
+   
+   
+
+   
+   
+   

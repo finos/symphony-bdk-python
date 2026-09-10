@@ -1,0 +1,6 @@
+symphony.bdk.core.service.stream.stream\_util.from\_url\_safe\_stream\_id
+=========================================================================
+
+.. currentmodule:: symphony.bdk.core.service.stream.stream_util
+
+.. autofunction:: from_url_safe_stream_id

@@ -1,0 +1,28 @@
+symphony.bdk.core.service.health.health\_service.HealthService
+==============================================================
+
+.. currentmodule:: symphony.bdk.core.service.health.health_service
+
+.. autoclass:: HealthService
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~HealthService.__init__
+      ~HealthService.get_agent_info
+      ~HealthService.health_check
+      ~HealthService.health_check_extended
+   
+   
+
+   
+   
+   

@@ -1,0 +1,28 @@
+symphony.bdk.core.activity.form.FormReplyActivity
+=================================================
+
+.. currentmodule:: symphony.bdk.core.activity.form
+
+.. autoclass:: FormReplyActivity
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~FormReplyActivity.__init__
+      ~FormReplyActivity.before_matcher
+      ~FormReplyActivity.matches
+      ~FormReplyActivity.on_activity
+   
+   
+
+   
+   
+   

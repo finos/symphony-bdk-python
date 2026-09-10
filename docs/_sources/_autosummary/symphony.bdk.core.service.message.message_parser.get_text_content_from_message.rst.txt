@@ -1,0 +1,6 @@
+symphony.bdk.core.service.message.message\_parser.get\_text\_content\_from\_message
+===================================================================================
+
+.. currentmodule:: symphony.bdk.core.service.message.message_parser
+
+.. autofunction:: get_text_content_from_message

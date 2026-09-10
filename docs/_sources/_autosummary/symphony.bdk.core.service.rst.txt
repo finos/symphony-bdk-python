@@ -1,0 +1,45 @@
+symphony.bdk.core.service
+=========================
+
+.. automodule:: symphony.bdk.core.service
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   symphony.bdk.core.service.application
+   symphony.bdk.core.service.connection
+   symphony.bdk.core.service.datafeed
+   symphony.bdk.core.service.exception
+   symphony.bdk.core.service.health
+   symphony.bdk.core.service.message
+   symphony.bdk.core.service.obo_services
+   symphony.bdk.core.service.pagination
+   symphony.bdk.core.service.presence
+   symphony.bdk.core.service.session
+   symphony.bdk.core.service.signal
+   symphony.bdk.core.service.stream
+   symphony.bdk.core.service.user
+   symphony.bdk.core.service.version
+

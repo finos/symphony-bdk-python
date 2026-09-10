@@ -1,0 +1,39 @@
+symphony.bdk.core.client.trace\_id
+==================================
+
+.. automodule:: symphony.bdk.core.client.trace_id
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      add_x_trace_id
+      setup_trace_id_log_record_factory
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      DistributedTracingContext
+   
+   
+
+   
+   
+   
+
+
+

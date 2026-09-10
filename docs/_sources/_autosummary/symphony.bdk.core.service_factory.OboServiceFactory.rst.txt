@@ -1,0 +1,31 @@
+symphony.bdk.core.service\_factory.OboServiceFactory
+====================================================
+
+.. currentmodule:: symphony.bdk.core.service_factory
+
+.. autoclass:: OboServiceFactory
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~OboServiceFactory.__init__
+      ~OboServiceFactory.get_connection_service
+      ~OboServiceFactory.get_message_service
+      ~OboServiceFactory.get_presence_service
+      ~OboServiceFactory.get_signal_service
+      ~OboServiceFactory.get_stream_service
+      ~OboServiceFactory.get_user_service
+   
+   
+
+   
+   
+   

@@ -1,0 +1,33 @@
+symphony.bdk.core.auth.bot\_authenticator
+=========================================
+
+.. automodule:: symphony.bdk.core.auth.bot_authenticator
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      BotAuthenticator
+      BotAuthenticatorCert
+      BotAuthenticatorRsa
+   
+   
+
+   
+   
+   
+
+
+

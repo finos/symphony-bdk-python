@@ -1,0 +1,6 @@
+symphony.bdk.core.retry.strategy.is\_network\_or\_minor\_error\_or\_client
+==========================================================================
+
+.. currentmodule:: symphony.bdk.core.retry.strategy
+
+.. autofunction:: is_network_or_minor_error_or_client

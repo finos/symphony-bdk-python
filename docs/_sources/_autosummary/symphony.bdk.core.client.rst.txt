@@ -1,0 +1,33 @@
+symphony.bdk.core.client
+========================
+
+.. automodule:: symphony.bdk.core.client
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   symphony.bdk.core.client.api_client_factory
+   symphony.bdk.core.client.trace_id
+

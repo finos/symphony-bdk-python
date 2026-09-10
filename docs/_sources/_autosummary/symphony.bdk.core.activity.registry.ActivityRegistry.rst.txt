@@ -1,0 +1,51 @@
+symphony.bdk.core.activity.registry.ActivityRegistry
+====================================================
+
+.. currentmodule:: symphony.bdk.core.activity.registry
+
+.. autoclass:: ActivityRegistry
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~ActivityRegistry.__init__
+      ~ActivityRegistry.fetch_bot_info
+      ~ActivityRegistry.is_accepting_event
+      ~ActivityRegistry.on_connection_accepted
+      ~ActivityRegistry.on_connection_requested
+      ~ActivityRegistry.on_instant_message_created
+      ~ActivityRegistry.on_message_sent
+      ~ActivityRegistry.on_message_suppressed
+      ~ActivityRegistry.on_room_created
+      ~ActivityRegistry.on_room_deactivated
+      ~ActivityRegistry.on_room_demoted_from_owner
+      ~ActivityRegistry.on_room_member_promoted_to_owner
+      ~ActivityRegistry.on_room_reactivated
+      ~ActivityRegistry.on_room_updated
+      ~ActivityRegistry.on_shared_post
+      ~ActivityRegistry.on_symphony_elements_action
+      ~ActivityRegistry.on_user_joined_room
+      ~ActivityRegistry.on_user_left_room
+      ~ActivityRegistry.on_user_requested_to_join_room
+      ~ActivityRegistry.register
+      ~ActivityRegistry.slash
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~ActivityRegistry.activity_list
+   
+   

@@ -1,0 +1,34 @@
+symphony.bdk.core.config
+========================
+
+.. automodule:: symphony.bdk.core.config
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   symphony.bdk.core.config.exception
+   symphony.bdk.core.config.loader
+   symphony.bdk.core.config.model
+

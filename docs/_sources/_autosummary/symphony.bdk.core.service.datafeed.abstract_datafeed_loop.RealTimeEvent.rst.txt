@@ -1,0 +1,40 @@
+symphony.bdk.core.service.datafeed.abstract\_datafeed\_loop.RealTimeEvent
+=========================================================================
+
+.. currentmodule:: symphony.bdk.core.service.datafeed.abstract_datafeed_loop
+
+.. autoclass:: RealTimeEvent
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~RealTimeEvent.MESSAGESENT
+      ~RealTimeEvent.SHAREDPOST
+      ~RealTimeEvent.INSTANTMESSAGECREATED
+      ~RealTimeEvent.ROOMCREATED
+      ~RealTimeEvent.ROOMUPDATED
+      ~RealTimeEvent.ROOMDEACTIVATED
+      ~RealTimeEvent.ROOMREACTIVATED
+      ~RealTimeEvent.USERREQUESTEDTOJOINROOM
+      ~RealTimeEvent.USERJOINEDROOM
+      ~RealTimeEvent.USERLEFTROOM
+      ~RealTimeEvent.ROOMMEMBERPROMOTEDTOOWNER
+      ~RealTimeEvent.ROOMMEMBERDEMOTEDFROMOWNER
+      ~RealTimeEvent.CONNECTIONREQUESTED
+      ~RealTimeEvent.CONNECTIONACCEPTED
+      ~RealTimeEvent.SYMPHONYELEMENTSACTION
+      ~RealTimeEvent.MESSAGESUPPRESSED
+   
+   

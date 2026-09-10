@@ -1,0 +1,31 @@
+symphony.bdk.core.config.model.bdk\_retry\_config
+=================================================
+
+.. automodule:: symphony.bdk.core.config.model.bdk_retry_config
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      BdkRetryConfig
+   
+   
+
+   
+   
+   
+
+
+

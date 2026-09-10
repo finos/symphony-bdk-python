@@ -1,0 +1,6 @@
+symphony.bdk.core.retry.strategy.is\_client\_error
+==================================================
+
+.. currentmodule:: symphony.bdk.core.retry.strategy
+
+.. autofunction:: is_client_error

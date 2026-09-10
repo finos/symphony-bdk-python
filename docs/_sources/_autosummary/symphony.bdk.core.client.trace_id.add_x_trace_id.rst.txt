@@ -1,0 +1,6 @@
+symphony.bdk.core.client.trace\_id.add\_x\_trace\_id
+====================================================
+
+.. currentmodule:: symphony.bdk.core.client.trace_id
+
+.. autofunction:: add_x_trace_id

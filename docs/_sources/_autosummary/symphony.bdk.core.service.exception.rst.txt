@@ -1,0 +1,31 @@
+symphony.bdk.core.service.exception
+===================================
+
+.. automodule:: symphony.bdk.core.service.exception
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Exceptions
+
+   .. autosummary::
+      :toctree:
+   
+      MessageCreationError
+      MessageParserError
+   
+   
+
+
+

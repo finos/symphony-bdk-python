@@ -1,0 +1,33 @@
+symphony.bdk.core.auth.obo\_authenticator
+=========================================
+
+.. automodule:: symphony.bdk.core.auth.obo_authenticator
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      OboAuthenticator
+      OboAuthenticatorCert
+      OboAuthenticatorRsa
+   
+   
+
+   
+   
+   
+
+
+

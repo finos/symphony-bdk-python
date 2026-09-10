@@ -1,0 +1,31 @@
+symphony.bdk.core.client.trace\_id.DistributedTracingContext
+============================================================
+
+.. currentmodule:: symphony.bdk.core.client.trace_id
+
+.. autoclass:: DistributedTracingContext
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~DistributedTracingContext.__init__
+      ~DistributedTracingContext.clear
+      ~DistributedTracingContext.get_trace_id
+      ~DistributedTracingContext.has_trace_id
+      ~DistributedTracingContext.is_trace_id_set_by_user
+      ~DistributedTracingContext.set_new_trace_id
+      ~DistributedTracingContext.set_trace_id
+   
+   
+
+   
+   
+   

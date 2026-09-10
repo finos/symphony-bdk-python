@@ -1,0 +1,34 @@
+symphony.bdk.core.service.user
+==============================
+
+.. automodule:: symphony.bdk.core.service.user
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   symphony.bdk.core.service.user.model
+   symphony.bdk.core.service.user.user_service
+   symphony.bdk.core.service.user.user_util
+

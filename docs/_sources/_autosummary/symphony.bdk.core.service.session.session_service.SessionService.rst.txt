@@ -1,0 +1,26 @@
+symphony.bdk.core.service.session.session\_service.SessionService
+=================================================================
+
+.. currentmodule:: symphony.bdk.core.service.session.session_service
+
+.. autoclass:: SessionService
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~SessionService.__init__
+      ~SessionService.get_session
+   
+   
+
+   
+   
+   

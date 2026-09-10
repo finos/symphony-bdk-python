@@ -1,0 +1,35 @@
+symphony.bdk.core.activity.form.FormReplyContext
+================================================
+
+.. currentmodule:: symphony.bdk.core.activity.form
+
+.. autoclass:: FormReplyContext
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~FormReplyContext.__init__
+      ~FormReplyContext.get_form_value
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~FormReplyContext.form_id
+      ~FormReplyContext.form_values
+      ~FormReplyContext.initiator
+      ~FormReplyContext.source_event
+   
+   

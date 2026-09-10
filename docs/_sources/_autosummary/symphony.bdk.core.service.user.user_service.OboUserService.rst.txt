@@ -1,0 +1,32 @@
+symphony.bdk.core.service.user.user\_service.OboUserService
+===========================================================
+
+.. currentmodule:: symphony.bdk.core.service.user.user_service
+
+.. autoclass:: OboUserService
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~OboUserService.__init__
+      ~OboUserService.follow_user
+      ~OboUserService.list_users_by_emails
+      ~OboUserService.list_users_by_ids
+      ~OboUserService.list_users_by_usernames
+      ~OboUserService.search_all_users
+      ~OboUserService.search_users
+      ~OboUserService.unfollow_user
+   
+   
+
+   
+   
+   

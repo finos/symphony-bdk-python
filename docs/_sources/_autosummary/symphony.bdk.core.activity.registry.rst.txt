@@ -1,0 +1,31 @@
+symphony.bdk.core.activity.registry
+===================================
+
+.. automodule:: symphony.bdk.core.activity.registry
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      ActivityRegistry
+   
+   
+
+   
+   
+   
+
+
+

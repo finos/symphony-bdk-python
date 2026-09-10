@@ -1,0 +1,6 @@
+symphony.bdk.core.config.exception.BotNotConfiguredError
+========================================================
+
+.. currentmodule:: symphony.bdk.core.config.exception
+
+.. autoexception:: BotNotConfiguredError

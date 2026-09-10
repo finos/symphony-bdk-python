@@ -1,0 +1,6 @@
+symphony.bdk.core.retry.strategy.read\_datafeed\_retry
+======================================================
+
+.. currentmodule:: symphony.bdk.core.retry.strategy
+
+.. autofunction:: read_datafeed_retry

@@ -1,0 +1,6 @@
+symphony.bdk.core.retry.strategy.authentication\_retry
+======================================================
+
+.. currentmodule:: symphony.bdk.core.retry.strategy
+
+.. autofunction:: authentication_retry

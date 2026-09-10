@@ -1,0 +1,40 @@
+﻿symphony.bdk.core
+=================
+
+.. automodule:: symphony.bdk.core
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   symphony.bdk.core.activity
+   symphony.bdk.core.auth
+   symphony.bdk.core.client
+   symphony.bdk.core.config
+   symphony.bdk.core.extension
+   symphony.bdk.core.retry
+   symphony.bdk.core.service
+   symphony.bdk.core.service_factory
+   symphony.bdk.core.symphony_bdk
+
