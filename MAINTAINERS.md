@@ -14,6 +14,13 @@ This file lists the maintainers of this repository.
 | @thibauult | Thibault Pensec | @SymphonyOSF  |  |
 | @vladokrsymphony | Vlado Kragujevski | @SymphonyOSF |  |
 | @symphony-enrico | Enrico Molino | @SymphonyOSF |  |
+| @Alex-Nalin | Alex Nalin | @SymphonyOSF |  |
+| @bscrivanich242 | Ben Scrivanich | @SymphonyOSF |  |
+| @Hamilton-Chang | Hamilton Chang | @SymphonyOSF |  |
+| @jeremyamenity | Jeremy Batt | @SymphonyOSF |  |
+| @matthewcummings | Matthew Cummings | @SymphonyOSF |  |
+| @richardring | Richard Ring | @SymphonyOSF |  |
+| @Sean-Koval-Sym | Sean Koval | @SymphonyOSF |  |
 
 For information about maintainer responsibilities and resources, see the [FINOS Maintainers Cheatsheet](https://community.finos.org/docs/finos-maintainers-cheatsheet).
 
