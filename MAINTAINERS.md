@@ -18,7 +18,6 @@ This file lists the maintainers of this repository.
 | @bscrivanich242 | Ben Scrivanich | @SymphonyOSF |  |
 | @Hamilton-Chang | Hamilton Chang | @SymphonyOSF |  |
 | @jeremyamenity | Jeremy Batt | @SymphonyOSF |  |
-| @matthewcummings | Matthew Cummings | @SymphonyOSF |  |
 | @richardring | Richard Ring | @SymphonyOSF |  |
 | @Sean-Koval-Sym | Sean Koval | @SymphonyOSF |  |
 
