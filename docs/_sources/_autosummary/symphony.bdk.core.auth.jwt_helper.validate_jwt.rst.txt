@@ -1,0 +1,6 @@
+symphony.bdk.core.auth.jwt\_helper.validate\_jwt
+================================================
+
+.. currentmodule:: symphony.bdk.core.auth.jwt_helper
+
+.. autofunction:: validate_jwt

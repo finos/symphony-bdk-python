@@ -1,0 +1,31 @@
+symphony.bdk.core.service.message.model
+=======================================
+
+.. automodule:: symphony.bdk.core.service.message.model
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      Message
+   
+   
+
+   
+   
+   
+
+
+

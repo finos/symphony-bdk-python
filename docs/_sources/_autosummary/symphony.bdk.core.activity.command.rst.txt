@@ -1,0 +1,33 @@
+symphony.bdk.core.activity.command
+==================================
+
+.. automodule:: symphony.bdk.core.activity.command
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      CommandActivity
+      CommandContext
+      SlashCommandActivity
+   
+   
+
+   
+   
+   
+
+
+

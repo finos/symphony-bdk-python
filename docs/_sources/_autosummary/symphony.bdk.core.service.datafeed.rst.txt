@@ -1,0 +1,40 @@
+symphony.bdk.core.service.datafeed
+==================================
+
+.. automodule:: symphony.bdk.core.service.datafeed
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   symphony.bdk.core.service.datafeed.abstract_ackId_event_loop
+   symphony.bdk.core.service.datafeed.abstract_datafeed_loop
+   symphony.bdk.core.service.datafeed.abstract_datahose_loop
+   symphony.bdk.core.service.datafeed.datafeed_loop_v1
+   symphony.bdk.core.service.datafeed.datafeed_loop_v2
+   symphony.bdk.core.service.datafeed.datahose_loop
+   symphony.bdk.core.service.datafeed.exception
+   symphony.bdk.core.service.datafeed.on_disk_datafeed_id_repository
+   symphony.bdk.core.service.datafeed.real_time_event_listener
+

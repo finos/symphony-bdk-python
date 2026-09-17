@@ -1,0 +1,25 @@
+symphony.bdk.core.service.user.user\_util.Segment
+=================================================
+
+.. currentmodule:: symphony.bdk.core.service.user.user_util
+
+.. autoclass:: Segment
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Segment.__init__
+   
+   
+
+   
+   
+   

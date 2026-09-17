@@ -1,0 +1,65 @@
+symphony.bdk.core.service.user.user\_service.UserService
+========================================================
+
+.. currentmodule:: symphony.bdk.core.service.user.user_service
+
+.. autoclass:: UserService
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~UserService.__init__
+      ~UserService.add_disclaimer
+      ~UserService.add_role
+      ~UserService.create
+      ~UserService.follow_user
+      ~UserService.get_avatar
+      ~UserService.get_delegates
+      ~UserService.get_disclaimer
+      ~UserService.get_feature_entitlements
+      ~UserService.get_manifest
+      ~UserService.get_status
+      ~UserService.get_user_detail
+      ~UserService.list_all_audit_trail
+      ~UserService.list_all_user_details
+      ~UserService.list_all_user_details_by_filter
+      ~UserService.list_all_user_followers
+      ~UserService.list_all_users_following
+      ~UserService.list_audit_trail
+      ~UserService.list_roles
+      ~UserService.list_user_details
+      ~UserService.list_user_details_by_filter
+      ~UserService.list_user_followers
+      ~UserService.list_users_by_emails
+      ~UserService.list_users_by_ids
+      ~UserService.list_users_by_usernames
+      ~UserService.list_users_following
+      ~UserService.remove_disclaimer
+      ~UserService.remove_role
+      ~UserService.search_all_users
+      ~UserService.search_users
+      ~UserService.suspend
+      ~UserService.suspend_user
+      ~UserService.unfollow_user
+      ~UserService.unsuspend
+      ~UserService.update
+      ~UserService.update_avatar
+      ~UserService.update_delegates
+      ~UserService.update_feature_entitlements
+      ~UserService.update_manifest_from_file
+      ~UserService.update_manifest_from_json
+      ~UserService.update_status
+   
+   
+
+   
+   
+   

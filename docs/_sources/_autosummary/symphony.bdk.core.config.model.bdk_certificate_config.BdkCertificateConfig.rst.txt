@@ -1,0 +1,32 @@
+symphony.bdk.core.config.model.bdk\_certificate\_config.BdkCertificateConfig
+============================================================================
+
+.. currentmodule:: symphony.bdk.core.config.model.bdk_certificate_config
+
+.. autoclass:: BdkCertificateConfig
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~BdkCertificateConfig.__init__
+      ~BdkCertificateConfig.is_valid
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~BdkCertificateConfig.path
+   
+   

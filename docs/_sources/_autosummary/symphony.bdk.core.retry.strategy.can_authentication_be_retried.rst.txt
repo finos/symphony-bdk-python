@@ -1,0 +1,6 @@
+symphony.bdk.core.retry.strategy.can\_authentication\_be\_retried
+=================================================================
+
+.. currentmodule:: symphony.bdk.core.retry.strategy
+
+.. autofunction:: can_authentication_be_retried

@@ -1,0 +1,6 @@
+symphony.bdk.core.auth.jwt\_helper.create\_signed\_jwt\_with\_claims
+====================================================================
+
+.. currentmodule:: symphony.bdk.core.auth.jwt_helper
+
+.. autofunction:: create_signed_jwt_with_claims

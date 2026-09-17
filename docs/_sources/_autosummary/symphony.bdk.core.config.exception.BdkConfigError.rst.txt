@@ -1,0 +1,6 @@
+symphony.bdk.core.config.exception.BdkConfigError
+=================================================
+
+.. currentmodule:: symphony.bdk.core.config.exception
+
+.. autoexception:: BdkConfigError

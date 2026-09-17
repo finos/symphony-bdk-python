@@ -1,0 +1,37 @@
+symphony.bdk.core.config.model.bdk\_config.BdkConfig
+====================================================
+
+.. currentmodule:: symphony.bdk.core.config.model.bdk_config
+
+.. autoclass:: BdkConfig
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~BdkConfig.__init__
+      ~BdkConfig.get_base_path
+      ~BdkConfig.get_formatted_context
+      ~BdkConfig.get_port_as_string
+      ~BdkConfig.is_app_configured
+      ~BdkConfig.is_bot_configured
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~BdkConfig.DEFAULT_HTTPS_PORT
+      ~BdkConfig.DEFAULT_SCHEME
+   
+   

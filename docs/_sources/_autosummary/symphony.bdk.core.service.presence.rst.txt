@@ -1,0 +1,32 @@
+symphony.bdk.core.service.presence
+==================================
+
+.. automodule:: symphony.bdk.core.service.presence
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst
+   :recursive:
+
+   symphony.bdk.core.service.presence.presence_service
+

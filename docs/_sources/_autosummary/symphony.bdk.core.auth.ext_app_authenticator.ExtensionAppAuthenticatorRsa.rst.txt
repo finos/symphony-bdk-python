@@ -1,0 +1,29 @@
+symphony.bdk.core.auth.ext\_app\_authenticator.ExtensionAppAuthenticatorRsa
+===========================================================================
+
+.. currentmodule:: symphony.bdk.core.auth.ext_app_authenticator
+
+.. autoclass:: ExtensionAppAuthenticatorRsa
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~ExtensionAppAuthenticatorRsa.__init__
+      ~ExtensionAppAuthenticatorRsa.authenticate_and_retrieve_tokens
+      ~ExtensionAppAuthenticatorRsa.authenticate_extension_app
+      ~ExtensionAppAuthenticatorRsa.is_token_pair_valid
+      ~ExtensionAppAuthenticatorRsa.validate_jwt
+   
+   
+
+   
+   
+   

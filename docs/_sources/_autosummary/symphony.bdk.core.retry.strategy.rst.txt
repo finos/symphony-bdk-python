@@ -1,0 +1,39 @@
+symphony.bdk.core.retry.strategy
+================================
+
+.. automodule:: symphony.bdk.core.retry.strategy
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:
+   
+      authentication_retry
+      can_authentication_be_retried
+      is_client_error
+      is_client_timeout_error
+      is_network_or_minor_error
+      is_network_or_minor_error_or_client
+      is_unauthorized
+      read_datafeed_retry
+      read_datahose_retry
+      refresh_session_if_unauthorized
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

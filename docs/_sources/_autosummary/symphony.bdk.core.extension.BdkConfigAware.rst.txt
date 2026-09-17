@@ -1,0 +1,26 @@
+symphony.bdk.core.extension.BdkConfigAware
+==========================================
+
+.. currentmodule:: symphony.bdk.core.extension
+
+.. autoclass:: BdkConfigAware
+   :members:
+   :show-inheritance:
+   :inherited-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~BdkConfigAware.__init__
+      ~BdkConfigAware.set_config
+   
+   
+
+   
+   
+   

@@ -1,0 +1,33 @@
+symphony.bdk.core.auth.auth\_session
+====================================
+
+.. automodule:: symphony.bdk.core.auth.auth_session
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      AppAuthSession
+      AuthSession
+      OboAuthSession
+   
+   
+
+   
+   
+   
+
+
+

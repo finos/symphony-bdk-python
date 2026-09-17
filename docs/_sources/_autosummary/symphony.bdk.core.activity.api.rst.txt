@@ -1,0 +1,32 @@
+symphony.bdk.core.activity.api
+==============================
+
+.. automodule:: symphony.bdk.core.activity.api
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      AbstractActivity
+      ActivityContext
+   
+   
+
+   
+   
+   
+
+
+

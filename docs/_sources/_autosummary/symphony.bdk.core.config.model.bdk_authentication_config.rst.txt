@@ -1,0 +1,31 @@
+symphony.bdk.core.config.model.bdk\_authentication\_config
+==========================================================
+
+.. automodule:: symphony.bdk.core.config.model.bdk_authentication_config
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      BdkAuthenticationConfig
+   
+   
+
+   
+   
+   
+
+
+

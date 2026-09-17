@@ -1,0 +1,31 @@
+symphony.bdk.core.service.datafeed.datafeed\_loop\_v2
+=====================================================
+
+.. automodule:: symphony.bdk.core.service.datafeed.datafeed_loop_v2
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      DatafeedLoopV2
+   
+   
+
+   
+   
+   
+
+
+

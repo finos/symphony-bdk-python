@@ -1,0 +1,33 @@
+symphony.bdk.core.service.datafeed.abstract\_datafeed\_loop
+===========================================================
+
+.. automodule:: symphony.bdk.core.service.datafeed.abstract_datafeed_loop
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:
+      :template: custom-class-template.rst
+   
+      AbstractDatafeedLoop
+      DatafeedVersion
+      RealTimeEvent
+   
+   
+
+   
+   
+   
+
+
+
