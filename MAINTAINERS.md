@@ -14,6 +14,12 @@ This file lists the maintainers of this repository.
 | @thibauult | Thibault Pensec | @SymphonyOSF  |  |
 | @vladokrsymphony | Vlado Kragujevski | @SymphonyOSF |  |
 | @symphony-enrico | Enrico Molino | @SymphonyOSF |  |
+| @Alex-Nalin | Alex Nalin | @SymphonyOSF |  |
+| @bscrivanich242 | Ben Scrivanich | @SymphonyOSF |  |
+| @Hamilton-Chang | Hamilton Chang | @SymphonyOSF |  |
+| @jeremyamenity | Jeremy Batt | @SymphonyOSF |  |
+| @richardring | Richard Ring | @SymphonyOSF |  |
+| @Sean-Koval-Sym | Sean Koval | @SymphonyOSF |  |
 | @matthewcummings | Matthew Cummings | @SymphonyOSF |  |
 | @sebastientosello | Sebastien Tosello | @SymphonyOSF |  |
 
