@@ -70,7 +70,7 @@ class OboPresenceService:
             last_user_id=last_user_id,
             limit=limit,
         )
-        return presence_list.value
+        return presence_list
 
     @retry
     async def get_user_presence(self, user_id: int, local: bool) -> V2Presence:
@@ -146,7 +146,7 @@ class OboPresenceService:
         presence_list = await self._presence_api.v1_presence_feed_feed_id_read_get(
             session_token=await self._auth_session.session_token, feed_id=feed_id
         )
-        return presence_list.value
+        return presence_list
 
     @retry
     async def delete_presence_feed(self, feed_id: str) -> str:

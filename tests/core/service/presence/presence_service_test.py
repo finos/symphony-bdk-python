@@ -1,14 +1,14 @@
+from typing import List
 from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
 from symphony.bdk.core.auth.auth_session import AuthSession
 from symphony.bdk.core.service.presence.presence_service import PresenceService, PresenceStatus
-from symphony.bdk.gen import ApiException
+from symphony.bdk.gen.rest import ApiException
 from symphony.bdk.gen.pod_api.presence_api import PresenceApi
 from symphony.bdk.gen.pod_model.string_id import StringId
 from symphony.bdk.gen.pod_model.v2_presence import V2Presence
-from symphony.bdk.gen.pod_model.v2_presence_list import V2PresenceList
 from symphony.bdk.gen.pod_model.v2_presence_status import V2PresenceStatus
 from symphony.bdk.gen.pod_model.v2_user_presence import V2UserPresence
 from tests.core.config import minimal_retry_config
@@ -66,7 +66,7 @@ async def test_get_presence_failed(presence_service, mocked_presence_api_client)
 @pytest.mark.asyncio
 async def test_get_all_presence(presence_service, mocked_presence_api_client):
     mocked_presence_api_client.v2_users_presence_get.return_value = deserialize_object(
-        V2PresenceList,
+        List[V2Presence],
         "["
         "    {"
         '        "category":"AVAILABLE",'
@@ -186,7 +186,7 @@ async def test_create_presence_feed_failed(presence_service, mocked_presence_api
 @pytest.mark.asyncio
 async def test_read_presence_feed(presence_service, mocked_presence_api_client):
     mocked_presence_api_client.v1_presence_feed_feed_id_read_get.return_value = deserialize_object(
-        V2PresenceList,
+        List[V2Presence],
         "["
         "  {"
         '      "category":"AVAILABLE",'

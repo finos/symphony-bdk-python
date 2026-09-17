@@ -9,7 +9,7 @@ TRACE_ID_LENGTH = 6
 
 X_TRACE_ID = "X-Trace-Id"
 
-HEADER_ARG_INDEX = 4
+HEADER_ARG_INDEX = 2
 
 
 def setup_trace_id_log_record_factory():

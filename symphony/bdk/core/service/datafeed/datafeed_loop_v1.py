@@ -81,7 +81,7 @@ class DatafeedLoopV1(AbstractDatafeedLoop):
         events = await self._datafeed_api.v4_datafeed_id_read_get(
             id=self._datafeed_id, session_token=session_token, key_manager_token=key_manager_token
         )
-        return events.value if events is not None and events.value else []
+        return events if events is not None else []
 
     async def _log_listener_exception(self, task):
         exception = task.exception()

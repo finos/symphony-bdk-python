@@ -1,4 +1,4 @@
-[![FINOS - Active](https://cdn.jsdelivr.net/gh/finos/contrib-toolbox@master/images/badge-active.svg)](https://community.finos.org/docs/governance/Software-Projects/stages/active)
+[![FINOS - Graduated](https://cdn.jsdelivr.net/gh/finos/contrib-toolbox@master/images/badge-graduated.svg)](https://community.finos.org/docs/governance/lifecycle-stages/graduated)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Python](https://img.shields.io/badge/python-3.9%20%7C%203.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-blue)](https://www.python.org/downloads/)
 [![Pypi](https://img.shields.io/pypi/v/symphony-bdk-python)](https://pypi.org/project/symphony-bdk-python/)
@@ -70,8 +70,27 @@ _NOTE:_ Ensure you have an active Individual Contributor License Agreement (ICLA
 
 For further inquiries, email [help@finos.org](mailto:help@finos.org).
 
-
 ### Updating Generated Code
+
+Python BDK uses [OpenAPITools/openapi-generator](https://github.com/OpenAPITools/openapi-generator/) to generate code. 
+To update the generated code, follow these steps:
+
+1. Download desired version of openapi generator.
+     ```bash
+     cd api_client_generation
+     curl -L https://repo1.maven.org/maven2/org/openapitools/openapi-generator-cli/7.14.0/openapi-generator-cli-7.14.0.jar      -o openapi-generator-cli.jar
+     ```
+2. Adjust the commit for which the code is generated(inside generate.sh script)
+3. Execute the generation script: 
+   ```bash
+   ./generate.sh
+   ```
+4. Commit and push the newly generated code along with the updated JAR file.
+
+Note: There are a few files that are not replaced(EX. api_client.py), those files require some modifications after code is generated.
+
+
+### OLD Updating Generated Code (Deprecated)
 
 Python BDK uses [OpenAPITools/openapi-generator](https://github.com/OpenAPITools/openapi-generator/) to generate code. 
 To update the generated code, follow these steps:

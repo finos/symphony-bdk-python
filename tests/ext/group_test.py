@@ -14,6 +14,7 @@ from symphony.bdk.gen.group_model.create_group import CreateGroup
 from symphony.bdk.gen.group_model.group_list import GroupList
 from symphony.bdk.gen.group_model.member import Member
 from symphony.bdk.gen.group_model.owner import Owner
+from symphony.bdk.gen.group_api.group_api import GroupApi
 from symphony.bdk.gen.group_model.read_group import ReadGroup
 from symphony.bdk.gen.group_model.sort_order import SortOrder
 from symphony.bdk.gen.group_model.status import Status
@@ -73,13 +74,6 @@ def fixture_group():
     return ReadGroup(type="SDL", owner_type=Owner(value="TENANT"), owner_id=123, name="SDl test")
 
 
-def assert_called_idm_tokens(first_call_args, session_token=SESSION_TOKEN):
-    assert first_call_args.args[0] == "/idm/tokens"
-    params = dict(first_call_args.args[3])
-    assert params["scope"] == "profile-manager"
-    assert first_call_args.args[4]["sessionToken"] == session_token
-
-
 def test_group_extension_initialisation():
     api_client_factory = Mock()
     bot_session = Mock()
@@ -96,8 +90,10 @@ def test_group_extension_initialisation():
 
 
 @pytest.mark.asyncio
-async def test_insert_group(group_service, mocked_group, api_client):
-    api_client.call_api.return_value = mocked_group
+async def test_insert_group(group_service, mocked_group):
+    group_api = MagicMock(spec=GroupApi)
+    group_api.insert_group = AsyncMock(return_value=mocked_group)
+    group_service._group_api = group_api
 
     create_group = CreateGroup(
         type="SDL", owner_type=Owner(value="TENANT"), owner_id=190, name="SDL"
@@ -106,67 +102,73 @@ async def test_insert_group(group_service, mocked_group, api_client):
 
     assert group.type == mocked_group.type
     assert group.name == mocked_group.name
-    api_client.call_api.assert_called_once()
-    assert api_client.call_api.call_args.args[0] == "/v1/groups"
-    assert api_client.call_api.call_args.kwargs["body"] == create_group
+    group_api.insert_group.assert_called_once()
+    call_kwargs = group_api.insert_group.call_args.kwargs
+    assert call_kwargs["create_group"] == create_group
+    assert call_kwargs["x_symphony_host"] == "localhost"
 
 
 @pytest.mark.asyncio
-async def test_list_groups(group_service, mocked_group, api_client):
-    api_client.call_api.return_value = GroupList(data=[mocked_group])
+async def test_list_groups(group_service, mocked_group):
+    group_api = MagicMock(spec=GroupApi)
+    group_api.list_groups = AsyncMock(return_value=GroupList(data=[mocked_group]))
+    group_service._group_api = group_api
 
     groups = await group_service.list_groups()
     assert len(groups.data) == 1
-    api_client.call_api.assert_called_once()
-    assert api_client.call_api.call_args.args[0] == "/v1/groups/type/{typeId}"
+    group_api.list_groups.assert_called_once()
+    call_kwargs = group_api.list_groups.call_args.kwargs
+    assert call_kwargs["x_symphony_host"] == "localhost"
 
 
 @pytest.mark.asyncio
-async def test_list_all_groups(group_service, api_client):
-    api_client.call_api.return_value = get_deserialized_object_from_resource(
+async def test_list_all_groups(group_service):
+    group_api = MagicMock(spec=GroupApi)
+    group_api.list_groups = AsyncMock(return_value=get_deserialized_object_from_resource(
         GroupList, "group/list_all_groups_one_page.json"
-    )
+    ))
+    group_service._group_api = group_api
 
     gen = await group_service.list_all_groups(chunk_size=2)
     groups = [d async for d in gen]
 
-    args, kwargs = api_client.call_api.call_args
-
-    assert args[0] == "/v1/groups/type/{typeId}"
-    assert args[3] == [("limit", 2)]
+    group_api.list_groups.assert_called_once()
+    call_kwargs = group_api.list_groups.call_args.kwargs
+    assert call_kwargs["limit"] == 2
     assert len(groups) == 2
-    assert groups[0]["name"] == "SDl test 0"
-    assert groups[1]["name"] == "SDl test 1"
+    assert groups[0].name == "SDl test 0"
+    assert groups[1].name == "SDl test 1"
 
 
 @pytest.mark.asyncio
-async def test_list_all_groups_2_pages(group_service, api_client):
+async def test_list_all_groups_2_pages(group_service):
     return_values = [
         get_deserialized_object_from_resource(GroupList, "group/list_all_groups_page_1.json"),
         get_deserialized_object_from_resource(GroupList, "group/list_all_groups_page_2.json"),
     ]
-
-    api_client.call_api.side_effect = return_values
+    group_api = MagicMock(spec=GroupApi)
+    group_api.list_groups = AsyncMock(side_effect=return_values)
+    group_service._group_api = group_api
 
     gen = await group_service.list_all_groups(chunk_size=2, max_number=4)
     groups = [d async for d in gen]
 
-    args, kwargs = api_client.call_api.call_args
-
-    assert api_client.call_api.call_count == 2
-    assert args[0] == "/v1/groups/type/{typeId}"
-    assert dict(args[3])["after"] == "2"
-    assert dict(args[3])["limit"] == 2
+    assert group_api.list_groups.call_count == 2
+    call_kwargs = group_api.list_groups.call_args.kwargs
+    assert call_kwargs["after"] == "2"
+    assert call_kwargs["limit"] == 2
     assert len(groups) == 4
-    assert groups[0]["name"] == "SDl test 0"
-    assert groups[1]["name"] == "SDl test 1"
-    assert groups[2]["name"] == "SDl test 2"
-    assert groups[3]["name"] == "SDl test 3"
+    assert groups[0].name == "SDl test 0"
+    assert groups[1].name == "SDl test 1"
+    assert groups[2].name == "SDl test 2"
+    assert groups[3].name == "SDl test 3"
 
 
 @pytest.mark.asyncio
-async def test_list_groups_with_params(group_service, mocked_group, api_client):
-    api_client.call_api.return_value = GroupList(data=[mocked_group])
+async def test_list_groups_with_params(group_service, mocked_group):
+    group_api = MagicMock(spec=GroupApi)
+    group_api.list_groups = AsyncMock(return_value=GroupList(data=[mocked_group]))
+    group_service._group_api = group_api
 
     groups = await group_service.list_groups(
         status=Status(value="ACTIVE"),
@@ -176,22 +178,23 @@ async def test_list_groups_with_params(group_service, mocked_group, api_client):
         sort_order=SortOrder(value="ASC"),
     )
     assert len(groups.data) == 1
-    api_client.call_api.assert_called_once()
-    assert api_client.call_api.call_args.args[0] == "/v1/groups/type/{typeId}"
-    params = dict(api_client.call_api.call_args.args[3])
-    assert params["status"] == Status(value="ACTIVE")
-    assert params["before"] == "0"
-    assert params["after"] == "50"
-    assert params["limit"] == 50
-    assert params["sortOrder"] == SortOrder(value="ASC")
+    group_api.list_groups.assert_called_once()
+    call_kwargs = group_api.list_groups.call_args.kwargs
+    assert call_kwargs["status"] == Status(value="ACTIVE")
+    assert call_kwargs["before"] == "0"
+    assert call_kwargs["after"] == "50"
+    assert call_kwargs["limit"] == 50
+    assert call_kwargs["sort_order"] == SortOrder(value="ASC")
 
 
 @pytest.mark.asyncio
-async def test_update_group(group_service, mocked_group, api_client):
+async def test_update_group(group_service, mocked_group):
     mocked_group.name = "Updated name"
     mocked_group.e_tag = "e_tag"
     mocked_group.id = "group_id"
-    api_client.call_api.return_value = mocked_group
+    group_api = MagicMock(spec=GroupApi)
+    group_api.update_group = AsyncMock(return_value=mocked_group)
+    group_service._group_api = group_api
 
     update_group = UpdateGroup(
         name="Updated name",
@@ -207,69 +210,82 @@ async def test_update_group(group_service, mocked_group, api_client):
     )
 
     assert group.name == mocked_group.name
-    api_client.call_api.assert_called_once()
-    assert api_client.call_api.call_args.args[0] == "/v1/groups/{groupId}"
-    assert api_client.call_api.call_args.kwargs["body"] == update_group
+    group_api.update_group.assert_called_once()
+    call_kwargs = group_api.update_group.call_args.kwargs
+    assert call_kwargs["if_match"] == mocked_group.e_tag
+    assert call_kwargs["group_id"] == mocked_group.id
+    assert call_kwargs["update_group"] == update_group
 
 
 @pytest.mark.asyncio
-async def test_update_avatar(group_service, mocked_group, api_client):
+async def test_update_avatar(group_service, mocked_group):
     mocked_group.id = "group_id"
-    api_client.call_api.return_value = mocked_group
+    group_api = MagicMock(spec=GroupApi)
+    group_api.update_avatar = AsyncMock(return_value=mocked_group)
+    group_service._group_api = group_api
 
     image = "base_64_image"
     group = await group_service.update_avatar(group_id=mocked_group.id, image=image)
 
     assert group.name == mocked_group.name
-    api_client.call_api.assert_called_once()
-    assert api_client.call_api.call_args.args[0] == "/v1/groups/{groupId}/avatar"
-    assert api_client.call_api.call_args.kwargs["body"] == UploadAvatar(image=image)
+    group_api.update_avatar.assert_called_once()
+    call_kwargs = group_api.update_avatar.call_args.kwargs
+    assert call_kwargs["group_id"] == mocked_group.id
+    assert call_kwargs["upload_avatar"] == UploadAvatar(image=image)
 
 
 @pytest.mark.asyncio
-async def test_get_group(group_service, mocked_group, api_client):
+async def test_get_group(group_service, mocked_group):
     mocked_group.id = "group_id"
-    api_client.call_api.return_value = mocked_group
+    group_api = MagicMock(spec=GroupApi)
+    group_api.get_group = AsyncMock(return_value=mocked_group)
+    group_service._group_api = group_api
 
     group = await group_service.get_group(group_id=mocked_group.id)
 
     assert group.name == mocked_group.name
-    api_client.call_api.assert_called_once()
-    assert api_client.call_api.call_args.args[0] == "/v1/groups/{groupId}"
+    group_api.get_group.assert_called_once_with(group_id=mocked_group.id, x_symphony_host="localhost")
 
 
 @pytest.mark.asyncio
-async def test_add_member_to_group(group_service, mocked_group, api_client):
+async def test_add_member_to_group(group_service, mocked_group):
     mocked_group.id = "group_id"
-    api_client.call_api.return_value = mocked_group
+    group_api = MagicMock(spec=GroupApi)
+    group_api.add_member_to_group = AsyncMock(return_value=mocked_group)
+    group_service._group_api = group_api
     user_id = 12345
     group = await group_service.add_member_to_group(group_id=mocked_group.id, user_id=user_id)
 
     assert group.name == mocked_group.name
-    api_client.call_api.assert_called_once()
-    assert api_client.call_api.call_args.args[0] == "/v1/groups/{groupId}/member"
-    assert api_client.call_api.call_args.kwargs["body"] == AddMember(
+    group_api.add_member_to_group.assert_called_once()
+    call_kwargs = group_api.add_member_to_group.call_args.kwargs
+    assert call_kwargs["group_id"] == mocked_group.id
+    assert call_kwargs["add_member"] == AddMember(
         member=Member(member_id=user_id, member_tenant=extract_tenant_id(user_id))
     )
 
 
 @pytest.mark.asyncio
 async def test_add_member_to_group_with_retries(
-    group_service, mocked_group, api_client, login_client
+    group_service, mocked_group
 ):
-    login_client.call_api.return_value = JwtToken(access_token="access token")
-
+    authentication_api = group_service._oauth_session._authentication_api
+    authentication_api.idm_tokens_post = AsyncMock(return_value=JwtToken(access_token="access token"))
+    
     mocked_group.id = "group_id"
-    api_client.call_api.side_effect = [ApiException(status=401), mocked_group]
+    group_api = MagicMock(spec=GroupApi)
+    group_api.add_member_to_group = AsyncMock(side_effect=[ApiException(status=401), mocked_group])
+    group_service._group_api = group_api
     user_id = 12345
 
     group = await group_service.add_member_to_group(group_id=mocked_group.id, user_id=user_id)
 
-    login_client.call_api.assert_called_once()
+    authentication_api.idm_tokens_post.assert_called_once()
     assert group.name == mocked_group.name
-    assert api_client.call_api.call_count == 2
-    assert api_client.call_api.call_args.args[0] == "/v1/groups/{groupId}/member"
-    assert api_client.call_api.call_args.kwargs["body"] == AddMember(
+    assert group_api.add_member_to_group.call_count == 2
+    call_kwargs = group_api.add_member_to_group.call_args.kwargs
+    assert call_kwargs["group_id"] == mocked_group.id
+    assert call_kwargs["add_member"] == AddMember(
         member=Member(member_id=user_id, member_tenant=extract_tenant_id(user_id))
     )
 
@@ -285,47 +301,50 @@ async def test_oauth_session_initialisation(auth_session, retry_config):
 
 
 @pytest.mark.asyncio
-async def test_oauth_session_refresh(auth_session, retry_config, login_client):
+async def test_oauth_session_refresh(auth_session, retry_config):
     bearer_token = "bearer token"
     token = JwtToken(access_token=bearer_token)
-    login_client.call_api.return_value = token
 
-    oauth_session = OAuthSession(login_client, auth_session, retry_config)
+    oauth_session = OAuthSession(AsyncMock(), auth_session, retry_config)
+    oauth_session._authentication_api.idm_tokens_post = AsyncMock(return_value=token)
     await oauth_session.refresh()
 
-    login_client.call_api.assert_called_once()
-    assert_called_idm_tokens(login_client.call_api.call_args)
+    oauth_session._authentication_api.idm_tokens_post.assert_called_once_with(
+        session_token=SESSION_TOKEN, scope="profile-manager"
+    )
     assert oauth_session._bearer_token == bearer_token
 
 
 @pytest.mark.asyncio
-async def test_oauth_session_refresh_with_retries(auth_session, retry_config, login_client):
+async def test_oauth_session_refresh_with_retries(auth_session, retry_config):
     bearer_token = "bearer token"
-    login_client.call_api.side_effect = [
+    oauth_session = OAuthSession(AsyncMock(), auth_session, retry_config)
+    oauth_session._authentication_api.idm_tokens_post = AsyncMock(side_effect=[
         ApiException(status=401),
         JwtToken(access_token=bearer_token),
-    ]
+    ])
     authenticator = AsyncMock(BotAuthenticator)
     auth_session._authenticator = authenticator
     updated_session_token = "updated session token"
     authenticator.retrieve_session_token.return_value = updated_session_token
 
-    oauth_session = OAuthSession(login_client, auth_session, retry_config)
     await oauth_session.refresh()
 
-    assert login_client.call_api.call_count == 2
-    assert_called_idm_tokens(login_client.call_api.call_args_list[0])
-    assert_called_idm_tokens(login_client.call_api.call_args_list[1], updated_session_token)
+    assert oauth_session._authentication_api.idm_tokens_post.call_count == 2
+    first_call_kwargs = oauth_session._authentication_api.idm_tokens_post.call_args_list[0].kwargs
+    assert first_call_kwargs["session_token"] == SESSION_TOKEN
+    second_call_kwargs = oauth_session._authentication_api.idm_tokens_post.call_args_list[1].kwargs
+    assert second_call_kwargs["session_token"] == updated_session_token
     assert oauth_session._bearer_token == bearer_token
 
 
 @pytest.mark.asyncio
-async def test_oauth_settings(auth_session, retry_config, login_client):
+async def test_oauth_settings(auth_session, retry_config):
     bearer_token = "bearer token"
     token = JwtToken(access_token=bearer_token)
-    login_client.call_api.return_value = token
 
-    oauth_session = OAuthSession(login_client, auth_session, retry_config)
+    oauth_session = OAuthSession(AsyncMock(), auth_session, retry_config)
+    oauth_session._authentication_api.idm_tokens_post = AsyncMock(return_value=token)
     settings = await oauth_session.get_auth_settings()
 
     assert settings == {
@@ -336,18 +355,18 @@ async def test_oauth_settings(auth_session, retry_config, login_client):
             "value": "Bearer bearer token",
         }
     }
-    login_client.call_api.assert_called_once()
+    oauth_session._authentication_api.idm_tokens_post.assert_called_once()
 
 
 @pytest.mark.asyncio
 async def test_oauth_settings_does_not_refresh_when_called_twice(
-    auth_session, retry_config, login_client
+    auth_session, retry_config
 ):
     bearer_token = "bearer token"
     token = JwtToken(access_token=bearer_token)
-    login_client.call_api.return_value = token
 
-    oauth_session = OAuthSession(login_client, auth_session, retry_config)
+    oauth_session = OAuthSession(AsyncMock(), auth_session, retry_config)
+    oauth_session._authentication_api.idm_tokens_post = AsyncMock(return_value=token)
     await oauth_session.get_auth_settings()
     settings = await oauth_session.get_auth_settings()
 
@@ -359,4 +378,4 @@ async def test_oauth_settings_does_not_refresh_when_called_twice(
             "value": "Bearer bearer token",
         }
     }
-    login_client.call_api.assert_called_once()
+    oauth_session._authentication_api.idm_tokens_post.assert_called_once()

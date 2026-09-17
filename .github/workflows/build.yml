@@ -4,7 +4,7 @@ on:
   push:
     branches: [ "main", "*-rc" ]
   pull_request:
-    branches: [ "main", "*-rc" ]
+    branches: [ "main", "*-rc", "release/3.x" ]
 
 jobs:
   build:

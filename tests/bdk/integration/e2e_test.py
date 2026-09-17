@@ -74,20 +74,21 @@ async def test_bot_creates_stream_add_delete_user(bdk):
     test_user = int(TEST_USER_ID)
     # Given: Stream bdk creates a room
     streams = bdk.streams()
+    room_name = f"New room-{str(uuid4())}"[:40]
     room_result = await streams.create_room(
-        V3RoomAttributes(name="New fancy room", description="test room")
+        V3RoomAttributes(name=room_name, description="test room")
     )
     room_id = room_result.room_system_info.id
     # When: user is added to the room
     await streams.add_member_to_room(test_user, room_id)
     members = await streams.list_room_members(room_id)
     # Then: user is present in the room
-    assert test_user in [m.id for m in members.value]
+    assert test_user in [m.id for m in members]
     # When: user is removed from the room
     await streams.remove_member_from_room(test_user, room_id)
     # Then: user is deleted from the room
     members_after_removal = await streams.list_room_members(room_id)
-    assert test_user not in [m.id for m in members_after_removal.value]
+    assert test_user not in [m.id for m in members_after_removal]
 
 
 @pytest.mark.asyncio

@@ -20,6 +20,8 @@ This file lists the maintainers of this repository.
 | @jeremyamenity | Jeremy Batt | @SymphonyOSF |  |
 | @richardring | Richard Ring | @SymphonyOSF |  |
 | @Sean-Koval-Sym | Sean Koval | @SymphonyOSF |  |
+| @matthewcummings | Matthew Cummings | @SymphonyOSF |  |
+| @sebastientosello | Sebastien Tosello | @SymphonyOSF |  |
 
 For information about maintainer responsibilities and resources, see the [FINOS Maintainers Cheatsheet](https://community.finos.org/docs/finos-maintainers-cheatsheet).
 
