@@ -197,7 +197,8 @@ datahose:
     eventTypes: # mandatory field, events you want to receive
         - INSTANTMESSAGECREATED
         - ROOMCREATED
-        - ROOMUPDATED 
+        - ROOMUPDATED
+        - GENERICSYSTEMEVENT
         
     retry: # optional
         maxAttempts: 6 # maximum number of retry attempts
@@ -206,10 +207,10 @@ datahose:
         maxIntervalMillis: 10000 # limit of the interval between two attempts
 ```
 
-The minimal configuration for the datahose service is the `eventTypes` field. It should contain at least one value 
-chosen among [_Real Time Events_](https://docs.developers.symphony.com/building-bots-on-symphony/datafeed/real-time-events) 
-list and that `MESSAGESENT`, `MESSAGESUPPRESSED` and `SYMPHONYELEMENTSACTION` values can be set only if the ceservice is
-properly configured and running in your Symphony agent.
+The minimal configuration for the datahose service is the `eventTypes` field. It should contain at least one value
+chosen among [_Real Time Events_](...) list. Note that `MESSAGESENT`, `MESSAGESUPPRESSED`, `SYMPHONYELEMENTSACTION`
+and `GENERICSYSTEMEVENT` values can be set only if the ceservice is properly configured and running in your
+Symphony agent.
 
 The `tag` field is optional and is used when creating and reusing datahose feeds. If you have several instances of the
 same bot and want them to use the same datahose feed (so that events are spread over bot instances),

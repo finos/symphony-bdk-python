@@ -1,6 +1,7 @@
 # ruff: noqa
 import asyncio
 from unittest.mock import AsyncMock, call, patch
+from symphony.bdk.gen.agent_model.v4_generic_system_event import V4GenericSystemEvent
 
 import pytest
 
@@ -492,6 +493,22 @@ async def test_handle_symphony_element(df_loop, listener, initiator_userid):
         initiator_userid, payload.symphony_elements_action
     )
 
+# This test verifies the full dispatch path: enum lookup → payload extraction → listener method called with correct
+# arguments
+@pytest.mark.asyncio
+async def test_handle_generic_system_event(df_loop, listener, initiator_userid):
+    payload = V4Payload(generic_system_event=V4GenericSystemEvent())
+    event = V4Event(
+        type=RealTimeEvent.GENERICSYSTEMEVENT.name,
+        payload=payload,
+        initiator=initiator_userid,
+    )
+
+    await create_and_await_tasks(df_loop, [event])
+
+    listener.on_generic_system_event.assert_called_once_with(
+        initiator_userid, payload.generic_system_event
+    )
 
 @pytest.mark.asyncio
 async def test_handle_unknown_type(df_loop, listener, initiator_userid):

@@ -57,6 +57,7 @@ class RealTimeEvent(Enum):
     CONNECTIONACCEPTED = ("on_connection_accepted", "connection_accepted")
     SYMPHONYELEMENTSACTION = ("on_symphony_elements_action", "symphony_elements_action")
     MESSAGESUPPRESSED = ("on_message_suppressed", "message_suppressed")
+    GENERICSYSTEMEVENT = ("on_generic_system_event", "generic_system_event")
 
 
 def _set_context_var(current_task, event, listener):
@@ -202,7 +203,8 @@ class AbstractDatafeedLoop(ABC):
             listener_method_name, payload_field_name = RealTimeEvent[event.type].value
         except KeyError:
             logger.info("Received event with an unknown type: %s", event.type)
-            return
+            return # <-- GENERICSYSTEMEVENT hits this branch
+            # GENERICSYSTEMEVENT is not in the enum, so every event is dropped.
 
         listener_method = getattr(listener, listener_method_name)
         event_field = getattr(event.payload, payload_field_name)
