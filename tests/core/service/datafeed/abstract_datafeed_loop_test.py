@@ -146,6 +146,30 @@ async def test_unexpected_error_should_be_propagated_and_call_stop_tasks(bare_df
 
 
 @pytest.mark.asyncio
+async def test_running_flag_reset_after_crash_allows_restart(
+    bare_df_loop, run_iteration_side_effect
+):
+    # After an exception escapes the loop, _running must be reset to False so the loop
+    # is restartable. Previously it stayed True, so DatafeedLoopV2.start() would raise
+    # "already started" forever, turning a transient error into a permanent outage.
+    bare_df_loop._run_loop_iteration.side_effect = ValueError("boom")
+
+    with pytest.raises(ValueError):
+        await bare_df_loop.start()
+
+    assert bare_df_loop._running is False
+
+    # A subsequent start() must run again and stop cleanly.
+    bare_df_loop._run_loop_iteration.side_effect = run_iteration_side_effect
+    t = asyncio.create_task(bare_df_loop.start())
+    await asyncio.sleep(0.001)
+    await bare_df_loop.stop()
+    await t
+
+    assert bare_df_loop._running is False
+
+
+@pytest.mark.asyncio
 async def test_create_listener_tasks_none(df_loop, listener):
     tasks = await df_loop._create_listener_tasks(None)
 
