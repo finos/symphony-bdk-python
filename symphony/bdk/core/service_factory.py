@@ -22,6 +22,7 @@ from symphony.bdk.core.service.message.multi_attachments_messages_api import (
     MultiAttachmentsMessagesApi,
 )
 from symphony.bdk.core.service.presence.presence_service import OboPresenceService, PresenceService
+from symphony.bdk.core.service.reaction.reaction_service import ReactionService
 from symphony.bdk.core.service.session.session_service import SessionService
 from symphony.bdk.core.service.signal.signal_service import OboSignalService, SignalService
 from symphony.bdk.core.service.stream.stream_service import OboStreamService, StreamService
@@ -199,6 +200,13 @@ class ServiceFactory:
         return PresenceService(
             PresenceApi(self._pod_client), self._auth_session, self._config.retry
         )
+
+    def get_reaction_service(self) -> ReactionService:
+        """Returns a fully initialized ReactionService
+
+        :return: a new ReactionService instance
+        """
+        return ReactionService(self._pod_client, self._auth_session, self._config.retry)
 
     def get_agent_version_service(self) -> AgentVersionService:
         """Returns a fully initialized AgentVersionService
