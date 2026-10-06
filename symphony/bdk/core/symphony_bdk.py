@@ -19,6 +19,7 @@ from symphony.bdk.core.service.health.health_service import HealthService
 from symphony.bdk.core.service.message.message_service import MessageService
 from symphony.bdk.core.service.obo_services import OboServices
 from symphony.bdk.core.service.presence.presence_service import PresenceService
+from symphony.bdk.core.service.reaction.reaction_service import ReactionService
 from symphony.bdk.core.service.session.session_service import SessionService
 from symphony.bdk.core.service.signal.signal_service import SignalService
 from symphony.bdk.core.service.stream.stream_service import StreamService
@@ -98,6 +99,7 @@ class SymphonyBdk:
         self._datahose_loop = None
         self._health_service = None
         self._presence_service = None
+        self._reaction_service = None
         self._activity_registry = None
 
         if self._config.bot.is_authentication_configured():
@@ -125,6 +127,7 @@ class SymphonyBdk:
         self._datahose_loop = self._service_factory.get_datahose_loop()
         self._health_service = self._service_factory.get_health_service()
         self._presence_service = self._service_factory.get_presence_service()
+        self._reaction_service = self._service_factory.get_reaction_service()
         # creates ActivityRegistry that subscribes to DF Loop events
         self._activity_registry = ActivityRegistry(self._session_service)
         self._datafeed_loop.subscribe(self._activity_registry)
@@ -261,6 +264,14 @@ class SymphonyBdk:
         :return: The HealthService instance.
         """
         return self._health_service
+
+    @bot_service
+    def reactions(self) -> ReactionService:
+        """Get the ReactionService from the BDK entry point.
+
+        :return: The ReactionService instance.
+        """
+        return self._reaction_service
 
     @bot_service
     def presence(self) -> PresenceService:
